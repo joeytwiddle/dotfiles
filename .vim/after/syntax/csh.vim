@@ -1,1 +1,1 @@
-:so ~/.vim/after/syntax/all.vim
+:so ~/.vim/after/syntax/sh.vim
