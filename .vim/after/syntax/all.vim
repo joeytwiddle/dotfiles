@@ -1,8 +1,8 @@
-:let g:vimsynloaded=1
-
-if ! g:vimsynloaded == 1
-	source ~/.vim/after/syntax/all.vim
-endif
+"" This is nonsense:
+" :let g:vimsynloaded=1
+" if ! g:vimsynloaded == 1
+	" source ~/.vim/after/syntax/all.vim
+" endif
 
 " comment
 :map <F5> ^i" <Esc>j^

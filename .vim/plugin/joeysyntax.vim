@@ -6,8 +6,6 @@
 	" :syn sync maxlines=50
 	" :syn sync minlines=10
 
-	:set hls!
-
 	" :colors pablo
 	" :set guifont=-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv
 	" :set guifont=-schumacher-clean-medium-r-normal-*-*-150-*-*-c-*-iso646.1991-irv
@@ -15,7 +13,8 @@
 	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
 	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
 	" :set guifont=-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv
-	:set guifont=-b&h-lucidatypewriter-medium-r-normal-*-14-*-*-*-m-*-iso10646-1
+	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-14-*-*-*-m-*-iso10646-1
+	:set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso10646-1
 	:set background=dark
 
 	:syntax on
@@ -35,6 +34,14 @@
 	:syntax match jEq /=/
 	:highlight link jEq Statement
 
+	" :syntax keyword jTodo TODO
+	" :highlight link jTodo Todo
+	" :syntax keyword jNote NOTE
+	" :highlight link jNote Todo
+	"" Marche pas:
+	:syntax keyword jTodo TODO Todo NOTE Note
+	:highlight link jTodo Todo
+
 :endfun
 
-:Joeysyntax
+" :Joeysyntax

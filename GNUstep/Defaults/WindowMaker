@@ -1,109 +1,82 @@
 {
-  MultiByteText = NO;
-  WindozeCycling = NO;
-  SelectWindowsMouseButton = left;
-  WindowListMouseButton = middle;
-  ApplicationMenuMouseButton = right;
-  TitleJustify = left;
-  ClipTitleFont = "-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*";
-  WindowTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
-  MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
-  MenuTextFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
-  IconTitleFont = "-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*";
-  DisplayFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
   HighlightColor = "#ffffff";
-  HighlightTextColor = "#000000";
-  FTitleColor = "#ffffff";
-  PTitleColor = "#ffffff";
-  UTitleColor = "#ffffff";
-  FTitleBack = (
-    tpixmap,
-    "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/danger.png",
-    "#000000"
-  );
-  PTitleBack = (
-    tpixmap,
-    "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/crackedstones-looklike-leaves.png",
-    "#000000"
-  );
+  LowerKey = "Mod1+A";
+  CycleWorkspaces = YES;
+  MoveResizeKey = None;
   UTitleBack = (
     tpixmap,
     "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/crackedstones-looklike-leaves.png",
     "#000000"
   );
-  ResizebarBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
-  MenuTitleColor = "#ffffff";
-  MenuTextColor = "#000000";
-  MenuDisabledColor = "#616561";
+  HideKey = "Mod1+E";
+  PrevWorkspaceKey = "Mod1+Left";
+  WindowShortcut10Key = None;
+  PTitleBack = (
+    tpixmap,
+    "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/crackedstones-looklike-leaves.png",
+    "#000000"
+  );
+  MiniwindowTitleBalloons = YES;
+  NoWindowOverIcons = YES;
+  NoWindowOverDock = YES;
+  CloseKey = "Mod1+Q";
+  MenuDisabledColor = "#636563";
+  FocusMode = sloppy;
+  FocusNextKey = "Mod1+Up";
+  MenuTextBack = (hgradient, "rgb:c2/c0/c5", "rgb:82/80/85");
+  IconBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
   MenuTitleBack = (
     tpixmap,
     "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/crackedstones-looklike-leaves.png",
     "#000000"
   );
-  MenuTextBack = (hgradient, "rgb:c2/c0/c5", "rgb:82/80/85");
-  IconTitleColor = white;
-  IconTitleBack = "#384246";
-  WorkspaceBack = (tpixmap, "~/Debian.jpg", gray20);
-  MiniaturizeKey = "Mod1+I";
-  CloseKey = "Mod1+W";
-  MaximizeKey = "Mod1+Z";
-  VMaximizeKey = "Mod1+V";
-  HMaximizeKey = "Mod1+H";
-  LowerKey = "Mod1+A";
-  ShadeKey = "Mod1+D";
-  MoveResizeKey = "Mod1+R";
-  FocusPrevKey = "Mod1+grave";
-  NextWorkspaceKey = "Control+Mod1+Right";
-  PrevWorkspaceKey = "Control+Mod1+Left";
   WindowShortcut1Key = None;
+  FTitleBack = (
+    tpixmap,
+    "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/danger.png",
+    "#000000"
+  );
+  IconificationStyle = twist;
+  MiniaturizeKey = "Mod1+I";
   WindowShortcut2Key = None;
+  ToggleKbdModeKey = None;
   WindowShortcut3Key = None;
   WindowShortcut4Key = None;
+  ResizebarBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
+  MenuTextColor = "#000000";
   WindowShortcut5Key = None;
+  MaximizeKey = "Control+Z";
+  HighlightTextColor = "#000000";
   WindowShortcut6Key = None;
-  WindowShortcut7Key = None;
-  WindowShortcut8Key = None;
-  WindowShortcut9Key = None;
-  WindowShortcut10Key = None;
-  ScreenSwitchKey = None;
-  FocusMode = sloppy;
-  RaiseDelay = 350;
-  NoWindowOverDock = NO;
-  Attraction = NO;
-  AutoArrangeIcons = NO;
-  IconPosition = blh;
-  IconificationStyle = twist;
-  CirculateRaise = NO;
-  MiniwindowTitleBalloons = NO;
-  AppIconBalloons = NO;
-  HelpBalloons = NO;
-  IconPath = (
-    "~/pixmaps",
-    "~/GNUstep/Library/Icons",
-    "/usr/local/share/WindowMaker/Icons",
-    "/usr/share/WindowMaker/Icons",
-    "/usr/local/share/icons",
-    "/usr/share/icons",
-    "/usr/X11R6/include/X11/pixmaps"
-  );
-  PixmapPath = (
-    "~/pixmaps",
-    "~/GNUstep/Library/WindowMaker/Backgrounds",
-    "~/GNUstep/Library/WindowMaker/Pixmaps",
-    "/usr/local/share/WindowMaker/Backgrounds",
-    "/usr/local/share/WindowMaker/Pixmaps",
-    "/usr/share/WindowMaker/Backgrounds",
-    "/usr/share/WindowMaker/Pixmaps",
-    "/usr/local/share/pixmaps",
-    "/usr/share/pixmaps",
-    "/usr/X11R6/include/X11/pixmaps"
-  );
-  DontLinkWorkspaces = NO;
-  CycleWorkspaces = YES;
-  AdvanceToNewWorkspace = YES;
-  DisableClip = NO;
+  MenuTitleColor = "#ffffff";
   WorkspaceNameDisplayPosition = center;
-  ShadeSpeed = slow;
-  Superfluous = NO;
+  ShadeKey = "Mod1+D";
+  WindowShortcut7Key = None;
+  FTitleColor = "#ffffff";
+  AppIconBalloons = YES;
+  WorkspaceBorderSize = 2;
+  WorkspaceBack = (tpixmap, "/mnt/big/stuff/wallpapers/mine/deb_gnu_lnx.jpg", gray20);
+  VMaximizeKey = "Mod1+V";
+  HideOthersKey = None;
+  NextWorkspaceKey = "Mod1+Right";
   SmoothWorkspaceBack = YES;
+  UTitleColor = "#ffffff";
+  PTitleColor = "#ffffff";
+  Attraction = NO;
+  WorkspaceBorder = AllDirections;
+  RaiseDelay = 350;
+  FocusPrevKey = "Mod1+Down";
+  DontLinkWorkspaces = NO;
+  HelpBalloons = YES;
+  OpaqueMove = NO;
+  WindowPlaceOrigin = (22, 25);
+  WindowPlacement = smart;
+  CirculateRaise = YES;
+  WindowShortcut8Key = None;
+  CClipTitleColor = "rgb:61/61/61";
+  ScreenSwitchKey = None;
+  WindowShortcut9Key = None;
+  IconTitleBack = "#384246";
+  OpenTransientOnOwnerWorkspace = YES;
+  HMaximizeKey = "Mod1+H";
 }

@@ -38,5 +38,5 @@
   IconTitleColor = white;
   IconTitleBack = "#384246";
   MenuStyle = normal;
-  WorkspaceBack = (tpixmap, "~/Debian.jpg", gray20);
+  WorkspaceBack = (tpixmap, "/mnt/big/stuff/wallpapers/mine/deb_gnu_lnx.jpg", gray20);
 }

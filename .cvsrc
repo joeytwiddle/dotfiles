@@ -7,4 +7,10 @@ update -P
 # Contextual diff (show lines near change):
 # diff -c
 # Two-column diff:
-# diff --side-by-side
+diff --side-by-side
+
+## Recommended by the KDE dudes:
+# cvs -z4 -q
+# diff -u3 -p
+# update -dP
+# checkout -P

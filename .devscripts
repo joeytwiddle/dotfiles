@@ -1,0 +1,4 @@
+# Required so that debuild can sign files.
+# If this is ignored, try passing it at the command line with "-m"
+# DEBSIGN_MAINT='Paul Clark <pclark@cs.bris.ac.uk>'
+DEBSIGN_MAINT="Joey's automatic deb builder <pclark@cs.bris.ac.uk>"

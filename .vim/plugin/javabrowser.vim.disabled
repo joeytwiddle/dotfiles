@@ -1,9 +1,21 @@
 " File: JavaBrowser.vim
 " Author: Pradeep Unde (pradeep_unde AT yahoo DOT com)
-" Version: l.8
-" Last Modified: Apr 01, 2003
+" Version: l.12
+" Last Modified: Apr 15, 2003
 "
 " ChangeLog:
+" Version 1.12:
+" 1. Small bug fix to remove unwanted echo for visibility.
+" Version 1.11:
+" 1. Now interface methods are highlighted as public, abstract. I missed
+" the abstract part in the previous version.
+" 2. The visibility modifier (public/protected/private) can now be anywhere
+" in the method/field declaration and it will be highlighted correctly.
+" Version 1.10:
+" 1. Now interface methods are highlighted as public and fields as public,
+" static
+" Version 1.9:
+" 1. Added syntax highlighting (italic, underline) for xterm users
 " Version 1.8:
 " 1. Bug fix for comment syntax matching.
 " Version 1.7:
@@ -368,14 +380,13 @@ if has('syntax')
     " Colors used to highlight the selected tag name
     highlight clear TagName
     if has('gui_running') || &t_Co > 2
-	highlight link TagName Search
+        highlight link TagName Search
     else
-	highlight TagName term=reverse cterm=reverse
+        highlight TagName term=reverse cterm=reverse
     endif
 
     " Colors to highlight. These are the defaults. User can change them in
     " their gvimrc as per their wish
-    highlight clear JavaBrowserComment
     highlight link JavaBrowserComment Comment
     highlight clear JavaBrowserTitle
     highlight link JavaBrowserTitle Title
@@ -396,51 +407,51 @@ if has('syntax')
 
     " Colors for public, abstract members
     highlight link JavaBrowser_public_abstract JavaBrowser_public
-    highlight JavaBrowser_public_abstract ctermfg=green cterm=italic guifg=green gui=italic
+    highlight JavaBrowser_public_abstract ctermfg=green term=italic cterm=italic guifg=green gui=italic
     
     " Colors for protected, abstract members
     highlight link JavaBrowser_protected_abstract JavaBrowser_protected
-    highlight JavaBrowser_protected_abstract ctermfg=brown cterm=italic guifg=orange gui=italic
+    highlight JavaBrowser_protected_abstract ctermfg=brown term=italic cterm=italic guifg=orange gui=italic
     
     " Colors for private, abstarct members
     highlight link JavaBrowser_private_abstract JavaBrowser_private
-    highlight JavaBrowser_private_abstract ctermfg=red cterm=italic guifg=red gui=italic
+    highlight JavaBrowser_private_abstract ctermfg=red term=italic cterm=italic guifg=red gui=italic
 
     " Colors for public, static members
     highlight link JavaBrowser_public_static JavaBrowser_public
-    highlight JavaBrowser_public_static ctermfg=green cterm=underline guifg=green gui=underline
+    highlight JavaBrowser_public_static ctermfg=green term=underline cterm=underline guifg=green gui=underline
     
     " Colors for protected, static members
     highlight link JavaBrowser_protected_static JavaBrowser_protected
-    highlight JavaBrowser_protected_static ctermfg=brown cterm=underline guifg=orange gui=underline
+    highlight JavaBrowser_protected_static ctermfg=brown term=underline cterm=underline guifg=orange gui=underline
     
     " Colors for private, static members
     highlight link JavaBrowser_private_static JavaBrowser_private
-    highlight JavaBrowser_private_static ctermfg=red cterm=underline guifg=red gui=underline
+    highlight JavaBrowser_private_static ctermfg=red term=underline cterm=underline guifg=red gui=underline
 
     " Colors for abstract, static members (with default visibility)
     highlight link JavaBrowser_abstract_static Normal
-    highlight JavaBrowser_abstract_static cterm=italic,underline gui=italic,underline
+    highlight JavaBrowser_abstract_static term=italic,underline cterm=italic,underline gui=italic,underline
     
     " Colors for static members (with default visibility)
     highlight link JavaBrowser_static Normal
-    highlight JavaBrowser_static cterm=underline gui=underline
+    highlight JavaBrowser_static term=underline cterm=underline gui=underline
     
     " Colors for abstract members (with default visibility)
     highlight link JavaBrowser_abstract Normal
-    highlight JavaBrowser_abstract cterm=italic gui=italic
+    highlight JavaBrowser_abstract term=italic cterm=italic gui=italic
     
     " Colors for public, abstract, static members
     highlight link JavaBrowser_public_abstract_static JavaBrowser_public
-    highlight JavaBrowser_public_abstract_static ctermfg=green cterm=italic,underline guifg=green gui=italic,underline
+    highlight JavaBrowser_public_abstract_static ctermfg=green term=italic,underline cterm=italic,underline guifg=green gui=italic,underline
     
     " Colors for protected, abstract, static members
     highlight link JavaBrowser_protected_abstract_static JavaBrowser_protected
-    highlight JavaBrowser_protected_abstract_static ctermfg=brown cterm=italic,underline guifg=orange gui=italic,underline
+    highlight JavaBrowser_protected_abstract_static ctermfg=brown term=italic,underline cterm=italic,underline guifg=orange gui=italic,underline
     
     " Colors for private, abstract, static members
     highlight link JavaBrowser_private_abstract_static JavaBrowser_private
-    highlight JavaBrowser_private_abstract_static ctermfg=red cterm=italic,underline guifg=red gui=italic,underline
+    highlight JavaBrowser_private_abstract_static ctermfg=red term=italic,underline cterm=italic,underline guifg=red gui=italic,underline
 endif
 
 " c++ language
@@ -824,6 +835,52 @@ function! s:JavaBrowser_Close_Window()
     endif
 endfunction
 
+" JavaBrowser_IsInterface
+" Checks if the passed variable exists as an interface in the open java file
+" return 1 if an interface, 0 otherwise
+function! s:JavaBrowser_IsInterface(bufnum, varname)
+    let ftype = getbufvar(a:bufnum, '&filetype')
+    "call s:JavaBrowser_Warning_Msg('interfaces: '.b:jbrowser_{ftype}_interface)
+    if b:jbrowser_{ftype}_interface == ''
+        return 0
+    endif
+    let l:allinterfaces = b:jbrowser_{ftype}_interface
+    while l:allinterfaces != ''
+        let l:iname = strpart(l:allinterfaces, 0, stridx(l:allinterfaces, "\n"))
+        " Remove the line
+        let l:allinterfaces = strpart(l:allinterfaces, stridx(l:allinterfaces, "\n") + 1)
+        if iname == a:varname
+            return 1
+        endif
+    endwhile
+    return 0
+endfunction
+
+" JavaBrowser_Get_Visib_From_Proto
+" Get the visibility of a class member from its prototype
+function! s:JavaBrowser_Get_Visib_From_Proto(bufnum, proto)
+    let l:visib = 'default'
+    let ftype = getbufvar(a:bufnum, '&filetype')
+    let l:visibstartidx = match(a:proto, '\a')
+    let l:visibendidx = match(a:proto, '(', visibstartidx)
+    if l:visibendidx == -1
+        let l:visibendidx = match(a:proto, '$', visibstartidx)
+    endif
+    let l:tmp_proto = strpart(a:proto, l:visibstartidx, l:visibendidx-l:visibstartidx)
+    while l:visibstartidx != -1
+        let l:cur_proto_part = strpart(l:tmp_proto, 0, stridx(l:tmp_proto, " "))
+        "call s:JavaBrowser_Warning_Msg('current proto part: '.l:cur_proto_part)
+        if stridx(s:jbrowser_def_{ftype}_visibilities, l:cur_proto_part) != -1
+            let l:visib = l:cur_proto_part
+            break
+        endif
+        " Remove the word
+        let l:tmp_proto = strpart(l:tmp_proto, stridx(l:tmp_proto, " ") + 1)
+        let l:visibstartidx = match(l:tmp_proto, " ")
+    endwhile
+    return l:visib
+endfunction
+
 " JavaBrowser_Explore_File()
 " List the tags defined in the specified file in a Vim window
 function! s:JavaBrowser_Explore_File(bufnum)
@@ -952,9 +1009,7 @@ function! s:JavaBrowser_Explore_File(bufnum)
             let protostart = stridx(one_line, '^')
             let protoend = stridx(one_line, '$')
             let proto = strpart(one_line, protostart+1, protoend-protostart-1)
-            let visibstartidx = match(proto, '\a')
-            let visibendidx = match(proto, ' ', visibstartidx)
-            let visib = strpart(proto, visibstartidx, visibendidx-visibstartidx)
+            let visib = s:JavaBrowser_Get_Visib_From_Proto(a:bufnum, proto)
 
             if ttype == ''
                 " Line is not in proper tags format
@@ -1045,13 +1100,29 @@ function! s:JavaBrowser_Explore_File(bufnum)
                 if stridx(s:jbrowser_def_{ftype}_visibilities, visib) != -1
                     let l:{tscope}_{ttype}_{ttxt}_lineno_visib = visib
                 endif
-                if stridx(proto, ' abstract ') != -1
-                    let l:{tscope}_{ttype}_{ttxt}_lineno_visib = l:{tscope}_{ttype}_{ttxt}_lineno_visib . '_abstract'
+                if s:JavaBrowser_IsInterface(a:bufnum, tscope) == 1
+                    if stridx(l:{tscope}_{ttype}_{ttxt}_lineno_visib, 'public') == -1
+                        let l:{tscope}_{ttype}_{ttxt}_lineno_visib = l:{tscope}_{ttype}_{ttxt}_lineno_visib . 'public'
+                    endif
+                    if ttype == 'field'
+                        let l:{tscope}_{ttype}_{ttxt}_lineno_visib = l:{tscope}_{ttype}_{ttxt}_lineno_visib . '_static'
+                    endif
+                    if ttype == 'method' && stridx(proto, 'abstract ') == -1
+                        let l:{tscope}_{ttype}_{ttxt}_lineno_visib = l:{tscope}_{ttype}_{ttxt}_lineno_visib . '_abstract'
+                    endif
                     "call s:JavaBrowser_Warning_Msg('got abstarct='.proto)
                 endif
-                if stridx(proto, ' static ') != -1
-                    let l:{tscope}_{ttype}_{ttxt}_lineno_visib = l:{tscope}_{ttype}_{ttxt}_lineno_visib . '_static'
-                    "call s:JavaBrowser_Warning_Msg('got abstarct='.proto)
+                if stridx(proto, 'abstract ') != -1
+                    if stridx(l:{tscope}_{ttype}_{ttxt}_lineno_visib, 'abstract') == -1
+                        let l:{tscope}_{ttype}_{ttxt}_lineno_visib = l:{tscope}_{ttype}_{ttxt}_lineno_visib . '_abstract'
+                        "call s:JavaBrowser_Warning_Msg('got abstarct='.proto)
+                    endif
+                endif
+                if stridx(proto, 'static ') != -1
+                    if stridx(l:{tscope}_{ttype}_{ttxt}_lineno_visib, 'static') == -1
+                        let l:{tscope}_{ttype}_{ttxt}_lineno_visib = l:{tscope}_{ttype}_{ttxt}_lineno_visib . '_static'
+                        "call s:JavaBrowser_Warning_Msg('got abstarct='.proto)
+                    endif
                 endif
                 "call s:JavaBrowser_Warning_Msg('l:'.tscope.'_'.ttype.'='.l:{tscope}_{ttype})
                 "call s:JavaBrowser_Warning_Msg('l:{'.tscope.'}_{'.ttype.'}_{'.ttxt.'}_lineno='.lnno)

@@ -1,12 +1,19 @@
 ## ~/.muttrc
 ## (see: http://www.mutt.org/links.html#config)
 
+## TODO
+
+set record = "$HOME/Mail/sent-mail-mutt"
+set save_name
+
 ## Colours:
 color indicator white magenta
 color hdrdefault blue black
 color header brightcyan default "^From: "
 color header brightcyan default "^To: "
 color header brightgreen default "^Subject: "
+color header brightred default "^X-Spam"
+color header magenta default "^List"
 color quoted yellow black
 color status white blue
 color tree green default
@@ -34,8 +41,9 @@ folder-hook Lists set sort=threads
 # macro generic "i" <view-file>
 # macro generic "l" <change-folder>"?"
 macro generic <left> <exit>
-## Folder browsing:
-macro browser <left> <exit><exit>
+## Browser:
+# macro browser <left> <exit><exit>
+macro browser <left> "<Home><Enter>"
 macro browser <right> <select-entry>
 macro browser "Q" <exit><exit>
 ## Index and pager: (mutt bug: refreshes only half work in pager)
@@ -45,6 +53,7 @@ macro index "c" <mail>
 macro pager "c" <mail>
 macro index "l" <change-folder>"?"
 macro pager "l" <change-folder>"?"
+## For some reason these "\Ck"s no longer work in index
 # Sort by thread
 macro index "\Ct" ":set sort=threads<Enter>"
 macro pager "\Ct" ":set sort=threads<Enter><refresh>"
@@ -68,7 +77,40 @@ macro pager <up> <previous-entry>
 macro pager <down> <next-entry>
 macro pager <pageup> <half-up>
 macro pager <pagedown> <half-down>
+macro pager "u" <half-up>
+# Actually best left as default up one line, which matches <return> =)
+# macro pager <backspace> <half-up>
+macro pager <space> <half-down>
 macro pager <right> <view-attachments>
+
+## Generic:
+macro generic ":0<Return>" <first-entry>
+macro generic ":$<Return>" <last-entry>
+macro generic "?" <search-reverse>
+## and because ? was help...
+macro generic \H <help>
+macro generic \h <help>
+macro generic <Esc>h <help>
+macro generic <f1> <help>
+macro generic ":h" <help>
+##
+macro browser "N" <search-opposite>
+macro index "N" <search-opposite>
+macro pager "N" <search-opposite>
+### don't work:
+# macro generic "\Cy" <decrypt-copy>
+# macro generic "\Cy" <decrypt-save>
+
+## Spamassasin:
+# quick assess
+macro index "XL" "| spamassassin -t -L | grep \^SPAM | highlight '\(.*hits.*required\)'<Enter>"
+macro pager "XL" "| spamassassin -t -L | grep \^SPAM | highlight '\(.*hits.*required\)'<Enter>"
+# full assess
+macro index "X?" "| spamassassin -t | grep \^SPAM | highlight '\(.*hits.*required\)'<Enter>"
+macro pager "X?" "| spamassassin -t | grep \^SPAM | highlight '\(.*hits.*required\)'<Enter>"
+# report and delete
+macro index "XX" "| spamassassin -r<Enter>d"
+macro pager "XX" "| spamassassin -r<Enter>d"
 
 ## Addresbook / aliases:
 # source ~/.mail_aliases
@@ -80,9 +122,11 @@ macro pager \A "!abook\n" "Abook"
 ## Edit the email aliases in special file:
 macro index \ea "!$EDITOR ~/.mutt/aliases\n:source ~/.mutt/aliases\n" "Edit aliases file and reload it"
 macro pager \ea "!$EDITOR ~/.mutt/aliases\n:source ~/.mutt/aliases\n" "Edit aliases file and reload it"
-## Aliases straight in .muttrc =)
+
+## Addressbook aliases straight in .muttrc =)
 alias cat Catherine Rachel Slicer <catslicer@hotmail.com>
 alias tim TRJ Langford <langford@cs.bris.ac.uk>
 alias erik Erik <erik@eempson.freeserve.co.uk>
 alias sharon Sharon <curliemeg@yahoo.com>
 alias friends cat,tim,erik,sharon
+alias megan_humphries Megan Humphries <megan_humphries@hotmail.com>

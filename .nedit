@@ -324,7 +324,7 @@ nedit.styles: 	Plain:black:Plain\n\
 	Text Arg2:MediumBlue:Plain\n\
 	Text Escape:gray30:Bold\n\
 	LaTeX Math:darkGreen:Plain\n\
-	WINDOW_BACKGROUND:grey2:Plain\n\
+	WINDOW_BACKGROUND:white:Plain\n\
 	Pointer:#660000:Bold\n\
 	Regex:#009944:Bold\n\
 	Warning:brown2:Italic
@@ -354,14 +354,14 @@ nedit.pathInWindowsMenu: True
 nedit.warnFileMods: True
 nedit.warnExit: True
 nedit.searchMethod: Literal
-nedit.textRows: 35
-nedit.textCols: 15
+nedit.textRows: 40
+nedit.textCols: 80
 nedit.tabDistance: 3
 nedit.emulateTabs: 0
 nedit.insertTabs: False
-nedit.textFont: -schumacher-clean-medium-r-normal--15-150-75-75-c-90-iso8859-1
-nedit.boldHighlightFont: -schumacher-clean-bold-r-normal--15-150-75-75-c-90-iso8859-1
-nedit.italicHighlightFont: -schumacher-clean-medium-o-normal--15-150-75-75-c-90-iso8859-1
-nedit.boldItalicHighlightFont: -schumacher-clean-bold-o-normal--15-150-75-75-c-90-iso8859-1
+nedit.textFont: -b&h-lucidatypewriter-medium-r-normal-sans-11-80-100-100-m-70-iso8859-1
+nedit.boldHighlightFont: -b&h-lucidatypewriter-bold-r-normal-sans-11-80-100-100-m-70-iso8859-1
+nedit.italicHighlightFont: -b&h-lucidatypewriter-medium-o-normal-sans-11-80-100-100-m-70-iso8859-1
+nedit.boldItalicHighlightFont: -b&h-lucidatypewriter-bold-o-normal-sans-11-80-100-100-m-70-iso8859-1
 nedit.smartTags: True
 nedit.prefFileRead: True

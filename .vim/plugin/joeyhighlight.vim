@@ -31,12 +31,13 @@
 	" :highlight Comment ctermfg=DarkMagenta guifg=#d080d0
 	" :highlight Comment ctermfg=Magenta guifg=#d080d0
 	" :highlight Comment ctermfg=DarkCyan guifg=DarkCyan
-	:highlight Comment cterm=bold ctermfg=Magenta guifg=LightMagenta
+	:highlight Comment term=none cterm=none ctermfg=DarkMagenta guifg=LightMagenta
+	" :highlight Comment cterm=none ctermfg=DarkCyan guifg=LightMagenta
 	" :highlight link jComment Comment
 	:highlight jComment ctermfg=DarkYellow guifg=DarkYellow
 	:highlight SpecialChar ctermfg=Red guifg=Red
 	:highlight String ctermfg=DarkGreen guifg=#80f080 cterm=NONE
-	:highlight Todo term=reverse ctermbg=black ctermfg=red
+	:highlight Todo term=reverse cterm=reverse ctermbg=black ctermfg=red
 
 	" Code
 	:highlight Boolean ctermfg=LightBlue guifg=LightBlue
@@ -99,6 +100,9 @@
 	:highlight prologClauseHead ctermfg=DarkCyan
 
 	":so /home/joey/linux/.vim/joeyfolding.vim
+
+	" Highlight search (doesn't work if called at top of this file!)
+	:set hlsearch
 
 :endfun
 

@@ -1,1 +1,1 @@
-:so ~/.vim/joey/joey.vim
+" :so ~/.vim/joey/joey.vim

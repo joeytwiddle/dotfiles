@@ -9,8 +9,8 @@
 	" Or:
 	:map - zc
 	:map = zo
-	map _ zC
-	map + zO
+	:map _ zC
+	:map + zO
 	" :map _ zm
 	" :map + zr
 	:map <kMinus> zc
@@ -30,6 +30,8 @@
 	:normal zR
 
 	" For all languages with {}s
+	" I have noticed problems (with sh functions) which disappear if language
+	" syntax is not loaded.
 	:syn region myFold matchgroup=myDummy start="{" end="}" transparent fold
 
 	" C/Java comments
@@ -60,5 +62,19 @@
 	:highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#000060
 
 	:set foldtext=getline(v:foldstart).'\ \ \ ['.(v:foldend-v:foldstart).'\ lines]'
+
+	" For treelist.hs:
+	" :syntax match TreeListFoldLine ".*\(-{\|-}\|{-\|}-\).*" contains=TreeListHsTag,myFold
+	" :highlight TreeListFoldLine ctermbg=Red ctermfg=White cterm=bold
+	:syntax match TreeListHsTag "^\(\.\|+\|-\|\*\) "
+	:highlight TreeListHsTag ctermbg=blue ctermfg=white cterm=bold
+	" :syn region TreeListFold matchgroup=myDummy start="-{" end="}-" transparent fold
+	"" Conflicts with TreeListFold
+	" :syntax match TreeListHsCurl "\(-{\|{-\|-}\|}\)$"
+	" :highlight TreeListHsCurl ctermbg=blue ctermfg=white cterm=bold
+	"" These two fix the strange looking holes in treelists but make tabs look weird in normal folding situations.  :-(
+	"" This listchars should do tabs cos tabs get turned into ^I :-(
+	" :set listchars=trail:\ 
+	" :highlight SpecialKey ctermbg=blue ctermfg=white
 
 :endfun

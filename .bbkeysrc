@@ -17,3 +17,4 @@ KeyToGrab(KP_Delete), WithModifier(Mod1), WithAction(:ExecCommand), DoThis(xmms 
 
 # Not in wmaker :-(
 KeyToGrab(J), WithModifier(Mod1), WithAction(BigNudgeDown)
+KeyToGrab(K), WithModifier(Mod1), WithAction(Maximise)
