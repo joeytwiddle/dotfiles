@@ -828,6 +828,8 @@ function! s:Tlist_Explore_File(bufnum)
         " Ctags command to produce output with regexp for locating the tags
         let ctags_cmd = g:Tlist_Ctags_Cmd . ctags_args
         let ctags_cmd = ctags_cmd . ' "' . filename . '"'
+        "" For debugging:
+        let ctags_cmd = ctags_cmd . ' | tee /tmp/ctags.out'
 
         " Run ctags and get the tag list
         let cmd_output = system(ctags_cmd)
