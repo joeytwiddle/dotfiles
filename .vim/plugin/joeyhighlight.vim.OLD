@@ -1,3 +1,6 @@
+" Note: it seems (at least with DiffDelete), that setting cterm?g=... after
+" cterm=... can cause cterm= to be changed!
+
 " :colors pablo
 " :set guifont=-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv
 " :set guifont=-schumacher-clean-medium-r-normal-*-*-150-*-*-c-*-iso646.1991-irv
@@ -21,7 +24,7 @@
 " :highlight Comment ctermfg=DarkMagenta guifg=#d080d0
 :highlight Comment ctermfg=Magenta guifg=#d080d0
 :highlight SpecialChar ctermfg=Red guifg=Red
-:highlight String cterm=NONE ctermfg=DarkGreen guifg=#80f080
+:highlight String ctermfg=DarkGreen guifg=#80f080 cterm=NONE
 
 " Code
 :highlight Boolean ctermfg=LightBlue guifg=LightBlue
@@ -35,9 +38,9 @@
 " It appears to ignore the contains, otherwise I could use start=/^/ =)
 " :syntax region javaClassLine start=/class / end=/{/ contains=javaClassDecl
 :highlight link javaClassLine javaClassDecl
-:highlight javaClassDecl term=bold cterm=bold ctermbg=DarkGreen ctermfg=White gui=bold guibg=DarkGreen guifg=White
-:highlight javaStorageClass term=NONE cterm=NONE ctermfg=Cyan gui=NONE guifg=Cyan
-:highlight javaType term=NONE cterm=NONE gui=bold guifg=LightBlue
+:highlight javaClassDecl term=bold ctermbg=DarkGreen ctermfg=White cterm=bold guibg=DarkGreen guifg=White gui=bold
+:highlight javaStorageClass term=NONE ctermfg=Cyan cterm=NONE guifg=Cyan gui=NONE
+:highlight javaType term=NONE cterm=NONE guifg=LightBlue gui=bold
 :highlight link javaOperator SpecialChar
 :highlight Type ctermfg=Red guifg=Red
 :highlight Number ctermfg=LightBlue guifg=LightBlue
@@ -45,18 +48,19 @@
 :highlight Special ctermfg=Magenta guifg=#d080d0
 
 " For vimdiffs
-" :highlight DiffAdd cterm=bold ctermbg=Green guibg=DarkGreen
+" :highlight DiffAdd ctermbg=Green cterm=bold guibg=DarkGreen
 " :highlight DiffDelete ctermbg=Blue guibg=DarkBlue
 " Black and Yellow
-" :highlight DiffAdd cterm=bold ctermbg=green ctermfg=white guibg=DarkGreen guifg=White gui=none
-:highlight DiffAdd cterm=bold ctermbg=red ctermfg=white guibg=DarkRed guifg=White gui=bold
-" :highlight DiffText cterm=bold ctermbg=yellow ctermfg=white guibg=DarkYellow guifg=White gui=bold
-:highlight DiffText cterm=bold ctermbg=green ctermfg=white guibg=DarkGreen guifg=White gui=bold
-" :highlight DiffChange cterm=bold ctermfg=white ctermbg=black gui=bold guifg=White guibg=#202020
-:highlight DiffChange cterm=bold ctermfg=white ctermbg=black gui=bold guifg=White guibg=Black
-" :highlight DiffDelete cterm=none ctermbg=black ctermfg=red gui=bold guifg=#600000 guibg=black
-" :highlight DiffDelete cterm=none ctermbg=blue ctermfg=blue gui=bold guifg=#000060 guibg=#000060
-:highlight DiffDelete cterm=none ctermbg=black ctermfg=black gui=bold guifg=Black guibg=Black
+" :highlight DiffAdd ctermbg=green ctermfg=white cterm=bold guibg=DarkGreen guifg=White gui=none
+:highlight DiffAdd ctermbg=red ctermfg=white cterm=bold guibg=DarkRed guifg=White gui=bold
+" :highlight DiffText ctermbg=yellow ctermfg=white cterm=bold guibg=DarkYellow guifg=White gui=bold
+:highlight DiffText ctermbg=green ctermfg=white cterm=bold guibg=DarkGreen guifg=White gui=bold
+" :highlight DiffChange ctermfg=white ctermbg=black cterm=bold guifg=White guibg=#202020 gui=bold
+:highlight DiffChange ctermfg=white ctermbg=black cterm=bold gui=bold guifg=White guibg=Black
+" :highlight DiffDelete ctermbg=black ctermfg=red cterm=none gui=bold guifg=#600000 guibg=black
+" :highlight DiffDelete ctermbg=blue ctermfg=blue cterm=none gui=bold guifg=#000060 guibg=#000060
+" :highlight DiffDelete ctermbg=black ctermfg=black cterm=none gui=bold guifg=Black guibg=Black
+:highlight DiffDelete term=none ctermbg=black ctermfg=blue cterm=none guifg=#000050 guibg=#000050 gui=none
 
 " For jfc diffs
 " :syntax keyword difference jDiff @@>>

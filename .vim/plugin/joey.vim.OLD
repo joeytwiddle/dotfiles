@@ -32,6 +32,8 @@
 
 
 
+
+
 " <Leader> defaults to "\", I use ","
 " let mapleader = ","
 
@@ -43,6 +45,9 @@
 		call MyRepeatedSearch()
 	endif
 endfun
+
+
+
 
 
 " This needs fixing!
