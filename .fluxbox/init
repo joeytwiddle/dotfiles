@@ -6,8 +6,8 @@ session.screen0.toolbar.placement:	BottomCenter
 session.screen0.toolbar.autoHide:	true
 session.screen0.toolbar.onhead:	0
 session.screen0.tab.height:	16
-session.screen0.tab.placement:	Bottom
 session.screen0.tab.rotatevertical:	true
+session.screen0.tab.placement:	Bottom
 session.screen0.tab.alignment:	Relative
 session.screen0.tab.width:	100
 session.screen0.slit.onTop:	False
@@ -15,33 +15,33 @@ session.screen0.slit.direction:	Vertical
 session.screen0.slit.placement:	TopLeft
 session.screen0.slit.autoHide:	True
 session.screen0.slit.onHead:	0
-session.screen0.colPlacementDirection:	TopToBottom
-session.screen0.fullMaximization:	false
-session.screen0.windowPlacement:	RowSmartPlacement
-session.screen0.rootCommand:	
-session.screen0.workspacewarping:	true
-session.screen0.edgeSnapThreshold:	5
-session.screen0.strftimeFormat:	%I:%M %p
-session.screen0.showwindowposition:	true
-session.screen0.focusModel:	AutoRaiseSloppyFocus
 session.screen0.focusNewWindows:	true
-session.screen0.maxOverSlit:	false
-session.screen0.workspaceNames:	Earth,Air,Fire,Water,Toast,
-session.screen0.imageDither:	false
-session.screen0.desktopwheeling:	true
-session.screen0.focusLastWindow:	true
+session.screen0.showwindowposition:	true
+session.screen0.windowPlacement:	RowSmartPlacement
+session.screen0.edgeSnapThreshold:	5
 session.screen0.sloppywindowgrouping:	true
+session.screen0.workspacewarping:	true
+session.screen0.colPlacementDirection:	TopToBottom
+session.screen0.maxOverSlit:	false
+session.screen0.focusModel:	AutoRaiseSloppyFocus
 session.screen0.workspaces:	5
+session.screen0.focusLastWindow:	true
+session.screen0.workspaceNames:	Earth,Air,Fire,Water,Toast,
+session.screen0.fullMaximization:	false
+session.screen0.strftimeFormat:	%I:%M %p
+session.screen0.imageDither:	false
 session.screen0.rowPlacementDirection:	LeftToRight
-session.doubleClickInterval:	250
-session.keyFile:	/home/joey/linux/.fluxbox/keys
-session.autoRaiseDelay:	350
+session.screen0.desktopwheeling:	true
+session.screen0.rootCommand:	
 session.cacheMax:	200l
-session.opaqueMove:	false
+session.keyFile:	/home/joey/linux/.fluxbox/keys
 session.cacheLife:	5l
-session.slitlistFile:	/home/joey/linux/.fluxbox/slitlist
-session.styleFile:	/home/joey/linux/.fluxbox/styles/filfirinPumpkin
-session.colorsPerChannel:	4
-session.tabs:	true
 session.menuFile:	/home/joey/linux/.fluxbox/menu
+session.autoRaiseDelay:	350
+session.styleFile:	/home/joey/linux/.fluxbox/styles/filfirinAqua
+session.doubleClickInterval:	250
+session.opaqueMove:	false
 session.iconbar:	true
+session.colorsPerChannel:	4
+session.slitlistFile:	/home/joey/linux/.fluxbox/slitlist
+session.tabs:	true
