@@ -8,6 +8,7 @@ Compiler output:
 
 
 For the following you need the relevant plugins from jsh's linkhome.
+To get them, run a jsh install from your current box, ensuring you have the $JPATH/code/home directory, and run "linkhome vim".
 
 
 
