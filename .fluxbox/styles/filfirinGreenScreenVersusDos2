@@ -83,7 +83,7 @@ toolbar.button.pressed.color:	rgb:AB/AB/AB
 window.font:	-*-lucida-medium-r-*-*-*-70-*-*-*-*-*-*
 window.justify:	center
 window.tab.font:	-*-lucida-medium-r-*-*-*-70-*-*-*-*-*-*
-window.tab.justify:	center
+window.tab.justify:	left
 menu.title.font:	-*-lucida-medium-r-*-*-*-180-*-*-*-*-*-*
 menu.title.justify:	center
 menu.frame.font:	-*-lucida-medium-r-*-*-*-140-*-*-*-*-*-*

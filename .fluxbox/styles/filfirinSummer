@@ -90,7 +90,7 @@ toolbar.button.pressed.color:	rgb:AB/AB/AB
 
 ! Fonts (lucidasans-10 is good default)
 window.font:	-*-lucida-medium-r-*-*-*-70-*-*-*-*-*-*
-window.justify:	right
+window.justify:	center
 window.tab.font:	-*-lucida-medium-r-*-*-*-70-*-*-*-*-*-*
 window.tab.justify:	left
 menu.title.font:	-*-lucida-medium-r-*-*-*-180-*-*-*-*-*-*

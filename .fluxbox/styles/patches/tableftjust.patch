@@ -1,0 +1,4 @@
+95c95
+< window.tab.justify:	center
+---
+> window.tab.justify:	left
