@@ -1,4 +1,6 @@
 " **fold.vim**  
+"
+" A very old and slightly buggy folding script, before folding was supported with vim.
 " 
 " 1_MAPS 2_CONSTANTS 3_FUNCTIONS
 "  

@@ -1,5 +1,3 @@
-:let joeymods = ""
-
 :let Tmenu_ctags_cmd = "/usr/bin/ctags-exuberant"
 :let Tlist_Ctags_Cmd = "/usr/bin/ctags-exuberant"
 " :let Tlist_Display_Prototype = 1
@@ -15,6 +13,13 @@
 " :set titlestring="hello"
 " :set title
 
+
+:let fileType = &ft
+:if fileType == 'java'
+	:Javabrowser
+:elseif fileType == 'c'
+	:Tlist
+:endif
 
 
 " :so ~/.vim/joey/joeykeymap.vim
@@ -52,6 +57,16 @@
 
 " I hope you never need to type a £, because I've remapped it to leave ins mode!
 inoremap £ <esc>
+
+
+
+" For console menu on F4 and tab, from the manual:
+:source $VIMRUNTIME/menu.vim
+:set wildmenu
+:set cpo-=<
+:set wcm=<C-Z>
+:map <F4> :emenu <C-Z>
+
 
 
 " This is very nice but I am just testing word_complete

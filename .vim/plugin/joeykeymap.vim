@@ -1,5 +1,3 @@
-:let joeymods=joeymods . "\njoeykeymap"
-
 " comment
 :map <F5> ^i// <Esc>j^
 " uncomment

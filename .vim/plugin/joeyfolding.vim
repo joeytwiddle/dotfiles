@@ -1,8 +1,6 @@
-:command Joeyfolding call s:Joeyfolding()
+:command! Joeyfolding call s:Joeyfolding()
 
-:function s:Joeyfolding()
-
-	" :let joeymods=joeymods . "\njoeyfolding"
+:function! s:Joeyfolding()
 
 	" All gentle:
 	":map = zo
