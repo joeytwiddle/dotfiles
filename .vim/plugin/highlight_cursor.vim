@@ -37,6 +37,7 @@ function! HighlightCursorOn()
 	" exe 'highlight CursorHighlighted ctermfg=black ctermbg=' . g:highlightcursor
 	" " sleep 200m
 	" " endwhile
+	match ToDo /.*\%#.*/
 	match CursorHighlighted /\%#/
 endfunction
 

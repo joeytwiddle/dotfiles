@@ -39,13 +39,14 @@
   );
   MiniaturizeKey = "Mod1+I";
   WindowShortcut2Key = None;
+  ScreenNextSwitchKey = None;
   ToggleKbdModeKey = None;
   WindowShortcut3Key = None;
   WindowShortcut4Key = None;
   ResizebarBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
   MenuTextColor = "#000000";
   WindowShortcut5Key = None;
-  MaximizeKey = "Control+Shift+Z";
+  MaximizeKey = "Control+X";
   HighlightTextColor = "#000000";
   WindowShortcut6Key = None;
   MenuTitleColor = "#ffffff";
@@ -54,6 +55,7 @@
   WindowShortcut7Key = None;
   AppIconBalloons = YES;
   FTitleColor = "#ffffff";
+  ScreenPrevSwitchKey = None;
   WorkspaceBorderSize = 2;
   WorkspaceBack = (tpixmap, "/mnt/big/stuff/wallpapers/mine/deb_gnu_lnx.jpg", gray20);
   VMaximizeKey = "Mod1+V";
@@ -68,7 +70,6 @@
   FocusPrevKey = "Mod1+Down";
   DontLinkWorkspaces = NO;
   HelpBalloons = YES;
-  OpaqueMove = NO;
   WindowPlaceOrigin = (22, 25);
   WindowPlacement = smart;
   CirculateRaise = YES;

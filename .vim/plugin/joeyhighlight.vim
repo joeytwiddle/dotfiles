@@ -52,7 +52,8 @@
 	" It appears to ignore the contains, otherwise I could use start=/^/ =)
 	" :syntax region javaClassLine start=/class / end=/{/ contains=javaClassDecl
 	:highlight link javaClassLine javaClassDecl
-	:highlight javaClassDecl term=bold ctermbg=DarkGreen ctermfg=White cterm=bold guibg=DarkGreen guifg=White gui=bold
+	" :highlight javaClassDecl term=bold ctermbg=DarkGreen ctermfg=White cterm=bold guibg=DarkGreen guifg=White gui=bold
+	:highlight javaClassDecl ctermbg=black ctermfg=green cterm=bold guibg=DarkGreen guifg=White gui=bold
 	:highlight javaStorageClass term=NONE ctermfg=Cyan cterm=NONE guifg=Cyan gui=NONE
 	:highlight javaType term=NONE cterm=NONE guifg=LightBlue gui=bold
 	:highlight link javaOperator SpecialChar

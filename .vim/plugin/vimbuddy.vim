@@ -10,7 +10,11 @@
 "
 :set shm=atT
 :set statusline=%<%f\ %m%h%r%=\ %P\ (%l,%c)%V\ \#%B%<
-:set rulerformat=%60(%=%m\ \"%<%f\"\ (%l,%c)\ \#%B%)
+" Shows time:
+:set rulerformat=%55(%{strftime('%a\ %b\ %e\ %I:%M\ %p')}\ %5l,%-6(%c%V%)\ %P%)
+" Previous:
+" :set rulerformat=%60(%=%m\ \"%<%f\"\ (%l,%c)\ \#%B%)
+
 " :set statusline=%<%f\ %m%h%r%=\ %P\ (%l,%c)%V\ \#%B%<\ %{VimBuddy()}
 " :set rulerformat=%60(%=%m\ \"%<%f\"\ (%l,%c)\ \#%B\ %{VimBuddy()}%)
 " " :set rulerformat=%15(%c%V\ %p%%%)

@@ -17,16 +17,6 @@ then
 	# vncserver -kill $DISPLAY
 fi
 
-### For all instances except first:
-echo "DISPLAY = $DISPLAY"
-if test ! "$DISPLAY" = ":0" && test ! "$DISPLAY" = ":0.0"
-then
-	startkde
-	exit
-fi
-
-
-
 ### Configuration
 
 export GNOME_PANEL=true;
@@ -47,6 +37,17 @@ export GNOME_PANEL=true;
 WinMan="fluxbox" ## can be "Gnome-compliant", can be KDE-compliant
 # WinMan="wmaker"
 # WinMan="sawfish"
+
+### For all instances except first:
+echo "DISPLAY = $DISPLAY"
+if test ! "$DISPLAY" = ":0" && test ! "$DISPLAY" = ":0.0"
+then
+	bbkeys -i &
+	GNOME_PANEL=
+	WinMan=startkde
+fi
+
+
 
 
 

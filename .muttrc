@@ -60,13 +60,17 @@ macro index "c" <mail>
 macro pager "c" <mail>
 macro index "l" <change-folder>"?"
 macro pager "l" <change-folder>"?"
-## For some reason these "\Ck"s no longer work in index
 # Sort by thread
 macro index "\Ct" ":set sort=threads<Enter>"
 macro pager "\Ct" ":set sort=threads<Enter><refresh>"
+# macro index "\Ct" ot
+# macro pager "\Ct" ot
 # Sort by person
 macro index "\Cp" ":set sort=from<Enter>"
 macro pager "\Cp" ":set sort=from<Enter><refresh>"
+# Sort by received date
+macro index "\Cr" ":set sort=date-received<Enter>"
+macro pager "\Cr" ":set sort=date-received<Enter><refresh>"
 # Show name
 macro index "\Cn" ":set index_format = \"%S%T %[%d/%b] %-12.12L (%4l) %s\"<Enter>:set date_format = \"%d/%b\"<Enter>"
 macro pager "\Cn" ":set index_format = \"%S%T %[%d/%b] %-12.12L (%4l) %s\"<Enter>:set date_format = \"%d/%b\"<Enter><refresh>"
@@ -97,11 +101,14 @@ macro pager <right> <view-attachments>
 # macro generic ":0<Return>" <first-entry>
 # macro generic ":$<Return>" <last-entry>
 ## and because ? was help...
+macro generic \\H <help>
+macro generic \\h <help>
 macro generic \CH <help>
 macro generic \Ch <help>
 macro generic <Esc>h <help>
 macro generic <f1> <help>
-macro generic ":h" <help>
+## Musn't use this, because it disables all ":command" keymappings!
+# macro generic ":h" <help>
 ##
 ## Already defaults:
 # macro generic "/" <search>

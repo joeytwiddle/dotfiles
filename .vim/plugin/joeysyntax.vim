@@ -41,10 +41,13 @@
 	"" Marche pas:
 	" :syntax keyword jTodo TODO Todo BUG BUGS Consider:
 	"" Hmm the standard TODO's are contained inside Comment types
-	:syntax contain jTodo BUG linksto Todo
-	:highlight link jTodo Todo
-	:syntax keyword jNote NOTE Note \<NB:
-	:highlight link jNote jNote
+	" :syntax contain jTodo BUG linksto Todo
+	"" BUG: Doesn't always work.  Works better now.  Wish I could say containedin=*
+	" :highlight! link jTodo Todo
+	:syntax keyword jTodo TODO Todo ToDo todo BUG BUGS containedin=Comment,jShComment,jComment
+	:highlight jTodo ctermbg=red ctermfg=black guibg=red guifg=black
+	:syntax keyword jNote NOTE Note \<NB: Consider: CONSIDER containedin=Comment,jShComment,jComment
+	:highlight jNote ctermbg=yellow ctermfg=black guibg=yellow guifg=black
 
 	"" Log4j:
 	" :syntax match log4jDebug " DEBUG "
