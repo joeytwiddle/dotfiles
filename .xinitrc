@@ -1,3 +1,13 @@
+## For Vnc:
+# (
+# echo "ppid = $PPID"
+# echo "pid = $PID"
+# ps -A | grep "$PPID"
+# ps -A | grep "$PID"
+# ) > /tmp/vncxinit.txt
+# fluxbox
+# exit
+
 ### Configuration
 
 export GNOME_PANEL=true;
@@ -52,7 +62,7 @@ xset fp- unix/:7100
 	# xset r rate 280 90
 
 	browse $JPATH/org/jumpgate.html
-	# evolution &
+	evolution &
 	# kfmclient openProfile startbrowsing &
 	# netscape -messenger &
 

@@ -17,14 +17,14 @@
 
 
 
-:so /home/joey/debian/.vim/mine/joeykeymap.vim
+:so /home/joey/.vim/joey/joeykeymap.vim
 " Causes nasty slowdown on tex!
-" :so /home/joey/debian/.vim/mine/joeysyntax.vim
+" :so /home/joey/.vim/joey/joeysyntax.vim
 " For some reason, syn on cancels folding wherever it is!
 :syn on
-" :so /home/joey/debian/.vim/mine/joeyfolding.vim
+" :so /home/joey/.vim/joey/joeyfolding.vim
 " No point: always cleared unless we source after syntax.
-" :so /home/joey/debian/.vim/mine/joeyhighlight.vim
+" :so /home/joey/.vim/joey/joeyhighlight.vim
 
 :set autoindent
 " :set cindent
