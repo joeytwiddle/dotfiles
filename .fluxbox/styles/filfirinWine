@@ -9,12 +9,12 @@ window.title.unfocus:	raised gradient vertical
 window.title.unfocus.color:	rgb:e0/e0/e0
 window.title.unfocus.colorTo:	rgb:e0/e0/e0
 window.label.focus:	flat gradient vertical
-window.label.focus.color:	rgb:00/80/00
-window.label.focus.colorTo:	rgb:00/60/00
+window.label.focus.colorTo:	rgb:00/80/00
+window.label.focus.color:	rgb:00/60/00
 window.label.focus.textColor:	white
-window.label.unfocus:	flat gradient vertical
-window.label.unfocus.color:	rgb:60/00/00
-window.label.unfocus.colorTo:	rgb:90/00/00
+window.label.unfocus:	raised gradient vertical
+window.label.unfocus.colorTo:	rgb:60/00/00
+window.label.unfocus.color:	rgb:90/00/00
 window.label.unfocus.textColor:	rgb:ff/ff/80
 window.button.focus:	raised gradient vertical
 window.button.focus.color:	rgb:e0/e0/e0
@@ -40,12 +40,12 @@ window.frame.focusColor:	rgb:e0/e0/e0
 
 ! Tabs
 window.tab.label.focus:	flat gradient vertical
-window.tab.label.focus.color:	rgb:00/80/00
-window.tab.label.focus.colorTo:	rgb:00/60/00
+window.tab.label.focus.colorTo:	rgb:00/80/00
+window.tab.label.focus.color:	rgb:00/60/00
 window.tab.label.focus.textColor:	white
-window.tab.label.unfocus:	flat gradient vertical
-window.tab.label.unfocus.color:	rgb:60/00/00
-window.tab.label.unfocus.colorTo:	rgb:90/00/00
+window.tab.label.unfocus:	raised gradient vertical
+window.tab.label.unfocus.colorTo:	rgb:60/00/00
+window.tab.label.unfocus.color:	rgb:90/00/00
 window.tab.label.unfocus.textColor:	rgb:ff/ff/80
 window.tab.borderWidth:	1
 window.tab.borderColor:	rgb:c9/c9/c9
@@ -88,9 +88,9 @@ toolbar.button.pressed:	sunken flat
 toolbar.button.pressed.color:	rgb:AB/AB/AB
 
 ! Fonts (lucidasans-10 is good default)
-window.font:	-*-lucida-medium-r-*-*-*-70-*-*-*-*-*-*
+window.font:	-*-small fonts-medium-r-*-*-12-*-*-*-*-*-*-*
 window.justify:	center
-window.tab.font:	-*-lucida-medium-r-*-*-*-70-*-*-*-*-*-*
+window.tab.font:	-*-small fonts-medium-r-*-*-12-*-*-*-*-*-*-*
 window.tab.justify:	left
 menu.title.font:	-*-lucida-medium-r-*-*-*-180-*-*-*-*-*-*
 menu.title.justify:	center
