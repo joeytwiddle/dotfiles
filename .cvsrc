@@ -1,3 +1,4 @@
+cvs -z3
 checkout -P
 update -P
 # -P means prune empty directories

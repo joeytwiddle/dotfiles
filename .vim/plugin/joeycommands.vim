@@ -58,7 +58,8 @@ function! Jrefactor(replace)
 	"" TODO: Check the unique word replace is not already present in target
 	"" TODO: Allow all buffers to be targeted
 	"" TODO: Confirm action beforehand if /c not enabled.  Allows user to check <cword> worked suitably.
-	execute "%s/\\<" . l:word . "\\>/" . a:replace . "/c"
+	" execute "%s/\\<" . l:word . "\\>/" . a:replace . "/c"
+	execute "%s/\\<" . l:word . "\\>/" . a:replace . "/gc"
 endfunction
 
 """"""""""""""""""""""""""" Library functions """""""""""""""""""""""""""

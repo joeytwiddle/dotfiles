@@ -38,7 +38,9 @@ endif
 	" :syntax region jShComment start="[#]*## " end='$'
 	" :highlight link jShComment jComment
 
-	:syntax match jEq /=/
+	" :syntax match jEq /=/
+	"" for webscraping log:
+	:syntax match jEq /[[:alpha:]]*=/
 	:highlight link jEq Statement
 
 	" :syntax keyword jTodo TODO
@@ -55,6 +57,9 @@ endif
 	:highlight jTodo ctermbg=red ctermfg=black guibg=red guifg=black
 	:syntax keyword jNote NOTE Note \<NB: Consider: CONSIDER containedin=Comment,jShComment,jComment
 	:highlight jNote ctermbg=yellow ctermfg=black guibg=yellow guifg=black
+
+	:syntax match jXmlBits /\(<\|>\)[[:alpha:]]*/
+	:highlight jXmlBits ctermfg=red term=bold
 
 	"" Log4j:
 	" :syntax match log4jDebug " DEBUG "

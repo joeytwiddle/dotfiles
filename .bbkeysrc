@@ -20,3 +20,4 @@ KeyToGrab(J), WithModifier(Mod1), WithAction(BigNudgeDown)
 KeyToGrab(K), WithModifier(Mod1), WithAction(Maximise)
 
 KeyToGrab(Print), WithModifier(Mod1), WithAction(:ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
+KeyToGrab(Print), WithModifier(Mod4), WithAction(:ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)

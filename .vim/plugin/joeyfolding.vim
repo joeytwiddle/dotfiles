@@ -8,32 +8,7 @@ endif
 
 :function! Joeyfolding()
 
-	" All gentle:
-	":map = zo
-	":map + zo
-	":map - zc
-	" Or:
-	:map - zc
-	:map = zo
-	:map _ zC
-	:map + zO
-	" :map _ zm
-	" :map + zr
-	:map <kMinus> zc
-	:map <kPlus> zo
-	:map <kDivide> zm
-	:map <kMultiply> zr
-
-	" This is _intended_ to clear any current folding.
-	:set foldmethod=manual
-	:normal zE
-
-	:set foldmethod=syntax
-	:set fdc=2
-	" :set fdc=0
-
-	:set foldlevel=2
-	:normal zR
+	" ------------- Syntax and highlighting ------------- 
 
 	" For all languages with {}s
 	" I have noticed problems (with sh functions) which disappear if language
@@ -63,7 +38,9 @@ endif
 	" sh
 	":syn region myFold7 matchgroup=myDummy start="\<do\>" end="\<done\>" fold transparent
 
-	:syn sync fromstart
+	"" Diffs/patches:  (Probably more to do for other forms of diff.  This is the form makebak uses.)
+	:syn region joeyRecursiveDiffFoldFile matchgroup=myDummy start="^diff "rs=s+1 end="^diff "me=s-1,re=s-1 fold transparent
+	:syn region joeyRecursiveDiffFoldBit matchgroup=myDummy start="^@@ "rs=s+1 end="^\(diff\|@@\) "me=s-1,re=s-1 fold transparent
 
 	" :set foldmethod=manual
 
@@ -96,5 +73,35 @@ endif
 	"" This listchars should do tabs cos tabs get turned into ^I :-(
 	" :set listchars=trail:\ 
 	" :highlight SpecialKey ctermbg=blue ctermfg=white
+
+	:syn sync fromstart
+
+	" All gentle:
+	":map = zo
+	":map + zo
+	":map - zc
+	" Or:
+	:map - zc
+	:map = zo
+	:map _ zC
+	:map + zO
+	" :map _ zm
+	" :map + zr
+	:map <kMinus> zc
+	:map <kPlus> zo
+	:map <kDivide> zm
+	:map <kMultiply> zr
+
+	" This is _intended_ to clear any current folding.
+	:set foldmethod=manual
+	:normal zE
+
+	:set foldmethod=syntax
+	:set fdc=5
+	" :set fdc=0
+
+	:set foldlevel=2
+	" :normal zR
+	" :normal zM
 
 :endfun

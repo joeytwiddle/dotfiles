@@ -14,7 +14,8 @@ window.*.label.focus.colorTo:	rgb:00/00/00
 window.*.label.focus.textColor:	white
 window.*.label.unfocus:	flat bevel1 solid interlaced
 window.*.label.unfocus.color:	rgb:00/00/80
-window.*.label.unfocus.colorTo:	rgb:00/40/00
+# window.*.label.unfocus.colorTo:	rgb:00/40/00
+window.*.label.unfocus.colorTo:	rgb:00/00/00
 window.*.label.unfocus.textColor:	rgb:68/b6/b6
 window.button.focus:	raised gradient vertical
 window.button.focus.color:	rgb:e0/e0/e0

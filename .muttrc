@@ -29,7 +29,7 @@ set move = no
 unset mark_old
 set pager_stop
 set pager_index_lines = 8
-set folder_format = "%2C%N %-4.4u:%-4.4g  %d %7s  %f"
+set folder_format = "%2C%N %-4.4u:%-4.4g  %d %8s  %f"
 set index_format = "%S%T %[%d/%b] %-12.12L (%4l) %s"
 set to_chars = "? +C@L"
 ## Headers to display:
@@ -37,11 +37,14 @@ ignore *
 unignore from date subject to cc
 unignore organization organisation x-mailer: x-newsreader: x-mailing-list:
 unignore posted-to:
+unignore x-spam-status:
 
 ## Commands to run when entering particular folders:
 folder-hook . set sort=date-sent
 folder-hook Lists set sort=threads
 # folder-hook lists set sort=threads
+
+macro index U <untag-pattern>
 
 ## Keybindings (see: /usr/share/doc/mutt/html/manual-6.html#functions)
 # macro generic "c" <mail>
@@ -115,6 +118,11 @@ macro generic <f1> <help>
 # macro generic "n" <search-next>
 ## When reading message, still perform search in index
 macro pager "n" i<search-next><Enter>
+
+## still doesn't get it working on the search screen:
+## in fact breaks index re-search!
+# macro generic "n" i<search-next><Enter>
+
 macro generic "?" <search-reverse>
 macro browser "N" <search-opposite>
 macro index "N" <search-opposite>
@@ -124,20 +132,26 @@ macro pager "N" i<search-opposite><Enter>
 # macro generic "\Cy" <decrypt-copy>
 # macro generic "\Cy" <decrypt-save>
 
-## Spamassasin:
-# Fully assess email:
-macro index "X?" "| spamassassin -t | fromline '^---- Start Spam' | toline '^---- End of Spam' | highlight '.*points.*required' <Enter>"
-macro pager "X?" "| spamassassin -t | fromline '^---- Start Spam' | toline '^---- End of Spam' | highlight '.*points.*required' <Enter>"
+### Spamassasin:
+## Fully assess email:
+macro index "X?" "| spamassassin -t"
+# | fromline '^---- Start Spam' | toline '^---- End of Spam' | highlight '.*points.*required' <Enter>"
+macro pager "X?" "| spamassassin -t"
+# | fromline '^---- Start Spam' | toline '^---- End of Spam' | highlight '.*points.*required' <Enter>"
 # | grep \^SPAM | highlight '\(.*hits.*required\)' &<Enter>"
-# Quickly assess email (do not use network resources, eg. razor):
-macro index "XL" "| spamassassin -t -L | fromline '^---- Start Spam' | highlight '.*points.*required' <Enter>"
-macro pager "XL" "| spamassassin -t -L | fromline '^---- Start Spam' | highlight '.*points.*required' <Enter>"
-# Report spam (to razor), and delete.
+## Quickly assess email (do not use network resources, eg. razor):
+macro index "XL" "| spamassassin -t -L"
+# | fromline '^---- Start Spam' | highlight '.*points.*required' <Enter>"
+macro pager "XL" "| spamassassin -t -L"
+# | fromline '^---- Start Spam' | highlight '.*points.*required' <Enter>"
+## Report spam (to razor), and delete.
 macro index "XS" "| spamassassin -r & <Enter>d"
 macro pager "XS" "| spamassassin -r & <Enter>d"
-# Razor direct:
-macro index "XX" "| razor-report & <Enter>d"
-macro pager "XX" "| razor-report & <Enter>d"
+## Razor direct:
+# macro index "XX" "| razor-report & <Enter>d"
+# macro pager "XX" "| razor-report & <Enter>d"
+macro index "XX" "| razor-report & <Enter>s~/Mail/spam_reported<Enter>y"
+macro pager "XX" "| razor-report & <Enter>s~/Mail/spam_reported<Enter>y"
 
 ## Addresbook / aliases:
 # source ~/.mail_aliases
