@@ -9,13 +9,13 @@ window.title.focus.colorTo:	rgb:90/40/10
 window.title.unfocus:	raised gradient vertical
 window.title.unfocus.color:	rgb:90/40/10
 window.title.unfocus.colorTo:	rgb:90/40/10
-window.label.focus:	raised gradient horizontal
-window.label.focus.color:	rgb:00/20/00
-window.label.focus.colorTo:	rgb:00/60/00
+window.label.focus:	sunken gradient vertical
+window.label.focus.color:	rgb:c0/80/60
+window.label.focus.colorTo:	rgb:a0/60/40
 window.label.focus.textColor:	white
 window.label.unfocus:	raised gradient vertical
-window.label.unfocus.color:	rgb:90/00/00
-window.label.unfocus.colorTo:	rgb:60/00/00
+window.label.unfocus.color:	rgb:60/00/00
+window.label.unfocus.colorTo:	rgb:90/00/00
 window.label.unfocus.textColor:	rgb:ff/ff/80
 window.button.focus:	raised gradient vertical
 window.button.focus.color:	rgb:e0/e0/e0
@@ -40,14 +40,14 @@ window.frame.unfocusColor:	rgb:90/40/10
 window.frame.focusColor:	rgb:90/40/10
 
 ! Tabs
+window.tab.label.focus:	sunken gradient vertical
+window.tab.label.focus.color:	rgb:c0/80/60
+window.tab.label.focus.colorTo:	rgb:a0/60/40
+window.tab.label.focus.textColor:	white
 window.tab.label.unfocus:	raised gradient vertical
 window.tab.label.unfocus.color:	rgb:90/00/00
 window.tab.label.unfocus.colorTo:	rgb:60/00/00
 window.tab.label.unfocus.textColor:	rgb:ff/ff/80
-window.tab.label.focus:	flat gradient vertical
-window.tab.label.focus.color:	rgb:00/40/00
-window.tab.label.focus.colorTo:	rgb:00/60/00
-window.tab.label.focus.textColor:	white
 window.tab.borderWidth:	1
 window.tab.borderColor:	rgb:90/40/10
 
@@ -102,10 +102,10 @@ toolbar.justify:	center
 
 ! Borders
 borderColor:	rgb:90/40/10
-borderWidth:	0
+borderWidth:	1
 bevelWidth:	2
 handleWidth:	1
-frameWidth:	1
+frameWidth:	0
 
 ! Other
 rootCommand:  bsetbg -solid black

@@ -1,0 +1,57 @@
+5c5
+< ! Focused and unfocused windows
+---
+> ! Focused and focused windows
+9c9
+< window.title.unfocus:	flat gradient vertical
+---
+> window.title.unfocus:	raised gradient vertical
+13,15c13,15
+< window.label.focus.color:	rgb:60/00/00
+< window.label.focus.colorTo:	rgb:90/00/00
+< window.label.focus.textColor:	rgb:ff/ff/80
+---
+> window.label.focus.color:	rgb:00/60/00
+> window.label.focus.colorTo:	rgb:00/80/00
+> window.label.focus.textColor:	white
+17,19c17,19
+< window.label.unfocus.color:	rgb:00/80/00
+< window.label.unfocus.colorTo:	rgb:00/40/00
+< window.label.unfocus.textColor:	white
+---
+> window.label.unfocus.color:	rgb:90/00/00
+> window.label.unfocus.colorTo:	rgb:60/00/00
+> window.label.unfocus.textColor:	rgb:ff/ff/80
+31,32d30
+< window.handle.focus:	solid
+< window.handle.focus.color:	rgb:e0/e0/e0
+35,36c33,34
+< window.grip.focus:	solid
+< window.grip.focus.color:	rgb:e0/e0/e0
+---
+> window.handle.focus:	solid
+> window.handle.focus.color:	rgb:e0/e0/e0
+39c37,38
+< window.frame.focusColor:	rgb:e0/e0/e0
+---
+> window.grip.focus:	solid
+> window.grip.focus.color:	rgb:e0/e0/e0
+40a40
+> window.frame.focusColor:	rgb:e0/e0/e0
+43,46d42
+< window.tab.label.focus:	flat gradient vertical
+< window.tab.label.focus.color:	rgb:60/00/00
+< window.tab.label.focus.colorTo:	rgb:90/00/00
+< window.tab.label.focus.textColor:	rgb:ff/ff/80
+48,50c44,50
+< window.tab.label.unfocus.color:	rgb:00/80/00
+< window.tab.label.unfocus.colorTo:	rgb:00/40/00
+< window.tab.label.unfocus.textColor:	white
+---
+> window.tab.label.unfocus.color:	rgb:90/00/00
+> window.tab.label.unfocus.colorTo:	rgb:60/00/00
+> window.tab.label.unfocus.textColor:	rgb:ff/ff/80
+> window.tab.label.focus:	flat gradient vertical
+> window.tab.label.focus.color:	rgb:00/60/00
+> window.tab.label.focus.colorTo:	rgb:00/80/00
+> window.tab.label.focus.textColor:	white
