@@ -285,7 +285,9 @@ exe "nnoremap <unique> <silent> " . Grep_Key . " :call RunGrep('grep')<CR>"
 " RunGrepCmd()
 " Run the specified grep command using the supplied pattern
 function! s:RunGrepCmd(cmd, pattern)
+    " echo "command: " . a:cmd
     let cmd_output = system(a:cmd)
+    " echo "output: " . cmd_output
 
     if cmd_output == ""
         echohl WarningMsg | 
@@ -303,9 +305,10 @@ function! s:RunGrepCmd(cmd, pattern)
     let old_efm = &efm
     set efm=%f:%\\s%#%l:%m
 
-    " execute "silent! cfile " . tmpfile
+    execute "silent! cfile " . tmpfile
     "" Joey: don't jump to first occurrence
-    execute "silent! cgetfile " . tmpfile
+    "" But disabled because it stopped working
+    " execute "silent! cgetfile " . tmpfile
 
     let &efm = old_efm
 
