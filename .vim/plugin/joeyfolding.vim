@@ -16,7 +16,7 @@ endif
 		" :syn region joeyRecursiveDiffFoldFile matchgroup=myDummy start="^diff "rs=s+1 end="^diff "me=s-1,re=s-1 fold transparent
 		:syn region joeyRecursiveDiffFoldFile matchgroup=myDummy start="^\(diff\|Index:\) "rs=s+1 end="^\(diff\|Index:\) "me=s-1,re=s-1 fold transparent
 		" :syn region joeyRecursiveDiffFoldFile matchgroup=myDummy start="^Index: "rs=s+1 end="^Index: "me=s-1,re=s-1 fold transparent
-		" :syn region joeyRecursiveDiffFoldBit matchgroup=myDummy start="^@@ "rs=s+1 end="^\(diff\|@@\) "me=s-1,re=s-1 fold transparent
+		:syn region joeyRecursiveDiffFoldBit matchgroup=myDummy start="^@@ "rs=s+1 end="^\(diff\|@@\|Index:\) "me=s-1,re=s-1 fold transparent
 
 	else
 
