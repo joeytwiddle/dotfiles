@@ -30,3 +30,5 @@ bindkey "^p" next
 ## worked for Ctrl+] and [, but also broke <up> and <down> arrows.
 # bindkey "\033" prev
 # bindkey "\035" next
+
+## couldn't get Ctrl+< and > working at all, cos I couldn't get vim's Ctrl+V to accept them as a code.

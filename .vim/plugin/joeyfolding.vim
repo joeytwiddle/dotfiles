@@ -66,8 +66,14 @@
 	" For treelist.hs:
 	" :syntax match TreeListFoldLine ".*\(-{\|-}\|{-\|}-\).*" contains=TreeListHsTag,myFold
 	" :highlight TreeListFoldLine ctermbg=Red ctermfg=White cterm=bold
-	:syntax match TreeListHsTag "^\(\.\|+\|-\|\*\) "
-	:highlight TreeListHsTag ctermbg=blue ctermfg=white cterm=bold
+	"" tags are blue, blends in:
+	" :syntax match TreeListHsTag "^\(\.\|+\|-\|\*\) "
+	" :highlight TreeListHsTag ctermbg=blue ctermfg=white cterm=bold
+	:syntax match TreeListHsTag "^\(+\|-\) [^{}]*"
+	" :highlight TreeListHsTag ctermbg=darkmagenta ctermfg=white cterm=bold
+	:highlight TreeListHsTag ctermbg=darkblue ctermfg=white cterm=bold
+	:syntax match TreeListHsTagNorm "^\(\.\|\*\) "
+	:highlight TreeListHsTagNorm ctermbg=darkblue ctermfg=white cterm=bold
 	" :syn region TreeListFold matchgroup=myDummy start="-{" end="}-" transparent fold
 	"" Conflicts with TreeListFold
 	" :syntax match TreeListHsCurl "\(-{\|{-\|-}\|}\)$"
