@@ -15,6 +15,7 @@
 ":autocmd BufWritePre,FilterWritePre     *.* set expandtab | retab!
 " :set wrapmargin=8
 :set incsearch
+:set hlsearch
 :set shiftwidth=3
 :set ts=3
 " :set expandtab
@@ -37,7 +38,7 @@
 " <Leader> defaults to "\", I use ","
 " let mapleader = ","
 
-:nmap <Leader>n :call MyRepeatedSearch()<CR>
+:nmap <Leader>/ :call MyRepeatedSearch()<CR>
 
 :fun! MyRepeatedSearch()
 	if @/ != "" && search(@/, 'W') == 0
@@ -66,8 +67,8 @@ let SearchBuffersList = ""
 
 " Search for the last search pattern (register /)
 " The direction of the last search (? or /) is ignored.
-" map <Leader>n :call SearchBuffers(@/, "n")<Return>
-" map <Leader>N :call SearchBuffers(@/, "N")<Return>
+map <Leader>n :call SearchBuffers(@/, "n")<Return>
+map <Leader>N :call SearchBuffers(@/, "N")<Return>
 
 " Search through buffers for a specified pattern, either forward
 " or backwards ("n" and "N" respectively).

@@ -1,0 +1,41 @@
+session.titlebar.left:	Close 
+session.titlebar.right:	Minimize Shade Stick Maximize 
+session.screen0.toolbar.onTop:	false
+session.screen0.toolbar.autoHide:	false
+session.screen0.toolbar.widthPercent:	65
+session.screen0.toolbar.placement:	TopCenter
+session.screen0.tab.width:	64
+session.screen0.tab.height:	16
+session.screen0.tab.alignment:	Relative
+session.screen0.tab.placement:	Bottom
+session.screen0.tab.rotatevertical:	false
+session.screen0.slit.placement:	CenterRight
+session.screen0.slit.direction:	Vertical
+session.screen0.slit.onTop:	False
+session.screen0.slit.autoHide:	False
+session.screen0.rootCommand:	
+session.screen0.maxOverSlit:	false
+session.screen0.fullMaximization:	true
+session.screen0.focusNewWindows:	true
+session.screen0.windowPlacement:	RowSmartPlacement
+session.screen0.strftimeFormat:	%I:%M %p
+session.screen0.rowPlacementDirection:	LeftToRight
+session.screen0.sloppywindowgrouping:	true
+session.screen0.workspaces:	5
+session.screen0.workspaceNames:	Earth,Air,Fire,Water,Toast,
+session.screen0.imageDither:	false
+session.screen0.focusModel:	AutoRaiseSloppyFocus
+session.screen0.edgeSnapThreshold:	8
+session.screen0.colPlacementDirection:	TopToBottom
+session.screen0.focusLastWindow:	true
+session.opaqueMove:	true
+session.cacheMax:	200l
+session.menuFile:	/etc/X11/fluxbox/fluxbox-menu
+session.styleFile:	/home/joey/linux/.fluxbox/styles/my-qnx-photon
+session.keyFile:	/etc/X11/fluxbox/keys
+session.autoRaiseDelay:	250
+session.iconbar:	true
+session.colorsPerChannel:	4
+session.cacheLife:	5l
+session.doubleClickInterval:	250
+session.tabs:	true

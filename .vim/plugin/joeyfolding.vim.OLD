@@ -30,4 +30,4 @@
 " Fold colours
 :highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000060 guifg=White
 " :highlight foldColumn ctermbg=Grey ctermfg=Blue cterm=none gui=bold guifg=Green guibg=#000060
-:highlight foldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=Green guibg=#000060
+:highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#000060

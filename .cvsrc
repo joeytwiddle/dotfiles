@@ -5,6 +5,6 @@ update -P
 # for sticky problems use -A on update
 
 # Contextual diff (show lines near change):
-diff -c
+# diff -c
 # Two-column diff:
 # diff --side-by-side

@@ -1,3 +1,7 @@
+# `jwhich wine` /mnt/filfirin/joey/code/c/gfx/sdl/transtri/transtri.exe
+
+# `jwhich xterm` -e testallfonts
+
 # xvidtune&
 
 # Keyboard
@@ -34,8 +38,8 @@ Panel=true;
 # WinMan="icewm" # Gnome-compliant
 # WinMan="ion"
 # WinMan="pwm"
-# WinMan="fluxbox" # KDE-compliant
-WinMan="wmaker"
+WinMan="fluxbox" # KDE-compliant
+# WinMan="wmaker"
 # WinMan="sawfish"
 
 # Start all the stuff I like
@@ -52,7 +56,8 @@ WinMan="wmaker"
 	#   xv -root -rmode 5 -maxpect -quit $JPATH/background.jpg )
 	( 
 		sleep 4
-	  nice -n 10 jxplanet render
+		jxplanet makeicon /stuff/portablelinux/images/xplanet.gif
+		nice -n 10 jxplanet render
 	) &
 
 	# xhost +
