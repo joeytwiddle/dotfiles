@@ -3,24 +3,22 @@
 # 2001 (c) skypher
 
 ! Focused and unfocused windows
-window.title.focus:	flat gradient vertical
-window.title.focus.color:	rgb:00/ff/00
-window.title.focus.colorTo:	rgb:00/ff/00
-window.title.unfocus:	flat gradient vertical
+window.title.focus:	flat solid
+window.title.focus.color:	rgb:00/00/ff
+window.title.unfocus:	flat solid
 window.title.unfocus.color:	rgb:00/ff/00
-window.title.unfocus.colorTo:	rgb:00/ff/00
 window.label.focus:	flat solid
-window.label.focus.color:	rgb:00/ff/00
-window.label.focus.textColor:	rgb:00/00/00
+window.label.focus.color:	rgb:00/00/80
+window.label.focus.textColor:	rgb:ff/ff/00
 window.label.unfocus:	flat solid
-window.label.unfocus.color:	rgb:00/00/00
-window.label.unfocus.textColor:	rgb:00/ff/00
-window.button.focus:	flat solid
-window.button.focus.color:	rgb:00/00/00
-window.button.focus.picColor:	rgb:00/ff/00
+window.label.unfocus.color:	rgb:00/80/00
+window.label.unfocus.textColor:	rgb:00/00/00
+window.button.focus:	raised solid
+window.button.focus.color:	rgb:ff/ff/ff
+window.button.focus.picColor:	rgb:00/00/ff
 window.button.unfocus:	flat solid
-window.button.unfocus.color:	rgb:00/00/00
-window.button.unfocus.picColor:	rgb:00/ff/00
+window.button.unfocus.color:	rgb:00/ff/00
+window.button.unfocus.picColor:	rgb:00/00/00
 window.button.pressed:	sunken solid
 window.button.pressed.color:	rgb:ff/00/00
 window.handle.focus:	solid
@@ -31,18 +29,18 @@ window.grip.focus:	solid
 window.grip.focus.color:	rgb:00/00/00
 window.grip.unfocus:	solid
 window.grip.unfocus.color:	rgb:00/00/00
-window.frame.focusColor:	rgb:00/a5/00
-window.frame.unfocusColor:	rgb:00/a5/00
+window.frame.focusColor:	rgb:00/00/ff
+window.frame.unfocusColor:	rgb:00/ff/00
 
 ! Tabs
 window.tab.label.focus:	flat solid
-window.tab.label.focus.color:	rgb:00/ff/00
-window.tab.label.focus.textColor:	rgb:00/00/00
+window.tab.label.focus.color:	rgb:00/00/ff
+window.tab.label.focus.textColor:	rgb:ff/ff/00
 window.tab.label.unfocus:	flat solid
 window.tab.label.unfocus.color:	rgb:00/00/00
 window.tab.label.unfocus.textColor:	rgb:00/ff/00
 window.tab.borderWidth:	1
-window.tab.borderColor:	rgb:00/a0/00
+window.tab.borderColor:	rgb:80/80/80
 
 ! Menu
 menu.title:	flat gradient vertical
@@ -94,7 +92,7 @@ toolbar.font:	lucidasans-10
 toolbar.justify:	center
 
 ! Borders
-borderColor:	rgb:00/ff/00
+borderColor:	rgb:80/80/80
 borderWidth:	0
 bevelWidth:	1
 handleWidth:	1

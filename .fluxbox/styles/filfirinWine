@@ -93,9 +93,9 @@ window.font:	-*-lucida-medium-r-*-*-*-70-*-*-*-*-*-*
 window.justify:	center
 window.tab.font:	-*-lucida-medium-r-*-*-*-70-*-*-*-*-*-*
 window.tab.justify:	center
-menu.title.font:	-*-lucida-medium-r-*-*-*-240-*-*-*-*-*-*
+menu.title.font:	-*-lucida-medium-r-*-*-*-180-*-*-*-*-*-*
 menu.title.justify:	center
-menu.frame.font:	-*-lucida-medium-r-*-*-*-180-*-*-*-*-*-*
+menu.frame.font:	-*-lucida-medium-r-*-*-*-140-*-*-*-*-*-*
 menu.frame.justify:	center
 toolbar.font:	lucidasans-10
 toolbar.justify:	center
