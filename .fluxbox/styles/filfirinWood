@@ -3,19 +3,19 @@
 # 2001 (c) skypher
 
 ! Focused and focused windows
-window.title.unfocus:	flat gradient vertical
-window.title.unfocus.color:	rgb:c0/80/60
-window.title.unfocus.colorTo:	rgb:c0/80/60
 window.title.focus:	flat gradient vertical
-window.title.focus.color:	rgb:a0/50/20
-window.title.focus.colorTo:	rgb:a0/50/20
+window.title.focus.color:	rgb:c0/80/60
+window.title.focus.colorTo:	rgb:c0/80/60
+window.title.unfocus:	flat gradient vertical
+window.title.unfocus.color:	rgb:a0/50/20
+window.title.unfocus.colorTo:	rgb:a0/50/20
 window.label.focus:	raised gradient vertical
 window.label.focus.color:	rgb:90/00/00
 window.label.focus.colorTo:	rgb:60/00/00
 window.label.focus.textColor:	rgb:ff/ff/80
 window.label.unfocus:	flat gradient vertical
-window.label.unfocus.color:	rgb:80/30/10
-window.label.unfocus.colorTo:	rgb:a0/50/20
+window.label.unfocus.color:	rgb:70/20/0
+window.label.unfocus.colorTo:	rgb:90/40/20
 window.label.unfocus.textColor:	white
 window.button.focus:	raised gradient vertical
 window.button.focus.color:	rgb:e0/e0/e0
@@ -28,16 +28,16 @@ window.button.unfocus.picColor:	rgb:00/00/00
 window.button.pressed:	sunken gradient vertical
 window.button.pressed.color:	rgb:b0/b0/b0
 window.button.pressed.colorTo:	rgb:e0/e0/e0
-window.handle.focus:	solid
-window.handle.focus.color:	rgb:a0/50/20
 window.handle.unfocus:	solid
-window.handle.unfocus.color:	rgb:c0/80/60
-window.grip.focus:	solid
-window.grip.focus.color:	rgb:a0/50/20
+window.handle.unfocus.color:	rgb:a0/50/20
+window.handle.focus:	solid
+window.handle.focus.color:	rgb:c0/80/60
 window.grip.unfocus:	solid
-window.grip.unfocus.color:	rgb:c0/80/60
-window.frame.focusColor:	rgb:a0/50/20
-window.frame.unfocusColor:	rgb:c0/80/60
+window.grip.unfocus.color:	rgb:a0/50/20
+window.grip.focus:	solid
+window.grip.focus.color:	rgb:c0/80/60
+window.frame.unfocusColor:	rgb:a0/50/20
+window.frame.focusColor:	rgb:c0/80/60
 
 ! Tabs
 window.tab.label.focus:	raised gradient vertical
@@ -45,8 +45,8 @@ window.tab.label.focus.color:	rgb:90/00/00
 window.tab.label.focus.colorTo:	rgb:60/00/00
 window.tab.label.focus.textColor:	rgb:ff/ff/80
 window.tab.label.unfocus:	flat gradient vertical
-window.tab.label.unfocus.colorTo:	rgb:a0/50/20
-window.tab.label.unfocus.color:	rgb:80/30/10
+window.tab.label.unfocus.color:	rgb:70/20/0
+window.tab.label.unfocus.colorTo:	rgb:90/40/20
 window.tab.label.unfocus.textColor:	white
 window.tab.borderWidth:	1
 window.tab.borderColor:	rgb:a0/50/20
