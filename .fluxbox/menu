@@ -447,6 +447,7 @@ Debian MENU
       [restart] (Restart)
       [restart] (Sawfish)  {sawfish}
       [restart] (Twm)  {twm}
+      [restart] (Treewm)  {treewm}
       [restart] (Window Maker)  {/usr/X11R6/bin/wmaker}
       [restart] (XFwm/XFce)  {startxfce}
       [restart] (aewm)  {/usr/bin/aewm}
