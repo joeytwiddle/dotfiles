@@ -1,6 +1,7 @@
 #~/.bbkeysrc, automagically configured by bbkeysconf.pl
 
-KeyToGrab(X), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xterm)
+# KeyToGrab(X), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xterm)
+KeyToGrab(X), WithModifier(Mod1), WithAction(ExecCommand), DoThis(/home/joey/j/jsh xterm -e /home/joey/j/jsh)
 KeyToGrab(KP_Divide), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumedown 9)
 KeyToGrab(KP_Multiply), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumeup 9)
 KeyToGrab(KP_Subtract), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumedown 2)
@@ -9,7 +10,8 @@ KeyToGrab(minus), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumedown
 KeyToGrab(equal), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumedown)
 
 KeyToGrab(KP_7), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -r)
-KeyToGrab(KP_9), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -f)
+# KeyToGrab(KP_9), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -f)
+KeyToGrab(KP_9), WithModifier(Mod1), WithAction(ExecCommand), DoThis(nextsong)
 KeyToGrab(KP_0), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -u)
 KeyToGrab(KP_1), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -p)
 KeyToGrab(KP_3), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -s)

@@ -2,6 +2,7 @@
 
 ## Put your favourite WMs at the top.  The first one present will be chosen.
 WindowManagers="
+startkde
 enlightenment
 fluxbox
 wmaker
@@ -12,7 +13,6 @@ gnome-session
 metacity
 sawfish
 sawmill
-startkde
 pwm
 ion
 ratpoison
@@ -156,6 +156,10 @@ xset r rate 270 65
 date
 echo "Starting window manager: $WinMan"
 
+if [ ! "$JPATH" ]
+then export JPATH=/tmp/
+fi
+mkdir -p "$JPATH/data"
 # NEXTWMFILE=`jgettmp nextwinman`
 # CURRENTWMFILE=`jgettmp currentwinman`
 NEXTWMFILE=$JPATH/data/nextwinman.$DISPLAY.dat

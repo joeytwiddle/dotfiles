@@ -53,9 +53,9 @@ endif
 	" :syntax contain jTodo BUG linksto Todo
 	"" BUG: Doesn't always work.  Works better now.  Wish I could say containedin=*
 	" :highlight! link jTodo Todo
-	:syntax keyword jTodo TODO Todo ToDo todo BUG BUGS containedin=Comment,jShComment,jComment
+	:syntax keyword jTodo TODO Todo ToDo todo BUG BUGS containedin=Comment,jShComment,jComment,shComment
 	:highlight jTodo ctermbg=red ctermfg=black guibg=red guifg=black
-	:syntax keyword jNote NOTE Note \<NB: Consider: CONSIDER containedin=Comment,jShComment,jComment
+	:syntax keyword jNote NOTE Note \<NB: Consider: CONSIDER containedin=Comment,jShComment,jComment,shComment
 	:highlight jNote ctermbg=yellow ctermfg=black guibg=yellow guifg=black
 
 	:syntax match jXmlBits /\(<\|>\)[[:alpha:]]*/
