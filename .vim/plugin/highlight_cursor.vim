@@ -64,3 +64,7 @@ map <C-C> :call HighlightCursorToggle()<CR>
 
 "" Uncomment this line to have the cursor highlighted as default:
 " :call HighlightCursorToggle()
+
+if has("menu")
+	amenu &Joey's\ Tools.&Toggle\ emergency\ cursor\ <C-C> :call HighlightCursorToggle()<CR>
+endif

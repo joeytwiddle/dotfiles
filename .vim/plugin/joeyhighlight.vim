@@ -1,6 +1,9 @@
-:command! Joeyhighlight call s:Joeyhighlight()
+:command! Joeyhighlight call Joeyhighlight()
+if has("menu")
+	amenu &Joey's\ Tools.&Joey's\ highlighting :call Joeyhighlight()<CR>
+endif
 
-:function! s:Joeyhighlight()
+:function! Joeyhighlight()
 
 	" Note: it seems (at least with DiffDelete), that setting cterm?g=... after
 	" cterm=... can cause cterm= to be changed!

@@ -280,7 +280,7 @@ endif
 " --------------------- Do not edit after this line ------------------------
 
 " Map a key to invoke grep on a word under cursor.
-exe "nnoremap <unique> <silent> " . Grep_Key . " :call <SID>RunGrep('grep')<CR>"
+exe "nnoremap <unique> <silent> " . Grep_Key . " :call RunGrep('grep')<CR>"
 
 " RunGrepCmd()
 " Run the specified grep command using the supplied pattern
@@ -535,7 +535,7 @@ endfunction
 
 " RunGrep()
 " Run the specified grep command
-function! s:RunGrep(grep_cmd, ...)
+function! RunGrep(grep_cmd, ...)
     if a:0 == 0 || a:1 == ''
         " No options are specified. Use the default grep options
         let grep_opt = g:Grep_Default_Options
@@ -597,15 +597,19 @@ function! s:RunGrep(grep_cmd, ...)
 endfunction
 
 " Define the set of grep commands
-command! -nargs=* Grep call s:RunGrep('grep', <q-args>)
+command! -nargs=* Grep call RunGrep('grep', <q-args>)
 command! -nargs=* Rgrep call s:RunGrepRecursive('grep', <q-args>)
 command! -nargs=* GrepBuffer call s:RunGrepBuffer(<q-args>)
 command! -nargs=* GrepArgs call s:RunGrepArgs(<q-args>)
 
-command! -nargs=* Fgrep call s:RunGrep('fgrep', <q-args>)
+command! -nargs=* Fgrep call RunGrep('fgrep', <q-args>)
 command! -nargs=* Rfgrep call s:RunGrepRecursive('fgrep', <q-args>)
-command! -nargs=* Egrep call s:RunGrep('egrep', <q-args>)
+command! -nargs=* Egrep call RunGrep('egrep', <q-args>)
 command! -nargs=* Regrep call s:RunGrepRecursive('egrep', <q-args>)
-command! -nargs=* Agrep call s:RunGrep('agrep', <q-args>)
+command! -nargs=* Agrep call RunGrep('agrep', <q-args>)
 command! -nargs=* Ragrep call s:RunGrepRecursive('agrep', <q-args>)
 
+"" Joey notes: I had to remove s: from all RunGrep's to allow this:
+if has("menu")
+	amenu &Joey's\ Tools.&Grep\ (F3) :call RunGrep('grep')<CR>
+endif

@@ -1,9 +1,12 @@
 " Much of this is now in treefolding.vim, which is auto-generated from treevim.sh.
 " Can we hope to factor out the common code?
 
-:command! Joeyfolding call s:Joeyfolding()
+:command! Joeyfolding call Joeyfolding()
+if has("menu")
+	amenu &Joey's\ Tools.&Joey's\ folding :call Joeyfolding()<CR>
+endif
 
-:function! s:Joeyfolding()
+:function! Joeyfolding()
 
 	" All gentle:
 	":map = zo
@@ -26,15 +29,15 @@
 	:normal zE
 
 	:set foldmethod=syntax
-	" :set fdc=2
-	:set fdc=0
+	:set fdc=2
+	" :set fdc=0
 
 	:set foldlevel=2
 	:normal zR
 
 	" For all languages with {}s
 	" I have noticed problems (with sh functions) which disappear if language
-	" syntax is not loaded.
+	" syntax is not loaded.  Probably due to "contains" conditions.
 	:syn region myFold matchgroup=myDummy start="{" end="}" transparent fold
 
 	" C/Java comments
@@ -44,7 +47,12 @@
 	:highlight link myFold2 cComment
 
 	" C/Java #ifdefs
+	" The first of the repeated syntax lines is simply there to ensure that the clear does not produce an error!
+	" The clear prevents BUG where multiple sourcing repeats folds!
 	:syn region myFold4 start="#ifdef" end="#endif" transparent fold
+	:syn clear myFold4
+	:syn region myFold4 start="#ifdef" end="#endif" transparent fold
+	"" TODO: clear all like myFold4
 
 	" PS
 	:syn region myFold5 matchgroup=myDummy start="% Begin" end="% End" fold transparent
@@ -60,12 +68,13 @@
 	" :set foldmethod=manual
 
 	" Fold colours
-	:highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#0000b0 guifg=White
+	:highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000080 guifg=White
 	" :highlight foldColumn ctermbg=Grey ctermfg=Blue cterm=none gui=bold guifg=Green guibg=#000060
-	:highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#0000b0
+	:highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#000080
 
 	"" TODO: I really want this to use shiftwidth to indent the line properly.
 	""       It would read much better, and IMO is vital in some cases.
+	"" TODO: After #lines in decimal, list #lines/50 with each 50 represented by a '.' character.  Much easier visually.
 	:set foldtext=getline(v:foldstart).'\ \ \ ['.(v:foldend-v:foldstart).'\ lines]'
 
 	" For treelist.hs:

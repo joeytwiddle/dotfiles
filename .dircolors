@@ -165,6 +165,7 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .DOC 01;33
 .ppt 01;33
 .man 01;33
+.url 01;33 # actually a link - so could be grouped/coloured like a symlink
 .html 01;33
 .HTML 01;33
 .htm 01;33

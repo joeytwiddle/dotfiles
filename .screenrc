@@ -24,6 +24,8 @@ sorendition 00 mW # white on magenta
 
 activity              "%C -> %n%f %t activity!"
 
+defscrollback 10000
+
 ## My prefered default command keys:
 defescape "^k^l"
 
@@ -31,8 +33,10 @@ defescape "^k^l"
 # bindkey -k kP copy
 ## Home key kH enters copy/scrollback mode UNTESTED (ho?)
 # bindkey -k ho copy ## not recognised!
-## Strangely kH works on End from boris
+## Strangely kH works on End not Home!
 bindkey -k kH copy
+## Now I'm binding it to the Insert key:
+bindkey -k kI copy
 ## Shift-Home key enters copy/scrollback mode UNTESTED
 # bindkey -k #2 copy
 

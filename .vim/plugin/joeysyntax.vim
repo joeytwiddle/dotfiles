@@ -1,6 +1,9 @@
-:command! Joeysyntax call s:Joeysyntax()
+:command! Joeysyntax call Joeysyntax()
+if has("menu")
+	amenu &Joey's\ Tools.&Joey's\ syntax\ rulez :call Joeysyntax()<CR>
+endif
 
-:function! s:Joeysyntax()
+:function! Joeysyntax()
 
 	" For slow computers:
 	" :syn sync maxlines=50
@@ -31,9 +34,9 @@
 	" for Mason
 	:syntax region jComment start="/\*"  end="\*/"
 
-	" for sh
-	:syntax region jShComment start="[#]*## " end='$'
-	:highlight link jShComment jComment
+	" for sh, but bad for #defines!
+	" :syntax region jShComment start="[#]*## " end='$'
+	" :highlight link jShComment jComment
 
 	:syntax match jEq /=/
 	:highlight link jEq Statement

@@ -125,3 +125,4 @@ Mod1 KP_Delete :ExecCommand xmms -s
 ## actually completely steals my keyboard!
 # None XF86AudioPlay :ExecCommand xmms -u
 # None XF86AudioStop :ExecCommand xmms -s
+Mod1 Print :ExecCommand import -window root /tmp/screenshot-$$.bmp

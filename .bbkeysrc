@@ -18,3 +18,5 @@ KeyToGrab(KP_Delete), WithModifier(Mod1), WithAction(:ExecCommand), DoThis(xmms 
 # Not in wmaker :-(
 KeyToGrab(J), WithModifier(Mod1), WithAction(BigNudgeDown)
 KeyToGrab(K), WithModifier(Mod1), WithAction(Maximise)
+
+KeyToGrab(Print), WithModifier(Mod1), WithAction(:ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)

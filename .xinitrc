@@ -1,5 +1,5 @@
 ### For Vnc:
-if test "$VNCDESKTOP" = "X"
+if [ "$VNCDESKTOP" = "X" ]
 then
 	xterm &
 	# fluxbox &
@@ -22,7 +22,9 @@ fi
 export GNOME_PANEL=true;
 ## Lets get some kind of window manager starting!
 # gnome-session
-# WinMan=`echo "wmaker sawmill" | tr " " "\n" | chooserandomline`
+if [ ! "$WinMan" ]
+then WinMan=`echo "wmaker startkde sawfish fluxbox enlightenment" | tr " " "\n" | chooserandomline`
+fi
 # WinMan="sawmill"
 # WinMan="fvwm"
 # WinMan="twm"
@@ -34,13 +36,14 @@ export GNOME_PANEL=true;
 # WinMan="icewm" ## Gnome-compliant
 # WinMan="ion"
 # WinMan="pwm"
-WinMan="fluxbox" ## can be "Gnome-compliant", can be KDE-compliant
 # WinMan="wmaker"
 # WinMan="sawfish"
+# WinMan="fluxbox" ## can be "Gnome-compliant", can be KDE-compliant
+WinMan="enlightenment"
 
 ### For all instances except first:
 echo "DISPLAY = $DISPLAY"
-if test ! "$DISPLAY" = ":0" && test ! "$DISPLAY" = ":0.0"
+if [ ! "$DISPLAY" = ":0" ] && [ ! "$DISPLAY" = ":0.0" ]
 then
 	bbkeys -i &
 	GNOME_PANEL=
@@ -69,6 +72,10 @@ xset dpms 3600 3600 3600
 
 	xterm -geometry 80x24+570+680 &
 
+	if [ ! "$WinMan" = fluxbox ]
+	then bbkeys -i &
+	fi
+
 	## This file likes to cause me problems:
 	del .gnome/session
 
@@ -76,7 +83,7 @@ xset dpms 3600 3600 3600
 	if [ $GNOME_PANEL ]
 	then
 		## Increased from 5 to 10 because gnomeICU and xmms-applet were failing to show their visuals.
-		( sleep 10s && panel ) &
+		( sleep 0s && panel ) &
 	fi
 
 	## Allow connections to X display from anywhere
@@ -89,14 +96,14 @@ xset dpms 3600 3600 3600
 	xset r rate 270 65
 	# xset r rate 280 90
 
-	browse $JPATH/org/jumpgate.html
+	(sleep 5; browse $JPATH/org/jumpgate.html)&
 	# evolution &
 	# kfmclient openProfile startbrowsing &
 	# netscape -messenger &
 
 	xscreensaver &
 
-	sleep 4
+	# sleep 4
 	## Background
 	# xsetroot -grey -bg darkgreen -fg black
 	for X in `seq -w 0 1 80`
@@ -128,7 +135,8 @@ NEXTWMFILE=$JPATH/data/nextwinman.dat
 CURRENTWMFILE=$JPATH/data/currentwinman.dat
 echo "$WinMan" > $NEXTWMFILE
 
-while test -f $NEXTWMFILE; do
+while [ -f $NEXTWMFILE ]
+do
 
 	WinMan=`cat $NEXTWMFILE`
 	mv -f $NEXTWMFILE $CURRENTWMFILE
