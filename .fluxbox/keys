@@ -1,3 +1,5 @@
+Control Left :PrevTab
+Control Right :NextTab
 Mod4 Left :PrevTab
 Mod4 Right :NextTab
 Mod1 Tab :PrevWindow 1

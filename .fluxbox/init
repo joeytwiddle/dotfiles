@@ -34,13 +34,13 @@ session.screen0.maxOverSlit:	false
 session.screen0.strftimeFormat:	%I:%M %p
 session.screen0.colPlacementDirection:	TopToBottom
 session.tabs:	true
-session.menuFile:	/home/joey/linux/.fluxbox/menu
+session.menuFile:	~/.fluxbox/menu
 session.iconbar:	true
-session.keyFile:	/home/joey/linux/.fluxbox/keys
+session.keyFile:	~/.fluxbox/keys
 session.cacheLife:	5l
 session.cacheMax:	200l
 session.doubleClickInterval:	250
-session.styleFile:	/home/joey/linux/.fluxbox/styles/filfirinWood
+session.styleFile:	~/.fluxbox/styles/filfirinWood
 session.autoRaiseDelay:	350
 session.colorsPerChannel:	4
 session.opaqueMove:	true
