@@ -94,6 +94,10 @@ endif
 	:highlight DiffChange ctermfg=white ctermbg=black cterm=bold gui=bold guifg=White guibg=Black
 	:highlight DiffDelete term=none ctermbg=blue ctermfg=blue cterm=none guifg=DarkBlue guibg=DarkBlue gui=none
 
+	:highlight link diffRemoved DiffDelete
+	:highlight link diffAdded DiffAdd
+	:highlight link diffChanged DiffChange
+
 	" For jfc diffs
 	" :syntax keyword difference jDiff @@>>
 	:highlight jDiff ctermbg=Magenta ctermfg=White
