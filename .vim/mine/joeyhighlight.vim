@@ -14,6 +14,8 @@
 
 :highlight Normal ctermbg=black ctermfg=grey guibg=Black guifg=#cccccc
 
+:highlight Title ctermbg=black ctermfg=green guibg=#000060 guifg=#00ff00
+
 " :highlight Normal ctermfg=LightGray guibg=#000000 guifg=LightGray
 
 :highlight DiffLine ctermbg=Magenta ctermfg=White

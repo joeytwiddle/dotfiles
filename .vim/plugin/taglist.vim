@@ -596,14 +596,13 @@ endfunction
 
 " Adds an item to a list
 function! s:List_Add(listname,item)
-    let l:count = {a:listname}_count
-    " if ! exists({a:listname}_count)
-        " call s:List_New(a:listname)
+    " If the list does not exist, initialise it.
+    if ! exists(a:listname."_count")
+        call s:List_New(a:listname)
         " echo "Error: cannot add to uninitialised list" listname
-    " endif
-    let l:count = l:count + 1
-    let {a:listname}_{l:count} = a:item
-    let {a:listname}_count = l:count
+    endif
+    let {a:listname}_count = {a:listname}_count + 1
+    let {a:listname}_{{a:listname}_count} = a:item
 endfunction
 
 " Highlights everything after the last space on a line.
@@ -618,17 +617,17 @@ endfunction
 function! Tlist_Init_Scope_For(ftype,ttype,tname)
     if ! exists("g:tlist_".a:ttype."_".a:tname."_scope_total")
         let g:tlist_{a:ttype}_{a:tname}_scope_total = 0
-        let tts = s:tlist_{a:ftype}_tag_types . ' '
-        while tts != ''
-            " Create the script variable with the tag type name
-            let attype = strpart(tts, 0, stridx(tts, ' '))
-            let tts = strpart(tts, stridx(tts, ' ') + 1)
-             " if !exists("g:tlist_" . ttype . "_" . tname . "_scope_" . attype )
-                 call s:List_New( "g:tlist_" . a:ttype . "_" . a:tname . "_scope_" . attype )
-                 call s:List_New( "g:tlist_" . a:ttype . "_" . a:tname . "_scope_" . attype . "_show" )
-                 call s:List_New( "g:tlist_" . a:ttype . "_" . a:tname . "_scope_" . attype . "_taglines" )
-             " endif
-        endwhile
+        " let tts = s:tlist_{a:ftype}_tag_types . ' '
+        " while tts != ''
+            " " Create the script variable with the tag type name
+            " let attype = strpart(tts, 0, stridx(tts, ' '))
+            " let tts = strpart(tts, stridx(tts, ' ') + 1)
+             " " if !exists("g:tlist_" . ttype . "_" . tname . "_scope_" . attype )
+                 " call s:List_New( "g:tlist_" . a:ttype . "_" . a:tname . "_scope_" . attype )
+                 " call s:List_New( "g:tlist_" . a:ttype . "_" . a:tname . "_scope_" . attype . "_show" )
+                 " call s:List_New( "g:tlist_" . a:ttype . "_" . a:tname . "_scope_" . attype . "_taglines" )
+             " " endif
+        " endwhile
     else
         " echo "Warning: the scope of tag" a:tname "(".a:ttype.") has already been initialised."
         " echo "There are probably two tags with the same name, but now they are sharing scope."
@@ -699,7 +698,7 @@ function! Tlist_Show_Scope_Contents(ftype,indent,ttype,tname,tnameshow)
                     let subtagshow = g:tlist_{a:ttype}_{a:tname}_scope_{attype}_show_{j}
                     let subtagline = g:tlist_{a:ttype}_{a:tname}_scope_{attype}_taglines_{j}
                     let lineno = line('.')+1
-                    let g:tlist_whatisatline_{lineno} = subtagline
+                    let g:tlist_taglinefortaglistline_{lineno} = subtagline
                     " Display it
                     call Tlist_Show_Scope_Contents(a:ftype,nnindent,attype,subtagname,subtagshow)
                     let j = j + 1
@@ -1221,9 +1220,9 @@ function! s:Tlist_Get_Tag_Linenr()
 
     let lnum = line('.')
 
-    let seek = 'g:tlist_whatisatline_' . lnum
+    let seek = 'g:tlist_taglinefortaglistline_' . lnum
     if exists(seek)
-        return g:tlist_whatisatline_{lnum}
+        return g:tlist_taglinefortaglistline_{lnum}
     else
         return 0
     endif

@@ -1,7 +1,12 @@
 :let joeymods = ""
 
+:let Tmenu_ctags_cmd = "/usr/bin/ctags-exuberant"
 :let Tlist_Ctags_Cmd = "/usr/bin/ctags-exuberant"
+" :let Tlist_Display_Prototype = 1
 :let Jlist_Ctags_Cmd = "/usr/bin/ctags-exuberant"
+:let Tlist_Well_Spaced = 1
+:let Tlist_Fold_Tags = 1
+:let Tlist_Fold_Tagtypes = 0
 :filetype on
 
 " Doesn't work if it comes after the :so's
