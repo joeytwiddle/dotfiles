@@ -226,7 +226,7 @@ endif
 
 " Vertically split taglist window width setting
 if !exists('Jlist_WinWidth')
-	let Jlist_WinWidth = 30
+	let Jlist_WinWidth = 40
 endif
 
 " Automatically open the taglist window on Vim startup
@@ -237,6 +237,11 @@ endif
 " Display tag prototypes or tag names in the taglist window
 if !exists('Jlist_Display_Prototype')
 	let Jlist_Display_Prototype = 0
+endif
+
+" Space out tree in display window
+if !exists('Jlist_Well_Spaced')
+	let Jlist_Well_Spaced = 0
 endif
 
 " File types supported by taglist
@@ -580,13 +585,23 @@ function! Pluralise(attype)
 	endif
 endfunction
 
+function! HighlightLine(synType,lineNo)
+	if has('syntax')
+		exe 'syntax match '.a:synType.' /\%'.a:lineNo.'l[^ ]*$/'
+	endif
+endfunction
+
 function! ShowInScope(ftype,indent,thingtype,thing)
+	call ShowInScope(a:ftype,a:indent,a:thingtype,a:thing,a:thing)
+endfunction
+
+function! ShowInScope(ftype,indent,thingtype,thing,thingshow)
 	let start_fold = line('.') + 1
 	if exists("g:jlist_".a:thingtype."_".a:thing."_scope_total")
 		" echo "Got an existing one: ".a:thingtype." ".a:thing
 		if g:jlist_{a:thingtype}_{a:thing}_scope_total == 0
 			" echo "Got an empty one: ".a:thingtype." ".a:thing
-			let print = a:indent . "|- " . a:thing
+			let print = a:indent . "|- " . a:thingshow
 			silent! put =print
 			return
 		endif
@@ -594,7 +609,7 @@ function! ShowInScope(ftype,indent,thingtype,thing)
 	if a:thing == ""
 		let nindent = a:indent
 	else
-		let print = a:indent . "|- " . a:thing
+		let print = a:indent . "|- " . a:thingshow
 		silent! put =print
 		let nindent = "|  " . a:indent
 	endif
@@ -609,13 +624,22 @@ function! ShowInScope(ftype,indent,thingtype,thing)
 			let l:num = g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_count 
 			if l:num > 0
 				" echo a:indent . "For " . a:thing . " showing scope " . l:num
+				if g:Jlist_Well_Spaced == 1
+					let print = nindent . "|"
+					silent! put =print
+				endif
 				let start_inner_fold = line('.') + 1
 				let print = nindent . "|- " . Pluralise(attype) . ":"
 				silent! put =print
+				call HighlightLine("TagListTitle",line('.'))
 				if ttso == ""
 					let nnindent = nindent . "   "
 				else
 					let nnindent = nindent . "|  "
+				endif
+				if g:Jlist_Well_Spaced == 1
+					let print = Trim(nnindent."|")
+					silent! put =print
 				endif
 				" if a:thing == ""
 					" let nnindent = nindent
@@ -624,11 +648,13 @@ function! ShowInScope(ftype,indent,thingtype,thing)
 				let j = 1
 				while j <= g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_count
 					let thong = g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_{j}
+					let tshow = g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_show_{j}
 					let thong2 = g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_taglines_{j}
 					let lineno = line('.')+1
 					let g:jlist_whatisatline_{lineno} = thong2
 					" echo "lineno" lineno "line=".thong2 "obj=".thong
-					call ShowInScope(a:ftype,nnindent,attype,thong)
+					" echo tshow
+					call ShowInScope(a:ftype,nnindent,attype,thong,tshow)
 					let j = j + 1
 				endwhile
 				" let print = nindent . "}"
@@ -771,9 +797,8 @@ function! s:Jlist_Explore_File(bufnum)
 			let attype = strpart(tts, 0, stridx(tts, ' '))
 			let tts = strpart(tts, stridx(tts, ' ') + 1)
 			if !exists("g:jlist_" . "_scope_" . attype )
-				call s:NewList( "g:jlist_" . "_scope_" . attype )
-				call s:NewList( "g:jlist_" . "_scope_" . attype . "_taglines" )
 				call s:NewList( "g:jlist_" . "__scope_" . attype )
+				call s:NewList( "g:jlist_" . "__scope_" . attype . "_show" )
 				call s:NewList( "g:jlist_" . "__scope_" . attype . "_taglines" )
 			endif
 		endwhile
@@ -810,37 +835,38 @@ function! s:Jlist_Explore_File(bufnum)
 			let ttype = substitute(ttype, ' ', '_', 'g')
 
 			" Extract the tag name
-				let tscope = ''
-				let tscope_type = ''
-			if g:Jlist_Display_Prototype == 0
-				let tname = strpart(one_line, 0, stridx(one_line, "\t"))
+			let tscope = ''
+			let tscope_type = ''
+			let tname = strpart(one_line, 0, stridx(one_line, "\t"))
 
-				" Add the tag scope, if it is available. Tag scope is the last
-				" field after the 'line:<num>\t' field
-				let start = strridx(one_line, 'line:')
-				let end = strridx(one_line, "\t")
-				if end > start
-					let tmptscope = strpart(one_line, end + 1)
-					" echo ">>".tmptscope."<<"
-					let tscope = strpart(tmptscope, stridx(tmptscope, ':') + 1)
-					if stridx(tscope,"\.") > 0
-						let tscope = strpart(tscope,stridx(tscope,"\.")+1)
-					endif
-					let tscope_type = strpart(tmptscope, 0, stridx(tmptscope, ':'))
-					" if tscope != ''
-						" let tname = tname . ' [' . tscope . ']'
-					" endif
+			" Add the tag scope, if it is available. Tag scope is the last
+			" field after the 'line:<num>\t' field
+			let start = strridx(one_line, 'line:')
+			let end = strridx(one_line, "\t")
+			if end > start
+				let tmptscope = strpart(one_line, end + 1)
+				" echo ">>".tmptscope."<<"
+				let tscope = strpart(tmptscope, stridx(tmptscope, ':') + 1)
+				if stridx(tscope,"\.") > 0
+					let tscope = strpart(tscope,stridx(tscope,"\.")+1)
 				endif
-			else
+				let tscope_type = strpart(tmptscope, 0, stridx(tmptscope, ':'))
+				" if tscope != ''
+					" let tname = tname . ' [' . tscope . ']'
+				" endif
+			endif
+			let tshow = tname
+			if g:Jlist_Display_Prototype == 1
 				let start = stridx(one_line, '/^') + 2
 				let end = strridx(one_line, '/;"' . "\t")
 				if one_line[end - 1] == '$'
 					let end = end -1
 				endif
-				let tname = strpart(one_line, start, end - start)
+				let tshow = Trim(strpart(one_line, start, end - start))
+				" echo one_line
+				" echo tshow
+				" echo tname
 			endif
-
-			let tname = substitute(tname," ","","")
 
 			" Update the count of this tag type
 			let cnt = b:jlist_{ftype}_{ttype}_count + 1
@@ -860,6 +886,7 @@ function! s:Jlist_Explore_File(bufnum)
 					let tts = strpart(tts, stridx(tts, ' ') + 1)
 					if !exists("g:jlist_" . ttype . "_" . tname . "_scope_" . attype )
 						call s:NewList( "g:jlist_" . ttype . "_" . tname . "_scope_" . attype )
+						call s:NewList( "g:jlist_" . ttype . "_" . tname . "_scope_" . attype . "_show" )
 						call s:NewList( "g:jlist_" . ttype . "_" . tname . "_scope_" . attype . "_taglines" )
 					endif
 				endwhile
@@ -867,6 +894,8 @@ function! s:Jlist_Explore_File(bufnum)
 			" echo "f=" . ftype . " t=" . ttype . " tscope=" . tscope . " tname=>" . tname . "<"
 			let g:jlist_{tscope_type}_{tscope}_scope_total = (g:jlist_{tscope_type}_{tscope}_scope_total) + 1
 			call s:AddToList( "g:jlist_" . tscope_type . "_" . tscope . "_scope_" . ttype,tname)
+			call s:AddToList( "g:jlist_" . tscope_type . "_" . tscope . "_scope_" . ttype . "_show",tshow)
+			" echo tshow
 			call s:AddToList( "g:jlist_" . tscope_type . "_" . tscope . "_scope_" . ttype . "_taglines",b:jlist_tag_count+1)
 			" call s:AddToList( "g:jlist_" . tscope . "_scope_" . ttype . "_taglines",one_line)
 			" let l:jlist_{tscope} = l:jlist_{tscope} . '    ' . tname . "\n"
@@ -921,12 +950,12 @@ function! s:Jlist_Explore_File(bufnum)
 	setlocal modifiable
 
 	normal "zE"
-	call ShowInScope(ftype,"","","")
+	call ShowInScope(ftype,"","","","")
 	let i = 1
 	while i <= s:jlist_{ftype}_count
 		let ttype = s:jlist_{ftype}_{i}_name
 		" echo "Doing type: " . ttype
-		call ShowInScope(ftype,"",ttype,"")
+		call ShowInScope(ftype,"",ttype,"","")
 		let i = i + 1
 	endwhile
 		" " Add the tag type only if there are tags for that type
@@ -987,10 +1016,6 @@ function! s:Jlist_Explore_File(bufnum)
 " 
 			" " Syntax highlight the tag type names
 			" normal 'zR'
-			if has('syntax')
-				exe 'syntax match TagListTitle /\%' . 
-						    \ b:jlist_{ftype}_{ttype}_start . 'l.*/'
-			endif
 		" endif
 		" let i = i + 1
 	" endwhile
