@@ -1,5 +1,8 @@
+## We could get rid of this file by passing -o options to zsh in jsh
 set show-all-if-ambiguous on
+# set print-completions-horizontally on
 # set bell-style none
+set bell-style visual
 
 ## Moved to bashkeys.sh
 # "\C-d" backward-word

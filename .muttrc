@@ -3,8 +3,13 @@
 
 ## TODO
 
+set mbox = "$HOME/Mail/incoming"
+set postponed = "$HOME/Mail/postponed"
 set record = "$HOME/Mail/sent-mail-mutt"
 set save_name
+
+## Check for new mail in folder every minute:
+set timeout = 60
 
 ## Colours:
 color indicator white magenta
@@ -12,6 +17,7 @@ color hdrdefault blue black
 color header brightcyan default "^From: "
 color header brightcyan default "^To: "
 color header brightgreen default "^Subject: "
+color header yellow default "^Date: "
 color header brightred default "^X-Spam"
 color header magenta default "^List"
 color quoted yellow black
@@ -23,7 +29,7 @@ set move = no
 unset mark_old
 set pager_stop
 set pager_index_lines = 8
-set folder_format = "%2C%N %-4.4u:%-4.4g  %d %6s  %f"
+set folder_format = "%2C%N %-4.4u:%-4.4g  %d %7s  %f"
 set index_format = "%S%T %[%d/%b] %-12.12L (%4l) %s"
 set to_chars = "? +C@L"
 ## Headers to display:
@@ -35,6 +41,7 @@ unignore posted-to:
 ## Commands to run when entering particular folders:
 folder-hook . set sort=date-sent
 folder-hook Lists set sort=threads
+# folder-hook lists set sort=threads
 
 ## Keybindings (see: /usr/share/doc/mutt/html/manual-6.html#functions)
 # macro generic "c" <mail>
@@ -61,16 +68,19 @@ macro pager "\Ct" ":set sort=threads<Enter><refresh>"
 macro index "\Cp" ":set sort=from<Enter>"
 macro pager "\Cp" ":set sort=from<Enter><refresh>"
 # Show name
-macro index "\Cn" ":set index_format = \"%S%T %[%d/%b] %-12.12L (%4l) %s\"<Enter>"
-macro pager "\Cn" ":set index_format = \"%S%T %[%d/%b] %-12.12L (%4l) %s\"<Enter><refresh>"
+macro index "\Cn" ":set index_format = \"%S%T %[%d/%b] %-12.12L (%4l) %s\"<Enter>:set date_format = \"%d/%b\"<Enter>"
+macro pager "\Cn" ":set index_format = \"%S%T %[%d/%b] %-12.12L (%4l) %s\"<Enter>:set date_format = \"%d/%b\"<Enter><refresh>"
 # Show email address (who)
-macro index "\Cw" ":set index_format = \"%S%T %[%d/%b] %-25.25a %-20.20t (%4l) %s\"<Enter>"
-macro pager "\Cw" ":set index_format = \"%S%T %[%d/%b] %-25.25a %-20.20t (%4l) %s\"<Enter><refresh>"
+macro index "\Cw" ":set date_format = \"%a d/%b %r\"<Enter>:set index_format = \"%S%T %[%d/%b] %-25.25a %-20.20t (%4l) %s\"<Enter>"
+macro pager "\Cw" ":set date_format = \"%a d/%b %r\"<Enter>:set index_format = \"%S%T %[%d/%b] %-25.25a %-20.20t (%4l) %s\"<Enter><refresh>"
+# macro index "\Cw" ":set date_format = \"%a d/%b %r\"<Enter>:set index_format = \"%S%T %[%D] %-25.25a %-20.20t (%4l) %s\"<Enter>"
+# macro pager "\Cw" ":set date_format = \"%a d/%b %r\"<Enter>:set index_format = \"%S%T %[%D] %-25.25a %-20.20t (%4l) %s\"<Enter><refresh>"
 ## Index:
 macro index <left> <change-folder>"?"
 macro index <right> <display-message>
 ## Pager:
-macro pager "\Ci" ":set pager_index_lines = 0<Enter>"
+# macro pager "\Ci" ":set pager_index_lines = 0<Enter>"
+macro pager "\Ci" ":set pager_index_lines = 4<Enter>"
 macro pager "\Co" ":set pager_index_lines = 20<Enter>"
 macro pager <left> <exit>
 macro pager <up> <previous-entry>
@@ -84,33 +94,43 @@ macro pager <space> <half-down>
 macro pager <right> <view-attachments>
 
 ## Generic:
-macro generic ":0<Return>" <first-entry>
-macro generic ":$<Return>" <last-entry>
-macro generic "?" <search-reverse>
+# macro generic ":0<Return>" <first-entry>
+# macro generic ":$<Return>" <last-entry>
 ## and because ? was help...
-macro generic \H <help>
-macro generic \h <help>
+macro generic \CH <help>
+macro generic \Ch <help>
 macro generic <Esc>h <help>
 macro generic <f1> <help>
 macro generic ":h" <help>
 ##
+## Already defaults:
+# macro generic "/" <search>
+# macro generic "n" <search-next>
+## When reading message, still perform search in index
+macro pager "n" i<search-next><Enter>
+macro generic "?" <search-reverse>
 macro browser "N" <search-opposite>
 macro index "N" <search-opposite>
-macro pager "N" <search-opposite>
+# macro pager "N" <search-opposite>
+macro pager "N" i<search-opposite><Enter>
 ### don't work:
 # macro generic "\Cy" <decrypt-copy>
 # macro generic "\Cy" <decrypt-save>
 
 ## Spamassasin:
-# quick assess
-macro index "XL" "| spamassassin -t -L | grep \^SPAM | highlight '\(.*hits.*required\)'<Enter>"
-macro pager "XL" "| spamassassin -t -L | grep \^SPAM | highlight '\(.*hits.*required\)'<Enter>"
-# full assess
-macro index "X?" "| spamassassin -t | grep \^SPAM | highlight '\(.*hits.*required\)'<Enter>"
-macro pager "X?" "| spamassassin -t | grep \^SPAM | highlight '\(.*hits.*required\)'<Enter>"
-# report and delete
-macro index "XX" "| spamassassin -r<Enter>d"
-macro pager "XX" "| spamassassin -r<Enter>d"
+# Fully assess email:
+macro index "X?" "| spamassassin -t | fromline '^---- Start Spam' | toline '^---- End of Spam' | highlight '.*points.*required' <Enter>"
+macro pager "X?" "| spamassassin -t | fromline '^---- Start Spam' | toline '^---- End of Spam' | highlight '.*points.*required' <Enter>"
+# | grep \^SPAM | highlight '\(.*hits.*required\)' &<Enter>"
+# Quickly assess email (do not use network resources, eg. razor):
+macro index "XL" "| spamassassin -t -L | fromline '^---- Start Spam' | highlight '.*points.*required' <Enter>"
+macro pager "XL" "| spamassassin -t -L | fromline '^---- Start Spam' | highlight '.*points.*required' <Enter>"
+# Report spam (to razor), and delete.
+macro index "XS" "| spamassassin -r & <Enter>d"
+macro pager "XS" "| spamassassin -r & <Enter>d"
+# Razor direct:
+macro index "XX" "| razor-report & <Enter>d"
+macro pager "XX" "| razor-report & <Enter>d"
 
 ## Addresbook / aliases:
 # source ~/.mail_aliases
@@ -123,6 +143,11 @@ macro pager \A "!abook\n" "Abook"
 macro index \ea "!$EDITOR ~/.mutt/aliases\n:source ~/.mutt/aliases\n" "Edit aliases file and reload it"
 macro pager \ea "!$EDITOR ~/.mutt/aliases\n:source ~/.mutt/aliases\n" "Edit aliases file and reload it"
 
+## Read HTML attachment:
+macro index H "v|striphtml|less<Enter>q"
+macro pager H "v|striphtml|less<Enter>q"
+
+# set alias_file = "$HOME/addressbook/aliases.mutt"
 ## Addressbook aliases straight in .muttrc =)
 alias cat Catherine Rachel Slicer <catslicer@hotmail.com>
 alias tim TRJ Langford <langford@cs.bris.ac.uk>

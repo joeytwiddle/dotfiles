@@ -14,6 +14,7 @@ then
 	# `jwhich panel` &
 	## Unlike X, and despite the exit 1, Xvnc keeps running when this script exits!
 	exit 1
+	# vncserver -kill $DISPLAY
 fi
 
 ### For all instances except first:
@@ -23,6 +24,8 @@ then
 	startkde
 	exit
 fi
+
+
 
 ### Configuration
 
@@ -49,10 +52,15 @@ WinMan="fluxbox" ## can be "Gnome-compliant", can be KDE-compliant
 
 ### Start all the stuff I like in the background
 
+## From fluxbox's xinitrc howto:
+# turn off screen blanking and turn on energy star features
+xset s off
+xset dpms 600 60 60
+
 # Got problems with []s
 # xset fp- unix/:7100
 
-export LD_PRELOAD=/usr/lib/libgdkxft.so
+[ -f /usr/lib/libgdkxft.so ] && export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libgdkxft.so
 
 (
 	## Keyboard
@@ -64,7 +72,8 @@ export LD_PRELOAD=/usr/lib/libgdkxft.so
 	del .gnome/session
 
 	## Start Gnome panel
-	if test $GNOME_PANEL; then
+	if [ $GNOME_PANEL ]
+	then
 		## Increased from 5 to 10 because gnomeICU and xmms-applet were failing to show their visuals.
 		sleep 10s && panel &
 	fi
@@ -89,7 +98,8 @@ export LD_PRELOAD=/usr/lib/libgdkxft.so
 	sleep 4
 	## Background
 	# xsetroot -grey -bg darkgreen -fg black
-	for X in `seq -w 0 1 80`; do
+	for X in `seq -w 0 1 80`
+	do
 		Y=`expr 80 - $X`
 		xsetroot -mod 16 16 -fg "#$Y"80"$Y" -bg "#"$Y$Y$Y
 	done
@@ -128,3 +138,4 @@ while test -f $NEXTWMFILE; do
 done
 
 echo "X session ended."
+

@@ -173,6 +173,7 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .pdf 01;33
 .sdw 01;33 # StarOffice Document
 .sxi 01;33 # StarOffice Presentation
+.sxw 01;33 # OpenOffice document
 .mbox 01;33 # Mail folder
 # .sda 01;33 # Drawing (moved to images)
 .sdd 01;33 # Presentation

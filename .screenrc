@@ -1,0 +1,24 @@
+  # caption always "%{kG}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{kG}%?%+Lw%?"
+  # caption always "%{bw}%?%-Lw%?%{Gk}[%n] %f %t%?(%u)%?%{bw}%?%+Lw%?"
+  # caption always "%{bw}%-Lw%{kw} %{Gk} [%n] %f %t(%u) %{kw} %{bw}%+Lw%{kw} %65=%{bW} %H %{bw}%75=%M%d %85=%c%="
+  # caption always "%{bw}%-Lw%{kw} %{Gk} [%n] %f %t(%u) %{kw} %{bw}%+Lw%{kw} %65=%{bW} %H %{bw}%75=%M%d %85=%c%="
+  caption always "%{BW} %H %{bw} %-w%{kw} %{gk} [%n] %t %{kw} %{bw}%+w %80=%{BW} %M %d %y %93=%c%="
+  # caption always "%{BW} %H %{bw}%-w%{gK}%n %t%{bw}%+w%79=%{BW} %M %d %y %93=%c%="
+  # hardstatus alwayslastline "%{BW}www.guckes.net/screen/%50=%{RY}host: %H %85=%{YR}%M%d %92=%{Gb}%c%="
+
+  sorendition 02 34 # yellow on blue
+# sorendition    kG # black  on bold green
+
+  activity              "%C -> %n%f %t activity!"
+
+# use the PgUp and PgDn keys to enter copy mode
+# and page through the window backlog:
+  bindkey -k kP copy
+#
+# Use the function keys F7 and F8
+# to cycle backwards/forwards in
+# the list of existing windows:
+  bindkey -k k7 prev
+  bindkey -k k8 next
+#
+
