@@ -1,138 +1,48 @@
 {
-  tool_options.Gimp = {
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-tooloption.tif";
-  };
-  Logo.WMClip = {
-    Icon = clip.tiff;
-  };
-  image_window.Gimp = {
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-work.tif";
-  };
-  "Mozilla-bin" = {
-    Icon = "wmaker-nav.tif";
-  };
-  WMSoundServer = {
-    Icon = Sound.tiff;
-  };
-  KTerm = {
-    Icon = GNUterm.tiff;
-  };
-  Logo.WMPanel = {
-    Icon = GNUstep.tiff;
-  };
-  patternselection.Gimp = {
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-patterns.tif";
-  };
+  Logo.WMDock = {Icon = GNUstepGlow.tiff;};
+  Logo.WMPanel = {Icon = GNUstep.tiff;};
+  Logo.WMClip = {Icon = clip.tiff;};
+  Dockit = {Icon = GNUstep.tiff;};
+  DockApp = {NoAppIcon = NO;};
+  WSoundServer = {Icon = sound.tiff;};
+  panel.Panel = {NoAppIcon = YES;};
+  gmc.Gmc = {NoAppIcon = YES;};
+  XTerm = {Icon = Terminal.tiff;};
+  NXTerm = {Icon = Terminal.tiff;};
+  ScilabGraphic0.Xscilab = {KeepInsideScreen = YES;};
+  ScilabGraphic1.Xscilab = {KeepInsideScreen = YES;};
+  ScilabGraphic2.Xscilab = {KeepInsideScreen = YES;};
+  ScilabGraphic3.Xscilab = {KeepInsideScreen = YES;};
+  ScilabGraphic4.Xscilab = {KeepInsideScreen = YES;};
+  ScilabGraphic5.Xscilab = {KeepInsideScreen = YES;};
+  ScilabGraphic6.Xscilab = {KeepInsideScreen = YES;};
+  bookmarks.Netscape = {NoAppIcon = YES;};
+  xcalc = {AlwaysUserIcon = Yes;Icon = "HP-16C-48.xpm";};
+  Netscape = {Icon = Netscape.xpm;};
+  Emacs = {Icon = ColorGNU.xpm;};
+  Ghostview = {Icon = Ghost.xpm;};
+  AcroRead = {AlwaysUserIcon = Yes;Icon = pdf.tiff;};
+  Gimp = {AlwaysUserIcon = Yes;Icon = wilber.tiff;};
+  xv = {AlwaysUserIcon = Yes;Icon = xv.tiff;};
+  lyX.XForm = {AlwaysUserIcon = Yes;Icon = write.tiff;};
+  XPaint = {AlwaysUserIcon = Yes;Icon = Paint.xpm;};
+  Fig = {AlwaysUserIcon = Yes;Icon = draw.tiff;};
+  XLess = {AlwaysUserIcon = YES;Icon = Reference.xpm;};
+  manualBrowser.Xman = {AlwaysUserIcon = Yes;Icon = Book.xpm;};
+  Xman = {AlwaysUserIcon = Yes;Icon = Bookshelf.xpm;};
+  Stepman = {Icon = Bookshelf.xpm;};
+  Xmag = {Icon = inspect.xpm;};
+  Xmessage = {Icon = Reference.xpm;};
+  XConsole = {Icon = inspect.xpm;Omnipresent = Yes;};
+  Fte = {Icon = Clipboard.xpm;};
+  xjed = {Icon = Clipboard.xpm;};
+  xedit = {Icon = notepad.tiff;};
+  xmixer = {Icon = mixer.tiff;};
+  xmcd = {Icon = Radio.xpm;};
+  xplaycd = {Icon = Radio.xpm;};
+  "*" = {Icon = defaultAppIcon.tiff;};
   konqueror.toplevel = {
-    Icon = "/home/joey/linux/GNUstep/.AppInfo/WindowMaker/konqueror.toplevel.xpm";
+    Icon = "/home/pgrad/pclark/linux/GNUstep/.AppInfo/WindowMaker/konqueror.toplevel.xpm";
   };
-  preferences.Gimp = {
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-prefs.tif";
-  };
-  Dockit = {
-    Icon = GNUstep.tiff;
-  };
-  tip_of_the_day.Gimp = {
-    NoResizebar = Yes;
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp2.tif";
-    KeepOnTop = Yes;
-    NoCloseButton = Yes;
-    NoMiniaturizeButton = Yes;
-  };
-  color_palette.Gimp = {
-    NoResizebar = Yes;
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-palette.tif";
-  };
-  XMMS_Player.xmms = {
-    Icon = "/home/joey/linux/GNUstep/.AppInfo/WindowMaker/XMMS_Player.xmms.xpm";
-  };
-  brushselection.Gimp = {
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-brushes.tif";
-  };
-  gradient_editor.Gimp = {
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-gradient.tif";
-  };
-  gimp_startup.Gimp = {
-    NoResizebar = Yes;
-    AlwaysUserIcon = Yes;
-    NotClosable = Yes;
-    NotMiniaturizable = Yes;
-    Icon = "wmaker-gimp2.tif";
-    NoTitlebar = Yes;
-  };
-  WPrefs = {
-    Icon = "/usr/lib/GNUstep/Apps/WPrefs.app/WPrefs.tiff";
-  };
-  Tile.WMClip = {
-    Icon = clip.tiff;
-  };
-  XTerm = {
-    Icon = GNUterm.tiff;
-  };
-  groupLeader.WPrefs = {
-    Icon = "/root/GNUstep/.AppInfo/WindowMaker/groupLeader.WPrefs.xpm";
-  };
-  "Script-fu" = {
-    Icon = "wmaker-gimp-script-fu.tif";
-  };
-  Rxvt = {
-    Icon = GNUterm.tiff;
-  };
-  Netscape = {
-    Icon = "wmaker-netscape.tif";
-  };
-  NXTerm = {
-    Icon = GNUterm.tiff;
-  };
-  gmc = {
-    NoAppIcon = Yes;
-    SkipWindowList = Yes;
-    Omnipresent = Yes;
-  };
-  layers_and_channels.Gimp = {
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-layers.tif";
-  };
-  "script-fu.Script-fu" = {
-    Icon = "wmaker-gimp-script-fu.tif";
-  };
-  Logo.WMDock = {
-    Icon = GNUstep.tiff;
-  };
-  toolbox.Gimp = {
-    NoAppIcon = Yes;
-    Icon = "wmaker-gimp2.tif";
-  };
-  pvm3 = {
-    Icon = "wmaker-pvm3-1.tif";
-  };
-  panel = {
-    NoAppIcon = Yes;
-  };
-  emacs = {
-    Icon = "wmaker-emacs.tif";
-  };
-  indexed_color_palette.Gimp = {
-    NoResizebar = Yes;
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-palette.tif";
-  };
-  "*" = {
-    Icon = defaultAppIcon.tiff;
-  };
-  Gimp = {
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp2.tif";
-  };
-  xdvi.XDvi = {
-    Icon = "/home/joey/linux/GNUstep/.AppInfo/WindowMaker/xdvi.XDvi.xpm";
-  };
+  groupLeader.WPrefs = {Icon = "/usr/lib/GNUstep/Apps/WPrefs.app/WPrefs.tiff";};
 }

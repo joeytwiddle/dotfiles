@@ -13,15 +13,15 @@
   FTitleColor = "#ffffff";
   PTitleColor = "#ffffff";
   UTitleColor = "#ffffff";
-  FTitleBack = (tpixmap, "/stuff/portablelinux/images/danger.png", "#000000");
+  FTitleBack = (tpixmap, "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/danger.png", "#000000");
   PTitleBack = (
     tpixmap,
-    "/stuff/portablelinux/images/crackedstones-looklike-leaves.png",
+    "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/crackedstones-looklike-leaves.png",
     "#000000"
   );
   UTitleBack = (
     tpixmap,
-    "/stuff/portablelinux/images/crackedstones-looklike-leaves.png",
+    "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/crackedstones-looklike-leaves.png",
     "#000000"
   );
   ResizebarBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
@@ -30,7 +30,7 @@
   MenuDisabledColor = "#616561";
   MenuTitleBack = (
     tpixmap,
-    "/stuff/portablelinux/images/crackedstones-looklike-leaves.png",
+    "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/crackedstones-looklike-leaves.png",
     "#000000"
   );
   MenuTextBack = (hgradient, "rgb:c2/c0/c5", "rgb:82/80/85");
@@ -38,5 +38,5 @@
   IconTitleColor = white;
   IconTitleBack = "#384246";
   MenuStyle = normal;
-  WorkspaceBack = (tpixmap, "/usr/share/WindowMaker/Backgrounds/Debian.jpg", gray20);
+  WorkspaceBack = (tpixmap, "~/Debian.jpg", gray20);
 }
