@@ -162,6 +162,10 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 
 # cyan
 # Code
+.sh 01;36
+.zsh 01;36
+.csh 01;36
+.bash 01;36
 .c 01;36
 .h 01;36
 .cc 01;36
