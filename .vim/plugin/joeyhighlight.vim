@@ -38,6 +38,7 @@
 	:highlight SpecialChar ctermfg=Red guifg=Red
 	:highlight String ctermfg=DarkGreen guifg=#80f080 cterm=NONE
 	:highlight Todo term=reverse cterm=reverse ctermbg=black ctermfg=red
+	:highlight jNote term=reverse cterm=reverse ctermbg=black ctermfg=yellow
 
 	" Code
 	:highlight Boolean ctermfg=LightBlue guifg=LightBlue

@@ -112,7 +112,8 @@ Mod1 KP_Subtract :ExecCommand volumedown 2
 # (back)
 Mod1 KP_7 :ExecCommand xmms -r
 # (forward)
-Mod1 KP_9 :ExecCommand xmms -f
+# Mod1 KP_9 :ExecCommand xmms -f
+Mod1 KP_9 :ExecCommand nextsong
 # (pause)
 Mod1 KP_0 :ExecCommand xmms -u
 # (play)

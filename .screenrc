@@ -1,4 +1,14 @@
-# caption always "%{BW} %H %{bw}%-w%{gK}%n %t%{bw}%+w%79=%{BW} %M %d %y %93=%c%="
+## Dotted around jsh are screentitle calls to describe the state of each window:
+# shell in dir	directory/
+# shell running command	#command
+# editing file	{filename}   (poorly supported, only with 'edit')
+# man page	"page"       (with 'jman')
+# shell on remote machine	(hostname)
+# another screen	[host:screenname]
+## Do we want state too or is that too bloated? ^ here
+## I believe support for those not mentioned is in jsh startup: xttitleprompt
+
+# caption always "%{BW} %H %{bw}%-w%{gK}%n %t%{bw}%+w%78=%{BW} %M %d %y %93=%c%="
 # hardstatus alwayslastline "%{BW}www.guckes.net/screen/%50=%{RY}host: %H %85=%{YR}%M%d %92=%{Gb}%c%="
 # caption always "%{kG}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{kG}%?%+Lw%?"
 # caption always "%{bw}%?%-Lw%?%{Gk}[%n] %f %t%?(%u)%?%{bw}%?%+Lw%?"
@@ -6,7 +16,7 @@
 # caption always "%{bw}%-Lw%{kw} %{Gk} [%n] %f %t(%u) %{kw} %{bw}%+Lw%{kw} %65=%{bW} %H %{bw}%75=%M%d %85=%c%="
 # caption always "%{BW} %H %{bw} %-w%{kw} %{gk} >%n< %t %{kw} %{bw}%+w %81=%{BW} %M %d %92=%c%="
 # caption always "%{BW} %H: $SCREENNAME %{bw} %-w%{kw} %{gk} >%n< %t %{kw} %{bw}%+w %=%{BW} %M %d %c"
-caption always "%{BW} [%{BC}%H%{BW}:%{BC}$SCREENNAME%{BW}] %{bw} %-w%{kw} %{gk} [%n] %t %{kw} %{bw}%+w %=%{BW} %M %d %c"
+caption always "%{BW}[%{BC}%H%{BW}:%{BC}$SCREENNAME%{BW}] %{bw} %-w%{kw} %{gk} %n %t %{kw} %{bw}%+w %=%{BW} %M %d %c"
 
 # sorendition    kG # black  on bold green
 # sorendition 00 57 # white on magenta
@@ -14,21 +24,74 @@ sorendition 00 mW # white on magenta
 
 activity              "%C -> %n%f %t activity!"
 
-# use the PgUp and PgDn keys to enter copy mode
-# and page through the window backlog:
-bindkey -k kP copy
-#
-# Use the function keys F7 and F8
-# to cycle backwards/forwards in
-# the list of existing windows:
-bindkey -k k8 prev
-bindkey -k k9 next
+## My prefered default command keys:
+defescape "^k^l"
 
-bindkey "^o" prev
-bindkey "^p" next
+## PgUp and PgDn keys enter copy/scrollback mode
+# bindkey -k kP copy
+## Home key kH enters copy/scrollback mode UNTESTED (ho?)
+# bindkey -k ho copy ## not recognised!
+## Strangely kH works on End from boris
+bindkey -k kH copy
+## Shift-Home key enters copy/scrollback mode UNTESTED
+# bindkey -k #2 copy
 
-## worked for Ctrl+] and [, but also broke <up> and <down> arrows.
-# bindkey "\033" prev
-# bindkey "\035" next
+## Ctrl+X opens a new window
+# bindkey "^x" screen
 
-## couldn't get Ctrl+< and > working at all, cos I couldn't get vim's Ctrl+V to accept them as a code.
+## Ctrl+N opens a new window
+bindkey "^n" screen
+
+
+### Window switching
+
+  ## F8 and F9 or Crl+O and Ctrl+P cycle backwards/forwards through window list
+  bindkey -k k8 prev
+  bindkey -k k9 next
+  bindkey "^o" prev
+  bindkey "^p" next
+  ## worked for Ctrl+] and [, but also broke <up> and <down> arrows.
+  # bindkey "\033" prev
+  # bindkey "\035" next
+  ## couldn't get Ctrl+< and > working at all, cos I couldn't get vim's Ctrl+V to accept them as a code.
+
+  ## Provided all your screens use commandkeys (-e) ^k^l, we can cycle nested
+  ## screens too.
+  ## F6 and F7 cycle on inner screen
+  bindkey -k k6 stuff "^k^l^kp"
+  bindkey -k k7 stuff "^k^l^kn"
+  ## Ctrl+N and Ctrl+@ too
+  # bindkey "^n" stuff "^k^lp"
+  # bindkey "^G" stuff "^k^ln"
+
+  ## F4 and F5 cycle on second nested screen
+  bindkey -k k4 stuff "^k^lp"
+  bindkey -k k5 stuff "^k^ln"
+
+## Move windows with Ctrl+W followed by target number
+
+  bindkey "^w0" number 0
+  bindkey "^w1" number 1
+  bindkey "^w2" number 2
+  bindkey "^w3" number 3
+  bindkey "^w4" number 4
+  bindkey "^w5" number 5
+  bindkey "^w6" number 6
+  bindkey "^w7" number 7
+  bindkey "^w8" number 8
+  bindkey "^w9" number 9
+
+## Or with Ctrl+M
+
+  bindkey "^m0" number 0
+  bindkey "^m1" number 1
+  bindkey "^m2" number 2
+  bindkey "^m3" number 3
+  bindkey "^m4" number 4
+  bindkey "^m5" number 5
+  bindkey "^m6" number 6
+  bindkey "^m7" number 7
+  bindkey "^m8" number 8
+  bindkey "^m9" number 9
+
+maptimeout 800

@@ -55,7 +55,7 @@ WinMan="fluxbox" ## can be "Gnome-compliant", can be KDE-compliant
 ## From fluxbox's xinitrc howto:
 # turn off screen blanking and turn on energy star features
 xset s off
-xset dpms 600 60 60
+xset dpms 3600 3600 3600
 
 # Got problems with []s
 # xset fp- unix/:7100
@@ -75,7 +75,7 @@ xset dpms 600 60 60
 	if [ $GNOME_PANEL ]
 	then
 		## Increased from 5 to 10 because gnomeICU and xmms-applet were failing to show their visuals.
-		sleep 10s && panel &
+		( sleep 10s && panel ) &
 	fi
 
 	## Allow connections to X display from anywhere
