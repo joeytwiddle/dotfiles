@@ -2,7 +2,7 @@
   # caption always "%{bw}%?%-Lw%?%{Gk}[%n] %f %t%?(%u)%?%{bw}%?%+Lw%?"
   # caption always "%{bw}%-Lw%{kw} %{Gk} [%n] %f %t(%u) %{kw} %{bw}%+Lw%{kw} %65=%{bW} %H %{bw}%75=%M%d %85=%c%="
   # caption always "%{bw}%-Lw%{kw} %{Gk} [%n] %f %t(%u) %{kw} %{bw}%+Lw%{kw} %65=%{bW} %H %{bw}%75=%M%d %85=%c%="
-  caption always "%{BW} %H %{bw} %-w%{kw} %{gk} [%n] %t %{kw} %{bw}%+w %80=%{BW} %M %d %y %93=%c%="
+  caption always "%{BW} %H %{bw} %-w%{kw} %{gk} >%n< %t %{kw} %{bw}%+w %80=%{BW} %M %d %y %93=%c%="
   # caption always "%{BW} %H %{bw}%-w%{gK}%n %t%{bw}%+w%79=%{BW} %M %d %y %93=%c%="
   # hardstatus alwayslastline "%{BW}www.guckes.net/screen/%50=%{RY}host: %H %85=%{YR}%M%d %92=%{Gb}%c%="
 
