@@ -66,10 +66,10 @@ Control Mod4 Left :PrevWorkspace
 Control Mod1 Right :NextWorkspace
 Control Mod4 Right :NextWorkspace
 
-Control KP_Right :BigNudgeRight
-Control KP_Left :BigNudgeLeft
-Control KP_Down :BigNudgeDown
-Control KP_Up :BigNudgeUp
+Control KP_Right :NudgeRight
+Control KP_Left :NudgeLeft
+Control KP_Down :NudgeDown
+Control KP_Up :NudgeUp
 Mod1 KP_Right :BigNudgeRight
 Mod4 KP_Right :BigNudgeRight
 Mod1 KP_Left :BigNudgeLeft
@@ -85,3 +85,8 @@ Control KP_Divide :HorizontalDecrement
 Control KP_Multiply :HorizontalIncrement
 Control KP_Subtract :VerticalDecrement
 Control KP_Add :VerticalIncrement
+
+Mod1 KP_Multiply :ExecCommand volumeup 9
+Mod1 KP_Divide :ExecCommand volumedown 9
+Mod1 KP_Add :ExecCommand volumeup 2
+Mod1 KP_Subtract :ExecCommand volumedown 2

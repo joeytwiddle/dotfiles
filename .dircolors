@@ -101,10 +101,25 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .pgm 01;35
 .pnm 01;35
 .tga 01;35
+.tif 01;35
+.tiff 01;35
 .xbm 01;35
 .xpm 01;35
 .tif 01;35
 .gf 01;35
+.xcf 01;35 # Gimpformat. Also got these from Gimp:
+.aa 01;35
+.cel 01;35
+.fits 01;35
+.fli 01;35
+.gbr 01;35
+.gicon 01;35
+.hrz 01;35
+.pat 01;35
+.pix 01;35
+.sgi 01;35
+.sunras 01;35
+.xwd 01;35
 # Video
 .ram 01;35
 .rm 01;35

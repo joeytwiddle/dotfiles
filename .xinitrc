@@ -8,7 +8,7 @@
 # xmodmap /stuff/portablelinux/etc/X11/Xmodmap.hwiDeb &
 
 # `jwhich xterm`  +sb -sl 5000 -vb -si -sk -bg black -fg white -font '-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv' -geometry 80x25+0+500 $* &
-xterm -geometry 80x24+583+700 &
+xterm -geometry 80x24+570+680 &
 
 xset r rate 400 50
 
@@ -25,7 +25,7 @@ xset r rate 400 50
 # This file likes to cause me problems:
 del .gnome/session
 
-# Panel=true;
+Panel=true;
 # Lets get some kind of window manager starting!
 # gnome-session
 # WinMan=`echo "wmaker sawmill" | tr " " "\n" | chooserandomline`
@@ -40,7 +40,7 @@ del .gnome/session
 # WinMan="icewm" # Gnome-compliant
 # WinMan="ion"
 # WinMan="pwm"
-WinMan="fluxbox" # KDE-compliant
+WinMan="fluxbox" # can be KDE-compliant
 # WinMan="wmaker"
 # WinMan="sawfish"
 
@@ -85,44 +85,26 @@ WinMan="fluxbox" # KDE-compliant
 ) &
 
 
-# if test $Panel; then
-# 
-	# # Start window manager in background.
-	# $WinMan ||
-		# `jwhich xterm` -title "--- wm $WinMan died ---" &
-# 
-	# # Start Gnome panel in the foreground.
-	# # On logout from the panel, the X session will quit.
-# 
-	# # Check if panel already running.
-	# SEEK=`findjob panel`
-	# # How strange: this test only works without spaces around the =
-	# if test ! "$SEEK"=""; then
-		# `jwhich xterm` -bg darkred -fg white -title "--- [master] panel already running ---"
-	# else
-		# # Start panel; present xterm if panel fails.
-		# panel ||
-			# `jwhich xterm` -bg darkred -fg white -title "--- [master] panel died ---"
-	# fi
-# 
-# else
+if test $Panel; then
 
-	# Start window manager in the foreground.
-	NEXTWMFILE="$JPATH/data/nextwinman.dat"
-	CURRENTWMFILE="$JPATH/data/currentwinman.dat"
-	echo "$WinMan" > "$NEXTWMFILE"
-
-	while test -f "$NEXTWMFILE"; do
-
-		WinMan=`cat "$NEXTWMFILE"`
-		mv -f "$NEXTWMFILE" "$CURRENTWMFILE"
-
-		$WinMan ||
-			`jwhich xterm` -bg darkred -fg white -title "--- [master] wm $WinMan died ---"
-
-	done
+	sleep 15s && panel &
 
 fi
+
+# Start window manager in the foreground.
+NEXTWMFILE=`jgettmp nextwinman`
+CURRENTWMFILE=`jgettmp currentwinman`
+echo "$WinMan" > $NEXTWMFILE
+
+while test -f $NEXTWMFILE; do
+
+	WinMan=`cat $NEXTWMFILE`
+	mv -f $NEXTWMFILE $CURRENTWMFILE
+
+	$WinMan ||
+		`jwhich xterm` -bg darkred -fg white -title "--- [master] wm $WinMan died ---"
+
+done
 
 
 # Even if the panel isn't started, this script will wait for window maker (or whatever else is running) before quitting.
