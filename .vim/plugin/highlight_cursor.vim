@@ -1,10 +1,17 @@
-" Highlights the cursor so that it appear as a reverse block (oldskool!)
-" Especially useful if for some reason your normal cursor
-" disappears or is missing/invisible/hidden or intermittent.
-" Ctrl-C or Ctrl-H to toggle on/off
+"" Highlights the character under the cursor so that it appears reversed.
+"" Very useful if for some reason your normal cursor has disappeared or is
+"" missing, invisible, hidden or intermittent.
 
-" Not needed but keep cursor centered
-" set scrolloff=999
+"" Hit Ctrl-C or Ctrl-H to toggle on/off.
+
+"" BUGS: If your cursor really has disappeared, this highlighting method will
+""       not help you to edit commands in ex mode.
+
+"" TODO: Choose cursor colour to constrast :set background or :highlight Normal.
+""       I don't know how to read the output of the :set or :highlight commands.
+
+"" Also handy: keeps cursor in center of screen
+"" set scrolloff=999
 
 function! HighlightCursorRefresh()
 	if exists("g:highlightcursor")
@@ -18,35 +25,38 @@ function! HighlightCursorOff()
 endfunction
 
 function! HighlightCursorOn()
-	"" Intended to cycle colours constantly, but event only fired on keypress.
-	"" Tried while loop with sleep but no user interaction allowed :-(
-	"" We could try using getchar(0) and if it exists, send it to the keyboard!
+	"" Intended to cycle colours constantly, but events only fired on keypress.
+	"" So I tried a while loop with sleep but no user interaction got through.
+	"" Fix: We could use getchar(0) and if it exists, send it to the keyboard!
+	""      I reckon that will only animate in Command mode, not Insert mode.
 	" " while 1
 	" let g:highlightcursor=g:highlightcursor+1
 	" if g:highlightcursor > 7
 		" let g:highlightcursor=1
 	" endif
-	" exe 'highlight JCursor ctermfg=black ctermbg=' . g:highlightcursor
+	" exe 'highlight CursorHighlighted ctermfg=black ctermbg=' . g:highlightcursor
 	" " sleep 200m
 	" " endwhile
-	match JCursor /\%#/
+	match CursorHighlighted /\%#/
 endfunction
 
 function! HighlightCursorToggle()
 	if exists("g:highlightcursor")
 		unlet g:highlightcursor
-		" Clear autocmds etc.
+		"" Clear autocmds etc.
 		call HighlightCursorOff()
 	else
 		let g:highlightcursor=1
 		set updatetime=10
 		autocmd CursorHold * :call HighlightCursorRefresh()
-		autocmd BufEnter * :call HighlightCursorRefresh()
-		" highlight JCursor ctermfg=black ctermbg=white
-		highlight JCursor ctermfg=black ctermbg=green term=reverse
+		" autocmd BufEnter * :call HighlightCursorRefresh()
+		highlight CursorHighlighted term=reverse ctermfg=black ctermbg=green guifg=black guibg=brightgreen
 		call HighlightCursorRefresh()
 	endif
 endfunction
 
 map <C-C> :call HighlightCursorToggle()<CR>
 map <C-H> :call HighlightCursorToggle()<CR>
+
+"" Uncomment this line to have the cursor highlighted as default:
+" :call HighlightCursorToggle()
