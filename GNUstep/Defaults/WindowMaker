@@ -20,23 +20,23 @@
   NoWindowOverIcons = YES;
   NoWindowOverDock = YES;
   CloseKey = "Mod1+Q";
-  MenuDisabledColor = "#636563";
   FocusMode = sloppy;
+  MenuDisabledColor = "#636563";
   FocusNextKey = "Mod1+Up";
   MenuTextBack = (hgradient, "rgb:c2/c0/c5", "rgb:82/80/85");
-  IconBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
   MenuTitleBack = (
     tpixmap,
     "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/crackedstones-looklike-leaves.png",
     "#000000"
   );
+  IconBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
   WindowShortcut1Key = None;
+  IconificationStyle = twist;
   FTitleBack = (
     tpixmap,
     "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/danger.png",
     "#000000"
   );
-  IconificationStyle = twist;
   MiniaturizeKey = "Mod1+I";
   WindowShortcut2Key = None;
   ToggleKbdModeKey = None;
@@ -45,15 +45,15 @@
   ResizebarBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
   MenuTextColor = "#000000";
   WindowShortcut5Key = None;
-  MaximizeKey = "Control+Z";
+  MaximizeKey = "Control+Shift+Z";
   HighlightTextColor = "#000000";
   WindowShortcut6Key = None;
   MenuTitleColor = "#ffffff";
   WorkspaceNameDisplayPosition = center;
   ShadeKey = "Mod1+D";
   WindowShortcut7Key = None;
-  FTitleColor = "#ffffff";
   AppIconBalloons = YES;
+  FTitleColor = "#ffffff";
   WorkspaceBorderSize = 2;
   WorkspaceBack = (tpixmap, "/mnt/big/stuff/wallpapers/mine/deb_gnu_lnx.jpg", gray20);
   VMaximizeKey = "Mod1+V";
@@ -62,8 +62,8 @@
   SmoothWorkspaceBack = YES;
   UTitleColor = "#ffffff";
   PTitleColor = "#ffffff";
-  Attraction = NO;
   WorkspaceBorder = AllDirections;
+  Attraction = NO;
   RaiseDelay = 350;
   FocusPrevKey = "Mod1+Down";
   DontLinkWorkspaces = NO;

@@ -3,14 +3,14 @@
     AlwaysUserIcon = Yes;
     Icon = "wmaker-gimp-tooloption.tif";
   };
-  konsole.konsole = {
-    Icon = "/home/joey/linux/GNUstep/.AppInfo/WindowMaker/konsole.konsole.xpm";
+  VCLSalFrame.VCLSalFrame = {
+    Icon = "/home/joey/linux/GNUstep/.AppInfo/WindowMaker/VCLSalFrame.VCLSalFrame.xpm";
   };
   wmmixer.WMMixer = {
     Icon = "wmaker-sound_mixer.tif";
   };
-  VCLSalFrame.VCLSalFrame = {
-    Icon = "/home/joey/linux/GNUstep/.AppInfo/WindowMaker/VCLSalFrame.VCLSalFrame.xpm";
+  konsole.konsole = {
+    Icon = "/home/joey/linux/GNUstep/.AppInfo/WindowMaker/konsole.konsole.xpm";
   };
   xterm.XTerm = {
     Icon = GNUterm.tiff;
@@ -73,6 +73,9 @@
   };
   XTerm = {
     Icon = GNUterm.tiff;
+  };
+  kio_uiserver.kio_uiserver = {
+    Icon = "/home/joey/linux/GNUstep/.AppInfo/WindowMaker/kio_uiserver.kio_uiserver.xpm";
   };
   Rxvt = {
     Icon = GNUterm.tiff;
