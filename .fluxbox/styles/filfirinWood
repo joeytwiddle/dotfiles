@@ -1,21 +1,20 @@
-# photon-qnx
-# theme for fluxbox
-# 2001 (c) skypher
+# filfirinWood fluxbox theme
+# based on qnx-photon
 
 ! Focused and focused windows
 window.title.focus:	flat gradient vertical
 window.title.focus.color:	rgb:90/40/30
 window.title.focus.colorTo:	rgb:90/40/30
 window.title.unfocus:	flat gradient vertical
-window.title.unfocus.color:	rgb:a0/50/40
-window.title.unfocus.colorTo:	rgb:a0/50/40
+window.title.unfocus.color:	rgb:c0/80/60
+window.title.unfocus.colorTo:	rgb:c0/80/60
 window.label.focus:	raised gradient vertical
 window.label.focus.color:	rgb:90/00/00
 window.label.focus.colorTo:	rgb:60/00/00
 window.label.focus.textColor:	rgb:ff/ff/80
 window.label.unfocus:	flat gradient vertical
-window.label.unfocus.color:	rgb:b0/70/50
-window.label.unfocus.colorTo:	rgb:c8/88/68
+window.label.unfocus.color:	rgb:90/40/30
+window.label.unfocus.colorTo:	rgb:b0/60/50
 window.label.unfocus.textColor:	white
 window.button.focus:	raised gradient vertical
 window.button.focus.color:	rgb:e0/e0/e0
@@ -28,16 +27,16 @@ window.button.unfocus.picColor:	rgb:00/00/00
 window.button.pressed:	sunken gradient vertical
 window.button.pressed.color:	rgb:b0/b0/b0
 window.button.pressed.colorTo:	rgb:e0/e0/e0
-window.handle.unfocus:	solid
-window.handle.unfocus.color:	rgb:90/40/30
 window.handle.focus:	solid
 window.handle.focus.color:	rgb:c0/80/60
-window.grip.unfocus:	solid
-window.grip.unfocus.color:	rgb:90/40/30
+window.handle.unfocus:	solid
+window.handle.unfocus.color:	rgb:c0/80/60
 window.grip.focus:	solid
 window.grip.focus.color:	rgb:c0/80/60
-window.frame.unfocusColor:	rgb:90/40/30
+window.grip.unfocus:	solid
+window.grip.unfocus.color:	rgb:c0/80/60
 window.frame.focusColor:	rgb:90/40/30
+window.frame.unfocusColor:	rgb:c0/80/60
 
 ! Tabs
 window.tab.label.focus:	raised gradient vertical
@@ -45,11 +44,11 @@ window.tab.label.focus.color:	rgb:90/00/00
 window.tab.label.focus.colorTo:	rgb:60/00/00
 window.tab.label.focus.textColor:	rgb:ff/ff/80
 window.tab.label.unfocus:	flat gradient vertical
-window.tab.label.unfocus.color:	rgb:a4/64/44
-window.tab.label.unfocus.colorTo:	rgb:c8/88/68
+window.tab.label.unfocus.color:	rgb:90/40/30
+window.tab.label.unfocus.colorTo:	rgb:b0/60/50
 window.tab.label.unfocus.textColor:	white
 window.tab.borderWidth:	1
-window.tab.borderColor:	rgb:90/40/30
+window.tab.borderColor:	rgb:c0/80/60
 
 ! Menu
 menu.title:	raised gradient vertical
