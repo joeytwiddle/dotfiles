@@ -7,7 +7,7 @@
 "
 
 :set statusline=%<%f\ %m%h%r%=\ %P\ (%l,%c)%V\ \#%B%<\ %{VimBuddy()}
-:set rulerformat=%40(%=%m\ %<%f\ (%l,%c)\ \#%B\ %{VimBuddy()}%)
+:set rulerformat=%60(%=%m\ \"%<%f\"\ (%l,%c)\ \#%B\ %{VimBuddy()}%)
 " :set rulerformat=%15(%c%V\ %p%%%)
 
 function! VimBuddy()

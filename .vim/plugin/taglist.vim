@@ -616,6 +616,7 @@ endfunction
 " Given a tag's type and name, initialise lists in which sub-tags can be stored.
 function! Tlist_Init_Scope_For(ftype,ttype,tname)
     if ! exists("g:tlist_".a:ttype."_".a:tname."_scope_total")
+		" echo "initialising:" "g:tlist_".a:ttype."_".a:tname."_scope_total"
         let g:tlist_{a:ttype}_{a:tname}_scope_total = 0
         " let tts = s:tlist_{a:ftype}_tag_types . ' '
         " while tts != ''
@@ -630,7 +631,7 @@ function! Tlist_Init_Scope_For(ftype,ttype,tname)
         " endwhile
     else
         " echo "Warning: the scope of tag" a:tname "(".a:ttype.") has already been initialised."
-        " echo "There are probably two tags with the same name, but now they are sharing scope."
+        " echo "There are probably two tags with the same name, and now they are sharing scope."
         " This regularly happens for functions, but they usually don't have subtags =)
     endif
 endfunction
@@ -649,7 +650,12 @@ function! Tlist_Show_Scope_Contents(ftype,indent,ttype,tname,tnameshow)
             return
         endif
     else
-        show "Error: sub-tag total should always be found!"
+		"" I don't know why, but for packages (maybe the '.'s) this list is not initialised :-/
+        " echo "Error: could not find sub-tag total:" "g:tlist_".a:ttype."_".a:tname."_scope_total"
+		"" So we just show it anyway:
+		let print = a:indent . "|- " . a:tnameshow
+		silent! put =print
+		return
     endif
 
     " Print this tag
