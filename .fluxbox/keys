@@ -1,5 +1,5 @@
-Control Left :PrevTab
-Control Right :NextTab
+Shift Mod1 Left :PrevTab
+Shift Mod1 Right :NextTab
 Mod4 Left :PrevTab
 Mod4 Right :NextTab
 Mod1 Tab :PrevWindow 1

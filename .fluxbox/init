@@ -26,27 +26,21 @@ session.screen0.colPlacementDirection:	TopToBottom
 session.screen0.edgeSnapThreshold:	5
 session.screen0.desktopwheeling:	true
 session.screen0.workspaces:	5
-session.screen0.fullMaximization:	true
+session.screen0.fullMaximization:	false
 session.screen0.workspacewarping:	true
 session.screen0.workspaceNames:	Earth,Air,Fire,Water,Toast,
 session.screen0.showwindowposition:	true
 session.screen0.rowPlacementDirection:	LeftToRight
 session.screen0.rootCommand:	
-session.iconbar:	true
-session.cacheLife:	5l
-session.styleFile:	/home/joey/linux/.fluxbox/styles/filfirinGreenScreen
-session.autoRaiseDelay:	350
-session.tabs:	true
-session.cacheMax:	200l
 session.screen0.focusNewWindows:	true
-session.styleFile:	~/.fluxbox/styles/filfirinWood
-session.autoRaiseDelay:	350
+session.menuFile:	/home/joey/linux/.fluxbox/menu
+session.keyFile:	/home/joey/linux/.fluxbox/keys
 session.colorsPerChannel:	4
-session.keyFile:	~/.fluxbox/keys
-session.screen0.maxOverSlit:	false
-session.screen0.strftimeFormat:	%I:%M %p
-session.screen0.colPlacementDirection:	TopToBottom
-session.tabs:	true
-session.menuFile:	~/.fluxbox/menu
-session.opaqueMove:	true
+session.opaqueMove:	false
 session.doubleClickInterval:	250
+session.iconbar:	true
+session.styleFile:	/home/joey/linux/.fluxbox/styles/filfirinGreenScreen
+session.cacheLife:	5l
+session.cacheMax:	200l
+session.autoRaiseDelay:	350
+session.tabs:	true
