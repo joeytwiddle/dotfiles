@@ -44,10 +44,6 @@ macro index "\Cn" ":set index_format = \"%S%T %[%d/%b] %-12.12L (%4l) %s\"<Enter
 macro pager "\Cn" ":set index_format = \"%S%T %[%d/%b] %-12.12L (%4l) %s\"<Enter><refresh>"
 macro index "\Cw" ":set index_format = \"%S%T %[%d/%b] %-25.25a %-20.20F (%4l) %s\"<Enter>"
 macro pager "\Cw" ":set index_format = \"%S%T %[%d/%b] %-25.25a %-20.20F (%4l) %s\"<Enter><refresh>"
-macro index <home> <first-entry>
-macro pager <home> <first-entry>
-macro index <end> <last-entry>
-macro pager <end> <last-entry>
 macro index <right> <display-message>
 # Pager:
 macro pager <left> <exit>
