@@ -36,9 +36,9 @@ session.screen0.rootCommand:
 session.cacheMax:	200l
 session.keyFile:	/home/joey/linux/.fluxbox/keys
 session.cacheLife:	5l
+session.styleFile:	/home/joey/linux/.fluxbox/styles/filfirinSummer
 session.menuFile:	/home/joey/linux/.fluxbox/menu
 session.autoRaiseDelay:	350
-session.styleFile:	/home/joey/linux/.fluxbox/styles/filfirinAqua
 session.doubleClickInterval:	250
 session.opaqueMove:	false
 session.iconbar:	true

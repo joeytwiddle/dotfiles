@@ -1,32 +1,7 @@
-# `jwhich wine` /mnt/filfirin/joey/code/c/gfx/sdl/transtri/transtri.exe
+### Configuration
 
-# `jwhich xterm` -e testallfonts
-
-# xvidtune&
-
-# Keyboard
-# xmodmap /stuff/portablelinux/etc/X11/Xmodmap.hwiDeb &
-
-# `jwhich xterm`  +sb -sl 5000 -vb -si -sk -bg black -fg white -font '-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv' -geometry 80x25+0+500 $* &
-xterm -geometry 80x24+570+680 &
-
-xset r rate 400 50
-
-# inwheel --wheel-fifo
-
-# Grab xterm/vim colours before anything else does (for 256 color modes):
-# xterm -e vim -R $JPATH/code/java/net/email/SMTPprotocol.java & # > ~/nedit.startup.txt &
-# ( sleep 9 &&
-# #   killchild $$ "\"xterm -e vim\"" ) &
-# asmix &
-# ( sleep 20 &&
-  # killchild $$ asmix ) &
-
-# This file likes to cause me problems:
-del .gnome/session
-
-Panel=true;
-# Lets get some kind of window manager starting!
+export GNOME_PANEL=true;
+## Lets get some kind of window manager starting!
 # gnome-session
 # WinMan=`echo "wmaker sawmill" | tr " " "\n" | chooserandomline`
 # WinMan="sawmill"
@@ -34,64 +9,79 @@ Panel=true;
 # WinMan="twm"
 # WinMan="fvwm2"
 # WinMan="ratpoison"
-# WinMan="blackbox" # KDE-compliant
-# My favourites:
-# WinMan="startkde"; Panel=;
-# WinMan="icewm" # Gnome-compliant
+# WinMan="blackbox" ## KDE-compliant
+## My favourites:
+# WinMan="startkde"; export GNOME_PANEL=;
+# WinMan="icewm" ## Gnome-compliant
 # WinMan="ion"
 # WinMan="pwm"
-WinMan="fluxbox" # can be KDE-compliant
+WinMan="fluxbox" ## can be "Gnome-compliant", can be KDE-compliant
 # WinMan="wmaker"
 # WinMan="sawfish"
 
-# Start all the stuff I like
+
+
+### Start all the stuff I like in the background
+
+# Got problems with []s
+xset fp- unix/:7100
+
 (
+	## Keyboard
+	# xmodmap /stuff/portablelinux/etc/X11/Xmodmap.hwiDeb &
 
-	sleep 2
+	xterm -geometry 80x24+570+680 &
+
+	## This file likes to cause me problems:
+	del .gnome/session
+
+	## Start Gnome panel
+	if test $GNOME_PANEL; then
+		## Increased from 5 to 10 because gnomeICU and xmms-applet were failing to show their visuals.
+		sleep 10s && panel &
+	fi
+
+	## Allow connections to X display from anywhere
+	# xhost +
+
+	## Disable bell
+	xset -b
+	## Increase keyboard rate
+	# xset r rate 400 50
+	xset r rate 270 65
+	# xset r rate 280 90
+
+	browse $JPATH/org/jumpgate.html
+	# kfmclient openProfile startbrowsing &
+	# netscape -messenger &
+
+	xscreensaver &
+
+	sleep 4
+	## Background
 	# xsetroot -grey -bg darkgreen -fg black
-	# xsetroot -mod 16 16 -fg darkgreen -bg black
-	for X in `seq -w 0 1 80`; do Y=$((80-$X)); xsetroot -mod 16 16 -fg "#$Y"80"$Y" -bg "#"$Y$Y$Y; done
-
-	# Background
+	for X in `seq -w 0 1 80`; do
+		Y=`expr 80 - $X`
+		xsetroot -mod 16 16 -fg "#$Y"80"$Y" -bg "#"$Y$Y$Y
+	done
 	# randomwallpaper &
 	# xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/abstract/mosaic.jpg
-	xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/abstract/mondflow.jpg
+	xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/abstract/mindflow.jpg
 	# ( 
 		# sleep 480
 		# jxplanet makeicon /stuff/portablelinux/images/xplanet.gif
 		# nice -n 10 jxplanet render
 	# ) &
 
-	# xhost +
-
-	# Disable bell
-	xset -b
-	# ( sleep 10s; xset fp+ unix/:7101 ) &
-
-	# Maybe this was only needed for 256 colour modes?
-	# aumix -v 40
-
-
-
-	browse $JPATH/org/jumpgate.html
-	# kfmclient openProfile startbrowsing &
-
-	# netscape -messenger &
-
-
-
-	xscreensaver &
-
 ) &
 
 
-if test $Panel; then
 
-	sleep 15s && panel &
+### Start window manager in the foreground.
 
-fi
+date
+echo "Starting window manager."
 
-# Start window manager in the foreground.
 # NEXTWMFILE=`jgettmp nextwinman`
 # CURRENTWMFILE=`jgettmp currentwinman`
 NEXTWMFILE=$JPATH/data/nextwinman.dat
@@ -107,10 +97,5 @@ while test -f $NEXTWMFILE; do
 		`jwhich xterm` -bg darkred -fg white -title "--- [master] wm $WinMan died ---"
 
 done
-
-
-# Even if the panel isn't started, this script will wait for window maker (or whatever else is running) before quitting.
-# Nah this is naff cos it waits for xscreensaver and all other apps to close.
-# wait
 
 echo "X session ended."
