@@ -1,3 +1,6 @@
+" Much of this is now in treefolding.vim, which is auto-generated from treevim.sh.
+" Can we hope to factor out the common code?
+
 :command! Joeyfolding call s:Joeyfolding()
 
 :function! s:Joeyfolding()
@@ -57,9 +60,9 @@
 	" :set foldmethod=manual
 
 	" Fold colours
-	:highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000060 guifg=White
+	:highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#0000b0 guifg=White
 	" :highlight foldColumn ctermbg=Grey ctermfg=Blue cterm=none gui=bold guifg=Green guibg=#000060
-	:highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#000060
+	:highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#0000b0
 
 	:set foldtext=getline(v:foldstart).'\ \ \ ['.(v:foldend-v:foldstart).'\ lines]'
 
@@ -71,9 +74,9 @@
 	" :highlight TreeListHsTag ctermbg=blue ctermfg=white cterm=bold
 	:syntax match TreeListHsTag "^\(+\|-\) [^{}]*"
 	" :highlight TreeListHsTag ctermbg=darkmagenta ctermfg=white cterm=bold
-	:highlight TreeListHsTag ctermbg=darkblue ctermfg=white cterm=bold
+	:highlight TreeListHsTag ctermbg=darkblue ctermfg=grey cterm=none gui=bold guibg=#000060
 	:syntax match TreeListHsTagNorm "^\(\.\|\*\) "
-	:highlight TreeListHsTagNorm ctermbg=darkblue ctermfg=white cterm=bold
+	:highlight TreeListHsTagNorm ctermbg=darkblue ctermfg=grey cterm=none gui=bold guibg=#000060
 	" :syn region TreeListFold matchgroup=myDummy start="-{" end="}-" transparent fold
 	"" Conflicts with TreeListFold
 	" :syntax match TreeListHsCurl "\(-{\|{-\|-}\|}\)$"
