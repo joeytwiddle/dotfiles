@@ -15,7 +15,7 @@ xterm -geometry 80x24+583+700 &
 # Grab xterm/vim colours before anything else does (for 256 color modes):
 # xterm -e vim -R $JPATH/code/java/net/email/SMTPprotocol.java & # > ~/nedit.startup.txt &
 # ( sleep 9 &&
-#   killchild $$ "\"xterm -e vim\"" ) &
+# #   killchild $$ "\"xterm -e vim\"" ) &
 # asmix &
 # ( sleep 20 &&
   # killchild $$ asmix ) &
@@ -23,7 +23,7 @@ xterm -geometry 80x24+583+700 &
 # This file likes to cause me problems:
 del .gnome/session
 
-Panel=true;
+# Panel=true;
 # Lets get some kind of window manager starting!
 # gnome-session
 # WinMan=`echo "wmaker sawmill" | tr " " "\n" | chooserandomline`
@@ -83,27 +83,27 @@ WinMan="fluxbox" # KDE-compliant
 ) &
 
 
-if test $Panel; then
-
-	# Start window manager in background.
-	$WinMan ||
-		`jwhich xterm` -title "--- wm $WinMan died ---" &
-
-	# Start Gnome panel in the foreground.
-	# On logout from the panel, the X session will quit.
-
-	# Check if panel already running.
-	SEEK=`findjob panel`
-	# How strange: this test only works without spaces around the =
-	if test ! "$SEEK"=""; then
-		`jwhich xterm` -bg darkred -fg white -title "--- [master] panel already running ---"
-	else
-		# Start panel; present xterm if panel fails.
-		panel ||
-			`jwhich xterm` -bg darkred -fg white -title "--- [master] panel died ---"
-	fi
-
-else
+# if test $Panel; then
+# 
+	# # Start window manager in background.
+	# $WinMan ||
+		# `jwhich xterm` -title "--- wm $WinMan died ---" &
+# 
+	# # Start Gnome panel in the foreground.
+	# # On logout from the panel, the X session will quit.
+# 
+	# # Check if panel already running.
+	# SEEK=`findjob panel`
+	# # How strange: this test only works without spaces around the =
+	# if test ! "$SEEK"=""; then
+		# `jwhich xterm` -bg darkred -fg white -title "--- [master] panel already running ---"
+	# else
+		# # Start panel; present xterm if panel fails.
+		# panel ||
+			# `jwhich xterm` -bg darkred -fg white -title "--- [master] panel died ---"
+	# fi
+# 
+# else
 
 	# Start window manager in the foreground.
 	NEXTWMFILE="$JPATH/data/nextwinman.dat"

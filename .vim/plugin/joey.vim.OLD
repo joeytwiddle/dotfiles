@@ -1,6 +1,9 @@
 " Doesn't work if it comes after the :so's
 :set hlsearch
 
+" :set title
+" :set titlestring="hello"
+
 :so ~/.vim/plugin/joeykeymap.vim
 :so ~/.vim/plugin/joeysyntax.vim
 :so ~/.vim/plugin/joeyfolding.vim

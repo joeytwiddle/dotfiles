@@ -1,8 +1,8 @@
 Mod4 Left :PrevTab
 Mod4 Right :NextTab
-Mod1 Tab :NextWindow 1
-Mod1 grave :PrevWindow 1
-Mod1 Shift Tab :PrevWindow 1
+Mod1 Tab :PrevWindow 1
+Mod1 grave :NextWindow 1
+Mod1 Shift Tab :NextWindow 1
 Mod4 q :KillWindow
 Mod1 x :ExecCommand xterm
 Mod4 x :ExecCommand xterm
