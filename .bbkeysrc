@@ -8,16 +8,16 @@ KeyToGrab(KP_Add), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumeup 
 KeyToGrab(minus), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumedown)
 KeyToGrab(equal), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumedown)
 
-KeyToGrab(KP_7), WithModifier(Mod1), WithAction(:ExecCommand ), DoThis(xmms -r)
-KeyToGrab(KP_9), WithModifier(Mod1), WithAction(:ExecCommand), DoThis(xmms -f)
-KeyToGrab(KP_0), WithModifier(Mod1), WithAction(:ExecCommand), DoThis(xmms -u)
-KeyToGrab(KP_1), WithModifier(Mod1), WithAction(:ExecCommand), DoThis(xmms -p)
-KeyToGrab(KP_3), WithModifier(Mod1), WithAction(:ExecCommand), DoThis(xmms -s)
-KeyToGrab(KP_Delete), WithModifier(Mod1), WithAction(:ExecCommand), DoThis(xmms -s)
+KeyToGrab(KP_7), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -r)
+KeyToGrab(KP_9), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -f)
+KeyToGrab(KP_0), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -u)
+KeyToGrab(KP_1), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -p)
+KeyToGrab(KP_3), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -s)
+KeyToGrab(KP_Delete), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -s)
 
 # Not in wmaker :-(
 KeyToGrab(J), WithModifier(Mod1), WithAction(BigNudgeDown)
 KeyToGrab(K), WithModifier(Mod1), WithAction(Maximise)
 
-KeyToGrab(Print), WithModifier(Mod1), WithAction(:ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
-KeyToGrab(Print), WithModifier(Mod4), WithAction(:ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
+KeyToGrab(Print), WithModifier(Mod1), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
+KeyToGrab(Print), WithModifier(Mod4), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
