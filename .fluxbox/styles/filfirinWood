@@ -37,7 +37,7 @@ window.grip.unfocus.color:	rgb:90/40/30
 window.grip.focus:	solid
 window.grip.focus.color:	rgb:c0/80/60
 window.frame.unfocusColor:	rgb:90/40/30
-window.frame.focusColor:	rgb:c0/80/60
+window.frame.focusColor:	rgb:90/40/30
 
 ! Tabs
 window.tab.label.focus:	raised gradient vertical
@@ -102,10 +102,10 @@ toolbar.justify:	center
 
 ! Borders
 borderColor:	rgb:90/40/30
-borderWidth:	1
+borderWidth:	0
 bevelWidth:	2
 handleWidth:	1
-frameWidth:	0
+frameWidth:	1
 
 ! Other
 rootCommand:  bsetbg -solid black
