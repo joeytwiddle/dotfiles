@@ -3,12 +3,10 @@
 # 2001 (c) skypher
 
 ! Focused and unfocused windows
-window.title.focus:	flat gradient vertical
+window.title.focus:	flat solid
 window.title.focus.color:	rgb:00/ff/00
-window.title.focus.colorTo:	rgb:00/ff/00
-window.title.unfocus:	flat gradient vertical
+window.title.unfocus:	flat solid
 window.title.unfocus.color:	rgb:00/ff/00
-window.title.unfocus.colorTo:	rgb:00/ff/00
 window.label.focus:	flat solid
 window.label.focus.color:	rgb:00/ff/00
 window.label.focus.textColor:	rgb:00/00/00
