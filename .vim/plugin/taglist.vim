@@ -571,7 +571,17 @@ function! s:AddToList(listname,item)
 	" echo "Added " . {a:listname}_count . "th item to list " . a:listname . " : " . a:item
 endfunction
 
+function! Pluralise(attype)
+	let lastchar = strpart(a:attype,strlen(a:attype)-1)
+	if lastchar == "s"
+		return a:attype."es"
+	else
+		return a:attype."s"
+	endif
+endfunction
+
 function! ShowInScope(ftype,indent,thingtype,thing)
+	let start_fold = line('.') + 1
 	if exists("g:jlist_".a:thingtype."_".a:thing."_scope_total")
 		" echo "Got an existing one: ".a:thingtype." ".a:thing
 		if g:jlist_{a:thingtype}_{a:thing}_scope_total == 0
@@ -583,11 +593,11 @@ function! ShowInScope(ftype,indent,thingtype,thing)
 	endif
 		if a:indent == ""
 			let nindent = a:indent
-			let nindent = " |- "
+			let nindent = "|- "
 		else
-			let print = a:indent . a:thing . " {"
+			let print = a:indent . a:thing
 			silent! put =print
-			let nindent = " |  " . a:indent
+			let nindent = "|  " . a:indent
 		endif
 		" For each tag type
 		let ttso = s:jlist_{a:ftype}_tag_types . ' '
@@ -599,9 +609,10 @@ function! ShowInScope(ftype,indent,thingtype,thing)
 				let l:num = g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_count 
 				if l:num > 0
 					echo a:indent . "For " . a:thing . " showing scope " . l:num
-					let print = nindent . attype . "s {"
+					let start_inner_fold = line('.') + 1
+					let print = nindent . Pluralise(attype) . ":"
 					silent! put =print
-					let nnindent = " |  " . nindent
+					let nnindent = "|  " . nindent
 					let j = 1
 					while j <= g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_count
 						let thong = g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_{j}
@@ -611,15 +622,26 @@ function! ShowInScope(ftype,indent,thingtype,thing)
 						call ShowInScope(a:ftype,nnindent,attype,thong)
 						let j = j + 1
 					endwhile
-					let print = nindent . "}"
+					" let print = nindent . "}"
 					silent! put =print
+					let end_inner_fold = line('.')
+					let fold_cmd = start_inner_fold.",".end_inner_fold."fold"
+					if end_inner_fold > start_fold
+						exe fold_cmd
+					endif
 				endif
 			endif
 		endwhile
-		if a:indent != ""
-			let print = a:indent . "}"
-			silent! put =print
-		endif
+		" if a:indent != ""
+			" let print = a:indent . "}"
+			" silent! put =print
+		" endif
+	let end_fold = line('.')
+	let fold_cmd = start_fold.",".end_fold."fold"
+	if end_fold > start_fold
+		echo fold_cmd
+		exe fold_cmd
+	endif
 endfunction
 
 " Jlist_Explore_File()
@@ -879,6 +901,7 @@ function! s:Jlist_Explore_File(bufnum)
 	" Mark the buffer as modifiable
 	setlocal modifiable
 
+	normal "zE"
 	call ShowInScope(ftype,"","","")
 	let i = 1
 	while i <= s:jlist_{ftype}_count
@@ -946,10 +969,10 @@ function! s:Jlist_Explore_File(bufnum)
 			" " Syntax highlight the tag type names
 			" exe 'set foldlevel=1'
 			" normal 'zR'
-			" if has('syntax')
-				" exe 'syntax match TagListTitle /\%' . 
-						    " \ b:jlist_{ftype}_{ttype}_start . 'l.*/'
-			" endif
+			if has('syntax')
+				exe 'syntax match TagListTitle /\%' . 
+						    \ b:jlist_{ftype}_{ttype}_start . 'l.*/'
+			endif
 		" endif
 		" let i = i + 1
 	" endwhile
@@ -1141,10 +1164,10 @@ function! s:Jlist_Init_Window()
 	" Folding related settings
 	if has('folding')
 		setlocal foldenable
-		" setlocal foldmethod=manual
+		setlocal foldmethod=manual
 		" setlocal foldmethod=indent
-		:syn region myFold matchgroup=myDummy start="{" end="}" transparent fold
-		:setlocal foldmethod=syntax
+		" :syn region myFold matchgroup=myDummy start="{" end="}" transparent fold
+		" :setlocal foldmethod=syntax
 		:set foldlevel=1
 		setlocal foldcolumn=2
 		setlocal foldtext=v:folddashes.getline(v:foldstart)
