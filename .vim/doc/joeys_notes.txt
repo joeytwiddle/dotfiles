@@ -1,0 +1,36 @@
+Compiler output:
+
+	Type :make to run the Makefile in the current directory.
+	Any error/warning output will appear in the error window, which links to the liens in the source code.  =)
+
+	TODO: how do we do it for Java?
+
+
+
+For the following you need the relevant plugins from jsh's linkhome.
+
+
+
+Show list of files in buffers:
+
+	Run :MiniBufExplorer
+
+
+
+Tags: useful for jumping around code
+
+	Install ctags or preferably exuberant-ctags.
+
+	Run :!ctags *.c
+
+	Go over an item and press Ctrl-] to see it's definition/declaration.
+	Press Ctrl-O to go back, or :ts to select other matches if there were more than one.
+
+
+
+Grep: search for occurrences of the word under the cursor
+
+	In the current file, # and * move forwards and backwards.
+	Or [I does a quick grep on the current file.
+	Or <F3> or :Grep does a nice search of all your files, showing links in the error window.  =)
+
