@@ -1,3 +1,6 @@
+" Doesn't work if it comes after the :so's
+:set hlsearch
+
 :so ~/.vim/plugin/joeykeymap.vim
 :so ~/.vim/plugin/joeysyntax.vim
 :so ~/.vim/plugin/joeyfolding.vim
@@ -9,7 +12,6 @@
 " :set background=dark
 
 :set incsearch
-:set hlsearch
 " :set wrapmargin=8
 :set shiftwidth=3
 :set ts=3

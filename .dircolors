@@ -160,6 +160,8 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 *HELP 01;33
 .nfo 01;33
 .NFO 01;33
+# patch failure: certainly deserves user attention!
+.rej 01;33
 
 # cyan
 # Code
