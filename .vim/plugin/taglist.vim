@@ -615,7 +615,7 @@ function! Tlist_Highlight_Line(synType,lineNo)
 endfunction
 
 " Given a tag's type and name, initialise lists in which sub-tags can be stored.
-function Tlist_Init_Scope_For(ftype,ttype,tname)
+function! Tlist_Init_Scope_For(ftype,ttype,tname)
     if ! exists("g:tlist_".a:ttype."_".a:tname."_scope_total")
         let g:tlist_{a:ttype}_{a:tname}_scope_total = 0
         let tts = s:tlist_{a:ftype}_tag_types . ' '
@@ -981,10 +981,10 @@ function! s:Tlist_Explore_File(bufnum)
 
     " Initially open all the folds
     if has('folding')
+        " silent! %foldopen!
         let desiredFoldLevel = g:Tlist_Fold_Tags + g:Tlist_Fold_Tagtypes
         let toexe = "set foldlevel=".desiredFoldLevel
         exe toexe
-        " silent! %foldopen!
     endif
 
     " Goto the first line in the buffer
@@ -1164,12 +1164,7 @@ function! s:Tlist_Init_Window()
     if has('folding')
         setlocal foldenable
         setlocal foldmethod=manual
-        " setlocal foldmethod=indent
-        " :syn region myFold matchgroup=myDummy start="{" end="}" transparent fold
-        " :setlocal foldmethod=syntax
-        :set foldlevel=3
         setlocal foldcolumn=2
-        " setlocal foldtext=v:folddashes.getline(v:foldstart)
         setlocal foldtext=getline(v:foldstart)
         " Fold colours
         :highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000060 guifg=White
@@ -1225,47 +1220,13 @@ function! s:Tlist_Get_Tag_Linenr()
     endif
 
     let lnum = line('.')
-    " echo "seeking" lnum
 
     let seek = 'g:tlist_whatisatline_' . lnum
-    " echo "Seek: " . seek
     if exists(seek)
-        " echo "exists"
-        " echo g:tlist_whatisatline_{lnum}
         return g:tlist_whatisatline_{lnum}
     else
-        " echo "don't exist"
         return 0
     endif
-    
-    let ftype = b:tlist_ftype
-
-    " Determine to which tag type the current line number belongs to using the
-    " tag type start line number and the number of tags in a tag type
-    let i = 1
-    while i <= s:tlist_{ftype}_count
-        let ttype = s:tlist_{ftype}_{i}_name
-        let end = b:tlist_{ftype}_{ttype}_start + b:tlist_{ftype}_{ttype}_count
-        if lnum >= b:tlist_{ftype}_{ttype}_start && lnum <= end
-            break
-        endif
-        let i = i + 1
-    endwhile
-
-    " Current line doesn't belong to any of the displayed tag types
-    if i > s:tlist_{ftype}_count
-        return 0
-    endif
-
-    " Compute the offset into the displayed tags for the tag type
-    let offset = lnum - b:tlist_{ftype}_{ttype}_start
-    if offset == 0
-        return 0
-    endif
-
-    " Get the corresponding tag line and return it
-    " echo b:tlist_{ftype}_{ttype}_{offset}
-    return b:tlist_{ftype}_{ttype}_{offset}
 endfunction
 
 function! s:Tlist_Highlight_Tagline()
@@ -1296,14 +1257,13 @@ function! s:Tlist_Jump_To_Tag()
     endif
 
     let mtxt = b:tlist_tag_{lnum}
-    " echo mtxt
     let start = stridx(mtxt, '/^') + 2
     let end = strridx(mtxt, '/;"' . "\t")
     if mtxt[end - 1] == '$'
         let end = end - 1
     endif
     let tagpat = '\V\^' . strpart(mtxt, start, end - start) .
-                        \ (mtxt[end] == '$' ? '\$' : '')
+                                        \ (mtxt[end] == '$' ? '\$' : '')
 
     " Highlight the tagline
     call s:Tlist_Highlight_Tagline()
