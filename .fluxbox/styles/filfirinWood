@@ -37,7 +37,7 @@ window.grip.focus.color:	rgb:90/40/30
 window.grip.unfocus:	flat solid
 window.grip.unfocus.color:	rgb:c0/80/60
 window.frame.focusColor:	rgb:90/40/30
-window.frame.focusColor:	rgb:90/40/30
+window.frame.unfocusColor:	rgb:90/40/30
 
 ! Tabs
 window.tab.label.focus:	flat gradient vertical
