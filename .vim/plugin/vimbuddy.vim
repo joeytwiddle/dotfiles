@@ -8,9 +8,12 @@
 
 " OFF!
 "
+:set shm=atT
+:set statusline=%<%f\ %m%h%r%=\ %P\ (%l,%c)%V\ \#%B%<
+:set rulerformat=%60(%=%m\ \"%<%f\"\ (%l,%c)\ \#%B%)
 " :set statusline=%<%f\ %m%h%r%=\ %P\ (%l,%c)%V\ \#%B%<\ %{VimBuddy()}
-" " :set rulerformat=%15(%c%V\ %p%%%)
 " :set rulerformat=%60(%=%m\ \"%<%f\"\ (%l,%c)\ \#%B\ %{VimBuddy()}%)
+" " :set rulerformat=%15(%c%V\ %p%%%)
 
 function! VimBuddy()
     " Take a copy for others to see the messages
