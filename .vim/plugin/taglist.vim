@@ -586,62 +586,77 @@ function! ShowInScope(ftype,indent,thingtype,thing)
 		" echo "Got an existing one: ".a:thingtype." ".a:thing
 		if g:jlist_{a:thingtype}_{a:thing}_scope_total == 0
 			" echo "Got an empty one: ".a:thingtype." ".a:thing
-			let print = a:indent . a:thing
+			let print = a:indent . "|- " . a:thing
 			silent! put =print
 			return
 		endif
 	endif
-		if a:indent == ""
-			let nindent = a:indent
-			let nindent = "|- "
-		else
-			let print = a:indent . a:thing
-			silent! put =print
-			let nindent = "|  " . a:indent
-		endif
-		" For each tag type
-		let ttso = s:jlist_{a:ftype}_tag_types . ' '
-		while ttso != ''
-			let attype = strpart(ttso, 0, stridx(ttso, ' '))
-			let ttso = strpart(ttso, stridx(ttso, ' ') + 1)
-			" If it has anything in its scope
-			if exists("g:jlist_" . a:thingtype . "_" . a:thing . "_scope_" . attype. "_count")
-				let l:num = g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_count 
-				if l:num > 0
-					echo a:indent . "For " . a:thing . " showing scope " . l:num
-					let start_inner_fold = line('.') + 1
-					let print = nindent . Pluralise(attype) . ":"
-					silent! put =print
-					let nnindent = "|  " . nindent
-					let j = 1
-					while j <= g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_count
-						let thong = g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_{j}
-						let thong2 = g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_taglines_{j}
-						let lineno = line('.')
-						let g:jlist_whatisatline_{lineno} = thong2
-						call ShowInScope(a:ftype,nnindent,attype,thong)
-						let j = j + 1
-					endwhile
-					" let print = nindent . "}"
-					silent! put =print
-					let end_inner_fold = line('.')
-					let fold_cmd = start_inner_fold.",".end_inner_fold."fold"
-					if end_inner_fold > start_fold
-						exe fold_cmd
-					endif
+	if a:thing == ""
+		let nindent = a:indent
+	else
+		let print = a:indent . "|- " . a:thing
+		silent! put =print
+		let nindent = "|  " . a:indent
+	endif
+	" let nindent = a:indent . "|  "
+	" For each tag type:
+	let ttso = s:jlist_{a:ftype}_tag_types . ' '
+	while ttso != ''
+		let attype = strpart(ttso, 0, stridx(ttso, ' '))
+		let ttso = strpart(ttso, stridx(ttso, ' ') + 1)
+		" If it has anything in its scope
+		if exists("g:jlist_" . a:thingtype . "_" . a:thing . "_scope_" . attype. "_count")
+			let l:num = g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_count 
+			if l:num > 0
+				" echo a:indent . "For " . a:thing . " showing scope " . l:num
+				let start_inner_fold = line('.') + 1
+				let print = nindent . "|- " . Pluralise(attype) . ":"
+				silent! put =print
+				if ttso == ""
+					let nnindent = nindent . "   "
+				else
+					let nnindent = nindent . "|  "
+				endif
+				" if a:thing == ""
+					" let nnindent = nindent
+				" endif
+				" For everything of that tagtype in the scope:
+				let j = 1
+				while j <= g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_count
+					let thong = g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_{j}
+					let thong2 = g:jlist_{a:thingtype}_{a:thing}_scope_{attype}_taglines_{j}
+					let lineno = line('.')+1
+					let g:jlist_whatisatline_{lineno} = thong2
+					" echo "lineno" lineno "line=".thong2 "obj=".thong
+					call ShowInScope(a:ftype,nnindent,attype,thong)
+					let j = j + 1
+				endwhile
+				" let print = nindent . "}"
+				" silent! put =print
+				let end_inner_fold = line('.')
+				let fold_cmd = start_inner_fold.",".end_inner_fold."fold"
+				if end_inner_fold > start_fold
+					exe fold_cmd
 				endif
 			endif
-		endwhile
-		" if a:indent != ""
-			" let print = a:indent . "}"
-			" silent! put =print
-		" endif
+		endif
+	endwhile
+	" if a:indent != ""
+		" let print = a:indent . "}"
+		" silent! put =print
+	" endif
 	let end_fold = line('.')
 	let fold_cmd = start_fold.",".end_fold."fold"
 	if end_fold > start_fold
-		echo fold_cmd
+		" echo fold_cmd
 		exe fold_cmd
 	endif
+	let print = substitute(nindent,"[ ]*$","","")
+	silent! put =print
+endfunction
+
+function! Trim(str)
+	return substitute(substitute(a:str,"^[ ]*","",""),"[ ]*$","",""))
 endfunction
 
 " Jlist_Explore_File()
@@ -767,7 +782,7 @@ function! s:Jlist_Explore_File(bufnum)
 		" based on the tag type and store it in the tag type variable
 		let len = strlen(cmd_output)
 
-		echo "[ " . ctags_cmd . " ... ]"
+		" echo "[ " . ctags_cmd . " ... ]"
 
 		while cmd_output != ''
 			let one_line = strpart(cmd_output, 0, stridx(cmd_output, "\n"))
@@ -808,6 +823,9 @@ function! s:Jlist_Explore_File(bufnum)
 					let tmptscope = strpart(one_line, end + 1)
 					" echo ">>".tmptscope."<<"
 					let tscope = strpart(tmptscope, stridx(tmptscope, ':') + 1)
+					if stridx(tscope,"\.") > 0
+						let tscope = strpart(tscope,stridx(tscope,"\.")+1)
+					endif
 					let tscope_type = strpart(tmptscope, 0, stridx(tmptscope, ':'))
 					" if tscope != ''
 						" let tname = tname . ' [' . tscope . ']'
@@ -822,36 +840,37 @@ function! s:Jlist_Explore_File(bufnum)
 				let tname = strpart(one_line, start, end - start)
 			endif
 
+			let tname = substitute(tname," ","","")
+
 			" Update the count of this tag type
 			let cnt = b:jlist_{ftype}_{ttype}_count + 1
 			let b:jlist_{ftype}_{ttype}_count = cnt
 
 			" Add this tag to the tag type variable
-				if ! exists("g:jlist_".ttype."_".tname."_scope_total")
-					let g:jlist_{ttype}_{tname}_scope_total = 0
-				endif
-				if tscope == ''
-					" echo "Unscoped f=" . ftype . " t=" . ttype . " tname=>" . tname . "<"
-					let l:jlist_{ftype}_{ttype} = l:jlist_{ftype}_{ttype} . tname . "\n"
-					let tts = s:jlist_{ftype}_tag_types . ' '
-					while tts != ''
-						" Create the script variable with the tag type name
-						let attype = strpart(tts, 0, stridx(tts, ' '))
-						let tts = strpart(tts, stridx(tts, ' ') + 1)
-						if !exists("g:jlist_" . ttype . "_" . tname . "_scope_" . attype )
-							call s:NewList( "g:jlist_" . ttype . "_" . tname . "_scope_" . attype )
-							call s:NewList( "g:jlist_" . ttype . "_" . tname . "_scope_" . attype . "_taglines" )
-						endif
-					endwhile
-				endif
-					" echo "Scoped f=" . ftype . " t=" . ttype . " tscope=" . tscope . " tname=>" . tname "<"
-					let g:jlist_{tscope_type}_{tscope}_scope_total = (g:jlist_{tscope_type}_{tscope}_scope_total) + 1
-					call s:AddToList( "g:jlist_" . tscope_type . "_" . tscope . "_scope_" . ttype,tname)
-					call s:AddToList( "g:jlist_" . tscope_type . "_" . tscope . "_scope_" . ttype . "_taglines",b:jlist_tag_count)
-					" call s:AddToList( "g:jlist_" . tscope . "_scope_" . ttype . "_taglines",one_line)
-					" let l:jlist_{tscope} = l:jlist_{tscope} . '    ' . tname . "\n"
-					" echo "Added to s:jlist_" . tscope
-				" endif
+			if ! exists("g:jlist_".ttype."_".tname."_scope_total")
+				let g:jlist_{ttype}_{tname}_scope_total = 0
+			endif
+			" if tscope == ''
+				" echo "Unscoped f=" . ftype . " t=" . ttype . " tname=>" . tname . "<"
+				let l:jlist_{ftype}_{ttype} = l:jlist_{ftype}_{ttype} . tname . "\n"
+				let tts = s:jlist_{ftype}_tag_types . ' '
+				while tts != ''
+					" Create the script variable with the tag type name
+					let attype = strpart(tts, 0, stridx(tts, ' '))
+					let tts = strpart(tts, stridx(tts, ' ') + 1)
+					if !exists("g:jlist_" . ttype . "_" . tname . "_scope_" . attype )
+						call s:NewList( "g:jlist_" . ttype . "_" . tname . "_scope_" . attype )
+						call s:NewList( "g:jlist_" . ttype . "_" . tname . "_scope_" . attype . "_taglines" )
+					endif
+				endwhile
+			" endif
+			" echo "f=" . ftype . " t=" . ttype . " tscope=" . tscope . " tname=>" . tname . "<"
+			let g:jlist_{tscope_type}_{tscope}_scope_total = (g:jlist_{tscope_type}_{tscope}_scope_total) + 1
+			call s:AddToList( "g:jlist_" . tscope_type . "_" . tscope . "_scope_" . ttype,tname)
+			call s:AddToList( "g:jlist_" . tscope_type . "_" . tscope . "_scope_" . ttype . "_taglines",b:jlist_tag_count+1)
+			" call s:AddToList( "g:jlist_" . tscope . "_scope_" . ttype . "_taglines",one_line)
+			" let l:jlist_{tscope} = l:jlist_{tscope} . '    ' . tname . "\n"
+			" echo "Added to s:jlist_" . tscope
 
 			" Update the total tag count
 			let b:jlist_tag_count = b:jlist_tag_count + 1
@@ -906,7 +925,7 @@ function! s:Jlist_Explore_File(bufnum)
 	let i = 1
 	while i <= s:jlist_{ftype}_count
 		let ttype = s:jlist_{ftype}_{i}_name
-		echo "Doing type: " . ttype
+		" echo "Doing type: " . ttype
 		call ShowInScope(ftype,"",ttype,"")
 		let i = i + 1
 	endwhile
@@ -967,7 +986,6 @@ function! s:Jlist_Explore_File(bufnum)
 			" " endif
 " 
 			" " Syntax highlight the tag type names
-			" exe 'set foldlevel=1'
 			" normal 'zR'
 			if has('syntax')
 				exe 'syntax match TagListTitle /\%' . 
@@ -985,7 +1003,8 @@ function! s:Jlist_Explore_File(bufnum)
 
 	" Initially open all the folds
 	if has('folding')
-		silent! %foldopen!
+		exe 'set foldlevel=3'
+		" silent! %foldopen!
 	endif
 
 	" Goto the first line in the buffer
@@ -1168,9 +1187,13 @@ function! s:Jlist_Init_Window()
 		" setlocal foldmethod=indent
 		" :syn region myFold matchgroup=myDummy start="{" end="}" transparent fold
 		" :setlocal foldmethod=syntax
-		:set foldlevel=1
+		:set foldlevel=3
 		setlocal foldcolumn=2
-		setlocal foldtext=v:folddashes.getline(v:foldstart)
+		" setlocal foldtext=v:folddashes.getline(v:foldstart)
+		setlocal foldtext=getline(v:foldstart)
+		" Fold colours
+		:highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000060 guifg=White
+		:highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#000060
 	endif
 
 	" Mark buffer as scratch
@@ -1222,12 +1245,13 @@ function! s:Jlist_Get_Tag_Linenr()
 	endif
 
 	let lnum = line('.')
+	" echo "seeking" lnum
 
 	let seek = 'g:jlist_whatisatline_' . lnum
 	" echo "Seek: " . seek
 	if exists(seek)
 		" echo "exists"
-		echo g:jlist_whatisatline_{lnum}
+		" echo g:jlist_whatisatline_{lnum}
 		return g:jlist_whatisatline_{lnum}
 	else
 		" echo "don't exist"
@@ -1260,7 +1284,7 @@ function! s:Jlist_Get_Tag_Linenr()
 	endif
 
 	" Get the corresponding tag line and return it
-	echo b:jlist_{ftype}_{ttype}_{offset}
+	" echo b:jlist_{ftype}_{ttype}_{offset}
 	return b:jlist_{ftype}_{ttype}_{offset}
 endfunction
 
@@ -1292,6 +1316,7 @@ function! s:Jlist_Jump_To_Tag()
 	endif
 
 	let mtxt = b:jlist_tag_{lnum}
+	" echo mtxt
 	let start = stridx(mtxt, '/^') + 2
 	let end = strridx(mtxt, '/;"' . "\t")
 	if mtxt[end - 1] == '$'
