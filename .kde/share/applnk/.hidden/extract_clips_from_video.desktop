@@ -1,0 +1,7 @@
+[Desktop Entry]
+Exec=/usr/local/jsh/jsh guifyscript extract_clips_from_video
+InitialPreference=4
+MimeType=video/x-msvideo;video/*
+Name=Extract clips from video
+Terminal=false
+Type=Application

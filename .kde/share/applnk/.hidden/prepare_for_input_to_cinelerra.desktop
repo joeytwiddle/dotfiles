@@ -1,0 +1,7 @@
+[Desktop Entry]
+Exec=/usr/local/jsh/jsh guifyscript prepare_for_input_to_cinelerra
+InitialPreference=2
+MimeType=video/x-msvideo;video/x-ms-wmv;video/*
+Name=Prepare for input to Cinelerra
+Terminal=false
+Type=Application
