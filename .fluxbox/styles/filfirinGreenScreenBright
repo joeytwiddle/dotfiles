@@ -36,11 +36,11 @@ window.frame.unfocusColor:	rgb:00/ff/00
 
 ! Tabs
 window.tab.label.focus:	flat solid
-window.tab.label.focus.color:	rgb:00/00/00
-window.tab.label.focus.textColor:	rgb:00/ff/00
+window.tab.label.focus.color:	rgb:00/ff/00
+window.tab.label.focus.textColor:	rgb:00/00/00
 window.tab.label.unfocus:	flat solid
-window.tab.label.unfocus.color:	rgb:00/ff/00
-window.tab.label.unfocus.textColor:	rgb:00/00/00
+window.tab.label.unfocus.color:	rgb:00/00/00
+window.tab.label.unfocus.textColor:	rgb:00/ff/00
 window.tab.borderWidth:	1
 window.tab.borderColor:	rgb:00/a0/00
 
