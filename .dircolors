@@ -84,6 +84,7 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .encrypted 00;33
 
 # magenta = Media
+# would of course be nice to distinguish video, raster, vector, audio
 # Images
 .jpg 01;35
 .Jpeg 01;35
@@ -142,8 +143,12 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .obj 01;35 # tfig
 .eps 01;35
 .ps 01;35 # maybe should be under docs?
+# SVG
+.svg 01;35
 # StarOffice drawings
 .sda 01;35
+# Windows SVG?
+.wmf 01;35
 
 # ?
 .gl 01;37
@@ -174,6 +179,7 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 *INSTALL 01;33
 *FAQ 01;33
 *HELP 01;33
+*TODO 01;33
 .nfo 01;33
 .NFO 01;33
 # patch failure: certainly deserves user attention!

@@ -52,6 +52,7 @@ xset fp- unix/:7100
 	# xset r rate 280 90
 
 	browse $JPATH/org/jumpgate.html
+	# evolution &
 	# kfmclient openProfile startbrowsing &
 	# netscape -messenger &
 

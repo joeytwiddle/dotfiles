@@ -6,8 +6,8 @@ window.title.focus:	flat gradient vertical
 window.title.focus.color:	rgb:a0/d0/d0
 window.title.focus.colorTo:	rgb:a0/d0/d0
 window.title.unfocus:	flat gradient vertical
-window.title.unfocus.color:	rgb:a0/d0/d0
-window.title.unfocus.colorTo:	rgb:a0/d0/d0
+window.title.unfocus.color:	rgb:a0/c0/c0
+window.title.unfocus.colorTo:	rgb:a0/c0/c0
 window.*.label.focus:	flat bevel1 solid interlaced
 window.*.label.focus.color:	rgb:00/60/80
 window.*.label.focus.colorTo:	rgb:00/00/00
@@ -30,13 +30,13 @@ window.button.pressed.colorTo:	rgb:e0/e0/e0
 window.handle.focus:	solid
 window.handle.focus.color:	rgb:a0/d0/d0
 window.handle.unfocus:	solid
-window.handle.unfocus.color:	rgb:a0/d0/d0
+window.handle.unfocus.color:	rgb:a0/c0/c0
 window.grip.focus:	solid
 window.grip.focus.color:	rgb:a0/d0/d0
 window.grip.unfocus:	solid
-window.grip.unfocus.color:	rgb:a0/d0/d0
+window.grip.unfocus.color:	rgb:a0/c0/c0
 window.frame.focusColor:	rgb:a0/d0/d0
-window.frame.unfocusColor:	rgb:a0/d0/d0
+window.frame.unfocusColor:	rgb:a0/c0/c0
 
 ! Tabs
 # window.tab.label.focus:	raised gradient vertical

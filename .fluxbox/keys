@@ -1,3 +1,5 @@
+! According to Hwi's xev, my key "Alt Gr" is Mode_switch, "Win right" is Multi_key, followed by Menu and Control_R
+
 Control Escape :RootMenu
 
 ! Move between tabs
@@ -104,10 +106,14 @@ Mod1 KP_Multiply :ExecCommand volumeup 9
 Mod1 KP_Divide :ExecCommand volumedown 9
 Mod1 KP_Add :ExecCommand volumeup 2
 Mod1 KP_Subtract :ExecCommand volumedown 2
-Mod1 KP_9 :ExecCommand xmms -r
-Mod1 KP_3 :ExecCommand xmms -f
-Mod1 KP_7 :ExecCommand xmms -u
-Mod1 KP_1 :ExecCommand xmms -u
+! (back)
+Mod1 KP_7 :ExecCommand xmms -r
+! (forward)
+Mod1 KP_9 :ExecCommand xmms -f
+! (pause)
 Mod1 KP_0 :ExecCommand xmms -u
-! Mod1 KP_1 :ExecCommand xmms -p (play)
-! Mod1 KP_1 :ExecCommand xmms -s (stop)
+! (play)
+Mod1 KP_1 :ExecCommand xmms -p
+! (stop)
+Mod1 KP_3 :ExecCommand xmms -s
+Mod1 KP_Delete :ExecCommand xmms -s
