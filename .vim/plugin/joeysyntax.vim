@@ -39,8 +39,12 @@
 	" :syntax keyword jNote NOTE
 	" :highlight link jNote Todo
 	"" Marche pas:
-	:syntax keyword jTodo TODO Todo NOTE Note
+	" :syntax keyword jTodo TODO Todo BUG BUGS Consider:
+	"" Hmm the standard TODO's are contained inside Comment types
+	:syntax contain jTodo BUG linksto Todo
 	:highlight link jTodo Todo
+	:syntax keyword jNote NOTE Note \<NB:
+	:highlight link jNote jNote
 
 	"" Log4j:
 	" :syntax match log4jDebug " DEBUG "
