@@ -331,6 +331,8 @@ function! s:RunGrepRecursive(grep_cmd, ...)
     else
         " Use the specified grep options
         let grep_opt = a:1
+        "" Joey:
+        let g:Grep_Default_Options = grep_opt
     endif
 
     if a:grep_cmd == 'grep'
@@ -559,7 +561,9 @@ function! s:RunGrep(grep_cmd, ...)
     endif
 
     " No argument supplied. Get the identifier and file list from user
-    let pattern = input("Grep for pattern: ", expand("<cword>"))
+    " let pattern = input("Grep for pattern: ", expand("<cword>"))
+    "" Joey:
+    let pattern = input("Grep for pattern: ", "\\<" . expand("<cword>") . "\\>" )
     if pattern == ""
         return
     endif
@@ -569,6 +573,7 @@ function! s:RunGrep(grep_cmd, ...)
     if filenames == ""
         return
     endif
+    let g:Grep_Default_Filelist = filenames
 
     echo "\n"
 
@@ -576,7 +581,10 @@ function! s:RunGrep(grep_cmd, ...)
     " filename and linenumber when grepping in a single file
     let filenames = filenames . " " . g:Grep_Null_Device
     let cmd = grep_path . " " . grep_opt . " -n "
-    let cmd = cmd . grep_expr_option . " " . pattern
+    let cmd = cmd . grep_expr_option . " "
+    let cmd = cmd . pattern
+    "" Joey:
+    " let cmd = cmd . "\\<" . pattern . "\\>"
     let cmd = cmd . " " . filenames
     "" Joey:
     " let cmd = cmd . " 2>/dev/null"

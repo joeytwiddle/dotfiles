@@ -19,6 +19,10 @@
 
 	:syntax on
 
+	"" Doesn't work for C - overidden by bracket matches?
+	:syntax match functionCall /[[:alpha:][:digit:]]+(/
+	:highlight functionCall ctermfg=cyan
+
 	" :syntax region javaClassLine start=/class / end=/{/ contains=javaClassDecl
 
 	" for jfc diffs

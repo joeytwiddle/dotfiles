@@ -64,6 +64,8 @@
 	" :highlight foldColumn ctermbg=Grey ctermfg=Blue cterm=none gui=bold guifg=Green guibg=#000060
 	:highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#0000b0
 
+	"" TODO: I really want this to use shiftwidth to indent the line properly.
+	""       It would read much better, and IMO is vital in some cases.
 	:set foldtext=getline(v:foldstart).'\ \ \ ['.(v:foldend-v:foldstart).'\ lines]'
 
 	" For treelist.hs:

@@ -46,18 +46,21 @@ function! HighlightCursorToggle()
 		unlet g:highlightcursor
 		"" Clear autocmds etc.
 		call HighlightCursorOff()
+		" TODO: should restore to whatever it was before
+		set updatetime=20
 	else
 		let g:highlightcursor=1
 		set updatetime=10
 		autocmd CursorHold * :call HighlightCursorRefresh()
 		" autocmd BufEnter * :call HighlightCursorRefresh()
-		highlight CursorHighlighted term=reverse ctermfg=black ctermbg=green guifg=black guibg=brightgreen
+		highlight CursorHighlighted term=reverse ctermfg=black ctermbg=green guifg=black guibg=#00ff00
 		call HighlightCursorRefresh()
 	endif
 endfunction
 
 map <C-C> :call HighlightCursorToggle()<CR>
-map <C-H> :call HighlightCursorToggle()<CR>
+"" To make way for JrandomHighlight in joeycommands.vim:
+" map <C-H> :call HighlightCursorToggle()<CR>
 
 "" Uncomment this line to have the cursor highlighted as default:
 " :call HighlightCursorToggle()

@@ -1,9 +1,32 @@
 " File: JavaBrowser.vim
 " Author: Pradeep Unde (pradeep_unde AT yahoo DOT com)
-" Version: l.12
-" Last Modified: Apr 15, 2003
+" Version: l.17
+" Last Modified: Sep 19, 2003
 "
 " ChangeLog:
+" Version 1.17:
+" 1. Optimized so that when the cursor moves within a method/function, the tag
+" is not rehighlighted, reducing the flicker on the screen.
+" 2. The sorting now works properly and correct tag is highlighted after the
+" sorting.
+" 3. Set JavaBrowser_Expand_Tree_At_Startup = 1 so that the tree opens
+" completely at :JavaBrowser command
+" 4. Now escaping the SPACES in $VIM so that sign will be read properly.
+" Version 1.16:
+" 1. Added tagindicator.bmp for windows. Vim on Windows does not understand
+" the xpms. Arrgghhh!
+" Version 1.15:
+" 1. Added various configurable ways to highlight current tag which include
+" A. an icon or B. an arrow(=>) with highlight of Constant and/or C. normal
+" search highlight
+" 2. Added options to control all these. Added 'JavaBrowser_Use_Icon',
+" 'JavaBrowser_Use_Text_Icon' and 'JavaBrowser_Use_Highlight_Tag'
+" 3. All have default values
+" Version 1.14:
+" 1. Now automatically highlights the current tag name.
+" Version 1.13:
+" 1. Added variable JavaBrowser_Expand_Tree_At_Startup to expand the
+" package/class/interface tree at startup.
 " Version 1.12:
 " 1. Small bug fix to remove unwanted echo for visibility.
 " Version 1.11:
@@ -266,6 +289,11 @@
 "
 "               let JavaBrowser_Compact_Format = 1
 "
+" By default, the tree for package/class/interface members is folded. If you
+" want the tree to be expanded at the startup, put the following statement in
+" the vimrc file
+"               let JavaBrowser_Expand_Tree_At_Startup = 1
+"
 " Extending
 " ---------
 " You can add support for new languages or modify the support for an already
@@ -322,6 +350,12 @@ if !exists('JavaBrowser_Use_Right_Window')
     let JavaBrowser_Use_Right_Window = 0
 endif
 
+" Flag to indicate if the tree for package/class/interface members needs to be
+" expanded at startup
+if !exists('JavaBrowser_Expand_Tree_At_Startup')
+    let JavaBrowser_Expand_Tree_At_Startup = 1
+endif
+
 " Increase Vim window width to display vertically split taglist window.  For
 " MS-Windows version of Vim running in a MS-DOS window, this must be set to 0
 " otherwise the system may hang due to a Vim limitation.
@@ -365,8 +399,43 @@ if !exists('JavaBrowser_Compact_Format')
     let JavaBrowser_Compact_Format = 0
 endif
 
+" Use tagindicator (an arrow) icon to show the current tag
+if !exists('JavaBrowser_Use_Icon')
+    let JavaBrowser_Use_Icon = 0
+endif
+
+" Use a text simulated arrow (=>) to show the current tag
+if JavaBrowser_Use_Icon == 0 && !exists('JavaBrowser_Use_Text_Icon')
+    let JavaBrowser_Use_Text_Icon = 1
+endif
+
+" Use a highlight to show the current tag
+if !exists('JavaBrowser_Use_Highlight_Tag')
+    let JavaBrowser_Use_Highlight_Tag = 0
+endif
+
+" Check if vim has been compiled with the signs feature or not
+" if not, we enable the highlight tag at least to show current tag
+if !has('signs')
+    let JavaBrowser_Use_Icon = 0
+    let JavaBrowser_Use_Text_Icon = 0
+    let JavaBrowser_Use_Highlight_Tag = 1
+endif
+
+" Check and define signs, if required
+if g:JavaBrowser_Use_Icon == 1
+    let imgName = 'tagindicator.xpm'
+    if has('win32')
+        let imgName = 'tagindicator.bmp'
+    endif
+    exe 'sign define currTag icon=' . substitute(expand('$VIM'), ' ', '\\ ', 'g') . '/pixmaps/' . imgName . ' text==> texthl=Constant'
+else
+    if g:JavaBrowser_Use_Text_Icon == 1
+        exe 'sign define currTag text==> texthl=Constant'
+    endif
+endif
+
 " File types supported by taglist
-"let s:jbrowser_file_types = 'cpp java php python ruby'
 let s:jbrowser_file_types = 'java'
 if exists('g:jbrowser_file_types')
     " Add user specified file types
@@ -738,6 +807,7 @@ function! s:JavaBrowser_Init_Window(bufnum)
     let b:jbrowser_bufnum = a:bufnum
     let b:jbrowser_bufname = fnamemodify(bufname(a:bufnum), ':p')
     let b:jbrowser_ftype = getbufvar(a:bufnum, '&filetype')
+    let b:buf_tag_line_no = -2
 
     " Mark the buffer as modifiable
     setlocal modifiable
@@ -808,8 +878,10 @@ function! s:JavaBrowser_Init_Window(bufnum)
         " Display the tag prototype for the tag under the cursor.
         autocmd CursorHold __JBrowser_List__ call s:JavaBrowser_Show_Tag_Prototype()
         " Highlight the current tag 
-        "autocmd CursorHold * silent call <SID>JavaBrowser_Highlight_Tag(bufnr('%'), 
-        "                                \ line('.'))
+        autocmd CursorHold *.java silent call s:JavaBrowser_Highlight_Tag(bufnr('%'), 
+                                       \ line('.'))
+        " Unlighlight the previous search
+        autocmd CursorHold *.java call s:JavaBrowser_Unhighlight_Prvline()
         " Adjust the Vim window width when taglist window is closed
         autocmd BufUnload __JBrowser_List__ call <SID>JavaBrowser_Close_Window()
         " Auto refresh the taglisting window
@@ -969,7 +1041,7 @@ function! s:JavaBrowser_Explore_File(bufnum)
 
         " Handle errors
         if v:shell_error && cmd_output != ''
-            "call s:JavaBrowser_Warning_Msg(cmd_output)
+            call s:JavaBrowser_Warning_Msg(cmd_output)
             return
         endif
 
@@ -1163,6 +1235,7 @@ function! s:JavaBrowser_Explore_File(bufnum)
 
     " Mark the buffer as modifiable
     setlocal modifiable
+    let b:buf_to_jbrowser_line_nos = ''
 
     let i = 1
     let l:ttype_put = ''
@@ -1188,6 +1261,9 @@ function! s:JavaBrowser_Explore_File(bufnum)
                 let l:type_start = line('.')
                 let b:line_no_{l:type_start} = l:{l:ttype}_{l:type}_lineno
                 let b:line_no_{l:type_start}_proto = l:{l:ttype}_{l:type}_lineno_proto
+                let b:buf_to_jbrowser_line_no_{l:{l:ttype}_{l:type}_lineno} = l:type_start + 1
+                let b:buf_to_jbrowser_line_nos = b:buf_to_jbrowser_line_nos . l:{l:ttype}_{l:type}_lineno . "\n"
+                "call s:JavaBrowser_Warning_Msg('b:buf_to_jbrowser_line_no_'.l:{l:ttype}_{l:type}_lineno.'='.l:type_start)
                 "call s:JavaBrowser_Warning_Msg('b:line_no_{'.l:type_start.'}:'.l:{l:ttype}_{l:type}_lineno)
                 " Put actual class/package name etc
                 silent! put ='  '.l:type
@@ -1220,6 +1296,8 @@ function! s:JavaBrowser_Explore_File(bufnum)
                             let l:curr_line = line('.')
                             let b:line_no_{l:curr_line} = l:{l:type_sub_type}_{one_val}_lineno
                             let b:line_no_{l:curr_line}_proto = l:{l:type_sub_type}_{one_val}_lineno_proto
+                            let b:buf_to_jbrowser_line_no_{l:{l:type_sub_type}_{one_val}_lineno} = l:curr_line + 1
+                            let b:buf_to_jbrowser_line_nos = b:buf_to_jbrowser_line_nos . l:{l:type_sub_type}_{one_val}_lineno . "\n"
                             let l:tmpvarname = 'l:'.l:type_sub_type.'_'.one_val.'_lineno_visib'
                             let l:subtype_val = one_val
                             let l:override_idx = stridx(one_val, '__OVERRIDE__')
@@ -1273,6 +1351,7 @@ function! s:JavaBrowser_Explore_File(bufnum)
         endif
         let i = i + 1
     endwhile
+    "call s:JavaBrowser_Warning_Msg('b:buf_to_jbrowser_line_nos='.b:buf_to_jbrowser_line_nos)
 
     " Mark the buffer as not modifiable
     setlocal nomodifiable
@@ -1282,6 +1361,12 @@ function! s:JavaBrowser_Explore_File(bufnum)
 
     " Goto the first line in the buffer
     go
+
+    " Expand the tree if expand flag is set
+    if g:JavaBrowser_Expand_Tree_At_Startup == 1
+        silent! %foldopen!
+    endif
+
 
     return
 endfunction
@@ -1332,12 +1417,12 @@ function! s:JavaBrowser_Toggle_Window(bufnum)
     call s:JavaBrowser_Explore_File(a:bufnum)
 
     " Highlight the current tag
-    "call s:JavaBrowser_Highlight_Tag(a:bufnum, curline)
+    call s:JavaBrowser_Highlight_Tag(a:bufnum, curline)
 
     " Go back to the original window
-    let s:JavaBrowser_Skip_Refresh = 1
-    wincmd p
-    let s:JavaBrowser_Skip_Refresh = 0
+    "let s:JavaBrowser_Skip_Refresh = 1
+    "wincmd p
+    "let s:JavaBrowser_Skip_Refresh = 0
 endfunction
 
 " JavaBrowser_Extract_Tagtype
@@ -1405,13 +1490,13 @@ function! s:JavaBrowser_Refresh_Window()
     call s:JavaBrowser_Explore_File(cur_bufnr)
 
     " Highlight the current tag
-    "call s:JavaBrowser_Highlight_Tag(cur_bufnr, curline)
+    call s:JavaBrowser_Highlight_Tag(cur_bufnr, curline)
 
     " Refresh the taglist window
-    redraw
+    "redraw
 
     " Jump back to the original window
-    exe cur_winnr . 'wincmd w'
+    "exe cur_winnr . 'wincmd w'
 endfunction
 
 " JavaBrowser_Change_Sort()
@@ -1431,7 +1516,7 @@ function! s:JavaBrowser_Change_Sort()
     endif
 
     " Save the current line for later restoration
-    let curline = '\V\^' . getline('.') . '\$'
+    "let curline = '\V\^' . getline('.') . '\$'
 
     " Clear out the cached taglist information
     call setbufvar(b:jbrowser_bufnum, 'jbrowser_valid_cache', '')
@@ -1443,7 +1528,18 @@ function! s:JavaBrowser_Change_Sort()
     call s:JavaBrowser_Explore_File(b:jbrowser_bufnum)
 
     " Go back to the tag line before the list is sorted
-    call search(curline, 'w')
+    "call search(curline, 'w')
+    
+    " Go to the java buffer
+    wincmd p
+    let l:curbufnr = bufnr('%')
+    let l:curline = line('.')
+    
+    " Go back to the __JBrowser_List__ and highlight the current tag
+    let l:bname = '__JBrowser_List__'
+    let l:winnum = bufwinnr(l:bname)
+    exe l:winnum . 'wincmd w'
+    call s:JavaBrowser_Highlight_Tag(l:curbufnr, l:curline)
 endfunction
 
 " JavaBrowser_Update_Window()
@@ -1467,18 +1563,49 @@ function! s:JavaBrowser_Update_Window()
     call s:JavaBrowser_Explore_File(b:jbrowser_bufnum)
 
     " Go back to the tag line before the list is sorted
-    call search(curline, 'w')
+    "call search(curline, 'w')
+    
+    " Go to the java buffer
+    wincmd p
+    let l:curbufnr = bufnr('%')
+    let l:curline = line('.')
+    
+    " Go back to the __JBrowser_List__ and highlight the current tag
+    let l:bname = '__JBrowser_List__'
+    let l:winnum = bufwinnr(l:bname)
+    exe l:winnum . 'wincmd w'
+    call s:JavaBrowser_Highlight_Tag(l:curbufnr, l:curline)
 endfunction
 
 function! s:JavaBrowser_Highlight_Tagline()
-    " Clear previously selected name
-    match none
+    if g:JavaBrowser_Use_Highlight_Tag == 1
+        " Clear previously selected name
+        match none
 
-    " Highlight the current selected name
-    if g:JavaBrowser_Display_Prototype == 0
-        exe 'match TagName /\%' . line('.') . 'l\s\+\zs.*/'
-    else
-        exe 'match TagName /\%' . line('.') . 'l.*/'
+        " Highlight the current selected name
+        if g:JavaBrowser_Display_Prototype == 0
+            exe 'match TagName /\%' . line('.') . 'l\s\+\zs.*/'
+        else
+            exe 'match TagName /\%' . line('.') . 'l.*/'
+        endif
+    endif
+
+    " Place the current tag sign if required, clearing the previous
+    if g:JavaBrowser_Use_Icon == 1 || g:JavaBrowser_Use_Text_Icon == 1
+        exe 'sign unplace 2 buffer=' . bufnr('%')
+        exe 'sign place 2 line=' . line('.') . ' name=currTag buffer=' . bufnr('%')
+    endif
+endfunction
+
+function! s:JavaBrowser_Unhighlight_Prvline()
+    " Clear previously selected name
+    if g:JavaBrowser_Use_Highlight_Tag == 1
+        match none
+    endif
+
+    " Clear the previous tag sign
+    if g:JavaBrowser_Use_Icon == 1 || g:JavaBrowser_Use_Text_Icon == 1
+        exe 'sign unplace 2 buffer=' . bufnr('%')
     endif
 endfunction
 
@@ -1557,88 +1684,66 @@ function! s:JavaBrowser_Show_Tag_Prototype()
     endif
 endfunction
 
-" JavaBrowser_Locate_Tag_Text
-" Locate the tag text given the line number in the source window
-function! s:JavaBrowser_Locate_Tag_Text(sort_type, linenum)
-    let left = 1
-    let right = b:jbrowser_tag_count
+" JavaBrowser_Highlight_Tag
+" Highlight tag from Javabrowser Buffer given the source line number and
+" source buffer number
+function! s:JavaBrowser_Highlight_Tag(buf_no, linenum)
+    " JavaBrowser window name
+    let l:bname = '__JBrowser_List__'
 
-    if a:sort_type == 'order'
-        " Tag list sorted by order, do a binary search comparing the line
-        " numbers
-
-        " If the current line is the less than the first tag, then no need to
-        " search
-        let txt = b:jbrowser_tag_1
-        let start = strridx(txt, 'line:') + strlen('line:')
-        let end = strridx(txt, "\t")
-        if end < start
-            let first_lnum = strpart(txt, start) + 0
-        else
-            let first_lnum = strpart(txt, start, end - start) + 0
-        endif
-
-        if a:linenum < first_lnum
-            return ""
-        endif
-
-        while left < right
-            let middle = (right + left + 1) / 2
-            let txt = b:jbrowser_tag_{middle}
-
-            let start = strridx(txt, 'line:') + strlen('line:')
-            let end = strridx(txt, "\t")
-            if end < start
-                let middle_lnum = strpart(txt, start) + 0
-            else
-                let middle_lnum = strpart(txt, start, end - start) + 0
-            endif
-
-            if middle_lnum == a:linenum
-                let left = middle
-                break
-            endif
-
-            if middle_lnum > a:linenum
-                let right = middle - 1
-            else
-                let left = middle
-            endif
-        endwhile
-    else
-        " sorted by name, brute force method (Dave Eggum)
-        let closest_lnum = 0
-        let final_left = 0
-        while left < right
-            let txt = b:jbrowser_tag_{left}
-
-            let start = strridx(txt, 'line:') + strlen('line:')
-            let end = strridx(txt, "\t")
-            if end < start
-                let lnum = strpart(txt, start) + 0
-            else
-                let lnum = strpart(txt, start, end - start) + 0
-            endif
-
-            if lnum < a:linenum && lnum > closest_lnum
-                let closest_lnum = lnum
-                let final_left = left
-            elseif lnum == a:linenum
-                let closest_lnum = lnum
-                break
-            else
-                let left = left + 1
-            endif
-        endwhile
-        if closest_lnum == 0
-            return ""
-        endif
-        if left == right
-            let left = final_left
-        endif
+    " Check if the JavaBrowser window is open
+    let l:winnum = bufwinnr(l:bname)
+    if l:winnum == -1
+        return
+    endif
+    " Jump to the JavaBrowser window
+    exe l:winnum . 'wincmd w'
+   
+    " Check if we have the current tag line no
+    if !exists('b:buf_tag_line_no')
+        let b:buf_tag_line_no = -2
     endif
 
-    return b:jbrowser_tag_{left}
+    let l:all_line_nos = b:buf_to_jbrowser_line_nos
+    let l:buf_lineno = -1
+    let l:prv_line_no = -1
+    while l:all_line_nos != ''
+        let l:line_no = strpart(l:all_line_nos, 0, stridx(l:all_line_nos, "\n"))
+        " Remove the line
+        let l:all_line_nos = strpart(l:all_line_nos, stridx(l:all_line_nos, "\n") + 1)
+        if l:line_no == a:linenum
+            let l:buf_lineno = l:line_no
+            break
+        endif
+        if l:line_no > a:linenum
+            let l:buf_lineno = l:prv_line_no
+            break
+        endif
+        let l:prv_line_no = l:line_no
+    endwhile
+    if l:buf_lineno == -1
+        if l:prv_line_no != -1
+            let l:buf_lineno = l:prv_line_no
+        endif
+    endif
+    if l:buf_lineno != -1 && l:buf_lineno != b:buf_tag_line_no
+        let l:varname = 'b:buf_to_jbrowser_line_no_' . l:buf_lineno
+        if exists(l:varname)
+            let l:jbrowser_lineno = b:buf_to_jbrowser_line_no_{l:buf_lineno}
+            exe 'normal ' . l:jbrowser_lineno . 'G'
+            
+            " Highlight the tagline
+            call s:JavaBrowser_Highlight_Tagline()
+
+            " Store the line number of the current tag
+            let b:buf_tag_line_no = l:buf_lineno
+        endif
+    endif
+    let l:winnum = bufwinnr(a:buf_no)
+    if l:winnum != -1
+        " Jump to the Java source window
+        exe l:winnum . 'wincmd w'
+    endif
 endfunction
 
 " Define tag listing autocommand to automatically open the taglist window on
