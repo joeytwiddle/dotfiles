@@ -94,9 +94,12 @@ endif
 	:highlight DiffChange ctermfg=white ctermbg=black cterm=bold gui=bold guifg=White guibg=Black
 	:highlight DiffDelete term=none ctermbg=blue ctermfg=blue cterm=none guifg=DarkBlue guibg=DarkBlue gui=none
 
-	:highlight link diffRemoved DiffDelete
-	:highlight link diffAdded DiffAdd
-	:highlight link diffChanged DiffChange
+	" :highlight diffRemoved term=none ctermbg=red ctermfg=white cterm=none guifg=Grey guibg=DarkRed gui=none
+	" :highlight link diffAdded DiffAdd
+	" :highlight link diffChanged DiffChange
+	:highlight diffRemoved term=bold ctermbg=black ctermfg=red cterm=bold guifg=Grey guibg=DarkRed gui=none
+	:highlight diffAdded   term=bold ctermbg=black ctermfg=green cterm=bold guifg=Grey guibg=DarkRed gui=none
+	:highlight diffChanged term=bold ctermbg=black ctermfg=yellow cterm=bold guifg=Grey guibg=DarkRed gui=none
 
 	" For jfc diffs
 	" :syntax keyword difference jDiff @@>>
@@ -124,6 +127,16 @@ endif
 	:highlight log4jInfo  ctermfg=White
 	:highlight log4jWarn  ctermfg=Yellow
 	:highlight log4jError ctermfg=Red
+
+	"" For GNU diffs:
+	" if &filetype == "diff" "" It appears that at this point we don't know the filetype
+		" :syntax match diffFileLine "^\(diff\|Index:\) "
+		" :highlight diffFileLine term=bold cterm=bold ctermbg=blue ctermfg=white guibg=DarkBlue guifg=White
+		" :highlight clear diffFile
+		" :highlight diffFile term=bold cterm=bold ctermbg=blue ctermfg=white gui=bold guibg=DarkBlue guifg=White
+		" :highlight diffFile term=bold cterm=bold ctermbg=white ctermfg=blue gui=bold guibg=White guifg=DarkBlue
+		:highlight link diffFile diffLine
+	" fi
 
 	":so /home/joey/linux/.vim/joeyfolding.vim
 
