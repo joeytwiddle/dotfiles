@@ -2,36 +2,36 @@
 :so ~/.vim/plugin/joeysyntax.vim
 :so ~/.vim/plugin/joeyfolding.vim
 
-:set listchars=tab:>>,trail:>
-
 :set autoindent
 " :set cindent
 :set nowrap
 " :set wrap
 " :set background=dark
 
-" Make these work for modifiable only - they seriously warp the online help!
-":autocmd BufReadPost   *.* set ts=8 | set expandtab | retab | set ts=2 | set noexpandtab | retab!
-":autocmd BufWritePre,FilterWritePre     *.* set expandtab | retab!
-" :set wrapmargin=8
 :set incsearch
 :set hlsearch
+" :set wrapmargin=8
 :set shiftwidth=3
 :set ts=3
-" :set expandtab
 :set list
 " :set listchars=tab:::,trail:$
 " :set listchars=tab:>\ ,trail:$
 " :set listchars=tab:-\ ,trail:$
 " :set listchars=tab:\|\ ,trail:$
 " :set listchars=tab:\\_,trail:$
-:set listchars=tab:\|-,trail:$
+" :set listchars=tab:\|-,trail:$
+:set listchars=tab:\>-,trail:$
 :highlight SpecialKey ctermfg=DarkGrey cterm=bold guifg=#606060
+" :set expandtab
 ":set noautoindent
 ":set nocindent
 :set mouse=a
 
 
+
+" Make these work for modifiable only - they seriously warp the online help!
+":autocmd BufReadPost   *.* set ts=8 | set expandtab | retab | set ts=2 | set noexpandtab | retab!
+":autocmd BufWritePre,FilterWritePre     *.* set expandtab | retab!
 
 
 

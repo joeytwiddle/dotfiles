@@ -10,7 +10,7 @@ window.title.unfocus:	flat gradient vertical
 window.title.unfocus.color:	rgb:d0/d0/d0
 window.title.unfocus.colorTo:	rgb:e0/e0/e0
 window.label.focus:	sunken solid
-window.label.focus.color:	rgb:e0/e0/00
+window.label.focus.color:	rgb:d0/d0/00
 window.label.focus.textColor:	black
 window.label.unfocus:	raised gradient vertical
 window.label.unfocus.color:	rgb:00/80/00
@@ -40,7 +40,7 @@ window.frame.unfocusColor:	rgb:e0/e0/e0
 
 ! Tabs
 window.tab.label.focus:	sunken solid
-window.tab.label.focus.color:	rgb:e0/e0/00
+window.tab.label.focus.color:	rgb:d0/d0/00
 window.tab.label.focus.textColor:	black
 window.tab.label.unfocus:	raised gradient vertical
 window.tab.label.unfocus.color:	rgb:00/80/00
@@ -87,7 +87,7 @@ toolbar.button.pressed:	sunken flat
 toolbar.button.pressed.color:	rgb:AB/AB/AB
 
 ! Fonts (lucidasans-10 is good default)
-window.font:	-*-helvetica-medium-r-*-*-*-80-*-*-*-*-*-*
+window.font:	-*-lucida-medium-r-*-*-*-70-*-*-*-*-*-*
 window.justify:	center
 window.tab.font:	-*-lucida-medium-r-*-*-*-70-*-*-*-*-*-*
 window.tab.justify:	center

@@ -1,0 +1,42 @@
+{
+  TitleJustify = left;
+  ClipTitleFont = "-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*";
+  WindowTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
+  MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
+  MenuTextFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
+  IconTitleFont = "-*-helvetica-medium-r-normal-*-8-*-*-*-*-*-*-*";
+  DisplayFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
+  HighlightColor = "#ffffff";
+  HighlightTextColor = "#000000";
+  ClipTitleColor = black;
+  CClipTitleColor = "rgb:61/61/61";
+  FTitleColor = "#ffffff";
+  PTitleColor = "#ffffff";
+  UTitleColor = "#ffffff";
+  FTitleBack = (tpixmap, "/stuff/portablelinux/images/danger.png", "#000000");
+  PTitleBack = (
+    tpixmap,
+    "/stuff/portablelinux/images/crackedstones-looklike-leaves.png",
+    "#000000"
+  );
+  UTitleBack = (
+    tpixmap,
+    "/stuff/portablelinux/images/crackedstones-looklike-leaves.png",
+    "#000000"
+  );
+  ResizebarBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
+  MenuTitleColor = "#ffffff";
+  MenuTextColor = "#000000";
+  MenuDisabledColor = "#616561";
+  MenuTitleBack = (
+    tpixmap,
+    "/stuff/portablelinux/images/crackedstones-looklike-leaves.png",
+    "#000000"
+  );
+  MenuTextBack = (hgradient, "rgb:c2/c0/c5", "rgb:82/80/85");
+  IconBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
+  IconTitleColor = white;
+  IconTitleBack = "#384246";
+  MenuStyle = normal;
+  WorkspaceBack = (tpixmap, "/usr/share/WindowMaker/Backgrounds/Debian.jpg", gray20);
+}
