@@ -99,4 +99,4 @@ handleWidth:	1
 frameWidth:	1
 
 ! Other
-rootCommand:  xsetroot -mod 16 16 -fg "#008000" -bg "#000000"
+rootCommand:  xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/3dworld/povray/chapman2.jpg

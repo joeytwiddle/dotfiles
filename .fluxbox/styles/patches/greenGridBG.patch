@@ -1,0 +1,4 @@
+102c102
+< rootCommand:  bsetbg -solid black
+---
+> rootCommand:  xsetroot -mod 16 16 -fg "#008000" -bg "#000000"

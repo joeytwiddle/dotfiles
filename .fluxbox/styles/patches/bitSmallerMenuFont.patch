@@ -1,0 +1,8 @@
+89c89
+< menu.title.font:	-*-lucida-medium-r-*-*-*-240-*-*-*-*-*-*
+---
+> menu.title.font:	-*-lucida-medium-r-*-*-*-180-*-*-*-*-*-*
+91c91
+< menu.frame.font:	-*-lucida-medium-r-*-*-*-180-*-*-*-*-*-*
+---
+> menu.frame.font:	-*-lucida-medium-r-*-*-*-140-*-*-*-*-*-*
