@@ -1,12 +1,20 @@
-## For Vnc:
-# (
-# echo "ppid = $PPID"
-# echo "pid = $PID"
-# ps -A | grep "$PPID"
-# ps -A | grep "$PID"
-# ) > /tmp/vncxinit.txt
-# fluxbox
-# exit
+### For Vnc:
+if test "$VNCDESKTOP" = "X"
+then
+	xterm &
+	# fluxbox &
+	wmaker &
+	## To speed up the volume control scripts when invoked from bbkeys:
+	## (should it go in a bbkeys.sh wrapper?)
+	. importshfn volumeup volumedown after before
+	bbkeys -i &
+	# sleep 10
+	# wmmixer -w &
+	# asmix -withdrawn &
+	# `jwhich panel` &
+	## Unlike X, and despite the exit 1, Xvnc keeps running when this script exits!
+	exit 1
+fi
 
 ### Configuration
 
@@ -21,7 +29,7 @@ export GNOME_PANEL=true;
 # WinMan="ratpoison"
 # WinMan="blackbox" ## KDE-compliant
 ## My favourites:
-# WinMan="startkde"; export GNOME_PANEL=;
+# WinMan="startkde"; export GNOME_PANEL=; export QT_TT=true;
 # WinMan="icewm" ## Gnome-compliant
 # WinMan="ion"
 # WinMan="pwm"
@@ -34,7 +42,9 @@ WinMan="fluxbox" ## can be "Gnome-compliant", can be KDE-compliant
 ### Start all the stuff I like in the background
 
 # Got problems with []s
-xset fp- unix/:7100
+# xset fp- unix/:7100
+
+export LD_PRELOAD=/usr/lib/libgdkxft.so
 
 (
 	## Keyboard
@@ -62,7 +72,7 @@ xset fp- unix/:7100
 	# xset r rate 280 90
 
 	browse $JPATH/org/jumpgate.html
-	evolution &
+	# evolution &
 	# kfmclient openProfile startbrowsing &
 	# netscape -messenger &
 
