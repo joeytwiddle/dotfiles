@@ -15,17 +15,23 @@ Mod4 F5 :Workspace 5
 Mod4 F6 :Workspace 6
 Mod4 F7 :Workspace 7
 Mod4 F8 :Workspace 8
-Mod1 Tab :PrevWindow 1
-Mod1 grave :NextWindow 1
-Mod1 Shift Tab :NextWindow 1
+
 Mod4 Left :PrevTab
 Shift Mod1 Left :PrevTab
 Mod4 Right :NextTab
 Shift Mod1 Right :NextTab
+Control Tab :PrevTab
+Control grave :NextTab
+Control Shift Tab :NextTab
+
+Mod1 Tab :PrevWindow 1
+Mod1 grave :NextWindow 1
+Mod1 Shift Tab :NextWindow 1
 Mod4 Up :PrevWindow 1
 Mod1 Up :PrevWindow 1
 Mod4 Down :NextWindow 1
 Mod1 Down :NextWindow 1
+
 Mod1 q :Close
 Mod4 q :KillWindow
 Mod1 x :ExecCommand xterm
@@ -54,10 +60,12 @@ Mod1 f :ToggleDecor
 Mod4 f :ToggleDecor
 Mod1 t :ToggleTab
 Mod4 t :ToggleTab
+
 Control Mod1 Left :PrevWorkspace
 Control Mod4 Left :PrevWorkspace
 Control Mod1 Right :NextWorkspace
 Control Mod4 Right :NextWorkspace
+
 Control KP_Right :BigNudgeRight
 Control KP_Left :BigNudgeLeft
 Control KP_Down :BigNudgeDown
@@ -70,6 +78,7 @@ Mod1 KP_Down :BigNudgeDown
 Mod4 KP_Down :BigNudgeDown
 Mod1 KP_Up :BigNudgeUp
 Mod4 KP_Up :BigNudgeUp
+
 Mod1 KP_5 :VerticalDecrement
 Mod4 KP_5 :HorizontalDecrement
 Control KP_Divide :HorizontalDecrement
