@@ -13,29 +13,29 @@ session.screen0.slit.placement:	CenterRight
 session.screen0.slit.direction:	Vertical
 session.screen0.slit.onTop:	False
 session.screen0.slit.autoHide:	False
-session.screen0.colPlacementDirection:	TopToBottom
-session.screen0.maxOverSlit:	false
 session.screen0.rowPlacementDirection:	LeftToRight
+session.screen0.maxOverSlit:	false
 session.screen0.focusModel:	AutoRaiseSloppyFocus
 session.screen0.sloppywindowgrouping:	true
-session.screen0.windowPlacement:	RowSmartPlacement
-session.screen0.focusLastWindow:	true
-session.screen0.fullMaximization:	true
-session.screen0.strftimeFormat:	%I:%M %p
-session.screen0.imageDither:	false
 session.screen0.edgeSnapThreshold:	8
+session.screen0.imageDither:	false
 session.screen0.rootCommand:	
 session.screen0.focusNewWindows:	true
-session.screen0.workspaces:	5
 session.screen0.workspaceNames:	Earth,Air,Fire,Water,Toast,
+session.screen0.workspaces:	5
+session.screen0.strftimeFormat:	%I:%M %p
+session.screen0.fullMaximization:	true
+session.screen0.windowPlacement:	RowSmartPlacement
+session.screen0.focusLastWindow:	true
+session.screen0.colPlacementDirection:	TopToBottom
 session.iconbar:	true
-session.menuFile:	/etc/X11/fluxbox/fluxbox-menu
-session.tabs:	true
-session.keyFile:	/etc/X11/fluxbox/keys
+session.doubleClickInterval:	250
+session.cacheMax:	200l
 session.colorsPerChannel:	4
+session.styleFile:	/home/joey/linux/.fluxbox/styles/my-qnx-photon
 session.cacheLife:	5l
 session.opaqueMove:	true
-session.styleFile:	/home/joey/linux/.fluxbox/styles/my-qnx-photon
+session.keyFile:	/etc/X11/fluxbox/keys
 session.autoRaiseDelay:	350
-session.cacheMax:	200l
-session.doubleClickInterval:	250
+session.tabs:	true
+session.menuFile:	/etc/X11/fluxbox/fluxbox-menu
