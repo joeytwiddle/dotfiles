@@ -33,6 +33,25 @@
 :set mouse=a
 
 
+" I hope you never need to type a £, because I've remapped it to leave ins mode!
+inoremap £ <esc>
+
+
+" Tab expands if over a word, otherwise normal tab.
+
+function InsertTabWrapper()
+	let col = col('.') - 1
+	if !col || getline('.')[col - 1] !~ '\k'
+	return "\<tab>"
+	else
+	return "\<c-p>"
+	endif
+endfunction 
+
+inoremap <tab> <c-r>=InsertTabWrapper()<cr>
+
+
+
 
 " Make these work for modifiable only - they seriously warp the online help!
 ":autocmd BufReadPost   *.* set ts=8 | set expandtab | retab | set ts=2 | set noexpandtab | retab!

@@ -36,11 +36,11 @@ session.screen0.rowPlacementDirection:	LeftToRight
 session.doubleClickInterval:	250
 session.keyFile:	/home/joey/linux/.fluxbox/keys
 session.autoRaiseDelay:	350
+session.cacheMax:	200l
 session.opaqueMove:	false
 session.cacheLife:	5l
-session.cacheMax:	200l
 session.slitlistFile:	/home/joey/linux/.fluxbox/slitlist
-session.styleFile:	/home/joey/linux/.fluxbox/styles/filfirinStealth
+session.styleFile:	/home/joey/linux/.fluxbox/styles/filfirinPumpkin
 session.colorsPerChannel:	4
 session.tabs:	true
 session.menuFile:	/home/joey/linux/.fluxbox/menu

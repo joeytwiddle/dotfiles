@@ -1,0 +1,73 @@
+# ~/.muttrc
+# (see: http://www.mutt.org/links.html#config)
+
+# Colours:
+color indicator white magenta
+color hdrdefault blue black
+color header brightcyan default "^From: "
+color header brightcyan default "^To: "
+color header brightgreen default "^Subject: "
+color quoted yellow black
+color status white blue
+color tree green default
+
+# Settings (see: /usr/share/doc/mutt/html/manual-6.html#variables)
+set move = no
+unset mark_old
+set pager_stop
+set pager_index_lines = 8
+set folder_format = "%2C%N %-4.4u:%-4.4g  %d %6s  %f"
+set index_format = "%S%T %[%d/%b] %-12.12L (%4l) %s"
+set to_chars = "+ TC@"
+# Headers to display:
+ignore *
+unignore from date subject to cc
+unignore organization organisation x-mailer: x-newsreader: x-mailing-list:
+unignore posted-to:
+
+# Commands to run when entering particular folders:
+folder-hook . set sort=date-sent
+folder-hook Lists set sort=threads
+
+# Keybindings (see: /usr/share/doc/mutt/html/manual-6.html#functions)
+macro generic <left> <exit>
+# macro browser <left> "qq"
+macro browser <right> <select-entry>
+# Index:
+macro index <left> "c?"
+# refreshes only half work in pager
+macro index "\Ct" ":set sort=threads<Enter>"
+macro pager "\Ct" ":set sort=threads<Enter><refresh>"
+macro index "\Cp" ":set sort=from<Enter>"
+macro pager "\Cp" ":set sort=from<Enter><refresh>"
+macro index "\Cn" ":set index_format = \"%S%T %[%d/%b] %-12.12L (%4l) %s\"<Enter>"
+macro pager "\Cn" ":set index_format = \"%S%T %[%d/%b] %-12.12L (%4l) %s\"<Enter><refresh>"
+macro index "\Cw" ":set index_format = \"%S%T %[%d/%b] %-25.25a %-20.20F (%4l) %s\"<Enter>"
+macro pager "\Cw" ":set index_format = \"%S%T %[%d/%b] %-25.25a %-20.20F (%4l) %s\"<Enter><refresh>"
+macro index <right> <display-message>
+# Pager:
+macro pager <left> <exit>
+macro pager <up> <previous-entry>
+macro pager <down> <next-entry>
+macro pager <pageup> <half-up>
+macro pager <pagedown> <half-down>
+macro pager <right> <view-attachments>
+macro pager "\Ci" ":set pager_index_lines = 0<Enter>"
+macro pager "\Co" ":set pager_index_lines = 20<Enter>"
+
+# Addresbook / aliases:
+# source ~/.mail_aliases
+# set alias_file=~/.mail_aliases
+# set query_command="abook --mutt-query '%s'" noconfirmappend
+# Run addressbook:
+macro index \A "!abook\n" "Abook"
+macro pager \A "!abook\n" "Abook"
+# Edit the email aliases in special file:
+macro index \ea "!$EDITOR ~/.mutt/aliases\n:source ~/.mutt/aliases\n" "Edit aliases file and reload it"
+macro pager \ea "!$EDITOR ~/.mutt/aliases\n:source ~/.mutt/aliases\n" "edit aliases file and reload it"
+# Aliases straight in .muttrc =)
+alias cat Catherine Rachel Slicer <catslicer@hotmail.com>
+alias tim TRJ Langford <langford@cs.bris.ac.uk>
+alias erik Erik <erik@eempson.freeserve.co.uk>
+alias sharon Sharon <curliemeg@yahoo.com>
+alias friends cat,tim,erik,sharon

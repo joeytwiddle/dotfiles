@@ -54,13 +54,13 @@ WinMan="fluxbox" # can be KDE-compliant
 
 	# Background
 	# randomwallpaper &
-	# ( env DISPLAY= xplanet -output $JPATH/background.jpg -projection orthographic -body Earth -blend -geometry 1024x768 &&
-	#   xv -root -rmode 5 -maxpect -quit $JPATH/background.jpg )
-	( 
-		sleep 480
-		jxplanet makeicon /stuff/portablelinux/images/xplanet.gif
-		nice -n 10 jxplanet render
-	) &
+	# xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/abstract/mosaic.jpg
+	xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/abstract/mondflow.jpg
+	# ( 
+		# sleep 480
+		# jxplanet makeicon /stuff/portablelinux/images/xplanet.gif
+		# nice -n 10 jxplanet render
+	# ) &
 
 	# xhost +
 

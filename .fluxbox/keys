@@ -106,3 +106,8 @@ Mod1 KP_Add :ExecCommand volumeup 2
 Mod1 KP_Subtract :ExecCommand volumedown 2
 Mod1 KP_9 :ExecCommand xmms -r
 Mod1 KP_3 :ExecCommand xmms -f
+Mod1 KP_7 :ExecCommand xmms -u
+Mod1 KP_1 :ExecCommand xmms -u
+Mod1 KP_0 :ExecCommand xmms -u
+! Mod1 KP_1 :ExecCommand xmms -p (play)
+! Mod1 KP_1 :ExecCommand xmms -s (stop)

@@ -206,9 +206,15 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .bib 01;36
 .sty 01;36
 .cls 01;36
+# PHP (IMC)
+.php3 01;36
+.inc 01;33
+
 # Strictly data
 .dat 00;36
 .xml 00;36
+.data 00;36
+.results 00;36
 .out 00;36
 
 # Config files

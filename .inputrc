@@ -1,7 +1,7 @@
-"\C-d" vi-prev-word
-"\C-f" vi-next-word
-"\C-r" backward-word
-"\C-t" forward-word
+"\C-d" backward-word
+"\C-f" forward-word
+"\C-r" vi-prev-word
+"\C-t" vi-next-word
 # Dammit these already are small deletes!
 "\C-x" backward-kill-word
 "\C-v" kill-word
