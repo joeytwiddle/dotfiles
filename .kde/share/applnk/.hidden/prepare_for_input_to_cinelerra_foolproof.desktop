@@ -1,0 +1,7 @@
+[Desktop Entry]
+Exec=/usr/local/jsh/jsh guifyscript prepare_for_input_to_cinelerra -foolproof
+InitialPreference=2
+MimeType=video/mpeg;video/quicktime;video/x-flic;video/x-msvideo;video/x-ms-asf;Application
+Name=Prepare for input to Cinelerra (slower foolproof method)
+Terminal=false
+Type=Application
