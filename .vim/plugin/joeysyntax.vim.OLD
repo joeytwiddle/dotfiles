@@ -18,3 +18,6 @@
 
 " for Mason
 :syntax region jComment start="/\*"  end="\*/"
+
+:syntax match jEq /=/
+:highlight link jEq Statement

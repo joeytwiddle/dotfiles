@@ -138,6 +138,7 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .diff 01;33
 .sync 01;33
 .txt 01;33
+.log 01;33
 .TXT 01;33
 .doc 01;33
 .DOC 01;33
@@ -189,8 +190,9 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .sty 01;36
 .cls 01;36
 # Strictly data
-.dat 01;36
-.xml 01;36
+.dat 00;36
+.xml 00;36
+.out 00;36
 
 # Config files
 .config 00;36

@@ -47,6 +47,10 @@
 " To bring first sentence of Java comments in line with Comments.
 :highlight Special ctermfg=Magenta guifg=#d080d0
 
+" Shellscript
+" :highlight link shDeref shVariable
+:highlight shDeref term=underline cterm=none ctermfg=6 guifg=#30a0a0
+
 " For vimdiffs
 " :highlight DiffAdd ctermbg=Green cterm=bold guibg=DarkGreen
 " :highlight DiffDelete ctermbg=Blue guibg=DarkBlue
