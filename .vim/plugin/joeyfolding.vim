@@ -1,7 +1,20 @@
 :let joeymods=joeymods . "\njoeyfolding"
 
-:map + zo
+" All gentle:
+":map = zo
+":map + zo
+":map - zc
+" Or:
 :map - zc
+:map = zo
+map _ zC
+map + zO
+" :map _ zm
+" :map + zr
+:map <kMinus> zc
+:map <kPlus> zo
+:map <kDivide> zm
+:map <kMultiply> zr
 
 " This is _intended_ to clear any current folding.
 :set foldmethod=manual
