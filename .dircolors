@@ -209,6 +209,7 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .jav 01;36
 .JAVA 01;36
 .JAV 01;36
+.jpp 01;36 # my java-macro files
 .hs 01;36
 .HS 01;36
 *Makefile 01;36

@@ -42,6 +42,16 @@
 	:syntax keyword jTodo TODO Todo NOTE Note
 	:highlight link jTodo Todo
 
+	"" Log4j:
+	" :syntax match log4jDebug " DEBUG "
+	" :syntax match log4jInfo  " INFO "
+	" :syntax match log4jWarn  " WARN "
+	" :syntax match log4jError " ERROR "
+	:syntax match log4jDebug "^.* DEBUG .*$"
+	:syntax match log4jInfo  "^.* INFO .*$"
+	:syntax match log4jWarn  "^.* WARN .*$"
+	:syntax match log4jError "^.* ERROR .*$"
+
 :endfun
 
 " :Joeysyntax
