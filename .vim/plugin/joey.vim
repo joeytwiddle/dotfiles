@@ -17,7 +17,7 @@
 
 
 
-:so /home/joey/.vim/joey/joeykeymap.vim
+:so ~/.vim/joey/joeykeymap.vim
 " Causes nasty slowdown on tex!
 " :so /home/joey/.vim/joey/joeysyntax.vim
 " For some reason, syn on cancels folding wherever it is!
