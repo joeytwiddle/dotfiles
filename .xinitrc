@@ -10,6 +10,8 @@
 # `jwhich xterm`  +sb -sl 5000 -vb -si -sk -bg black -fg white -font '-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv' -geometry 80x25+0+500 $* &
 xterm -geometry 80x24+583+700 &
 
+xset r rate 400 50
+
 # inwheel --wheel-fifo
 
 # Grab xterm/vim colours before anything else does (for 256 color modes):
@@ -63,7 +65,7 @@ WinMan="fluxbox" # KDE-compliant
 	# xhost +
 
 	# Disable bell
-	# xset -b
+	xset -b
 	# ( sleep 10s; xset fp+ unix/:7101 ) &
 
 	# Maybe this was only needed for 256 colour modes?

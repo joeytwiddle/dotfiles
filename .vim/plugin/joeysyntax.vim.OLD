@@ -11,7 +11,7 @@
 
 :syntax on
 
-:syntax region javaClassLine start=/class / end=/{/ contains=javaClassDecl
+" :syntax region javaClassLine start=/class / end=/{/ contains=javaClassDecl
 
 " for jfc diffs
 :syntax keyword difference jDiff @@>>

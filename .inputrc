@@ -1,4 +1,10 @@
-"\C-d" backward-word
-"\C-f" forward-word
+"\C-d" vi-prev-word
+"\C-f" vi-next-word
+"\C-r" backward-word
+"\C-t" forward-word
+# Dammit these already are small deletes!
 "\C-x" backward-kill-word
 "\C-v" kill-word
+# As with zsh, we fake small deletes
+"\C-b" "\C-f \C-x"
+"\C-z" "\C-d \C-v"
