@@ -57,7 +57,7 @@ WinMan="fluxbox" # can be KDE-compliant
 	# ( env DISPLAY= xplanet -output $JPATH/background.jpg -projection orthographic -body Earth -blend -geometry 1024x768 &&
 	#   xv -root -rmode 5 -maxpect -quit $JPATH/background.jpg )
 	( 
-		sleep 4
+		sleep 480
 		jxplanet makeicon /stuff/portablelinux/images/xplanet.gif
 		nice -n 10 jxplanet render
 	) &
@@ -92,8 +92,10 @@ if test $Panel; then
 fi
 
 # Start window manager in the foreground.
-NEXTWMFILE=`jgettmp nextwinman`
-CURRENTWMFILE=`jgettmp currentwinman`
+# NEXTWMFILE=`jgettmp nextwinman`
+# CURRENTWMFILE=`jgettmp currentwinman`
+NEXTWMFILE=$JPATH/data/nextwinman.dat
+CURRENTWMFILE=$JPATH/data/currentwinman.dat
 echo "$WinMan" > $NEXTWMFILE
 
 while test -f $NEXTWMFILE; do

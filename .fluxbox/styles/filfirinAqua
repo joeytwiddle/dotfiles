@@ -8,13 +8,13 @@ window.title.focus.colorTo:	rgb:80/e0/e0
 window.title.unfocus:	flat gradient vertical
 window.title.unfocus.color:	rgb:80/e0/e0
 window.title.unfocus.colorTo:	rgb:80/e0/e0
-window.label.focus:	flat gradient vertical
-window.label.focus.color:	rgb:00/d0/80
-window.label.focus.colorTo:	rgb:00/ff/b0
+window.label.focus:	raised gradient vertical
+window.label.focus.color:	rgb:00/ff/b0
+window.label.focus.colorTo:	rgb:00/d0/80
 window.label.focus.textColor:	black
-window.label.unfocus:	flat gradient vertical
-window.label.unfocus.color:	rgb:00/00/40
-window.label.unfocus.colorTo:	rgb:00/00/b0
+window.label.unfocus:	raised gradient vertical
+window.label.unfocus.color:	rgb:00/00/b0
+window.label.unfocus.colorTo:	rgb:00/00/40
 window.label.unfocus.textColor:	white
 window.button.focus:	raised gradient vertical
 window.button.focus.color:	rgb:e0/e0/e0
@@ -39,13 +39,13 @@ window.frame.focusColor:	rgb:80/e0/e0
 window.frame.unfocusColor:	rgb:80/e0/e0
 
 ! Tabs
-window.tab.label.focus:	flat gradient vertical
-window.tab.label.focus.color:	rgb:00/d0/80
-window.tab.label.focus.colorTo:	rgb:00/ff/b0
+window.tab.label.focus:	raised gradient vertical
+window.tab.label.focus.color:	rgb:00/ff/b0
+window.tab.label.focus.colorTo:	rgb:00/d0/80
 window.tab.label.focus.textColor:	black
-window.tab.label.unfocus:	flat gradient vertical
-window.tab.label.unfocus.color:	rgb:00/00/40
-window.tab.label.unfocus.colorTo:	rgb:00/00/b0
+window.tab.label.unfocus:	raised gradient vertical
+window.tab.label.unfocus.color:	rgb:00/00/b0
+window.tab.label.unfocus.colorTo:	rgb:00/00/40
 window.tab.label.unfocus.textColor:	white
 window.tab.borderWidth:	1
 window.tab.borderColor:	rgb:c9/c9/c9
