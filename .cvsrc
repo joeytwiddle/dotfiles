@@ -1,0 +1,10 @@
+checkout -P
+update -d -P
+# -P means prune empty directories
+# update -d means update all CVS directories, not only those present locally
+# for sticky problems use -A on update
+
+# Contextual diff (show lines near change):
+diff -c
+# Two-column diff:
+# diff --side-by-side
