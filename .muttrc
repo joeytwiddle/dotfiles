@@ -83,7 +83,8 @@ macro pager "\Cw" ":set date_format = \"%a d/%b %r\"<Enter>:set index_format = \
 # macro index "\Cw" ":set date_format = \"%a d/%b %r\"<Enter>:set index_format = \"%S%T %[%D] %-25.25a %-20.20t (%4l) %s\"<Enter>"
 # macro pager "\Cw" ":set date_format = \"%a d/%b %r\"<Enter>:set index_format = \"%S%T %[%D] %-25.25a %-20.20t (%4l) %s\"<Enter><refresh>"
 ## Index:
-macro index <left> <change-folder>"?"
+# macro index <left> <change-folder>"?"
+macro index <left> <change-folder>"?"Od
 macro index <right> <display-message>
 ## Pager:
 # macro pager "\Ci" ":set pager_index_lines = 0<Enter>"
@@ -144,14 +145,23 @@ macro index "XL" "| spamassassin -t -L"
 # | fromline '^---- Start Spam' | highlight '.*points.*required' <Enter>"
 macro pager "XL" "| spamassassin -t -L"
 # | fromline '^---- Start Spam' | highlight '.*points.*required' <Enter>"
-## Report spam (to razor), and delete.
-macro index "XS" "| spamassassin -r & <Enter>d"
-macro pager "XS" "| spamassassin -r & <Enter>d"
+## Report spam to spamassassin, and delete:
+# macro index "XS" "| spamassassin -r & <Enter>d"
+# macro pager "XS" "| spamassassin -r & <Enter>d"
+## Report spam to spamassassin, and move:
+macro index "XS" "| spamassassin -r<Enter>s~/Mail/spam_reported<Enter>y"
+macro pager "XS" "| spamassassin -r<Enter>s~/Mail/spam_reported<Enter>y"
+## Quickly learn spam:  (perform "sa-learn --sync" after batch)
+macro index "XX" "| sa-learn --spam --no-sync<Enter>s~/Mail/spam_reported<Enter>y"
+macro pager "XX" "| sa-learn --spam --no-sync<Enter>s~/Mail/spam_reported<Enter>y"
+## Quickly lean ham:  (perform "sa-learn --sync" after batch)
+macro index "XH" "| sa-learn --ham --no-sync<Enter><Down>"
+macro pager "XH" "| sa-learn --ham --no-sync<Enter><Down>"
 ## Razor direct:
 # macro index "XX" "| razor-report & <Enter>d"
 # macro pager "XX" "| razor-report & <Enter>d"
-macro index "XX" "| razor-report & <Enter>s~/Mail/spam_reported<Enter>y"
-macro pager "XX" "| razor-report & <Enter>s~/Mail/spam_reported<Enter>y"
+# macro index "XX" "| razor-report & <Enter>s~/Mail/spam_reported<Enter>y"
+# macro pager "XX" "| razor-report & <Enter>s~/Mail/spam_reported<Enter>y"
 
 ## Addresbook / aliases:
 # source ~/.mail_aliases
@@ -169,10 +179,3 @@ macro index H "v|striphtml|less<Enter>q"
 macro pager H "v|striphtml|less<Enter>q"
 
 # set alias_file = "$HOME/addressbook/aliases.mutt"
-## Addressbook aliases straight in .muttrc =)
-alias cat Catherine Rachel Slicer <catslicer@hotmail.com>
-alias tim TRJ Langford <langford@cs.bris.ac.uk>
-alias erik Erik <erik@eempson.freeserve.co.uk>
-alias sharon Sharon <curliemeg@yahoo.com>
-alias friends cat,tim,erik,sharon
-alias megan_humphries Megan Humphries <megan_humphries@hotmail.com>
