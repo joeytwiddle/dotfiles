@@ -1,6 +1,7 @@
 :let joeymods = ""
 
 :let Tlist_Ctags_Cmd = "/usr/bin/ctags-exuberant"
+:let Jlist_Ctags_Cmd = "/usr/bin/ctags-exuberant"
 :filetype on
 
 " Doesn't work if it comes after the :so's

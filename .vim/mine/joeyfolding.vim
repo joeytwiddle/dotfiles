@@ -8,7 +8,8 @@
 " :set fdc=2
 :set fdc=0
 
-:set foldlevel=3
+:set foldlevel=2
+:normal zR
 
 " For all languages with {}s
 :syn region myFold matchgroup=myDummy start="{" end="}" transparent fold
