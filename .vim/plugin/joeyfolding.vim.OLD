@@ -1,0 +1,25 @@
+:set foldmethod=syntax
+" :set fdc=2
+:set fdc=0
+
+" For all languages with {}s
+:syn region myFold matchgroup=myDummy start="{" end="}" transparent fold
+" C/Java comments
+" bad :syn region myFold2 start="/*" end="*/" transparent fold
+" bad :syn region myFold5 start="^$" end="^$" transparent fold
+:syn region myFold2 matchgroup=myDummy start="\/\*" end="\*\/" fold
+:highlight link myFold2 cComment
+" C/Java #ifdefs
+:syn region myFold4 start="#ifdef" end="#endif" transparent fold
+" PS
+:syn region myFold5 matchgroup=myDummy start="% Begin" end="% End" fold transparent
+" Tex
+:syn region myFold6 matchgroup=myDummy start="\\begin" end="\\end" fold transparent
+
+:syn sync fromstart
+" :set foldmethod=manual
+
+" Fold colours
+:highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000060 guifg=White
+" :highlight foldColumn ctermbg=Grey ctermfg=Blue cterm=none gui=bold guifg=Green guibg=#000060
+:highlight foldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=Green guibg=#000060

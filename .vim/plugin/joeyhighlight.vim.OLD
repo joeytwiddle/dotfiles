@@ -1,0 +1,77 @@
+" :colors pablo
+" :set guifont=-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv
+" :set guifont=-schumacher-clean-medium-r-normal-*-*-150-*-*-c-*-iso646.1991-irv
+" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
+
+" :set background=dark
+
+" :syntax on
+
+:highlight Normal ctermbg=black ctermfg=grey guibg=Black guifg=#cccccc
+
+" :highlight Normal ctermfg=LightGray guibg=#000000 guifg=LightGray
+
+:highlight DiffLine ctermbg=Magenta ctermfg=White
+" :highlight Search term=reverse,bold ctermbg=White guibg=White ctermfg=Black guifg=Black
+:highlight Search ctermbg=Blue ctermfg=White term=bold guibg=Blue guifg=White
+:highlight ErrorMsg ctermbg=Red ctermfg=Yellow guibg=Red guifg=Yellow
+:highlight Visual ctermfg=DarkMagenta ctermbg=White guifg=DarkMagenta guibg=White
+" :highlight Comment ctermfg=Magenta guifg=#80a080 " green-grey
+" :highlight Comment ctermfg=DarkMagenta guifg=LightMagenta
+" :highlight Comment ctermfg=DarkMagenta guifg=#d080d0
+:highlight Comment ctermfg=Magenta guifg=#d080d0
+:highlight SpecialChar ctermfg=Red guifg=Red
+:highlight String cterm=NONE ctermfg=DarkGreen guifg=#80f080
+
+" Code
+:highlight Boolean ctermfg=LightBlue guifg=LightBlue
+:highlight Constant ctermfg=DarkYellow guifg=DarkYellow
+
+" C
+:highlight cType ctermfg=Cyan guifg=Cyan
+:highlight PreProc ctermfg=Red guifg=Red
+
+" Java
+" It appears to ignore the contains, otherwise I could use start=/^/ =)
+" :syntax region javaClassLine start=/class / end=/{/ contains=javaClassDecl
+:highlight link javaClassLine javaClassDecl
+:highlight javaClassDecl term=bold cterm=bold ctermbg=DarkGreen ctermfg=White gui=bold guibg=DarkGreen guifg=White
+:highlight javaStorageClass term=NONE cterm=NONE ctermfg=Cyan gui=NONE guifg=Cyan
+:highlight javaType term=NONE cterm=NONE gui=bold guifg=LightBlue
+:highlight link javaOperator SpecialChar
+:highlight Type ctermfg=Red guifg=Red
+:highlight Number ctermfg=LightBlue guifg=LightBlue
+" To bring first sentence of Java comments in line with Comments.
+:highlight Special ctermfg=Magenta guifg=#d080d0
+
+" For vimdiffs
+" :highlight DiffAdd cterm=bold ctermbg=Green guibg=DarkGreen
+" :highlight DiffDelete ctermbg=Blue guibg=DarkBlue
+" Black and Yellow
+" :highlight DiffAdd cterm=bold ctermbg=green ctermfg=white guibg=DarkGreen guifg=White gui=none
+:highlight DiffAdd cterm=bold ctermbg=red ctermfg=white guibg=DarkRed guifg=White gui=bold
+" :highlight DiffText cterm=bold ctermbg=yellow ctermfg=white guibg=DarkYellow guifg=White gui=bold
+:highlight DiffText cterm=bold ctermbg=green ctermfg=white guibg=DarkGreen guifg=White gui=bold
+" :highlight DiffChange cterm=bold ctermfg=white ctermbg=black gui=bold guifg=White guibg=#202020
+:highlight DiffChange cterm=bold ctermfg=white ctermbg=black gui=bold guifg=White guibg=Black
+" :highlight DiffDelete cterm=none ctermbg=black ctermfg=red gui=bold guifg=#600000 guibg=black
+" :highlight DiffDelete cterm=none ctermbg=blue ctermfg=blue gui=bold guifg=#000060 guibg=#000060
+:highlight DiffDelete cterm=none ctermbg=black ctermfg=black gui=bold guifg=Black guibg=Black
+
+" For jfc diffs
+" :syntax keyword difference jDiff @@>>
+:highlight jDiff ctermbg=Magenta ctermfg=White
+
+" For Mason sources
+:highlight jComment ctermfg=Yellow guifg=#ffff00
+
+" Can't be bothered to put in proper place:
+
+" Haskell:
+:highlight hsStructure ctermfg=DarkYellow
+:highlight hsOperator ctermfg=DarkCyan
+
+" Prolog
+:highlight prologClauseHead ctermfg=DarkCyan
+
+":so /home/joey/linux/.vim/joeyfolding.vim

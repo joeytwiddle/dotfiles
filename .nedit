@@ -1,7 +1,7 @@
 ! Preferences file for NEdit
 !
 ! This file is overwritten by the "Save Defaults..." command in NEdit 
-! and serves only the interactively setable options presented in the NEdit
+! and serves only the interactively settable options presented in the NEdit
 ! "Preferences" menu.  To modify other options, such as background colors
 ! and key bindings, use the .Xdefaults file in your home directory (or
 ! the X resource specification method appropriate to your system).  The
@@ -10,6 +10,7 @@
 ! this file should be deleted or individual resource lines in the file
 ! should be deleted for the moved lines to take effect.
 
+nedit.fileVersion: 5.2
 nedit.shellCommands: \
 	spell:Alt+B:s:EX:\n\
 		cat>spellTmp; xterm -e ispell -x spellTmp; cat spellTmp; rm spellTmp\n\
@@ -251,12 +252,22 @@ nedit.highlightPatterns: C:Default\n\
 	Sh Ksh Bash:Default\n\
 	Csh:Default\n\
 	Makefile:Default\n\
-	HTML:Default\n\
+	SGML HTML:Default\n\
 	LaTeX:Default\n\
+	PostScript:Default\n\
+	Lex:Default\n\
+	SQL:Default\n\
+	Matlab:Default\n\
 	VHDL:Default\n\
 	Verilog:Default\n\
 	X Resources:Default\n\
-	NEdit Macro:Default
+	NEdit Macro:Default\n\
+	Haskell:1:0{\n\
+		Comment:"--":"\\n"::Comment::\n\
+	}\n\
+	CSS:Default\n\
+	Regex:Default\n\
+	XML:Default
 nedit.languageModes: 	C:.c .h::::::".,/\\`'!|@#%^&*()-=+{}[]"":;<>?~"\n\
 	C++:.cc .hh .C .H .i::::::".,/\\`'!|@#%^&*()-=+{}[]"":;<>?~"\n\
 	Java:.java::::::\n\
@@ -265,67 +276,92 @@ nedit.languageModes: 	C:.c .h::::::".,/\\`'!|@#%^&*()-=+{}[]"":;<>?~"\n\
 	Fortran:.f .f77 .for::::::\n\
 	Pascal:.pas .p .int::::::\n\
 	Yacc:.y::::::".,/\\`'!|@#%^&*()-=+{}[]"":;<>?~"\n\
-	Perl:.pl .pm .p5:"^[ \\t]*#[ \\t]*!.*perl":::::\n\
+	Perl:.pl .pm .p5 .PL:"^[ \\t]*#[ \\t]*!.*perl":Auto:None:::".,/\\\\`'!$@#%^&*()-=+{}[]"":;<>?~|"\n\
 	Python:.py:"^#!.*python":Auto:None:::\n\
-	Tcl:.tcl::::::\n\
+	Tcl:.tcl .tk .itcl .itk::Smart:None:::\n\
 	Awk:.awk::::::\n\
-	Sh Ksh Bash:.sh .bash .ksh .profile:"^[ \\t]*#[ \\t]*![ \\t]*/bin/(sh|ksh|bash)":::::\n\
+	Sh Ksh Bash:.sh .bash .ksh .profile .bashrc .bash_logout .bash_login .bash_profile:"^[ \\t]*#[ \\t]*![ \\t]*/.*bin/(sh|ksh|bash)":::::\n\
 	Csh:.csh .cshrc .login .logout:"^[ \\t]*#[ \\t]*![ \\t]*/bin/csh":::::\n\
 	Makefile:Makefile makefile::::::\n\
-	HTML:.html .htm::::::\n\
+	SGML HTML:.sgml .sgm .html .htm:"\\<(?ihtml)\\>":::::\n\
 	LaTeX:.tex .sty .cls .dtx .ins::::::\n\
+	PostScript:.ps .PS .eps .EPS .epsf .epsi::::::\n\
+	Lex:.lex::::::\n\
+	SQL:.sql::::::\n\
+	Matlab:..m .oct .sci::::::\n\
 	VHDL:.vhd .vhdl .vdl::::::\n\
 	Verilog:.v::::::\n\
 	X Resources:.Xresources .Xdefaults .nedit:"^[!#].*([Aa]pp|[Xx]).*[Dd]efaults":::::\n\
-	NEdit Macro:.nm .neditmacro::::::
+	NEdit Macro:.nm .neditmacro::::::\n\
+	Haskell:.hs .gs:"--":::::\n\
+	CSS:css::Auto:None:::".,/\\`'!|@#%^&*()=+{}[]"":;<>?~"\n\
+	Regex:.reg .regex:"\\(\\?[:#=!iInN].+\\)":None:Continuous:::\n\
+	XML:.xml .xsl .dtd:"\\<(?i\\?xml|!doctype)"::None:::"<>/=""'()+*?|"
 nedit.styles: 	Plain:black:Plain\n\
-	Comment:gray20:Italic\n\
+	Comment:SaddleBrown:Italic\n\
 	Keyword:black:Bold\n\
-	Storage Type:brown:Bold\n\
+	Storage Type:SaddleBrown:Bold\n\
+	Storage Type1:saddle brown:Bold\n\
 	String:darkGreen:Plain\n\
-	String1:SeaGreen:Plain\n\
+	String1:darkGreen:Plain\n\
 	String2:darkGreen:Bold\n\
-	Preprocessor:RoyalBlue4:Plain\n\
+	Preprocessor:MediumBlue:Plain\n\
 	Preprocessor1:blue:Plain\n\
 	Character Const:darkGreen:Plain\n\
 	Numeric Const:darkGreen:Plain\n\
-	Identifier:brown:Plain\n\
-	Identifier1:RoyalBlue4:Plain\n\
-	Subroutine:brown:Plain\n\
+	Identifier:SaddleBrown:Plain\n\
+	Identifier1:MediumBlue:Plain\n\
+	Subroutine:SaddleBrown:Plain\n\
 	Subroutine1:chocolate:Plain\n\
 	Ada Attributes:plum:Bold\n\
+	Label:red:Italic\n\
 	Flag:red:Bold\n\
 	Text Comment:SteelBlue4:Italic\n\
 	Text Key:VioletRed4:Bold\n\
 	Text Key1:VioletRed4:Plain\n\
-	Text Arg:RoyalBlue4:Bold\n\
+	Text Arg:MediumBlue:Bold\n\
 	Text Arg1:SteelBlue4:Bold\n\
-	Text Arg2:RoyalBlue4:Plain\n\
+	Text Arg2:MediumBlue:Plain\n\
 	Text Escape:gray30:Bold\n\
 	LaTeX Math:darkGreen:Plain\n\
-	WINDOW_BACKGROUND:white:Plain
+	WINDOW_BACKGROUND:grey2:Plain\n\
+	Pointer:#660000:Bold\n\
+	Regex:#009944:Bold\n\
+	Warning:brown2:Italic
 nedit.smartIndentInit: 	C:Default\n\
 	C++:Default\n\
-	Python:Default
+	Python:Default\n\
+	Matlab:Default
 nedit.smartIndentInitCommon: Default
 nedit.autoWrap: None
 nedit.wrapMargin: 0
 nedit.autoIndent: Auto
 nedit.autoSave: True
 nedit.saveOldVersion: False
-nedit.showMatching: True
+nedit.showMatching: Delimiter
 nedit.highlightSyntax: True
 nedit.searchDialogs: False
+nedit.beepOnSearchWrap: False
 nedit.retainSearchDialogs: False
+nedit.searchWraps: True
+nedit.stickyCaseSenseButton: True
 nedit.repositionDialogs: True
-nedit.statisticsLine: False
+nedit.sortOpenPrevMenu: True
+nedit.statisticsLine: True
+nedit.iSearchLine: False
+nedit.lineNumbers: False
+nedit.pathInWindowsMenu: True
+nedit.warnFileMods: True
+nedit.warnExit: True
 nedit.searchMethod: Literal
 nedit.textRows: 35
 nedit.textCols: 15
-nedit.tabDistance: 8
-nedit.emulateTabs: 2
+nedit.tabDistance: 3
+nedit.emulateTabs: 0
 nedit.insertTabs: False
-nedit.textFont: -adobe-courier-medium-r-normal--14-100-100-100-m-90-iso8859-1
-nedit.boldHighlightFont: -adobe-courier-bold-r-normal--14-100-100-100-m-90-iso8859-1
-nedit.italicHighlightFont: -adobe-courier-medium-o-normal--14-100-100-100-m-90-iso8859-1
-nedit.boldItalicHighlightFont: -adobe-courier-bold-o-normal--14-100-100-100-m-90-iso8859-1
+nedit.textFont: -schumacher-clean-medium-r-normal--15-150-75-75-c-90-iso8859-1
+nedit.boldHighlightFont: -schumacher-clean-bold-r-normal--15-150-75-75-c-90-iso8859-1
+nedit.italicHighlightFont: -schumacher-clean-medium-o-normal--15-150-75-75-c-90-iso8859-1
+nedit.boldItalicHighlightFont: -schumacher-clean-bold-o-normal--15-150-75-75-c-90-iso8859-1
+nedit.smartTags: True
+nedit.prefFileRead: True
