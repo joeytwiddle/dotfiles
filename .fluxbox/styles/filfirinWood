@@ -4,14 +4,14 @@
 
 ! Focused and focused windows
 window.title.focus:	flat gradient vertical
-window.title.focus.color:	rgb:90/40/10
-window.title.focus.colorTo:	rgb:90/40/10
+window.title.focus.color:	rgb:c0/80/60
+window.title.focus.colorTo:	rgb:c0/80/60
 window.title.unfocus:	raised gradient vertical
-window.title.unfocus.color:	rgb:90/40/10
-window.title.unfocus.colorTo:	rgb:90/40/10
+window.title.unfocus.color:	rgb:a0/50/20
+window.title.unfocus.colorTo:	rgb:a0/50/20
 window.label.focus:	sunken gradient vertical
-window.label.focus.color:	rgb:c0/80/60
-window.label.focus.colorTo:	rgb:a0/60/40
+window.label.focus.color:	rgb:70/20/00
+window.label.focus.colorTo:	rgb:a0/50/20
 window.label.focus.textColor:	white
 window.label.unfocus:	raised gradient vertical
 window.label.unfocus.color:	rgb:60/00/00
@@ -28,28 +28,28 @@ window.button.unfocus.picColor:	rgb:00/00/00
 window.button.pressed:	sunken gradient vertical
 window.button.pressed.color:	rgb:b0/b0/b0
 window.button.pressed.colorTo:	rgb:e0/e0/e0
-window.handle.unfocus:	solid
-window.handle.unfocus.color:	rgb:90/40/10
 window.handle.focus:	solid
-window.handle.focus.color:	rgb:90/40/10
-window.grip.unfocus:	solid
-window.grip.unfocus.color:	rgb:90/40/10
+window.handle.focus.color:	rgb:c0/80/60
+window.handle.unfocus:	solid
+window.handle.unfocus.color:	rgb:a0/50/20
 window.grip.focus:	solid
-window.grip.focus.color:	rgb:90/40/10
-window.frame.unfocusColor:	rgb:90/40/10
-window.frame.focusColor:	rgb:90/40/10
+window.grip.focus.color:	rgb:c0/80/60
+window.grip.unfocus:	solid
+window.grip.unfocus.color:	rgb:a0/50/20
+window.frame.focusColor:	rgb:c0/80/60
+window.frame.unfocusColor:	rgb:a0/50/20
 
 ! Tabs
 window.tab.label.focus:	sunken gradient vertical
-window.tab.label.focus.color:	rgb:c0/80/60
-window.tab.label.focus.colorTo:	rgb:a0/60/40
+window.tab.label.focus.color:	rgb:70/20/00
+window.tab.label.focus.colorTo:	rgb:a0/50/20
 window.tab.label.focus.textColor:	white
 window.tab.label.unfocus:	raised gradient vertical
 window.tab.label.unfocus.color:	rgb:90/00/00
 window.tab.label.unfocus.colorTo:	rgb:60/00/00
 window.tab.label.unfocus.textColor:	rgb:ff/ff/80
 window.tab.borderWidth:	1
-window.tab.borderColor:	rgb:90/40/10
+window.tab.borderColor:	rgb:a0/50/20
 
 ! Menu
 menu.title:	raised gradient vertical
@@ -101,7 +101,7 @@ toolbar.font:	lucidasans-10
 toolbar.justify:	center
 
 ! Borders
-borderColor:	rgb:90/40/10
+borderColor:	rgb:a0/50/20
 borderWidth:	1
 bevelWidth:	2
 handleWidth:	1
