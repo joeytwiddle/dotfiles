@@ -88,6 +88,8 @@ endif
 	" :highlight DiffDelete term=none ctermbg=black ctermfg=blue cterm=none guifg=#000050 guibg=#000050 gui=none
 	:highlight DiffAdd ctermbg=green ctermfg=white cterm=bold guibg=DarkGreen guifg=White gui=bold
 	:highlight DiffText ctermbg=red ctermfg=yellow cterm=bold guibg=red guifg=DarkRed gui=bold
+	" :highlight DiffChange ctermfg=black ctermbg=white cterm=bold gui=bold guifg=White guibg=Black
+	" :highlight DiffChange ctermfg=white ctermbg=black cterm=bold gui=bold guifg=White guibg=Black
 	" Lines with changes only marked with brighter white fg, which doesn't always show:
 	:highlight DiffChange ctermfg=white ctermbg=black cterm=bold gui=bold guifg=White guibg=Black
 	:highlight DiffDelete term=none ctermbg=blue ctermfg=blue cterm=none guifg=DarkBlue guibg=DarkBlue gui=none
@@ -107,6 +109,17 @@ endif
 
 	" Prolog
 	:highlight prologClauseHead ctermfg=DarkCyan
+
+	" Log4j:
+
+	" :highlight log4jDebug ctermfg=White
+	" :highlight log4jInfo  ctermfg=DarkGreen
+	" :highlight log4jWarn  ctermfg=Yellow
+	" :highlight log4jError ctermfg=Red
+	:highlight log4jDebug ctermfg=Grey
+	:highlight log4jInfo  ctermfg=White
+	:highlight log4jWarn  ctermfg=Yellow
+	:highlight log4jError ctermfg=Red
 
 	":so /home/joey/linux/.vim/joeyfolding.vim
 
