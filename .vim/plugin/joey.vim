@@ -5,7 +5,7 @@
 " :let Tlist_Display_Prototype = 1
 :let Jlist_Ctags_Cmd = "/usr/bin/ctags-exuberant"
 :let Tlist_Well_Spaced = 1
-:let Tlist_Fold_Tags = 0
+:let Tlist_Fold_Tags = 1
 :let Tlist_Fold_Tagtypes = 1
 :filetype on
 

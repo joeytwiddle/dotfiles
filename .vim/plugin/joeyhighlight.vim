@@ -12,7 +12,8 @@
 
 " :syntax on
 
-:highlight Normal ctermbg=black ctermfg=grey guibg=Black guifg=#cccccc
+" :highlight Normal ctermbg=black ctermfg=grey guibg=Black guifg=#cccccc
+:highlight Normal ctermfg=grey guibg=Black guifg=#cccccc
 
 :highlight Title ctermbg=black ctermfg=green guibg=#000060 guifg=#00ff00
 
