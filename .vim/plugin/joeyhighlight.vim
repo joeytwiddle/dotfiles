@@ -36,7 +36,9 @@ endif
 	" :highlight Comment ctermfg=DarkMagenta guifg=#d080d0
 	" :highlight Comment ctermfg=Magenta guifg=#d080d0
 	" :highlight Comment ctermfg=DarkCyan guifg=DarkCyan
-	:highlight Comment term=none cterm=none ctermfg=DarkMagenta guifg=LightMagenta
+	" :highlight Comment term=none cterm=none ctermfg=DarkMagenta guifg=LightMagenta
+	"" Previous was getting too dark for me, so ...
+	:highlight Comment term=none cterm=bold ctermfg=Magenta guifg=LightMagenta
 	" :highlight Comment cterm=none ctermfg=DarkCyan guifg=LightMagenta
 	" :highlight link jComment Comment
 	:highlight jComment ctermfg=DarkYellow guifg=DarkYellow
@@ -139,6 +141,11 @@ endif
 	" fi
 
 	":so /home/joey/linux/.vim/joeyfolding.vim
+
+	"" For shellscript:
+	:highlight shOption ctermfg=blue cterm=bold
+	:highlight shCommandSub ctermfg=red
+	:highlight shOperator ctermfg=yellow " cterm=bold
 
 	" Highlight search (doesn't work if called at top of this file!)
 	:set hlsearch
