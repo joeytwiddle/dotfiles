@@ -1,6 +1,5 @@
-# photon-qnx
-# theme for fluxbox
-# 2001 (c) skypher
+# filfirinWine fluxbox theme
+# based on qnx-photon
 
 ! Focused and focused windows
 window.title.focus:	flat gradient vertical
