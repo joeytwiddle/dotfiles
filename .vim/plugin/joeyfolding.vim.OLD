@@ -24,6 +24,7 @@
 :syn region myFold7 matchgroup=myDummy start="\<do\>" end="\<done\>" fold transparent
 
 :syn sync fromstart
+
 " :set foldmethod=manual
 
 " Fold colours
