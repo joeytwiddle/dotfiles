@@ -8,6 +8,8 @@
 "	Dan Sharp		Bug reports, improvements
 "	If your name is not here, but should be, drop me a mail
 
+" <leader>te to play
+
 " TODO FocusGained FocusLost Auto calibration during play
 let s:s='-Tetris_game-'
 let s:WIDTH=10|let s:NEXTXPOS=16|let s:NEXTYPOS=2
