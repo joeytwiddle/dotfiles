@@ -1,0 +1,9 @@
+nedit*text.foreground: white
+nedit*text.background: black
+nedit*text.selectForeground: white
+nedit*text.selectBackground: magenta
+nedit*text.highlightForeground: white
+nedit*text.highlightBackground: red
+nedit*text.cursorForeground: white
+
+nedit*menuBar.fontList: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
