@@ -11,7 +11,7 @@ window.title.unfocus.color:	rgb:e0/e0/e0
 window.title.unfocus.colorTo:	rgb:e0/e0/e0
 window.label.focus:	flat gradient vertical
 window.label.focus.color:	rgb:b0/b0/00
-window.label.focus.colorTo:	rgb:ff/ff/00
+window.label.focus.colorTo:	rgb:f0/f0/00
 window.label.focus.textColor:	black
 window.label.unfocus:	raised gradient vertical
 window.label.unfocus.color:	rgb:00/80/00
@@ -42,7 +42,7 @@ window.frame.unfocusColor:	rgb:e0/e0/e0
 ! Tabs
 window.tab.label.focus:	flat gradient vertical
 window.tab.label.focus.color:	rgb:b0/b0/00
-window.tab.label.focus.colorTo:	rgb:ff/ff/00
+window.tab.label.focus.colorTo:	rgb:f0/f0/00
 window.tab.label.focus.textColor:	black
 window.tab.label.unfocus:	raised gradient vertical
 window.tab.label.unfocus.color:	rgb:00/80/00
