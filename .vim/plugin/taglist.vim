@@ -1,3 +1,10 @@
+" Joey recommends:
+"   :%s/"g:tlist_/"g:tlist_".filename."_/g
+" and
+"   :%s/g:tlist_/g:tlist_{filename}_/g
+" but probably filename var scoping needs to be addressed.
+"
+" File: taglist.vim
 " File: taglist.vim
 " Author: Yegappan Lakshmanan
 " Version: l.9
@@ -613,9 +620,8 @@ function! Tlist_Highlight_Line(synType,lineNo)
     endif
 endfunction
 
-" Given a tag's type and name, initialise lists in which sub-tags can be stored.
-function! Tlist_Init_Scope_For(ftype,ttype,tname)
-    if ! exists("g:tlist_".a:ttype."_".a:tname."_scope_total")
+" This doen't work / is not enough - need to clear whole tree.
+function! Tlist_New_Scope_For(ftype,ttype,tname)
 		" echo "initialising:" "g:tlist_".a:ttype."_".a:tname."_scope_total"
         let g:tlist_{a:ttype}_{a:tname}_scope_total = 0
         " let tts = s:tlist_{a:ftype}_tag_types . ' '
@@ -629,6 +635,12 @@ function! Tlist_Init_Scope_For(ftype,ttype,tname)
                  " call s:List_New( "g:tlist_" . a:ttype . "_" . a:tname . "_scope_" . attype . "_taglines" )
              " " endif
         " endwhile
+endfunction
+
+" Given a tag's type and name, initialise lists in which sub-tags can be stored.
+function! Tlist_Init_Scope_For(ftype,ttype,tname)
+    if ! exists("g:tlist_".a:ttype."_".a:tname."_scope_total")
+		call Tlist_New_Scope_For(a:ftype,a:ttype,a:tname)
     else
         " echo "Warning: the scope of tag" a:tname "(".a:ttype.") has already been initialised."
         " echo "There are probably two tags with the same name, and now they are sharing scope."
@@ -846,7 +858,7 @@ function! s:Tlist_Explore_File(bufnum)
             let i = i + 1
         endwhile
         " Initialise lists for things with no scope (parent-tag)
-        call Tlist_Init_Scope_For(ftype,"","")
+        call Tlist_New_Scope_For(ftype,"","")
 
         " Process the ctags output one line at a time. Separate the tag output
         " based on the tag type and store it in the tag type variable
@@ -912,7 +924,7 @@ function! s:Tlist_Explore_File(bufnum)
             " Add this tag to the tag type variable
             let l:tlist_{ftype}_{ttype} = l:tlist_{ftype}_{ttype} . tname . "\n"
             " Initialise lists for things in scope of this tag
-            call Tlist_Init_Scope_For(ftype,ttype,tname)
+            call Tlist_New_Scope_For(ftype,ttype,tname)
 
             let g:tlist_{tscope_type}_{tscope}_scope_total = (g:tlist_{tscope_type}_{tscope}_scope_total) + 1
             " Add this tag's name, display string, and tagline to the lists of the relevant scope (parent tag).

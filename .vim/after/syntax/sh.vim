@@ -9,6 +9,8 @@ source ~/.vim/after/syntax/all.vim
 " undent
 :map <F8> 02xj^
 
+" :syntax clear shCaseCommandSub
+
 " Make these work for modifiable only
 " :autocmd BufReadPost    *.* set ts=8 | set expandtab | retab | set ts=2 | set noexpandtab | retab!
 " :autocmd BufWritePre,FilterWritePre    *.* set expandtab | retab!

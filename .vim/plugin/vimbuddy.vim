@@ -6,9 +6,11 @@
 " Usage:       Insert %{VimBuddy()} into your 'statusline'
 "
 
-:set statusline=%<%f\ %m%h%r%=\ %P\ (%l,%c)%V\ \#%B%<\ %{VimBuddy()}
-:set rulerformat=%60(%=%m\ \"%<%f\"\ (%l,%c)\ \#%B\ %{VimBuddy()}%)
-" :set rulerformat=%15(%c%V\ %p%%%)
+" OFF!
+"
+" :set statusline=%<%f\ %m%h%r%=\ %P\ (%l,%c)%V\ \#%B%<\ %{VimBuddy()}
+" " :set rulerformat=%15(%c%V\ %p%%%)
+" :set rulerformat=%60(%=%m\ \"%<%f\"\ (%l,%c)\ \#%B\ %{VimBuddy()}%)
 
 function! VimBuddy()
     " Take a copy for others to see the messages

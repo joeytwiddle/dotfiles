@@ -1,5 +1,9 @@
 :let joeymods=joeymods . "\njoeysyntax"
 
+" For slow computers:
+" :syn sync maxlines=50
+" :syn sync minlines=10
+
 :set hls!
 
 " :colors pablo

@@ -34,6 +34,7 @@
 :highlight jComment ctermfg=DarkYellow guifg=DarkYellow
 :highlight SpecialChar ctermfg=Red guifg=Red
 :highlight String ctermfg=DarkGreen guifg=#80f080 cterm=NONE
+:highlight Todo term=reverse ctermbg=black ctermfg=red
 
 " Code
 :highlight Boolean ctermfg=LightBlue guifg=LightBlue

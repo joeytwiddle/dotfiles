@@ -1,5 +1,8 @@
 :let joeymods=joeymods . "\njoeyfolding"
 
+:map + zo
+:map - zc
+
 " This is _intended_ to clear any current folding.
 :set foldmethod=manual
 :normal zE
@@ -30,7 +33,7 @@
 :syn region myFold6 matchgroup=myDummy start="\\begin" end="\\end" fold transparent
 
 " sh
-:syn region myFold7 matchgroup=myDummy start="\<do\>" end="\<done\>" fold transparent
+":syn region myFold7 matchgroup=myDummy start="\<do\>" end="\<done\>" fold transparent
 
 :syn sync fromstart
 
@@ -40,3 +43,6 @@
 :highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000060 guifg=White
 " :highlight foldColumn ctermbg=Grey ctermfg=Blue cterm=none gui=bold guifg=Green guibg=#000060
 :highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#000060
+
+:set foldtext=getline(v:foldstart).'\ \ \ ['.(v:foldend-v:foldstart).'\ lines]'
+

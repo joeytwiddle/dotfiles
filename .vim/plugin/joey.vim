@@ -54,18 +54,18 @@
 inoremap £ <esc>
 
 
+" This is very nice but I am just testing word_complete
+
 " Tab expands if over a word, otherwise normal tab.
-
-function! InsertTabWrapper()
-	let col = col('.') - 1
-	if !col || getline('.')[col - 1] !~ '\k'
-	return "\<tab>"
-	else
-	return "\<c-p>"
-	endif
-endfunction 
-
-inoremap <tab> <c-r>=InsertTabWrapper()<cr>
+" function! InsertTabWrapper()
+	" let col = col('.') - 1
+	" if !col || getline('.')[col - 1] !~ '\k'
+	" return "\<tab>"
+	" else
+	" return "\<c-p>"
+	" endif
+" endfunction 
+" inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 
 
 
