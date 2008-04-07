@@ -135,28 +135,30 @@ macro pager "N" i<search-opposite><Enter>
 
 ### Spamassasin:
 ## Fully assess email:
-macro index "X?" "| spamassassin -t"
+macro index "X?" "| spamassassin -D -t"
 # | fromline '^---- Start Spam' | toline '^---- End of Spam' | highlight '.*points.*required' <Enter>"
-macro pager "X?" "| spamassassin -t"
+macro pager "X?" "| spamassassin -D -t"
 # | fromline '^---- Start Spam' | toline '^---- End of Spam' | highlight '.*points.*required' <Enter>"
 # | grep \^SPAM | highlight '\(.*hits.*required\)' &<Enter>"
 ## Quickly assess email (do not use network resources, eg. razor):
-macro index "XL" "| spamassassin -t -L"
+macro index "XL" "| spamassassin -D -t -L"
 # | fromline '^---- Start Spam' | highlight '.*points.*required' <Enter>"
-macro pager "XL" "| spamassassin -t -L"
+macro pager "XL" "| spamassassin -D -t -L"
 # | fromline '^---- Start Spam' | highlight '.*points.*required' <Enter>"
 ## Report spam to spamassassin, and delete:
 # macro index "XS" "| spamassassin -r & <Enter>d"
 # macro pager "XS" "| spamassassin -r & <Enter>d"
 ## Report spam to spamassassin, and move:
-macro index "XS" "| spamassassin -r<Enter>s~/Mail/spam_reported<Enter>y"
-macro pager "XS" "| spamassassin -r<Enter>s~/Mail/spam_reported<Enter>y"
+macro index "XS" "| spamassassin -D -r<Enter>s~/Mail/spam_reported<Enter>y"
+macro pager "XS" "| spamassassin -D -r<Enter>s~/Mail/spam_reported<Enter>y"
 ## Quickly learn spam:  (perform "sa-learn --sync" after batch)
-macro index "XX" "| sa-learn --spam --no-sync<Enter>s~/Mail/spam_reported<Enter>y"
-macro pager "XX" "| sa-learn --spam --no-sync<Enter>s~/Mail/spam_reported<Enter>y"
+macro index "XX" "| sa-learn -D --spam --no-sync<Enter>s~/Mail/spam_reported<Enter>y"
+macro pager "XX" "| sa-learn -D --spam --no-sync<Enter>s~/Mail/spam_reported<Enter>y"
 ## Quickly lean ham:  (perform "sa-learn --sync" after batch)
-macro index "XH" "| sa-learn --ham --no-sync<Enter><Down>"
-macro pager "XH" "| sa-learn --ham --no-sync<Enter><Down>"
+# macro index "XH" "| sa-learn --ham --no-sync<Enter><Down>"
+# macro pager "XH" "| sa-learn --ham --no-sync<Enter><Down>"
+macro index "XH" "| spamassassin -D -k<Enter><Down>"
+macro pager "XH" "| spamassassin -D -k<Enter><Down>"
 ## Razor direct:
 # macro index "XX" "| razor-report & <Enter>d"
 # macro pager "XX" "| razor-report & <Enter>d"

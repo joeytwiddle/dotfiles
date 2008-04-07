@@ -24,10 +24,13 @@ sorendition 00 mW # white on magenta
 
 activity              "%C -> %n%f %t activity!"
 
-defscrollback 10000
+## Joey disabled this to test whether it is the cause of slow unswapping when screen is resized, or not.
+# defscrollback 10000
 
 ## My prefered default command keys:
+## bigscreen was having trouble overriding these so they are disabled here (can be set at invokation or during runtime).
 defescape "^k^l"
+escape "^k^l"
 
 ## PgUp and PgDn keys enter copy/scrollback mode
 # bindkey -k kP copy
@@ -45,7 +48,8 @@ bindkey -k kI copy
 
 ## Ctrl+N opens a new window
 bindkey "^n" screen
-
+## Trying to split and open new window:
+# bindkey "^v" stuff "^kS^kc"
 
 ### Window switching
 
@@ -54,6 +58,12 @@ bindkey "^n" screen
   bindkey -k k9 next
   bindkey "^o" prev
   bindkey "^p" next
+  ## I changed those commands to keystrokes so that we can make a screen with this config but a different key, allowing these commands throgh (making the alternative key screen transparent)
+  ## I don't understand: these don't appear to work.  Did they ever work?!
+  # bindkey -k k8 stuff "^kp"
+  # bindkey -k k9 stuff "^kn"
+  # bindkey "^o" stuff "^kp"
+  # # bindkey "^p" stuff "^kn"
   ## worked for Ctrl+] and [, but also broke <up> and <down> arrows.
   # bindkey "\033" prev
   # bindkey "\035" next
@@ -71,6 +81,10 @@ bindkey "^n" screen
   ## F4 and F5 cycle on second nested screen
   bindkey -k k4 stuff "^k^lp"
   bindkey -k k5 stuff "^k^ln"
+
+  ## Ctrl+J moves between split windows:
+  bindkey "^h" resize +1
+  bindkey "^j" focus
 
 ## Move windows with Ctrl+W followed by target number
 

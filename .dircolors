@@ -233,6 +233,10 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .inc 01;33
 # DB:
 .sql 01;36
+## Web code: (html is in "Docs")
+.js 01;36
+# ...
+# .xsl 01;36
 
 # Plain data ("output")
 .dat 00;36

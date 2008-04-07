@@ -2,6 +2,9 @@
 
 # KeyToGrab(X), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xterm)
 KeyToGrab(X), WithModifier(Mod1), WithAction(ExecCommand), DoThis(/home/joey/j/jsh xterm -e /home/joey/j/jsh)
+
+KeyToGrab(Slash), WithModifier(Mod1), WithAction(ExecCommand), DoThis(whatsplaying)
+
 KeyToGrab(KP_Divide), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumedown 9)
 KeyToGrab(KP_Multiply), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumeup 9)
 KeyToGrab(KP_Subtract), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumedown 2)
@@ -18,8 +21,13 @@ KeyToGrab(KP_3), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -s)
 KeyToGrab(KP_Delete), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -s)
 
 # Not in wmaker :-(
-KeyToGrab(J), WithModifier(Mod1), WithAction(BigNudgeDown)
-KeyToGrab(K), WithModifier(Mod1), WithAction(Maximise)
+KeyToGrab(J), WithModifier(Mod4), WithAction(BigNudgeDown)
+KeyToGrab(K), WithModifier(Mod4), WithAction(Maximise)
 
-KeyToGrab(Print), WithModifier(Mod1), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
-KeyToGrab(Print), WithModifier(Mod4), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
+KeyToGrab(F2), WithModifier(Mod1), WithAction(ExecCommand), DoThis(runacommand)
+KeyToGrab(F2), WithModifier(Mod4), WithAction(ExecCommand), DoThis(runacommand)
+
+KeyToGrab(P), WithModifier(Mod1), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
+KeyToGrab(P), WithModifier(Mod4), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
+KeyToGrab(PrintScreen), WithModifier(Mod1), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
+KeyToGrab(PrintScreen), WithModifier(Mod4), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
