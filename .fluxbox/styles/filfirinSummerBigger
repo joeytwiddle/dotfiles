@@ -1,5 +1,6 @@
 # filfirinSummer fluxbox theme
 # based on qnx-photon
+# vim:ts=40:nowrap
 
 ! Focused and unfocused windows
 window.title.focus:	flat gradient vertical
@@ -8,14 +9,14 @@ window.title.focus.colorTo:	rgb:e0/e0/e0
 window.title.unfocus:	flat gradient vertical
 window.title.unfocus.color:	rgb:e0/e0/e0
 window.title.unfocus.colorTo:	rgb:e0/e0/e0
-window.*label.focus:	raised gradient vertical
-window.*label.focus.color:	rgb:d0/80/00
-window.*label.focus.colorTo:	rgb:ff/b0/40
-window.*label.focus.textColor:	black
-window.*label.unfocus:	flat gradient vertical
-window.*label.unfocus.color:	rgb:70/00/b5
-window.*label.unfocus.colorTo:	rgb:20/00/55
-window.*label.unfocus.textColor:	white
+window.label.focus:	flat gradient vertical
+window.label.focus.colorTo:	rgb:e8/e8/00
+window.label.focus.color:	rgb:c0/c0/00
+window.label.focus.textColor:	black
+window.label.unfocus:	flat gradient vertical
+window.label.unfocus.colorTo:	rgb:00/40/00
+window.label.unfocus.color:	rgb:00/80/00
+window.label.unfocus.textColor:	white
 window.button.focus:	raised gradient vertical
 window.button.focus.color:	rgb:e0/e0/e0
 window.button.focus.colorTo:	rgb:b0/b0/b0
@@ -28,17 +29,25 @@ window.button.pressed:	sunken gradient vertical
 window.button.pressed.color:	rgb:b0/b0/b0
 window.button.pressed.colorTo:	rgb:e0/e0/e0
 window.handle.focus:	solid
-window.handle.focus.color:	rgb:e0/90/20
+window.handle.focus.color:	rgb:e0/e0/e0
 window.handle.unfocus:	solid
-window.handle.unfocus.color:	rgb:40/00/80
+window.handle.unfocus.color:	rgb:e0/e0/e0
 window.grip.focus:	solid
-window.grip.focus.color:	rgb:e0/90/20
+window.grip.focus.color:	rgb:e0/e0/e0
 window.grip.unfocus:	solid
-window.grip.unfocus.color:	rgb:40/00/80
+window.grip.unfocus.color:	rgb:e0/e0/e0
 window.frame.focusColor:	rgb:e0/e0/e0
-window.frame.unfocusColor:	rgb:80/80/80
+window.frame.unfocusColor:	rgb:e0/e0/e0
 
 ! Tabs
+window.tab.label.focus:	flat gradient vertical
+window.tab.label.focus.colorTo:	rgb:e8/e8/00
+window.tab.label.focus.color:	rgb:c0/c0/00
+window.tab.label.focus.textColor:	black
+window.tab.label.unfocus:	flat gradient vertical
+window.tab.label.unfocus.colorTo:	rgb:00/40/00
+window.tab.label.unfocus.color:	rgb:00/80/00
+window.tab.label.unfocus.textColor:	white
 window.tab.borderWidth:	1
 window.tab.borderColor:	rgb:c9/c9/c9
 
@@ -52,8 +61,8 @@ menu.frame.color:	rgb:DB/DA/DB
 menu.frame.colorTo:	rgb:D4/CE/D2
 menu.frame.textColor:	rgb:45/45/45
 menu.hilite:	sunken gradient vertical
-menu.hilite.color:	rgb:0/0/d0
-menu.hilite.colorTo:	rgb:0/0/80
+menu.hilite.color:	rgb:98/35/E3
+menu.hilite.colorTo:	rgb:71/29/9C
 menu.hilite.textColor:	white
 menu.bullet:	triangle
 menu.bullet.position:	right
@@ -80,23 +89,24 @@ toolbar.button.pressed:	sunken flat
 toolbar.button.pressed.color:	rgb:AB/AB/AB
 
 ! Fonts (lucidasans-10 is good default)
-window.font:	-*-lucida-medium-r-*-*-*-100-*-*-*-*-*-*
+window.font:	-*-lucida-medium-r-*-*-*-95-*-*-*-*-*-*
 window.justify:	center
-window.tab.font:	-*-lucida-medium-r-*-*-*-100-*-*-*-*-*-*
+window.tab.font:	-*-lucida-medium-r-*-*-*-90-*-*-*-*-*-*
 window.tab.justify:	left
-menu.title.font:	-*-lucida-medium-r-*-*-*-120-*-*-*-*-*-*
+menu.title.font:	-*-lucida-medium-r-*-*-*-180-*-*-*-*-*-*
 menu.title.justify:	center
-menu.frame.font:	-*-lucida-medium-r-*-*-*-100-*-*-*-*-*-*
+menu.frame.font:	-*-lucida-medium-r-*-*-*-140-*-*-*-*-*-*
 menu.frame.justify:	center
 toolbar.font:	lucidasans-10
 toolbar.justify:	center
 
 ! Borders
-borderColor:	rgb:d0/d0/d0
-borderWidth:	1
-bevelWidth:	2
-handleWidth:	5
+borderColor:	rgb:a0/a0/a0
+borderWidth:	2
+bevelWidth:	1
+handleWidth:	2
 frameWidth:	2
 
 ! Other
 rootCommand:  bsetbg -solid black
+
