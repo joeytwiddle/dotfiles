@@ -124,18 +124,19 @@ toolbar.iconbar.unfocused.justify:		center
 window.bevelWidth:						1
 window.shade:							false
 window.borderWidth:						2
-window.borderColor:						#cccccc
+window.borderColor:						#ccccd0
+# window.borderColor:						#bbbbcc
 
 window.justify:							Center
 
 window.title.height:					19
 
 window.title.focus:						flat
-window.title.focus.color:				#444444
-window.title.focus.colorTo:				#444444
+window.title.focus.color:				#111111
+window.title.focus.colorTo:				#222222
 window.title.unfocus:					flat
 window.title.unfocus.color:				#111111
-window.title.unfocus.colorTo:			#111111
+window.title.unfocus.colorTo:			#222222
 
 # window.label.focus:						flat
 # window.label.focus.color:				#895D52
@@ -151,7 +152,7 @@ window.title.unfocus.colorTo:			#111111
 # window.label.focus.colorTo:          rgb:7C/56/00
 window.label.focus:                  flat bevel1 solid interlaced
 # window.label.focus.color:            rgb:99/99/00
-window.label.focus.color:            rgb:99/88/00
+window.label.focus.color:            rgb:aa/99/00
 window.label.focus.colorTo:          rgb:00/00/00
 window.label.focus.textColor:        white
 window.label.unfocus:                raised gradient vertical
@@ -159,32 +160,61 @@ window.label.unfocus.color:          rgb:00/80/00
 window.label.unfocus.colorTo:        rgb:00/50/00
 window.label.unfocus.textColor:      white
 
-window.button.focus:					flat
-window.button.focus.color:      		#5c5c5c
-window.button.focus.colorTo:      		#5c5c5c
-window.button.focus.picColor:			#f3f3f3
+# window.button.pressed.color:			#ee2211
+# window.button.pressed.colorTo:			#ff00ff
+
+window.button.focus:					gradient vertical
+window.button.focus.color:      		#666666
+window.button.focus.colorTo:      		#555555
+window.button.focus.picColor:			#000000
 window.button.unfocus:					flat
-window.button.unfocus.Color:			#414141
-window.button.unfocus.ColorTo:			#414141
-window.button.unfocus.picColor:			#838383
-window.button.pressed:					sunken
-window.button.pressed.color:			#ee6622
-window.button.pressed.colorTo:			#ff00ff
+window.button.unfocus.Color:			#555555
+window.button.unfocus.ColorTo:			#555555
+window.button.unfocus.picColor:			#000000
+window.button.pressed:					gradient vertical
+window.button.pressed.color:			#444444
+window.button.pressed.colorTo:			#555555
 window.button.pressed.picColor:			#000000
 
+# window.button.focus:					raised
+# window.button.focus.color:      		#666666
+# window.button.focus.colorTo:      		#666666
+# window.button.focus.picColor:			#111111
+# window.button.unfocus:					flat
+# window.button.unfocus.Color:			#4b4b4b
+# window.button.unfocus.ColorTo:			#4b4b4b
+# window.button.unfocus.picColor:			#777777
+# window.button.pressed:					sunken
+# window.button.pressed.color:			#444444
+# window.button.pressed.colorTo:			#000000
+# window.button.pressed.picColor:			#ffffff
+
+# window.button.focus:					raised
+# window.button.focus.color:      		#777777
+# window.button.focus.colorTo:      		#777777
+# window.button.focus.picColor:			#111111
+# window.button.unfocus:					flat
+# window.button.unfocus.Color:			#555555
+# window.button.unfocus.ColorTo:			#555555
+# window.button.unfocus.picColor:			#111111
+# window.button.pressed:					sunken
+# window.button.pressed.color:			#444444
+# window.button.pressed.colorTo:			#000000
+# window.button.pressed.picColor:			#ffffff
+
 window.handle.focus:					flat
-window.handle.focus.color:				#
+window.handle.focus.color:				#666666
 window.handle.focus.colorTo:			#
 window.handle.unfocus:					flat
-window.handle.unfocus.color:			#
+window.handle.unfocus.color:			#444444
 window.handle.unfocus.colorTo:			#
 window.handleWidth:						4
 
 window.grip.focus:						flat
-window.grip.focus.color:				#
+window.grip.focus.color:				#008800
 window.grip.focus.colorTo:				#
 window.grip.unfocus:					flat
-window.grip.unfocus.color:				#
+window.grip.unfocus.color:				#006600
 window.grip.unfocus.colorTo:			#
 
 ###############################################################################
