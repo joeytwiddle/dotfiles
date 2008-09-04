@@ -24,11 +24,11 @@
 
 ############################################################## FONTS ##########
 					
-menu.frame.font:						sans-9:bold
-menu.title.font:						sans-10:bold
+menu.frame.font:						sans-13:bold
+menu.title.font:						sans-14:bold
 toolbar.clock.font:						sans-9:bold
 toolbar.workspace.font:					tahoma-10:bold
-toolbar.iconbar.focused.font:			sans-8:bold
+toolbar.iconbar.focused.font:			sans-8
 toolbar.iconbar.unfocused.font:			sans-8
 window.font:							sans-8:bold
 
@@ -38,85 +38,89 @@ menu.bevelWidth:						1
 
 #menu.itemHeight:						35
 #menu.titleHeight:						21
-menu.borderColor:						#895D52
-menu.borderWidth:						1
+menu.borderColor:						#008822
+menu.borderWidth:						2
 
 menu.bullet:							triangle
 menu.bullet.position:					Right
 
 menu.title:								flat
 menu.title.justify:						center
-menu.title.color:						#895D52
-menu.title.colorTo:						#895D52
+menu.title.color:						#006622
+menu.title.colorTo:						#006622
 menu.title.textColor:					#e7e7e7
 
 menu.frame:								flat
 menu.frame.justify:						left
-menu.frame.color:						#171717
-menu.frame.colorTo:						#171717
-menu.frame.textColor:					#ffffff
-menu.frame.disableColor:				#895D52
+menu.frame.color:						#004422
+menu.frame.colorTo:						#004422
+menu.frame.textColor:					#dddddd
+menu.frame.disableColor:				#0000aa
 
 menu.hilite:							flat
-menu.hilite.color:						#895D52
-menu.hilite.colorTo:					#895D52
+menu.hilite.color:						#008866
+menu.hilite.colorTo:					#008866
 menu.hilite.textColor:					#e7e7e7			
 
 ############################################################## TOOLBAR ########
 
-toolbar.bevelWidth:						1
+toolbar.bevelWidth:						3
 
-toolbar.borderWidth:					1
-toolbar.borderColor:					#895D52
+toolbar.borderWidth:					0
+toolbar.borderColor:					#006600
 
-toolbar.height:							15
+toolbar.height:							19
 
 toolbar.justify:						center
 
 toolbar:								flat
 toolbar.pixmap:							
-toolbar.color:							#171717
-toolbar.colorTo:						#171717
+toolbar.color:							#006600
+toolbar.colorTo:						#006600
 
 toolbar.clock:							flat
 toolbar.clock.justify:					center
-toolbar.clock.color:					#583b35
-toolbar.clock.colorTo:					#583b35
+toolbar.clock.color:					#004444
+toolbar.clock.colorTo:					#004444
 toolbar.clock.textColor:				#e7e7e7
 
 toolbar.workspace:						flat
-toolbar.workspace.justify:				Center
-toolbar.workspace.color:				#583b35
-toolbar.workspace.colorTo:				#583b35
+toolbar.workspace.justify:				center
+toolbar.workspace.color:				#004444
+toolbar.workspace.colorTo:				#004444
 toolbar.workspace.textColor:			#e7e7e7
 
-toolbar.button:							flat 
-toolbar.button.color:					#5c5c5c
-toolbar.button.colorTo:					#5c5c5c
+toolbar.button:							gradient vertical 
+toolbar.button.color:					#337799
+toolbar.button.colorTo:					#114466
 toolbar.button.picColor:				#e7e7e7
-toolbar.button.pressed:					sunken 
-toolbar.button.pressed.color:			#5c5c5c
-toolbar.button.pressed.colorTo:			#5c5c5c
+toolbar.button.pressed:					gradient vertical 
+toolbar.button.pressed.color:			#114466
+toolbar.button.pressed.colorTo:			#226688
 toolbar.button.pressed.picColor:		#000000
 
 toolbar.iconbar.empty:					flat
-toolbar.iconbar.empty.color:			#583b35
-toolbar.iconbar.empty.colorTo:			#583b35
+toolbar.iconbar.empty.color:			#009900
+toolbar.iconbar.empty.colorTo:			#009900
 
-!toolbar.iconbar.focused.borderWidth:	1
-!toolbar.iconbar.focused.borderColor:	#aeaeae
-toolbar.iconbar.focused:				flat
-toolbar.iconbar.focused.color:			#895D52
-toolbar.iconbar.focused.colorTo:		#895D52
-toolbar.iconbar.focused.textColor:		#e7e7e7
+toolbar.iconbar.focused.borderWidth:	2
+toolbar.iconbar.focused.borderColor:	#006600
+toolbar.iconbar.focused:				sunken gradient vertical
+# toolbar.iconbar.focused.color:			#222299
+# toolbar.iconbar.focused.colorTo:		#2222aa
+toolbar.iconbar.focused.color:			#006000
+toolbar.iconbar.focused.colorTo:		#006400
+toolbar.iconbar.focused.textColor:		#bbbbbb
 toolbar.iconbar.focused.justify:		center
 
-!toolbar.iconbar.unfocused.borderWidth:	1
-!toolbar.iconbar.unfocused.borderColor:	#aeaeae
-toolbar.iconbar.unfocused:				flat
-toolbar.iconbar.unfocused.color:		#583b35
-toolbar.iconbar.unfocused.colorTo:		#583b35
-toolbar.iconbar.unfocused.textColor:	#6f6f6f
+toolbar.iconbar.unfocused.borderWidth:	2
+toolbar.iconbar.unfocused.borderColor:	#006600
+toolbar.iconbar.unfocused:				raised gradient vertical
+# toolbar.iconbar.unfocused.color:		#0099aa
+# toolbar.iconbar.unfocused.colorTo:		#2222aa
+toolbar.iconbar.unfocused.color:		#006800
+toolbar.iconbar.unfocused.colorTo:		#006000
+toolbar.iconbar.unfocused.textColor:	#ffffff
 toolbar.iconbar.unfocused.justify:		center
 
 ############################################################## WINDOW #########
@@ -203,18 +207,18 @@ window.button.pressed.picColor:			#000000
 # window.button.pressed.picColor:			#ffffff
 
 window.handle.focus:					flat
-window.handle.focus.color:				#666666
-window.handle.focus.colorTo:			#
+window.handle.focus.color:				#444444
+window.handle.focus.colorTo:			#444444
 window.handle.unfocus:					flat
-window.handle.unfocus.color:			#444444
-window.handle.unfocus.colorTo:			#
+window.handle.unfocus.color:			#666666
+window.handle.unfocus.colorTo:			#666666
 window.handleWidth:						4
 
 window.grip.focus:						flat
-window.grip.focus.color:				#008800
-window.grip.focus.colorTo:				#
+window.grip.focus.color:				#00aa00
+window.grip.focus.colorTo:				#004400
 window.grip.unfocus:					flat
-window.grip.unfocus.color:				#006600
+window.grip.unfocus.color:				#228822
 window.grip.unfocus.colorTo:			#
 
 ###############################################################################
