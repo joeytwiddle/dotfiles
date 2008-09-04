@@ -169,8 +169,8 @@ window.label.unfocus.textColor:      white
 window.button.focus:					raised gradient vertical
 # window.button.focus.color:      		#e0e0ff
 # window.button.focus.colorTo:      		#707088
-window.button.focus.color:      		#ccccdd
-window.button.focus.colorTo:      		#777788
+window.button.focus.color:      		#778888
+window.button.focus.colorTo:      		#556666
 window.button.focus.picColor:			#000000
 window.button.unfocus:					raised gradient vertical
 window.button.unfocus.Color:			#777777
