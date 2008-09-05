@@ -51,7 +51,7 @@ menu.title.textColor:					#000000
 menu.title.justify:						center
 
 menu.frame:								gradient vertical
-menu.frame.color:						#bbbbaa
+menu.frame.color:						#ccccbb
 menu.frame.colorTo:						#a3a391
 menu.frame.textColor:					#000000
 menu.frame.disableColor:				#666666
@@ -128,17 +128,17 @@ window.borderWidth:						2
 # window.borderColor:						#bbbb99
 # window.borderColor:						#ddddbb
 # window.borderColor:							#c0c0c0
-window.borderColor:						#c0c0c8
+window.borderColor:						#c8c8cc
 
 window.justify:							Center
 
 window.title.height:					19
 
 window.title.focus:						flat
-window.title.focus.color:				#111111
+window.title.focus.color:				#c0c0c8
 window.title.focus.colorTo:				#222222
 window.title.unfocus:					flat
-window.title.unfocus.color:				#111111
+window.title.unfocus.color:				#c0c0c8
 window.title.unfocus.colorTo:			#222222
 
 # window.label.focus:						flat
@@ -187,18 +187,28 @@ window.label.unfocus.textColor:      white
 # window.button.pressed.colorTo:			#666666
 # window.button.focus.color:		#337777
 # window.button.focus.colorTo:		#226666
-window.button.focus:					flat
-window.button.focus.color:		#666666
-window.button.focus.picColor:			#000000
-window.button.pressed:					flat
-window.button.pressed.color:			#009999
-window.button.pressed.picColor:			#00aaaa
+window.button.focus:			raised gradient
+window.button.focus.Color:		#666666
+window.button.focus.ColorTo:			#000000
+window.button.focus.picColor:			#aaaaaa
+# window.button.focus:					raised gradient vertical
+# window.button.focus.color:		#ee4444
+# window.button.focus.colorTo:		#aa4444
+# window.button.focus.picColor:			#cccccc
+window.button.pressed:					sunken gradient
+window.button.pressed.color:			#000000
+window.button.pressed.colorTo:			#666666
+window.button.pressed.picColor:			#999999
 # window.button.unfocus:					gradient vertical
 # window.button.unfocus.Color:			#777777
 # window.button.unfocus.ColorTo:			#555555
-window.button.unfocus:					flat
-window.button.unfocus.Color:			#666666
-window.button.unfocus.picColor:			#000000
+# window.button.unfocus:					flat
+# window.button.unfocus.Color:			#666666
+# window.button.unfocus.picColor:			#000000
+window.button.unfocus:					raised gradient
+window.button.unfocus.Color:				#444444
+window.button.unfocus.ColorTo:			#000000
+window.button.unfocus.picColor:			#888888
 
 # window.button.focus:					raised gradient vertical
 # window.button.focus.color:      		#bbbbbb
