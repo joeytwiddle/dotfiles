@@ -106,8 +106,8 @@ toolbar.iconbar.empty.colorTo:	#bbbb99
 toolbar.iconbar.focused.borderWidth:	2
 toolbar.iconbar.focused.borderColor:	#999977
 toolbar.iconbar.focused:	sunken gradient vertical
-toolbar.iconbar.focused.color:	#aaaaaa
-toolbar.iconbar.focused.colorTo:	#cccccc
+toolbar.iconbar.focused.color:	#b8b8b8
+toolbar.iconbar.focused.colorTo:	#dddddd
 toolbar.iconbar.focused.textColor:	#333333
 toolbar.iconbar.focused.justify:	center
 
