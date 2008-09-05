@@ -1,15 +1,22 @@
+!mouse actions added by fluxbox-update_configs
+OnDesktop Mouse1 :hideMenus
+OnDesktop Mouse2 :workspaceMenu
+OnDesktop Mouse3 :rootMenu
+OnDesktop Mouse4 :nextWorkspace
+OnDesktop Mouse5 :prevWorkspace
+
 # According to Hwi's xev, my key "Alt Gr" is Mode_switch, "Win right" is Multi_key, followed by Menu and Control_R
 
 Control Escape :RootMenu
 
 # Move between tabs
 Mod4 Left :PrevTab
-Shift Mod1 Left :PrevTab
 Mod4 Right :NextTab
-Shift Mod1 Right :NextTab
 Control Tab :PrevTab
 Control grave :NextTab
 Control Shift Tab :NextTab
+Mod1 Left :MoveTabLeft
+Mod1 Right :MoveTabRight
 # not working:
 Mod1 braceleft :MovePrevTab
 Mod4 braceleft :MovePrevTab
@@ -18,8 +25,8 @@ Mod4 braceright :MoveNextTab
 
 # Move between windows
 # A couple of these are disabled so we can use them through xvncviewer
-Mod1 Tab :PrevWindow 1
-Mod1 grave :NextWindow 1
+Mod1 Tab :NextWindow 1
+Mod1 grave :PrevWindow 1
 Mod1 Shift Tab :NextWindow 0
 #!!!! Mod4 Up :PrevWindow 7
 #!!!! Mod1 Up :PrevWindow 7
@@ -33,18 +40,14 @@ Mod1 q :Close
 Mod4 q :KillWindow
 Mod1 x :ExecCommand xterm
 Mod4 x :ExecCommand xterm
-Mod1 g :ToggleDecor
-Mod4 g :ToggleDecor
 Mod1 a :Lower
 Mod4 a :Lower
 Mod1 d :ShadeWindow
 Mod4 d :ShadeWindow
-Mod1 o :StickWindow
-Mod4 o :StickWindow
+Mod1 o :DetachClient
+Mod4 o :DetachClient
 Mod1 s :StickWindow
 Mod4 s :StickWindow
-Mod1 m :Minimize
-Mod4 m :Minimize
 Mod1 i :Minimize
 Mod4 i :Minimize
 Mod1 z :MaximizeWindow
@@ -63,11 +66,15 @@ Control Mod1 Left :PrevWorkspace
 Control Mod4 Left :PrevWorkspace
 Control Mod1 Right :NextWorkspace
 Control Mod4 Right :NextWorkspace
+Shift Mod1 Left :TakeToPrevWorkspace
+Shift Mod1 Right :TakeToNextWorkspace
 ## This makes sense if you have three columns of desktops:
 Control Mod1 Up :PrevWorkspace 3
 Control Mod4 Up :PrevWorkspace 3
 Control Mod1 Down :NextWorkspace 3
 Control Mod4 Down :NextWorkspace 3
+Shift Mod1 Up :TakeToPrevWorkspace 3
+Shift Mod1 Down :TakeToNextWorkspace 3
 # Mod1 F1 :Workspace 1
 # Mod1 F2 :Workspace 2
 # Mod1 F3 :Workspace 3
@@ -85,27 +92,37 @@ Control Mod4 Down :NextWorkspace 3
 # Mod4 F7 :Workspace 7
 # Mod4 F8 :Workspace 8
 
-# Moving windows
-Control KP_Right :NudgeRight
-Control KP_Left :NudgeLeft
-Control KP_Down :NudgeDown
-Control KP_Up :NudgeUp
-Mod1 KP_Right :BigNudgeRight
-Mod4 KP_Right :BigNudgeRight
-Mod1 KP_Left :BigNudgeLeft
-Mod4 KP_Left :BigNudgeLeft
-Mod1 KP_Down :BigNudgeDown
-Mod4 KP_Down :BigNudgeDown
-Mod1 KP_Up :BigNudgeUp
-Mod4 KP_Up :BigNudgeUp
+### Moving windows
+## Gnome-style not working:
+# Control KP_Right :NudgeRight
+# Control KP_Left :NudgeLeft
+# Control KP_Down :NudgeDown
+# Control KP_Up :NudgeUp
+# Mod1 KP_Right :BigNudgeRight
+# Mod4 KP_Right :BigNudgeRight
+# Mod1 KP_Left :BigNudgeLeft
+# Mod4 KP_Left :BigNudgeLeft
+# Mod1 KP_Down :BigNudgeDown
+# Mod4 KP_Down :BigNudgeDown
+# Mod1 KP_Up :BigNudgeUp
+# Mod4 KP_Up :BigNudgeUp
+## Fluxbox-style:
+Mod1 KP_Right :MoveRight +32
+Mod1 KP_Left :MoveRight -32
+Mod1 KP_Up :MoveUp +32
+Mod1 KP_Down :MoveUp -32
 
-# Resizing windows
-Mod1 KP_5 :VerticalDecrement
-Mod4 KP_5 :HorizontalDecrement
-Mod4 KP_Divide :HorizontalDecrement
-Mod4 KP_Multiply :HorizontalIncrement
-Mod4 KP_Subtract :VerticalDecrement
-Mod4 KP_Add :VerticalIncrement
+## Resizing windows
+# Mod1 KP_5 :VerticalDecrement
+# Mod4 KP_5 :HorizontalDecrement
+# Mod4 KP_Divide :HorizontalDecrement
+# Mod4 KP_Multiply :HorizontalIncrement
+# Mod4 KP_Subtract :VerticalDecrement
+# Mod4 KP_Add :VerticalIncrement
+Mod4 KP_Multiply :Resize +12 0
+Mod4 KP_Divide :Resize -12 0
+Mod4 KP_Add :Resize 0 +12
+Mod4 KP_Subtract :Resize 0 -12
 
 Mod1 F2 :ExecCommand runacommand
 
@@ -132,3 +149,4 @@ Mod1 KP_Delete :ExecCommand xmms -s
 # None XF86AudioStop :ExecCommand xmms -s
 Mod1 Print :ExecCommand import -window root /tmp/screenshot-$$.bmp
 Mod4 Print :ExecCommand import -window root /tmp/screenshot-$$.bmp
+
