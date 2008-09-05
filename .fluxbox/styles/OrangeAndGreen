@@ -65,7 +65,7 @@ menu.hilite.textColor:	#000000
 toolbar.bevelWidth:	4
 
 toolbar.borderWidth:	0
-toolbar.borderColor:	#2233bb
+toolbar.borderColor:	#aaaaaa
 
 toolbar.height:	19
 
@@ -73,8 +73,8 @@ toolbar.justify:	center
 
 toolbar:	raised gradient vertical
 toolbar.pixmap:	
-toolbar.color:	#2233cc
-toolbar.colorTo:	#2233aa
+toolbar.color:	#cccccc
+toolbar.colorTo:	#888888
 
 toolbar.clock:	sunken gradient vertical
 toolbar.clock.justify:	center
@@ -89,31 +89,36 @@ toolbar.workspace.colorTo:	#eeeedd
 toolbar.workspace.textColor:	#444444
 
 toolbar.button:	raised gradient
-toolbar.button.color:	#aaccff
-toolbar.button.colorTo:	#006680
-toolbar.button.picColor:	#000000
+toolbar.button.color:	#555555
+toolbar.button.colorTo:	#222222
+toolbar.button.picColor:	#aaaaaa
 toolbar.button.pressed:	flat gradient
-toolbar.button.pressed.color:	#006680
-toolbar.button.pressed.colorTo:	#aaccff
-toolbar.button.pressed.picColor:	#000000
+toolbar.button.pressed.color:	#222222
+toolbar.button.pressed.colorTo:	#555555
 
 toolbar.iconbar.empty:	gradient vertical
-toolbar.iconbar.empty.color:	#2233aa
-toolbar.iconbar.empty.colorTo:	#2233cc
+toolbar.iconbar.empty.color:	#bbbbbb
+toolbar.iconbar.empty.colorTo:	#999999
 
 toolbar.iconbar.focused.borderWidth:	2
-toolbar.iconbar.focused.borderColor:	#2233bb
-toolbar.iconbar.focused:	sunken gradient vertical
-toolbar.iconbar.focused.color:	#1155aa
-toolbar.iconbar.focused.colorTo:	#3366cc
+toolbar.iconbar.focused.borderColor:	#aaaaaa
+# toolbar.iconbar.focused:	sunken gradient vertical
+# toolbar.iconbar.focused.color:	#667780
+# toolbar.iconbar.focused.colorTo:	#99aab0
 toolbar.iconbar.focused.textColor:	#dddddd
 toolbar.iconbar.focused.justify:	center
 
+toolbar.iconbar.focused:	sunken gradient vertical
+toolbar.iconbar.focused.color:	#775500
+toolbar.iconbar.focused.colorTo:	#997700
+
 toolbar.iconbar.unfocused.borderWidth:	2
-toolbar.iconbar.unfocused.borderColor:	#2233bb
+toolbar.iconbar.unfocused.borderColor:	#aaaaaa
 toolbar.iconbar.unfocused:	raised gradient vertical
-toolbar.iconbar.unfocused.color:	#4477ff
-toolbar.iconbar.unfocused.colorTo:	#005588
+# toolbar.iconbar.unfocused.color:	#4477ff
+# toolbar.iconbar.unfocused.colorTo:	#005588
+toolbar.iconbar.unfocused.color:	#009900
+toolbar.iconbar.unfocused.colorTo:	#006600
 toolbar.iconbar.unfocused.textColor:	#white
 toolbar.iconbar.unfocused.justify:	center
 
