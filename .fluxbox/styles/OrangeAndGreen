@@ -163,8 +163,8 @@ window.label.focus.colorTo:	#aa8800
 # window.label.focus.colorTo:	#996655
 window.label.focus.textColor:	white
 window.label.unfocus:	raised gradient vertical
-window.label.unfocus.color:	rgb:00/99/00
-window.label.unfocus.colorTo:	rgb:00/66/00
+window.label.unfocus.color:	#009900
+window.label.unfocus.colorTo:	#006600
 window.label.unfocus.textColor:	white
 
 # window.button.pressed.color:	#ee2211
