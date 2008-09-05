@@ -7,20 +7,18 @@
 #  559 Nathan Abbott Way, Stanford, California 94305, USA. #
 ############################################################
 
-
-
 ###############################################################################
 #
 # name: ostrich
-# made: tenner
-# date: 12-12-2006
-# http://www.tenr.de 
+# author: joeytwiddle
+# date: 10-09-2008
+# http://hwi.ath.cx
 #
 ############################################################## BACKGROUND #####
 
-# background:	flat gradient elliptic
-# background.color:	#404040
-# background.colorTo:	#535353
+background:	flat gradient vertical
+background.color:	#99aad8
+background.colorTo:	#4466aa
 
 ############################################################## FONTS ##########
 
@@ -29,7 +27,7 @@ menu.frame.font:	sans-13
 menu.title.font:	sans-14:bold
 toolbar.clock.font:	sans-10
 toolbar.workspace.font:	sans-9
-toolbar.iconbar.focused.font:	sans-8
+toolbar.iconbar.focused.font:	sans-8:bold
 toolbar.iconbar.unfocused.font:	sans-8
 
 ############################################################## MENU ###########
@@ -38,7 +36,7 @@ menu.bevelWidth:	1
 
 #menu.itemHeight:	35
 #menu.titleHeight:	21
-menu.borderColor:	#999977
+menu.borderColor:	#777799
 menu.borderWidth:	2
 
 menu.bullet:	triangle
@@ -67,7 +65,7 @@ menu.hilite.textColor:	#000000
 toolbar.bevelWidth:	3
 
 toolbar.borderWidth:	0
-toolbar.borderColor:	#999977
+toolbar.borderColor:	#2222bb
 
 toolbar.height:	19
 
@@ -75,8 +73,8 @@ toolbar.justify:	center
 
 toolbar:	raised gradient vertical
 toolbar.pixmap:	
-toolbar.color:	#bbbb99
-toolbar.colorTo:	#888866
+toolbar.color:	#2222cc
+toolbar.colorTo:	#2222aa
 
 toolbar.clock:	sunken
 toolbar.clock.justify:	center
@@ -90,33 +88,33 @@ toolbar.workspace.color:	#fffff2
 toolbar.workspace.colorTo:	#fffff2
 toolbar.workspace.textColor:	#000000
 
-toolbar.button:	raised gradient vertical 
-toolbar.button.color:	#eeeeee
-toolbar.button.colorTo:	#bbbbbb
+toolbar.button:	raised gradient
+toolbar.button.color:	#aaccff
+toolbar.button.colorTo:	#006680
 toolbar.button.picColor:	#000000
-toolbar.button.pressed:	sunken gradient vertical 
-toolbar.button.pressed.color:	#aaaaaa
-toolbar.button.pressed.colorTo:	#dddddd
+toolbar.button.pressed:	sunken gradient
+toolbar.button.pressed.color:	#006680
+toolbar.button.pressed.colorTo:	#aaccff
 toolbar.button.pressed.picColor:	#000000
 
 toolbar.iconbar.empty:	gradient vertical
-toolbar.iconbar.empty.color:	#999977
-toolbar.iconbar.empty.colorTo:	#bbbb99
+toolbar.iconbar.empty.color:	#2222aa
+toolbar.iconbar.empty.colorTo:	#2222cc
 
 toolbar.iconbar.focused.borderWidth:	2
-toolbar.iconbar.focused.borderColor:	#999977
-toolbar.iconbar.focused:	sunken gradient vertical
-toolbar.iconbar.focused.color:	#b8b8b8
-toolbar.iconbar.focused.colorTo:	#dddddd
-toolbar.iconbar.focused.textColor:	#333333
+toolbar.iconbar.focused.borderColor:	#2222bb
+toolbar.iconbar.focused:	sunken gradient horizontal bevel1 solid interlaced
+toolbar.iconbar.focused.color:	#997700
+toolbar.iconbar.focused.colorTo:	#aa8800
+toolbar.iconbar.focused.textColor:	#white
 toolbar.iconbar.focused.justify:	center
 
 toolbar.iconbar.unfocused.borderWidth:	2
-toolbar.iconbar.unfocused.borderColor:	#999977
+toolbar.iconbar.unfocused.borderColor:	#2222bb
 toolbar.iconbar.unfocused:	raised gradient vertical
-toolbar.iconbar.unfocused.color:	#ddddbb
-toolbar.iconbar.unfocused.colorTo:	#aaaa88
-toolbar.iconbar.unfocused.textColor:	#000000
+toolbar.iconbar.unfocused.color:	#009900
+toolbar.iconbar.unfocused.colorTo:	#006600
+toolbar.iconbar.unfocused.textColor:	#white
 toolbar.iconbar.unfocused.justify:	center
 
 ############################################################## WINDOW #########
@@ -157,7 +155,7 @@ window.title.unfocus.colorTo:	#222222
 # window.label.focus:	bevel1 solid interlaced
 # window.label.focus.color:	#aa9900
 # window.label.focus.colorTo:	#000000
-window.label.focus:	raised gradient horizontal bevel1 solid interlaced
+window.label.focus:	sunken gradient horizontal bevel1 solid interlaced
 window.label.focus.color:	#997700
 window.label.focus.colorTo:	#aa8800
 # window.label.focus:	raised gradient vertical
@@ -248,7 +246,7 @@ window.button.unfocus.picColor:	#777777
 # window.button.pressed.colorTo:	#000000
 # window.button.pressed.picColor:	#ffffff
 
-window.handle.focus:	raised
+window.handle.focus:	sunken
 # window.handle.focus.color:	#660000
 # window.handle.focus.color:	#444444
 window.handle.focus.color:	#997700
@@ -256,7 +254,7 @@ window.handle.focus.colorTo:	#444444
 # window.handle.focus:	raised gradient horizontal bevel1 solid interlaced
 # window.handle.focus.color:	#997700
 # window.handle.focus.colorTo:	#aa8800
-window.grip.focus:	raised
+window.grip.focus:	sunken
 window.grip.focus.color:	#997700
 window.grip.focus.colorTo:	#004400
 
