@@ -16,14 +16,14 @@
 #
 ############################################################## BACKGROUND #####
 
-background:	flat gradient vertical
-background.color:	#113388
-background.colorTo:	#99bbee
+# background:	flat gradient vertical
+# background.color:	#113388
+# background.colorTo:	#99bbee
 
 ############################################################## FONTS ##########
 
 window.font:	sans-8:bold
-menu.frame.font:	sans-13
+menu.frame.font:	sans-12
 menu.title.font:	sans-14:bold
 toolbar.clock.font:	sans-10
 toolbar.workspace.font:	sans-9
@@ -32,7 +32,7 @@ toolbar.iconbar.unfocused.font:	sans-8
 
 ############################################################## MENU ###########
 
-menu.bevelWidth:	1
+menu.bevelWidth:	3
 
 #menu.itemHeight:	35
 #menu.titleHeight:	21
@@ -42,7 +42,7 @@ menu.borderWidth:	2
 menu.bullet:	triangle
 menu.bullet.position:	Right
 
-menu.title:	gradient horizontal
+menu.title:	raised gradient horizontal
 menu.title.color:	#bbbb88
 menu.title.colorTo:	#ddddaa
 menu.title.textColor:	#000000
@@ -50,19 +50,18 @@ menu.title.justify:	center
 
 menu.frame:	gradient vertical
 menu.frame.color:	#ccccbb
-menu.frame.colorTo:	#a3a391
+menu.frame.colorTo:	#aaaa99
 menu.frame.textColor:	#000000
 menu.frame.disableColor:	#666666
 menu.frame.justify:	left
 
-menu.hilite:	raised gradient vertical
-menu.hilite.color:	#aaaaaa
-menu.hilite.colorTo:	#cccccc
-menu.hilite.textColor:	#000000
+menu.hilite:	raised flat
+menu.hilite.color:	#cccc99
+menu.hilite.textColor:	#111111
 
 ############################################################## TOOLBAR ########
 
-toolbar.bevelWidth:	4
+toolbar.bevelWidth:	5
 
 toolbar.borderWidth:	0
 toolbar.borderColor:	#aaaaaa
@@ -91,7 +90,7 @@ toolbar.workspace.textColor:	#555555
 toolbar.button:	raised gradient
 toolbar.button.color:	#555555
 toolbar.button.colorTo:	#222222
-toolbar.button.picColor:	#aaaaaa
+toolbar.button.picColor:	#bbbbbb
 toolbar.button.pressed:	flat gradient
 toolbar.button.pressed.color:	#222222
 toolbar.button.pressed.colorTo:	#555555
