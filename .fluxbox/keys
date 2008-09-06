@@ -1,9 +1,24 @@
-!mouse actions added by fluxbox-update_configs
+# OnTitlebar Mouse2 :MacroCmd {Focus} {StartTabbing} {Lower}
+OnTitlebar Mouse2 :StartTabbing
+# OnTitlebar Double Mouse1 :Shade
+# OnTitlebar Mouse3 :WindowMenu
+OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
+# OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing BottomRight}
+# OnDesktop Mouse1 :hideMenus
+# OnDesktop Mouse2 :workspaceMenu
+# OnDesktop Mouse3 :rootMenu
+OnDesktop Mouse4 :nextWorkspace
+OnDesktop Mouse5 :prevWorkspace
+
+OnTitlebar Double Mouse1 :MacroCmd {Lower} {PrevWindow {groups}}
+# OnTitlebar Mouse2 :Lower
+OnTitlebar Mouse3 :Shade
+OnTitlebar Double Mouse3 :WindowMenu
+OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+
 OnDesktop Mouse1 :hideMenus
 OnDesktop Mouse2 :workspaceMenu
 OnDesktop Mouse3 :rootMenu
-OnDesktop Mouse4 :nextWorkspace
-OnDesktop Mouse5 :prevWorkspace
 
 # According to Hwi's xev, my key "Alt Gr" is Mode_switch, "Win right" is Multi_key, followed by Menu and Control_R
 
@@ -18,20 +33,22 @@ Control Shift Tab :NextTab
 Mod1 Left :MoveTabLeft
 Mod1 Right :MoveTabRight
 # not working:
-Mod1 braceleft :MovePrevTab
-Mod4 braceleft :MovePrevTab
-Mod1 braceright :MoveNextTab
-Mod4 braceright :MoveNextTab
+# Mod1 braceleft :MovePrevTab
+# Mod4 braceleft :MovePrevTab
+# Mod1 braceright :MoveNextTab
+# Mod4 braceright :MoveNextTab
 
 # Move between windows
 # A couple of these are disabled so we can use them through xvncviewer
-Mod1 Tab :NextWindow 1
-Mod1 grave :PrevWindow 1
+# Mod1 Tab :NextWindow 0
+# Mod1 grave :PrevWindow 0
+Mod1 Tab :NextWindow {groups}
+Mod1 grave :PrevWindow {groups}
 Mod1 Shift Tab :NextWindow 0
-#!!!! Mod4 Up :PrevWindow 7
-#!!!! Mod1 Up :PrevWindow 7
-#!!!! Mod4 Down :NextWindow 7
-#!!!! Mod1 Down :NextWindow 7
+#!!!! Mod4 Up :PrevWindow {groups} (stuck=no) (shaded=no)
+#!!!! Mod1 Up :PrevWindow {groups} (stuck=no) (shaded=no)
+#!!!! Mod4 Down :NextWindow {groups} (stuck=no) (shaded=no)
+#!!!! Mod1 Down :NextWindow {groups} (stuck=no) (shaded=no)
 
 # Do things to windows
 Mod1 c :Close
@@ -58,8 +75,8 @@ Mod1 h :MaximizeHorizontal
 Mod4 h :MaximizeHorizontal
 Mod1 f :ToggleDecor
 Mod4 f :ToggleDecor
-Mod1 t :ToggleTab
-Mod4 t :ToggleTab
+# Mod1 t :ToggleTab
+# Mod4 t :ToggleTab
 
 # Changing workspace
 Control Mod1 Left :PrevWorkspace
@@ -149,4 +166,5 @@ Mod1 KP_Delete :ExecCommand xmms -s
 # None XF86AudioStop :ExecCommand xmms -s
 Mod1 Print :ExecCommand import -window root /tmp/screenshot-$$.bmp
 Mod4 Print :ExecCommand import -window root /tmp/screenshot-$$.bmp
+
 
