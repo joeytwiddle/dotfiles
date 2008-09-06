@@ -9,13 +9,14 @@
 
 ###############################################################################
 #
-# name: ostrich
+# name: OrangeAndGreen
 # author: joeytwiddle
 # date: 10-09-2008
 # http://hwi.ath.cx
 #
 ############################################################## BACKGROUND #####
 
+background:	none
 # background:	flat gradient vertical
 # background.color:	#113388
 # background.colorTo:	#99bbee
@@ -61,7 +62,7 @@ menu.hilite.textColor:	#111111
 
 ############################################################## TOOLBAR ########
 
-toolbar.bevelWidth:	5
+toolbar.bevelWidth:	4
 
 toolbar.borderWidth:	0
 toolbar.borderColor:	#aaaaaa
@@ -133,7 +134,7 @@ window.borderWidth:	2
 # window.borderColor:	#bbbb99
 # window.borderColor:	#ddddbb
 # window.borderColor:	#c0c0c0
-window.borderColor:	#cccccc
+window.borderColor:	#d0d0d0
 
 window.justify:	Center
 
