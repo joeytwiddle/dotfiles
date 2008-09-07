@@ -16,16 +16,16 @@
 #
 ############################################################## BACKGROUND #####
 
-background:	none
-# background:	flat gradient vertical
-# background.color:	#113388
-# background.colorTo:	#99bbee
+# background:	none
+background:	flat gradient vertical
+background.color:	#99bbee
+background.colorTo:	#113388
 
 ############################################################## FONTS ##########
 
 window.font:	sans-8:bold
-menu.frame.font:	sans-15
-menu.title.font:	sans-16:bold
+menu.title.font:	sans-13:bold
+menu.frame.font:	sans-12
 toolbar.clock.font:	sans-10
 toolbar.workspace.font:	sans-9
 toolbar.iconbar.focused.font:	sans-8:bold
@@ -33,31 +33,41 @@ toolbar.iconbar.unfocused.font:	sans-8
 
 ############################################################## MENU ###########
 
-menu.bevelWidth:	3
-
-#menu.itemHeight:	35
-#menu.titleHeight:	21
-menu.borderColor:	#999977
-menu.borderWidth:	2
-
+menu.bevelWidth:	8
+menu.borderWidth:	0
 menu.bullet:	triangle
 menu.bullet.position:	Right
-
-menu.title:	raised gradient horizontal
-menu.title.color:	#bbbb88
-menu.title.colorTo:	#ddddaa
-menu.title.textColor:	#000000
+menu.title:	raised gradient vertical
 menu.title.justify:	center
+menu.frame:	gradient
+menu.frame.justify:	left
+# menu.hilite:	sunken gradient vertical bevel1 solid interlaced
+menu.hilite:	raised gradient vertical
+#menu.itemHeight:	35
+#menu.titleHeight:	21
 
-menu.frame:	gradient vertical
-menu.frame.color:	#ccccbb
-menu.frame.colorTo:	#aaaa99
+## Golden:
+# menu.borderColor:	#999977
+# menu.title.color:	#bbbb88
+# menu.title.colorTo:	#ddddaa
+# menu.title.textColor:	#000000
+# menu.frame.color:	#ccccbb
+# menu.frame.colorTo:	#aaaa99
+# menu.frame.textColor:	#000000
+# menu.frame.disableColor:	#666666
+# menu.hilite.color:	#cccc99
+# menu.hilite.textColor:	#111111
+
+# menu.borderColor:	#ddddaa
+menu.title.color:	#00aa00
+menu.title.colorTo:	#008800
+menu.title.textColor:	#eeeeee
+menu.frame.colorTo:	#e0e8f0
+menu.frame.color:	#d4dce8
 menu.frame.textColor:	#000000
 menu.frame.disableColor:	#666666
-menu.frame.justify:	left
-
-menu.hilite:	raised flat
-menu.hilite.color:	#cccc99
+menu.hilite.color:	#ffee00
+menu.hilite.colorTo:	#bb7700
 menu.hilite.textColor:	#111111
 
 ############################################################## TOOLBAR ########
@@ -88,12 +98,12 @@ toolbar.workspace.color:	#bbbbaa
 toolbar.workspace.colorTo:	#eeeedd
 toolbar.workspace.textColor:	#555555
 
-toolbar.button:	raised gradient
+toolbar.button:	raised gradient vertical
 toolbar.button.color:	#555555
-toolbar.button.colorTo:	#222222
-toolbar.button.picColor:	#b0b0b0
-toolbar.button.pressed:	flat gradient
-toolbar.button.pressed.color:	#222222
+toolbar.button.colorTo:	#111111
+toolbar.button.picColor:	#aaaaaa
+toolbar.button.pressed:	flat gradient vertical
+toolbar.button.pressed.color:	#111111
 toolbar.button.pressed.colorTo:	#555555
 
 toolbar.iconbar.empty:	gradient vertical
@@ -134,18 +144,22 @@ window.borderWidth:	2
 # window.borderColor:	#bbbb99
 # window.borderColor:	#ddddbb
 # window.borderColor:	#c0c0c0
-window.borderColor:	#d0d0d0
+# window.borderColor:	#d0d0d0
+window.borderColor:	#d4d8e0
+window.title.focus:	flat
+window.title.focus.color:	#d4d8e0
+window.title.unfocus:	flat
+window.title.unfocus.color:	#d4d8e0
+## Peach:
+# window.borderColor:	#fff0d8
+# window.title.focus:	flat
+# window.title.focus.color:	#fff0d8
+# window.title.unfocus:	flat
+# window.title.unfocus.color:	#fff0d8
 
 window.justify:	Center
 
-window.title.height:	19
-
-window.title.focus:	flat
-window.title.focus.color:	#c0c0c8
-window.title.focus.colorTo:	#222222
-window.title.unfocus:	flat
-window.title.unfocus.color:	#c0c0c8
-window.title.unfocus.colorTo:	#222222
+window.title.height:	20
 
 # window.label.focus:	flat
 # window.label.focus.color:	#895D52
@@ -184,16 +198,16 @@ window.label.unfocus.textColor:	white
 # window.button.focus.colorTo:	#556666
 # window.button.focus.color:	#bbbbbb
 # window.button.focus.colorTo:	#777777
-window.button.focus:	raised gradient
+window.button.focus:	raised gradient vertical
 window.button.focus.color:	#555555
-window.button.focus.colorTo:	#222222
+window.button.focus.colorTo:	#111111
 window.button.focus.picColor:	#888888
-window.button.pressed:	gradient
-window.button.pressed.color:	#222222
+window.button.pressed:	sunken gradient vertical
+window.button.pressed.color:	#111111
 window.button.pressed.colorTo:	#555555
-window.button.unfocus:	raised gradient
-window.button.unfocus.Color:	#555555
-window.button.unfocus.ColorTo:	#222222
+window.button.unfocus:	raised gradient vertical
+window.button.unfocus.Color:	#444444
+window.button.unfocus.ColorTo:	#111111
 window.button.unfocus.picColor:	#777777
 # window.button.focus.color:	#337777
 # window.button.focus.colorTo:	#226666
@@ -214,19 +228,6 @@ window.button.unfocus.picColor:	#777777
 # window.button.unfocus.Color:	#bbbbbb
 # window.button.unfocus.ColorTo:	#999999
 # window.button.unfocus.picColor:	#444444
-
-# window.button.focus:	raised gradient vertical
-# window.button.focus.color:	#bbbbbb
-# window.button.focus.colorTo:	#888888
-# window.button.focus.picColor:	#000000
-# window.button.unfocus:	flat
-# window.button.unfocus.Color:	#555555
-# window.button.unfocus.ColorTo:	#555555
-# window.button.unfocus.picColor:	#000000
-# window.button.pressed:	sunken gradient vertical
-# window.button.pressed.color:	#777777
-# window.button.pressed.colorTo:	#aaaaaa
-# window.button.pressed.picColor:	#000000
 
 # window.button.focus:	raised
 # window.button.focus.color:	#666666
