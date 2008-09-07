@@ -146,12 +146,10 @@ window.borderWidth:	2
 # window.borderColor:	#c0c0c0
 # window.borderColor:	#d0d0d0
 window.borderColor:	#d4d8e0
-window.title.focus:	gradient vertical
-window.title.focus.color:	#b4b8d0
-window.title.focus.colorTo:	#e4e8f0
-window.title.unfocus:	gradient vertical
-window.title.unfocus.color:	#b4b8d0
-window.title.unfocus.colorTo:	#e4e8f0
+window.title.focus:	raised
+window.title.focus.color:	#d4d8e0
+window.title.unfocus:	sunken
+window.title.unfocus.color:	#d4d8e0
 # window.title.focus:	raised gradient vertical
 # window.title.focus.color:	#c4c8d0
 # window.title.focus.colorTo:	#9498a0
