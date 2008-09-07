@@ -62,8 +62,15 @@ menu.hilite:	raised gradient vertical
 menu.title.color:	#00aa00
 menu.title.colorTo:	#008800
 menu.title.textColor:	#eeeeee
-menu.frame.color:	#e4e8f0
-menu.frame.colorTo:	#ecf0f8
+## White/blue/silver:
+# menu.frame.color:	#e8ecf4
+# menu.frame.colorTo:	#ecf0f8
+## Peach:
+# menu.frame.color:	#e4dcd0
+# menu.frame.colorTo:	#f4ece0
+## Grey:
+menu.frame.color:	#dcdcdc
+menu.frame.colorTo:	#f8f8f8
 menu.frame.textColor:	#000000
 menu.frame.disableColor:	#666666
 menu.hilite.color:	#ffee00
@@ -146,9 +153,9 @@ window.borderWidth:	2
 # window.borderColor:	#c0c0c0
 # window.borderColor:	#d0d0d0
 window.borderColor:	#d4d8e0
-window.title.focus:	raised
+window.title.focus:	flat
 window.title.focus.color:	#d4d8e0
-window.title.unfocus:	sunken
+window.title.unfocus:	flat
 window.title.unfocus.color:	#d4d8e0
 # window.title.focus:	raised gradient vertical
 # window.title.focus.color:	#c4c8d0
