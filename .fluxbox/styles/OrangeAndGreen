@@ -39,7 +39,7 @@ menu.bullet:	triangle
 menu.bullet.position:	Right
 menu.title:	raised gradient vertical
 menu.title.justify:	center
-menu.frame:	gradient
+menu.frame:	gradient vertical
 menu.frame.justify:	left
 # menu.hilite:	sunken gradient vertical bevel1 solid interlaced
 menu.hilite:	raised gradient vertical
@@ -62,8 +62,8 @@ menu.hilite:	raised gradient vertical
 menu.title.color:	#00aa00
 menu.title.colorTo:	#008800
 menu.title.textColor:	#eeeeee
-menu.frame.colorTo:	#e0e8f0
-menu.frame.color:	#d4dce8
+menu.frame.color:	#e4e8f0
+menu.frame.colorTo:	#ecf0f8
 menu.frame.textColor:	#000000
 menu.frame.disableColor:	#666666
 menu.hilite.color:	#ffee00
@@ -98,11 +98,11 @@ toolbar.workspace.color:	#bbbbaa
 toolbar.workspace.colorTo:	#eeeedd
 toolbar.workspace.textColor:	#555555
 
-toolbar.button:	raised gradient vertical
+toolbar.button:	raised gradient
 toolbar.button.color:	#555555
 toolbar.button.colorTo:	#111111
 toolbar.button.picColor:	#aaaaaa
-toolbar.button.pressed:	flat gradient vertical
+toolbar.button.pressed:	flat gradient
 toolbar.button.pressed.color:	#111111
 toolbar.button.pressed.colorTo:	#555555
 
@@ -137,19 +137,27 @@ toolbar.iconbar.unfocused.justify:	center
 
 ############################################################## WINDOW #########
 
-window.bevelWidth:	1
+window.bevelWidth:	2
 window.shade:	false
-window.borderWidth:	2
+window.borderWidth:	1
 # window.borderColor:	#bbbbcc
 # window.borderColor:	#bbbb99
 # window.borderColor:	#ddddbb
 # window.borderColor:	#c0c0c0
 # window.borderColor:	#d0d0d0
 window.borderColor:	#d4d8e0
-window.title.focus:	flat
-window.title.focus.color:	#d4d8e0
-window.title.unfocus:	flat
-window.title.unfocus.color:	#d4d8e0
+window.title.focus:	gradient vertical
+window.title.focus.color:	#b4b8d0
+window.title.focus.colorTo:	#e4e8f0
+window.title.unfocus:	gradient vertical
+window.title.unfocus.color:	#b4b8d0
+window.title.unfocus.colorTo:	#e4e8f0
+# window.title.focus:	raised gradient vertical
+# window.title.focus.color:	#c4c8d0
+# window.title.focus.colorTo:	#9498a0
+# window.title.unfocus:	raised gradient vertical
+# window.title.unfocus.color:	#c4c8d0
+# window.title.unfocus.colorTo:	#9498a0
 ## Peach:
 # window.borderColor:	#fff0d8
 # window.title.focus:	flat
@@ -159,7 +167,7 @@ window.title.unfocus.color:	#d4d8e0
 
 window.justify:	Center
 
-window.title.height:	20
+window.title.height:	22
 
 # window.label.focus:	flat
 # window.label.focus.color:	#895D52
@@ -198,14 +206,14 @@ window.label.unfocus.textColor:	white
 # window.button.focus.colorTo:	#556666
 # window.button.focus.color:	#bbbbbb
 # window.button.focus.colorTo:	#777777
-window.button.focus:	raised gradient vertical
+window.button.focus:	raised gradient
 window.button.focus.color:	#555555
 window.button.focus.colorTo:	#111111
 window.button.focus.picColor:	#888888
-window.button.pressed:	sunken gradient vertical
+window.button.pressed:	sunken gradient
 window.button.pressed.color:	#111111
 window.button.pressed.colorTo:	#555555
-window.button.unfocus:	raised gradient vertical
+window.button.unfocus:	raised gradient
 window.button.unfocus.Color:	#444444
 window.button.unfocus.ColorTo:	#111111
 window.button.unfocus.picColor:	#777777
