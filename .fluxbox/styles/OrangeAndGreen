@@ -69,8 +69,8 @@ menu.title.textColor:	#eeeeee
 # menu.frame.color:	#e4dcd0
 # menu.frame.colorTo:	#f4ece0
 ## Grey:
-menu.frame.color:	#dcdcdc
-menu.frame.colorTo:	#f8f8f8
+menu.frame.color:	#e4e4e4
+menu.frame.colorTo:	#ececec
 menu.frame.textColor:	#000000
 menu.frame.disableColor:	#666666
 menu.hilite.color:	#ffee00
@@ -95,8 +95,8 @@ toolbar.colorTo:	#888888
 
 toolbar.clock:	sunken gradient vertical
 toolbar.clock.justify:	center
-toolbar.clock.color:	#bbbbaa
-toolbar.clock.colorTo:	#eeeedd
+toolbar.clock.color:	#99aaaa
+toolbar.clock.colorTo:	#eeffff
 toolbar.clock.textColor:	#555555
 
 toolbar.workspace:	sunken gradient vertical
@@ -144,9 +144,9 @@ toolbar.iconbar.unfocused.justify:	center
 
 ############################################################## WINDOW #########
 
+window.borderWidth:	2
 window.bevelWidth:	1
 window.shade:	false
-window.borderWidth:	2
 # window.borderColor:	#bbbbcc
 # window.borderColor:	#bbbb99
 # window.borderColor:	#ddddbb
