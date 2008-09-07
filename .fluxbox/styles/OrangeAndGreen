@@ -137,9 +137,9 @@ toolbar.iconbar.unfocused.justify:	center
 
 ############################################################## WINDOW #########
 
-window.bevelWidth:	2
+window.bevelWidth:	1
 window.shade:	false
-window.borderWidth:	1
+window.borderWidth:	2
 # window.borderColor:	#bbbbcc
 # window.borderColor:	#bbbb99
 # window.borderColor:	#ddddbb
@@ -167,7 +167,7 @@ window.title.unfocus.colorTo:	#e4e8f0
 
 window.justify:	Center
 
-window.title.height:	22
+window.title.height:	20
 
 # window.label.focus:	flat
 # window.label.focus.color:	#895D52
