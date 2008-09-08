@@ -112,11 +112,11 @@ toolbar.workspace.colorTo:	#eeeedd
 toolbar.workspace.textColor:	#555555
 toolbar.workspace.justify:	center
 
-toolbar.button:	raised gradient
+toolbar.button:	raised gradient vertical
 toolbar.button.color:	#555555
 toolbar.button.colorTo:	#111111
 toolbar.button.picColor:	#aaaaaa
-toolbar.button.pressed:	flat gradient
+toolbar.button.pressed:	flat gradient vertical
 toolbar.button.pressed.color:	#111111
 toolbar.button.pressed.colorTo:	#555555
 
@@ -151,8 +151,8 @@ toolbar.iconbar.unfocused.justify:	center
 
 ############################################################## WINDOW #########
 
-window.borderWidth:	0
-window.bevelWidth:	3
+window.borderWidth:	1
+window.bevelWidth:	2
 window.shade:	false
 # window.borderColor:	#bbbbcc
 # window.borderColor:	#bbbb99
@@ -161,17 +161,17 @@ window.shade:	false
 # window.borderColor:	#d0d0d0
 window.borderColor:	#e8e8e8
 ## Nice simple grey:
-# window.title.focus:	flat
-# window.title.focus.color:	#d8d8d8
-# window.title.unfocus:	flat
-# window.title.unfocus.color:	#d8d8d8
+window.title.focus:	flat
+window.title.focus.color:	#d8d8d8
+window.title.unfocus:	flat
+window.title.unfocus.color:	#d8d8d8
 ## Shaded:
-window.title.focus:	gradient vertical
-window.title.focus.color:	#c8c8c8
-window.title.focus.colorTo:	#e8e8e8
-window.title.unfocus:	gradient vertical
-window.title.unfocus.color:	#c8c8c8
-window.title.unfocus.colorTo:	#e8e8e8
+# window.title.focus:	gradient vertical
+# window.title.focus.color:	#c8c8c8
+# window.title.focus.colorTo:	#e8e8e8
+# window.title.unfocus:	gradient vertical
+# window.title.unfocus.color:	#c8c8c8
+# window.title.unfocus.colorTo:	#e8e8e8
 ## Peach:
 # window.borderColor:	#fff0d8
 # window.title.focus:	flat
@@ -181,7 +181,7 @@ window.title.unfocus.colorTo:	#e8e8e8
 
 window.justify:	Center
 
-window.title.height:	24
+window.title.height:	22
 
 # window.label.focus:	flat
 # window.label.focus.color:	#895D52
@@ -224,11 +224,11 @@ window.button.focus:	raised gradient
 window.button.focus.color:	#555555
 window.button.focus.colorTo:	#111111
 window.button.focus.picColor:	#888888
-window.button.pressed:	sunken gradient
+window.button.pressed:	gradient horizontal
 window.button.pressed.color:	#111111
-window.button.pressed.colorTo:	#555555
+window.button.pressed.colorTo:	#444444
 window.button.unfocus:	raised gradient
-window.button.unfocus.Color:	#444444
+window.button.unfocus.Color:	#555555
 window.button.unfocus.ColorTo:	#111111
 window.button.unfocus.picColor:	#777777
 # window.button.focus.color:	#337777
@@ -301,10 +301,10 @@ window.grip.unfocus.color:	#008800
 window.grip.unfocus.colorTo:	#
 
 ## Grey handles:
-window.handle.focus.color:	#999999
-window.grip.focus.color:	#999999
-window.handle.unfocus.color:	#999999
-window.grip.unfocus.color:	#999999
+# window.handle.focus.color:	#999999
+# window.grip.focus.color:	#999999
+# window.handle.unfocus.color:	#999999
+# window.grip.unfocus.color:	#999999
 
 ###############################################################################
 # EOF
