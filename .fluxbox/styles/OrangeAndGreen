@@ -89,7 +89,9 @@ toolbar.height:	20
 
 toolbar.justify:	center
 
+
 toolbar:	raised gradient vertical
+# toolbar:	raised gradient vertical bevel1 solid interlaced
 toolbar.pixmap:	
 toolbar.color:	#cccccc
 toolbar.colorTo:	#888888
