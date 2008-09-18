@@ -17,9 +17,9 @@
 ############################################################## BACKGROUND #####
 
 # background:	none
-background:	flat gradient vertical
-background.color:	#99bbee
-background.colorTo:	#113388
+background:	flat gradient crossdiagonal
+background.color:	#113388
+background.colorTo:	#66bbee
 
 ############################################################## FONTS ##########
 
