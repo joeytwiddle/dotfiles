@@ -200,11 +200,11 @@ window.title.height:	24
 # window.label.focus.color:	#2244aa
 # window.label.focus.color:	#004400
 # window.label.focus.colorTo:	#006000
-window.label.focus:	gradient vertical
+window.label.focus:	gradient
 window.label.focus.color:	#1a33bb
 window.label.focus.colorTo:	#3366cc
 window.label.focus.textColor:	white
-window.label.unfocus:	raised gradient vertical
+window.label.unfocus:	raised gradient
 # window.label.unfocus.color:	#009900
 # window.label.unfocus.colorTo:	#006600
 window.label.unfocus.color:	#3377cc
