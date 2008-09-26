@@ -201,15 +201,15 @@ window.title.height:	24
 # window.label.focus.color:	#004400
 # window.label.focus.colorTo:	#006000
 window.label.focus:	gradient
-window.label.focus.color:	#1a33bb
-window.label.focus.colorTo:	#3366cc
-window.label.focus.textColor:	white
+window.label.focus.color:	#1122bb
+window.label.focus.colorTo:	#4466dd
+window.label.focus.textColor:	#ffffff
 window.label.unfocus:	raised gradient
 # window.label.unfocus.color:	#009900
 # window.label.unfocus.colorTo:	#006600
-window.label.unfocus.color:	#009900
-window.label.unfocus.colorTo:	#006600
-window.label.unfocus.textColor:	white
+window.label.unfocus.color:	#3388cc
+window.label.unfocus.colorTo:	#227799
+window.label.unfocus.textColor:	#dddddd
 
 # window.button.pressed.color:	#ee2211
 # window.button.pressed.colorTo:	#ff00ff
