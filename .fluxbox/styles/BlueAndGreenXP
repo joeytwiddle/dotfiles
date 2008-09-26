@@ -154,18 +154,18 @@ toolbar.iconbar.unfocused.justify:	center
 ############################################################## WINDOW #########
 
 window.borderWidth:	2
-window.bevelWidth:	2
+window.bevelWidth:	1
 window.shade:	false
 # window.borderColor:	#bbbbcc
 # window.borderColor:	#bbbb99
 # window.borderColor:	#ddddbb
 # window.borderColor:	#c0c0c0
 # window.borderColor:	#d0d0d0
-window.borderColor:	#2244bb
+window.borderColor:	#1144cc
 ## Nice simple grey:
 window.title.focus:	gradient vertical
-window.title.focus.color:	#3366cc
-window.title.focus.colorTo:	#2244bb
+window.title.focus.colorTo:	#3366cc
+window.title.focus.color:	#2244bb
 window.title.unfocus:	gradient vertical
 window.title.unfocus.color:	#3366cc
 window.title.unfocus.colorTo:	#2244bb
@@ -185,7 +185,7 @@ window.title.unfocus.colorTo:	#2244bb
 
 window.justify:	Center
 
-window.title.height:	22
+window.title.height:	24
 
 # window.label.focus:	flat
 # window.label.focus.color:	#895D52
@@ -196,11 +196,13 @@ window.title.height:	22
 # window.label.unfocus.colorTo:	#583b35
 # window.label.unfocus.textColor:	#6f6f6f
 
-window.label.focus:	sunken flat
-window.label.focus.color:	#2244aa
-# window.label.focus:	gradient vertical
-# window.label.focus.color:	#2255bb
-# window.label.focus.colorTo:	#3366cc
+# window.label.focus:	flat gradient vertical bevel1 solid interlaced
+# window.label.focus.color:	#2244aa
+# window.label.focus.color:	#004400
+# window.label.focus.colorTo:	#006000
+window.label.focus:	gradient vertical
+window.label.focus.color:	#1a33bb
+window.label.focus.colorTo:	#3366cc
 window.label.focus.textColor:	white
 window.label.unfocus:	raised gradient vertical
 # window.label.unfocus.color:	#009900
@@ -219,12 +221,12 @@ window.label.unfocus.textColor:	white
 # window.button.focus.color:	#bbbbbb
 # window.button.focus.colorTo:	#777777
 window.button.focus:	raised gradient
-window.button.focus.color:	#555555
-window.button.focus.colorTo:	#111111
-window.button.focus.picColor:	#888888
+window.button.focus.color:	#5566cc
+window.button.focus.colorTo:	#114488
+window.button.focus.picColor:	#ccdddd
 window.button.pressed:	gradient horizontal
 window.button.pressed.color:	#111111
-window.button.pressed.colorTo:	#444444
+window.button.pressed.colorTo:	#001166
 window.button.unfocus:	raised gradient
 window.button.unfocus.Color:	#555555
 window.button.unfocus.ColorTo:	#111111
@@ -281,13 +283,13 @@ window.handleWidth:	5
 window.handle.focus:	raised
 # window.handle.focus.color:	#660000
 # window.handle.focus.color:	#444444
-window.handle.focus.color:	#997700
-window.handle.focus.colorTo:	#444444
+window.handle.focus.color:	#002299
+window.handle.focus.colorTo:	#001166
 # window.handle.focus:	raised gradient horizontal bevel1 solid interlaced
-# window.handle.focus.color:	#997700
+# window.handle.focus.color:	#002299
 # window.handle.focus.colorTo:	#aa8800
 window.grip.focus:	raised
-window.grip.focus.color:	#997700
+window.grip.focus.color:	#002299
 window.grip.focus.colorTo:	#004400
 
 window.handle.unfocus:	raised
