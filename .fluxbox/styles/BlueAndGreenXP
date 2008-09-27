@@ -204,9 +204,9 @@ window.title.height:	24
 # window.label.focus.color:	#2244aa
 # window.label.focus.color:	#004400
 # window.label.focus.colorTo:	#006000
-window.label.focus:	gradient
-window.label.focus.color:	#3355cc
-window.label.focus.colorTo:	#2233cc
+window.label.focus:	gradient vertical
+window.label.focus.colorTo:	#3355cc
+window.label.focus.color:	#2233cc
 window.label.focus.textColor:	#ffffff
 window.label.unfocus:	raised gradient
 # window.label.unfocus.color:	#009900
@@ -230,11 +230,11 @@ window.button.focus:	raised gradient
 window.button.focus.Color:	#666666
 window.button.focus.ColorTo:	#222222
 window.button.focus.picColor:	#888888
-window.button.pressed:	gradient horizontal
+window.button.pressed:	gradient
 window.button.pressed.color:	#111111
-window.button.pressed.colorTo:	#001144
+window.button.pressed.colorTo:	#555555
 window.button.unfocus:	raised gradient
-window.button.unfocus.Color:	#666666
+window.button.unfocus.Color:	#555555
 window.button.unfocus.ColorTo:	#222222
 window.button.unfocus.picColor:	#666666
 # window.button.unfocus:	raised gradient
@@ -290,25 +290,25 @@ window.button.unfocus.picColor:	#666666
 ## handleWidth is actually height!
 window.handleWidth:	5
 
-window.handle.focus:	raised
+window.handle.focus:	raised gradient vertical
 # window.handle.focus.color:	#660000
 # window.handle.focus.color:	#444444
-window.handle.focus.color:	#002299
-window.handle.focus.colorTo:	#001166
+window.handle.focus.color:	#2244bb
+window.handle.focus.colorTo:	#1133aa
 # window.handle.focus:	raised gradient horizontal bevel1 solid interlaced
 # window.handle.focus.color:	#002299
 # window.handle.focus.colorTo:	#aa8800
-window.grip.focus:	raised
-window.grip.focus.color:	#002299
-window.grip.focus.colorTo:	#004400
+window.grip.focus:	raised gradient vertical
+window.grip.focus.color:	#2244bb
+window.grip.focus.colorTo:	#1133aa
 
-window.handle.unfocus:	raised
-window.handle.unfocus.color:	#008800
-window.handle.unfocus.colorTo:	#555555
-window.grip.unfocus:	raised
+window.handle.unfocus:	raised gradient vertical
+window.handle.unfocus.color:	#2244bb
+window.handle.unfocus.colorTo:	#1133aa
+window.grip.unfocus:	raised gradient vertical
 # window.grip.unfocus.color:	#228822
-window.grip.unfocus.color:	#008800
-window.grip.unfocus.colorTo:	#
+window.grip.unfocus.color:	#2244bb
+window.grip.unfocus.colorTo:	#1133aa
 
 ## Grey handles:
 # window.handle.focus.color:	#999999
