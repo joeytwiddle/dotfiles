@@ -213,8 +213,8 @@ window.label.unfocus:	raised gradient
 # window.label.unfocus.colorTo:	#006600
 # window.label.unfocus.color:	#009900
 # window.label.unfocus.colorTo:	#006600
-window.label.unfocus.color:	#6699cc
-window.label.unfocus.colorTo:	#2277aa
+window.label.unfocus.color:	#4480cc
+window.label.unfocus.colorTo:	#3876aa
 window.label.unfocus.textColor:	#dddddd
 
 # window.button.pressed.color:	#ee2211
