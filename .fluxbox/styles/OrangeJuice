@@ -175,7 +175,9 @@ window.label.focus.textColor:	#ffffff
 window.label.unfocus:	raised gradient vertical
 window.label.unfocus.color:	#669944
 window.label.unfocus.colorTo:	#446633
+window.label.unfocus.colorTo:	#446633
 window.label.unfocus.textColor:	#eeeecc
+window.label.unfocus.textColor:	#ddddbb
 
 window.button.focus:	raised gradient
 window.button.focus.color:	#666666
