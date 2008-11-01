@@ -178,8 +178,12 @@ window.title.focus.ColorTo:	#665522
 window.title.unfocus:	gradient vertical
 # window.title.unfocus.color:	#779955
 # window.title.unfocus.colorTo:	#446633
-window.title.unfocus.color:	#88cc88
-window.title.unfocus.colorTo:	#006600
+# window.title.unfocus.color:	#88cc88
+# window.title.unfocus.colorTo:	#006600
+window.title.unfocus.color:	#77aa55
+window.title.unfocus.colorTo:	#225511
+# window.title.unfocus.color:	#669944
+# window.title.unfocus.colorTo:	#446633
 ## Old:
 # window.title.focus:	gradient vertical
 # # window.title.focus.color:	#3350d8
@@ -226,11 +230,13 @@ window.title.height:	26
 # window.label.focus.color:	#335522
 # window.label.focus:	gradient vertical
 # window.label.focus:	sunken gradient horizontal solid interlaced
-window.label.focus:	gradient vertical
+window.label.focus:	gradient
 window.label.focus.colorTo:	#bb9944
 window.label.focus.color:	#998822
 window.label.focus.textColor:	#ffffff
 window.label.unfocus:	raised gradient vertical
+window.label.unfocus.color:	#669944
+window.label.unfocus.colorTo:	#446633
 # window.label.unfocus.color:	#aaddff
 # window.label.unfocus.colorTo:	#4488aa
 # window.label.unfocus:	raised gradient
@@ -239,8 +245,6 @@ window.label.unfocus:	raised gradient vertical
 window.label.unfocus.textColor:	#eeeecc
 # window.label.unfocus.color:	#88cc88
 # window.label.unfocus.colorTo:	#006600
-window.label.unfocus.color:	#669944
-window.label.unfocus.colorTo:	#446633
 
 # window.button.pressed.color:	#ee2211
 # window.button.pressed.colorTo:	#ff00ff
@@ -278,14 +282,14 @@ window.handleWidth:	5
 window.handle.focus:	gradient vertical
 window.handle.focus.color:	#ddaa33
 window.handle.focus.colorTo:	#665522
-window.grip.focus:	raised gradient vertical
+window.grip.focus:	raised gradient veritical
 window.grip.focus.color:	#888888
 window.grip.focus.colorTo:	#555555
 
 window.handle.unfocus:	gradient vertical
 window.handle.unfocus.color:	#88cc88
 window.handle.unfocus.colorTo:	#006600
-window.grip.unfocus:	raised gradient vertical
+window.grip.unfocus:	gradient vertical
 window.grip.unfocus.color:	#888888
 window.grip.unfocus.colorTo:	#555555
 
