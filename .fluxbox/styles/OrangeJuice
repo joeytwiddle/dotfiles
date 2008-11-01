@@ -226,9 +226,9 @@ window.title.height:	26
 # window.label.focus.color:	#335522
 # window.label.focus:	gradient vertical
 # window.label.focus:	sunken gradient horizontal solid interlaced
-window.label.focus:	gradient solid interlaced
-window.label.focus.color:	#775511
-window.label.focus.colorTo:	#bb9922
+window.label.focus:	gradient vertical solid interlaced
+window.label.focus.colorTo:	#775511
+window.label.focus.color:	#bb9922
 window.label.focus.textColor:	#ffffff
 window.label.unfocus:	raised gradient vertical
 # window.label.unfocus.color:	#aaddff
