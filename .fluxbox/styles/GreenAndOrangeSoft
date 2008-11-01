@@ -194,18 +194,14 @@ window.button.pressed.colorTo:	#555555
 ## handleWidth is actually height!
 window.handleWidth:	5
 
-window.handle.focus:	gradient vertical
-window.handle.focus.color:	#ddaa33
-window.handle.focus.colorTo:	#665522
-window.grip.focus:	raised gradient vertical
-window.grip.focus.color:	#666666
-window.grip.focus.colorTo:	#222222
+window.handle.focus:	raised flat
+window.handle.focus.color:	#aa8833
+window.grip.focus:	raised flat
+window.grip.focus.color:	#555555
 
-window.handle.unfocus:	gradient vertical
-window.handle.unfocus.color:	#88cc88
-window.handle.unfocus.colorTo:	#006600
-window.grip.unfocus:	raised gradient vertical
+window.handle.unfocus:	raised flat
+window.handle.unfocus.color:	#447744
+window.grip.unfocus:	raised flat
 window.grip.unfocus.color:	#444444
-window.grip.unfocus.colorTo:	#333333
 
 ###############################################################################
