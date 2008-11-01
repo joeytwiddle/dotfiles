@@ -154,12 +154,14 @@ window.label.focus.colorTo:	#bb9944
 window.label.focus.color:	#998822
 window.label.focus.textColor:	#ffffff
 
-window.title.unfocus:	raised gradient vertical
-window.title.unfocus.colorTo:	#779966
-window.title.unfocus.color:	#668855
+# window.title.unfocus:	raised gradient vertical
+# window.title.unfocus.colorTo:	#226622
+# window.title.unfocus.color:	#337733
+window.title.unfocus:	raised
+window.title.unfocus.color:	#226622
 window.label.unfocus:	raised gradient vertical
-window.label.unfocus.color:	#559955
-window.label.unfocus.colorTo:	#226622
+window.label.unfocus.color:	#669944
+window.label.unfocus.colorTo:	#337711
 window.label.unfocus.textColor:	#eeeecc
 
 ## Shaded:
