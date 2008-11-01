@@ -164,7 +164,7 @@ window.shade:	false
 # window.borderColor:	#2a44c2
 # window.borderColor:	#2a8888
 # window.borderColor:	#556666
-window.borderColor:	#444444
+window.borderColor:	#000000
 # window.borderColor:	#3350d8
 #
 ## Nice simple grey:
@@ -172,7 +172,7 @@ window.borderColor:	#444444
 # window.title.focus.color:	#3333bb
 window.title.focus:	gradient vertical
 window.title.focus.Color:	#ddaa33
-window.title.focus.ColorTo:	#663322
+window.title.focus.ColorTo:	#665522
 # window.title.unfocus:	flat
 # window.title.unfocus.color:	#3333bb
 window.title.unfocus:	gradient vertical
@@ -226,9 +226,9 @@ window.title.height:	26
 # window.label.focus.color:	#335522
 # window.label.focus:	gradient vertical
 # window.label.focus:	sunken gradient horizontal solid interlaced
-window.label.focus:	raised gradient vertical
-window.label.focus.color:	#cccc55
-window.label.focus.colorTo:	#777711
+window.label.focus:	raised gradient
+window.label.focus.colorTo:	#eedd44
+window.label.focus.color:	#666622
 window.label.focus.textColor:	#ffffff
 window.label.unfocus:	raised gradient vertical
 # window.label.unfocus.color:	#aaddff
@@ -275,25 +275,19 @@ window.button.pressed.colorTo:	#555555
 ## handleWidth is actually height!
 window.handleWidth:	5
 
-window.handle.focus:	raised gradient vertical
-# window.handle.focus.color:	#660000
-# window.handle.focus.color:	#444444
-window.handle.focus.color:	#222288
-window.handle.focus.colorTo:	#4444ff
-# window.handle.focus:	raised gradient horizontal bevel1 solid interlaced
-# window.handle.focus.color:	#002299
-# window.handle.focus.colorTo:	#aa8800
+window.handle.focus:	gradient vertical
+window.handle.focus.color:	#ddaa33
+window.handle.focus.colorTo:	#665522
 window.grip.focus:	raised gradient vertical
-window.grip.focus.color:	#222288
-window.grip.focus.colorTo:	#4444ff
+window.grip.focus.color:	#888888
+window.grip.focus.colorTo:	#555555
 
-window.handle.unfocus:	raised gradient vertical
-window.handle.unfocus.color:	#aaddff
-window.handle.unfocus.colorTo:	#4488aa
+window.handle.unfocus:	gradient vertical
+window.handle.unfocus.color:	#88cc88
+window.handle.unfocus.colorTo:	#006600
 window.grip.unfocus:	raised gradient vertical
-# window.grip.unfocus.color:	#228822
-window.grip.unfocus.color:	#aaddff
-window.grip.unfocus.colorTo:	#4488aa
+window.grip.unfocus.color:	#888888
+window.grip.unfocus.colorTo:	#555555
 
 ## Grey handles:
 # window.handle.focus.color:	#999999
