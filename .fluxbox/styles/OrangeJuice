@@ -24,9 +24,19 @@ background:	none
 ############################################################## FONTS ##########
 
 window.font:	sans-8:bold
+# window.font:	bistream vera sans-8:bold
 # window.font:	freesans-9:bold
 # window.font:	freesans-10:bold
-# window.font:	nimbus sans l-9:bold
+# window.font:	nimbus sans l-8:bold
+# window.font:	lucida-8:bold
+# window.font:	lucida-8:bold
+# window.font:	arial black-8
+# window.font:	helvetica-8:bold
+# window.font:	newspaper-8:bold
+# window.font:	URW Bookman L-8:bold
+# window.font:	URW Gothic L-8:bold
+# window.font:	URW Gothic L-9:bold
+# window.font:	verdana-8:bold
 menu.title.font:	sans-13:bold
 menu.frame.font:	sans-12
 toolbar.clock.font:	sans-10
@@ -111,15 +121,9 @@ toolbar.iconbar.empty.color:	#999999
 
 toolbar.iconbar.focused.borderWidth:	2
 toolbar.iconbar.focused.borderColor:	#aaaaaa
-# toolbar.iconbar.focused:	sunken gradient vertical
-# toolbar.iconbar.focused.color:	#667780
-# toolbar.iconbar.focused.colorTo:	#99aab0
 toolbar.iconbar.focused.textColor:	#dddddd
 toolbar.iconbar.focused.justify:	center
 
-# toolbar.iconbar.focused:	sunken gradient vertical
-# toolbar.iconbar.focused.color:	#7f5f00
-# toolbar.iconbar.focused.colorTo:	#997700
 toolbar.iconbar.focused:	sunken gradient vertical bevel1 solid interlaced
 toolbar.iconbar.focused.color:	#00bb00
 toolbar.iconbar.focused.colorTo:	#007700
@@ -127,8 +131,6 @@ toolbar.iconbar.focused.colorTo:	#007700
 toolbar.iconbar.unfocused.borderWidth:	2
 toolbar.iconbar.unfocused.borderColor:	#aaaaaa
 toolbar.iconbar.unfocused:	raised gradient vertical
-# toolbar.iconbar.unfocused.color:	#4477ff
-# toolbar.iconbar.unfocused.colorTo:	#005588
 toolbar.iconbar.unfocused.color:	#000077
 toolbar.iconbar.unfocused.colorTo:	#0000bb
 toolbar.iconbar.unfocused.textColor:	#white
@@ -164,7 +166,7 @@ window.title.unfocus.colorTo:	#225511
 
 window.justify:	Center
 
-window.title.height:	23
+window.title.height:	24
 
 window.label.focus:	gradient
 window.label.focus.colorTo:	#bb9944
@@ -178,10 +180,12 @@ window.label.unfocus.textColor:	#eeeecc
 window.button.focus:	raised gradient
 window.button.focus.color:	#666666
 window.button.focus.colorTo:	#222222
+# window.button.focus.color:	#333333
+# window.button.focus.colorTo:	#555555
 window.button.focus.picColor:	#888888
 window.button.unfocus.picColor:	#666666
 window.button.unfocus:	raised gradient
-window.button.unfocus.Color:	#555555
+window.button.unfocus.Color:	#444444
 window.button.unfocus.ColorTo:	#333333
 window.button.pressed:	gradient
 window.button.pressed.color:	#111111
@@ -193,22 +197,15 @@ window.handleWidth:	5
 window.handle.focus:	gradient vertical
 window.handle.focus.color:	#ddaa33
 window.handle.focus.colorTo:	#665522
-window.grip.focus:	raised gradient veritical
-window.grip.focus.color:	#888888
-window.grip.focus.colorTo:	#555555
+window.grip.focus:	raised gradient vertical
+window.grip.focus.color:	#666666
+window.grip.focus.colorTo:	#222222
 
 window.handle.unfocus:	gradient vertical
 window.handle.unfocus.color:	#88cc88
 window.handle.unfocus.colorTo:	#006600
-window.grip.unfocus:	gradient vertical
-window.grip.unfocus.color:	#888888
-window.grip.unfocus.colorTo:	#555555
-
-## Grey handles:
-# window.handle.focus.color:	#999999
-# window.grip.focus.color:	#999999
-# window.handle.unfocus.color:	#999999
-# window.grip.unfocus.color:	#999999
+window.grip.unfocus:	raised gradient vertical
+window.grip.unfocus.color:	#444444
+window.grip.unfocus.colorTo:	#333333
 
 ###############################################################################
-# EOF
