@@ -145,12 +145,12 @@ window.bevelWidth:	2
 window.shade:	false
 window.borderColor:	#000000
 
-window.title.focus:	raised flat
-window.title.focus.colorTo:	#ccaa44
+window.title.focus:	raised gradient vertical
 window.title.focus.color:	#aa8822
-window.label.focus:	flat
-window.label.focus.colorTo:	#bb9933
-window.label.focus.color:	#aa8822
+window.title.focus.colorTo:	#bb9933
+window.label.focus:	gradient
+window.label.focus.color:	#ccaa44
+window.label.focus.colorTo:	#aa8822
 window.label.focus.textColor:	#ffffff
 
 # window.title.unfocus:	raised gradient vertical
