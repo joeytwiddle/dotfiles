@@ -24,6 +24,9 @@ background:	none
 ############################################################## FONTS ##########
 
 window.font:	sans-8:bold
+# window.font:	freesans-9:bold
+# window.font:	freesans-10:bold
+# window.font:	nimbus sans l-9:bold
 menu.title.font:	sans-13:bold
 menu.frame.font:	sans-12
 toolbar.clock.font:	sans-10
