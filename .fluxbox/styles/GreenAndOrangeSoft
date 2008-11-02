@@ -55,9 +55,9 @@ menu.frame.justify:	left
 #menu.itemHeight:	35
 #menu.titleHeight:	21
 
-menu.title:	raised gradient vertical
-menu.title.colorTo:	#00a000
-menu.title.color:	#009000
+menu.title:	raised gradient horizontal
+menu.title.color:	#00a000
+menu.title.colorTo:	#009000
 menu.title.textColor:	#eeeeee
 ## Grey:
 menu.frame:	raised gradient vertical
@@ -139,11 +139,12 @@ toolbar.iconbar.unfocused.justify:	center
 ############################################################## WINDOW #########
 
 window.justify:	Center
-window.title.height:	24
+window.title.height:	26
 window.borderWidth:	1
-window.bevelWidth:	2
+window.bevelWidth:	3
 window.shade:	false
 window.borderColor:	#000000
+# window.roundCorners:	TopLeft TopRight
 
 window.title.focus:	raised gradient vertical
 window.title.focus.colorTo:	#aa8822
