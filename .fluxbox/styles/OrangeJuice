@@ -158,7 +158,7 @@ window.label.focus.textColor:	#ffffff
 # window.title.unfocus.colorTo:	#226622
 # window.title.unfocus.color:	#337733
 window.title.unfocus:	raised gradient vertical
-window.title.unfocus.color:	#446633
+window.title.unfocus.color:	#406630
 window.title.unfocus.colorTo:	#336022
 window.label.unfocus:	raised gradient vertical
 window.label.unfocus.color:	#669955
