@@ -160,8 +160,8 @@ window.label.focus.textColor:	#ffffff
 window.title.unfocus:	raised
 window.title.unfocus.color:	#226622
 window.label.unfocus:	raised gradient vertical
-window.label.unfocus.color:	#669955
-window.label.unfocus.colorTo:	#336622
+window.label.unfocus.colorTo:	#558844
+window.label.unfocus.color:	#447733
 window.label.unfocus.textColor:	#eeeecc
 
 ## Shaded:
@@ -181,8 +181,6 @@ window.label.unfocus.textColor:	#eeeecc
 window.button.focus:	raised gradient
 window.button.focus.color:	#666666
 window.button.focus.colorTo:	#222222
-# window.button.focus.color:	#333333
-# window.button.focus.colorTo:	#555555
 window.button.focus.picColor:	#888888
 window.button.unfocus:	raised gradient
 window.button.unfocus.Color:	#555555
