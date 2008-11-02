@@ -145,7 +145,7 @@ window.bevelWidth:	2
 window.shade:	false
 window.borderColor:	#000000
 
-window.title.focus:	gradient vertical
+window.title.focus:	raised gradient vertical
 window.title.focus.colorTo:	#aa8822
 window.title.focus.color:	#bb9933
 window.label.focus:	gradient
@@ -156,7 +156,7 @@ window.label.focus.textColor:	#ffffff
 # window.title.unfocus:	raised gradient vertical
 # window.title.unfocus.colorTo:	#226622
 # window.title.unfocus.color:	#337733
-window.title.unfocus:	flat
+window.title.unfocus:	raised
 window.title.unfocus.color:	#226622
 window.label.unfocus:	raised gradient vertical
 window.label.unfocus.color:	#669955
