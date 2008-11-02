@@ -184,10 +184,10 @@ window.button.focus.colorTo:	#222222
 # window.button.focus.color:	#333333
 # window.button.focus.colorTo:	#555555
 window.button.focus.picColor:	#888888
-window.button.unfocus.picColor:	#666666
 window.button.unfocus:	raised gradient
-window.button.unfocus.Color:	#444444
-window.button.unfocus.ColorTo:	#333333
+window.button.unfocus.Color:	#555555
+window.button.unfocus.ColorTo:	#222222
+window.button.unfocus.picColor:	#666666
 window.button.pressed:	gradient
 window.button.pressed.color:	#111111
 window.button.pressed.colorTo:	#555555
