@@ -73,10 +73,10 @@ menu.hilite.textColor:	#111111
 
 ############################################################## TOOLBAR ########
 
-toolbar.bevelWidth:	4
+toolbar.bevelWidth:	3
 
 toolbar.borderWidth:	0
-toolbar.borderColor:	#aaaaaa
+toolbar.borderColor:	#ff00ff
 
 toolbar.height:	20
 
@@ -86,53 +86,46 @@ toolbar.justify:	center
 toolbar:	raised gradient vertical
 # toolbar:	raised gradient vertical bevel1 solid interlaced
 toolbar.pixmap:	
-toolbar.colorTo:	#cccccc
-toolbar.color:	#888888
-
-toolbar.clock:	sunken gradient vertical
-toolbar.clock.justify:	center
-toolbar.clock.colorTo:	#bbbbaa
-toolbar.clock.color:	#eeeedd
-toolbar.clock.textColor:	#555555
-
-## Golden (nice):
-## Silver:
-# toolbar.workspace.color:	#82aaaa
-# toolbar.workspace.colorTo:	#ffffff
-# toolbar.workspace.textColor:	#335555
+toolbar.color:	#bb9933
+toolbar.colorTo:	#aa8822
 
 toolbar.workspace:	sunken gradient vertical
-toolbar.workspace.colorTo:	#bbbbaa
-toolbar.workspace.color:	#eeeedd
+toolbar.workspace.color:	#999977
+toolbar.workspace.colorTo:	#ddddcc
 toolbar.workspace.textColor:	#555555
 toolbar.workspace.justify:	center
 
-toolbar.button:	raised gradient vertical
-toolbar.button.colorTo:	#555555
-toolbar.button.color:	#111111
+toolbar.clock:	sunken gradient vertical
+toolbar.clock.justify:	center
+toolbar.clock.color:	#999977
+toolbar.clock.colorTo:	#ddddcc
+toolbar.clock.textColor:	#555555
+
+toolbar.button:	raised gradient
+toolbar.button.color:	#777777
+toolbar.button.colorTo:	#111111
 toolbar.button.picColor:	#bbbbbb
-toolbar.button.pressed:	flat gradient vertical
-toolbar.button.pressed.colorTo:	#111111
-toolbar.button.pressed.color:	#555555
+toolbar.button.pressed:	gradient
+toolbar.button.pressed.color:	#111111
+toolbar.button.pressed.colorTo:	#666666
 
 toolbar.iconbar.empty:	gradient vertical
-toolbar.iconbar.empty.colorTo:	#bbbbbb
-toolbar.iconbar.empty.color:	#999999
+toolbar.iconbar.empty.color:	#bb9933
+toolbar.iconbar.empty.colorTo:	#aa8822
 
 toolbar.iconbar.focused.borderWidth:	2
-toolbar.iconbar.focused.borderColor:	#aaaaaa
+toolbar.iconbar.focused.borderColor:	#b09030
 toolbar.iconbar.focused.textColor:	#dddddd
 toolbar.iconbar.focused.justify:	center
-
-toolbar.iconbar.focused:	sunken gradient vertical bevel1 solid interlaced
-toolbar.iconbar.focused.color:	#00bb00
-toolbar.iconbar.focused.colorTo:	#007700
+toolbar.iconbar.focused:	gradient vertical
+toolbar.iconbar.focused.color:	#aa8822
+toolbar.iconbar.focused.colorTo:	#bb9933
 
 toolbar.iconbar.unfocused.borderWidth:	2
-toolbar.iconbar.unfocused.borderColor:	#aaaaaa
+toolbar.iconbar.unfocused.borderColor:	#b09030
 toolbar.iconbar.unfocused:	raised gradient vertical
-toolbar.iconbar.unfocused.color:	#000077
-toolbar.iconbar.unfocused.colorTo:	#0000bb
+toolbar.iconbar.unfocused.color:	#669955
+toolbar.iconbar.unfocused.colorTo:	#446633
 toolbar.iconbar.unfocused.textColor:	#white
 toolbar.iconbar.unfocused.justify:	center
 
@@ -144,19 +137,17 @@ window.borderWidth:	1
 window.bevelWidth:	2
 window.shade:	false
 window.borderColor:	#000000
+# window.borderColor:	#aa8822
 # window.roundCorners:	TopLeft TopRight
 
 window.title.focus:	raised gradient vertical
-window.title.focus.colorTo:	#aa8822
 window.title.focus.color:	#bb9933
+window.title.focus.colorTo:	#aa8822
 window.label.focus:	gradient
 window.label.focus.colorTo:	#ccaa44
 window.label.focus.color:	#aa8822
 window.label.focus.textColor:	#ffffff
 
-# window.title.unfocus:	raised gradient vertical
-# window.title.unfocus.colorTo:	#226622
-# window.title.unfocus.color:	#337733
 window.title.unfocus:	raised gradient vertical
 window.title.unfocus.color:	#406630
 window.title.unfocus.colorTo:	#336022
@@ -165,23 +156,9 @@ window.label.unfocus.color:	#669955
 window.label.unfocus.colorTo:	#446633
 window.label.unfocus.textColor:	#eeeecc
 
-## Shaded:
-# window.title.focus:	gradient vertical
-# window.title.focus.color:	#c8c8c8
-# window.title.focus.colorTo:	#e8e8e8
-# window.title.unfocus:	gradient vertical
-# window.title.unfocus.color:	#c8c8c8
-# window.title.unfocus.colorTo:	#e8e8e8
-## Peach:
-# window.borderColor:	#fff0d8
-# window.title.focus:	flat
-# window.title.focus.color:	#fff0d8
-# window.title.unfocus:	flat
-# window.title.unfocus.color:	#fff0d8
-
 window.button.focus:	raised gradient
 window.button.focus.color:	#666666
-window.button.focus.colorTo:	#222222
+window.button.focus.colorTo:	#111111
 window.button.focus.picColor:	#888888
 window.button.unfocus:	raised gradient
 window.button.unfocus.Color:	#555555
