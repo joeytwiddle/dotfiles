@@ -129,7 +129,7 @@ toolbar.iconbar.focused.colorTo:	#bb9933
 toolbar.iconbar.unfocused.borderWidth:	2
 toolbar.iconbar.unfocused.borderColor:	#b09030
 toolbar.iconbar.unfocused:	raised gradient vertical
-toolbar.iconbar.unfocused.color:	#669955
+toolbar.iconbar.unfocused.color:	#448833
 toolbar.iconbar.unfocused.colorTo:	#446633
 toolbar.iconbar.unfocused.textColor:	#white
 toolbar.iconbar.unfocused.justify:	center
@@ -154,10 +154,10 @@ window.label.focus.color:	#aa8822
 window.label.focus.textColor:	#ffffff
 
 window.title.unfocus:	raised gradient vertical
-window.title.unfocus.color:	#406630
-window.title.unfocus.colorTo:	#336022
-window.label.unfocus:	raised gradient vertical
-window.label.unfocus.color:	#669955
+window.title.unfocus.color:	#448833
+window.title.unfocus.colorTo:	#446633
+window.label.unfocus:	gradient vertical
+window.label.unfocus.color:	#448833
 window.label.unfocus.colorTo:	#446633
 window.label.unfocus.textColor:	#eeeecc
 
