@@ -9,10 +9,15 @@
 
 ###############################################################################
 #
-# name: OrangeAndGreen
+# name: OrangeJuice
 # author: joeytwiddle
 # date: 10-09-2008
 # http://hwi.ath.cx
+#
+# Unfocused windows are matte green, focused windows and tabs are orange!
+# Buttons are dark like rubber TV controls.
+#
+# OrangeJuice can work well with a light peach theme for applications.
 #
 ############################################################## BACKGROUND #####
 
@@ -73,7 +78,7 @@ menu.hilite.textColor:	#111111
 
 ############################################################## TOOLBAR ########
 
-toolbar.bevelWidth:	3
+toolbar.bevelWidth:	4
 
 toolbar.borderWidth:	0
 toolbar.borderColor:	#ff00ff
@@ -117,7 +122,7 @@ toolbar.iconbar.focused.borderWidth:	2
 toolbar.iconbar.focused.borderColor:	#b09030
 toolbar.iconbar.focused.textColor:	#dddddd
 toolbar.iconbar.focused.justify:	center
-toolbar.iconbar.focused:	gradient vertical
+toolbar.iconbar.focused:	gradient
 toolbar.iconbar.focused.color:	#aa8822
 toolbar.iconbar.focused.colorTo:	#bb9933
 
