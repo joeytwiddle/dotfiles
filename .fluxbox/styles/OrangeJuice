@@ -127,8 +127,8 @@ toolbar.iconbar.focused.color:	#aa8822
 toolbar.iconbar.focused.colorTo:	#bb9933
 
 toolbar.iconbar.unfocused.borderWidth:	2
-toolbar.iconbar.unfocused.borderColor:	#b09030
-toolbar.iconbar.unfocused:	raised gradient vertical
+toolbar.iconbar.unfocused.borderColor:	#336633
+toolbar.iconbar.unfocused:	gradient vertical
 toolbar.iconbar.unfocused.color:	#448833
 toolbar.iconbar.unfocused.colorTo:	#446633
 toolbar.iconbar.unfocused.textColor:	#white
