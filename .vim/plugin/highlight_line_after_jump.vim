@@ -14,7 +14,7 @@ function! HighlightLine()
     execute "syntax match HLCurrentLine +".pattern."+"
     execute "syntax clear HLCurrentLine"
     execute "syntax match HLCurrentLine +".pattern."+"
-    execute "highlight HLCurrentLine term=reverse cterm=none ctermbg=magenta ctermfg=white"
+    execute "highlight HLCurrentLine term=reverse cterm=none ctermbg=magenta ctermfg=white guibg=magenta guifg=white"
     "" Freezes vim: execute "sleep 5| call UnHighlightLine()"
   endif
 endfunction
