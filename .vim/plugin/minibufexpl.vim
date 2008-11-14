@@ -649,18 +649,26 @@ function! <SID>StartExplorer(sticky, delBufNum)
  
   if has("syntax")
     syn clear
-    syn match MBENormal             '\[[^\]]*\]'
-    syn match MBEChanged            '\[[^\]]*\]+'
-    syn match MBEVisibleNormal      '\[[^\]]*\]\*+\='
-    syn match MBEVisibleChanged     '\[[^\]]*\]\*+'
+    " syn match MBENormal             '\[[^\]]*\]'
+    " syn match MBEChanged            '\[[^\]]*\]+'
+    " syn match MBEVisibleNormal      '\[[^\]]*\]\*+\='
+    " syn match MBEVisibleChanged     '\[[^\]]*\]\*+'
+    " syn match MBEGap                ' '
+    syn match MBENormal             '|*\( \|\)[^ ]* '
+    syn match MBEChanged            '|*\( \|\)[^ +]*+ '
+    syn match MBEVisibleNormal      '|*\( \|\)[^ *]*\* |*'
+    syn match MBEVisibleChanged     '|*\( \|\)[^ *+]*\*+ |*'
     
-    if !exists("g:did_minibufexplorer_syntax_inits")
+    " if !exists("g:did_minibufexplorer_syntax_inits")
       let g:did_minibufexplorer_syntax_inits = 1
-      hi def link MBENormal         Comment
-      hi def link MBEChanged        String
-      hi def link MBEVisibleNormal  Special
-      hi def link MBEVisibleChanged Special
-    endif
+      " highlight MBEGap            ctermfg=white ctermbg=magenta guibg=magenta
+      " highlight MBENormal         ctermfg=white ctermbg=blue guibg=blue
+      highlight MBENormal         term=none cterm=none gui=none ctermbg=blue ctermfg=white guibg=darkblue guifg=white
+      highlight MBEChanged        term=none cterm=none gui=none ctermbg=blue ctermfg=red guibg=darkblue guifg=red
+      " highlight MBEVisibleNormal  term=bold cterm=bold gui=bold ctermbg=green ctermfg=black guibg=green guifg=black
+      highlight MBEVisibleNormal  term=bold,reverse cterm=bold gui=bold ctermbg=white ctermfg=blue guibg=white guifg=blue
+      highlight MBEVisibleChanged term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=black guibg=yellow guifg=black
+    " endif
   endif
 
   " If you press return in the -MiniBufExplorer- then try
@@ -1084,7 +1092,9 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
             " Get filename & Remove []'s & ()'s
             let l:shortBufName = fnamemodify(l:BufName, ":t")                  
             let l:shortBufName = substitute(l:shortBufName, '[][()]', '', 'g') 
-            let l:tab = '['.l:i.':'.l:shortBufName.']'
+            " let l:tab = '['.l:i.':'.l:shortBufName.']'
+            " let l:tab = '['.l:shortBufName.']'
+            let l:tab = l:shortBufName
 
             " If the buffer is open in a window mark it
             if bufwinnr(l:i) != -1
@@ -1097,13 +1107,14 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
             endif
 
             let l:maxTabWidth = <SID>Max(strlen(l:tab), l:maxTabWidth)
+            let l:fileNames .= " "
             let l:fileNames = l:fileNames.l:tab
 
             " If horizontal and tab wrap is turned on we need to add spaces
             if g:miniBufExplVSplit == 0
-              if g:miniBufExplTabWrap != 0
-                let l:fileNames = l:fileNames.' '
-              endif
+              " if g:miniBufExplTabWrap != 0
+                let l:fileNames .= " |"
+              " endif
             " If not horizontal we need a newline
             else
               let l:fileNames = l:fileNames . "\n"
@@ -1113,6 +1124,8 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
       endif
     endif
   endwhile
+
+ " let l:fileNames = substitute(l:fileNames,"|$",'','')
 
   if (g:miniBufExplBufList != l:fileNames)
     if (a:updateBufList)
@@ -1310,10 +1323,16 @@ function! <SID>GetSelectedBuffer()
   endif
 
   let l:save_reg = @"
+  " TODO: if g:miniBufExplVSplit == 0 then get buffer# from line#
   let @" = ""
-  normal ""yi[
+  " normal ""yi[
+  normal ""y0
   if @" != ""
-    let l:retv = substitute(@",'\([0-9]*\):.*', '\1', '') + 0
+    " let l:retv = substitute(@",'\([0-9]*\):.*', '\1', '') + 0
+    " let l:retv = @" " returns the filename
+    " let l:retv = count(@"," ") + 1
+    let l:retv = substitute(@",'[^ ]*', '', 'g')
+    let l:retv = len(l:retv)/2+1
     let @" = l:save_reg
     return l:retv
   else
@@ -1353,7 +1372,11 @@ function! <SID>MBESelectBuffer()
     let l:saveAutoUpdate = g:miniBufExplorerAutoUpdate
     let g:miniBufExplorerAutoUpdate = 0
     " Switch to the previous window
-    wincmd p
+    " wincmd p
+    " TODO: make this a global default WhichWindowToSwitch
+    " I personally want down then right, because often previous or just down is my TList
+    wincmd j
+    wincmd l
 
     " If we are in the buffer explorer or in a nonmodifiable buffer with
     " g:miniBufExplModSelTarget set then try another window (a few times)
@@ -1374,6 +1397,7 @@ function! <SID>MBESelectBuffer()
     endif
 
     exec('b! '.l:bufnr)
+    " exec('argedit '.l:bufnr) " Open the file with that name.  TODO/BUG: This may not be the real pathname.
     if (l:resize)
       resize
     endif
