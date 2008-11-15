@@ -5,11 +5,16 @@
 
 function! HighlightLine()
   " set cul
+  let l:line = "FAIL"
   let l:line = GetRegAfter('""yy')
-  " echo "line = ".l:line
-  " checking :syn output, we have a nasty trailing '^@' char
+  " When i checked output of :syn HLCurrentLine, we had a nasty trailing '^@' char:
+  if l:line == "FAIL"
+    echo "failed to get register got: ".l:line
+  endif
+  let l:line = substitute(l:line,'.$','','')
   if l:line != ""
-    let l:pattern = '^' . substitute(l:line,'.'.'$','','') . '$'
+    " Convert String to regexp, by escaping regexp special chars:
+    let l:pattern = '^' . substitute(l:line,'\([.^$\\][)(*]\)','\\\\\1','g') . '$'
     " next line is a dummy to prevent the clear from complaining on the first run
     execute "syntax match HLCurrentLine +".pattern."+"
     execute "syntax clear HLCurrentLine"
@@ -25,7 +30,7 @@ function! UnHighlightLine()
   execute "syntax clear HLCurrentLine"
 endfunction
 
-function s:Cursor_Moved()
+function! Cursor_Moved()
   let cur_pos = winline()
   if g:last_pos == 0
     call HighlightLine()
@@ -50,11 +55,11 @@ function! GetRegAfter(cmd)
   return l:retv
 endfunction
 
-autocmd CursorMoved,CursorMovedI * call s:Cursor_Moved()
+autocmd CursorMoved,CursorMovedI * call Cursor_Moved()
 autocmd CursorHold * call UnHighlightLine()
 " autocmd CursorHold * call s:Cursor_Moved()
 
 let g:last_pos = 0
 
-set updatetime=500
+" set updatetime=4000
 
