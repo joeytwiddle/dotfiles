@@ -30,12 +30,13 @@ function! JrandomHighlight(pat)
 	let i = 0
 	while i < 6
 		let n = Jrandom(0, 16)
-		let truecolour = truecolour.ToHex(n)
+		let truecolour .= ToHex(n)
 		let i = i + 1
 	endwhile
 	let numcolour = Jrandom(1,8)
 	let name = "JrandomHighlight_".pattern
-	"" This next line is a dummy to prevent the clear from complaining!
+	print "name=".name
+	"" This next line prevents clear from complaining on the first run.
 	execute "syntax match ".name." +".pattern."+"
 	execute "syntax clear ".name
 	execute "syntax match ".name." +".pattern."+"
@@ -84,3 +85,4 @@ endfunction
 function! ToHex(i) " only one digit ie. 0-15!
 	return strpart("0123456789ABCDEF",a:i,1)
 endfunction
+
