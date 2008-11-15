@@ -35,7 +35,6 @@ function! JrandomHighlight(pat)
 	endwhile
 	let numcolour = Jrandom(1,8)
 	let name = "JrandomHighlight_".pattern
-	print "name=".name
 	"" This next line prevents clear from complaining on the first run.
 	execute "syntax match ".name." +".pattern."+"
 	execute "syntax clear ".name
