@@ -654,16 +654,16 @@ function! <SID>StartExplorer(sticky, delBufNum)
     " syn match MBEVisibleNormal      '\[[^\]]*\]\*+\='
     " syn match MBEVisibleChanged     '\[[^\]]*\]\*+'
     " syn match MBEGap                ' '
-    syn match MBENormal             '|*\( \|\)[^ ]* '
-    syn match MBEChanged            '|*\( \|\)[^ +]*+ '
-    syn match MBEVisibleNormal      '|*\( \|\)[^ *]*\* |*'
-    syn match MBEVisibleChanged     '|*\( \|\)[^ *+]*\*+ |*'
+    syn match MBENormal             ' *[^ ]* \(|$\|\)'
+    syn match MBEChanged            ' *[^ +]*+ \(|$\|\)'
+    syn match MBEVisibleNormal      '|* *[^ *]*\* |*'
+    syn match MBEVisibleChanged     '|* *[^ *+]*\*+ |*'
     
     " if !exists("g:did_minibufexplorer_syntax_inits")
       let g:did_minibufexplorer_syntax_inits = 1
       " highlight MBEGap            ctermfg=white ctermbg=magenta guibg=magenta
       " highlight MBENormal         ctermfg=white ctermbg=blue guibg=blue
-      highlight MBENormal         term=none cterm=none gui=none ctermbg=blue ctermfg=white guibg=darkblue guifg=white
+      highlight MBENormal         term=none cterm=none gui=none ctermbg=blue ctermfg=grey guibg=darkblue guifg=white
       highlight MBEChanged        term=none cterm=none gui=none ctermbg=blue ctermfg=red guibg=darkblue guifg=red
       " highlight MBEVisibleNormal  term=bold cterm=bold gui=bold ctermbg=green ctermfg=black guibg=green guifg=black
       highlight MBEVisibleNormal  term=bold,reverse cterm=bold gui=bold ctermbg=white ctermfg=blue guibg=white guifg=blue
