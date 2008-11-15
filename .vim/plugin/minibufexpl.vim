@@ -646,25 +646,29 @@ function! <SID>StartExplorer(sticky, delBufNum)
   " them off for the MBE window
   setlocal foldcolumn=0
   setlocal nonumber
- 
+
   if has("syntax")
     syn clear
     " syn match MBENormal             '\[[^\]]*\]'
     " syn match MBEChanged            '\[[^\]]*\]+'
     " syn match MBEVisibleNormal      '\[[^\]]*\]\*+\='
     " syn match MBEVisibleChanged     '\[[^\]]*\]\*+'
-    " syn match MBEGap                ' '
-    syn match MBENormal             ' *[^ ]* \(|$\|\)'
-    syn match MBEChanged            ' *[^ +]*+ \(|$\|\)'
-    syn match MBEVisibleNormal      '|* *[^ *]*\* |*'
-    syn match MBEVisibleChanged     '|* *[^ *+]*\*+ |*'
-    
+    syn match MBEButton             '\[[^]]*\]'
+    syn match MBEGap                '\(|\|   *\)'
+    syn match MBENormal             ' [^ *+|]* '
+    syn match MBEChanged            ' [^ *+|]*+ '
+    syn match MBEVisibleNormal      '|* [^ *+|]*\* |*'
+    syn match MBEVisibleChanged     '|* [^ *+|]*\*+ |*'
+
     " if !exists("g:did_minibufexplorer_syntax_inits")
       let g:did_minibufexplorer_syntax_inits = 1
       " highlight MBEGap            ctermfg=white ctermbg=magenta guibg=magenta
+      " highlight MBEGap            term=none cterm=none ctermbg=black ctermfg=grey guibg=black guifg=grey
+      highlight MBEGap            term=bold cterm=bold gui=bold ctermbg=darkblue ctermfg=white guibg=darkblue guifg=white
+      highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=red ctermfg=white guibg=red guifg=white
       " highlight MBENormal         ctermfg=white ctermbg=blue guibg=blue
-      highlight MBENormal         term=none cterm=none gui=none ctermbg=blue ctermfg=grey guibg=darkblue guifg=white
-      highlight MBEChanged        term=none cterm=none gui=none ctermbg=blue ctermfg=red guibg=darkblue guifg=red
+      highlight MBENormal         term=none cterm=none gui=none ctermbg=darkblue ctermfg=cyan guibg=darkblue guifg=cyan
+      highlight MBEChanged        term=reverse cterm=none gui=none ctermbg=red ctermfg=black guibg=darkred guifg=white
       " highlight MBEVisibleNormal  term=bold cterm=bold gui=bold ctermbg=green ctermfg=black guibg=green guifg=black
       highlight MBEVisibleNormal  term=bold,reverse cterm=bold gui=bold ctermbg=white ctermfg=blue guibg=white guifg=blue
       highlight MBEVisibleChanged term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=black guibg=yellow guifg=black
@@ -1096,24 +1100,26 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
             " let l:tab = '['.l:shortBufName.']'
             let l:tab = l:shortBufName
 
+            let l:tabEdges = '| ' . l:tab . ' '
             " If the buffer is open in a window mark it
-            if bufwinnr(l:i) != -1
-              let l:tab = l:tab . '*'
+            if bufwinnr(l:i) != -1 && getbufvar(l:i, '&modified') == 1
+              let l:tabEdges = '| ' . l:tab . '*+' . ' '
+            elseif bufwinnr(l:i) != -1
+              let l:tabEdges = '| ' . l:tab . '*' . ' '
+            elseif getbufvar(l:i, '&modified') == 1
+              let l:tabEdges = '| ' . l:tab . '+' . ' '
             endif
 
             " If the buffer is modified then mark it
-            if(getbufvar(l:i, '&modified') == 1)
-              let l:tab = l:tab . '+'
-            endif
 
             let l:maxTabWidth = <SID>Max(strlen(l:tab), l:maxTabWidth)
-            let l:fileNames .= " "
-            let l:fileNames = l:fileNames.l:tab
+
+            let l:fileNames .= l:tabEdges . ''
 
             " If horizontal and tab wrap is turned on we need to add spaces
             if g:miniBufExplVSplit == 0
               " if g:miniBufExplTabWrap != 0
-                let l:fileNames .= " |"
+                " let l:fileNames .= " "
               " endif
             " If not horizontal we need a newline
             else
@@ -1125,7 +1131,8 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
     endif
   endwhile
 
- " let l:fileNames = substitute(l:fileNames,"|$",'','')
+  " let l:fileNames = substitute(l:fileNames,' *$','','') . ' [X]'
+  let l:fileNames .= "|   [X]"
 
   if (g:miniBufExplBufList != l:fileNames)
     if (a:updateBufList)
@@ -1332,7 +1339,8 @@ function! <SID>GetSelectedBuffer()
     " let l:retv = @" " returns the filename
     " let l:retv = count(@"," ") + 1
     let l:retv = substitute(@",'[^ ]*', '', 'g')
-    let l:retv = len(l:retv)/2+1
+    let l:retv = strlen(l:retv)/2+1
+    " let l:retv = len(l:retv)
     let @" = l:save_reg
     return l:retv
   else
