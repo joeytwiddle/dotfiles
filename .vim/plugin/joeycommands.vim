@@ -16,16 +16,15 @@ endfunction
 
 " map clear <C-H>
 " map! <C-H> :call JrandomHighlight()<CR>
-map <C-H> :call JrandomHighlight('\<'.expand("<cword>").'\>')<CR>
+map <C-H> :call JrandomHighlight(expand("<cword>"))<CR>
 
 if has("menu")
-	amenu &Joey's\ Tools.&Colour\ current\ word\ <C-H> :call JrandomHighlight('\<'.expand("<cword>").'\>')<CR>
+	amenu &Joey's\ Tools.&Colour\ current\ word\ <C-H> :call JrandomHighlight(expand("<cword>"))<CR>
 endif
 
 function! JrandomHighlight(pat)
-	" let pattern = JwordUnderCursor()
-	" let pattern = '\<'.expand("<cword>").'\>'
-	let pattern = a:pat
+	let name = "JrandomHighlight_".a:pat
+	let pattern = '\<'.substitute(a:pat,'+','\\+','g').'\>'
 	let truecolour = "#"
 	let i = 0
 	while i < 6
@@ -34,7 +33,8 @@ function! JrandomHighlight(pat)
 		let i = i + 1
 	endwhile
 	let numcolour = Jrandom(1,8)
-	let name = "JrandomHighlight_".pattern
+	" TODO: We can generate more "colours" by setting italic/bold/reverse/background!
+	echo "Highlighting ".a:pat." in ".numcolour."/".truecolour." (".name.")"
 	"" This next line prevents clear from complaining on the first run.
 	execute "syntax match ".name." +".pattern."+"
 	execute "syntax clear ".name

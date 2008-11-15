@@ -21,3 +21,6 @@ source ~/.vim/after/syntax/all.vim
 " :autocmd BufWritePre,FilterWritePre    *.* set expandtab | retab!
 " :set tabstop=2
 " :set shiftwidth=2
+
+" Appears to be # by default which sucks for my shellscripts
+:set foldignore=

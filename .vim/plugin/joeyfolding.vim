@@ -1,5 +1,13 @@
+" Type :Joeyfolding or find it on the gvim menu.
+" It will start up vim folding for you with nice colours and 2 columns for mouse interaction.
+" - It can detect some foldable blocks which Vim doesn't auto-detect:
+" - It has rules for folding diff/patch files :D
+" - It will always fold { ... } blocks
+" - It can also fold: C++ #ifdefs, Latex
+" If folding is still poor after :Joeyfolding, try :set foldmethod=index
+
 " Much of this is now in treefolding.vim, which is auto-generated from treevim.sh.
-" Can we hope to factor out the common code?
+" Can we hope to factor out the common code?  (jsh script <-dep-> joey rc script)
 
 :command! Joeyfolding call Joeyfolding()
 if has("menu")
@@ -77,10 +85,10 @@ endif
 
 	" :set foldmethod=manual
 
-	" Fold colours
-	:highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000080 guifg=White
-	" :highlight foldColumn ctermbg=Grey ctermfg=Blue cterm=none gui=bold guifg=Green guibg=#000060
-	:highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#000080
+	" " Fold colours
+	" :highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000080 guifg=White
+	" " :highlight foldColumn ctermbg=Grey ctermfg=Blue cterm=none gui=bold guifg=Green guibg=#000060
+	" :highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#000080
 
 	:syn sync fromstart
 

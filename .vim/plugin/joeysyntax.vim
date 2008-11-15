@@ -17,7 +17,12 @@ endif
 	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
 	" :set guifont=-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv
 	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-14-*-*-*-m-*-iso10646-1
-	:set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso10646-1
+	" Good for Windows, bad on Linux:
+	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso10646-1
+	" :set guifont=LucidaTypewriter\ 8
+	" :set guifont=LucidaTypewriter\ 7
+	:set guifont=clean
+
 	:set background=dark
 
 	:syntax on
@@ -51,12 +56,23 @@ endif
 	" :syntax keyword jTodo TODO Todo BUG BUGS Consider:
 	"" Hmm the standard TODO's are contained inside Comment types
 	" :syntax contain jTodo BUG linksto Todo
-	"" BUG: Doesn't always work.  Works better now.  Wish I could say containedin=*
+	"" BUG: Doesn't always work.  Works better now.  Wish I could say containedin=*  Err, they don't seem to be working at all, only "TODO" gets highlighted, and i suspect that's a script somewhere else doing it ^^
 	" :highlight! link jTodo Todo
-	:syntax keyword jTodo TODO Todo ToDo todo BUG BUGS containedin=Comment,jShComment,jComment,shComment
-	:highlight jTodo ctermbg=red ctermfg=black guibg=red guifg=black
-	:syntax keyword jNote NOTE Note \<NB: Consider: CONSIDER containedin=Comment,jShComment,jComment,shComment
-	:highlight jNote ctermbg=yellow ctermfg=black guibg=yellow guifg=black
+	" NOTE: these DO work, if you call :Joeysyntax after vim has started.
+	:syntax keyword jTodo TODO Todo ToDo todo BUG BUGS WARN CONSIDER Consider TEST TESTING Testing containedin=Comment,jShComment,jComment,shComment,ucComment,vimComment
+	" :syntax keyword jTodo TODO Todo ToDo todo BUG BUGS WARN containedin=Comment,jShComment,jComment,shComment linksto Todo
+	"" Maybe worth noting, when I type :highlight, I see something like this:
+	" :syntax keyword jTodo contained COMBAK RELEASED NOT TODO WIP WARN links to Todo
+	"" Also interesting, after doing :Joeysyntax, lines containing WARN get turned yellow, although again I don't think that's done by this script!
+	" :syntax keyword jNote NOTE Note \<NB: CONSIDER Consider: TEST TESTING containedin=Comment,jShComment,jComment,shComment
+	" The "Consider:" was never getting highlighted
+	:syntax keyword jNote NOTE Note \<NB: DONE Done: FIXED: containedin=Comment,jShComment,jComment,shComment,ucComment,vimComment
+	" oh it appears to be case-insensitive after all
+
+	" :syntax keyword vimTodo contained TODO BUG WARN COMBAK RELEASED NOT " linksto Todo?
+	" :syntax keyword vimLook contained CONSIDER TEST NOTE
+
+	" Hmm the highlighting is working ok for me in shellscripts, if i run :Joeysyntax, but this vimscript looks weird
 
 	:syntax match jXmlBits /\(<\|>\)[[:alpha:]]*/
 	:highlight jXmlBits ctermfg=red term=bold
@@ -73,4 +89,4 @@ endif
 
 :endfun
 
-" :Joeysyntax
+call Joeysyntax()

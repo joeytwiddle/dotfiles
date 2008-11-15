@@ -38,14 +38,18 @@ endif
 	" :highlight Comment ctermfg=DarkCyan guifg=DarkCyan
 	" :highlight Comment term=none cterm=none ctermfg=DarkMagenta guifg=LightMagenta
 	"" Previous was getting too dark for me, so ...
-	:highlight Comment term=none cterm=bold ctermfg=Magenta guifg=LightMagenta
+	" :highlight Comment term=none cterm=bold ctermfg=Magenta guifg=LightMagenta
+	:highlight Comment term=none cterm=none ctermfg=blue guifg=#7070ee
 	" :highlight Comment cterm=none ctermfg=DarkCyan guifg=LightMagenta
 	" :highlight link jComment Comment
 	:highlight jComment ctermfg=DarkYellow guifg=DarkYellow
 	:highlight SpecialChar ctermfg=Red guifg=Red
 	:highlight String ctermfg=DarkGreen guifg=#80f080 cterm=NONE
-	:highlight Todo term=reverse cterm=reverse ctermbg=black ctermfg=red
-	:highlight jNote term=reverse cterm=reverse ctermbg=black ctermfg=yellow
+	" vimTodo links to Todo
+	:highlight Todo term=reverse cterm=reverse ctermbg=black ctermfg=red guibg=red guifg=black
+	:highlight jTodo term=reverse cterm=reverse ctermfg=black ctermbg=red guibg=red guifg=black
+	" :highlight jNote ctermbg=yellow ctermfg=black guibg=yellow guifg=black
+	:highlight jNote term=reverse cterm=reverse ctermbg=black ctermfg=yellow guibg=yellow guifg=black
 
 	" Code
 	:highlight Boolean ctermfg=LightBlue guifg=LightBlue
@@ -149,6 +153,29 @@ endif
 
 	" Highlight search (doesn't work if called at top of this file!)
 	:set hlsearch
+
+	" This was an attempt to colour syntax highlight only the current buffer, but
+	" :syn on/off appear to work globally!
+	" function! SynOn()
+	" syn on
+	" endfunction
+	" function! SynOff()
+	" syn off
+	" endfunction
+	" autocmd BufEnter * call SynOn()
+	" autocmd BufLeave * call SynOff()
+
+	" :highlight StatusLine term=bold,reverse cterm=bold,reverse ctermfg=green ctermbg=black
+	" :highlight StatusLineNC term=reverse cterm=reverse ctermfg=blue ctermbg=white
+	" :highlight StatusLine term=bold,reverse cterm=bold,reverse ctermfg=cyan ctermbg=black
+	" :highlight StatusLineNC term=reverse cterm=reverse ctermfg=grey ctermbg=black
+	:highlight StatusLine term=reverse,bold cterm=bold ctermfg=black ctermbg=white gui=none,bold guifg=black guibg=white
+	:highlight StatusLineNC term=reverse cterm=bold ctermfg=black ctermbg=grey gui=none,bold guifg=black guibg=grey
+
+	" Fold colours
+	:highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000080 guifg=White
+	" :highlight foldColumn ctermbg=Grey ctermfg=Blue cterm=none gui=bold guifg=Green guibg=#000060
+	:highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#000080
 
 :endfun
 
