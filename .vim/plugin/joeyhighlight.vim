@@ -22,7 +22,8 @@ endif
 
 	:highlight Title ctermbg=black ctermfg=green guibg=#000060 guifg=#00ff00
 
-	:highlight WarningMsg ctermbg=black ctermfg=red cterm=bold
+	" :highlight WarningMsg ctermbg=black ctermfg=red cterm=bold
+	:highlight WarningMsg term=reverse,bold cterm=reverse,bold gui=reverse,bold ctermbg=yellow ctermfg=red guibg=yellow guifg=red
 
 	" :highlight Normal ctermfg=LightGray guibg=#000000 guifg=LightGray
 

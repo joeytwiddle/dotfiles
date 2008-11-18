@@ -2,6 +2,7 @@
 " DONE: I would prefer to change the bg colour of the line
 "       This could be done with a temporary syntax+highlight (altho only
 "       really works if the line is unique!).
+" TODO: Still errors when dealing with '+'s, whether I escape them or not!
 
 if exists('g:hiline') && g:hiline == 0
 else
@@ -23,14 +24,14 @@ function! HighlightLine()
   else
     " Convert String to regexp, by escaping regexp special chars:
     " let l:pattern = substitute(l:line,'\([.^$\\][)(]\|\*\|\\\|"\|\~\)','\\\1','g')
-    let l:pattern = substitute(l:line,'\([.^$\\][)(]\|\*\|\\\|\"\|\~\)','\\\1','g')
+    let l:pattern = substitute(l:line,'\([.^$\\][]\|\*\|\\\|\"\|\~\)','\\\1','g')
     let l:pattern = '^' . l:pattern . '$'
     " next line is a dummy to prevent the clear from complaining on the first run
-    " echo "got pattern: ".l:pattern
-    execute "syntax match HLCurrentLine \"".pattern."\""
-    execute "syntax clear HLCurrentLine"
-    execute "syntax match HLCurrentLine \"".pattern."\""
-    execute "highlight HLCurrentLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white"
+    echo "got pattern: ".l:pattern
+    execute 'syntax match HLCurrentLine "'.pattern.'"'
+    execute 'syntax clear HLCurrentLine'
+    execute 'syntax match HLCurrentLine "'.pattern.'"'
+    execute 'highlight HLCurrentLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white'
     "" Freezes vim: execute "sleep 5| call UnHighlightLine()"
   endif
 endfunction

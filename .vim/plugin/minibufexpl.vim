@@ -671,7 +671,11 @@ function! <SID>StartExplorer(sticky, delBufNum)
       highlight MBEChanged        term=reverse cterm=none gui=none ctermbg=red ctermfg=black guibg=darkred guifg=white
       " highlight MBEVisibleNormal  term=bold cterm=bold gui=bold ctermbg=green ctermfg=black guibg=green guifg=black
       highlight MBEVisibleNormal  term=bold,reverse cterm=bold gui=bold ctermbg=white ctermfg=blue guibg=white guifg=blue
-      highlight MBEVisibleChanged term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=black guibg=yellow guifg=black
+      " highlight MBEVisibleChanged term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=black guibg=yellow guifg=black
+      " There seems no point making MBEVisibleChanged differ from
+      " MBEVisibleNormal, since it is inconsistent - it only updates when a
+      " tab is switched, not when the current buffer is modified or saved.
+      highlight MBEVisibleChanged  term=bold,reverse cterm=bold gui=bold ctermbg=white ctermfg=blue guibg=white guifg=blue
     " endif
   endif
 
