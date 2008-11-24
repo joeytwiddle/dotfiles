@@ -128,7 +128,7 @@ toolbar.iconbar.focused.colorTo:	#bb9933
 
 toolbar.iconbar.unfocused.borderWidth:	2
 toolbar.iconbar.unfocused.borderColor:	#336633
-toolbar.iconbar.unfocused:	gradient vertical
+toolbar.iconbar.unfocused:	raised gradient vertical
 toolbar.iconbar.unfocused.color:	#448833
 toolbar.iconbar.unfocused.colorTo:	#446633
 toolbar.iconbar.unfocused.textColor:	#white
@@ -163,14 +163,14 @@ window.label.unfocus.textColor:	#eeeecc
 
 window.button.focus:	raised gradient
 window.button.focus.color:	#666666
-window.button.focus.colorTo:	#111111
-window.button.focus.picColor:	#888888
+window.button.focus.colorTo:	#222222
+window.button.focus.picColor:	#777777
 window.button.unfocus:	raised gradient
 window.button.unfocus.Color:	#555555
 window.button.unfocus.ColorTo:	#222222
-window.button.unfocus.picColor:	#666666
+window.button.unfocus.picColor:	#606060
 window.button.pressed:	gradient
-window.button.pressed.color:	#111111
+window.button.pressed.color:	#222222
 window.button.pressed.colorTo:	#555555
 
 ## handleWidth is actually height!

@@ -163,15 +163,16 @@ window.shade:	false
 # window.borderColor:	#d0d0d0
 # window.borderColor:	#2a44c2
 # window.borderColor:	#2a8888
-window.borderColor:	#005500
+# window.borderColor:	#556666
+window.borderColor:	#444444
 # window.borderColor:	#3350d8
 #
 ## Nice simple grey:
 # window.title.focus:	flat
 # window.title.focus.color:	#3333bb
 window.title.focus:	gradient vertical
-window.title.focus.Color:	#ee9944
-window.title.focus.ColorTo:	#775511
+window.title.focus.Color:	#ddaa33
+window.title.focus.ColorTo:	#663322
 # window.title.unfocus:	flat
 # window.title.unfocus.color:	#3333bb
 window.title.unfocus:	gradient vertical
@@ -217,26 +218,24 @@ window.title.height:	26
 # window.label.unfocus.textColor:	#6f6f6f
 
 # window.label.focus:	flat gradient vertical bevel1 solid interlaced
-# window.label.focus.color:	#2244aa
-# window.label.focus.color:	#004400
 # window.label.focus.colorTo:	#006000
 # window.label.focus:	gradient vertical
-# window.label.focus.colorTo:	#3355cc
-# window.label.focus.color:	#2233cc
-window.label.focus:	gradient
-window.label.focus.color:	#222288
-window.label.focus.colorTo:	#4444ff
+# window.label.focus.colorTo:	#337722
+# window.label.focus.color:	#335522
+# window.label.focus:	gradient vertical
+window.label.focus.color:	#441100
+window.label.focus.colorTo:	#bb9900
 window.label.focus.textColor:	#ffffff
+window.label.focus:	sunken gradient horizontal bevel1 solid interlaced
 window.label.unfocus:	raised gradient vertical
-# window.label.unfocus.color:	#009900
-# window.label.unfocus.colorTo:	#006600
-# window.label.unfocus.color:	#009900
-# window.label.unfocus.colorTo:	#006600
-# window.label.unfocus.color:	#4480cc
-# window.label.unfocus.colorTo:	#2270aa
-window.label.unfocus.color:	#aaddff
-window.label.unfocus.colorTo:	#4488aa
-window.label.unfocus.textColor:	#226688
+# window.label.unfocus.color:	#aaddff
+# window.label.unfocus.colorTo:	#4488aa
+window.label.unfocus.color:	#779955
+window.label.unfocus.colorTo:	#446633
+# window.label.unfocus:	raised gradient
+# window.label.unfocus.colorTo:	#999944
+# window.label.unfocus.color:	#777744
+window.label.unfocus.textColor:	#eeeecc
 
 # window.button.pressed.color:	#ee2211
 # window.button.pressed.colorTo:	#ff00ff

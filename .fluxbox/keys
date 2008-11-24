@@ -1,37 +1,121 @@
-# OnTitlebar Mouse2 :MacroCmd {Focus} {StartTabbing} {Lower}
-OnTitlebar Mouse2 :StartTabbing
+# !mouse actions added by fluxbox-update_configs
+# OnTitlebar Mouse2 :StartTabbing
+# 
+# !mouse actions added by fluxbox-update_configs
 # OnTitlebar Double Mouse1 :Shade
 # OnTitlebar Mouse3 :WindowMenu
-OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
+# OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnToolbar Mouse4 :NextWorkspace
+# OnToolbar Mouse5 :PrevWorkspace
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnDesktop Mouse1 :HideMenus
+# OnDesktop Mouse2 :WorkspaceMenu
+# OnDesktop Mouse3 :RootMenu
+# OnDesktop Mouse4 :NextWorkspace
+# OnDesktop Mouse5 :PrevWorkspace
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnTitlebar Mouse2 :StartTabbing
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnTitlebar Double Mouse1 :Shade
+# OnTitlebar Mouse3 :WindowMenu
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
+# OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnToolbar Mouse4 :NextWorkspace
+# OnToolbar Mouse5 :PrevWorkspace
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnDesktop Mouse1 :HideMenus
+# OnDesktop Mouse2 :WorkspaceMenu
+# OnDesktop Mouse3 :RootMenu
+# OnDesktop Mouse4 :NextWorkspace
+# OnDesktop Mouse5 :PrevWorkspace
+
+## Joey's:
+
+## Basic tiling - kinda sux:
+Control Mod1 a :ArrangeWindows
+
+Control Mod1 r :Reconfigure
+Control Shift F2 :CommandDialog
+
+## Tabbing with Middle button:
+OnTitlebar Mouse2 :MacroCmd {Focus} {StartTabbing} {Lower}
+## These two don't work (but are inteded to avoid the lowering):
+OnTitlebar Mod1 Mouse2 :MacroCmd {Focus} {StartTabbing}
+OnTitlebar Mod4 Mouse2 :MacroCmd {Focus} {StartTabbing}
+
+# OnTitlebar Mouse2 :StartTabbing
+# OnTitlebar Double Mouse1 :Shade
+# OnTitlebar Mouse3 :WindowMenu
 # OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing BottomRight}
 # OnDesktop Mouse1 :hideMenus
 # OnDesktop Mouse2 :workspaceMenu
 # OnDesktop Mouse3 :rootMenu
-OnDesktop Mouse4 :nextWorkspace
-OnDesktop Mouse5 :prevWorkspace
+OnDesktop Mouse4 :PrevWorkspace 3
+OnDesktop Mouse5 :NextWorkspace 3
 
-OnTitlebar Double Mouse1 :MacroCmd {Lower} {PrevWindow {groups}}
+OnToolbar Mouse4 :PrevWorkspace
+OnToolbar Mouse5 :NextWorkspace
+
+OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
+OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+OnWindow Mod1 Mouse2 :MacroCmd {Raise} {Focus} {StartTabbing} {Lower}
+
+## Sometimes brings the window back to the front again after (due to focus?)
+OnTitlebar Double Mouse1 :Lower
+# OnTitlebar Double Mouse1 :MacroCmd {Lower}
+## Sometimes bring iconified windows up!
+# OnTitlebar Double Mouse1 :MacroCmd {Lower} {PrevWindow {groups}}
+# OnTitlebar Double Mouse1 :MacroCmd {Lower} {PrevWindow {groups} (stuck=no) (shaded=no) (minimized=no)}
 # OnTitlebar Mouse2 :Lower
 OnTitlebar Mouse3 :Shade
-OnTitlebar Double Mouse3 :WindowMenu
-OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+# OnTitlebar Double Mouse3 :WindowMenu
+# OnTitlebar Mod1 Mouse3 :WindowMenu
+OnTitlebar Control Mouse3 :WindowMenu
+OnTitlebar Mod1 Control Mouse3 :WindowMenu
+OnTitlebar Mouse4 :TakeToPrevWorkspace
+OnTitlebar Mouse5 :TakeToNextWorkspace
 
 OnDesktop Mouse1 :hideMenus
 OnDesktop Mouse2 :workspaceMenu
 OnDesktop Mouse3 :rootMenu
+
+## The Lower works but the StartTabbing does not.
+Mod1 t :MacroCmd {Raise} {Focus} {StartTabbing} {Lower}
+Mod4 t :StartTabbing
+
+## Currently moves all windows on all desktops!
+# Shift Control Mod1 Left :MacroCmd {ForEach {SendToPrevWorkspace 1}} {PrevWorkspace}
+# Shift Control Mod1 Right :MacroCmd {ForEach {SendToNextWorkspace 1}} {NextWorkspace}
+# Shift Control Mod1 Up :MacroCmd {ForEach {SendToPrevWorkspace 3}} {PrevWorkspace}
+# Shift Control Mod1 Down :MacroCmd {ForEach {SendToNextWorkspace 3}} {NextWorkspace}
 
 # According to Hwi's xev, my key "Alt Gr" is Mode_switch, "Win right" is Multi_key, followed by Menu and Control_R
 
 Control Escape :RootMenu
 
 # Move between tabs
-Mod4 Left :PrevTab
-Mod4 Right :NextTab
+Mod1 Left :PrevTab
+Mod1 Right :NextTab
 Control Tab :PrevTab
-Control grave :NextTab
+# Control grave :NextTab
 Control Shift Tab :NextTab
-Mod1 Left :MoveTabLeft
-Mod1 Right :MoveTabRight
+Mod4 Left :MoveTabLeft
+Mod4 Right :MoveTabRight
+Mod4 Shift Left :MoveTabLeft
+Mod4 Shift Right :MoveTabRight
 # not working:
 # Mod1 braceleft :MovePrevTab
 # Mod4 braceleft :MovePrevTab
@@ -42,6 +126,9 @@ Mod1 Right :MoveTabRight
 # A couple of these are disabled so we can use them through xvncviewer
 # Mod1 Tab :NextWindow 0
 # Mod1 grave :PrevWindow 0
+# Control grave :ClientMenu
+Control grave :ClientMenu (Workspace=[current])
+# Mod1 1 :ClientMenu
 Mod1 Tab :NextWindow {groups}
 Mod1 grave :PrevWindow {groups}
 Mod1 Shift Tab :NextWindow 0
@@ -63,8 +150,9 @@ Mod1 d :ShadeWindow
 Mod4 d :ShadeWindow
 Mod1 o :DetachClient
 Mod4 o :DetachClient
-Mod1 s :StickWindow
-Mod4 s :StickWindow
+# Mod1 s :StickWindow
+Mod1 s :StickWindow {groups} (shaded=no)
+Mod4 s :StickWindow {groups} (shaded=no)
 Mod1 i :Minimize
 Mod4 i :Minimize
 Mod1 z :MaximizeWindow
@@ -124,10 +212,29 @@ Shift Mod1 Down :TakeToNextWorkspace 3
 # Mod1 KP_Up :BigNudgeUp
 # Mod4 KP_Up :BigNudgeUp
 ## Fluxbox-style:
-Mod1 KP_Right :MoveRight +32
-Mod1 KP_Left :MoveRight -32
-Mod1 KP_Up :MoveUp +32
-Mod1 KP_Down :MoveUp -32
+Mod1 KP_Right :MoveRight +25
+Mod1 KP_Left :MoveRight -25
+Mod1 KP_Up :MoveUp +25
+Mod1 KP_Down :MoveUp -25
+Mod4 KP_Right :MoveRight +8
+Mod4 KP_Left :MoveRight -8
+Mod4 KP_Up :MoveUp +8
+Mod4 KP_Down :MoveUp -8
+## Move all windows together - this can be useful to recover after wm restarts and they have all shifted a little bit out of place.
+## DONE: Seems to work double/triple/etc. on groups of tags - should do for each group not for each tab.
+# Shift Control Right :ForEach {MoveRight +4} {{groups}}
+# Shift Control Left :ForEach {MoveRight -4} {{groups}}
+Shift Control Up :ForEach {MoveUp +4} {{groups}}
+Shift Control Down :ForEach {MoveUp -4} {{groups}}
+## The KP stuff appears to have stopped working.  (Blame x11vnc?)
+Shift Control KP_Right :ForEach {MoveRight +4} {{groups}}
+Shift Control KP_Left :ForEach {MoveRight -4} {{groups}}
+Shift Control KP_Up :ForEach {MoveUp +4} {{groups}}
+Shift Control KP_Down :ForEach {MoveUp -4} {{groups}}
+Control Mod1 KP_Right :ForEach {MoveRight +4} {{groups}}
+Control Mod1 KP_Left :ForEach {MoveRight -4} {{groups}}
+Control Mod1 KP_Up :ForEach {MoveUp +4} {{groups}}
+Control Mod1 KP_Down :ForEach {MoveUp -4} {{groups}}
 
 ## Resizing windows
 # Mod1 KP_5 :VerticalDecrement
@@ -152,7 +259,7 @@ Mod1 KP_Subtract :ExecCommand volumedown 2
 Mod1 KP_7 :ExecCommand xmms -r
 # (forward)
 # Mod1 KP_9 :ExecCommand xmms -f
-Mod1 KP_9 :ExecCommand nextsong
+Mod1 KP_9 :ExecCommand /home/joey/j/jsh nextsong
 # (pause)
 Mod1 KP_0 :ExecCommand xmms -u
 # (play)
@@ -166,5 +273,7 @@ Mod1 KP_Delete :ExecCommand xmms -s
 # None XF86AudioStop :ExecCommand xmms -s
 Mod1 Print :ExecCommand import -window root /tmp/screenshot-$$.bmp
 Mod4 Print :ExecCommand import -window root /tmp/screenshot-$$.bmp
+
+
 
 
