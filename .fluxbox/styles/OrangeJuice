@@ -107,9 +107,9 @@ toolbar.clock.colorTo:	#ddddcc
 toolbar.clock.textColor:	#555555
 
 toolbar.button:	raised gradient
-toolbar.button.color:	#777777
-toolbar.button.colorTo:	#111111
-toolbar.button.picColor:	#bbbbbb
+toolbar.button.color:	#666666
+toolbar.button.colorTo:	#333333
+toolbar.button.picColor:	#999999
 toolbar.button.pressed:	gradient
 toolbar.button.pressed.color:	#111111
 toolbar.button.pressed.colorTo:	#666666
