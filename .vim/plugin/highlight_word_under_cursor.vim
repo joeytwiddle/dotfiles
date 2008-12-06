@@ -1,7 +1,10 @@
-" The original used cul and nocul to underline the newly reached line.
-" DONE: I would prefer to change the bg colour of the line
-"       This could be done with a temporary syntax+highlight (altho only
-"       really works if the line is unique!).
+" TODO: Refactor out the expand("<cword>") - maybe pass it into " HighlightWord().
+" TODO: In fact <cword> isn't really what we want - it captures *nearest* word
+" If we are over whitespace (desirable/not?), it includes '*' in the caught
+" word (fiddly wrt C pointer vars).
+" TODO: Can slow vim down.  if we are scrolling about the file, (if we've done
+" HighlightWord three times in the last second, then skip highlighting until
+" user has calmed down.
 
 if exists('g:hiword') && g:hiword == 0
 else
@@ -24,8 +27,7 @@ function! HighlightWord()
     " Convert String to regexp, by escaping regexp special chars:
     " let l:pattern = substitute(l:word,'\([.^$\\+][)(]\|\*\)','\\\1','g')
     " let l:pattern = substitute(l:word,'\([.^$]\|\*\|\\\|\"\|\~\|\[\|\]\|+\)','\\\1','g')
-    let l:pattern = substitute(l:word,'\([.^$\\]\|\[\|\]\*\|\\\|\"\|\~\)','\\\1','g')
-    " let l:pattern = '^' . l:pattern . '$'
+    let l:pattern = substitute(l:word,'\([.^$*\\]\|\[\|\]\|\\\|\"\|\~\)','\\\1','g')
     " let l:pattern = '\<' . l:pattern . '\>'
     let l:pattern = l:pattern
     " echo "got pattern: ".l:pattern
@@ -33,7 +35,7 @@ function! HighlightWord()
     execute 'syntax match HLCurrentWord "'.pattern.'"'
     execute 'syntax clear HLCurrentWord'
     execute 'syntax match HLCurrentWord "'.pattern.'"'
-    execute 'highlight HLCurrentWord term=reverse cterm=none ctermbg=red ctermfg=white guibg=darkred guifg=white'
+    execute 'highlight HLCurrentWord term=reverse cterm=none ctermbg=darkgreen ctermfg=white guibg=darkgreen guifg=white'
     "" Freezes vim: execute "sleep 5| call UnHighlightWord()"
   endif
 endfunction
