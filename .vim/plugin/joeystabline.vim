@@ -81,7 +81,7 @@ autocmd GUIEnter * hi! TabLineSel term=bold,reverse ctermfg=black ctermbg=yellow
 " highlight TabLine cterm=none ctermbg=blue ctermfg=white
 highlight TabLine term=none cterm=none ctermbg=white ctermfg=blue
 " highlight TabLineSel term=bold cterm=bold ctermbg=green ctermfg=black
-highlight TabLineSel term=bold cterm=bold ctermbg=blue ctermfg=white
+highlight TabLineSel term=bold cterm=bold ctermbg=blue ctermfg=white guifg=grey
 " highlight TabLineFill cterm=none ctermbg=blue ctermfg=white
 highlight TabLineFill term=none cterm=none ctermbg=white ctermfg=black
 
