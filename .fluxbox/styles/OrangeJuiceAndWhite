@@ -215,8 +215,8 @@ window.title.height:	25
 # window.label.focus.color:	#aa9900
 # window.label.focus.colorTo:	#000000
 window.label.focus:	gradient vertical
-window.label.focus.colorTo:	#aa8822
-window.label.focus.color:	#bb9933
+window.label.focus.color:	#aa8822
+window.label.focus.colorTo:	#bb9933
 # window.label.focus.colorTo:	#aa8822
 # window.label.focus.color:	#ccaa44
 # window.label.focus:	raised gradient vertical
@@ -305,10 +305,8 @@ window.grip.focus.color:	#505050
 window.handle.unfocus:	raised gradient vertical
 window.handle.unfocus.color:	#999999
 window.handle.unfocus.colorTo:	#666666
-window.grip.unfocus:	raised
-# window.grip.unfocus.color:	#228822
-window.grip.unfocus.color:	#008800
-window.grip.unfocus.colorTo:	#
+window.grip.unfocus:	raised flat
+window.grip.unfocus.color:	#484848
 
 ## Grey handles:
 # window.handle.focus.color:	#999999
