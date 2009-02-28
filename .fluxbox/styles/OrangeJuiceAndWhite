@@ -1,0 +1,318 @@
+# vim: ts=40
+
+############################################################
+#  This work is licensed under the Creative Commons        #
+#  Attribution-NonCommercial-ShareAlike 2.5 License.       #
+#  To view a copy of this license, visit                   #
+#  http://creativecommons.org/licenses/by-sa/2.5/          #
+#  or send a letter to Creative Commons,                   #
+#  559 Nathan Abbott Way, Stanford, California 94305, USA. #
+############################################################
+
+###############################################################################
+#
+# name: OrangeJuiceAndWhite
+# author: joeytwiddle
+# date: 10-09-2008
+# http://hwi.ath.cx
+#
+############################################################## BACKGROUND #####
+
+background:	none
+
+# background:	flat gradient crossdiagonal
+# background.color:	#081866
+# background.colorTo:	#66aadd
+
+## Blue grid from MerleyKay:
+# background:                          mod
+# background.modX:                     5
+# background.modY:                     5
+# background.color:                    rgb:52/60/75
+# background.colorTo:                  rgb:62/70/85
+
+############################################################## FONTS ##########
+
+window.font:	sans-8:bold
+menu.title.font:	sans-13:bold
+menu.frame.font:	sans-12
+toolbar.clock.font:	sans-10
+toolbar.workspace.font:	sans-9
+toolbar.iconbar.focused.font:	sans-8:bold
+toolbar.iconbar.unfocused.font:	sans-8
+
+############################################################## MENU ###########
+
+menu.bevelWidth:	8
+menu.borderWidth:	0
+menu.bullet:	triangle
+menu.bullet.position:	Right
+menu.title.justify:	center
+menu.frame.justify:	left
+#menu.itemHeight:	35
+#menu.titleHeight:	21
+
+## Golden:
+# menu.borderColor:	#999977
+# menu.title.color:	#bbbb88
+# menu.title.colorTo:	#ddddaa
+# menu.title.textColor:	#000000
+# menu.frame.color:	#ccccbb
+# menu.frame.colorTo:	#aaaa99
+# menu.frame.textColor:	#000000
+# menu.frame.disableColor:	#666666
+# menu.hilite.color:	#cccc99
+# menu.hilite.textColor:	#111111
+
+menu.title:	raised gradient vertical
+# menu.borderColor:	#ddddaa
+menu.title.color:	#00aa00
+menu.title.colorTo:	#008800
+menu.title.textColor:	#eeeeee
+menu.frame:	gradient vertical
+# menu.frame:	gradient
+## White/blue/silver:
+# menu.frame.color:	#e8ecf4
+# menu.frame.colorTo:	#ecf0f8
+## Peach:
+# menu.frame.color:	#e4dcd0
+# menu.frame.colorTo:	#f4ece0
+## Grey:
+menu.frame.color:	#e4e4e4
+menu.frame.colorTo:	#ececec
+menu.frame.textColor:	#000000
+menu.frame.disableColor:	#666666
+# menu.hilite:	sunken gradient vertical bevel1 solid interlaced
+menu.hilite:	raised gradient vertical
+menu.hilite.color:	#ffee00
+menu.hilite.colorTo:	#bb7700
+menu.hilite.textColor:	#111111
+
+############################################################## TOOLBAR ########
+
+toolbar.bevelWidth:	4
+
+toolbar.borderWidth:	0
+toolbar.borderColor:	#aaaaaa
+
+toolbar.height:	20
+
+toolbar.justify:	center
+
+
+toolbar:	raised gradient vertical
+# toolbar:	raised gradient vertical bevel1 solid interlaced
+toolbar.pixmap:	
+toolbar.color:	#cccccc
+toolbar.colorTo:	#888888
+
+toolbar.clock:	sunken gradient vertical
+toolbar.clock.justify:	center
+toolbar.clock.color:	#bbbbaa
+toolbar.clock.colorTo:	#eeeedd
+toolbar.clock.textColor:	#555555
+
+## Golden (nice):
+## Silver:
+# toolbar.workspace.color:	#82aaaa
+# toolbar.workspace.colorTo:	#ffffff
+# toolbar.workspace.textColor:	#335555
+
+toolbar.workspace:	sunken gradient vertical
+toolbar.workspace.color:	#bbbbaa
+toolbar.workspace.colorTo:	#eeeedd
+toolbar.workspace.textColor:	#555555
+toolbar.workspace.justify:	center
+
+toolbar.button:	raised gradient vertical
+toolbar.button.color:	#555555
+toolbar.button.colorTo:	#111111
+toolbar.button.picColor:	#bbbbbb
+toolbar.button.pressed:	flat gradient vertical
+toolbar.button.pressed.color:	#111111
+toolbar.button.pressed.colorTo:	#555555
+
+toolbar.iconbar.empty:	gradient vertical
+toolbar.iconbar.empty.color:	#bbbbbb
+toolbar.iconbar.empty.colorTo:	#999999
+
+toolbar.iconbar.focused.borderWidth:	2
+toolbar.iconbar.focused.borderColor:	#aaaaaa
+# toolbar.iconbar.focused:	sunken gradient vertical
+# toolbar.iconbar.focused.color:	#667780
+# toolbar.iconbar.focused.colorTo:	#99aab0
+toolbar.iconbar.focused.textColor:	#dddddd
+toolbar.iconbar.focused.justify:	center
+
+# toolbar.iconbar.focused:	sunken gradient vertical
+# toolbar.iconbar.focused.color:	#7f5f00
+# toolbar.iconbar.focused.colorTo:	#997700
+toolbar.iconbar.focused:	sunken gradient vertical bevel1 solid interlaced
+toolbar.iconbar.focused.color:	#886600
+toolbar.iconbar.focused.colorTo:	#aa8800
+
+toolbar.iconbar.unfocused.borderWidth:	2
+toolbar.iconbar.unfocused.borderColor:	#aaaaaa
+toolbar.iconbar.unfocused:	raised gradient vertical
+# toolbar.iconbar.unfocused.color:	#4477ff
+# toolbar.iconbar.unfocused.colorTo:	#005588
+toolbar.iconbar.unfocused.color:	#009900
+toolbar.iconbar.unfocused.colorTo:	#006600
+toolbar.iconbar.unfocused.textColor:	#white
+toolbar.iconbar.unfocused.justify:	center
+
+############################################################## WINDOW #########
+
+window.borderWidth:	0
+window.bevelWidth:	3
+window.shade:	false
+# window.borderColor:	#bbbbcc
+# window.borderColor:	#bbbb99
+# window.borderColor:	#ddddbb
+# window.borderColor:	#c0c0c0
+# window.borderColor:	#d0d0d0
+window.borderColor:	#999999
+## Nice simple grey:
+# window.title.focus:	flat
+# window.title.focus.color:	#d8d8d8
+# window.title.unfocus:	flat
+# window.title.unfocus.color:	#d8d8d8
+## Shaded:
+window.title.focus:	raised gradient vertical
+# window.title.focus.color:	#ccccaa
+# window.title.focus.colorTo:	#999966
+window.title.focus.color:	#bb9933
+window.title.focus.colorTo:	#aa8822
+window.title.unfocus:	raised gradient vertical
+# window.title.unfocus:	raised gradient vertical
+window.title.unfocus.colorTo:	#999999
+window.title.unfocus.color:	#cccccc
+## Peach:
+# window.borderColor:	#fff0d8
+# window.title.focus:	flat
+# window.title.focus.color:	#fff0d8
+# window.title.unfocus:	flat
+# window.title.unfocus.color:	#fff0d8
+
+window.justify:	Center
+
+window.title.height:	25
+
+# window.label.focus:	flat
+# window.label.focus.color:	#895D52
+# window.label.focus.colorTo:	#895D52
+# window.label.focus.textColor:	#e7e7e7
+# window.label.unfocus:	flat
+# window.label.unfocus.color:	#583b35
+# window.label.unfocus.colorTo:	#583b35
+# window.label.unfocus.textColor:	#6f6f6f
+
+# window.label.focus:	raised gradient vertical
+# window.label.focus.color:	rgb:a3/9b/00
+# window.label.focus.colorTo:	rgb:7C/56/00
+# window.label.focus.color:	rgb:99/99/00
+# window.label.focus:	bevel1 solid interlaced
+# window.label.focus.color:	#aa9900
+# window.label.focus.colorTo:	#000000
+window.label.focus:	gradient vertical
+window.label.focus.colorTo:	#aa8822
+window.label.focus.color:	#bb9933
+# window.label.focus.colorTo:	#aa8822
+# window.label.focus.color:	#ccaa44
+# window.label.focus:	raised gradient vertical
+# window.label.focus.color:	#cc8833
+# window.label.focus.colorTo:	#996655
+window.label.focus.textColor:	white
+window.label.unfocus:	raised gradient vertical
+window.label.unfocus.color:	#008800
+window.label.unfocus.colorTo:	#005500
+window.label.unfocus.textColor:	#eeeeee
+
+# window.button.pressed.color:	#ee2211
+# window.button.pressed.colorTo:	#ff00ff
+
+# window.button.focus.color:	#e0e0ff
+# window.button.focus.colorTo:	#707088
+# window.button.focus.color:	#778888
+# window.button.focus.colorTo:	#556666
+# window.button.focus.color:	#bbbbbb
+# window.button.focus.colorTo:	#777777
+window.button.focus:	raised gradient
+window.button.focus.color:	#555555
+window.button.focus.colorTo:	#111111
+window.button.focus.picColor:	#777777
+window.button.pressed:	raised gradient horizontal
+window.button.pressed.color:	#111111
+window.button.pressed.colorTo:	#444444
+window.button.unfocus:	raised gradient
+window.button.unfocus.Color:	#555555
+window.button.unfocus.ColorTo:	#111111
+window.button.unfocus.picColor:	#666666
+# window.button.focus.color:	#337777
+# window.button.focus.colorTo:	#226666
+# window.button.focus:	raised gradient
+# window.button.focus.Color:	#bbbbbb
+# window.button.focus.ColorTo:	#999999
+# window.button.focus.picColor:	#111111
+# window.button.focus:	raised gradient vertical
+# window.button.focus.color:	#ee4444
+# window.button.focus.colorTo:	#aa4444
+# window.button.focus.picColor:	#cccccc
+# window.button.pressed:	sunken gradient
+# window.button.pressed.color:	#999999
+# window.button.pressed.colorTo:	#bbbbbb
+# window.button.unfocus:	flat
+# window.button.unfocus.Color:	#666666
+# window.button.unfocus:	raised gradient
+# window.button.unfocus.Color:	#bbbbbb
+# window.button.unfocus.ColorTo:	#999999
+# window.button.unfocus.picColor:	#444444
+
+# window.button.focus:	raised
+# window.button.focus.color:	#666666
+# window.button.focus.colorTo:	#666666
+# window.button.focus.picColor:	#111111
+# window.button.unfocus:	flat
+# window.button.unfocus.Color:	#4b4b4b
+# window.button.unfocus.ColorTo:	#4b4b4b
+# window.button.unfocus.picColor:	#777777
+# window.button.pressed:	sunken
+# window.button.pressed.color:	#444444
+# window.button.pressed.colorTo:	#000000
+# window.button.pressed.picColor:	#ffffff
+
+# window.button.focus:	raised
+# window.button.focus.color:	#777777
+# window.button.focus.colorTo:	#777777
+# window.button.focus.picColor:	#111111
+# window.button.unfocus:	flat
+# window.button.unfocus.Color:	#555555
+# window.button.unfocus.ColorTo:	#555555
+# window.button.unfocus.picColor:	#111111
+# window.button.pressed:	sunken
+# window.button.pressed.color:	#444444
+# window.button.pressed.colorTo:	#000000
+# window.button.pressed.picColor:	#ffffff
+
+## handleWidth is actually height!
+window.handleWidth:	5
+
+window.handle.focus:	raised flat
+window.handle.focus.color:	#aa8833
+window.grip.focus:	raised flat
+window.grip.focus.color:	#505050
+
+window.handle.unfocus:	raised gradient vertical
+window.handle.unfocus.color:	#999999
+window.handle.unfocus.colorTo:	#666666
+window.grip.unfocus:	raised
+# window.grip.unfocus.color:	#228822
+window.grip.unfocus.color:	#008800
+window.grip.unfocus.colorTo:	#
+
+## Grey handles:
+# window.handle.focus.color:	#999999
+# window.grip.focus.color:	#999999
+# window.handle.unfocus.color:	#999999
+# window.grip.unfocus.color:	#999999
+
