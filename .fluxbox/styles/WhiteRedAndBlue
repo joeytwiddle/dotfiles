@@ -152,7 +152,7 @@ window.title.unfocus:	raised gradient vertical
 window.title.unfocus.color:	#888888
 window.title.unfocus.colorTo:	#848484
 
-window.label.focus:	raised gradient vertical
+window.label.focus:	raised gradient horizontal
 window.label.focus.colorTo:	#cc0000
 window.label.focus.color:	#990000
 window.label.focus.textColor:	#ffffff
@@ -176,14 +176,14 @@ window.button.pressed.colorTo:	#555555
 ## handleWidth is actually height!
 window.handleWidth:	5
 
-window.handle.focus:	raised flat
-window.handle.focus.color:	#aaaaaa
 window.grip.focus:	raised flat
-window.grip.focus.color:	#880000
+window.grip.focus.color:	#aaaaaa
+window.handle.focus:	raised flat
+window.handle.focus.color:	#880000
 
-window.handle.unfocus:	raised flat
-window.handle.unfocus.color:	#888888
 window.grip.unfocus:	raised flat
-window.grip.unfocus.color:	#000088
+window.grip.unfocus.color:	#888888
+window.handle.unfocus:	raised flat
+window.handle.unfocus.color:	#000088
 
 ###############################################################################

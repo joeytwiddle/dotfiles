@@ -1,5 +1,3 @@
-# vim: ts=40
-
 ############################################################
 #  This work is licensed under the Creative Commons        #
 #  Attribution-NonCommercial-ShareAlike 2.5 License.       #
@@ -19,17 +17,9 @@
 ############################################################## BACKGROUND #####
 
 background:	none
-
 # background:	flat gradient crossdiagonal
 # background.color:	#081866
 # background.colorTo:	#66aadd
-
-## Blue grid from MerleyKay:
-# background:                          mod
-# background.modX:                     5
-# background.modY:                     5
-# background.color:                    rgb:52/60/75
-# background.colorTo:                  rgb:62/70/85
 
 ############################################################## FONTS ##########
 
@@ -148,43 +138,58 @@ toolbar.iconbar.focused.justify:	center
 # toolbar.iconbar.focused.color:	#7f5f00
 # toolbar.iconbar.focused.colorTo:	#997700
 toolbar.iconbar.focused:	sunken gradient vertical bevel1 solid interlaced
-toolbar.iconbar.focused.color:	#886600
-toolbar.iconbar.focused.colorTo:	#aa8800
+toolbar.iconbar.focused.color:	#00bb00
+toolbar.iconbar.focused.colorTo:	#007700
 
 toolbar.iconbar.unfocused.borderWidth:	2
 toolbar.iconbar.unfocused.borderColor:	#aaaaaa
 toolbar.iconbar.unfocused:	raised gradient vertical
 # toolbar.iconbar.unfocused.color:	#4477ff
 # toolbar.iconbar.unfocused.colorTo:	#005588
-toolbar.iconbar.unfocused.color:	#009900
-toolbar.iconbar.unfocused.colorTo:	#006600
+toolbar.iconbar.unfocused.color:	#000077
+toolbar.iconbar.unfocused.colorTo:	#0000bb
 toolbar.iconbar.unfocused.textColor:	#white
 toolbar.iconbar.unfocused.justify:	center
 
 ############################################################## WINDOW #########
 
-window.borderWidth:	1
-window.bevelWidth:	2
+window.borderWidth:	2
+window.bevelWidth:	1
 window.shade:	false
 # window.borderColor:	#bbbbcc
 # window.borderColor:	#bbbb99
 # window.borderColor:	#ddddbb
 # window.borderColor:	#c0c0c0
 # window.borderColor:	#d0d0d0
-window.borderColor:	#b8b8b8
+# window.borderColor:	#2a44c2
+# window.borderColor:	#2a8888
+window.borderColor:	#bbbbbb
+# window.borderColor:	#3350d8
+#
 ## Nice simple grey:
-# window.title.focus:	flat
-# window.title.focus.color:	#d8d8d8
-# window.title.unfocus:	flat
-# window.title.unfocus.color:	#d8d8d8
+window.title.focus:	flat
+window.title.focus.color:	#3333bb
+window.title.unfocus:	flat
+window.title.unfocus.color:	#3333bb
+## Old:
+# window.title.focus:	gradient vertical
+# # window.title.focus.color:	#3350d8
+# # window.title.focus.colorTo:	#1144bb
+# window.title.focus.color:	#33aa55
+# window.title.focus.colorTo:	#116644
+# window.title.unfocus:	gradient vertical
+# # window.title.unfocus.color:	#3366cc
+# # window.title.unfocus.colorTo:	#2244bb
+# window.title.unfocus.color:	#3350d8
+# window.title.unfocus.colorTo:	#1144bb
+
 ## Shaded:
-window.title.focus:	gradient vertical
-window.title.focus.color:	#b8b8b8
-window.title.focus.colorTo:	#d8d8d8
-window.title.unfocus:	gradient vertical
-# window.title.unfocus:	raised gradient vertical
-window.title.unfocus.colorTo:	#b8b8b8
-window.title.unfocus.color:	#d8d8d8
+# window.title.focus:	gradient vertical
+# window.title.focus.color:	#c8c8c8
+# window.title.focus.colorTo:	#e8e8e8
+# window.title.unfocus:	gradient vertical
+# window.title.unfocus.color:	#c8c8c8
+# window.title.unfocus.colorTo:	#e8e8e8
 ## Peach:
 # window.borderColor:	#fff0d8
 # window.title.focus:	flat
@@ -194,7 +199,7 @@ window.title.unfocus.color:	#d8d8d8
 
 window.justify:	Center
 
-window.title.height:	23
+window.title.height:	24
 
 # window.label.focus:	flat
 # window.label.focus.color:	#895D52
@@ -205,24 +210,27 @@ window.title.height:	23
 # window.label.unfocus.colorTo:	#583b35
 # window.label.unfocus.textColor:	#6f6f6f
 
-# window.label.focus:	raised gradient vertical
-# window.label.focus.color:	rgb:a3/9b/00
-# window.label.focus.colorTo:	rgb:7C/56/00
-# window.label.focus.color:	rgb:99/99/00
-# window.label.focus:	bevel1 solid interlaced
-# window.label.focus.color:	#aa9900
-# window.label.focus.colorTo:	#000000
-window.label.focus:	gradient horizontal bevel1 solid interlaced
-window.label.focus.color:	#907000
-window.label.focus.colorTo:	#aa8800
-# window.label.focus:	raised gradient vertical
-# window.label.focus.color:	#cc8833
-# window.label.focus.colorTo:	#996655
-window.label.focus.textColor:	white
+# window.label.focus:	flat gradient vertical bevel1 solid interlaced
+# window.label.focus.color:	#2244aa
+# window.label.focus.color:	#004400
+# window.label.focus.colorTo:	#006000
+# window.label.focus:	gradient vertical
+# window.label.focus.colorTo:	#3355cc
+# window.label.focus.color:	#2233cc
+window.label.focus:	gradient
+window.label.focus.color:	#222288
+window.label.focus.colorTo:	#4444ff
+window.label.focus.textColor:	#ffffff
 window.label.unfocus:	raised gradient vertical
-window.label.unfocus.color:	#009900
-window.label.unfocus.colorTo:	#006600
-window.label.unfocus.textColor:	white
+# window.label.unfocus.color:	#009900
+# window.label.unfocus.colorTo:	#006600
+# window.label.unfocus.color:	#009900
+# window.label.unfocus.colorTo:	#006600
+# window.label.unfocus.color:	#4480cc
+# window.label.unfocus.colorTo:	#2270aa
+window.label.unfocus.color:	#eeeeee
+window.label.unfocus.colorTo:	#777777
+window.label.unfocus.textColor:	#444444
 
 # window.button.pressed.color:	#ee2211
 # window.button.pressed.colorTo:	#ff00ff
@@ -234,16 +242,20 @@ window.label.unfocus.textColor:	white
 # window.button.focus.color:	#bbbbbb
 # window.button.focus.colorTo:	#777777
 window.button.focus:	raised gradient
-window.button.focus.color:	#555555
-window.button.focus.colorTo:	#111111
-window.button.focus.picColor:	#777777
-window.button.pressed:	gradient horizontal
+window.button.focus.Color:	#666666
+window.button.focus.ColorTo:	#222222
+window.button.focus.picColor:	#888888
+window.button.pressed:	gradient
 window.button.pressed.color:	#111111
-window.button.pressed.colorTo:	#444444
+window.button.pressed.colorTo:	#555555
 window.button.unfocus:	raised gradient
 window.button.unfocus.Color:	#555555
-window.button.unfocus.ColorTo:	#111111
-window.button.unfocus.picColor:	#707070
+window.button.unfocus.ColorTo:	#222222
+window.button.unfocus.picColor:	#666666
+# window.button.unfocus:	raised gradient
+# window.button.unfocus.color:	#008980
+# window.button.unfocus.colorTo:	#004080
+# window.button.unfocus.picColor:	#bbbbbb
 # window.button.focus.color:	#337777
 # window.button.focus.colorTo:	#226666
 # window.button.focus:	raised gradient
@@ -293,25 +305,25 @@ window.button.unfocus.picColor:	#707070
 ## handleWidth is actually height!
 window.handleWidth:	5
 
-window.handle.focus:	raised
+window.handle.focus:	raised gradient vertical
 # window.handle.focus.color:	#660000
 # window.handle.focus.color:	#444444
-window.handle.focus.color:	#997700
-window.handle.focus.colorTo:	#444444
+window.handle.focus.color:	#222288
+window.handle.focus.colorTo:	#4444ff
 # window.handle.focus:	raised gradient horizontal bevel1 solid interlaced
-# window.handle.focus.color:	#997700
+# window.handle.focus.color:	#002299
 # window.handle.focus.colorTo:	#aa8800
-window.grip.focus:	raised
-window.grip.focus.color:	#997700
-window.grip.focus.colorTo:	#004400
+window.grip.focus:	raised gradient vertical
+window.grip.focus.color:	#222288
+window.grip.focus.colorTo:	#4444ff
 
-window.handle.unfocus:	raised
-window.handle.unfocus.color:	#008800
-window.handle.unfocus.colorTo:	#555555
-window.grip.unfocus:	raised
+window.handle.unfocus:	raised gradient vertical
+window.handle.unfocus.color:	#eeeeee
+window.handle.unfocus.colorTo:	#777777
+window.grip.unfocus:	raised gradient vertical
 # window.grip.unfocus.color:	#228822
-window.grip.unfocus.color:	#008800
-window.grip.unfocus.colorTo:	#
+window.grip.unfocus.color:	#eeeeee
+window.grip.unfocus.colorTo:	#777777
 
 ## Grey handles:
 # window.handle.focus.color:	#999999
@@ -319,3 +331,5 @@ window.grip.unfocus.colorTo:	#
 # window.handle.unfocus.color:	#999999
 # window.grip.unfocus.color:	#999999
 
+###############################################################################
+# EOF

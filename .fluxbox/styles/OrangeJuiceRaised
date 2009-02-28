@@ -156,21 +156,22 @@ window.label.focus.textColor:	#ffffff
 window.title.unfocus:	raised gradient vertical
 window.title.unfocus.color:	#448833
 window.title.unfocus.colorTo:	#446633
-window.label.unfocus:	gradient vertical
+## The raising makes sense on the focused window, but looks bad on the unfocused windows.
+window.label.unfocus:	raised gradient vertical
 window.label.unfocus.color:	#448833
 window.label.unfocus.colorTo:	#446633
 window.label.unfocus.textColor:	#eeeecc
 
 window.button.focus:	raised gradient
-window.button.focus.color:	#5c5c5c
-window.button.focus.colorTo:	#2a2a2a
-window.button.focus.picColor:	#7d7d7d
+window.button.focus.color:	#666666
+window.button.focus.colorTo:	#222222
+window.button.focus.picColor:	#777777
 window.button.unfocus:	raised gradient
 window.button.unfocus.Color:	#555555
 window.button.unfocus.ColorTo:	#222222
 window.button.unfocus.picColor:	#606060
 window.button.pressed:	gradient
-window.button.pressed.color:	#262626
+window.button.pressed.color:	#222222
 window.button.pressed.colorTo:	#555555
 
 ## handleWidth is actually height!
@@ -179,7 +180,7 @@ window.handleWidth:	5
 window.handle.focus:	raised flat
 window.handle.focus.color:	#aa8833
 window.grip.focus:	raised flat
-window.grip.focus.color:	#505050
+window.grip.focus.color:	#555555
 
 window.handle.unfocus:	raised flat
 window.handle.unfocus.color:	#447744

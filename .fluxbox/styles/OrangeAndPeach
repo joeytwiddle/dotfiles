@@ -14,7 +14,7 @@
 # date: 10-09-2008
 # http://hwi.ath.cx
 #
-# Unfocused windows are matte green, focused windows and tabs are orange!
+# Unfocused windows are peach, focused windows and tabs are orange!
 # Buttons are dark like rubber TV controls.
 #
 # OrangeJuice can work well with a light peach theme for applications.
@@ -148,18 +148,20 @@ window.borderColor:	#000000
 window.title.focus:	raised gradient vertical
 window.title.focus.color:	#bb9933
 window.title.focus.colorTo:	#aa8822
+# window.title.focus.color:	#d8c68d
+# window.title.focus.colorTo:	#b8a87d
 window.label.focus:	gradient
 window.label.focus.colorTo:	#ccaa44
 window.label.focus.color:	#aa8822
 window.label.focus.textColor:	#ffffff
 
 window.title.unfocus:	raised gradient vertical
-window.title.unfocus.color:	#448833
-window.title.unfocus.colorTo:	#446633
+window.title.unfocus.color:	#d8c68d
+window.title.unfocus.colorTo:	#b8a87d
 window.label.unfocus:	gradient vertical
-window.label.unfocus.color:	#448833
-window.label.unfocus.colorTo:	#446633
-window.label.unfocus.textColor:	#eeeecc
+window.label.unfocus.color:	#d8c68d
+window.label.unfocus.colorTo:	#b8a87d
+window.label.unfocus.textColor:	#f2edd0
 
 window.button.focus:	raised gradient
 window.button.focus.color:	#5c5c5c
@@ -168,7 +170,7 @@ window.button.focus.picColor:	#7d7d7d
 window.button.unfocus:	raised gradient
 window.button.unfocus.Color:	#555555
 window.button.unfocus.ColorTo:	#222222
-window.button.unfocus.picColor:	#606060
+window.button.unfocus.picColor:	#646464
 window.button.pressed:	gradient
 window.button.pressed.color:	#262626
 window.button.pressed.colorTo:	#555555
@@ -177,12 +179,12 @@ window.button.pressed.colorTo:	#555555
 window.handleWidth:	5
 
 window.handle.focus:	raised flat
-window.handle.focus.color:	#aa8833
+window.handle.focus.color:	#aa8822
 window.grip.focus:	raised flat
 window.grip.focus.color:	#505050
 
 window.handle.unfocus:	raised flat
-window.handle.unfocus.color:	#447744
+window.handle.unfocus.color:	#b8a87d
 window.grip.unfocus:	raised flat
 window.grip.unfocus.color:	#444444
 
