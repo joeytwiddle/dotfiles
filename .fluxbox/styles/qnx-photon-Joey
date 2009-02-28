@@ -80,7 +80,7 @@ window.title.unfocus.colorTo:        white
 window.label.unfocus:                raised gradient vertical
 window.label.unfocus.color:          rgb:00/85/00
 window.label.unfocus.colorTo:        rgb:00/44/00
-window.label.unfocus.textColor:      white
+window.label.unfocus.textColor:      #eeeeee
 
 window.button.unfocus:               raised gradient vertical
 window.button.unfocus.color:         rgb:EA/EA/EA

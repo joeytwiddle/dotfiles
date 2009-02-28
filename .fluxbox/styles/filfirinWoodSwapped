@@ -12,7 +12,7 @@ window.title.focus.colorTo:	rgb:c0/80/60
 window.label.unfocus:	flat gradient vertical
 window.label.unfocus.color:	rgb:a4/64/44
 window.label.unfocus.colorTo:	rgb:c8/88/68
-window.label.unfocus.textColor:	white
+window.label.unfocus.textColor:      #eeeeee
 window.label.focus:	raised gradient vertical
 window.label.focus.color:	rgb:90/00/00
 window.label.focus.colorTo:	rgb:60/00/00

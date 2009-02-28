@@ -222,7 +222,7 @@ window.label.focus.textColor:	white
 window.label.unfocus:	raised gradient vertical
 window.label.unfocus.color:	#008800
 window.label.unfocus.colorTo:	#005500
-window.label.unfocus.textColor:	white
+window.label.unfocus.textColor:      #eeeeee
 
 # window.button.pressed.color:	#ee2211
 # window.button.pressed.colorTo:	#ff00ff
