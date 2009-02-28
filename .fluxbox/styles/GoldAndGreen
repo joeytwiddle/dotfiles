@@ -178,10 +178,10 @@ window.borderColor:	#999999
 # window.title.unfocus:	flat
 # window.title.unfocus.color:	#d8d8d8
 ## Shaded:
-window.title.focus:	gradient vertical
+window.title.focus:	raised gradient vertical
 window.title.focus.color:	#ccccaa
 window.title.focus.colorTo:	#999966
-window.title.unfocus:	gradient vertical
+window.title.unfocus:	raised gradient vertical
 # window.title.unfocus:	raised gradient vertical
 window.title.unfocus.colorTo:	#999999
 window.title.unfocus.color:	#cccccc
@@ -293,11 +293,11 @@ window.button.unfocus.picColor:	#666666
 ## handleWidth is actually height!
 window.handleWidth:	5
 
-window.handle.focus:	raised
+window.handle.focus:	raised gradient vertical
 # window.handle.focus.color:	#660000
 # window.handle.focus.color:	#444444
-window.handle.focus.color:	#997700
-window.handle.focus.colorTo:	#444444
+window.handle.focus.color:	#cccc99
+window.handle.focus.colorTo:	#666622
 # window.handle.focus:	raised gradient horizontal bevel1 solid interlaced
 # window.handle.focus.color:	#997700
 # window.handle.focus.colorTo:	#aa8800
@@ -305,9 +305,9 @@ window.grip.focus:	raised
 window.grip.focus.color:	#997700
 window.grip.focus.colorTo:	#004400
 
-window.handle.unfocus:	raised
-window.handle.unfocus.color:	#008800
-window.handle.unfocus.colorTo:	#555555
+window.handle.unfocus:	raised gradient vertical
+window.handle.unfocus.color:	#999999
+window.handle.unfocus.colorTo:	#666666
 window.grip.unfocus:	raised
 # window.grip.unfocus.color:	#228822
 window.grip.unfocus.color:	#008800
