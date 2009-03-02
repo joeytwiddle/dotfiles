@@ -138,7 +138,7 @@ toolbar.iconbar.unfocused.justify:	center
 
 window.justify:	Center
 ## 25 was nice, except i felt the font was out 0.5 pixel.
-window.title.height:	26
+window.title.height:	28
 window.borderWidth:	1
 window.bevelWidth:	3
 window.shade:	false
