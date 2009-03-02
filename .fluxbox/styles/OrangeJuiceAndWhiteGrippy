@@ -196,7 +196,7 @@ window.title.unfocus.color:	#cccccc
 
 window.justify:	Center
 
-window.title.height:	25
+window.title.height:	26
 
 # window.label.focus:	flat
 # window.label.focus.color:	#895D52
