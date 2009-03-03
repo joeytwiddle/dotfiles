@@ -149,7 +149,7 @@ window.borderColor:	#000000
 window.title.focus:	raised gradient vertical
 window.title.focus.color:	#bb9933
 window.title.focus.colorTo:	#aa8822
-window.label.focus:	gradient
+window.label.focus:	gradient vertical
 window.label.focus.color:	#bb9933
 window.label.focus.colorTo:	#aa8822
 window.label.focus.textColor:	#ffffff
