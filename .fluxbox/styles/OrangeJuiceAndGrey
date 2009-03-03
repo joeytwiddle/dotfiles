@@ -185,8 +185,8 @@ window.title.focus.color:	#bb9933
 window.title.focus.colorTo:	#aa8822
 window.title.unfocus:	raised gradient vertical
 # window.title.unfocus:	raised gradient vertical
-window.title.unfocus.color:	#808080
-window.title.unfocus.colorTo:	#707070
+window.title.unfocus.color:	#999999
+window.title.unfocus.colorTo:	#666666
 ## Peach:
 # window.borderColor:	#fff0d8
 # window.title.focus:	flat
