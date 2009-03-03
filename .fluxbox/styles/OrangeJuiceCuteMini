@@ -149,8 +149,8 @@ window.title.focus:	raised gradient vertical
 window.title.focus.color:	#bb9933
 window.title.focus.colorTo:	#aa8822
 window.label.focus:	gradient
-window.label.focus.colorTo:	#ccaa44
-window.label.focus.color:	#aa8822
+window.label.focus.color:	#bb9933
+window.label.focus.colorTo:	#aa8822
 window.label.focus.textColor:	#ffffff
 
 window.title.unfocus:	raised gradient vertical
