@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xbel>
 <xbel folded="no" >
- <folder folded="no" icon="bookmark_folder" >
+ <folder folded="yes" icon="bookmark_folder" >
   <title>More</title>
   <bookmark icon="www" href="http://www.google.com/search?num=100&amp;q=site%3Awiki.beyondunreal.com+%25s" >
    <title>UnrealWiki with Google</title>
@@ -38,7 +38,7 @@
   <bookmark icon="unknown" href="javascript:(function()%7Bvar%20T%3D%7B%7D,W%3D%5B%5D,C%3D0,s,i;%20function%20F(n)%7Bvar%20i,x,a,w,t%3Dn.tagName;if(n.nodeType%3D%3D3)%7Ba%3Dn.data.toLowerCase().split(/%5B%5Cs%5C(%5C)%5C%3A%5C,%5C.;%5C%3C%5C%3E%5C%26%5C%27%5C%22%5D/);for(i%20in%20a)if(w%3Da%5Bi%5D)%7Bw%3D%22%20%22%2Bw;T%5Bw%5D%3DT%5Bw%5D?T[w]+1:1;++C;}}if(t!=&quot;SCRIPT&quot;&amp;&amp;t!=&quot;STYLE&quot;)for(i=0;x=n.childNodes[i];++i)F(x)}F(document);for(i%20in%20T)W.push([T[i],i]);W.sort(function(a,b){var%20x=b[0]-a[0];return%20x?x:((b[1]&lt;a[1])?1:-1)});%20s=&quot;&lt;h3>&quot;+C+&quot;%20words&lt;/h3>&quot;;for(i%20in%20W)s+=W[i][0]+&quot;:&quot;+W[i][1]+&quot;&lt;br>&quot;;with(open().document){write(s);close()}})()" >
    <title>Wordcount</title>
   </bookmark>
-  <folder folded="no" icon="bookmark_folder" >
+  <folder folded="yes" icon="bookmark_folder" >
    <title>Search</title>
    <bookmark icon="unknown" href="javascript:void(location.href%3D%27http%3A//web.archive.org/web/*/%27%2Bescape(location.href));" >
     <title>Wayback (all old copies)</title>
@@ -56,7 +56,7 @@
     <title>Google Search for Selection (No popup)</title>
    </bookmark>
   </folder>
-  <folder folded="yes" icon="bookmark_folder" >
+  <folder folded="no" icon="bookmark_folder" >
    <title>Miscellaneous</title>
    <bookmark icon="unknown" href="javascript:(function()%20%7B%20var%20d,b,f,u,L,i,K,t,%20LL%3D%22zh%20Chinese-simplified,zt%20Chinese-traditional,nl%20Dutch,fr%20French,de%20German,el%20Greek,it%20Italian,ja%20Japanese,ko%20Korean,pt%20Portuguese,ru%20Russian,es%20Spanish%22.split(%22,%22);%20d%3Dopen().document;%20b%3Dd.body;%20f%3Dd.createElement(%22form%22);%20b.appendChild(f);%20f.action%3D%22http%3A//babelfish.altavista.com/babelfish/trurl_pagecontent%22;%20u%3Dd.createElement(%22input%22);%20u.name%3D%22url%22;%20u.style.width%3D%22100%25%22;%20u.value%3Dlocation;%20f.appendChild(u);%20for%20(i%3D0;%20L%3DLL%5Bi%5D;%20%2B%2Bi)%20%7B%20K%20%3D%20L.split(%22%20%22);%20f.appendChild(d.createElement(%22br%22));%20t%3Dd.createElement(%22button%22);%20t.name%3D%22lp%22;%20t.value%3DK%5B0%5D%2B%22_en%22;%20t.innerHTML%20%3D%20%22%3Cb%3E%22%20%2B%20K%5B1%5D%20%2B%20%22%3C/b%3E%20to%20English%22;%20f.appendChild(t);%20%7D%20%7D)()" >
     <title>Translate (Other)</title>
@@ -173,6 +173,9 @@
  </folder>
  <bookmark icon="www" href="javascript:void(window.open(%27http%3A//bugmenot.com/view/%27%2Bescape(location),%27BugMeNot%27,%27location%3Dno,status%3Dyes,menubar%3Dno,scrollbars%3Dyes,resizable%3Dyes,width%3D385,height%3D450%27))" >
   <title>BugMeNot</title>
+ </bookmark>
+ <bookmark icon="unknown" href="javascript:(function()%7Bvar%20x;%20x%3D%27Auto%20%27%2Bdocument.title;%20if%20(x%20!%3D%20null)%20%7B%20window.sidebar.addPanel(x,location.href,%27%27);%20%7D%20%7D)();" >
+  <title>Open in SideBar</title>
  </bookmark>
  <bookmark icon="www" href="javascript:void(window.open(%27http%3A//www.google.com/search?q='+document.getSelection()+'&amp;hl=en&amp;ie=ISO-8859-1&amp;meta=&amp;btnG=Google%20Search&amp;btnI=I'm%20Feeling%20Lucky','location=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600'))" >
   <title>Google QuickSearch</title>
