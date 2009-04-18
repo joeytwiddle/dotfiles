@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xbel>
+<xbel folded="no" >
+ <folder folded="no" icon="bookmark_folder" >
+  <title>More</title>
+  <bookmark icon="www" href="http://www.google.com/search?num=100&amp;q=site%3Awiki.beyondunreal.com+%25s" >
+   <title>UnrealWiki with Google</title>
+  </bookmark>
+  <bookmark icon="www" href="http://wiki.beyondunreal.com/wiki?search=%25s" >
+   <title>UnrealWiki</title>
+  </bookmark>
+  <separator/>
+  <bookmark icon="html" href="javascript:%20l%3Ddocument.location;%20t%3Ddocument.title;%20document.open();%20document.write(%27%3Cframeset%20cols%3D%2230%25,*%22%3E%3Cframe%20src%3D%5C%27about%3Ablank%5C%27%3E%3Cframe%20src%3D%5C%27%27%2Bl%2B%27%26title%3D%27%2Bt%2B%27%5C%27%3E%3C/frameset%3E%27);%20document.close();%20document.frames%5B0%5D.document.open();%20document.frames%5B0%5D.document.write(%27%3Cframeset%20rows%3D%228%25,*%22%3E%3Cframe%20src%3D%5C%27about%3Ablank%5C%27%3E%3Cframe%20src%3D%5C%27http%3A//hwi.ath.cx/wikalong_redirect.html?url='+l+'\'>&lt;/frameset>');%20document.frames[0].document.close();%20document.frames[0].document.frames[0].document.open();%20document.frames[0].document.frames[0].document.write('&lt;HTML>&lt;BODY>&lt;SCRIPT%20language=\'Javascript\'>%20function%20closeSideBar()%20{%20window.top.document.location=\''+l+'\';%20}%20&lt;/SCRIPT>&lt;P%20align=\'center\'>&lt;a%20href=\'javascript:closeSideBar();\'>X%20Close%20Wikalong%20Sideframe&lt;/A>&lt;/P>&lt;/BODY>&lt;/HTML>');%20document.frames[0].document.frames[0].document.close();" >
+   <title>OLD2 Wikalong Sidebar</title>
+  </bookmark>
+  <bookmark icon="www" href="javascript:%20l%3Ddocument.location;document.open();%20document.write(%27%3Cframeset%20cols%3D%2230%25,*%22%3E%3Cframe%20src%3D%5C%27about%3Ablank%5C%27%3E%3Cframe%20src%3D%5C%27%27%2Bl%2B%27%5C%27%3E%3C/frameset%3E%27);%20document.close();%20document.frames%5B0%5D.document.open();%20document.frames%5B0%5D.document.write(%27%3Cframeset%20rows%3D%228%25,*%22%3E%3Cframe%20src%3D%5C%27about%3Ablank%5C%27%3E%3Cframe%20src%3D%5C%27http%3A//hwi.ath.cx/wikalong_redirect.html?url='+l+'\'>&lt;/frameset>');%20document.frames[0].document.close();%20document.frames[0].document.frames[0].document.open();%20document.frames[0].document.frames[0].document.write('&lt;HTML>&lt;BODY>&lt;SCRIPT%20language=\'Javascript\'>%20function%20closeSideBar()%20{%20window.top.document.location=\''+l+'\';%20}%20&lt;/SCRIPT>&lt;P%20align=\'center\'>&lt;a%20href=\'javascript:closeSideBar();\'>X%20Close%20Wikalong%20Sideframe&lt;/A>&lt;/P>&lt;/BODY>&lt;/HTML>');%20document.frames[0].document.frames[0].document.close();" >
+   <title>OLD1 Wikalong Sidebar</title>
+  </bookmark>
+  <bookmark icon="www" href="javascript:void(%20window.open(%27http%3A//hwi.ath.cx/wikalong_redirect.html?url='+document.location,'Wikalong','location=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=600'));" >
+   <title>OLD1 Wikalong Popup</title>
+  </bookmark>
+  <separator/>
+  <bookmark icon="www" href="http://" >
+   <title>-------------------------------------</title>
+  </bookmark>
+  <bookmark icon="www" href="javascript:%20var%20searchStr%20%3D%20document.getSelection();%20if%20(searchStr%20%3D%3D%20%27%27)%20%7B%20searchStr%20%3D%20prompt(%27Search%20for%20what?','');%20%7D%20if%20(searchStr%20!=%20null)%20%7B%20var%20searchUrl%20=%20'http://www.torrentreactor.net/search.php?words='+searchStr+'&amp;search=&amp;cid=';%20window.open(searchUrl,'','location=yes,status=yes,menubar=yes,scrollbars=yes,resizable=yes,width=800,height=600');%20%7D" >
+   <title>TorrentReactor search</title>
+  </bookmark>
+  <bookmark icon="www" href="javascript:%20var%20searchStr%20%3D%20document.getSelection();%20if%20(searchStr%20%3D%3D%20%27%27)%20%7B%20searchStr%20%3D%20prompt(%27Search%20for%20what?','');%20%7D%20if%20(searchStr%20!=%20null)%20%7B%20var%20searchUrl%20=%20'http://www.torrentspy.com/search.asp?query='+searchStr+'&amp;';%20window.open(searchUrl,'','location=yes,status=yes,menubar=yes,scrollbars=yes,resizable=yes,width=800,height=600');%20%7D" >
+   <title>TorrentSpy search</title>
+  </bookmark>
+  <separator/>
+  <bookmark icon="www" href="http://" >
+   <title>-------------------------------------</title>
+  </bookmark>
+  <bookmark icon="mime_empty" href="javascript:%20var%20searchStr%20%3D%20document.getSelection();%20if%20(searchStr%20%3D%3D%20%27%27)%20%7B%20searchStr%20%3D%20prompt(%27Search%20for%20what?','');%20%7D%20if%20(searchStr%20!=%20null)%20%7B%20var%20searchUrl%20=%20'http://packages.debian.org/cgi-bin/search_packages.pl?keywords='+searchStr+'&amp;searchon=names&amp;searchon=all&amp;searchon=sourcenames&amp;subword=1&amp;case=sensitive&amp;version=&amp;release=';%20window.open(searchUrl,'','location=yes,status=yes,menubar=yes,scrollbars=yes,resizable=yes,width=800,height=600');%20%7D" >
+   <title>Debian packages search</title>
+  </bookmark>
+  <bookmark icon="www" href="http://" >
+   <title>-------------------------------------</title>
+  </bookmark>
+  <bookmark icon="html" href="javascript:%20l%3Ddocument.location;%20t%3Ddocument.title;%20document.open();%20document.write(%27%3Cframeset%20cols%3D%2230%25,*%22%3E%3Cframe%20src%3D%5C%27about%3Ablank%5C%27%3E%3Cframe%20src%3D%5C%27%27%2Bl%2B%27%5C%27%3E%3C/frameset%3E%27);%20document.close();%20document.frames%5B0%5D.document.open();%20document.frames%5B0%5D.document.write(%27%3Cframeset%20rows%3D%228%25,*%22%3E%3Cframe%20src%3D%5C%27about%3Ablank%5C%27%3E%3Cframe%20src%3D%5C%27http%3A//hwi.ath.cx/wikalong_redirect.html?url='+escape(l)+'&amp;title='+escape(t)+'\'>&lt;/frameset>');%20document.frames[0].document.close();%20document.frames[0].document.frames[0].document.open();%20document.frames[0].document.frames[0].document.write('&lt;HTML>&lt;BODY>&lt;SCRIPT%20language=\'Javascript\'>%20function%20closeSideBar()%20{%20window.top.document.location=\''+l+'\';%20}%20&lt;/SCRIPT>&lt;P%20align=\'center\'>&lt;a%20href=\'javascript:closeSideBar();\'>X%20Close%20Wikalong%20Sideframe&lt;/A>&lt;/P>&lt;/BODY>&lt;/HTML>');%20void(%20document.frames[0].document.frames[0].document.close()%20);" >
+   <title>Wikalong Sidebar</title>
+  </bookmark>
+  <bookmark icon="html" href="javascript:void(%20window.open(%27http%3A//hwi.ath.cx/wikalong_redirect.html?url='+document.location+'&amp;title='+document.title,'Wikalong','location=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=600'));" >
+   <title>Wikalong Popup</title>
+  </bookmark>
+ </folder>
+ <folder folded="no" icon="bookmark_folder" >
+  <title>Zap (SquareFree)</title>
+  <folder folded="no" icon="bookmark_folder" >
+   <title>Text/Data</title>
+   <bookmark icon="unknown" href="javascript:(function()%7Bvar%20d%3Ddocument,q%3D%22table%22,i,j,k,y,r,c,t;for(i%3D0;t%3Dd.getElementsByTagName(q)%5Bi%5D;%2B%2Bi)%7Bvar%20w%3D0,N%3Dt.cloneNode(0);N.width%3D%22%22;N.height%3D%22%22;N.border%3D1;for(j%3D0;r%3Dt.rows%5Bj%5D;%2B%2Bj)for(y%3Dk%3D0;c%3Dr.cells%5Bk%5D;%2B%2Bk)%7Bvar%20z,a%3Dc.rowSpan,b%3Dc.colSpan,v%3Dc.cloneNode(1);v.rowSpan%3Db;v.colSpan%3Da;v.width%3D%22%22;v.height%3D%22%22;if(!v.bgColor)v.bgColor%3Dr.bgColor;while(w%3Cy%2Bb)N.insertRow(w%2B%2B).p%3D0;while(N.rows%5By%5D.p%3Ej)%2B%2By;N.rows%5By%5D.appendChild(v);for(z%3D0;z%3Cb;%2B%2Bz)N.rows%5By%2Bz%5D.p%2B%3Da;y%2B%3Db;%7Dt.parentNode.replaceChild(N,t);%7D%7D)()" >
+    <title>javascript:(function(){var d=document,q=&quot;table&quot;,i,j,k,y,r,c,t;for(i=0;t=d.getElementsByTagName(q)[i];++i){var w=0,N=t.cloneNode(0);N.width=&quot;&quot;;N.height=&quot;&quot;;N.border=1;for(j=0;r=t.rows[j];++j)for(y=k=0;c=r.cells[k];++k){var z,a=c.rowSpan,b=c.colSpan,v=c.cloneNode(1);v.rowSpan=b;v.colSpan=a;v.width=&quot;&quot;;v.height=&quot;&quot;;if(!v.bgColor)v.bgColor=r.bgColor;while(w&lt;y+b)N.insertRow(w++).p=0;while(N.rows[y].p>j)++y;N.rows[y].appendChild(v);for(z=0;z&lt;b;++z)N.rows[y+z].p+=a;y+=b;}t.parentNode.replaceChild(N,t);}})()</title>
+   </bookmark>
+   <bookmark icon="unknown" href="javascript:function%20toArray%20(c)%7Bvar%20a,%20k;a%3Dnew%20Array;for%20(k%3D0;%20k%3Cc.length;%20%2B%2Bk)a%5Bk%5D%3Dc%5Bk%5D;return%20a;%7Dfunction%20insAtTop(par,child)%7Bif(par.childNodes.length)%20par.insertBefore(child,%20par.childNodes%5B0%5D);else%20par.appendChild(child);%7Dfunction%20countCols(tab)%7Bvar%20nCols,%20i;nCols%3D0;for(i%3D0;i%3Ctab.rows.length;%2B%2Bi)if(tab.rows%5Bi%5D.cells.length%3EnCols)nCols%3Dtab.rows%5Bi%5D.cells.length;return%20nCols;%7Dfunction%20makeHeaderLink(tableNo,%20colNo,%20ord)%7Bvar%20link;link%3Ddocument.createElement(%27a%27);link.href%3D%27javascript%3AsortTable(%27%2BtableNo%2B%27,%27%2BcolNo%2B%27,%27%2Bord%2B%27);%27;link.appendChild(document.createTextNode((ord%3E0)?'a':'d'));return%20link;}function%20makeHeader(tableNo,nCols){var%20header,%20headerCell,%20i;header=document.createElement('tr');for(i=0;i&lt;nCols;++i){headerCell=document.createElement('td');headerCell.appendChild(makeHeaderLink(tableNo,i,1));headerCell.appendChild(document.createTextNode('/'));headerCell.appendChild(makeHeaderLink(tableNo,i,-1));header.appendChild(headerCell);}return%20header;}g_tables=toArray(document.getElementsByTagName('table'));if(!g_tables.length)%20alert(&quot;This%20page%20doesn't%20contain%20any%20tables.&quot;);(function(){var%20j,%20thead;for(j=0;j&lt;g_tables.length;++j){thead=g_tables[j].createTHead();insAtTop(thead,%20makeHeader(j,countCols(g_tables[j])))}})%20();function%20compareRows(a,b){if(a.sortKey==b.sortKey)return%200;return%20(a.sortKey%20&lt;%20b.sortKey)%20?%20g_order%20:%20-g_order;}function%20sortTable(tableNo,%20colNo,%20ord){var%20table,%20rows,%20nR,%20bs,%20i,%20j,%20temp;g_order=ord;g_colNo=colNo;table=g_tables[tableNo];rows=new%20Array();nR=0;bs=table.tBodies;for(i=0;%20i&lt;bs.length;%20++i)for(j=0;%20j&lt;bs[i].rows.length;%20++j){rows[nR]=bs[i].rows[j];temp=rows[nR].cells[g_colNo];if(temp)%20rows[nR].sortKey=temp.innerHTML;else%20rows[nR].sortKey=&quot;&quot;;++nR;}rows.sort(compareRows);for%20(i=0;%20i%20&lt;%20rows.length;%20++i)insAtTop(table.tBodies[0],%20rows[i]);}" >
+    <title>Sort Table</title>
+   </bookmark>
+   <bookmark icon="unknown" href="javascript:(function()%7B%20function%20zoomImage(image,%20amt)%20%7B%20if(image.initialHeight%20%3D%3D%20null)%20%7B%20/*%20avoid%20accumulating%20integer-rounding%20error%20*/%20image.initialHeight%3Dimage.height;%20image.initialWidth%3Dimage.width;%20image.scalingFactor%3D1;%20%7D%20image.scalingFactor*%3Damt;%20image.width%3Dimage.scalingFactor*image.initialWidth;%20image.height%3Dimage.scalingFactor*image.initialHeight;%20%7D%20var%20i,L%3Ddocument.images.length;%20for%20(i%3D0;i%3CL;%2B%2Bi)%20zoomImage(document.images%5Bi%5D,.5);%20if%20(!L)%20alert(%22This%20page%20contains%20no%20images.%22);%20%7D)();" >
+    <title>Zoom Images Out</title>
+   </bookmark>
+   <bookmark icon="unknown" href="javascript:(function()%7B%20function%20zoomImage(image,%20amt)%20%7B%20if(image.initialHeight%20%3D%3D%20null)%20%7B%20/*%20avoid%20accumulating%20integer-rounding%20error%20*/%20image.initialHeight%3Dimage.height;%20image.initialWidth%3Dimage.width;%20image.scalingFactor%3D1;%20%7D%20image.scalingFactor*%3Damt;%20image.width%3Dimage.scalingFactor*image.initialWidth;%20image.height%3Dimage.scalingFactor*image.initialHeight;%20%7D%20var%20i,L%3Ddocument.images.length;%20for%20(i%3D0;i%3CL;%2B%2Bi)%20zoomImage(document.images%5Bi%5D,%202);%20if%20(!L)%20alert(%22This%20page%20contains%20no%20images.%22);%20%7D)();" >
+    <title>Zoom Images In</title>
+   </bookmark>
+   <bookmark icon="unknown" href="javascript:(function()%7Bvar%20count%3D0,%20text,%20dv;text%3Dprompt(%22Search%20phrase%3A%22,%20%22%22);if(text%3D%3Dnull%20%7C%7C%20text.length%3D%3D0)return;dv%3Ddocument.defaultView;function%20searchWithinNode(node,%20te,%20len)%7Bvar%20pos,%20skip,%20spannode,%20middlebit,%20endbit,%20middleclone;skip%3D0;if(%20node.nodeType%3D%3D3%20)%7Bpos%3Dnode.data.toUpperCase().indexOf(te);if(pos%3E%3D0)%7Bspannode%3Ddocument.createElement(%22SPAN%22);spannode.style.backgroundColor%3D%22yellow%22;middlebit%3Dnode.splitText(pos);endbit%3Dmiddlebit.splitText(len);middleclone%3Dmiddlebit.cloneNode(true);spannode.appendChild(middleclone);middlebit.parentNode.replaceChild(spannode,middlebit);%2B%2Bcount;skip%3D1;%7D%7Delse%20if(%20node.nodeType%3D%3D1%26%26%20node.childNodes%20%26%26%20node.tagName.toUpperCase()!%3D%22SCRIPT%22%20%26%26%20node.tagName.toUpperCase!%3D%22STYLE%22)%7Bfor%20(var%20child%3D0;%20child%20%3C%20node.childNodes.length;%20%2B%2Bchild)%7Bchild%3Dchild%2BsearchWithinNode(node.childNodes%5Bchild%5D,%20te,%20len);%7D%7Dreturn%20skip;%7Dwindow.status%3D%22Searching%20for%20%27%22%2Btext%2B%22%27...%22;searchWithinNode(document.body,%20text.toUpperCase(),%20text.length);window.status%3D%22Found%20%22%2Bcount%2B%22%20occurrence%22%2B(count%3D%3D1?&quot;&quot;:&quot;s&quot;)+&quot;%20of%20'&quot;+text+&quot;'.&quot;;})();" >
+    <title>Highlight...</title>
+   </bookmark>
+  </folder>
+  <folder folded="yes" icon="bookmark_folder" >
+   <title>Forms</title>
+   <bookmark icon="unknown" href="javascript:(function()%7Bvar%20x,i;%20x%20%3D%20document.forms;%20for%20(i%20%3D%200;%20i%20%3C%20x.length;%20%2B%2Bi)%20x%5Bi%5D.method%3D%22get%22;%20alert(%22Changed%20%22%20%2B%20x.length%20%2B%20%22%20forms%20to%20use%20the%20GET%20method.%20%20After%20submitting%20a%20form%20from%20this%20page,%20you%20should%20be%20able%20to%20bookmark%20the%20result.%22);%20%7D)();" >
+    <title>Switch from POST to GET</title>
+   </bookmark>
+   <bookmark icon="unknown" href="javascript:(function()%7Bvar%20i,c,x,h;%20for(i%3D0;x%3Ddocument.links%5Bi%5D;%2B%2Bi)%20%7B%20h%3Dx.getAttribute(%22href%22);%20x.title%2B%3D%22%20%22%20%2B%20x.innerHTML;%20while(c%3Dx.firstChild)x.removeChild(c);%20x.appendChild(document.createTextNode(h));%20%7D%20%7D)()" >
+    <title>Show link URLs</title>
+   </bookmark>
+  </folder>
+  <folder folded="no" icon="bookmark_folder" >
+   <title>Links</title>
+   <bookmark icon="unknown" href="javascript:(function()%7Bvar%20x,i;%20x%3Ddocument.links;%20for(i%3D0;i%3Cx.length;%2B%2Bi)%20%7B%20x%5Bi%5D.target%3D%22_blank%22;%20%7D%20%7D)();" >
+    <title>Make all links target new tab</title>
+   </bookmark>
+   <bookmark icon="unknown" href="javascript:(function()%7Bvar%20x,i;%20x%3Ddocument.links;%20for(i%3D0;i%3Cx.length;%2B%2Bi)%20%7B%20x%5Bi%5D.target%3D%22_self%22;%20%7D%20%7D)();" >
+    <title>Make all links target this window</title>
+   </bookmark>
+   <bookmark icon="unknown" href="javascript:(function()%7Bvar%20n_to_open,dl,dll,i;%20function%20linkIsSafe(u)%20%7B%20if%20(u.substr(0,7)%3D%3D%27mailto%3A%27)%20return%20false;%20if%20(u.substr(0,11)%3D%3D%27javascript%3A%27)%20return%20false;%20return%20true;%20%7D%20n_to_open%20%3D%200;%20dl%20%3D%20document.links;%20dll%20%3D%20dl.length;%20if%20(window.getSelection%20%26%26%20window.getSelection().containsNode)%20%7B%20/*%20mozilla%20*/%20for(i%3D0;%20i%3Cdll;%20%2B%2Bi)%20%7B%20if%20(window.getSelection().containsNode(dl%5Bi%5D,%20true)%20%26%26%20linkIsSafe(dl%5Bi%5D.href))%20%2B%2Bn_to_open;%20%7D%20if%20(n_to_open%20%26%26%20confirm(%27Open%20%27%20%2B%20n_to_open%20%2B%20%27%20selected%20links%20in%20new%20windows?'))%20{%20for(i=0;%20i&lt;dll;%20++i)%20if%20(window.getSelection().containsNode(dl[i],%20true)%20&amp;&amp;%20linkIsSafe(dl[i].href))%20window.open(dl[i].href);%20}%20}%20/*%20/mozilla%20*/%20if%20(!n_to_open)%20{%20/*ie,%20or%20mozilla%20with%20no%20links%20selected:%20this%20section%20matches%20open_all_links,%20except%20for%20the%20alert%20text%20*/%20for(i%20=%200;%20i%20&lt;%20dll;%20++i)%20{%20if%20(linkIsSafe(dl[i].href))%20++n_to_open;%20}%20if%20(!n_to_open)%20alert%20('no%20links');%20else%20{%20if%20(confirm('No%20links%20selected.%20%20Open%20'%20+%20n_to_open%20+%20'%20links%20in%20new%20windows?'))%20for%20(i%20=%200;%20i%20&lt;%20dll;%20++i)%20if%20(linkIsSafe(dl[i].href))%20window.open(dl[i].href);%20}%20}%20})();" >
+    <title>Open selected links in new windows</title>
+   </bookmark>
+   <bookmark icon="unknown" href="javascript:(function()%7Bvar%20n_to_open,dl,dll,i;%20function%20linkIsSafe(u)%20%7B%20if%20(u.substr(0,7)%3D%3D%27mailto%3A%27)%20return%20false;%20if%20(u.substr(0,11)%3D%3D%27javascript%3A%27)%20return%20false;%20return%20true;%20%7D%20n_to_open%20%3D%200;%20dl%20%3D%20document.links;%20dll%20%3D%20dl.length;%20for(i%20%3D%200;%20i%20%3C%20dll;%20%2B%2Bi)%20%7B%20if%20(linkIsSafe(dl%5Bi%5D.href))%20%2B%2Bn_to_open;%20%7D%20if%20(!n_to_open)%20alert%20(%27no%20links%27);%20else%20%7B%20if%20(confirm(%27Open%20%27%20%2B%20n_to_open%20%2B%20%27%20links%20in%20new%20windows?'))%20for%20(i%20=%200;%20i%20&lt;%20dll;%20++i)%20if%20(linkIsSafe(dl[i].href))%20window.open(dl[i].href);%20}%20})();" >
+    <title>Open Links in new windows</title>
+   </bookmark>
+   <bookmark icon="unknown" href="javascript:(function()%7Bvar%20i,x;%20for%20(i%3D0;x%3Ddocument.links%5Bi%5D;%2B%2Bi)x.style.color%3D%5B%22blue%22,%22red%22,%22orange%22%5D%5Bsim(x,location)%5D;%20function%20sim(a,b)%20%7B%20if%20(a.hostname!%3Db.hostname)%20return%200;%20if%20(fixPath(a.pathname)!%3DfixPath(b.pathname)%20%7C%7C%20a.search!%3Db.search)%20return%201;%20return%202;%20%7D%20function%20fixPath(p)%7B%20p%20%3D%20(p.charAt(0)%3D%3D%22/%22%20?%20&quot;&quot;%20:%20&quot;/&quot;)%20+%20p;/*many%20browsers*/%20p=p.split(&quot;?&quot;)[0];/*opera*/%20return%20p;%20}%20})()" >
+    <title>Fix hyperlink colours</title>
+   </bookmark>
+   <bookmark icon="unknown" href="javascript:(function()%7Bvar%20dims,dimarray,wid,hei,dimstring,x,i,z,url;%20function%20linkIsSafe(u)%20%7B%20if%20(u.substr(0,7)%3D%3D%27mailto%3A%27)%20return%20false;%20if%20(u.substr(0,11)%3D%3D%27javascript%3A%27)%20return%20false;%20return%20true;%20%7D%20function%20htmlEscape(s)%7Bs%3Ds.replace(/%26/g,%27%26amp;%27);s%3Ds.replace(/%3E/g,%27%26gt;%27);s%3Ds.replace(/%3C/g,%27%26lt;%27);return%20s;%7D%20dims%20%3D%20prompt(%27width,%20height%20for%20each%20frame%27,%20%27760,%20500%27);%20if%20(dims!%3Dnull)%20%7B%20dimarray%20%3D%20dims.split(%27,%27);%20wid%20%3D%20parseInt(dimarray%5B0%5D);%20hei%20%3D%20parseInt(dimarray%5B1%5D);%20dimstring%20%3D%20%27width%3D%27%2Bwid%2B%27%20height%3D%27%2Bhei;%20x%20%3D%20document.links;%20z%20%3D%20window.open().document;%20for%20(i%20%3D%200;%20i%20%3C%20x.length;%20%2B%2Bi)%20%7B%20url%20%3D%20x%5Bi%5D.href;%20if(linkIsSafe(url))%20%7B%20z.writeln(%27%3Cp%3E%27%20%2B%20x%5Bi%5D.innerHTML%20%2B%20%27%20(%27%20%2B%20htmlEscape(url)%20%2B%20%27)%3Cbr%3E%3Ciframe%20%27%20%2B%20dimstring%20%2B%20%27%20src%3D%22%27%20%2B%20url.replace(/%22/g,%20%27%26quot;%27)%20%2B%20%27%22%3E%5Bbroken%20iframe%5D%3C/iframe%3E%3C/p%3E%27);%20%7D%20%7D%20z.close();%20%7D%20%7D)();" >
+    <title>Open Links in One Big Page...</title>
+   </bookmark>
+   <bookmark icon="unknown" href="javascript:(function()%7Bfunction%20I(u)%7Bvar%20t%3Du.split(%27.%27),e%3Dt%5Bt.length-1%5D.toLowerCase();return%20%7Bgif%3A1,jpg%3A1,jpeg%3A1,png%3A1,mng%3A1%7D%5Be%5D%7Dfunction%20hE(s)%7Breturn%20s.replace(/%26/g,%27%26amp;%27).replace(/%3E/g,%27%26gt;%27).replace(/%3C/g,%27%26lt;%27).replace(/%22/g,%27%26quot;%27);%7Dvar%20q,h,i,z%3Dopen().document;z.write(%27%3Cp%3EImages%20linked%20to%20by%20%27%2BhE(location.href)%2B%27%3A%3C/p%3E%3Chr%3E%27);for(i%3D0;q%3Ddocument.links%5Bi%5D;%2B%2Bi)%7Bh%3Dq.href;if(h%26%26I(h))z.write(%27%3Cp%3E%27%2Bq.innerHTML%2B%27%20(%27%2BhE(h)%2B%27)%3Cbr%3E%3Cimg%20src%3D%22%27%2BhE(h)%2B%27%22%3E%27);%7Dz.close();%7D)()" >
+    <title>Show all images</title>
+   </bookmark>
+  </folder>
+ </folder>
+ <bookmark icon="mime_empty" href="javascript:%20var%20searchStr%20%3D%20document.getSelection();%20if%20(searchStr%20%3D%3D%20%27%27)%20%7B%20searchStr%20%3D%20prompt(%27Search%20for%20what?','');%20%7D%20if%20(searchStr%20!=%20null)%20%7B%20var%20searchUrl%20=%20'http://www.dictionary.com/search?q='+searchStr+'&amp;db=*&amp;db=web';%20window.open(searchUrl,'','location=yes,status=yes,menubar=yes,scrollbars=yes,resizable=yes,width=800,height=600');%20%7D" >
+  <title>Dictionary.com search</title>
+ </bookmark>
+ <bookmark icon="mime_empty" href="javascript:%20var%20searchStr%20%3D%20document.getSelection();%20if%20(searchStr%20%3D%3D%20%27%27)%20%7B%20searchStr%20%3D%20prompt(%27Search%20for%20what?','');%20%7D%20if%20(searchStr%20!=%20null)%20%7B%20var%20searchUrl%20=%20'http://wikipedia.org/w/wiki.phtml?search='+searchStr+'&amp;';%20window.open(searchUrl,'','location=yes,status=yes,menubar=yes,scrollbars=yes,resizable=yes,width=800,height=600');%20%7D" >
+  <title>Wikipedia search</title>
+ </bookmark>
+ <separator/>
+ <separator/>
+ <bookmark icon="www" href="http://" >
+  <title>-------------------------------------</title>
+ </bookmark>
+ <bookmark icon="www" href="javascript:void(window.open(%27http%3A//bugmenot.com/view/%27%2Bescape(location),%27BugMeNot%27,%27location%3Dno,status%3Dyes,menubar%3Dno,scrollbars%3Dyes,resizable%3Dyes,width%3D385,height%3D450%27))" >
+  <title>BugMeNot</title>
+ </bookmark>
+ <bookmark icon="www" href="javascript:void(window.open(%27http%3A//www.google.com/search?q='+document.getSelection()+'&amp;hl=en&amp;ie=ISO-8859-1&amp;meta=&amp;btnG=Google%20Search&amp;btnI=I'm%20Feeling%20Lucky','location=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600'))" >
+  <title>Google QuickSearch</title>
+ </bookmark>
+ <bookmark icon="www" href="javascript:(function()%7Bf%3D%27http%3A//delicious.com/save?url='+encodeURIComponent(window.location.href)+'&amp;title='+encodeURIComponent(document.title)+'&amp;v=5&amp;';a=function(){if(!window.open(f+'noui=1&amp;jump=doclose','deliciousuiv5','location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550'))location.href=f+'jump=yes'};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})()" >
+  <title>Bookmark on Delicious</title>
+ </bookmark>
+ <bookmark icon="www" href="javascript:%20l%3Ddocument.location;%20t%3Ddocument.title;%20document.open();%20document.write(%27%3Cframeset%20cols%3D45%25,*%3E%3Cframe%20src%3D%5C%27about%3Ablank%5C%27%3E%3Cframe%20src%3D%5C%27%27%2Bl%2B%27%5C%27%3E%3C/frameset%3E%27);%20document.close();%20document.frames%5B0%5D.document.open();%20document.frames%5B0%5D.document.write(%27%3Cframeset%20rows%3D8%25,*%3E%3Cframe%20src%3D%5C%27about%3Ablank%5C%27%3E%3Cframe%20src%3D%5C%27http%3A//hwi.ath.cx/hwikalong?url='+escape(l)+'&amp;title='+escape(t)+'\'>&lt;/frameset>');%20document.frames[0].document.close();%20document.frames[0].document.frames[0].document.open();%20document.frames[0].document.frames[0].document.write('&lt;HTML>&lt;BODY>&lt;SCRIPT%20language=\'Javascript\'>%20function%20closeSideBar()%20{%20window.top.document.location=\''+l+'\';%20}%20&lt;/SCRIPT>&lt;P%20align=\'center\'>&lt;a%20href=\'javascript:closeSideBar();\'>[X%20Close]&lt;/A>&lt;/P>&lt;/BODY>&lt;/HTML>');%20void(%20document.frames[0].document.frames[0].document.close()%20);" >
+  <title>hwiKalong</title>
+ </bookmark>
+</xbel>
