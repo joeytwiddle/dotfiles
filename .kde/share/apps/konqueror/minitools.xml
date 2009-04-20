@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xbel>
 <xbel folded="no" >
- <folder folded="yes" icon="bookmark_folder" >
+ <folder folded="no" icon="bookmark_folder" >
   <title>More</title>
   <bookmark icon="www" href="http://www.google.com/search?num=100&amp;q=site%3Awiki.beyondunreal.com+%25s" >
    <title>UnrealWiki with Google</title>
@@ -30,7 +30,7 @@
    <title>------------------ Old -------------------</title>
   </bookmark>
  </folder>
- <folder folded="yes" icon="bookmark_folder" >
+ <folder folded="no" icon="bookmark_folder" >
   <title>Zap (SquareFree)</title>
   <bookmark icon="www" href="https://www.squarefree.com/bookmarklets/seo.html" >
    <title>Search Engine Optimization Bookmarklets</title>
@@ -56,7 +56,7 @@
     <title>Google Search for Selection (No popup)</title>
    </bookmark>
   </folder>
-  <folder folded="no" icon="bookmark_folder" >
+  <folder folded="yes" icon="bookmark_folder" >
    <title>Miscellaneous</title>
    <bookmark icon="unknown" href="javascript:(function()%20%7B%20var%20d,b,f,u,L,i,K,t,%20LL%3D%22zh%20Chinese-simplified,zt%20Chinese-traditional,nl%20Dutch,fr%20French,de%20German,el%20Greek,it%20Italian,ja%20Japanese,ko%20Korean,pt%20Portuguese,ru%20Russian,es%20Spanish%22.split(%22,%22);%20d%3Dopen().document;%20b%3Dd.body;%20f%3Dd.createElement(%22form%22);%20b.appendChild(f);%20f.action%3D%22http%3A//babelfish.altavista.com/babelfish/trurl_pagecontent%22;%20u%3Dd.createElement(%22input%22);%20u.name%3D%22url%22;%20u.style.width%3D%22100%25%22;%20u.value%3Dlocation;%20f.appendChild(u);%20for%20(i%3D0;%20L%3DLL%5Bi%5D;%20%2B%2Bi)%20%7B%20K%20%3D%20L.split(%22%20%22);%20f.appendChild(d.createElement(%22br%22));%20t%3Dd.createElement(%22button%22);%20t.name%3D%22lp%22;%20t.value%3DK%5B0%5D%2B%22_en%22;%20t.innerHTML%20%3D%20%22%3Cb%3E%22%20%2B%20K%5B1%5D%20%2B%20%22%3C/b%3E%20to%20English%22;%20f.appendChild(t);%20%7D%20%7D)()" >
     <title>Translate (Other)</title>
@@ -77,7 +77,7 @@
     <title>Go to Referrer (Back)</title>
    </bookmark>
   </folder>
-  <folder folded="yes" icon="bookmark_folder" >
+  <folder folded="no" icon="bookmark_folder" >
    <title>Web Development</title>
    <bookmark icon="unknown" href="javascript:(function()%7B%20function%20htmlEscape(s)%7Bs%3Ds.replace(/%26/g,%27%26amp;%27);s%3Ds.replace(/%3E/g,%27%26gt;%27);s%3Ds.replace(/%3C/g,%27%26lt;%27);return%20s;%7D%20x%3Dwindow.open();%20x.document.write(%27%3Cpre%3E%27%20%2B%20htmlEscape(%27%3Chtml%3E%5Cn%27%20%2B%20document.documentElement.innerHTML%20%2B%20%27%5Cn%3C/html%3E%27));%20x.document.close();%20%7D)();" >
     <title>Live DOM Source</title>
@@ -92,7 +92,7 @@
     <title>Javascript Shell</title>
    </bookmark>
   </folder>
-  <folder folded="yes" icon="bookmark_folder" >
+  <folder folded="no" icon="bookmark_folder" >
    <title>Zap</title>
    <bookmark icon="unknown" href="javascript:(function()%7Bfunction%20k(x)%20%7B%20if%20(x.onmouseover)%20%7B%20x.onmouseover();%20x.backupmouseover%20%3D%20x.onmouseover;%20x.backupmouseout%20%3D%20x.onmouseout;%20x.onmouseover%20%3D%20null;%20x.onmouseout%20%3D%20null;%20%7D%20else%20if%20(x.backupmouseover)%20%7B%20x.onmouseover%20%3D%20x.backupmouseover;%20x.onmouseout%20%3D%20x.backupmouseout;%20x.onmouseover();/*for%20MM_swapImgRestore*/%20x.onmouseout();%20%7D%20%7D%20var%20i,x;%20for(i%3D0;%20x%3Ddocument.links%5Bi%5D;%20%2B%2Bi)%20k(x);%20for%20(i%3D0;%20x%3Ddocument.images%5Bi%5D;%20%2B%2Bi)%20k(x);%20%7D)()" >
     <title>Trigger Rollovers (To Show Hidden Meat)</title>
@@ -118,13 +118,16 @@
    <bookmark icon="unknown" href="javascript:(function()%7Bfunction%20R(w)%7Btry%7Bvar%20d%3Dw.document,j,i,t,T,N,b,r%3D1,C;for(j%3D0;t%3D%5B%22object%22,%22embed%22,%22applet%22,%22iframe%22%5D%5Bj%5D;%2B%2Bj)%7BT%3Dd.getElementsByTagName(t);for(i%3DT.length-1;(i%2B1)%26%26(N%3DT%5Bi%5D);--i)if(j!%3D3%7C%7C!R((C%3DN.contentWindow)?C:N.contentDocument.defaultView)){b=d.createElement(&quot;div&quot;);b.style.width=N.width;%20b.style.height=N.height;b.innerHTML=&quot;&lt;del>&quot;+(j==3?&quot;third-party%20&quot;+t:t)+&quot;&lt;/del>&quot;;N.parentNode.replaceChild(b,N);}}}catch(E){r=0}return%20r}R(self);var%20i,x;for(i=0;x=frames[i];++i)R(x)})();%20javascript:(function(){var%20newSS,%20styles='*%20{%20background:%20white%20!%20important;%20color:%20black%20!important%20}%20:link,%20:link%20*%20{%20color:%20#0000EE !important } :visited, :visited * { color: #551A8B !important }'; if(document.createStyleSheet) { document.createStyleSheet(&quot;javascript:'&quot;+styles+&quot;'&quot;); } else { newSS=document.createElement('link'); newSS.rel='stylesheet'; newSS.href='data:text/css,'+escape(styles); document.getElementsByTagName(&quot;head&quot;)[0].appendChild(newSS); } })(); javascript:(function(){var d=document; function K(N,w) { var nn = d.createElement(w), C = N.childNodes, i; for(i=C.length-1;i>=0;--i) nn.insertBefore(C[i],nn.childNodes[0]); N.parentNode.replaceChild(nn,N); } function Z(t,w) { var T = document.getElementsByTagName(t), j; for (j=T.length-1;j>=0;--j) K(T[j],w); } Z(&quot;blink&quot;, &quot;span&quot;); Z(&quot;marquee&quot;, &quot;div&quot;); })(); javascript:(function(){var H=[&quot;mouseover&quot;,&quot;mouseout&quot;,&quot;unload&quot;,&quot;resize&quot;],o=window.opera; if(document.addEventListener/*MOZ*/&amp;&amp;!o) for(j in H)document.addEventListener(H[j],function(e){e.stopPropagation();},true); else if(window.captureEvents/*NS4*/&amp;&amp;!o) { document.captureEvents(-1/*ALL*/);for(j in H)window[&quot;on&quot;+H[j]]=null;} else/*IE*/ {function R(N){var i,x;for(j in H)if(N[&quot;on&quot;+H[j]]/*NOT TEXTNODE*/)N[&quot;on&quot;+H[j]]=null;for(i=0;x=N.childNodes[i];++i)R(x);}R(document);}})(); javascript:(function() { var c, tID, iID; tID = setTimeout(function(){}, 0); for (c=1; c&lt;1000 &amp;&amp; c&lt;=tID; ++c) clearTimeout(tID - c); iID = setInterval(function(){},1000); for (c=0; c&lt;1000 &amp;&amp; c&lt;=iID; ++c) clearInterval(iID - c); })();" >
     <title>Zap!</title>
    </bookmark>
+   <bookmark icon="www" href="javascript:%0A%09%09%09function%20attachClickListener(node,clickProcessor)%20%7B%0A%09%09%09%09if%20(node.captureEvents)%20%7B%0A%09%09%09%09%09node.captureEvents(Event.CLICK);%0A%09%09%09%09%7D%0A%09%09%09%09node.onmouseup%20%3D%20clickProcessor;%0A%09%09%09%09if%20(node.style)%20%7B%0A%09%09%09%09%09node.style.cursor%20%3D%20(clickProcessor?&quot;crosshair&quot;:&quot;&quot;);%0A%09%09%09%09}%0A%09%09%09%09var%20kids%20=%20node.childNodes;%0A%09%09%09%09for%20(var%20i=0;i&lt;kids.length;i++)%20{%0A%09%09%09%09%09attachClickListener(kids[i],clickProcessor);%0A%09%09%09%09}%0A%09%09%09}%0A%09%09%09function%20processClick(event)%20{%0A%09%09%09%09var%20node%20=%20event.srcElement;%0A%09%09%09%09if%20(!node)%20{%0A%09%09%09%09%09node%20=%20event.currentTarget;%0A%09%09%09%09}%0A%09%09%09%09node.innerHTML=&quot;&quot;;%0A%09%09%09%09attachClickListener(document,null);%0A%09%09%09}%0A%09%09%09attachClickListener(document,processClick);%0A" >
+    <title>Nuke next item clicked</title>
+   </bookmark>
   </folder>
   <folder folded="yes" icon="bookmark_folder" >
    <title>Text/Data</title>
    <bookmark icon="unknown" href="javascript:(function()%7Bvar%20d%3Ddocument,q%3D%22table%22,i,j,k,y,r,c,t;for(i%3D0;t%3Dd.getElementsByTagName(q)%5Bi%5D;%2B%2Bi)%7Bvar%20w%3D0,N%3Dt.cloneNode(0);N.width%3D%22%22;N.height%3D%22%22;N.border%3D1;for(j%3D0;r%3Dt.rows%5Bj%5D;%2B%2Bj)for(y%3Dk%3D0;c%3Dr.cells%5Bk%5D;%2B%2Bk)%7Bvar%20z,a%3Dc.rowSpan,b%3Dc.colSpan,v%3Dc.cloneNode(1);v.rowSpan%3Db;v.colSpan%3Da;v.width%3D%22%22;v.height%3D%22%22;if(!v.bgColor)v.bgColor%3Dr.bgColor;while(w%3Cy%2Bb)N.insertRow(w%2B%2B).p%3D0;while(N.rows%5By%5D.p%3Ej)%2B%2By;N.rows%5By%5D.appendChild(v);for(z%3D0;z%3Cb;%2B%2Bz)N.rows%5By%2Bz%5D.p%2B%3Da;y%2B%3Db;%7Dt.parentNode.replaceChild(N,t);%7D%7D)()" >
     <title>Transpose Table</title>
    </bookmark>
-   <bookmark icon="unknown" href="javascript:function%20toArray%20(c)%7Bvar%20a,%20k;a%3Dnew%20Array;for%20(k%3D0;%20k%3Cc.length;%20%2B%2Bk)a%5Bk%5D%3Dc%5Bk%5D;return%20a;%7Dfunction%20insAtTop(par,child)%7Bif(par.childNodes.length)%20par.insertBefore(child,%20par.childNodes%5B0%5D);else%20par.appendChild(child);%7Dfunction%20countCols(tab)%7Bvar%20nCols,%20i;nCols%3D0;for(i%3D0;i%3Ctab.rows.length;%2B%2Bi)if(tab.rows%5Bi%5D.cells.length%3EnCols)nCols%3Dtab.rows%5Bi%5D.cells.length;return%20nCols;%7Dfunction%20makeHeaderLink(tableNo,%20colNo,%20ord)%7Bvar%20link;link%3Ddocument.createElement(%27a%27);link.href%3D%27javascript%3AsortTable(%27%2BtableNo%2B%27,%27%2BcolNo%2B%27,%27%2Bord%2B%27);%27;link.appendChild(document.createTextNode((ord%3E0)?'a':'d'));return%20link;}function%20makeHeader(tableNo,nCols){var%20header,%20headerCell,%20i;header=document.createElement('tr');for(i=0;i&lt;nCols;++i){headerCell=document.createElement('td');headerCell.appendChild(makeHeaderLink(tableNo,i,1));headerCell.appendChild(document.createTextNode('/'));headerCell.appendChild(makeHeaderLink(tableNo,i,-1));header.appendChild(headerCell);}return%20header;}g_tables=toArray(document.getElementsByTagName('table'));if(!g_tables.length)%20alert(&quot;This%20page%20doesn't%20contain%20any%20tables.&quot;);(function(){var%20j,%20thead;for(j=0;j&lt;g_tables.length;++j){thead=g_tables[j].createTHead();insAtTop(thead,%20makeHeader(j,countCols(g_tables[j])))}})%20();function%20compareRows(a,b){if(a.sortKey==b.sortKey)return%200;return%20(a.sortKey%20&lt;%20b.sortKey)%20?%20g_order%20:%20-g_order;}function%20sortTable(tableNo,%20colNo,%20ord){var%20table,%20rows,%20nR,%20bs,%20i,%20j,%20temp;g_order=ord;g_colNo=colNo;table=g_tables[tableNo];rows=new%20Array();nR=0;bs=table.tBodies;for(i=0;%20i&lt;bs.length;%20++i)for(j=0;%20j&lt;bs[i].rows.length;%20++j){rows[nR]=bs[i].rows[j];temp=rows[nR].cells[g_colNo];if(temp)%20rows[nR].sortKey=temp.innerHTML;else%20rows[nR].sortKey=&quot;&quot;;++nR;}rows.sort(compareRows);for%20(i=0;%20i%20&lt;%20rows.length;%20++i)insAtTop(table.tBodies[0],%20rows[i]);}" >
+   <bookmark icon="unknown" href="javascript:function%20toArray%20(c)%7Bvar%20a,%20k;a%3Dnew%20Array;for%20(k%3D0;%20k%3Cc.length;%20%2B%2Bk)a%5Bk%5D%3Dc%5Bk%5D;return%20a;%7Dfunction%20insAtTop(par,child)%7Bif(par.childNodes.length)%20par.insertBefore(child,%20par.childNodes%5B0%5D);else%20par.appendChild(child);%7Dfunction%20countCols(tab)%7Bvar%20nCols,%20i;nCols%3D0;for(i%3D0;i%3Ctab.rows.length;%2B%2Bi)if(tab.rows%5Bi%5D.cells.length%3EnCols)nCols%3Dtab.rows%5Bi%5D.cells.length;return%20nCols;%7Dfunction%20makeHeaderLink(tableNo,%20colNo,%20ord)%7Bvar%20link;link%3Ddocument.createElement(%27a%27);link.href%3D%27javascript%3AsortTable(%27%2BtableNo%2B%27,%27%2BcolNo%2B%27,%27%2Bord%2B%27);%27;link.appendChild(document.createTextNode((ord%3E0)?'A':'D'));return%20link;}function%20makeHeader(tableNo,nCols){var%20header,%20headerCell,%20i;header=document.createElement('tr');for(i=0;i&lt;nCols;++i){headerCell=document.createElement('td');headerCell.appendChild(makeHeaderLink(tableNo,i,1));headerCell.appendChild(document.createTextNode('/'));headerCell.appendChild(makeHeaderLink(tableNo,i,-1));header.appendChild(headerCell);}return%20header;}g_tables=toArray(document.getElementsByTagName('table'));if(!g_tables.length)%20alert(&quot;This%20page%20doesn't%20contain%20any%20tables.&quot;);(function(){var%20j,%20thead;for(j=0;j&lt;g_tables.length;++j){thead=g_tables[j].createTHead();insAtTop(thead,%20makeHeader(j,countCols(g_tables[j])))}})%20();function%20compareRows(a,b){if(a.sortKey==b.sortKey)return%200;return%20(a.sortKey%20&lt;%20b.sortKey)%20?%20g_order%20:%20-g_order;}function%20sortTable(tableNo,%20colNo,%20ord){var%20table,%20rows,%20nR,%20bs,%20i,%20j,%20temp;g_order=ord;g_colNo=colNo;table=g_tables[tableNo];rows=new%20Array();nR=0;bs=table.tBodies;for(i=0;%20i&lt;bs.length;%20++i)for(j=0;%20j&lt;bs[i].rows.length;%20++j){rows[nR]=bs[i].rows[j];temp=rows[nR].cells[g_colNo];if(temp)%20rows[nR].sortKey=temp.innerHTML;else%20rows[nR].sortKey=&quot;&quot;;++nR;}rows.sort(compareRows);for%20(i=0;%20i%20&lt;%20rows.length;%20++i)insAtTop(table.tBodies[0],%20rows[i]);}" >
     <title>Sort Table</title>
    </bookmark>
    <bookmark icon="unknown" href="javascript:(function()%7B%20function%20zoomImage(image,%20amt)%20%7B%20if(image.initialHeight%20%3D%3D%20null)%20%7B%20/*%20avoid%20accumulating%20integer-rounding%20error%20*/%20image.initialHeight%3Dimage.height;%20image.initialWidth%3Dimage.width;%20image.scalingFactor%3D1;%20%7D%20image.scalingFactor*%3Damt;%20image.width%3Dimage.scalingFactor*image.initialWidth;%20image.height%3Dimage.scalingFactor*image.initialHeight;%20%7D%20var%20i,L%3Ddocument.images.length;%20for%20(i%3D0;i%3CL;%2B%2Bi)%20zoomImage(document.images%5Bi%5D,.5);%20if%20(!L)%20alert(%22This%20page%20contains%20no%20images.%22);%20%7D)();" >
@@ -146,28 +149,28 @@
     <title>Show link URLs</title>
    </bookmark>
   </folder>
-  <folder folded="yes" icon="bookmark_folder" >
+  <folder folded="no" icon="bookmark_folder" >
    <title>Links</title>
    <bookmark icon="unknown" href="javascript:(function()%7Bvar%20x,i;%20x%3Ddocument.links;%20for(i%3D0;i%3Cx.length;%2B%2Bi)%20%7B%20x%5Bi%5D.target%3D%22_blank%22;%20%7D%20%7D)();" >
-    <title>Make all links target new tab</title>
+    <title>Make Links target new window</title>
    </bookmark>
    <bookmark icon="unknown" href="javascript:(function()%7Bvar%20x,i;%20x%3Ddocument.links;%20for(i%3D0;i%3Cx.length;%2B%2Bi)%20%7B%20x%5Bi%5D.target%3D%22_self%22;%20%7D%20%7D)();" >
-    <title>Make all links target this window</title>
+    <title>Make Links target this window</title>
    </bookmark>
    <bookmark icon="unknown" href="javascript:(function()%7Bvar%20n_to_open,dl,dll,i;%20function%20linkIsSafe(u)%20%7B%20if%20(u.substr(0,7)%3D%3D%27mailto%3A%27)%20return%20false;%20if%20(u.substr(0,11)%3D%3D%27javascript%3A%27)%20return%20false;%20return%20true;%20%7D%20n_to_open%20%3D%200;%20dl%20%3D%20document.links;%20dll%20%3D%20dl.length;%20if%20(window.getSelection%20%26%26%20window.getSelection().containsNode)%20%7B%20/*%20mozilla%20*/%20for(i%3D0;%20i%3Cdll;%20%2B%2Bi)%20%7B%20if%20(window.getSelection().containsNode(dl%5Bi%5D,%20true)%20%26%26%20linkIsSafe(dl%5Bi%5D.href))%20%2B%2Bn_to_open;%20%7D%20if%20(n_to_open%20%26%26%20confirm(%27Open%20%27%20%2B%20n_to_open%20%2B%20%27%20selected%20links%20in%20new%20windows?'))%20{%20for(i=0;%20i&lt;dll;%20++i)%20if%20(window.getSelection().containsNode(dl[i],%20true)%20&amp;&amp;%20linkIsSafe(dl[i].href))%20window.open(dl[i].href);%20}%20}%20/*%20/mozilla%20*/%20if%20(!n_to_open)%20{%20/*ie,%20or%20mozilla%20with%20no%20links%20selected:%20this%20section%20matches%20open_all_links,%20except%20for%20the%20alert%20text%20*/%20for(i%20=%200;%20i%20&lt;%20dll;%20++i)%20{%20if%20(linkIsSafe(dl[i].href))%20++n_to_open;%20}%20if%20(!n_to_open)%20alert%20('no%20links');%20else%20{%20if%20(confirm('No%20links%20selected.%20%20Open%20'%20+%20n_to_open%20+%20'%20links%20in%20new%20windows?'))%20for%20(i%20=%200;%20i%20&lt;%20dll;%20++i)%20if%20(linkIsSafe(dl[i].href))%20window.open(dl[i].href);%20}%20}%20})();" >
     <title>Open selected links in new windows</title>
    </bookmark>
    <bookmark icon="unknown" href="javascript:(function()%7Bvar%20n_to_open,dl,dll,i;%20function%20linkIsSafe(u)%20%7B%20if%20(u.substr(0,7)%3D%3D%27mailto%3A%27)%20return%20false;%20if%20(u.substr(0,11)%3D%3D%27javascript%3A%27)%20return%20false;%20return%20true;%20%7D%20n_to_open%20%3D%200;%20dl%20%3D%20document.links;%20dll%20%3D%20dl.length;%20for(i%20%3D%200;%20i%20%3C%20dll;%20%2B%2Bi)%20%7B%20if%20(linkIsSafe(dl%5Bi%5D.href))%20%2B%2Bn_to_open;%20%7D%20if%20(!n_to_open)%20alert%20(%27no%20links%27);%20else%20%7B%20if%20(confirm(%27Open%20%27%20%2B%20n_to_open%20%2B%20%27%20links%20in%20new%20windows?'))%20for%20(i%20=%200;%20i%20&lt;%20dll;%20++i)%20if%20(linkIsSafe(dl[i].href))%20window.open(dl[i].href);%20}%20})();" >
-    <title>Open Links in new windows</title>
+    <title>Open Links in New Windows...</title>
    </bookmark>
    <bookmark icon="unknown" href="javascript:(function()%7Bvar%20i,x;%20for%20(i%3D0;x%3Ddocument.links%5Bi%5D;%2B%2Bi)x.style.color%3D%5B%22blue%22,%22red%22,%22orange%22%5D%5Bsim(x,location)%5D;%20function%20sim(a,b)%20%7B%20if%20(a.hostname!%3Db.hostname)%20return%200;%20if%20(fixPath(a.pathname)!%3DfixPath(b.pathname)%20%7C%7C%20a.search!%3Db.search)%20return%201;%20return%202;%20%7D%20function%20fixPath(p)%7B%20p%20%3D%20(p.charAt(0)%3D%3D%22/%22%20?%20&quot;&quot;%20:%20&quot;/&quot;)%20+%20p;/*many%20browsers*/%20p=p.split(&quot;?&quot;)[0];/*opera*/%20return%20p;%20}%20})()" >
-    <title>Fix hyperlink colours</title>
+    <title>Show relative/absolute Hyperlinks</title>
    </bookmark>
    <bookmark icon="unknown" href="javascript:(function()%7Bvar%20dims,dimarray,wid,hei,dimstring,x,i,z,url;%20function%20linkIsSafe(u)%20%7B%20if%20(u.substr(0,7)%3D%3D%27mailto%3A%27)%20return%20false;%20if%20(u.substr(0,11)%3D%3D%27javascript%3A%27)%20return%20false;%20return%20true;%20%7D%20function%20htmlEscape(s)%7Bs%3Ds.replace(/%26/g,%27%26amp;%27);s%3Ds.replace(/%3E/g,%27%26gt;%27);s%3Ds.replace(/%3C/g,%27%26lt;%27);return%20s;%7D%20dims%20%3D%20prompt(%27width,%20height%20for%20each%20frame%27,%20%27760,%20500%27);%20if%20(dims!%3Dnull)%20%7B%20dimarray%20%3D%20dims.split(%27,%27);%20wid%20%3D%20parseInt(dimarray%5B0%5D);%20hei%20%3D%20parseInt(dimarray%5B1%5D);%20dimstring%20%3D%20%27width%3D%27%2Bwid%2B%27%20height%3D%27%2Bhei;%20x%20%3D%20document.links;%20z%20%3D%20window.open().document;%20for%20(i%20%3D%200;%20i%20%3C%20x.length;%20%2B%2Bi)%20%7B%20url%20%3D%20x%5Bi%5D.href;%20if(linkIsSafe(url))%20%7B%20z.writeln(%27%3Cp%3E%27%20%2B%20x%5Bi%5D.innerHTML%20%2B%20%27%20(%27%20%2B%20htmlEscape(url)%20%2B%20%27)%3Cbr%3E%3Ciframe%20%27%20%2B%20dimstring%20%2B%20%27%20src%3D%22%27%20%2B%20url.replace(/%22/g,%20%27%26quot;%27)%20%2B%20%27%22%3E%5Bbroken%20iframe%5D%3C/iframe%3E%3C/p%3E%27);%20%7D%20%7D%20z.close();%20%7D%20%7D)();" >
     <title>Open Links in One Big Page...</title>
    </bookmark>
    <bookmark icon="unknown" href="javascript:(function()%7Bfunction%20I(u)%7Bvar%20t%3Du.split(%27.%27),e%3Dt%5Bt.length-1%5D.toLowerCase();return%20%7Bgif%3A1,jpg%3A1,jpeg%3A1,png%3A1,mng%3A1%7D%5Be%5D%7Dfunction%20hE(s)%7Breturn%20s.replace(/%26/g,%27%26amp;%27).replace(/%3E/g,%27%26gt;%27).replace(/%3C/g,%27%26lt;%27).replace(/%22/g,%27%26quot;%27);%7Dvar%20q,h,i,z%3Dopen().document;z.write(%27%3Cp%3EImages%20linked%20to%20by%20%27%2BhE(location.href)%2B%27%3A%3C/p%3E%3Chr%3E%27);for(i%3D0;q%3Ddocument.links%5Bi%5D;%2B%2Bi)%7Bh%3Dq.href;if(h%26%26I(h))z.write(%27%3Cp%3E%27%2Bq.innerHTML%2B%27%20(%27%2BhE(h)%2B%27)%3Cbr%3E%3Cimg%20src%3D%22%27%2BhE(h)%2B%27%22%3E%27);%7Dz.close();%7D)()" >
-    <title>Show all images</title>
+    <title>Show all linked images</title>
    </bookmark>
   </folder>
  </folder>
@@ -176,6 +179,9 @@
  </bookmark>
  <bookmark icon="unknown" href="javascript:(function()%7Bvar%20x;%20x%3D%27Auto%20%27%2Bdocument.title;%20if%20(x%20!%3D%20null)%20%7B%20window.sidebar.addPanel(x,location.href,%27%27);%20%7D%20%7D)();" >
   <title>Open in SideBar</title>
+ </bookmark>
+ <bookmark icon="www" href="javascript:var%20f%20%3D%20document.createElement(%27IFRAME%27);f.style%20%3D%20%27z-index%3A100%27;f.style.position%20%3D%20%27absolute%27;f.style.width%20%3D%20window.innerWidth%20*%203/4;f.style.height%20%3D%20window.innerHeight%20*%203/4;f.style.top%20%3D%2020;f.style.right%20%3D%2020;f.id%20%3D%20%27floatingFrame1%27;var%20links%20%3D%20document.getElementsByTagName(%27A%27);function%20eventHandler(evt)%20%7B/*%20var%20linkNode%20%3D%20evt.srcElement;%20*/var%20linkNode%20%3D%20evt.currentTarget;document.getElementById(%27floatingFrame1%27).src%20%3D%20linkNode.href;%7Dfor%20(var%20i%3D0;i%3Clinks.length;i%2B%2B)%20%7B/*%20links%5Bi%5D.onmouseover%20%3D%20%27alert(%22boo%22);%20document.getElementById(%22floatingFrame1%22).src%20%3D%20%22http%3A//www.google.com%22;%27;%20*/links%5Bi%5D.onmouseover%20%3D%20eventHandler;%7Ddocument.body.appendChild(f);" >
+  <title>Preview Links in Floating Frame</title>
  </bookmark>
  <bookmark icon="www" href="javascript:void(window.open(%27http%3A//www.google.com/search?q='+document.getSelection()+'&amp;hl=en&amp;ie=ISO-8859-1&amp;meta=&amp;btnG=Google%20Search&amp;btnI=I'm%20Feeling%20Lucky','location=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600'))" >
   <title>Google QuickSearch</title>
