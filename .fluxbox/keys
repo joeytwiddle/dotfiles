@@ -142,8 +142,13 @@ Mod1 c :Close
 Mod4 c :Close
 Mod1 q :Close
 Mod4 q :KillWindow
-Mod1 x :ExecCommand xterm
-Mod4 x :ExecCommand xterm
+# Mod1 x :ExecCommand xterm -bg black -fg white -font '-*-fixed-*-r-*-*-12-*-*-*-*-*-*-*'
+# Mod4 x :ExecCommand xterm -bg black -fg white -font '-*-fixed-*-r-*-*-12-*-*-*-*-*-*-*'
+# Mod1 x :ExecCommand xterm
+# Mod4 x :ExecCommand xterm
+## This got me the font I wanted:
+Mod1 x :ExecCommand xtermbg
+Mod4 x :ExecCommand xtermbg
 Mod1 a :Lower
 Mod4 a :Lower
 Mod1 d :ShadeWindow
@@ -165,6 +170,8 @@ Mod1 f :ToggleDecor
 Mod4 f :ToggleDecor
 # Mod1 t :ToggleTab
 # Mod4 t :ToggleTab
+Mod1 F9 :ExecCommand xsnapshot
+Mod4 F9 :ExecCommand xsnapshot
 
 # Changing workspace
 Control Mod1 Left :PrevWorkspace
@@ -243,10 +250,11 @@ Control Mod1 KP_Down :ForEach {MoveUp -4} {{groups}}
 # Mod4 KP_Multiply :HorizontalIncrement
 # Mod4 KP_Subtract :VerticalDecrement
 # Mod4 KP_Add :VerticalIncrement
-Mod4 KP_Multiply :Resize +12 0
-Mod4 KP_Divide :Resize -12 0
-Mod4 KP_Add :Resize 0 +12
-Mod4 KP_Subtract :Resize 0 -12
+## Mmm problem.  xterms require +/-4, other apps require +/-12
+Mod4 KP_Multiply :Resize +8 0
+Mod4 KP_Divide :Resize -8 0
+Mod4 KP_Add :Resize 0 +8
+Mod4 KP_Subtract :Resize 0 -8
 
 Mod1 F2 :ExecCommand runacommand
 
@@ -274,6 +282,6 @@ Mod1 KP_Delete :ExecCommand xmms -s
 Mod1 Print :ExecCommand import -window root /tmp/screenshot-$$.bmp
 Mod4 Print :ExecCommand import -window root /tmp/screenshot-$$.bmp
 
-
-
+Mod4 k :ExecCommand save_desktop
+Mod4 l :ExecCommand load_desktop
 
