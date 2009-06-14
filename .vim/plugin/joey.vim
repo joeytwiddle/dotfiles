@@ -2,7 +2,8 @@
 
 :function! s:Joey()
 
-		"" Highlight search
+	"" Highlight search
+
 	:let Tmenu_ctags_cmd = "/usr/bin/ctags-exuberant"
 	:let Tlist_Ctags_Cmd = "/usr/bin/ctags-exuberant"
 	" :let Tlist_Display_Prototype = 1
@@ -40,16 +41,37 @@
 
 	:set incsearch
 	" :set wrapmargin=8
+
+	" my defaults (rather than the default 8) but these should be
+	" overridden by modeline or whatever.
 	:set shiftwidth=3
 	:set ts=3
 	:set list
+
 	" :set listchars=tab:::,trail:$
 	" :set listchars=tab:>\ ,trail:$
 	" :set listchars=tab:-\ ,trail:$
 	" :set listchars=tab:\|\ ,trail:$
 	" :set listchars=tab:\\_,trail:$
 	" :set listchars=tab:\|-,trail:$
-	:set listchars=tab:\>-,trail:$
+	" :set listchars=tab:\>-,trail:$
+	:set listchars=tab:>-,trail:$,precedes:<,extends:>
+	" :set listchars+=precedes:<,extends:>
+	" :set showbreak=\ \\\ 
+	" :set showbreak=\ \|\|\ 
+	" :set showbreak=\\\ 
+	" :set showbreak=\ \|-\ 
+	" :set showbreak=\|-\ 
+	" :set showbreak=\\\\\ 
+	" :set showbreak=\-\|\-\ 
+	" :set showbreak=\ \\\\\ 
+	" :set showbreak=\ \\\\+>\ 
+	" :set showbreak=\ ....\ 
+	" :set showbreak=\ >>\ 
+	" :set showbreak=>>>
+	" :set showbreak=---+
+	:set showbreak=----
+
 	:highlight SpecialKey ctermfg=DarkGrey cterm=bold guifg=#606060
 	" :set expandtab
 	":set noautoindent
