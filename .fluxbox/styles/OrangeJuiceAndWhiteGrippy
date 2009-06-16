@@ -18,7 +18,7 @@
 #
 ############################################################## BACKGROUND #####
 
-background:	none
+# background:	none
 
 # background:	flat gradient crossdiagonal
 # background.color:	#081866
@@ -196,7 +196,7 @@ window.title.unfocus.color:	#dddddd
 
 window.justify:	Center
 
-window.title.height:	26
+window.title.height:	27
 
 # window.label.focus:	flat
 # window.label.focus.color:	#895D52
@@ -214,7 +214,7 @@ window.title.height:	26
 # window.label.focus:	bevel1 solid interlaced
 # window.label.focus.color:	#aa9900
 # window.label.focus.colorTo:	#000000
-window.label.focus:	raised gradient bevel1 solid interlaced
+window.label.focus:	gradient bevel1 solid interlaced
 window.label.focus.colorTo:	#907000
 window.label.focus.color:	#aa8800
 # window.label.focus:	raised gradient vertical

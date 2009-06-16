@@ -21,7 +21,7 @@
 #
 ############################################################## BACKGROUND #####
 
-background:	none
+# background:	none
 # background:	flat gradient crossdiagonal
 # background.color:	#081866
 # background.colorTo:	#66aadd

@@ -18,7 +18,7 @@
 #
 ############################################################## BACKGROUND #####
 
-background:	none
+# background:	none
 
 # background:	flat gradient crossdiagonal
 # background.color:	#081866
@@ -185,8 +185,8 @@ window.title.focus.color:	#bb9933
 window.title.focus.colorTo:	#aa8822
 window.title.unfocus:	raised gradient vertical
 # window.title.unfocus:	raised gradient vertical
-window.title.unfocus.color:	#999999
-window.title.unfocus.colorTo:	#666666
+window.title.unfocus.color:	#aaaaaa
+window.title.unfocus.colorTo:	#999999
 ## Peach:
 # window.borderColor:	#fff0d8
 # window.title.focus:	flat
@@ -196,7 +196,7 @@ window.title.unfocus.colorTo:	#666666
 
 window.justify:	Center
 
-window.title.height:	26
+window.title.height:	27
 
 # window.label.focus:	flat
 # window.label.focus.color:	#895D52
@@ -215,8 +215,8 @@ window.title.height:	26
 # window.label.focus.color:	#aa9900
 # window.label.focus.colorTo:	#000000
 window.label.focus:	gradient vertical
-window.label.focus.color:	#aa8822
-window.label.focus.colorTo:	#bb9933
+window.label.focus.color:	#bb9933
+window.label.focus.colorTo:	#aa8822
 # window.label.focus.colorTo:	#aa8822
 # window.label.focus.color:	#ccaa44
 # window.label.focus:	raised gradient vertical

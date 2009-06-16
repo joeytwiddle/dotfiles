@@ -21,7 +21,7 @@
 #
 ############################################################## BACKGROUND #####
 
-background:	none
+# background:	none
 # background:	flat gradient crossdiagonal
 # background.color:	#081866
 # background.colorTo:	#66aadd
@@ -138,7 +138,7 @@ toolbar.iconbar.unfocused.justify:	center
 
 window.justify:	Center
 ## 25 was nice, except i felt the font was out 0.5 pixel.
-window.title.height:	26
+window.title.height:	24
 window.borderWidth:	1
 window.bevelWidth:	3
 window.shade:	false
@@ -163,13 +163,13 @@ window.label.unfocus.colorTo:	#446633
 window.label.unfocus.textColor:	#eeeecc
 
 window.button.focus:	raised gradient
-window.button.focus.color:	#5c5c5c
-window.button.focus.colorTo:	#2a2a2a
+window.button.focus.color:	#666666
+window.button.focus.colorTo:	#222222
 window.button.focus.picColor:	#7d7d7d
 window.button.unfocus:	raised gradient
 window.button.unfocus.Color:	#555555
 window.button.unfocus.ColorTo:	#222222
-window.button.unfocus.picColor:	#606060
+window.button.unfocus.picColor:	#555555
 window.button.pressed:	gradient
 window.button.pressed.color:	#262626
 window.button.pressed.colorTo:	#555555

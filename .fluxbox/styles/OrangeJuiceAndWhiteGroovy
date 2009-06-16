@@ -18,7 +18,7 @@
 #
 ############################################################## BACKGROUND #####
 
-background:	none
+# background:	none
 
 # background:	flat gradient crossdiagonal
 # background.color:	#081866
@@ -196,7 +196,7 @@ window.title.unfocus.color:	#dddddd
 
 window.justify:	Center
 
-window.title.height:	26
+window.title.height:	27
 
 # window.label.focus:	flat
 # window.label.focus.color:	#895D52
