@@ -81,10 +81,11 @@
 	" I hope you never need to type a £, because I've remapped it to leave ins mode!
 	inoremap £ <Esc>
 	" I really wanted to map <C-Del> :-(
-	inoremap <C-h> <Left>
-	inoremap <C-l> <Right>
-	inoremap <C-j> <Down>
-	inoremap <C-k> <Up>
+	" This is no good.  On Gentoo C-h = ^H = backspace!
+	" inoremap <C-h> <Left>
+	" inoremap <C-l> <Right>
+	" inoremap <C-j> <Down>
+	" inoremap <C-k> <Up>
 	" Whoopee I did!
 	inoremap <C-xDel> <Left>
 	" Now just stuck on Ctrl+Space
