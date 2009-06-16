@@ -1,6 +1,6 @@
 "" Highlights the character under the cursor so that it appears reversed.
 "" Very useful if for some reason your normal cursor has disappeared or is
-"" missing, invisible, hidden or intermittent.
+"" missing, invisible, hidden or intermittent.  (I had this problem on a 486!)
 
 "" Hit Ctrl-C or Ctrl-H to toggle on/off.
 
