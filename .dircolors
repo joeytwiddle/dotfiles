@@ -131,6 +131,7 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .mov 01;35
 .wmv 01;35
 .ogm 01;35
+.flv 01;35
 # Audio
 .ra 01;35
 .mp3 01;35
