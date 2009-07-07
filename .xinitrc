@@ -73,6 +73,7 @@ PS4="[.xinitrc] # $PS4"
 ## Put your favourite WMs at the top.  The first one present will be chosen.
 ## TESTING kdelight again
 WindowManagers="
+compiz
 kdelight
 startkde
 fluxbox
@@ -115,7 +116,7 @@ NEWLINE="
 if [ "$DISPLAY" = ":0" ] || [ "$DISPLAY" = :0.0 ]
 then START_A_PANEL=true
 elif [ "$DISPLAY" = ":1" ] || [ "$DISPLAY" = ":2" ] || [ "$DISPLAY" = :1.0 ] || [ "$DISPLAY" = :2.0 ]
-then WindowManagers="WindowMaker""$NEWLINE""fluxbox""$NEWLINE""$WindowManagers"
+then WindowManagers="fluxbox""$NEWLINE""WindowMaker""$NEWLINE""$WindowManagers"
 elif [ "$DISPLAY" = ":3" ]
 then WindowManagers="startkde""$NEWLINE""$WindowManagers"
 fi
