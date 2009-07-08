@@ -1,33 +1,103 @@
-#~/.bbkeysrc, automagically configured by bbkeysconf.pl
+# ~/.bbkeysrc
 
-# KeyToGrab(X), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xterm)
-KeyToGrab(X), WithModifier(Mod1), WithAction(ExecCommand), DoThis(/home/joey/j/jsh xterm -e /home/joey/j/jsh)
+[begin]
 
-KeyToGrab(Slash), WithModifier(Mod1), WithAction(ExecCommand), DoThis(whatsplaying)
+ [config]
+ [end]
 
-KeyToGrab(KP_Divide), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumedown 9)
-KeyToGrab(KP_Multiply), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumeup 9)
-KeyToGrab(KP_Subtract), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumedown 2)
-KeyToGrab(KP_Add), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumeup 2)
-KeyToGrab(minus), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumedown)
-KeyToGrab(equal), WithModifier(Mod1), WithAction(ExecCommand), DoThis(volumedown)
+ [keybindings] (begin keybindings)
+  ## These are examples copied from the man page:
+  [chain] (Control-Mod1-W)
+    [sendToWorkspace] (1) {1}
+    [sendToWorkspace] (2) {2}
+    [sendToWorkspace] (3) {3}
+    [sendToWorkspace] (4) {4}
+    [sendToWorkspace] (5) {5}
+    [sendToWorkspace] (6) {6}
+    [sendToWorkspace] (7) {7}
+    [sendToWorkspace] (8) {8}
+  [end]
+  [chain] (Mod1-Y)
+    [execute] (1) {xmms}
+    [execute] (2) {aumix -v +5}
+    [execute] (3) {aumix -v -5}
+  [end]
+  [Lower]  (Mod1-Down)
+  [Raise]  (Mod1-Up)
+  [toggleShade]  (Mod1-F9)
+  [Close]  (Mod1-F4)
+  [Iconify]  (Mod1-m)
+  [toggleMaximizeFull]  (Mod1-F12)
+  [toggleMaximizeHorizontal]  (Mod1-F11)
+  [toggleMaximizeVertical]  (Mod1-F10)
+  [toggleOmnipresent]  (Mod1-Control-S)
+  [resizeWindowWidth]  (Mod1-Control-Shift-Left) {-5}
+  [resizeWindowWidth]  (Mod1-Control-Shift-Right) {5}
+  [resizeWindowHeight]  (Mod1-Control-Shift-Up) {-5}
+  [resizeWindowHeight]  (Mod1-Control-Shift-Down) {5}
+  [moveWindowUp]  (Mod1-Control-Up) {1}
+  [moveWindowDown]  (Mod1-Control-Down) {1}
+  [moveWindowLeft]  (Mod1-Control-Left) {1}
+  [moveWindowRight]  (Mod1-Control-Right) {1}
+  [NextWindow]  (Mod1-Tab)
+  [NextWindowOnAllWorkspaces]  (Mod1-Control-Tab)
+  [PrevWindow]  (Mod1-Shift-Tab)
+  [changeWorkspace]  (Mod1-1) {1}
+  [changeWorkspace]  (Mod1-2) {2}
+  [changeWorkspace]  (Mod1-3) {3}
+  [changeWorkspace]  (Mod1-4) {4}
+  [changeWorkspace]  (Mod1-5) {5}
+  [changeWorkspace]  (Mod1-6) {6}
+  [changeWorkspace]  (Mod1-7) {7}
+  [changeWorkspace]  (Mod1-8) {8}
 
-KeyToGrab(KP_7), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -r)
-# KeyToGrab(KP_9), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -f)
-KeyToGrab(KP_9), WithModifier(Mod1), WithAction(ExecCommand), DoThis(nextsong)
-KeyToGrab(KP_0), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -u)
-KeyToGrab(KP_1), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -p)
-KeyToGrab(KP_3), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -s)
-KeyToGrab(KP_Delete), WithModifier(Mod1), WithAction(ExecCommand), DoThis(xmms -s)
+  [upWorkspace] (Mod1-Control-K)
+  [downWorkspace] (Mod1-Control-J)
+  [leftWorkspace] (Mod1-Control-H)
+  [rightWorkspace] (Mod1-Control-L)
+
+  [showRootMenu] (Mod1-Control-Escape)
+  [Execute]  (Mod1-F5) {xrefresh}
+  #[Execute]  (Mod4-E) {kfmclient openProfile filemanagement}
+  #[Execute]  (F20) {kfmclient openProfile filemanagement}
+  [Execute]  (Mod4-E) {nautilus /home/gideon}
+  [Execute]  (F20) {nautilus /home/gideon}
+
+  ### Joey's binds follow:
+
+  # [Execute]  (Mod1-X) {xterm}
+  [Execute]  (Mod1-X) {/home/joey/j/jsh xterm -e /home/joey/j/jsh}
+
+  [Execute]  (Mod1-Slash) {whatsplaying}
+
+  [Execute]  (Mod1-KP_Divide) {volumedown 9}
+  [Execute]  (Mod1-KP_Multiply) {volumeup 9}
+  [Execute]  (Mod1-KP_Subtract) {volumedown 2}
+  [Execute]  (Mod1-KP_Add) {volumeup 2}
+  [Execute]  (Mod1-minus) {volumedown}
+  [Execute]  (Mod1-equal) {volumeup}
+
+  [Execute]  (Mod1-KP_7) {xmms -r}
+  # [Execute]  (Mod1-KP_9) {xmms -f}
+  [execute]  (Mod1-KP_9) {nextsong}
+  [Execute]  (Mod1-KP_0) {xmms -u}
+  [Execute]  (Mod1-KP_1) {xmms -p}
+  [Execute]  (Mod1-KP_3) {xmms -s}
+  [Execute]  (Mod1-KP_Delete) {xmms -s}
+
+ [end]
+
+[end]
 
 # Not in wmaker :-(
-KeyToGrab(J), WithModifier(Mod4), WithAction(BigNudgeDown)
-KeyToGrab(K), WithModifier(Mod4), WithAction(Maximise)
+#KeyToGrab(J), WithModifier(Mod4), WithAction(BigNudgeDown)
+#KeyToGrab(K), WithModifier(Mod4), WithAction(Maximise)
+#
+#KeyToGrab(F2), WithModifier(Mod1), WithAction(ExecCommand), DoThis(runacommand)
+#KeyToGrab(F2), WithModifier(Mod4), WithAction(ExecCommand), DoThis(runacommand)
+#
+#KeyToGrab(P), WithModifier(Mod1), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
+#KeyToGrab(P), WithModifier(Mod4), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
+#KeyToGrab(PrintScreen), WithModifier(Mod1), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
+#KeyToGrab(PrintScreen), WithModifier(Mod4), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
 
-KeyToGrab(F2), WithModifier(Mod1), WithAction(ExecCommand), DoThis(runacommand)
-KeyToGrab(F2), WithModifier(Mod4), WithAction(ExecCommand), DoThis(runacommand)
-
-KeyToGrab(P), WithModifier(Mod1), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
-KeyToGrab(P), WithModifier(Mod4), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
-KeyToGrab(PrintScreen), WithModifier(Mod1), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
-KeyToGrab(PrintScreen), WithModifier(Mod4), WithAction(ExecCommand), DoThis(import -window root /tmp/screenshot-$$.bmp)
