@@ -85,8 +85,11 @@ OnTitlebar Mouse3 :Shade
 # OnTitlebar Mod1 Mouse3 :WindowMenu
 OnTitlebar Control Mouse3 :WindowMenu
 OnTitlebar Mod1 Control Mouse3 :WindowMenu
-OnTitlebar Mouse4 :TakeToPrevWorkspace
-OnTitlebar Mouse5 :TakeToNextWorkspace
+## Too easy to do by accident, wrt significant change:
+# OnTitlebar Mouse4 :TakeToPrevWorkspace
+# OnTitlebar Mouse5 :TakeToNextWorkspace
+OnTitlebar Mouse4 :MacroCmd {ShadeWindow} {Lower}
+OnTitlebar Mouse5 :MacroCmd {ShadeWindow}
 
 OnDesktop Mouse1 :hideMenus
 OnDesktop Mouse2 :workspaceMenu
