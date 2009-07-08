@@ -245,6 +245,7 @@ xset -b
 # xset r rate 400 50
 xset r rate 270 65
 # xset r rate 280 90
+xset m 2/3
 
 ## Got problems with []s
 # xset fp- unix/:7100
@@ -290,7 +291,7 @@ xset r rate 270 65
 		kicker &
 	fi
 
-	gnome-settings-daemon &
+	# gnome-settings-daemon &
 
 	# xgamma -rgamma 0.7 -ggamma 1.0 -bgamma 1.0 ## for Tim's red-ish monitor
 	# xgamma -rgamma 0.8 -ggamma 1.2 -bgamma 1.2 ## for Tim's red-ish monitor
