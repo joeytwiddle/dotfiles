@@ -414,6 +414,7 @@ Debian MENU
       [exec] (Xman) {xman}
    [end]
    [submenu] (Screen) {}
+      [ToggleCmd {Exec xcompmgr -c} {Exec pkill xcompmgr}] (Toggle Effects)
       [submenu] (Lock) {}
          [exec] (Lock Screen \(XScreenSaver\)) {/usr/bin/xscreensaver-command -lock}
       [end]

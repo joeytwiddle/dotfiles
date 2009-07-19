@@ -141,7 +141,7 @@ window.title.height:	24
 window.borderWidth:	1
 window.bevelWidth:	2
 window.shade:	false
-window.borderColor:	#000000
+window.borderColor:	#333333
 # window.borderColor:	#aa8822
 # window.roundCorners:	TopLeft TopRight
 

@@ -88,8 +88,10 @@ OnTitlebar Mod1 Control Mouse3 :WindowMenu
 ## Too easy to do by accident, wrt significant change:
 # OnTitlebar Mouse4 :TakeToPrevWorkspace
 # OnTitlebar Mouse5 :TakeToNextWorkspace
-OnTitlebar Mouse4 :MacroCmd {ShadeWindow} {Lower}
-OnTitlebar Mouse5 :MacroCmd {ShadeWindow}
+OnTitlebar Mouse4 :MacroCmd {Lower}
+# OnTitlebar Mouse4 :ToggleCmd {Lower} {Raise}
+# OnTitlebar Mouse5 :MacroCmd {ShadeWindow}
+OnTitlebar Mouse5 :MacroCmd {ShadeWindow} {Raise}
 
 OnDesktop Mouse1 :hideMenus
 OnDesktop Mouse2 :workspaceMenu
