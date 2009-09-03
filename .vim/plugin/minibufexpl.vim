@@ -1,4 +1,10 @@
 " Mini Buffer Explorer <minibufexpl.vim>
+" Joey's version
+"
+" Joey's notes:
+" DONE: Some improvements to graphics.
+" TODO: We should highlight unselected but recently edited tabs differently
+" from untouched/skipped-thru tabs.
 "
 " HINT: Type zR if you don't know how to use folds
 "
@@ -654,6 +660,7 @@ function! <SID>StartExplorer(sticky, delBufNum)
     " syn match MBEVisibleNormal      '\[[^\]]*\]\*+\='
     " syn match MBEVisibleChanged     '\[[^\]]*\]\*+'
     syn match MBEButton             '\[[^]]*\]'
+    syn match MBEButtonRed          '\[X\]'     " This works altho the previous could have matched it.  Later definitions take priority?
     syn match MBEGap                '\(|\|   *\)'
     syn match MBENormal             ' [^ *+|]* '
     syn match MBEChanged            ' [^ *+|]*+ '
@@ -665,7 +672,14 @@ function! <SID>StartExplorer(sticky, delBufNum)
       " highlight MBEGap            ctermfg=white ctermbg=magenta guibg=magenta
       " highlight MBEGap            term=none cterm=none ctermbg=black ctermfg=grey guibg=black guifg=grey
       highlight MBEGap            term=bold cterm=bold gui=bold ctermbg=darkblue ctermfg=white guibg=darkblue guifg=white
-      highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=red ctermfg=white guibg=red guifg=white
+      " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=white ctermfg=black guibg=white guifg=black
+      " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=green ctermfg=white guibg=green guifg=white
+      " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=white ctermfg=green guibg=white guifg=green
+      " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
+      " TODO: in gvim (at least under gentoo) the gui shows the []s in [File] with less-bold-green bg.
+      highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=green ctermfg=blue guibg=green guifg=blue
+      " Blue on yellow did look quite menu-like.
+      highlight MBEButtonRed      term=reverse,bold cterm=bold gui=bold ctermbg=red ctermfg=white guibg=red guifg=white
       " highlight MBENormal         ctermfg=white ctermbg=blue guibg=blue
       highlight MBENormal         term=none cterm=none gui=none ctermbg=darkblue ctermfg=cyan guibg=darkblue guifg=cyan
       highlight MBEChanged        term=reverse cterm=none gui=none ctermbg=red ctermfg=black guibg=darkred guifg=white
@@ -1114,6 +1128,10 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
               let l:tabEdges = '| ' . l:tab . '+' . ' '
             endif
 
+            " CURRENT: | Blah | other | other2 |
+            " TODO: /Blah\ <other> <other2>
+            " TODO: [Blah] <other> <other2>
+
             " If the buffer is modified then mark it
 
             let l:maxTabWidth = <SID>Max(strlen(l:tab), l:maxTabWidth)
@@ -1136,7 +1154,14 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
   endwhile
 
   " let l:fileNames = substitute(l:fileNames,' *$','','') . ' [X]'
-  let l:fileNames .= "|   [X]"
+  let l:fileNames = '[File]  [Tags]  [Wrap]  ' . l:fileNames . "|  [X]"
+  "" [Wrap] toggles dsplayed line-wrapping (:set wrap/nowrap)
+  "" but it should probably be an option in the [View menu]?
+  "" Let users reconfigure toolbars+buttons.
+  "" Defaults are:
+  " File:Open,Save,Rename,Close,Quit
+  " View:Wrap Lines,Tabs
+  " Help:About
 
   if (g:miniBufExplBufList != l:fileNames)
     if (a:updateBufList)
@@ -1335,16 +1360,33 @@ function! <SID>GetSelectedBuffer()
 
   let l:save_reg = @"
   " TODO: if g:miniBufExplVSplit == 0 then get buffer# from line#
+
+  " let @" = ""
+  " " normal ""yi[
+
+  " let @" = ""
+  " normal hEB""yE
+  " echo "Word clicked on = " . @"
+
   let @" = ""
-  " normal ""yi[
   normal ""y0
   if @" != ""
     " let l:retv = substitute(@",'\([0-9]*\):.*', '\1', '') + 0
     " let l:retv = @" " returns the filename
     " let l:retv = count(@"," ") + 1
-    let l:retv = substitute(@",'[^ ]*', '', 'g')
-    let l:retv = strlen(l:retv)/2+1
+    "" Count the number of spaces / 2 + 1
+    " let l:retv = substitute(@",'[^ ]*', '', 'g')
+    " let l:retv = strlen(l:retv)/2+1
+    "" Count the number of |s
+    let l:retv = strlen(substitute(@",'[^|]*', '', 'g'))
     " let l:retv = len(l:retv)
+    " if l:retv==0
+        " " return -1
+        " " TODO: get word under cursor; echo it
+        " l:retv = strlen(substitute(@",'[^\[]*', '', 'g'))
+        " " return -l:retv
+        " l:retv = -l:retv
+    " endif
     let @" = l:save_reg
     return l:retv
   else
@@ -1379,7 +1421,25 @@ function! <SID>MBESelectBuffer()
   let l:bufnr  = <SID>GetSelectedBuffer()
   let l:resize = 0
 
-  if(l:bufnr != -1)             " If the buffer exists.
+  if(l:bufnr == -1)
+
+    " -1 = dunno what hit - Can't do anything
+
+  elseif (l:bufnr<0)
+
+    " -2 = first menu, -3 = second menu, ...
+
+    if (l:bufnr== -2)
+      call VsTreeExplorer()
+    elseif (l:bufnr== -3)
+      " call TList()
+      normal :Tlist<Enter>
+    endif
+
+    " elseif (l:bufnr>=0)
+  else
+
+    " The buffer exists.
 
     let l:saveAutoUpdate = g:miniBufExplorerAutoUpdate
     let g:miniBufExplorerAutoUpdate = 0
@@ -1462,7 +1522,7 @@ function! <SID>MBEDeleteBuffer()
   set noshowcmd 
   
   
-  if l:selBuf != -1 
+  if l:selBuf >= 0
 
     " Don't want auto updates while we are processing a delete
     " request.
