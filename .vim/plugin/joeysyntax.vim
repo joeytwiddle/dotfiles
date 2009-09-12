@@ -17,11 +17,12 @@ endif
 	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
 	" :set guifont=-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv
 	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-14-*-*-*-m-*-iso10646-1
-	" Good for Windows, bad on Linux:
+	" This one for Windows:
 	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso10646-1
 	" :set guifont=LucidaTypewriter\ 8
 	" :set guifont=LucidaTypewriter\ 7
-	:set guifont=clean
+	" :set guifont=clean
+	" See ~/.vimrc for current settings.
 
 	:set background=dark
 
@@ -47,6 +48,10 @@ endif
 	"" for webscraping log:
 	:syntax match jEq /[[:alpha:]]*=/
 	:highlight link jEq Statement
+
+	" TODO: Failed attempt to highlight operators in Unrealscript.
+	:syntax match jOperator1 /\(==\|!=\|&&\|||\)/
+	:highlight link jOperator1 Statement
 
 	" :syntax keyword jTodo TODO
 	" :highlight link jTodo Todo

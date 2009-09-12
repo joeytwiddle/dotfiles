@@ -547,18 +547,20 @@ function! RunGrep(grep_cmd, ...)
         let grep_opt = a:1
     endif
 
+    "" Joey doesn't like -e, because he wants to pass options to grep!  (Especially -r :P )
+    let grep_expr_option = ''
     if a:grep_cmd == 'grep'
         let grep_path = g:Grep_Path
-        let grep_expr_option = '--'
+        " let grep_expr_option = '--'
     elseif a:grep_cmd == 'fgrep'
         let grep_path = g:Fgrep_Path
-        let grep_expr_option = '-e'
+        " let grep_expr_option = '-e'
     elseif a:grep_cmd == 'egrep'
         let grep_path = g:Egrep_Path
-        let grep_expr_option = '-e'
+        " let grep_expr_option = '-e'
     elseif a:grep_cmd == 'agrep'
         let grep_path = g:Agrep_Path
-        let grep_expr_option = '-e'
+        " let grep_expr_option = '-e'
     else
         return
     endif

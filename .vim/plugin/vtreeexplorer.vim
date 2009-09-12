@@ -1,6 +1,6 @@
 "" File:        vtreeexplorer.vim
 "" Description: tree-like file system explorer for vim
-"" Version:     $Revision: 1.1 $ $Date: 2009/09/12 03:22:30 $
+"" Version:     $Revision: 1.2 $ $Date: 2009/09/12 05:19:38 $
 "" Author:      TS Urban (thomas.scott.urban@HORMELgmail.com)
 ""              (remove the source of SPAM from my email first)
 ""
@@ -590,9 +590,16 @@ function! s:Activate(how) " <<<
 		elseif a:how == "cur"
 			exec ("tabedit " . f)
 		elseif oldwin == winnr() || (&modified && s:BufInWindows(winbufnr(winnr())) < 2)
-			wincmd p
+			" if g:treeExplAutoClose
+				" wincmd c
+			" else
+				wincmd p
+			" endif
 			exec ("new " . f)
 		else
+			if g:treeExplAutoClose
+				wincmd c
+			endif
 			exec ("edit " . f)
 		endif
 	endif

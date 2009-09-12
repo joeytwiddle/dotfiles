@@ -58,9 +58,9 @@ function! HighlightCursorToggle()
 	endif
 endfunction
 
-map <C-C> :call HighlightCursorToggle()<CR>
-"" To make way for JrandomHighlight in joeycommands.vim:
-" map <C-H> :call HighlightCursorToggle()<CR>
+" map <C-c> :call HighlightCursorToggle()<CR>
+" map <C-h> :call HighlightCursorToggle()<CR>
+map <C-g> :call HighlightCursorToggle()<CR>
 
 "" Uncomment this line to have the cursor highlighted as default:
 " :call HighlightCursorToggle()

@@ -24,10 +24,13 @@ function! HighlightLine()
   else
     " Convert String to regexp, by escaping regexp special chars:
     " let l:pattern = substitute(l:line,'\([.^$\\][)(]\|\*\|\\\|"\|\~\)','\\\1','g')
+    " let l:pattern = substitute(l:line,'\([.^$\\][]\|\*\|\\\|\"\|\~\)','\\\1','g')
     let l:pattern = substitute(l:line,'\([.^$*\\][]\|\\\|\"\|\~\)','\\\1','g')
     let l:pattern = '^' . l:pattern . '$'
     " next line is a dummy to prevent the clear from complaining on the first run
-    echo "got pattern: ".l:pattern
+
+    " echo "got pattern: ".l:pattern
+
     execute 'syntax match HLCurrentLine "'.pattern.'"'
     execute 'syntax clear HLCurrentLine'
     execute 'syntax match HLCurrentLine "'.pattern.'"'

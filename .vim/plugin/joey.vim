@@ -57,6 +57,7 @@
 	" :set listchars=tab:\>-,trail:$
 	:set listchars=tab:>-,trail:$,precedes:<,extends:>
 	" :set listchars+=precedes:<,extends:>
+	"" showbreak defines how wrapped lines are indented when wrap is on.
 	" :set showbreak=\ \\\ 
 	" :set showbreak=\ \|\|\ 
 	" :set showbreak=\\\ 
@@ -70,7 +71,8 @@
 	" :set showbreak=\ >>\ 
 	" :set showbreak=>>>
 	" :set showbreak=---+
-	:set showbreak=----
+	" :set showbreak=----
+	:set showbreak=\ \ \ \ \ \ \ \ \ \ \\\ 
 
 	:highlight SpecialKey ctermfg=DarkGrey cterm=bold guifg=#606060
 	" :set expandtab

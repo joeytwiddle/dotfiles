@@ -1445,11 +1445,13 @@ function! <SID>MBESelectBuffer()
 
     if word == "File"
       " call VsTreeExplorer()
-      wincmd j
+      " wincmd j
+      wincmd p
       exec "VSTreeExplore"
+      " wincmd H
     elseif word == "Tags"
       " call TList()
-      wincmd j
+      wincmd p
       " normal :Tlist<Enter>
       exec "Tlist"
     elseif word == "Wrap"

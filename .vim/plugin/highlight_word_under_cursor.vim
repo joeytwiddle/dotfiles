@@ -28,14 +28,26 @@ function! HighlightWord()
     " let l:pattern = substitute(l:word,'\([.^$\\+][)(]\|\*\)','\\\1','g')
     " let l:pattern = substitute(l:word,'\([.^$]\|\*\|\\\|\"\|\~\|\[\|\]\|+\)','\\\1','g')
     let l:pattern = substitute(l:word,'\([.^$*\\]\|\[\|\]\|\\\|\"\|\~\)','\\\1','g')
-    " let l:pattern = '\<' . l:pattern . '\>'
-    let l:pattern = l:pattern
+    if exists('g:hiword_partial') && g:hiword_partial != 0
+      let l:pattern = l:pattern
+    else
+      let l:pattern = '\<' . l:pattern . '\>' " highlight only whole word matches
+    endif
+
     " echo "got pattern: ".l:pattern
+
     " next line is a dummy to prevent the clear from complaining on the first run
     execute 'syntax match HLCurrentWord "'.pattern.'"'
     execute 'syntax clear HLCurrentWord'
     execute 'syntax match HLCurrentWord "'.pattern.'"'
-    execute 'highlight HLCurrentWord term=reverse cterm=none ctermbg=darkgreen ctermfg=white guibg=darkgreen guifg=white'
+    " execute 'highlight HLCurrentWord term=reverse cterm=none ctermbg=darkgreen ctermfg=white guibg=darkgreen guifg=white'
+    " execute 'highlight HLCurrentWord term=none cterm=none ctermbg=blue ctermfg=green guibg=darkblue guifg=green'
+    " execute 'highlight HLCurrentWord term=bold cterm=bold ctermfg=green guifg=green'
+    " execute 'highlight HLCurrentWord ctermfg=red guifg=red'
+    " 121=light green, 179=light orange
+    " execute 'highlight HLCurrentWord ctermfg=180 guifg=orange'
+    " 130,166,172,173,203,208,214
+    execute 'highlight HLCurrentWord ctermfg=209 guifg=orange'
     "" Freezes vim: execute "sleep 5| call UnHighlightWord()"
   endif
 endfunction
@@ -50,6 +62,7 @@ function! Cursor_Moved()
   let l:word = expand("<cword>")
   if (l:word == s:lastWord) " e.g. user has moved 1 char in the word - hide highlighting now.
     call UnHighlightWord()
+    " TODO: Isn't this inefficient, causing syntax calls EVERY time we move?!
   else
     call HighlightWord()
     let s:lastWord = l:word
@@ -80,15 +93,18 @@ endfunction
   " return l:retv
 " endfunction
 
-" autocmd CursorMoved,CursorMovedI * call Cursor_Moved()
-autocmd CursorMoved * call Cursor_Moved()
-autocmd CursorHold * call UnHighlightWord()
-" autocmd CursorHold * call s:Cursor_Moved()
+" " autocmd CursorMoved,CursorMovedI * call Cursor_Moved()
+" autocmd CursorMoved * call Cursor_Moved()
+" autocmd CursorHold * call UnHighlightWord()
+" " autocmd CursorHold * call s:Cursor_Moved()
+" " set updatetime=4000
+
+" autocmd CursorMoved * call UnHighlightWord()
+autocmd CursorHold * call Cursor_Moved()
+set updatetime=2000
 
 let g:last_pos = 0
 let s:lastWord = ""
-
-" set updatetime=4000
 
 endif
 

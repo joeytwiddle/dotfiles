@@ -5,8 +5,8 @@ endif
 
 :function! Joeyhighlight()
 
-	" Note: it seems (at least with DiffDelete), that setting cterm?g=... after
-	" cterm=... can cause cterm= to be changed!
+	"" Note: it seems (at least with DiffDelete), that setting cterm?g=... after
+	"" cterm=... can cause cterm= to be changed!
 
 	" :colors pablo
 	" :set guifont=-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv
@@ -18,7 +18,8 @@ endif
 	" :syntax on
 
 	" :highlight Normal ctermbg=black ctermfg=grey guibg=Black guifg=#cccccc
-	:highlight Normal ctermfg=grey guibg=Black guifg=#cccccc
+	" :highlight Normal ctermfg=grey guibg=Black guifg=#cccccc
+	:highlight Normal ctermfg=lightgrey guibg=Black guifg=#cccccc
 
 	:highlight Title ctermbg=black ctermfg=green guibg=#000060 guifg=#00ff00
 
@@ -29,7 +30,13 @@ endif
 
 	:highlight DiffLine ctermbg=Magenta ctermfg=White
 	" :highlight Search term=reverse,bold ctermbg=White guibg=White ctermfg=Black guifg=Black
-	:highlight Search ctermbg=Blue ctermfg=White term=bold guibg=Blue guifg=White
+	" :highlight Search ctermbg=Blue ctermfg=White term=bold guibg=Blue guifg=White
+	" :highlight Search ctermbg=Blue ctermfg=Yellow term=bold guibg=Blue guifg=Yellow
+	" :highlight Search ctermbg=Blue ctermfg=Yellow term=bold guibg=#0000aa guifg=#ffee99 gui=bold
+	" :highlight Search ctermbg=Blue ctermfg=Yellow term=bold guibg=#005500 guifg=#ffbb66 gui=bold
+	" :highlight Search ctermbg=blue ctermfg=white term=bold guibg=#005500 guifg=#66ff88 gui=bold
+	" :highlight Search ctermbg=blue ctermfg=white term=bold guibg=#005500 guifg=#bbffbb gui=bold
+	:highlight Search ctermbg=blue ctermfg=green term=bold guibg=#005544 guifg=#aaffaa gui=bold
 	:highlight ErrorMsg ctermbg=Red ctermfg=Yellow guibg=Red guifg=Yellow
 	:highlight Visual ctermfg=DarkMagenta ctermbg=White guifg=DarkMagenta guibg=White
 	" :highlight Comment ctermfg=Magenta guifg=#80a080 " green-grey
@@ -48,9 +55,11 @@ endif
 	:highlight String ctermfg=DarkGreen guifg=#80f080 cterm=NONE
 	" vimTodo links to Todo
 	:highlight Todo term=reverse cterm=reverse ctermbg=black ctermfg=red guibg=red guifg=black
-	:highlight jTodo term=reverse cterm=reverse ctermfg=black ctermbg=red guibg=red guifg=black
-	" :highlight jNote ctermbg=yellow ctermfg=black guibg=yellow guifg=black
-	:highlight jNote term=reverse cterm=reverse ctermbg=black ctermfg=yellow guibg=yellow guifg=black
+	" :highlight jTodo term=reverse cterm=reverse ctermfg=black ctermbg=red guibg=red guifg=black
+	" " :highlight jNote ctermbg=yellow ctermfg=black guibg=yellow guifg=black
+	" :highlight jNote term=reverse cterm=reverse ctermbg=black ctermfg=yellow guibg=yellow guifg=black
+	:hi def link jTodo Todo
+	:hi def link jNote Todo
 
 	" Code
 	:highlight Boolean ctermfg=LightBlue guifg=LightBlue
@@ -152,10 +161,10 @@ endif
 	:highlight shCommandSub ctermfg=red
 	:highlight shOperator ctermfg=yellow " cterm=bold
 
-	" Highlight search (doesn't work if called at top of this file!)
+	"" Highlight search (doesn't work if called at top of this file!)
 	:set hlsearch
 
-	" This was an attempt to colour syntax highlight only the current buffer, but
+	"" This was an attempt to colour syntax highlight only the current buffer, but
 	" :syn on/off appear to work globally!
 	" function! SynOn()
 	" syn on
@@ -170,8 +179,9 @@ endif
 	" :highlight StatusLineNC term=reverse cterm=reverse ctermfg=blue ctermbg=white
 	" :highlight StatusLine term=bold,reverse cterm=bold,reverse ctermfg=cyan ctermbg=black
 	" :highlight StatusLineNC term=reverse cterm=reverse ctermfg=grey ctermbg=black
-	:highlight StatusLine term=reverse,bold cterm=bold ctermfg=black ctermbg=white gui=none,bold guifg=black guibg=white
-	:highlight StatusLineNC term=reverse cterm=bold ctermfg=black ctermbg=grey gui=none,bold guifg=black guibg=grey
+	"" cterm=bold was showing hiddens chars - specifically "^^^^^^^"s I didn't like.
+	:highlight StatusLine term=reverse cterm=none ctermfg=black ctermbg=white gui=none,bold guifg=black guibg=white
+	:highlight StatusLineNC term=reverse cterm=none ctermfg=black ctermbg=grey gui=none,bold guifg=black guibg=grey
 
 	" Fold colours
 	:highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000080 guifg=White

@@ -40,11 +40,14 @@ endif
 		:highlight link myFold2 cComment
 
 		" C/Java #ifdefs
-		" The first of the repeated syntax lines is simply there to ensure that the clear does not produce an error!
-		" The clear prevents BUG where multiple sourcing repeats folds!
-		:syn region myFold4 start="#ifdef" end="#endif" transparent fold
+		" The first of the repeated syntax lines is simply there to ensure that the clear does not produce an error.
+		" The clear prevents BUG where multiple sourcing repeats folds.
+		:syn region myFold3 start="#ifdef" end="#endif" transparent fold
+		:syn clear myFold3
+		:syn region myFold3 start="#ifdef" end="#endif" transparent fold
+		:syn region myFold4 start="#ifndef" end="#endif" transparent fold
 		:syn clear myFold4
-		:syn region myFold4 start="#ifdef" end="#endif" transparent fold
+		:syn region myFold4 start="#ifdnef" end="#endif" transparent fold
 		"" TODO: clear all like myFold4
 
 		" PS
@@ -59,7 +62,7 @@ endif
 		"" TODO: I really want this to use shiftwidth to indent the line properly.
 		""       It would read much better, and IMO is vital in some cases.
 		"" TODO: After #lines in decimal, list #lines/50 with each 50 represented by a '.' character.  Much easier visually.
-		:set foldtext=getline(v:foldstart).'\ \ \ ['.(v:foldend-v:foldstart).'\ lines]'
+		" :set foldtext=getline(v:foldstart).'\ \ \ ['.(v:foldend-v:foldstart).'\ lines]'
 
 		" For treelist.hs:
 		" :syntax match TreeListFoldLine ".*\(-{\|-}\|{-\|}-\).*" contains=TreeListHsTag,myFold

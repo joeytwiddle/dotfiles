@@ -86,6 +86,9 @@
 " Make sure the Vim file type detection (:filetype on) is turned on.
 "
 "
+" Disabled until i can stop it producing errors in Add_Tags_Menu().  (Editing
+" c/vim files.)
+finish
 " ****************** Do not modify after this line ************************
 if exists("loaded_tagmenu") || &cp
     finish
