@@ -1362,11 +1362,11 @@ function! <SID>GetSelectedBuffer()
   " TODO: if g:miniBufExplVSplit == 0 then get buffer# from line#
 
   " let @" = ""
-  " " normal ""yi[
+  " normal ""yi[
+  " echo "Got word = " . @"
 
   " let @" = ""
   " normal hEB""yE
-  " echo "Word clicked on = " . @"
 
   let @" = ""
   normal ""y0
@@ -1417,23 +1417,53 @@ function! <SID>MBESelectBuffer()
   let l:save_sc  = &showcmd
   let &report    = 10000
   set noshowcmd 
-  
+
+  let l:word = expand("<cword>")
   let l:bufnr  = <SID>GetSelectedBuffer()
   let l:resize = 0
+
+  " echo "GetSelectedBuffer returned " . l:bufnr
 
   if(l:bufnr == -1)
 
     " -1 = dunno what hit - Can't do anything
 
-  elseif (l:bufnr<0)
+  elseif (l:bufnr<=0)
 
     " -2 = first menu, -3 = second menu, ...
 
-    if (l:bufnr== -2)
-      call VsTreeExplorer()
-    elseif (l:bufnr== -3)
+    " Problem: we have already moved off the cursor word (due to y0 earlier?)
+    let l:save_reg = @"
+    let @" = ""
+    normal ""yi[
+    " let l:word = @"
+    let @" = l:save_reg
+    echo "Got word = " . l:word
+
+    " let @" = ""
+    " normal hEB""yE
+
+    if word == "File"
+      " call VsTreeExplorer()
+      wincmd j
+      exec "VSTreeExplore"
+    elseif word == "Tags"
       " call TList()
-      normal :Tlist<Enter>
+      wincmd j
+      " normal :Tlist<Enter>
+      exec "Tlist"
+    elseif word == "Wrap"
+      if !exists('g:wrapping') || g:wrapping == 0
+        let g:wrapping = 1
+        wincmd p
+        set wrap
+      else
+        let g:wrapping = 0
+        wincmd p
+        set nowrap
+      endif
+    else
+      echo "No command for bufnr=" . l:bufnr
     endif
 
     " elseif (l:bufnr>=0)
@@ -1468,7 +1498,11 @@ function! <SID>MBESelectBuffer()
       endif
     endif
 
-    exec('b! '.l:bufnr)
+    if l:bufnr == 0
+        echo "bufnr=" . l:bufnr
+    else
+        exec('b! '.l:bufnr)
+    endif
     " exec('argedit '.l:bufnr) " Open the file with that name.  TODO/BUG: This may not be the real pathname.
     if (l:resize)
       resize
