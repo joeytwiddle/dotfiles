@@ -30,6 +30,9 @@ let g:miniBufExplMaxHeight = 6
 let g:miniBufExplMapWindowNavArrows = 1
 let g:miniBufExplUseSingleClick = 1
 
+let g:treeExplVertical = 1
+let g:treeExplWinSize = 15
+
 " set tabline=%!MyTabLine()
 " set showtabline=2 " 2=always
 " autocmd GUIEnter * hi! TabLineFill term=underline cterm=underline gui=underline
@@ -57,4 +60,9 @@ let g:hiword = 1
 
 " Fix broken Backspace under gentoo:
 " :imap  <Left><Del>
+
+command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+
+" Flashing cursor means lag for gaming!
+:set guicursor=a:blinkoff0
 
