@@ -31,7 +31,8 @@ let g:miniBufExplMapWindowNavArrows = 1
 let g:miniBufExplUseSingleClick = 1
 
 let g:treeExplVertical = 1
-let g:treeExplWinSize = 15
+let g:treeExplWinSize = 20
+let g:treeExplAutoClose = 1
 
 " set tabline=%!MyTabLine()
 " set showtabline=2 " 2=always
