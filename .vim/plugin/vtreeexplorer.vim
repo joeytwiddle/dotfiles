@@ -1,6 +1,6 @@
 "" File:        vtreeexplorer.vim
 "" Description: tree-like file system explorer for vim
-"" Version:     $Revision: 1.2 $ $Date: 2009/09/12 05:19:38 $
+"" Version:     $Revision: 1.3 $ $Date: 2009/09/14 01:56:56 $
 "" Author:      TS Urban (thomas.scott.urban@HORMELgmail.com)
 ""              (remove the source of SPAM from my email first)
 ""
@@ -595,12 +595,21 @@ function! s:Activate(how) " <<<
 			" else
 				wincmd p
 			" endif
-			exec ("new " . f)
+			" exec ("new " . f)
+			exec ("last")
+			exec ("argedit " . f)
+			" exec ("argadd " . f)
+			" exec ("n")
 		else
 			if g:treeExplAutoClose
 				wincmd c
 			endif
-			exec ("edit " . f)
+			" exec ("edit " . f)
+			" We position the new buffer nicely for MinBufExplorer
+			exec ("last")
+			exec ("argedit " . f)
+			" exec ("argadd " . f)
+			" exec ("n")
 		endif
 	endif
 endfunction " >>>
