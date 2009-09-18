@@ -661,8 +661,8 @@ function! <SID>StartExplorer(sticky, delBufNum)
     " syn match MBEVisibleChanged     '\[[^\]]*\]\*+'
     syn match MBEButton             '\[[^]]*\]'
     syn match MBEButtonRed          '\[X\]'     " This works altho the previous could have matched it.  Later definitions take priority?
-    syn match MBEGap                '\(|\|   *\)'
-    syn match MBENormal             ' [^ *+|]* '
+    syn match MBEGap                '\(|\|  *\)'
+    syn match MBENormal             ' [^ *+|[\]]* '
     syn match MBEChanged            ' [^ *+|]*+ '
     syn match MBEVisibleNormal      '|* [^ *+|]*\* |*'
     syn match MBEVisibleChanged     '|* [^ *+|]*\*+ |*'
@@ -671,13 +671,13 @@ function! <SID>StartExplorer(sticky, delBufNum)
       let g:did_minibufexplorer_syntax_inits = 1
       " highlight MBEGap            ctermfg=white ctermbg=magenta guibg=magenta
       " highlight MBEGap            term=none cterm=none ctermbg=black ctermfg=grey guibg=black guifg=grey
-      highlight MBEGap            term=bold cterm=bold gui=bold ctermbg=darkblue ctermfg=white guibg=darkblue guifg=white
+      highlight MBEGap            term=bold cterm=bold gui=bold ctermbg=black ctermfg=white guibg=darkblue guifg=white
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=white ctermfg=black guibg=white guifg=black
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=green ctermfg=white guibg=green guifg=white
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=white ctermfg=green guibg=white guifg=green
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
       " TODO: in gvim (at least under gentoo) the gui shows the []s in [File] with less-bold-green bg.
-      highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=green ctermfg=blue guibg=green guifg=blue
+      highlight MBEButton         term=reverse,bold cterm=none gui=none ctermbg=cyan ctermfg=blue guibg=cyan guifg=blue
       " Blue on yellow did look quite menu-like.
       highlight MBEButtonRed      term=reverse,bold cterm=bold gui=bold ctermbg=red ctermfg=white guibg=red guifg=white
       " highlight MBENormal         ctermfg=white ctermbg=blue guibg=blue
@@ -1154,7 +1154,7 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
   endwhile
 
   " let l:fileNames = substitute(l:fileNames,' *$','','') . ' [X]'
-  let l:fileNames = '[File]  [Tags]  [Wrap]  ' . l:fileNames . "|  [X]"
+  let l:fileNames = '[File] [Tags] [Wrap] ' . l:fileNames . "|  [X]"
   "" [Wrap] toggles dsplayed line-wrapping (:set wrap/nowrap)
   "" but it should probably be an option in the [View menu]?
   "" Let users reconfigure toolbars+buttons.
