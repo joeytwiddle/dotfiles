@@ -19,8 +19,6 @@
 #
 # OrangeJuice can work well with a light peach theme for applications.
 #
-# The default has green unfocused windows and orange focused windows.
-#
 ############################################################## BACKGROUND #####
 
 # background:	none
@@ -143,18 +141,16 @@ window.title.height:	24
 window.borderWidth:	1
 window.bevelWidth:	2
 window.shade:	false
-# window.borderColor:	#000000
-## Although a dark grey border can look a bit ugly on the green windows, I find it very useful to see the edge of my current xterm when I have a few against a black background.
 window.borderColor:	#333333
 # window.borderColor:	#aa8822
 # window.roundCorners:	TopLeft TopRight
 
 window.title.focus:	raised gradient vertical
-window.title.focus.color:	#bb9933
-window.title.focus.colorTo:	#aa8822
-window.label.focus:	gradient vertical
-window.label.focus.color:	#bb9933
-window.label.focus.colorTo:	#aa8822
+window.title.focus.colorTo:	#bb9933
+window.title.focus.color:	#aa8822
+window.label.focus:	gradient
+window.label.focus.colorTo:	#bb9933
+window.label.focus.color:	#aa8822
 window.label.focus.textColor:	#ffffff
 
 window.title.unfocus:	raised gradient vertical

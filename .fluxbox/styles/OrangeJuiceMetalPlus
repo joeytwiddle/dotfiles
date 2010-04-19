@@ -18,7 +18,7 @@
 #
 ############################################################## BACKGROUND #####
 
-background:	none
+# background:	none
 
 # background:	flat gradient crossdiagonal
 # background.color:	#081866
@@ -163,7 +163,7 @@ toolbar.iconbar.unfocused.justify:	center
 
 ############################################################## WINDOW #########
 
-window.borderWidth:	1
+window.borderWidth:	2
 window.bevelWidth:	2
 window.shade:	false
 # window.borderColor:	#bbbbcc
@@ -171,20 +171,20 @@ window.shade:	false
 # window.borderColor:	#ddddbb
 # window.borderColor:	#c0c0c0
 # window.borderColor:	#d0d0d0
-window.borderColor:	#c8c8c8
+window.borderColor:	#aaaaaa
 ## Nice simple grey:
 # window.title.focus:	flat
 # window.title.focus.color:	#d8d8d8
 # window.title.unfocus:	flat
 # window.title.unfocus.color:	#d8d8d8
 ## Shaded:
-window.title.focus:	gradient vertical
-window.title.focus.colorTo:	#b8b8b8
-window.title.focus.color:	#eeeeee
-window.title.unfocus:	gradient vertical
+window.title.focus:	raised gradient vertical
+window.title.focus.color:	#cccccc
+window.title.focus.colorTo:	#999999
+window.title.unfocus:	raised gradient vertical
 # window.title.unfocus:	raised gradient vertical
-window.title.unfocus.colorTo:	#b8b8b8
-window.title.unfocus.color:	#eeeeee
+window.title.unfocus.colorTo:	#999999
+window.title.unfocus.color:	#cccccc
 ## Peach:
 # window.borderColor:	#fff0d8
 # window.title.focus:	flat
@@ -194,7 +194,7 @@ window.title.unfocus.color:	#eeeeee
 
 window.justify:	Center
 
-window.title.height:	24
+window.title.height:	23
 
 # window.label.focus:	flat
 # window.label.focus.color:	#895D52
@@ -212,17 +212,16 @@ window.title.height:	24
 # window.label.focus:	bevel1 solid interlaced
 # window.label.focus.color:	#aa9900
 # window.label.focus.colorTo:	#000000
-# window.label.focus:	gradient horizontal bevel1 solid interlaced
-window.label.focus:	gradient vertical
-window.label.focus.color:	#a08000
-window.label.focus.colorTo:	#aa8800
+window.label.focus:	gradient vertical bevel1 solid interlaced
+window.label.focus.colorTo:	#907000
+window.label.focus.color:	#aa8800
 # window.label.focus:	raised gradient vertical
 # window.label.focus.color:	#cc8833
 # window.label.focus.colorTo:	#996655
 window.label.focus.textColor:	white
 window.label.unfocus:	raised gradient vertical
-window.label.unfocus.color:	#009900
-window.label.unfocus.colorTo:	#006600
+window.label.unfocus.color:	#008800
+window.label.unfocus.colorTo:	#005500
 window.label.unfocus.textColor:      #eeeeee
 
 # window.button.pressed.color:	#ee2211
@@ -238,13 +237,13 @@ window.button.focus:	raised gradient
 window.button.focus.color:	#555555
 window.button.focus.colorTo:	#111111
 window.button.focus.picColor:	#777777
-window.button.pressed:	gradient horizontal
+window.button.pressed:	raised gradient horizontal
 window.button.pressed.color:	#111111
 window.button.pressed.colorTo:	#444444
 window.button.unfocus:	raised gradient
 window.button.unfocus.Color:	#555555
 window.button.unfocus.ColorTo:	#111111
-window.button.unfocus.picColor:	#707070
+window.button.unfocus.picColor:	#666666
 # window.button.focus.color:	#337777
 # window.button.focus.colorTo:	#226666
 # window.button.focus:	raised gradient

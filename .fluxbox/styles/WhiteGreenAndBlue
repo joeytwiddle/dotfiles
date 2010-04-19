@@ -19,11 +19,9 @@
 #
 # OrangeJuice can work well with a light peach theme for applications.
 #
-# The default has green unfocused windows and orange focused windows.
-#
 ############################################################## BACKGROUND #####
 
-# background:	none
+background:	none
 # background:	flat gradient crossdiagonal
 # background.color:	#081866
 # background.colorTo:	#66aadd
@@ -139,55 +137,54 @@ toolbar.iconbar.unfocused.justify:	center
 ############################################################## WINDOW #########
 
 window.justify:	Center
-window.title.height:	24
+window.title.height:	28
 window.borderWidth:	1
-window.bevelWidth:	2
+window.bevelWidth:	3
 window.shade:	false
-# window.borderColor:	#000000
-## Although a dark grey border can look a bit ugly on the green windows, I find it very useful to see the edge of my current xterm when I have a few against a black background.
-window.borderColor:	#333333
+window.borderColor:	#000000
+# window.borderColor:	#444444
 # window.borderColor:	#aa8822
 # window.roundCorners:	TopLeft TopRight
 
 window.title.focus:	raised gradient vertical
-window.title.focus.color:	#bb9933
-window.title.focus.colorTo:	#aa8822
-window.label.focus:	gradient vertical
-window.label.focus.color:	#bb9933
-window.label.focus.colorTo:	#aa8822
-window.label.focus.textColor:	#ffffff
-
+window.title.focus.color:	#cccccc
+window.title.focus.colorTo:	#aaaaaa
 window.title.unfocus:	raised gradient vertical
-window.title.unfocus.color:	#448833
-window.title.unfocus.colorTo:	#446633
-window.label.unfocus:	gradient vertical
-window.label.unfocus.color:	#448833
-window.label.unfocus.colorTo:	#446633
+window.title.unfocus.color:	#999999
+window.title.unfocus.colorTo:	#848484
+
+window.label.focus:	gradient vertical
+window.label.focus.color:	#009900
+window.label.focus.colorTo:	#008800
+window.label.focus.textColor:	#ffffff
+window.label.unfocus:	raised gradient vertical
+window.label.unfocus.color:	#0000aa
+window.label.unfocus.colorTo:	#000077
 window.label.unfocus.textColor:	#eeeecc
 
 window.button.focus:	raised gradient
-window.button.focus.color:	#5c5c5c
-window.button.focus.colorTo:	#2a2a2a
-window.button.focus.picColor:	#7d7d7d
+window.button.focus.color:	#666666
+window.button.focus.colorTo:	#222222
+window.button.focus.picColor:	#777777
 window.button.unfocus:	raised gradient
 window.button.unfocus.Color:	#555555
 window.button.unfocus.ColorTo:	#222222
 window.button.unfocus.picColor:	#606060
 window.button.pressed:	gradient
-window.button.pressed.color:	#262626
+window.button.pressed.color:	#222222
 window.button.pressed.colorTo:	#555555
 
 ## handleWidth is actually height!
 window.handleWidth:	5
 
-window.handle.focus:	raised flat
-window.handle.focus.color:	#aa8833
 window.grip.focus:	raised flat
-window.grip.focus.color:	#505050
+window.grip.focus.color:	#008800
+window.handle.focus:	raised flat
+window.handle.focus.color:	#999999
 
-window.handle.unfocus:	raised flat
-window.handle.unfocus.color:	#447744
 window.grip.unfocus:	raised flat
-window.grip.unfocus.color:	#444444
+window.grip.unfocus.color:	#111199
+window.handle.unfocus:	raised flat
+window.handle.unfocus.color:	#777777
 
 ###############################################################################

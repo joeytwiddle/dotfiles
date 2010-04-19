@@ -19,7 +19,8 @@
 #
 # OrangeJuice can work well with a light peach theme for applications.
 #
-# The default has green unfocused windows and orange focused windows.
+# Minor has all windows green, with orange as a tab-label meaning focused.
+# This version is OversizedCute.
 #
 ############################################################## BACKGROUND #####
 
@@ -139,9 +140,9 @@ toolbar.iconbar.unfocused.justify:	center
 ############################################################## WINDOW #########
 
 window.justify:	Center
-window.title.height:	24
+window.title.height:	26
 window.borderWidth:	1
-window.bevelWidth:	2
+window.bevelWidth:	3
 window.shade:	false
 # window.borderColor:	#000000
 ## Although a dark grey border can look a bit ugly on the green windows, I find it very useful to see the edge of my current xterm when I have a few against a black background.
@@ -150,8 +151,8 @@ window.borderColor:	#333333
 # window.roundCorners:	TopLeft TopRight
 
 window.title.focus:	raised gradient vertical
-window.title.focus.color:	#bb9933
-window.title.focus.colorTo:	#aa8822
+window.title.focus.color:	#448833
+window.title.focus.colorTo:	#336622
 window.label.focus:	gradient vertical
 window.label.focus.color:	#bb9933
 window.label.focus.colorTo:	#aa8822
@@ -159,10 +160,10 @@ window.label.focus.textColor:	#ffffff
 
 window.title.unfocus:	raised gradient vertical
 window.title.unfocus.color:	#448833
-window.title.unfocus.colorTo:	#446633
+window.title.unfocus.colorTo:	#336622
 window.label.unfocus:	gradient vertical
 window.label.unfocus.color:	#448833
-window.label.unfocus.colorTo:	#446633
+window.label.unfocus.colorTo:	#336622
 window.label.unfocus.textColor:	#eeeecc
 
 window.button.focus:	raised gradient
