@@ -26,6 +26,7 @@ TERM xterm-debian
 TERM rxvt
 TERM screen
 TERM screen-w
+TERM Eterm
 
 # Below are the color init strings for the basic file types. A color init
 # string consists of one or more of the following numeric codes:
@@ -133,8 +134,11 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .ogm 01;35
 .flv 01;35
 # Audio
-.ra 01;35
 .mp3 01;35
+.ogg 01;35
+.ra 00;35   # RealAudio
+.m4a 00;35  # iTunes
+.m4p 00;35  # iTunes
 .m3u 01;35
 .pls 01;35
 .wav 01;35
@@ -199,7 +203,7 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .jad 01;33
 
 # cyan
-# Code ("input")
+# Code / input for software
 .sh 01;36
 .zsh 01;36
 .csh 01;36
@@ -220,8 +224,7 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 *Makefile 01;36
 .bas 01;36
 .BAS 01;36
-.grm 01;36 # Joey's grammar
-.vim 01;36 # Vim
+.vim 01;36 # Vimscript
 .tex 01;36 # Tex
 .lyx 01;36
 .bib 01;36
@@ -231,13 +234,20 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .patch 01;36
 # PHP (IMC)
 .php3 01;36
-.inc 01;33
+.inc 01;36
 # DB:
 .sql 01;36
 ## Web code: (html is in "Docs")
 .js 01;36
 # ...
 # .xsl 01;36
+.grm 01;36 # Joey's grammar
+## My Beeb code:
+.dim 01;36
+.dims 01;36
+.asm 01;36
+.macro 01;36
+.fns 01;36
 
 # Plain data ("output")
 .dat 00;36
