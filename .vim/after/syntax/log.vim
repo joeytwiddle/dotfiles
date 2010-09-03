@@ -1,0 +1,1 @@
+exec "set iskeyword=" . &iskeyword . ",-"

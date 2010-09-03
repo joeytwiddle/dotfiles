@@ -22,6 +22,7 @@ if has("menu")
 	amenu &Joey's\ Tools.&Colour\ current\ word\ <C-H> :call JrandomHighlight(expand("<cword>"))<CR>
 endif
 
+" See also: :match and matchadd()
 function! JrandomHighlight(pat)
 	let name = "JrandomHighlight_".a:pat
 	let pattern = '\<'.substitute(a:pat,'+','\\+','g').'\>'

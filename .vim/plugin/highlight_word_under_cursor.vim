@@ -47,7 +47,8 @@ function! HighlightWord()
     " 121=light green, 179=light orange
     " execute 'highlight HLCurrentWord ctermfg=180 guifg=orange'
     " 130,166,172,173,203,208,214
-    execute 'highlight HLCurrentWord ctermfg=209 guifg=orange'
+    " execute 'highlight HLCurrentWord ctermfg=209 guifg=orange'
+    execute 'highlight HLCurrentWord ctermfg=red guifg=orange'
     "" Freezes vim: execute "sleep 5| call UnHighlightWord()"
   endif
 endfunction
@@ -101,7 +102,8 @@ endfunction
 
 " autocmd CursorMoved * call UnHighlightWord()
 autocmd CursorHold * call Cursor_Moved()
-set updatetime=2000
+" autocmd CursorMoved * call UnHighlightWord()
+set updatetime=500
 
 let g:last_pos = 0
 let s:lastWord = ""

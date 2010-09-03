@@ -57,6 +57,7 @@
 	" :set listchars=tab:\>-,trail:$
 	:set listchars=tab:>-,trail:$,precedes:<,extends:>
 	" :set listchars+=precedes:<,extends:>
+
 	"" showbreak defines how wrapped lines are indented when wrap is on.
 	" :set showbreak=\ \\\ 
 	" :set showbreak=\ \|\|\ 
@@ -72,9 +73,14 @@
 	" :set showbreak=>>>
 	" :set showbreak=---+
 	" :set showbreak=----
-	:set showbreak=\ \ \ \ \ \ \ \ \ \ \\\ 
+	"" We need at least as much indent as the most indented line in the file.
+	:set showbreak=\ \ \ \ \ \ \\\ 
+	" :set showbreak=\ \ \ \ \ \ \ \ \ \ \\\ 
+	" Now it's not too rubbish, let's actually use it.
+	set wrap
 
-	:highlight SpecialKey ctermfg=DarkGrey cterm=bold guifg=#606060
+	" My term font is LucidaTypewriter which is quite thick, so I only want bold in the GUI.
+	:highlight SpecialKey ctermfg=darkblue cterm=none guifg=#000088 gui=bold
 	" :set expandtab
 	":set noautoindent
 	":set nocindent
@@ -160,18 +166,13 @@
 	map <Leader>n :call SearchBuffers(@/, "n")<Return>
 	map <Leader>N :call SearchBuffers(@/, "N")<Return>
 
-	" Search through buffers for a specified pattern, either forward
-	" or backwards ("n" and "N" respectively).
-	" Global variables are check for which list of buffers to search
-	" and whether we should rewind the list after the last buffer. See
-	" below for details.
+	" Search through buffers for a specified pattern, either forward or backwards ("n" and "N" respectively).
+	" Global variables are check for which list of buffers to search and whether we should rewind the list after the last buffer. See below for details.
 	" Return codes:
 	"       0       match was found
 	"       1       no match was found
 	"       2       an error occured
-	" Todo: May fail if the match is on the first character of a buffer.
-	"       With the args list, we may end prematurely if the first buffer
-	"       is not in the list.
+	" Todo: May fail if the match is on the first character of a buffer.  With the args list, we may end prematurely if the first buffer is not in the list.
 	fun! SearchBuffers(pat, direction)
 		" On nonzero value here, we rewind the argument/buffer/window
 		" list after the last argument/buffer/window

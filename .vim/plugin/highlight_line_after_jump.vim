@@ -1,3 +1,4 @@
+" REDUNDANT: Instead just :set cursorline
 " The original used cul and nocul to underline the newly reached line.
 " DONE: I would prefer to change the bg colour of the line
 "       This could be done with a temporary syntax+highlight (altho only
@@ -75,6 +76,7 @@ endfunction
 autocmd CursorMoved * call Cursor_Moved()
 autocmd CursorHold * call UnHighlightLine()
 " autocmd CursorHold * call s:Cursor_Moved()
+set updatetime=1000
 
 let g:last_pos = 0
 

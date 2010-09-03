@@ -1,5 +1,6 @@
 " Mini Buffer Explorer <minibufexpl.vim>
 " Joey's version
+" vim: ts=2 sw=2
 "
 " Joey's notes:
 " DONE: Some improvements to graphics.
@@ -671,13 +672,13 @@ function! <SID>StartExplorer(sticky, delBufNum)
       let g:did_minibufexplorer_syntax_inits = 1
       " highlight MBEGap            ctermfg=white ctermbg=magenta guibg=magenta
       " highlight MBEGap            term=none cterm=none ctermbg=black ctermfg=grey guibg=black guifg=grey
-      highlight MBEGap            term=bold cterm=bold gui=bold ctermbg=black ctermfg=white guibg=darkblue guifg=white
+      highlight MBEGap            term=bold cterm=bold gui=bold ctermbg=blue ctermfg=white guibg=darkblue guifg=white
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=white ctermfg=black guibg=white guifg=black
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=green ctermfg=white guibg=green guifg=white
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=white ctermfg=green guibg=white guifg=green
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
       " TODO: in gvim (at least under gentoo) the gui shows the []s in [File] with less-bold-green bg.
-      highlight MBEButton         term=reverse,bold cterm=none gui=none ctermbg=cyan ctermfg=blue guibg=cyan guifg=blue
+      highlight MBEButton         term=reverse,bold cterm=none gui=none ctermbg=cyan ctermfg=darkblue guibg=cyan guifg=blue
       " Blue on yellow did look quite menu-like.
       highlight MBEButtonRed      term=reverse,bold cterm=bold gui=bold ctermbg=red ctermfg=white guibg=red guifg=white
       " highlight MBENormal         ctermfg=white ctermbg=blue guibg=blue
@@ -1153,19 +1154,26 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
     endif
   endwhile
 
-  " let l:fileNames = substitute(l:fileNames,' *$','','') . ' [X]'
-  let l:fileNames = '[File] [Tags] [Wrap] ' . l:fileNames . "|  [X]"
+  " let l:fileNames = substitute(l:fileNames,' *$','','')
+  let l:line = ''
+  if exists('g:vloaded_tree_explorer') || exists('g:loaded_nerd_tree') || exists('g:loaded_netrw')
+    let l:line = l:line . "[File] "
+  endif
+  if exists('g:loaded_taglist')
+    let l:line = l:line . "[Tags] "
+  endif
+  let l:line = l:line . '[Wrap] [Fold] ' . l:fileNames . "| [X]"
   "" [Wrap] toggles dsplayed line-wrapping (:set wrap/nowrap)
   "" but it should probably be an option in the [View menu]?
   "" Let users reconfigure toolbars+buttons.
-  "" Defaults are:
-  " File:Open,Save,Rename,Close,Quit
-  " View:Wrap Lines,Tabs
-  " Help:About
+  "" Defaults could be e.g.:
+  ""   File:Open,Save,Rename,Close,Quit
+  ""   View:Wrap Lines,Tabs
+  ""   Help:About
 
-  if (g:miniBufExplBufList != l:fileNames)
+  if (g:miniBufExplBufList != l:line)
     if (a:updateBufList)
-      let g:miniBufExplBufList = l:fileNames
+      let g:miniBufExplBufList = l:line
       let s:maxTabWidth = l:maxTabWidth
     endif
     return 1
@@ -1428,7 +1436,7 @@ function! <SID>MBESelectBuffer()
 
     " -1 = dunno what hit - Can't do anything
 
-  elseif (l:bufnr<=0)
+  elseif (l:bufnr<=0 || l:bufnr>=bufnr("$"))
 
     " -2 = first menu, -3 = second menu, ...
 
@@ -1438,23 +1446,36 @@ function! <SID>MBESelectBuffer()
     normal ""yi[
     " let l:word = @"
     let @" = l:save_reg
-    echo "Got word = " . l:word
+    " echo "Got word = " . l:word
 
     " let @" = ""
     " normal hEB""yE
 
     if word == "File"
-      " call VsTreeExplorer()
-      " wincmd j
-      wincmd p
-      exec "VSTreeExplore"
-      " wincmd H
+      if exists('g:loaded_netrw')
+        wincmd p
+        vsplit
+        exec "Explore"
+      elseif exists('g:vloaded_tree_explorer')
+        " call VsTreeExplorer()
+        " wincmd j
+        wincmd p
+        exec "VSTreeExplore"
+        " wincmd H
+      elseif exists('g:loaded_nerd_tree')
+        wincmd p
+        exec "NERDTree"
+      endif
     elseif word == "Tags"
-      " call TList()
-      wincmd p
-      " normal :Tlist<Enter>
-      exec "Tlist"
+      if exists('g:loaded_taglist')
+        " call TList()
+        wincmd p
+        " normal :Tlist<Enter>
+        exec "Tlist"
+      endif
     elseif word == "Wrap"
+      " We use our own toggle variable here, but it would be better to check
+      " the current existing setting instead.
       if !exists('g:wrapping') || g:wrapping == 0
         let g:wrapping = 1
         wincmd p
@@ -1464,6 +1485,39 @@ function! <SID>MBESelectBuffer()
         wincmd p
         set nowrap
       endif
+    elseif word == "Fold"
+      if !exists('g:folding') || g:folding == 0
+        let g:folding = 1
+        wincmd p
+        set fdc=5
+        set foldenable
+        set foldmethod=indent
+        set foldlevel=2
+      elseif g:folding == 1
+        let g:folding = 2
+        wincmd p
+        set foldmethod=syntax
+      elseif g:folding == 2
+        let g:folding = 3
+        wincmd p
+        set foldmethod=manual
+      else
+        let g:folding = 0
+        wincmd p
+        set nofoldenable
+        set fdc=0
+      endif
+    elseif word == "X"
+      wincmd p
+      "" Hmm both of these cause buffer N to no longer exist, making
+      "" everything suck :f
+      " exec "bdel"
+      " exec "bwipeout"
+      " wincmd c
+      "" TODO: we need to call bufd and argdel!
+      "" altho even then it appears in the list, but unselectable
+      " Best for now seems to be
+      exec "bdel"
     else
       echo "No command for bufnr=" . l:bufnr
     endif
@@ -1475,12 +1529,15 @@ function! <SID>MBESelectBuffer()
 
     let l:saveAutoUpdate = g:miniBufExplorerAutoUpdate
     let g:miniBufExplorerAutoUpdate = 0
-    " Switch to the previous window
+    "" Switch to the previous window
+    wincmd p
+    "" TODO: make this a global default WhichWindowToSwitch
+    "" I personally want down then right, because often previous or just down is my TList
+    " wincmd j
+    " wincmd l
+    "" Here I am going always for previous window, then panel on the right if it exists.
     " wincmd p
-    " TODO: make this a global default WhichWindowToSwitch
-    " I personally want down then right, because often previous or just down is my TList
-    wincmd j
-    wincmd l
+    " wincmd l
 
     " If we are in the buffer explorer or in a nonmodifiable buffer with
     " g:miniBufExplModSelTarget set then try another window (a few times)
@@ -1501,11 +1558,11 @@ function! <SID>MBESelectBuffer()
     endif
 
     if l:bufnr == 0
-        echo "bufnr=" . l:bufnr
+      echo "bufnr=" . l:bufnr
     else
-        exec('b! '.l:bufnr)
+      exec('b! '.l:bufnr)
     endif
-    " exec('argedit '.l:bufnr) " Open the file with that name.  TODO/BUG: This may not be the real pathname.
+    " exec('argedit '.l:bufnr) " Open the file with that name.  TODO/BUG: This may not be the real path to the file!
     if (l:resize)
       resize
     endif

@@ -182,7 +182,7 @@ if !exists('loaded_taglist')
     " not.  Also, controls whether empty lines are used to separate the tag
     " tree.
     if !exists('Tlist_Compact_Format')
-        let Tlist_Compact_Format = 1
+        let Tlist_Compact_Format = 0
     endif
 
     " Exit Vim if only the taglist window is currently open. By default, this is
@@ -1308,10 +1308,12 @@ function! s:Tlist_Window_Create()
 
         if g:Tlist_Use_Right_Window
             " Open the window at the rightmost place
-            let win_dir = 'botright vertical'
+            " let win_dir = 'botright vertical'
+            let win_dir = 'rightbelow vertical'
         else
             " Open the window at the leftmost place
-            let win_dir = 'topleft vertical'
+            " let win_dir = 'topleft vertical'
+            let win_dir = 'leftabove vertical'
         endif
         let win_size = g:Tlist_WinWidth
     endif

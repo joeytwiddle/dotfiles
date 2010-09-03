@@ -1,6 +1,6 @@
 "" File:        vtreeexplorer.vim
 "" Description: tree-like file system explorer for vim
-"" Version:     $Revision: 1.3 $ $Date: 2009/09/14 01:56:56 $
+"" Version:     $Revision: 1.4 $ $Date: 2010/09/03 18:50:29 $
 "" Author:      TS Urban (thomas.scott.urban@HORMELgmail.com)
 ""              (remove the source of SPAM from my email first)
 ""
@@ -590,16 +590,11 @@ function! s:Activate(how) " <<<
 		elseif a:how == "cur"
 			exec ("tabedit " . f)
 		elseif oldwin == winnr() || (&modified && s:BufInWindows(winbufnr(winnr())) < 2)
-			" if g:treeExplAutoClose
-				" wincmd c
-			" else
-				wincmd p
-			" endif
-			" exec ("new " . f)
+			wincmd p
+			"" We position the new buffer nicely for MinBufExplorer
+			"" NOTE: This may no longer be needed now I redefined my Ctrl+PageUp/Down.
 			exec ("last")
 			exec ("argedit " . f)
-			" exec ("argadd " . f)
-			" exec ("n")
 		else
 			if g:treeExplAutoClose
 				wincmd c
@@ -608,8 +603,6 @@ function! s:Activate(how) " <<<
 			" We position the new buffer nicely for MinBufExplorer
 			exec ("last")
 			exec ("argedit " . f)
-			" exec ("argadd " . f)
-			" exec ("n")
 		endif
 	endif
 endfunction " >>>
