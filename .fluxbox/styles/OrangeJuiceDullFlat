@@ -35,7 +35,7 @@
 
 window.font:	sans-8:bold
 menu.title.font:	sans-13:bold
-menu.frame.font:	sans-12
+menu.frame.font:	sans-10
 toolbar.clock.font:	sans-10
 toolbar.workspace.font:	sans-9
 toolbar.iconbar.focused.font:	sans-8:bold
