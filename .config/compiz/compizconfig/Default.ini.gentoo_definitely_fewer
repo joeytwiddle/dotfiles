@@ -1,0 +1,76 @@
+[core]
+as_active_plugins = core;decoration;place;png;regex;resize;zoom;workarounds;imgjpeg;resizeinfo;wall;extrawm;maximumize;shelf;widget;wallpaper;wobbly;animation;expo;fade;move;scale;switcher;opacify;group;
+s0_vsize = 4
+s0_hsize = 3
+as_autoraise_delay = 572
+as_click_to_focus = false
+as_lower_window_key = <Alt>a
+as_opacity_increase_button = Disabled
+as_lower_window_button = <Alt>Button4
+as_toggle_window_maximized_key = <Alt>z
+as_toggle_window_maximized_horizontally_key = <Alt>h
+as_toggle_window_maximized_vertically_key = <Alt>v
+
+[switcher]
+as_prev_key = <Alt>grave
+
+[vpswitch]
+
+[scale]
+as_initiate_all_edge = BottomRight
+as_initiate_edge = BottomLeft
+
+[expo]
+as_dnd_button = Button3
+as_exit_button = Button1
+as_expo_edge = TopLeft|TopRight
+as_mipmaps = true
+as_zoom_time = 0.821500
+as_vp_distance = 1.000000
+as_hide_docks = true
+as_distance = 0.173600
+
+[resize]
+as_initiate_button = <Alt>Button3
+as_mode = 3
+
+[extrawm]
+as_toggle_sticky_key = <Alt>s
+
+[group]
+
+[opacify]
+
+[wallpaper]
+s0_bg_image = /stuff/wallpapers/scifi/from_conceptart.org/rage01.jpg;/stuff/wallpapers/landscape/01527_eyeinthesky_2560x1600.jpg;/stuff/wallpapers/photography/3689372881_cde3f8a3e1.jpg;/stuff/wallpapers/landscape/00448_antelopecanyon_2560x1600.jpg;/stuff/wallpapers/cult/ghostInTheShell/prod-ig/BigBigTruck.01.jpg;/stuff/wallpapers/ut/03.png.jpg;
+s0_bg_image_pos = 1;1;1;1;0;1;
+s0_bg_fill_type = 0;0;0;0;0;0;
+s0_bg_color1 = #000000ff;#000000ff;#000000ff;#000000ff;#000000ff;#00000069;
+s0_bg_color2 = #000000ff;#000000ff;#000000ff;#000000ff;#000000ff;#ffffffff;
+
+[maximumize]
+as_ignore_overlapping = true
+
+[wobbly]
+as_shiver = true
+as_snap_inverted = false
+s0_friction = 4.000000
+s0_min_grid_size = 4
+s0_grid_resolution = 4
+
+[cube]
+s0_active_opacity = 14.663500
+s0_transparent_manual_only = false
+s0_skydome_image = /stuff/wallpapers/landscape/01253_silence_2560x1600.jpg
+s0_skydome = true
+
+[3d]
+s0_min_cube_size = 50
+s0_max_window_space = 50
+s0_width = 0.000000
+
+[wall]
+s0_edgeflip_dnd = true
+as_allow_wraparound = true
+as_slide_duration = 0.443900
+

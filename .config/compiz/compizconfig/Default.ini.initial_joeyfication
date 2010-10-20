@@ -1,0 +1,127 @@
+[core]
+as_active_plugins = core;resize;move;decoration;regex;switcher;png;place;zoom;extrawm;fadedesktop;group;widget;animation;resizeinfo;thumbnail;wall;workarounds;wobbly;expo;scale;
+s0_vsize = 4
+as_toggle_window_maximized_horizontally_key = <Alt>h
+as_toggle_window_maximized_vertically_key = <Alt>v
+s0_hsize = 3
+as_click_to_focus = false
+as_toggle_window_maximized_key = <Alt>z
+as_close_window_key = <Alt>q
+as_toggle_window_shaded_key = <Alt>d
+as_lower_window_key = <Alt>a
+as_autoraise_delay = 550
+as_window_menu_button = <Alt><Super>Button3
+as_minimize_window_key = <Alt>i
+as_run_command_screenshot_key = <Alt>F9
+
+[3d]
+s0_manual_only = false
+s0_max_window_space = 50
+s0_min_cube_size = 10
+s0_width = 0.000000
+
+[addhelper]
+as_opacity = 90
+as_saturation = 80
+as_brightness = 80
+as_toggle_key = <Super>h
+
+[rotate]
+
+[animation]
+s0_open_effects = 11;9;9;
+s0_shade_durations = 100;
+s0_minimize_effects = 12;
+s0_fire_particles = 500
+s0_close_effects = 9;9;21;
+s0_minimize_durations = 800;
+s0_open_durations = 600;150;150;
+s0_beam_size = 1.500000
+s0_close_durations = 150;150;400;
+s0_beam_color = #b3b3b3ff
+s0_close_matches = (type=Menu | PopupMenu | DropdownMenu);(type=Tooltip | Notification | Utility);(type=Normal | Dialog | ModalDialog | Unknown) & !(name=gnome-screensaver);
+
+[cubeaddon]
+
+[wobbly]
+as_snap_inverted = false
+s0_spring_k = 7.000000
+
+[resize]
+as_mode = 3
+as_initiate_button = <Alt>Button3
+
+[group]
+as_select_button = <Alt>Button2
+s0_bar_animations = false
+as_change_color_key = <Super>g
+s0_thumb_size = 256
+s0_border_width = 5
+s0_tab_base_color = #cdcdcdff
+s0_tab_border_color = #d49d00ff
+s0_tab_highlight_color = #17b729ff
+s0_border_radius = 1
+as_remove_key = <Super>o
+
+[decoration]
+as_command = kde-window-decorator
+
+[showmouse]
+
+[wall]
+s0_edgeflip_dnd = true
+as_thumb_gradient_highlight_color = #f320a0ff
+as_allow_wraparound = true
+as_thumb_gradient_base_color = #11ffa2ff
+as_preview_scale = 51
+
+[cube]
+s0_active_opacity = 44.444401
+s0_inactive_opacity = 44.696999
+
+[scale]
+as_show_desktop = false
+as_initiate_edge = BottomLeft
+as_initiate_all_edge = TopLeft
+
+[switcher]
+as_prev_key = <Alt>grave
+
+[maximumize]
+as_trigger_key = <Super>backslash
+
+[shelf]
+as_reset_key = <Super>equal
+as_dec_button = <Alt><Super>Button5
+as_inc_button = <Alt><Super>Button4
+
+[shift]
+as_next_key = <Alt>Tab
+as_prev_key = <Alt>grave
+s0_shift_speed = 5.000000
+s0_timestep = 3.200000
+as_terminate_button = Disabled
+
+[extrawm]
+as_toggle_sticky_key = <Alt>s
+
+[expo]
+as_dnd_button = Button3
+as_exit_button = Button1
+as_expo_edge = TopRight|BottomRight
+as_zoom_time = 0.750000
+as_deform = 2
+as_curve = 0.074300
+
+[ring]
+as_next_key = <Alt>Tab
+as_prev_key = <Alt>grave
+
+[firepaint]
+s0_fire_life = 0.892400
+
+[staticswitcher]
+as_prev_key = <Alt>grave
+
+[mswitch]
+
