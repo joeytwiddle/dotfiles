@@ -1,3 +1,12 @@
+## Joey's keybindings for Fluxbox, some of which require jsh scripts
+# Mod1 is Alt - some people might be annoyed if they want to access application
+# menus.  Mod4 is Win key.  That's where most people will want the extra
+# commands provided here.  But I myself moved a lot of them onto Alt, since it
+# is easier for my thumb, and I use them more often than I use app menus.
+
+# Note: You were having problems with some actions happening before others.
+# It might be possible to solve this using {Delay {Command...} 1}
+
 # !mouse actions added by fluxbox-update_configs
 # OnTitlebar Mouse2 :StartTabbing
 # 
@@ -98,8 +107,10 @@ OnDesktop Mouse2 :workspaceMenu
 OnDesktop Mouse3 :rootMenu
 
 ## The Lower works but the StartTabbing does not.
-Mod1 t :MacroCmd {Raise} {Focus} {StartTabbing} {Lower}
-Mod4 t :StartTabbing
+# Mod1 t :MacroCmd {Raise} {Focus} {StartTabbing} {Lower}
+# Mod4 t :StartTabbing
+
+Mod1 t :ExecCommand xtermbg -bg '#330000' -geometry 132x28 -e top n 100
 
 ## Currently moves all windows on all desktops!
 # Shift Control Mod1 Left :MacroCmd {ForEach {SendToPrevWorkspace 1}} {PrevWorkspace}
@@ -147,13 +158,6 @@ Mod1 c :Close
 Mod4 c :Close
 Mod1 q :Close
 Mod4 q :KillWindow
-# Mod1 x :ExecCommand xterm -bg black -fg white -font '-*-fixed-*-r-*-*-12-*-*-*-*-*-*-*'
-# Mod4 x :ExecCommand xterm -bg black -fg white -font '-*-fixed-*-r-*-*-12-*-*-*-*-*-*-*'
-# Mod1 x :ExecCommand xterm
-# Mod4 x :ExecCommand xterm
-## This got me the font I wanted:
-Mod1 x :ExecCommand xtermbg
-Mod4 x :ExecCommand xtermbg
 Mod1 a :Lower
 Mod4 a :Lower
 Mod1 d :ShadeWindow
@@ -243,10 +247,10 @@ Shift Control KP_Right :ForEach {MoveRight +4} {{groups}}
 Shift Control KP_Left :ForEach {MoveRight -4} {{groups}}
 Shift Control KP_Up :ForEach {MoveUp +4} {{groups}}
 Shift Control KP_Down :ForEach {MoveUp -4} {{groups}}
-Control Mod1 KP_Right :ForEach {MoveRight +4} {{groups}}
-Control Mod1 KP_Left :ForEach {MoveRight -4} {{groups}}
-Control Mod1 KP_Up :ForEach {MoveUp +4} {{groups}}
-Control Mod1 KP_Down :ForEach {MoveUp -4} {{groups}}
+Control Mod1 KP_Right :ForEach {MoveRight +1} {{groups}}
+Control Mod1 KP_Left :ForEach {MoveRight -1} {{groups}}
+Control Mod1 KP_Up :ForEach {MoveUp +1} {{groups}}
+Control Mod1 KP_Down :ForEach {MoveUp -1} {{groups}}
 
 ## Resizing windows
 # Mod1 KP_5 :VerticalDecrement
@@ -265,21 +269,28 @@ Mod1 F2 :ExecCommand runacommand
 
 # Audio
 Mod1 KP_Multiply :ExecCommand volumeup 9
-Mod1 KP_Divide :ExecCommand volumedown 9
-Mod1 KP_Add :ExecCommand volumeup 2
+Mod1 KP_Divide   :ExecCommand volumedown 9
+Mod1 KP_Add      :ExecCommand volumeup 2
 Mod1 KP_Subtract :ExecCommand volumedown 2
+# (play)
+# Mod1 KP_1 :ExecCommand xmms -p
+Mod1 KP_1 :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 /usr/local/xmms/bin/xmms -p
+# (stop)
+Mod1 KP_3 :ExecCommand xmms -s
+# (pause)
+Mod1 KP_0 :ExecCommand xmms -u
 # (back)
 Mod1 KP_7 :ExecCommand xmms -r
 # (forward)
-# Mod1 KP_9 :ExecCommand xmms -f
+#Mod1 KP_9 :ExecCommand xmms -f
 Mod1 KP_9 :ExecCommand /home/joey/j/jsh nextsong
-# (pause)
-Mod1 KP_0 :ExecCommand xmms -u
-# (play)
-Mod1 KP_1 :ExecCommand xmms -p
-# (stop)
-Mod1 KP_3 :ExecCommand xmms -s
 Mod1 KP_Delete :ExecCommand xmms -s
+Mod1 KP_5     :ExecCommand whatsplaying
+Mod4 slash    :ExecCommand whatsplaying
+# Neither of these worked:
+#Control Slash :ExecCommand whatsplaying
+#Control Shift Slash :ExecCommand whatsplaying
+
 ## only work if your X is configured correctly:
 ## actually completely steals my keyboard!
 # None XF86AudioPlay :ExecCommand xmms -u
@@ -289,4 +300,19 @@ Mod4 Print :ExecCommand import -window root /tmp/screenshot-$$.bmp
 
 Mod4 k :ExecCommand save_desktop
 Mod4 l :ExecCommand load_desktop
+
+# Mod1 x :ExecCommand xterm -bg black -fg white -font '-*-fixed-*-r-*-*-12-*-*-*-*-*-*-*'
+# Mod4 x :ExecCommand xterm -bg black -fg white -font '-*-fixed-*-r-*-*-12-*-*-*-*-*-*-*'
+# Mod1 x :ExecCommand xterm
+# Mod4 x :ExecCommand xterm
+## This got me the font I wanted:
+Mod1 x :ExecCommand xtermbg
+# Mod4 x :ExecCommand xtermbg
+Mod4 x :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 /usr/local/xmms/bin/xmms -p
+Mod1 e :ExecCommand eterm
+Mod4 e :ExecCommand konqueror
+# Mod1 w :ExecCommand google-chrome
+# Mod4 w :ExecCommand google-chrome
+Mod1 w :ExecCommand chromium-browser
+Mod4 w :ExecCommand chromium-browser
 

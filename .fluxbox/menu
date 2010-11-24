@@ -433,8 +433,15 @@ Debian MENU
          [exec] (ScreenSaver Preferences) {/usr/bin/xscreensaver-command -prefs}
       [end]
    [end]
+   [submenu] (Resolution) {}
+      [exec] (800x600) {xrandr -s 800x600}
+      [exec] (1024x768) {xrandr -s 1024x768}
+      [exec] (1280x1024) {xrandr -s 1280x1024}
+      [exec] (1600x1200) {xrandr -s 1600x1200}
+   [end]
    [submenu] (WindowManagers) {}
       [restart] (AfterStep)  {/usr/X11R6/bin/afterstep}
+      [restart] (Compiz)  {/usr/bin/compiz}
       [exit] (Exit)
       [restart] (FluxBox)  {/usr/local/bin/fluxbox}
       [restart] (Fvwm)  {/usr/bin/X11/fvwm2}
