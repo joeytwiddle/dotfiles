@@ -22,73 +22,108 @@
     [execute] (2) {aumix -v +5}
     [execute] (3) {aumix -v -5}
   [end]
-  [Lower]  (Mod1-Down)
-  [Raise]  (Mod1-Up)
-  [toggleShade]  (Mod1-F9)
-  [Close]  (Mod1-F4)
-  [Iconify]  (Mod1-m)
-  [toggleMaximizeFull]  (Mod1-F12)
-  [toggleMaximizeHorizontal]  (Mod1-F11)
-  [toggleMaximizeVertical]  (Mod1-F10)
-  [toggleOmnipresent]  (Mod1-Control-S)
-  [resizeWindowWidth]  (Mod1-Control-Shift-Left) {-5}
-  [resizeWindowWidth]  (Mod1-Control-Shift-Right) {5}
-  [resizeWindowHeight]  (Mod1-Control-Shift-Up) {-5}
-  [resizeWindowHeight]  (Mod1-Control-Shift-Down) {5}
-  [moveWindowUp]  (Mod1-Control-Up) {1}
-  [moveWindowDown]  (Mod1-Control-Down) {1}
-  [moveWindowLeft]  (Mod1-Control-Left) {1}
-  [moveWindowRight]  (Mod1-Control-Right) {1}
-  [NextWindow]  (Mod1-Tab)
+  [Lower]                      (Mod1-Down)
+  [Raise]                      (Mod1-Up)
+  # [toggleShade]                (Mod1-F9)
+  [Close]                      (Mod1-F4)
+  [Iconify]                    (Mod1-i)
+  [toggleMaximizeFull]         (Mod1-F12)
+  [toggleMaximizeHorizontal]   (Mod1-F11)
+  [toggleMaximizeVertical]     (Mod1-F10)
+  [toggleOmnipresent]          (Mod1-Control-S)
+  [resizeWindowWidth]          (Mod1-Control-Shift-Left)   {-5}
+  [resizeWindowWidth]          (Mod1-Control-Shift-Right)  {5}
+  [resizeWindowHeight]         (Mod1-Control-Shift-Up)     {-5}
+  [resizeWindowHeight]         (Mod1-Control-Shift-Down)   {5}
+  [moveWindowUp]               (Mod1-Control-K)            {1}
+  [moveWindowDown]             (Mod1-Control-J)            {1}
+  [moveWindowLeft]             (Mod1-Control-H)            {1}
+  [moveWindowRight]            (Mod1-Control-L)            {1}
+  [NextWindow]                 (Mod1-Tab)
   [NextWindowOnAllWorkspaces]  (Mod1-Control-Tab)
-  [PrevWindow]  (Mod1-Shift-Tab)
-  [changeWorkspace]  (Mod1-1) {1}
-  [changeWorkspace]  (Mod1-2) {2}
-  [changeWorkspace]  (Mod1-3) {3}
-  [changeWorkspace]  (Mod1-4) {4}
-  [changeWorkspace]  (Mod1-5) {5}
-  [changeWorkspace]  (Mod1-6) {6}
-  [changeWorkspace]  (Mod1-7) {7}
-  [changeWorkspace]  (Mod1-8) {8}
+  [PrevWindow]                 (Mod1-Shift-Tab)
+  [PrevWindow]                 (Mod1-grave)
+  [changeWorkspace]            (Mod1-1)                    {1}
+  [changeWorkspace]            (Mod1-2)                    {2}
+  [changeWorkspace]            (Mod1-3)                    {3}
+  [changeWorkspace]            (Mod1-4)                    {4}
+  [changeWorkspace]            (Mod1-5)                    {5}
+  [changeWorkspace]            (Mod1-6)                    {6}
+  [changeWorkspace]            (Mod1-7)                    {7}
+  [changeWorkspace]            (Mod1-8)                    {8}
 
-  [upWorkspace] (Mod1-Control-K)
-  [downWorkspace] (Mod1-Control-J)
-  [leftWorkspace] (Mod1-Control-H)
-  [rightWorkspace] (Mod1-Control-L)
+  ## These were added by joey:
 
-  [showRootMenu] (Mod1-Control-Escape)
-  [Execute]  (Mod1-F5) {xrefresh}
-  #[Execute]  (Mod4-E) {kfmclient openProfile filemanagement}
-  #[Execute]  (F20) {kfmclient openProfile filemanagement}
-  [Execute]  (Mod4-E) {nautilus /home/gideon}
-  [Execute]  (F20) {nautilus /home/gideon}
+  [upWorkspace]                (Mod1-Control-Up)
+  [downWorkspace]              (Mod1-Control-Down)
+  [leftWorkspace]              (Mod1-Control-Left)
+  [rightWorkspace]             (Mod1-Control-Right)
+
+  [toggleOmnipresent]          (Mod1-S)
+  [toggleShade]                (Mod1-D)
+  [Lower]                      (Mod1-A)
+  [Close]                      (Mod1-Q)
+  [Iconify]                    (Mod1-I)
+  [toggleMaximizeFull]         (Mod1-Z)
+  [toggleMaximizeHorizontal]   (Mod1-H)
+  [toggleMaximizeVertical]     (Mod1-V)
+  [toggleDecorations]          (Mod1-F)
+
+  [Execute]                    (Mod4-Q)                    {xkill}
+
+  [showRootMenu]               (Mod1-Control-Escape)
+  [Execute]                    (Mod1-F5)                   {xrefresh}
+  #[Execute]                    (Mod4-E)                    {kfmclient openProfile filemanagement}
+  #[Execute]                    (F20)                       {kfmclient openProfile filemanagement}
+  #[Execute]                    (Mod4-E)                    {nautilus /home/gideon}
+  #[Execute]                    (F20)                       {nautilus /home/gideon}
 
   ### Joey's binds follow:
 
+  ### Wanted for Debian, or jsh prompt isn't loaded:
+  # [Execute]  (Mod1-X) {/home/joey/j/jsh xterm -e /home/joey/j/jsh}
+  ### Wanted for Gentoo, with above jsh loads the Debian prompt and keys are crapzored!
   # [Execute]  (Mod1-X) {xterm}
-  [Execute]  (Mod1-X) {/home/joey/j/jsh xterm -e /home/joey/j/jsh}
+  [Execute]  (Mod1-X) {xtermbg}
 
-  [Execute]  (Mod1-Slash) {whatsplaying}
+  [Execute]  (Mod1-slash) {whatsplaying}
 
   [Execute]  (Mod1-KP_Divide) {volumedown 9}
   [Execute]  (Mod1-KP_Multiply) {volumeup 9}
   [Execute]  (Mod1-KP_Subtract) {volumedown 2}
   [Execute]  (Mod1-KP_Add) {volumeup 2}
-  [Execute]  (Mod1-minus) {volumedown}
-  [Execute]  (Mod1-equal) {volumeup}
 
   [Execute]  (Mod1-KP_7) {xmms -r}
-  # [Execute]  (Mod1-KP_9) {xmms -f}
-  [execute]  (Mod1-KP_9) {nextsong}
+  [Execute]  (Mod1-KP_9) {xmms -f}
+  # [execute]  (Mod1-KP_9) {nextsong}
   [Execute]  (Mod1-KP_0) {xmms -u}
   [Execute]  (Mod1-KP_1) {xmms -p}
   [Execute]  (Mod1-KP_3) {xmms -s}
   [Execute]  (Mod1-KP_Delete) {xmms -s}
 
+  ## Push windows to edges or corners of the screen
+  [Execute]  (Mod4-KP_1) {wmctrl -r :ACTIVE: -e 1,8,692,572,292}
+  # [Execute]  (Mod4-KP_2) {wmctrl -r :ACTIVE: -e 1,350,692,572,292}
+  [Execute]  (Mod4-KP_2) {wmctrl -r :ACTIVE: -e 1,250,692,772,292}
+  [Execute]  (Mod4-KP_3) {wmctrl -r :ACTIVE: -e 1,700,692,572,292}
+  [Execute]  (Mod4-KP_4) {wmctrl -r :ACTIVE: -e 1,8,190,618,650}
+  [Execute]  (Mod4-KP_5) {wmctrl -r :ACTIVE: -e 1,128,112,1024,768}
+  [Execute]  (Mod4-KP_6) {wmctrl -r :ACTIVE: -e 1,652,190,618,650}
+  [Execute]  (Mod4-KP_7) {wmctrl -r :ACTIVE: -e 1,8,8,800,600}
+  [Execute]  (Mod4-KP_8) {wmctrl -r :ACTIVE: -e 1,128,8,1024,768}
+  [Execute]  (Mod4-KP_9) {wmctrl -r :ACTIVE: -e 1,242,8,1024,768}
+
+  ## Untested:
+  [Execute]  (Mod1-minus) {volumedown}
+  [Execute]  (Mod1-equal) {volumeup}
+  [Execute]  (Mod1-slash) {whatsplaying}
+
  [end]
 
 [end]
 
+## My old file looked like this
+## Were these fbkeys maybe?
 # Not in wmaker :-(
 #KeyToGrab(J), WithModifier(Mod4), WithAction(BigNudgeDown)
 #KeyToGrab(K), WithModifier(Mod4), WithAction(Maximise)
