@@ -1,0 +1,105 @@
+[app] (name=xv) (class=MPlayer)
+  [Position]	(UPPERLEFT)	{399 631}
+  [Deco]	{NORMAL}
+  [Sticky]	{yes}
+  [Layer]	{2}
+  [Close]	{yes}
+[end]
+[app] (name=gl) (class=MPlayer)
+  [Sticky]	{yes}
+  [Layer]	{8}
+[end]
+[app] (name=xmms) (class=Xmms)
+  [Workspace]	{1}
+  [Position]	(UPPERLEFT)	{23 534}
+  [Deco]	{NONE}
+  [Layer]	{8}
+  [Close]	{yes}
+[end]
+[app] (name=beebem) (class=beebem)
+  [Position]	(UPPERLEFT)	{65 226}
+  [Close]	{yes}
+[end]
+[app] (name=glslideshow) (class=TopLevelShell)
+  [Deco]	{NONE}
+  [Close]	{yes}
+[end]
+[app] (name=kmplayer) (class=Kmplayer) (role=kmplayer-mainwindow#1)
+  [Deco]	{NORMAL}
+  [Sticky]	{yes}
+  [Layer]	{8}
+  [Close]	{yes}
+[end]
+[app] (name=MPlayer) (class=MPlayer)
+  [Position]	(UPPERLEFT)	{2 16}
+  [Sticky]	{no}
+  [Layer]	{8}
+  [Close]	{yes}
+[end]
+[app] (name=smplayer) (class=Smplayer)
+  [Dimensions]	{645 394}
+  [Position]	(UPPERLEFT)	{0 628}
+  [Sticky]	{yes}
+  [Layer]	{8}
+  [Close]	{yes}
+  [Alpha]	{121 75}
+[end]
+[app] (name=gimp) (class=Gimp) (role=gimp-image-window)
+  [Dimensions]	{930 775}
+  [Position]	(UPPERLEFT)	{313 22}
+  [Close]	{yes}
+[end]
+[app] (name=gimp) (class=Gimp) (role=gimp-toolbox)
+  [Dimensions]	{224 1018}
+  [Position]	(UPPERLEFT)	{0 0}
+  [Close]	{yes}
+[end]
+[group]  (workspace=[current])
+ [app] (title=Untitled.*)
+[end]
+[app] (title=Google Chrome Options)
+[end]
+[group]  (workspace=[current])
+ [app] (title=Untitled)
+ [app] (title=chrome://devtools/devtools.html)
+ [app] (title=Developer Tools.*)
+[end]
+[group]  (workspace=[current])
+ [app] (name=Navigator)
+ [app] (name=konqueror)
+ [app] (name=x-www-browser)
+ [app] (name=google-chrome)
+ [app] (name=chromium-browser)
+ [app] (name=chrome)
+[end]
+[group]  (workspace=[current])
+ [app] (name=gvim) (class=Gvim)
+ [app] (title=.* - VIM)
+ [app] (title=[Vim] .*)
+[end]
+[group]  (workspace=[current])
+ [app] (name=kopete)
+  [Workspace]	{7}
+[end]
+[app] (name=lavaps) (class=Lavaps)
+  [Sticky]	{yes}
+  [Layer]	{8}
+  [Close]	{yes}
+[end]
+[app] (name=ktorrent) (class=Ktorrent) (role=KTorrent)
+  [Workspace]	{5}
+[end]
+[app] (name=XMMS_Player) (class=xmms)
+  [Workspace]	{1}
+  [Layer]	{8}
+[end]
+[transient] (name=XMMS_Equalizer) (class=xmms)
+  [Workspace]	{1}
+[end]
+[transient] (name=XMMS_Playlist) (class=xmms)
+  [Workspace]	{1}
+[end]
+[app] (name=xchat) (class=Xchat)
+  [Dimensions]	{1059 847}
+  [Position]	(UPPERLEFT)	{112 86}
+[end]
