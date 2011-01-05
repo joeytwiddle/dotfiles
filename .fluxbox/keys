@@ -228,14 +228,15 @@ Shift Mod1 Down :TakeToNextWorkspace 3
 # Mod1 KP_Up :BigNudgeUp
 # Mod4 KP_Up :BigNudgeUp
 ## Fluxbox-style:
-Mod1 KP_Right :MoveRight +25
-Mod1 KP_Left :MoveRight -25
-Mod1 KP_Up :MoveUp +25
-Mod1 KP_Down :MoveUp -25
-Mod4 KP_Right :MoveRight +8
-Mod4 KP_Left :MoveRight -8
-Mod4 KP_Up :MoveUp +8
-Mod4 KP_Down :MoveUp -8
+## Mod1 Keypad are reserved for bbkeys edge-positioning
+# Mod1 KP_Right :MoveRight +25
+# Mod1 KP_Left :MoveRight -25
+# Mod1 KP_Up :MoveUp +25
+# Mod1 KP_Down :MoveUp -25
+# Mod4 KP_Right :MoveRight +8
+# Mod4 KP_Left :MoveRight -8
+# Mod4 KP_Up :MoveUp +8
+# Mod4 KP_Down :MoveUp -8
 ## Move all windows together - this can be useful to recover after wm restarts and they have all shifted a little bit out of place.
 ## DONE: Seems to work double/triple/etc. on groups of tags - should do for each group not for each tab.
 # Shift Control Right :ForEach {MoveRight +4} {{groups}}
@@ -315,4 +316,17 @@ Mod4 e :ExecCommand konqueror
 # Mod4 w :ExecCommand google-chrome
 Mod1 w :ExecCommand chromium-browser
 Mod4 w :ExecCommand chromium-browser
+
+## Push windows to edges or corners of the screen (no resizing)
+Mod4 KP_1 :ExecCommand put_current_xwindow sw
+Mod4 KP_2 :ExecCommand put_current_xwindow bottom
+Mod4 KP_3 :ExecCommand put_current_xwindow se
+Mod4 KP_4 :ExecCommand put_current_xwindow left
+# Mod4 KP_5 :ExecCommand put_current_xwindow center_x
+# Mod4 KP_5 :ExecCommand put_current_xwindow center_y
+Mod4 KP_5 :ExecCommand put_current_xwindow center
+Mod4 KP_6 :ExecCommand put_current_xwindow right
+Mod4 KP_7 :ExecCommand put_current_xwindow nw
+Mod4 KP_8 :ExecCommand put_current_xwindow top
+Mod4 KP_9 :ExecCommand put_current_xwindow ne
 
