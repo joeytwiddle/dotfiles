@@ -4,11 +4,7 @@
 	" source ~/.vim/after/syntax/all.vim
 " endif
 
-" comment
-:map <F5> ^i" <Esc>j^
-" uncomment
-:map <F6> ^2xj^
-" indent
-:map <F7> ^i  <Esc>j^
-" undent
-:map <F8> 02xj^
+"" Indent and Unindent disabled - Already in keymap.vim
+" :map <F7> ^i  <Esc>j^
+" :map <F8> 02xj^
+

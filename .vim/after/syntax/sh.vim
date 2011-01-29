@@ -29,3 +29,5 @@ source ~/.vim/after/syntax/all.vim
 " I just added the extra b:## rule to the defaults.
 :set comments=s1:/*,mb:*,ex:*/,://,b:#,b:##,:%,:XCOMM,n:>,fb:-
 
+" :hi PreProc term=bold ctermfg=magenta gui=bold guifg=magenta
+
