@@ -1489,7 +1489,7 @@ function! <SID>MBESelectBuffer()
       if !exists('g:folding') || g:folding == 0
         let g:folding = 1
         wincmd p
-        set fdc=5
+        set fdc=4
         set foldenable
         set foldmethod=indent
         set foldlevel=2
@@ -1497,10 +1497,13 @@ function! <SID>MBESelectBuffer()
         let g:folding = 2
         wincmd p
         set foldmethod=syntax
+        :call Joeyfolding() " I have some extra rules here
       elseif g:folding == 2
         let g:folding = 3
         wincmd p
-        set foldmethod=manual
+        set foldmethod=marker   " enable any existing marker folds (argh we need a pause!)
+        " set foldmethod=manual   " but then switch to manual mode
+        set fdc=2
       else
         let g:folding = 0
         wincmd p
@@ -1508,15 +1511,9 @@ function! <SID>MBESelectBuffer()
         set fdc=0
       endif
     elseif word == "X"
-      wincmd p
-      "" Hmm both of these cause buffer N to no longer exist, making
-      "" everything suck :f
-      " exec "bdel"
       " exec "bwipeout"
       " wincmd c
-      "" TODO: we need to call bufd and argdel!
-      "" altho even then it appears in the list, but unselectable
-      " Best for now seems to be
+      exec "wincmd p"
       exec "bdel"
     else
       echo "No command for bufnr=" . l:bufnr
