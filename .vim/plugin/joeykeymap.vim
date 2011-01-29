@@ -43,9 +43,15 @@ nmap <C-X>x :vnew \| vimshell bash<CR>
 " map <C-Left> :N<Enter>
 " map <C-PageDown> :n<Enter>
 " map <C-PageUp> :N<Enter>
+
 "" These two work best with MiniBufExplorer
 noremap <C-PageDown> :bnext<Enter>
 noremap <C-PageUp> :bprev<Enter>
+inoremap <C-PageDown> <Esc>:bnext<Enter>
+inoremap <C-PageUp> <Esc>:bprev<Enter>
+"" (not working?)
+" inoremap <C-PageUp> <Esc><C-PageUp>a
+" inoremap <C-PageDown> <Esc><C-PageDown>a
 
 " map <F8> :tabprev<Enter>
 " map <F9> :tabnext<Enter>
@@ -63,10 +69,17 @@ map :htab :tabnew<Enter>:h
 " :noremap <C-Left>  10<C-w><<C-W>h10<C-w>>
 " :noremap <C-Right> 10<C-w><<C-W>l10<C-w>>
 
+"" Moving between windows
 nnoremap <C-Up> <C-w>k
 nnoremap <C-Down> <C-w>j
 nnoremap <C-Left> <C-w>h
 nnoremap <C-Right> <C-w>l
+
+"" I want them to work in insert mode also (especially with ConqueTerm)
+inoremap <C-Up> <Esc><C-w>ka
+inoremap <C-Down> <Esc><C-w>ja
+inoremap <C-Left> <Esc><C-w>ha
+inoremap <C-Right> <Esc><C-w>la
 
 "" Here is too early, our value gets dropped.
 " :set winheight 40
@@ -93,4 +106,21 @@ nnoremap [5^ :bp<Enter>
 " nnoremap Ob j
 " nnoremap Od h
 " nnoremap Oc l
+
+"" Quick access to ConqueTerm
+:nnoremap <C-x> :ConqueTermSplit zsh<Enter>
+:inoremap <C-x> <Esc>:echo "Hello"<Enter>
+" :inoremap <C-x> <Esc>:bdel<Enter>
+
+"" I want :q to close the buffer, not the window.
+"" Unfortunately this does not quit Vim if we are on the last buffer.
+" nmap :q<Enter> :bdel<Enter>
+" nmap :wq<Enter> :w<Enter>:bdel<Enter>
+"" Meh turns out I don't always want to close the buffer.  I often use :q just
+"" to close an extra window I no longer want.
+
+:nnoremap <C-n> :cnext<Enter>
+:nnoremap <C-p> :cprev<Enter>
+:nnoremap = :cnext<Enter>
+:nnoremap - :cprev<Enter>
 

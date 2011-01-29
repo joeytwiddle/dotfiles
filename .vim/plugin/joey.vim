@@ -77,7 +77,7 @@
 	:set showbreak=\ \ \ \ \ \ \\\ 
 	" :set showbreak=\ \ \ \ \ \ \ \ \ \ \\\ 
 	" Now it's not too rubbish, let's actually use it.
-	set wrap
+	" set wrap
 
 	" My term font is LucidaTypewriter which is quite thick, so I only want bold in the GUI.
 	:highlight SpecialKey ctermfg=darkblue cterm=none guifg=#000088 gui=bold

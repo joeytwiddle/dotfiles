@@ -20,8 +20,15 @@ endif
 	"highlight Normal ctermbg=black ctermfg=grey guibg=Black guifg=#cccccc
 	"highlight Normal ctermfg=grey guibg=Black guifg=#cccccc
 	"highlight Normal ctermfg=lightgrey guibg=Black guifg=#cccccc
+	"" I lighten the background because LucidaConsole is quite faint
+	"" I set a weird background because my monitor is a bit buggered, 
 	" highlight Normal ctermfg=lightgrey guibg=#2b3735 guifg=#cccccc
-	highlight Normal ctermfg=lightgrey guibg=#223330 guifg=#cccccc
+	" highlight Normal ctermfg=lightgrey guifg=#cccccc guibg=#000000
+	" highlight Normal guibg=#081818	" Almost black background
+	" highlight Normal guibg=#102020	" Almost black background
+	highlight Normal guibg=#182828	" Medium/compromise
+	" highlight Normal guibg=#203030	" Lighter Faded background
+	" highlight Normal guibg=#223330	" Custom greeny/cyan, softer on my broken monitor
 
 	highlight Title ctermbg=black ctermfg=green guibg=#000060 guifg=#00ff00
 
@@ -40,7 +47,9 @@ endif
 	"highlight Search ctermbg=blue ctermfg=white term=bold guibg=#005500 guifg=#bbffbb gui=bold
 	highlight Search ctermbg=blue ctermfg=green term=bold guibg=#005544 guifg=#aaffaa gui=bold
 	highlight ErrorMsg ctermbg=Red ctermfg=Yellow guibg=Red guifg=Yellow
-	highlight Visual ctermfg=DarkMagenta ctermbg=White guifg=DarkMagenta guibg=White
+	" highlight Visual ctermfg=DarkMagenta ctermbg=White guifg=DarkMagenta guibg=White
+	" highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#553355
+	highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#445555
 	"highlight Comment ctermfg=Magenta guifg=#80a080 " green-grey
 	"highlight Comment ctermfg=DarkMagenta guifg=LightMagenta
 	"highlight Comment ctermfg=DarkMagenta guifg=#d080d0
@@ -49,7 +58,10 @@ endif
 	"highlight Comment term=none cterm=none ctermfg=DarkMagenta guifg=LightMagenta
 	"" Previous was getting too dark for me, so ...
 	"highlight Comment term=none cterm=bold ctermfg=Magenta guifg=LightMagenta
-	highlight Comment term=none cterm=none ctermfg=blue guifg=#7070ee
+	" highlight Comment term=none cterm=none ctermfg=blue guifg=#7070ee
+	" highlight Comment term=none cterm=none ctermfg=blue guifg=#88cccc
+	" highlight Comment term=none cterm=none ctermfg=cyan guifg=#88bbbb   " for javascript, like cyan for terminal, but darker
+	highlight Comment cterm=bold ctermfg=blue gui=none guifg=#7070ee   " dark blue to match my xterm
 	"highlight Comment cterm=none ctermfg=DarkCyan guifg=LightMagenta
 	"highlight link jComment Comment
 	highlight jComment ctermfg=DarkYellow guifg=DarkYellow
@@ -201,7 +213,8 @@ endif
 	hi Cursor guibg=#ffeecc
 
 	" hi MatchParen term=reverse ctermbg=red guibg=red
-	hi MatchParen term=reverse ctermbg=black ctermfg=magenta guibg=black guifg=magenta
+	" hi MatchParen term=reverse cterm=reverse ctermbg=black ctermfg=magenta guibg=black guifg=magenta
+	hi MatchParen term=reverse cterm=none ctermbg=magenta ctermfg=grey guibg=#880088 guifg=#eeeeee
 
 :endfun
 

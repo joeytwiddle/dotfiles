@@ -14,22 +14,20 @@ command! -narg=0 ZoomIn    :call s:ZoomIn()
 command! -narg=0 ZoomOut   :call s:ZoomOut()
 command! -narg=0 ZoomReset :call s:ZoomReset()
 
-" Maps Ctrl-MouseWheel to zoom in/out
+" Map Ctrl-MouseWheel to zoom in/out
 nmap <C-MouseDown> :ZoomIn<CR>
 nmap <C-MouseUp> :ZoomOut<CR>
-" Failed to map Ctrl-Plus/Minus
-" nmap <C-+> :ZoomIn<CR>
-" nmap <C--> :ZoomOut<CR>
+" Map Ctrl-KeypadPlus/Minus to zoom in/out
+nmap <C-kPlus> :ZoomIn<CR>
+nmap <C-kMinus> :ZoomOut<CR>
 
 " guifont size + 1
 function! s:ZoomIn()
-  " echo "== guifont=" . &guifont . ""
-  " let l:fsize = substitute(&guifont, '^.*:h\([^:]*\).*$', '\1', '')
+  " Original: let l:fsize = substitute(&guifont, '^.*:h\([^:]*\).*$', '\1', '')
+  " This might be a fix for Vim6 on WindowsXP:
   let l:fsize = substitute(&guifont, '^[^0-9]*\([0-9]*\)$', '\1', '')
-  " echo "== l:fsize=" . l:fsize . ""
   let l:fsize += 1
   let l:guifont = substitute(&guifont, '^\([^0-9]*\)[0-9]*$', '\1' . l:fsize, '')
-  echo "-- newguifont=" . l:guifont . ""
   let &guifont = l:guifont
 endfunction
 
@@ -38,7 +36,6 @@ function! s:ZoomOut()
   let l:fsize = substitute(&guifont, '^[^0-9]*\([0-9]*\)$', '\1', '')
   let l:fsize -= 1
   let l:guifont = substitute(&guifont, '^\([^0-9]*\)[0-9]*$', '\1' . l:fsize, '')
-  echo "-- newguifont=" . l:guifont . ""
   let &guifont = l:guifont
 endfunction
 

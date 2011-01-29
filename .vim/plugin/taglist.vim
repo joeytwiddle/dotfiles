@@ -1938,7 +1938,7 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
         let fidx_ttype = 's:tlist_' . fidx . '_' . ttype
         let ttype_txt = {fidx_ttype}
         if ttype_txt != ''
-            let txt = '  ' . s:tlist_{a:ftype}_{i}_fullname
+            let txt = ' ' . s:tlist_{a:ftype}_{i}_fullname
             if g:Tlist_Compact_Format == 0
                 let ttype_start_lnum = line('.') + 1
                 silent! put =txt

@@ -1376,6 +1376,7 @@ function! <SID>GetSelectedBuffer()
   " let @" = ""
   " normal hEB""yE
 
+  "" Read from cursor to beginning-of-line into the unnammed register "
   let @" = ""
   normal ""y0
   if @" != ""
@@ -1385,7 +1386,7 @@ function! <SID>GetSelectedBuffer()
     "" Count the number of spaces / 2 + 1
     " let l:retv = substitute(@",'[^ ]*', '', 'g')
     " let l:retv = strlen(l:retv)/2+1
-    "" Count the number of |s
+    "" Count the number of '|' chars, by removing all others
     let l:retv = strlen(substitute(@",'[^|]*', '', 'g'))
     " let l:retv = len(l:retv)
     " if l:retv==0
