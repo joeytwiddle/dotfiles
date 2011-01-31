@@ -125,7 +125,7 @@ nnoremap [5^ :bp<Enter>
 "" =/- get overriden by fold keymaps :P
 " :nnoremap = :cnext<Enter>
 " :nnoremap - :cprev<Enter>
-"" +/_ (Shift equivalent) don't
-:nnoremap + :cnext<Enter>
-:nnoremap _ :cprev<Enter>
+"" +/_ (Shift equivalent) also get overridden
+" :nnoremap + :cnext<Enter>
+" :nnoremap _ :cprev<Enter>
 
