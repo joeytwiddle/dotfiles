@@ -29,6 +29,7 @@ function! s:ZoomIn()
   let l:fsize += 1
   let l:guifont = substitute(&guifont, '^\([^0-9]*\)[0-9]*$', '\1' . l:fsize, '')
   let &guifont = l:guifont
+  echo "Setting size=" . l:fsize . " and font=" . l:guifont
 endfunction
 
 " guifont size - 1
@@ -37,6 +38,7 @@ function! s:ZoomOut()
   let l:fsize -= 1
   let l:guifont = substitute(&guifont, '^\([^0-9]*\)[0-9]*$', '\1' . l:fsize, '')
   let &guifont = l:guifont
+  echo "Setting size=" . l:fsize . " and font=" . l:guifont
 endfunction
 
 " reset guifont size
@@ -58,20 +60,20 @@ email   : mail@nanasi.jp
 version : 2008/07/18 10:00:00
 ==============================================================================
 
-Control Vim editor font size with key "+", or key "-".
-Press "+" key, Vim editor gui font size will change bigger.
-And, press "-" key, Vim editor gui font size will change smaller.
-
 This plugin is for GUI only.
 
-
 Normal Mode:
-    +                  ... change font size bigger
-    -                  ... change font size smaller
+
+    CTRL-kPlus         ... make font size bigger
+    CTRL-MouseUp
+
+    CTRL-kMinus        ... make font size smaller
+    CTRL-MouseDown
 
 Command-line Mode:
-    :ZoomIn            ... change font size bigger
-    :ZoomOut           ... change font size smaller
+
+    :ZoomIn            ... make font size bigger
+    :ZoomOut           ... make font size smaller
     :ZoomReset         ... reset font size changes.
 
 ==============================================================================

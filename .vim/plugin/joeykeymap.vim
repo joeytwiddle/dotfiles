@@ -119,8 +119,13 @@ nnoremap [5^ :bp<Enter>
 "" Meh turns out I don't always want to close the buffer.  I often use :q just
 "" to close an extra window I no longer want.
 
+"" Step through cope list (errors/search results) with Ctrl+N/P
 :nnoremap <C-n> :cnext<Enter>
 :nnoremap <C-p> :cprev<Enter>
-:nnoremap = :cnext<Enter>
-:nnoremap - :cprev<Enter>
+"" =/- get overriden by fold keymaps :P
+" :nnoremap = :cnext<Enter>
+" :nnoremap - :cprev<Enter>
+"" +/_ (Shift equivalent) don't
+:nnoremap + :cnext<Enter>
+:nnoremap _ :cprev<Enter>
 

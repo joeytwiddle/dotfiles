@@ -1,6 +1,6 @@
 "" File:        vtreeexplorer.vim
 "" Description: tree-like file system explorer for vim
-"" Version:     $Revision: 1.4 $ $Date: 2010/09/03 18:50:29 $
+"" Version:     $Revision: 1.5 $ $Date: 2011/01/31 04:32:53 $
 "" Author:      TS Urban (thomas.scott.urban@HORMELgmail.com)
 ""              (remove the source of SPAM from my email first)
 ""
@@ -23,6 +23,7 @@
 ""   -1 : directories sorting last
 ""  treeExplIndent      : width of tree indentation in spaces (min 3, max 8)
 ""  treeExplNoList      : don't list the explorer in the buffer list
+""  treeExplAutoClose   : close the explorer window when we open a file
 ""
 "" Todo:
 ""   - global option for path separator
@@ -596,7 +597,7 @@ function! s:Activate(how) " <<<
 			exec ("last")
 			exec ("argedit " . f)
 		else
-			if g:treeExplAutoClose
+			if exists("g:treeExplAutoClose")
 				wincmd c
 			endif
 			" exec ("edit " . f)

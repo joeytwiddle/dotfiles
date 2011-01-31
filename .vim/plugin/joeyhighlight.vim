@@ -3,32 +3,31 @@ if has("menu")
 	amenu &Joey's\ Tools.&Joey's\ highlighting :call Joeyhighlight()<CR>
 endif
 
-:function! Joeyhighlight()
+function! Joeyhighlight()
 
-	"" Note: it seems (at least with DiffDelete), that setting cterm?g=... after
-	"" cterm=... can cause cterm= to be changed!
+	" :colors pablo
+	" :set guifont=-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv
+	" :set guifont=-schumacher-clean-medium-r-normal-*-*-150-*-*-c-*-iso646.1991-irv
+	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
 
-	"colors pablo
-	"set guifont=-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv
-	"set guifont=-schumacher-clean-medium-r-normal-*-*-150-*-*-c-*-iso646.1991-irv
-	"set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
+	":syntax on
 
-	"set background=dark
-
-	"syntax on
-
+	"" Light on dark
+	:set background=dark
 	"highlight Normal ctermbg=black ctermfg=grey guibg=Black guifg=#cccccc
 	"highlight Normal ctermfg=grey guibg=Black guifg=#cccccc
 	"highlight Normal ctermfg=lightgrey guibg=Black guifg=#cccccc
-	"" I lighten the background because LucidaConsole is quite faint
-	"" I set a weird background because my monitor is a bit buggered, 
 	" highlight Normal ctermfg=lightgrey guibg=#2b3735 guifg=#cccccc
-	" highlight Normal ctermfg=lightgrey guifg=#cccccc guibg=#000000
+	highlight Normal ctermfg=lightgrey guifg=#cccccc guibg=#000000
+
+	"" Some slightly lighter (off-black) backgrounds:
+	"" Can help *reduce* contrast if font is thin and appears faint
 	" highlight Normal guibg=#081818	" Almost black background
 	" highlight Normal guibg=#102020	" Almost black background
-	highlight Normal guibg=#182828	" Medium/compromise
+	" highlight Normal guibg=#182828	" Medium/compromise
 	" highlight Normal guibg=#203030	" Lighter Faded background
-	" highlight Normal guibg=#223330	" Custom greeny/cyan, softer on my broken monitor
+	highlight Normal guibg=#223330	" Custom greeny/cyan, softer on my broken monitor
+	" highlight Normal guibg=#304040	" Not-so-dark grey
 
 	highlight Title ctermbg=black ctermfg=green guibg=#000060 guifg=#00ff00
 
@@ -216,6 +215,6 @@ endif
 	" hi MatchParen term=reverse cterm=reverse ctermbg=black ctermfg=magenta guibg=black guifg=magenta
 	hi MatchParen term=reverse cterm=none ctermbg=magenta ctermfg=grey guibg=#880088 guifg=#eeeeee
 
-:endfun
+endfun
 
 :Joeyhighlight

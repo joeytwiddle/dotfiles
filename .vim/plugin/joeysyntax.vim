@@ -1,9 +1,9 @@
 :command! Joeysyntax call Joeysyntax()
 if has("menu")
-	amenu &Joey's\ Tools.&Joey's\ syntax\ rulez :call Joeysyntax()<CR>
+	amenu &Joey's\ Tools.&Joey's\ syntax\ rules :call Joeysyntax()<CR>
 endif
 
-:function! Joeysyntax()
+function! Joeysyntax()
 
 	" For slow computers:
 	" :syn sync maxlines=50
@@ -24,7 +24,10 @@ endif
 	" :set guifont=clean
 	" See ~/.vimrc for current settings.
 
-	:set background=dark
+	"" Why is this here and not in joeyhighlight.vim ?
+	" :set background=dark
+	"" TODO: Should we move all highlight lines into joeyhighlight.vim ?
+	""       We might risk forgetting to delete
 
 	:syntax on
 
@@ -92,6 +95,6 @@ endif
 	:syntax match log4jWarn  "^.* WARN .*$"
 	:syntax match log4jError "^.* ERROR .*$"
 
-:endfun
+endfun
 
 call Joeysyntax()
