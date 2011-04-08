@@ -81,6 +81,11 @@ inoremap <C-Down> <Esc><C-w>ja
 inoremap <C-Left> <Esc><C-w>ha
 inoremap <C-Right> <Esc><C-w>la
 
+"" Close the current window on Ctrl-W (like browser tabs).
+"" This overrides a lot of C-w defaults.  Really I want to wait and see if
+"" the use presses anything else.  It is pretty dangerous at the moment!
+" nnoremap <C-w> :bdel<Enter>
+
 "" Here is too early, our value gets dropped.
 " :set winheight 40
 
@@ -111,6 +116,8 @@ nnoremap [5^ :bp<Enter>
 :nnoremap <C-x> :ConqueTermSplit zsh<Enter>
 :inoremap <C-x> <Esc>:echo "Hello"<Enter>
 " :inoremap <C-x> <Esc>:bdel<Enter>
+"" And my ConqueTerm settings:
+let g:ConqueTerm_ReadUnfocused = 1
 
 "" I want :q to close the buffer, not the window.
 "" Unfortunately this does not quit Vim if we are on the last buffer.
@@ -128,4 +135,14 @@ nnoremap [5^ :bp<Enter>
 "" +/_ (Shift equivalent) also get overridden
 " :nnoremap + :cnext<Enter>
 " :nnoremap _ :cprev<Enter>
+
+" Joey's little trick - really lives elsewhere.
+" :e usually clears undo history, so we don't really do :e any more.
+" We delete the contents of the buffer, then read the file in, which
+" is an operation we can undo.  We must delete the top (empty) line also.
+" :map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd
+" BUG: vim still thinks the file is out of sync with the buffer, so if you
+" quit without writing the file, vim complains, which is not how :e behaved.
+:map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
+" Unfortunately the ! in :w! doesn't work
 

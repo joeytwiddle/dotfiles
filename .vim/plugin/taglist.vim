@@ -194,7 +194,7 @@ if !exists('loaded_taglist')
     " Automatically close the folds for the non-active files in the taglist
     " window
     if !exists('Tlist_File_Fold_Auto_Close')
-        let Tlist_File_Fold_Auto_Close = 1
+        let Tlist_File_Fold_Auto_Close = 0
     endif
 
     " Close the taglist window when a tag is selected
@@ -220,7 +220,7 @@ if !exists('loaded_taglist')
 
     " Enable fold column to display the folding for the tag tree
     if !exists('Tlist_Enable_Fold_Column')
-        let Tlist_Enable_Fold_Column = 0
+        let Tlist_Enable_Fold_Column = 1
     endif
 
     " Display the tags for only one file in the taglist window

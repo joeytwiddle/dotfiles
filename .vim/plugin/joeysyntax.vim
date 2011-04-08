@@ -68,6 +68,7 @@ function! Joeysyntax()
 	" :highlight! link jTodo Todo
 	" NOTE: these DO work, if you call :Joeysyntax after vim has started.
 	:syntax keyword jTodo TODO Todo ToDo todo BUG BUGS WARN CONSIDER Consider TEST TESTING Testing containedin=Comment,jShComment,jComment,shComment,ucComment,vimComment
+	" :syntax contain jTodo BUG linksto Todo
 	" :syntax keyword jTodo TODO Todo ToDo todo BUG BUGS WARN containedin=Comment,jShComment,jComment,shComment linksto Todo
 	"" Maybe worth noting, when I type :highlight, I see something like this:
 	" :syntax keyword jTodo contained COMBAK RELEASED NOT TODO WIP WARN links to Todo
@@ -94,6 +95,12 @@ function! Joeysyntax()
 	:syntax match log4jInfo  "^.* INFO .*$"
 	:syntax match log4jWarn  "^.* WARN .*$"
 	:syntax match log4jError "^.* ERROR .*$"
+
+	" if exists(":Joeyhighlight")
+		" :Joeyhighlight
+	" endif
+
+	:syntax match friendlyComment /^\s*\(##\|""\|\/\/\/\/\).*/ contains=confTodo contains=shTodo
 
 endfun
 

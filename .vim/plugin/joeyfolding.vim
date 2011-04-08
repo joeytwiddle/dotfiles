@@ -100,8 +100,8 @@ endif
 	":map + zo
 	":map - zc
 	" Or:
-	:map - zc
-	:map = zo
+	" :map - zc
+	" :map = zo   " No we don't want to redefine = because it's useful for indenting
 	:map _ zC
 	:map + zO
 	" :map _ zm

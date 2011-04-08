@@ -18,7 +18,7 @@ function! Joeyhighlight()
 	"highlight Normal ctermfg=grey guibg=Black guifg=#cccccc
 	"highlight Normal ctermfg=lightgrey guibg=Black guifg=#cccccc
 	" highlight Normal ctermfg=lightgrey guibg=#2b3735 guifg=#cccccc
-	highlight Normal ctermfg=lightgrey guifg=#cccccc guibg=#000000
+	highlight Normal ctermfg=lightgrey guifg=#dddddd guibg=#000000
 
 	"" Some slightly lighter (off-black) backgrounds:
 	"" Can help *reduce* contrast if font is thin and appears faint
@@ -60,11 +60,18 @@ function! Joeyhighlight()
 	" highlight Comment term=none cterm=none ctermfg=blue guifg=#7070ee
 	" highlight Comment term=none cterm=none ctermfg=blue guifg=#88cccc
 	" highlight Comment term=none cterm=none ctermfg=cyan guifg=#88bbbb   " for javascript, like cyan for terminal, but darker
-	highlight Comment cterm=bold ctermfg=blue gui=none guifg=#7070ee   " dark blue to match my xterm
-	"highlight Comment cterm=none ctermfg=DarkCyan guifg=LightMagenta
+	" highlight Comment cterm=none ctermfg=DarkCyan gui=none guifg=LightMagenta
+	" highlight Comment cterm=bold ctermfg=blue gui=none guifg=#7070ee   " dark blue to match my xterm
+	highlight Comment cterm=bold ctermfg=darkcyan gui=none guifg=#80a0ff   " nice mid-light blue
+	" highlight Comment cterm=bold ctermfg=magenta gui=none guifg=LightMagenta
+	highlight friendlyComment cterm=none ctermfg=cyan gui=none guifg=#80a0ff   " nice mid-light blue
+	highlight def link confComment Comment
 	"highlight link jComment Comment
-	highlight jComment ctermfg=DarkYellow guifg=DarkYellow
+	" highlight jComment ctermfg=DarkYellow guifg=DarkYellow
+	" highlight jComment cterm=bold ctermfg=magenta gui=none guifg=lightmagenta
+	highlight link jComment Comment
 	highlight SpecialChar ctermfg=Red guifg=Red
+	highlight SpecialKey cterm=bold ctermfg=darkblue gui=bold guifg=#2222aa
 	highlight String ctermfg=DarkGreen guifg=#80f080 cterm=NONE
 	" vimTodo links to Todo
 	highlight Todo term=reverse cterm=reverse ctermbg=black ctermfg=red guibg=red guifg=black
@@ -80,7 +87,9 @@ function! Joeyhighlight()
 
 	" C
 	highlight cType ctermfg=Cyan guifg=Cyan
-	highlight PreProc ctermfg=Red guifg=Red
+	" highlight PreProc ctermfg=Red guifg=Red
+	" highlight PreProc ctermfg=Blue guifg=Blue
+	highlight PreProc ctermfg=cyan guifg=cyan
 
 	" Java
 	" It appears to ignore the contains, otherwise I could use start=/^/ =)
@@ -91,7 +100,8 @@ function! Joeyhighlight()
 	highlight javaStorageClass term=NONE ctermfg=Cyan cterm=NONE guifg=Cyan gui=NONE
 	highlight javaType term=NONE cterm=NONE guifg=LightBlue gui=bold
 	highlight link javaOperator SpecialChar
-	highlight Type ctermfg=Red guifg=Red
+	" highlight Type ctermfg=Red guifg=Red
+	highlight Type ctermfg=green guifg=green
 	highlight Number ctermfg=LightBlue guifg=LightBlue
 	" To bring first sentence of Java comments in line with Comments.
 	highlight Special ctermfg=Magenta guifg=#d080d0
@@ -192,12 +202,15 @@ function! Joeyhighlight()
 	"highlight StatusLine term=bold,reverse cterm=bold,reverse ctermfg=cyan ctermbg=black
 	"highlight StatusLineNC term=reverse cterm=reverse ctermfg=grey ctermbg=black
 	"" cterm=bold was showing hiddens chars - specifically "^^^^^^^"s I didn't like.
-	highlight StatusLine term=reverse cterm=none ctermfg=black ctermbg=white gui=none,bold guifg=black guibg=white
-	highlight StatusLineNC term=reverse cterm=none ctermfg=black ctermbg=grey gui=none,bold guifg=black guibg=grey
-	"highlight StatusLine gui=none ctermfg=darkred guifg=darkred
-	highlight StatusLine gui=none ctermfg=darkblue guifg=darkblue
-	"highlight StatusLineNC ctermbg=grey ctermfg=darkgrey cterm=bold   " greyed out effect
-	highlight StatusLineNC ctermbg=grey ctermfg=lightgrey cterm=bold  " whited out effect
+	highlight StatusLine term=reverse,underline cterm=none,underline ctermfg=darkblue ctermbg=white gui=none,underline guifg=#000066 guibg=white
+	" highlight StatusLineNC term=reverse,bold,italic,underline cterm=none,bold,italic,underline ctermfg=darkgrey ctermbg=black gui=none,italic,underline guifg=#222222 guibg=#bbbbbb " Looks wrong in Konsole
+	highlight StatusLineNC term=reverse,italic,underline cterm=none,italic,underline ctermfg=grey ctermbg=black gui=none,italic,underline guifg=#222222 guibg=#bbbbbb
+	" highlight StatusLineNC ctermfg=darkgrey
+	" highlight StatusLine ctermfg=darkred guifg=darkred
+	" highlight StatusLineNC cterm=reverse,bold,underline ctermbg=black ctermfg=darkgrey " greyed out effect x-term
+	"" This theme comes out nice in X-Term.  Somehow NC is always reversed!
+	" hi StatusLine ctermbg=blue ctermfg=black
+	" hi StatusLineNC ctermbg=black ctermfg=blue
 
 	" Fold colours
 	highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000080 guifg=White
