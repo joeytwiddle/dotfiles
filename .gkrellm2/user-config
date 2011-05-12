@@ -1,0 +1,189 @@
+### GKrellM user config.  Auto written, do not edit (usually) ###
+### Version 2.3.4 ###
+enable_hostname 0
+hostname_short 0
+enable_sysname 1
+mbmon_port 0
+sticky_state 0
+dock_type 0
+decorated 0
+skip_taskbar 0
+skip_pager 0
+above 0
+below 0
+track_gtk_theme_name 0
+default_track_theme "Default"
+save_position 0
+chart_width 192
+update_HZ 2
+allow_multiple_instances 0
+float_factor 1000
+hostname sysname_mode 1
+clock_cal clock_launch 
+clock_cal clock_tooltip 
+clock_cal cal_launch 
+clock_cal cal_tooltip 
+clock_cal hour_chime_command 
+clock_cal quarter_chime_command 
+clock_cal loop_chime_enable 0
+clock_cal clock_options 1
+clock_cal cal_options 1
+clock_cal cal_format %a <span foreground="$A"><big><big>%e</big></big></span> %b
+clock_cal clock_format %l:%M <span foreground="$A"><small>%S</small></span>
+cpu extra_info cpu 1
+cpu chart_config cpu 50 100 1 0 0 0 : 0 0 0 0 500 : 0 0 0 0 500 : 0 1 0 0 500
+cpu enable 1
+cpu smp_mode 0
+cpu omit_nice_mode 0
+cpu config_tracking 0
+cpu sensor_mode 0
+cpu text_format $s sys\n$u user\n$n nice
+proc enable 1 1
+proc launch 
+proc tooltip_comment 
+proc sensor_mode 0
+proc text_format \w88\a$p\f procs\n\e$u\f users
+proc chart_config 40 100 3 0 0 0 : 0 0 0 0 500 : 1 0 0 0 600
+disk assign_method 2
+disk device Disk 0 0 0 1 1 0 0
+disk chart_config Disk 40 10000000 2 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
+disk device sda 0 0 11 0 1 -1 0
+disk device sda1 0 0 11 0 1 1 0
+disk device sda2 0 0 11 0 1 2 0
+disk device sda3 0 0 11 0 1 3 0
+disk device sda4 0 0 11 0 1 4 0
+disk device sda5 0 0 11 0 1 5 0
+disk device sda6 0 0 11 0 1 6 0
+disk device sda7 0 0 11 0 1 7 0
+disk device sda8 0 0 11 0 1 8 0
+disk device sda9 0 0 11 0 1 9 0
+disk device sda10 0 0 11 0 1 10 0
+disk device sda11 0 0 11 0 1 11 0
+disk device sda12 0 0 11 0 1 12 0
+disk device sda13 0 0 11 0 1 13 0
+disk device sda14 0 0 11 0 1 14 0
+disk device sda15 0 0 11 0 1 15 0
+disk device sdb 0 0 11 0 1 -1 0
+disk device sdb1 0 0 11 0 1 1 0
+disk device sdb2 0 0 11 0 1 2 0
+disk device sdb5 0 0 11 0 1 5 0
+disk device sdb6 0 0 11 0 1 6 0
+disk device sdb7 0 0 11 0 1 7 0
+disk device sdb8 0 0 11 0 1 8 0
+disk device sr0 0 0 14 0 1 -1 0
+disk device fd0 0 0 42 0 1 -1 0
+disk text_format $w write\n$r read
+inet monitor inet0 http 80 443 ssh@hwi 22 0 1 0 0
+inet chart_config inet0:minute 35 20 1 0 0 0 : 1 0 0 0 500 : 0 1 0 0 500
+inet chart_config inet0:hour 35 10 0 1 0 0 : 0 0 0 0 500 : 0 0 0 0 500
+inet launch inet0 
+inet tooltip inet0 
+inet monitor inet1 ssh@deb 222 0 ssh@gen2 2222 0 1 0 0
+inet chart_config inet1:minute 30 5 1 0 0 0 : 1 0 0 0 500 : 1 1 0 0 500
+inet chart_config inet1:hour 30 10 0 1 0 0 : 0 0 0 0 500 : 0 0 0 0 500
+inet launch inet1 
+inet tooltip inet1 
+inet text_format all \t$a\f $l\N$A\f $L
+inet update_interval all 1
+net enables eth2 1 1 0
+net chart_config eth2 50 300000 1 0 0 0 : 0 0 0 0 500 : 0 1 0 0 400
+net enables eth3 1 1 0
+net chart_config eth3 40 50000 2 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
+net enables lo 0 1 0
+net enables nr0 1 1 0
+net enables nr1 1 1 0
+net enables nr2 1 1 0
+net enables nr3 1 1 0
+net enables rose0 1 1 0
+net enables rose1 1 1 0
+net enables rose2 1 1 0
+net enables rose3 1 1 0
+net enables rose4 1 1 0
+net enables rose5 1 1 0
+net enables rose6 1 1 0
+net enables rose7 1 1 0
+net enables rose8 1 1 0
+net enables rose9 1 1 0
+net enables sit0 1 1 0
+net timer_enabled 1
+net timer_seconds 1
+net timer_iface none
+net timer_on 
+net timer_off 
+net text_format $t out\n$r in\b\c\f$L
+net reset_mday 1
+net net_stats_window_height 515
+meminfo mem_meter 1 1 1
+meminfo swap_meter 1 1
+meminfo swap_chart 1 1
+meminfo chart_config 25 200 1 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
+meminfo mem_launch 
+meminfo mem_tooltip 
+meminfo mem_data_format $t - $f free
+meminfo swap_launch 
+meminfo swap_tooltip 
+meminfo swap_data_format $t - $f free
+meminfo text_format $i\n$o
+fs "debian" "/" 0 0 0 1 0
+fs "home" "/home" 0 0 0 1 0
+fs "hwibot" "/mnt/hwibot" 0 0 0 1 0
+fs "gentoo" "/mnt/gentoo" 0 0 0 1 0
+fs "big" "/mnt/big" 0 0 0 1 0
+fs "space" "/mnt/space" 0 0 0 1 0
+fs "moredata" "/mnt/moredata" 0 0 0 1 0
+fs "hdb5" "/mnt/hdb5" 0 0 0 1 0
+fs "hdb6" "/mnt/hdb6" 0 0 0 1 0
+fs "hdb7" "/mnt/hdb7" 0 0 0 1 0
+fs fs_check_timeout 2
+fs nfs_check_timeout 16
+fs auto_eject 0
+fs binary_units 0
+fs data_format $f free / $t   /$l/
+mail mailbox-local mbox /var/mail/joey
+mail mua 
+mail notify 
+mail fetch_command 
+mail remote_check_timeout 5
+mail local_check_timeout 4
+mail fetch_check_is_local 0
+mail msg_count_mode 0
+mail animation_select_mode 3
+mail fetch_check_only_mode 0
+mail reset_remote_mode 0
+mail unseen_is_new 0
+mail enable 0 0 0 0
+mail animation_continuous 0
+mail show_tooltip 1
+mail mh_seq_ignore 0
+battery enable 0
+battery enable_composite 0
+battery estimate_time 0
+battery estimate_time_discharge 1500
+battery estimate_time_charge 3000
+battery estimate_time_charge_model 0
+battery full_cap_fallback 5000
+battery poll_interval 5
+battery alert_units_percent 0
+uptime enable 1
+uptime launch 
+uptime tooltip 
+volume_plugin_config RIGHT_CLICK_CMD 
+gkrellxmms2 scroll_speed 1
+gkrellxmms2 medialib_window_width 460
+gkrellxmms2 medialib_window_height 320
+gkrellxmms2 medialib_window_pos_x 20
+gkrellxmms2 medialib_window_pos_y 20
+gkrellxmms2 medialib_search_column_id 1
+gkrellxmms2 medialib_search_column_artist 1
+gkrellxmms2 medialib_search_column_track 1
+gkrellxmms2 medialib_search_column_album 1
+gkrellxmms2 medialib_search_column_rating 1
+gkrellxmms2 medialib_playlist_column_id 1
+gkrellxmms2 medialib_playlist_column_artist 1
+gkrellxmms2 medialib_playlist_column_track 1
+gkrellxmms2 medialib_playlist_column_album 1
+gkrellxmms2 medialib_playlist_column_rating 1
+gkrellxmms2 medialib_playlist_column_pos 1
+gkrellxmms2 medialib_playlist_new_confirm 1
+gkrellxmms2 ipc_path unix:///tmp/xmms-ipc-joey
+gkrellxmms2 auto_reconnect 0
