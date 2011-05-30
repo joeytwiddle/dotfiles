@@ -1,5 +1,5 @@
 [app] (name=xv) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{399 631}
+  [Position]	(UPPERLEFT)	{-1 -21}
   [Deco]	{NORMAL}
   [Sticky]	{yes}
   [Layer]	{2}
@@ -11,7 +11,7 @@
 [end]
 [app] (name=xmms) (class=Xmms)
   [Workspace]	{1}
-  [Position]	(UPPERLEFT)	{23 534}
+  [Position]	(UPPERLEFT)	{0 622}
   [Deco]	{NONE}
   [Layer]	{8}
   [Close]	{yes}
@@ -37,16 +37,16 @@
   [Close]	{yes}
 [end]
 [app] (name=smplayer) (class=Smplayer)
-  [Dimensions]	{645 394}
-  [Position]	(UPPERLEFT)	{0 628}
-  [Sticky]	{yes}
-  [Layer]	{8}
+  [Dimensions]	{1085 510}
+  [Position]	(UPPERLEFT)	{0 0}
+  [Sticky]	{no}
+  [Layer]	{6}
   [Close]	{yes}
   [Alpha]	{121 75}
 [end]
 [app] (name=gimp) (class=Gimp) (role=gimp-image-window)
-  [Dimensions]	{930 775}
-  [Position]	(UPPERLEFT)	{313 22}
+  [Dimensions]	{930 814}
+  [Position]	(UPPERLEFT)	{290 145}
   [Close]	{yes}
 [end]
 [app] (name=gimp) (class=Gimp) (role=gimp-toolbox)
@@ -54,30 +54,34 @@
   [Position]	(UPPERLEFT)	{0 0}
   [Close]	{yes}
 [end]
-[group]  (workspace=[current])
+[group]
  [app] (title=Untitled.*)
 [end]
 [app] (title=Google Chrome Options)
 [end]
-[group]  (workspace=[current])
+[group]
  [app] (title=Untitled)
  [app] (title=chrome://devtools/devtools.html)
  [app] (title=Developer Tools.*)
 [end]
-[group]  (workspace=[current])
+[group]
  [app] (name=Navigator)
- [app] (name=konqueror)
- [app] (name=x-www-browser)
  [app] (name=google-chrome)
  [app] (name=chromium-browser)
  [app] (name=chrome)
+  [Position]	(UPPERLEFT)	{134 5}
+  [Close]	{yes}
 [end]
-[group]  (workspace=[current])
+[group]
+ [app] (name=x-www-browser)
+ [app] (name=konqueror)
+[end]
+[group]
  [app] (name=gvim) (class=Gvim)
  [app] (title=.* - VIM)
  [app] (title=[Vim] .*)
 [end]
-[group]  (workspace=[current])
+[group]
  [app] (name=kopete)
   [Workspace]	{7}
 [end]
@@ -93,13 +97,21 @@
   [Workspace]	{1}
   [Layer]	{8}
 [end]
-[transient] (name=XMMS_Equalizer) (class=xmms)
-  [Workspace]	{1}
-[end]
-[transient] (name=XMMS_Playlist) (class=xmms)
-  [Workspace]	{1}
-[end]
 [app] (name=xchat) (class=Xchat)
-  [Dimensions]	{1059 847}
-  [Position]	(UPPERLEFT)	{112 86}
+  [Dimensions]	{1055 839}
+  [Position]	(UPPERLEFT)	{113 83}
+[end]
+[app] (name=XMMS_Equalizer) (class=xmms)
+  [Workspace]	{1}
+[end]
+[app] (name=XMMS_Playlist) (class=xmms)
+  [Workspace]	{1}
+[end]
+[app] (name=gkrellm) (class=Gkrellm)
+  [Position]	(UPPERLEFT)	{1108 0}
+  [Sticky]	{yes}
+  [Close]	{yes}
+[end]
+[app] (name=explorer.exe) (class=Wine)
+  [Sticky]	{yes}
 [end]
