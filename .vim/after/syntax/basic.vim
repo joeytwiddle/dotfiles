@@ -63,6 +63,10 @@ highlight IntVar ctermfg=cyan guifg=cyan
 syn match OperatorEquals /=/
 highlight OperatorEquals ctermfg=yellow guifg=yellow
 
+
+
+"" Optional extras
+
 syn match OperatorPlus /+/
 syn match OperatorMinus /-/
 syn match OperatorMultiply /*/

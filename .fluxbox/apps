@@ -1,5 +1,5 @@
 [app] (name=xv) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{-1 -21}
+  [Position]	(UPPERLEFT)	{623 611}
   [Deco]	{NORMAL}
   [Sticky]	{yes}
   [Layer]	{2}
@@ -11,8 +11,8 @@
 [end]
 [app] (name=xmms) (class=Xmms)
   [Workspace]	{1}
-  [Position]	(UPPERLEFT)	{0 622}
-  [Deco]	{NONE}
+  [Position]	(UPPERLEFT)	{14 460}
+  [Deco]	{0x5ff}
   [Layer]	{8}
   [Close]	{yes}
 [end]
@@ -37,9 +37,9 @@
   [Close]	{yes}
 [end]
 [app] (name=smplayer) (class=Smplayer)
-  [Dimensions]	{1085 510}
-  [Position]	(UPPERLEFT)	{0 0}
-  [Sticky]	{no}
+  [Dimensions]	{899 643}
+  [Position]	(UPPERLEFT)	{8 168}
+  [Sticky]	{yes}
   [Layer]	{6}
   [Close]	{yes}
   [Alpha]	{121 75}
@@ -69,12 +69,11 @@
  [app] (name=google-chrome)
  [app] (name=chromium-browser)
  [app] (name=chrome)
-  [Position]	(UPPERLEFT)	{134 5}
+  [Position]	(UPPERLEFT)	{131 5}
   [Close]	{yes}
 [end]
 [group]
  [app] (name=x-www-browser)
- [app] (name=konqueror)
 [end]
 [group]
  [app] (name=gvim) (class=Gvim)
@@ -108,7 +107,7 @@
   [Workspace]	{1}
 [end]
 [app] (name=gkrellm) (class=Gkrellm)
-  [Position]	(UPPERLEFT)	{1108 0}
+  [Position]	(UPPERLEFT)	{1143 5}
   [Sticky]	{yes}
   [Close]	{yes}
 [end]

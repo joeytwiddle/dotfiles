@@ -1,23 +1,41 @@
 {
   HighlightColor = "#ffffff";
-  LowerKey = "Mod1+A";
+  AdvanceToNewWorkspace = NO;
+  IconSize = 64;
+  LowerKey = "Mod1+a";
+  IgnoreFocusClick = NO;
+  ShadeSpeed = medium;
+  DisableDock = NO;
+  MoveResizeKey = "Mod4+m";
   UTitleBack = (
     tpixmap,
     "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/crackedstones-looklike-leaves.png",
     "#000000"
   );
-  MoveResizeKey = "Mod1+M";
+  VirtualEdgeDownKey = None;
+  VirtualEdgeLeftKey = None;
+  StickyIcons = NO;
+  WindowShortcut10Key = None;
   PTitleBack = (
     tpixmap,
     "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/crackedstones-looklike-leaves.png",
     "#000000"
   );
-  WindowShortcut10Key = None;
+  PixmapPath = (
+    "~/pixmaps",
+    "~/GNUstep/Library/WindowMaker/Pixmaps",
+    "/usr/local/share/WindowMaker/Pixmaps",
+    "/usr/share/WindowMaker/Pixmaps",
+    "/usr/local/share/pixmaps",
+    "/usr/share/pixmaps",
+    "/usr/X11R6/include/X11/pixmaps"
+  );
   NoWindowOverIcons = YES;
   MenuDisabledColor = "#636563";
+  AutoFocus = NO;
   FocusMode = sloppy;
-  MenuTextBack = (hgradient, "rgb:c2/c0/c5", "rgb:82/80/85");
-  IconBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
+  MenuTextBack = (mhgradient, "#a2a0a5", "rgb:c2/c0/c5", "rgb:82/80/85");
+  IconBack = (mdgradient, "#7b7d8c", "rgb:a6/a6/b6", "rgb:51/55/61");
   MenuTitleBack = (
     tpixmap,
     "~/GNUstep/Library/WindowMaker/Themes/FilfirinImages/crackedstones-looklike-leaves.png",
@@ -29,61 +47,104 @@
     "#000000"
   );
   IconificationStyle = twist;
+  ClipRaiseKey = None;
   MiniaturizeKey = "Mod1+I";
+  ClipRaiseLowerKey = None;
   ScreenNextSwitchKey = "Mod4+Left";
   ToggleKbdModeKey = None;
-  ResizebarBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
+  RaiseLowerKey = None;
+  ResizebarBack = (mdgradient, "#7b7d8c", "rgb:a6/a6/b6", "rgb:51/55/61");
   MenuTextColor = "#000000";
   HighlightTextColor = "#000000";
   MenuTitleColor = "#ffffff";
-  WorkspaceNameDisplayPosition = bottom;
-  ShadeKey = "Mod1+D";
+  Superfluous = NO;
+  WorkspaceNameDisplayPosition = center;
+  ModifierKey = Mod1;
+  ShadeKey = "Mod1+d";
   WindowMenuKey = "Mod1+space";
   FTitleColor = "#ffffff";
   AppIconBalloons = YES;
-  WorkspaceBack = (tpixmap, "/mnt/big/stuff/wallpapers/mine/deb_gnu_lnx.jpg", gray20);
+  NextWorkspaceLayerKey = "Control+Mod1+Down";
   HideOthersKey = None;
+  NextWorkspaceKey = "Control+Mod1+Right";
   SmoothWorkspaceBack = YES;
-  NextWorkspaceKey = "Mod1+Right";
+  DisableWSMouseActions = NO;
+  VirtualEdgeRightKey = None;
   UTitleColor = "#ffffff";
+  IconPath = (
+    "~/pixmaps",
+    "~/GNUstep/Library/Icons",
+    "/usr/local/share/WindowMaker/Icons",
+    "/usr/share/WindowMaker/Icons",
+    "/usr/local/share/icons",
+    "/usr/share/icons",
+    "/usr/X11R6/include/X11/pixmaps"
+  );
   PTitleColor = "#ffffff";
   WorkspaceBorder = AllDirections;
   Attraction = NO;
   RaiseDelay = 350;
+  NewStyle = NO;
   DontLinkWorkspaces = NO;
   HelpBalloons = YES;
+  DisableAnimations = NO;
   WindowPlaceOrigin = (22, 25);
   WindowPlacement = smart;
-  CClipTitleColor = "rgb:61/61/61";
   WindowShortcut8Key = None;
+  CClipTitleColor = "rgb:61/61/61";
   WindowShortcut9Key = None;
+  DisableDithering = YES;
+  SelectKey = None;
+  Workspace10Key = None;
+  IconSlideSpeed = medium;
   CycleWorkspaces = YES;
+  RaiseKey = None;
   MouseMiddleButtonAction = OpenWindowListMenu;
   HideKey = None;
-  PrevWorkspaceKey = "Mod1+Left";
+  PrevWorkspaceKey = "Control+Mod1+Left";
   MiniwindowTitleBalloons = YES;
+  WindowTitleFont = "sans serif:slant=0:weight=200:width=100:pixelsize=13";
   NoWindowOverDock = YES;
-  CloseKey = "Mod1+Q";
-  FocusNextKey = "Mod1+Up";
+  CloseKey = "Mod1+q";
+  FocusNextKey = "Mod1+Down";
   WindowShortcut1Key = None;
   MouseRightButtonAction = OpenApplicationsMenu;
   WindowShortcut2Key = None;
   WindowShortcut3Key = None;
   WindowShortcut4Key = None;
-  MaximizeKey = "Control+X";
+  DisableClip = NO;
   WindowShortcut5Key = None;
+  MaximizeKey = "Mod1+z";
+  AutoArrangeIcons = NO;
   WindowShortcut6Key = None;
   RootMenuKey = "Control+Escape";
   WindowShortcut7Key = None;
-  ScreenPrevSwitchKey = "Mod4+Right";
+  VirtualEdgeUpKey = None;
+  ColormapSize = 2;
   MouseLeftButtonAction = SelectWindows;
+  ScreenPrevSwitchKey = "Mod4+Right";
   WorkspaceBorderSize = 2;
+  Workspace7Key = None;
   VMaximizeKey = "Mod1+V";
-  FocusPrevKey = "Mod1+Down";
+  Workspace6Key = None;
+  PrevWorkspaceLayerKey = "Control+Mod1+Up";
+  Workspace5Key = None;
+  Workspace4Key = None;
+  Workspace3Key = None;
+  Workspace2Key = "Mod1+2";
+  FocusPrevKey = "Mod1+Up";
+  Workspace1Key = "Mod1+1";
+  ColormapMode = auto;
   CirculateRaise = YES;
   ScreenSwitchKey = None;
+  ClipLowerKey = None;
+  DisableSound = NO;
+  WindowListKey = None;
+  IconPosition = blv;
   IconTitleBack = "#384246";
+  Workspace9Key = None;
   OpenTransientOnOwnerWorkspace = YES;
+  Workspace8Key = None;
   HMaximizeKey = "Mod1+H";
-  MouseWheelAction = None;
+  MouseWheelAction = SwitchWorkspaces;
 }

@@ -14,8 +14,8 @@ below 0
 track_gtk_theme_name 0
 default_track_theme "Default"
 save_position 0
-chart_width 192
-update_HZ 2
+chart_width 120
+update_HZ 1
 allow_multiple_instances 0
 float_factor 1000
 hostname sysname_mode 1
@@ -30,23 +30,40 @@ clock_cal clock_options 1
 clock_cal cal_options 1
 clock_cal cal_format %a <span foreground="$A"><big><big>%e</big></big></span> %b
 clock_cal clock_format %l:%M <span foreground="$A"><small>%S</small></span>
+gkrellweather chart_visible 0
+gkrellweather panel_visible 1
+gkrellweather metric 1
+gkrellweather update_interval 15
+gkrellweather switch_interval 0
+gkrellweather wind_chill 0
+gkrellweather windspeed_unit 1
+gkrellweather pressure_unit 1
+gkrellweather station EGTG
+gkrellweather command /usr/share/gkrellm/GrabWeather EGTG
+gkrellweather filename /home/joey/linux/.wmWeatherReports/EGTG.dat
 cpu extra_info cpu 1
 cpu chart_config cpu 50 100 1 0 0 0 : 0 0 0 0 500 : 0 0 0 0 500 : 0 1 0 0 500
 cpu enable 1
 cpu smp_mode 0
-cpu omit_nice_mode 0
+cpu omit_nice_mode 1
 cpu config_tracking 0
 cpu sensor_mode 0
-cpu text_format $s sys\n$u user\n$n nice
+cpu text_format \a$n\f nice\n\a$u\f user\n\a$s\f sys
+gkrelltop numproc 3
+gkrelltop threshold 0
+gkrelltop show_nice_processes 1
+gkrelltop show_percent 1
+gkrelltop local_updates 1
+gkrelltop exclusion_expression 
 proc enable 1 1
 proc launch 
 proc tooltip_comment 
 proc sensor_mode 0
-proc text_format \w88\a$p\f procs\n\e$u\f users
-proc chart_config 40 100 3 0 0 0 : 0 0 0 0 500 : 1 0 0 0 600
+proc text_format \a$p\f procs\n\a$u\f users\n\a$f\f forks
+proc chart_config 50 400 2 0 0 0 : 1 0 0 0 500 : 0 0 0 0 600
 disk assign_method 2
 disk device Disk 0 0 0 1 1 0 0
-disk chart_config Disk 40 10000000 2 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
+disk chart_config Disk 40 8000000 1 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
 disk device sda 0 0 11 0 1 -1 0
 disk device sda1 0 0 11 0 1 1 0
 disk device sda2 0 0 11 0 1 2 0
@@ -70,12 +87,14 @@ disk device sdb5 0 0 11 0 1 5 0
 disk device sdb6 0 0 11 0 1 6 0
 disk device sdb7 0 0 11 0 1 7 0
 disk device sdb8 0 0 11 0 1 8 0
+disk device sdc 0 0 11 0 1 -1 0
+disk device sdc1 0 0 11 0 1 1 0
 disk device sr0 0 0 14 0 1 -1 0
 disk device fd0 0 0 42 0 1 -1 0
-disk text_format $w write\n$r read
+disk text_format \a$r\f read\n\a$w\f write
 inet monitor inet0 http 80 443 ssh@hwi 22 0 1 0 0
-inet chart_config inet0:minute 35 20 1 0 0 0 : 1 0 0 0 500 : 0 1 0 0 500
-inet chart_config inet0:hour 35 10 0 1 0 0 : 0 0 0 0 500 : 0 0 0 0 500
+inet chart_config inet0:minute 30 30 1 0 0 0 : 1 0 0 0 500 : 1 1 0 0 500
+inet chart_config inet0:hour 30 10 0 1 0 0 : 0 0 0 0 500 : 0 0 0 0 500
 inet launch inet0 
 inet tooltip inet0 
 inet monitor inet1 ssh@deb 222 0 ssh@gen2 2222 0 1 0 0
@@ -85,10 +104,11 @@ inet launch inet1
 inet tooltip inet1 
 inet text_format all \t$a\f $l\N$A\f $L
 inet update_interval all 1
+net enables eth0 1 1 0
 net enables eth2 1 1 0
-net chart_config eth2 50 300000 1 0 0 0 : 0 0 0 0 500 : 0 1 0 0 400
+net chart_config eth2 50 200000 0 0 0 0 : 0 0 0 0 500 : 0 1 0 0 400
 net enables eth3 1 1 0
-net chart_config eth3 40 50000 2 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
+net chart_config eth3 40 500000 1 0 0 0 : 0 1 0 0 500 : 0 0 0 0 500
 net enables lo 0 1 0
 net enables nr0 1 1 0
 net enables nr1 1 1 0
@@ -110,20 +130,20 @@ net timer_seconds 1
 net timer_iface none
 net timer_on 
 net timer_off 
-net text_format $t out\n$r in\b\c\f$L
+net text_format \a$r\f in\n\a$t\f out\b\c\f$L
 net reset_mday 1
 net net_stats_window_height 515
-meminfo mem_meter 1 1 1
+meminfo mem_meter 1 0 1
 meminfo swap_meter 1 1
 meminfo swap_chart 1 1
-meminfo chart_config 25 200 1 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
+meminfo chart_config 25 200 0 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
 meminfo mem_launch 
 meminfo mem_tooltip 
-meminfo mem_data_format $t - $f free
+meminfo mem_data_format Mem:  $t  -  $f free
 meminfo swap_launch 
 meminfo swap_tooltip 
-meminfo swap_data_format $t - $f free
-meminfo text_format $i\n$o
+meminfo swap_data_format Swap: $t  -  $f free
+meminfo text_format \a$i\f swap in\n\a$o\f swap out
 fs "debian" "/" 0 0 0 1 0
 fs "home" "/home" 0 0 0 1 0
 fs "hwibot" "/mnt/hwibot" 0 0 0 1 0
@@ -155,6 +175,29 @@ mail enable 0 0 0 0
 mail animation_continuous 0
 mail show_tooltip 1
 mail mh_seq_ignore 0
+mailwatch_plugin_config toggles 65532
+mailwatch_plugin_config animation_steps 6
+mailwatch_plugin_config mailpanel Mail: friends
+mailwatch_plugin_config command xterm -geometry 120x45 -e mutt -f ~/Mail/friends
+mailwatch_plugin_config ticks 10
+mailwatch_plugin_config mailbox ~/Mail/friends
+mailwatch_plugin_config mailpanel Mail: incoming
+mailwatch_plugin_config command xterm -geometry 120x45 -e mutt -f ~/Mail/incoming
+mailwatch_plugin_config ticks 10
+mailwatch_plugin_config mailbox ~/Mail/incoming
+mailwatch_plugin_config mailpanel Mail: notifications
+mailwatch_plugin_config command xterm -geometry 120x45 -e mutt -f ~/Mail/notifications
+mailwatch_plugin_config ticks 10
+mailwatch_plugin_config mailbox ~/Mail/notifications
+volume_plugin_config RIGHT_CLICK_CMD 
+volume_plugin_config ADDMIXER hw:1
+volume_plugin_config ADDDEV 13
+volume_plugin_config SETDEVNAME PCM 
+volume_plugin_config ADDDEV 23
+volume_plugin_config SETDEVNAME Wave playback
+volume_plugin_config ADDMIXER hw:0
+volume_plugin_config ADDDEV 12
+volume_plugin_config SETDEVNAME PCM 
 battery enable 0
 battery enable_composite 0
 battery estimate_time 0
@@ -167,7 +210,6 @@ battery alert_units_percent 0
 uptime enable 1
 uptime launch 
 uptime tooltip 
-volume_plugin_config RIGHT_CLICK_CMD 
 gkrellxmms2 scroll_speed 1
 gkrellxmms2 medialib_window_width 460
 gkrellxmms2 medialib_window_height 320

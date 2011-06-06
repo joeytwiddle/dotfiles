@@ -4,6 +4,16 @@
 
 " == Vim Options ==
 
+"" See help for 'statusline' and %{eval_expr}
+" :set titlestring=[VIM]\ %m\ %F
+"" Had to use BufEnter to act after other plugins using BufEnter!
+"" Might not work here in .vimrc - I was testing from command line.
+" :auto BufEnter * set titlestring=(VIM)\ %m\ %F
+" :auto BufEnter * set titlestring=(VIM)\ %q%w%m\ %F\ %a
+" :auto BufEnter * set titlestring=[VIM]\ %q%w%m\ %F\ %y\ %a
+:set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ %a%)
+:auto BufEnter * set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ %a%)
+
 " if has("gui_kde")
 " 	set guifont=Courier\ 10\ Pitch/10/-1/5/50/0/0/0/1/0
 " endif
@@ -38,6 +48,9 @@
 " :set guifont=Lucida\ Console\ Semi-Condensed\ 7
 "" Shortest on Debian:
 :set guifont=Lucida\ Console\ Semi-Condensed\ 8
+"" Very small and clear; quite like Teletext font
+" :set guifont=MonteCarlo\ Fixed\ 12\ 11
+
 
 " set tabline=%!MyTabLine()
 " set showtabline=2 " 2=always
@@ -59,23 +72,23 @@
 
 " == Keybinds ==
 
-" Joey's little trick - really lives elsewhere.
-" :e usually clears undo history, so we don't really do :e any more.
-" We delete the contents of the buffer, then read the file in, which
-" is an operation we can undo.  We must delete the top (empty) line also.
-" :map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd
-" BUG: vim still thinks the file is out of sync with the buffer, so if you
-" quit without writing the file, vim complains, which is not how :e behaved.
-:map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
-
 " Fix broken Backspace under gentoo:
 " :imap  <Left><Del>
 
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 
+" When quitting vim in a hurry, save a brief cache of the session:
+" TODO BUG: If you cannot write the file (e.g. you piped to vi -) then these
+"           fail, and prevent the user from quitting!
+nnoremap :q<Enter> :mksession! ~/last_session.vim<Enter>:qa<Enter>
+nnoremap :qa<Enter> :mksession! ~/last_session.vim<Enter>:qa<Enter>
+nnoremap :qa!<Enter> :mksession! ~/last_session.vim<Enter>:qa<Enter>
+
 
 
 " == Options for plugins ==
+
+let g:Tlist_Use_Right_Window = 1
 
 let g:miniBufExplorerMoreThanOne = 1
 let g:miniBufExplMaxHeight = 6
@@ -89,9 +102,9 @@ let g:treeExplVertical = 1
 let g:treeExplWinSize = 24
 " let g:treeExplAutoClose = 0
 
+let g:ConqueTerm_Color = 1
+
 " dammit these two don't work together!
 let g:hiline = 0
 let g:hiword = 1
-
-let g:ConqueTerm_Color = 1
 

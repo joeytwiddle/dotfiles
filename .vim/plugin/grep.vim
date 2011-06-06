@@ -361,13 +361,13 @@ function! s:RunGrepRecursive(grep_cmd, ...)
     endif
     let pattern = g:Grep_Shell_Quote_Char . pattern . g:Grep_Shell_Quote_Char
 
-    let startdir = input("Start searching from directory: ", getcwd())
+    let startdir = input("Start searching from directory: ", getcwd(), "dir")
     if startdir == ""
         return
     endif
 
     let filepattern = input("Grep in files matching pattern: ", 
-                                      \ g:Grep_Default_Filelist)
+                                      \ g:Grep_Default_Filelist, "file")
     if filepattern == ""
         return
     endif
@@ -574,7 +574,7 @@ function! RunGrep(grep_cmd, ...)
     endif
     let pattern = g:Grep_Shell_Quote_Char . pattern . g:Grep_Shell_Quote_Char
 
-    let filenames = input("Grep in files: ", g:Grep_Default_Filelist)
+    let filenames = input("Grep in files: ", g:Grep_Default_Filelist, "file")
     if filenames == ""
         return
     endif

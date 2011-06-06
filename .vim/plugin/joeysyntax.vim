@@ -71,7 +71,7 @@ function! Joeysyntax()
 	" :syntax contain jTodo BUG linksto Todo
 	" :syntax keyword jTodo TODO Todo ToDo todo BUG BUGS WARN containedin=Comment,jShComment,jComment,shComment linksto Todo
 	"" Maybe worth noting, when I type :highlight, I see something like this:
-	" :syntax keyword jTodo contained COMBAK RELEASED NOT TODO WIP WARN links to Todo
+	" :syntax keyword jTodo contained COMBAK RELEASED NOT TODO WIP WARN BUG WARNING links to Todo
 	"" Also interesting, after doing :Joeysyntax, lines containing WARN get turned yellow, although again I don't think that's done by this script!
 	" :syntax keyword jNote NOTE Note \<NB: CONSIDER Consider: TEST TESTING containedin=Comment,jShComment,jComment,shComment
 	" The "Consider:" was never getting highlighted
@@ -100,7 +100,13 @@ function! Joeysyntax()
 		" :Joeyhighlight
 	" endif
 
-	:syntax match friendlyComment /^\s*\(##\|""\|\/\/\/\/\).*/ contains=confTodo contains=shTodo
+	" :syntax match friendlyComment /^\s*\(##\|""\|\/\/\/\/\).*/ contains=confTodo contains=shTodo
+	"" Assume a single-symbol comment is a friendlyComment if it starts with a
+	"" capital (or more strictly, capital then lowercase).
+	:syntax match friendlyComment +^\s*\(##\|""\|////\|// [A-Z]\|# [A-Z][a-z]\|" [A-Z][a-z]\).*+  contains=confTodo contains=shTodo
+
+
+	:syntax match Comma /,/
 
 endfun
 

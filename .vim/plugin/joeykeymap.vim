@@ -145,4 +145,12 @@ let g:ConqueTerm_ReadUnfocused = 1
 " quit without writing the file, vim complains, which is not how :e behaved.
 :map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
 " Unfortunately the ! in :w! doesn't work
+" Also it seems to me that this is firing when I do ":e!"
+
+" Scroll the page up and down with Ctrl+K/J
+" Only moves the cursor when it's near the edge
+noremap <C-K> 1<C-Y>
+noremap <C-J> 1<C-E>
+inoremap <C-K> <Esc>1<C-Y>a
+inoremap <C-J> <Esc>1<C-E>a
 

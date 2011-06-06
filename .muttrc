@@ -11,16 +11,21 @@ set save_name
 ## Check for new mail in folder every minute:
 set timeout = 60
 
-## Colours:
+## Colours for a black background:
+## overrides background image:
+# color normal white black
+## leaves background image visible:
+color normal default default
 color indicator white magenta
-color hdrdefault blue black
+color hdrdefault brightblue default
 color header brightcyan default "^From: "
 color header brightcyan default "^To: "
 color header brightgreen default "^Subject: "
 color header yellow default "^Date: "
 color header brightred default "^X-Spam"
 color header magenta default "^List"
-color quoted yellow black
+color body white default ".*"
+color quoted yellow default
 color status white blue
 color tree green default
 

@@ -1,21 +1,15 @@
 ## Apply changes and test with:
 ##   cat .Xresources | grep -v "^#" | xrdb -merge  ;  man xrdb  ;  top n 3
 
-nedit*text.foreground: white
-nedit*text.background: black
-nedit*text.selectForeground: white
-nedit*text.selectBackground: magenta
-nedit*text.highlightForeground: white
-nedit*text.highlightBackground: red
-nedit*text.cursorForeground: white
-
-nedit*menuBar.fontList: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
+xterm.vt100.font: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
+xterm*cursorColor: #ffdd44
+xterm*pointerColor: #ffee99
 
 ## For coloured man-pages:
 ## From: http://bugs.gentoo.org/184604
 ## (see /usr/share/X11/app-defaults/XTerm-color)
-*colorBDMode: on
-*colorULMode: on
+# *colorBDMode: on
+# *colorULMode: on
 ## *colorBD: red
 ## *colorUL: green
 # *colorBD: darkblue
@@ -27,16 +21,20 @@ nedit*menuBar.fontList: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-is
 # *colorUL: darkgreen
 # *colorUL: darkcyan
 *colorUL: brown
-## Did not work for me
-## Oh it might be affecting top tho - one of the things I tried has!
-## Oh it affects jshinfo as well!
-## Ah it does work for man on Debian!
 
-## The problem is, it happens on white-on-black xterms also, and the colours look wrong.
-## DONE: I want it only for manpages!  OK we implemented 2x xrdb -merge inside jman.
-## TODO: Keep the bold and underline formatting when changing the colour.
-
-## Fix for Debian, since above was happening everywhere, not just man pages, and that sucked:
+## The problem is, it happens on white-on-black xterms also, overriding curses colors!
+## Solution: Turn it off for terminals in general!
+## The jman script uses xrdb -merge to enable/disable these options when I want them at runtime.
 *colorBDMode: off
 *colorULMode: off
+
+nedit*text.foreground: white
+nedit*text.background: black
+nedit*text.selectForeground: white
+nedit*text.selectBackground: magenta
+nedit*text.highlightForeground: white
+nedit*text.highlightBackground: red
+nedit*text.cursorForeground: white
+
+nedit*menuBar.fontList: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
 

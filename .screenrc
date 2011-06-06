@@ -46,6 +46,24 @@ bindkey -k kI copy
 ## Ctrl+X opens a new window
 # bindkey "^x" screen
 
+#### TESTING:
+## Default: bindkey "^kS" split
+## Unsplit:
+bindkey "^kU" only
+# bindkey "^U" remove
+## Default: bindkey "^k<Tab>" focus
+## Ctrl-K j to switch through splits
+bindkey "^kj" focus
+## Ctrl-Up/Down to switch through splits
+bindkey "[1;5B" focus
+bindkey "[1;5A" focus
+## Ctrl-K Up/Down to switch through splits
+bindkey "^kOA" focus
+bindkey "^kOB" focus
+## Ctrl-K Ctrl-Up/Down to switch through splits
+bindkey "^k[1;5B" focus
+bindkey "^k[1;5A" focus
+
 ## Ctrl+N opens a new window
 bindkey "^n" screen
 ## Trying to split and open new window:
@@ -82,7 +100,7 @@ bindkey "^n" screen
   bindkey -k k4 stuff "^k^lp"
   bindkey -k k5 stuff "^k^ln"
 
-  ## Ctrl+J moves between split windows:
+  ## Ctrl+J moves between split windows: (default is Special -> Tab)
   bindkey "^h" resize +1
   bindkey "^j" focus
 
@@ -113,3 +131,4 @@ bindkey "^n" screen
   bindkey "^m9" number 9
 
 maptimeout 800
+

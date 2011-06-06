@@ -1,11 +1,21 @@
-## Joey's keybindings for Fluxbox, some of which require jsh scripts
-# Mod1 is Alt - some people might be annoyed if they want to access application
-# menus.  Mod4 is Win key.  That's where most people will want the extra
-# commands provided here.  But I myself moved a lot of them onto Alt, since it
-# is easier for my thumb, and I use them more often than I use app menus.
+! fluxbox-update_configs added '(workspace=[current])' to (Next|Prev)(Window|Group)
+! check lines marked by 'FBCV13' if they are correctly updated
+!mouse actions added by fluxbox-update_configs
+OnTitlebar Mouse1 :MacroCmd {Focus} {Raise} {ActivateTab}
+!mouse actions added by fluxbox-update_configs
+OnTitlebar Move1 :StartMoving
+OnLeftGrip Move1 :StartResizing bottomleft
+OnRightGrip Move1 :StartResizing bottomright
+OnWindowBorder Move1 :StartMoving
 
-# Note: You were having problems with some actions happening before others.
-# It might be possible to solve this using {Delay {Command...} 1}
+## Joey's keybindings for Fluxbox, some of which require jsh scripts
+## Mod1 is Alt - some people might be annoyed if they want to access application
+## menus.  Mod4 is Win key.  That's where most people will want the extra
+## commands provided here.  But I myself moved a lot of them onto Alt, since it
+## is easier for my thumb, and I use them more often than I use app menus.
+
+## Note: You were having problems with some actions happening before others.
+## It might be possible to solve this using {Delay {Command...} 1}
 
 # !mouse actions added by fluxbox-update_configs
 # OnTitlebar Mouse2 :StartTabbing
@@ -57,6 +67,7 @@
 Control Mod1 a :ArrangeWindows
 
 Control Mod1 r :Reconfigure
+Control Mod4 r :Restart
 Control Shift F2 :CommandDialog
 
 ## Tabbing with Middle button:
@@ -110,7 +121,7 @@ OnDesktop Mouse3 :rootMenu
 # Mod1 t :MacroCmd {Raise} {Focus} {StartTabbing} {Lower}
 # Mod4 t :StartTabbing
 
-Mod1 t :ExecCommand xtermbg -bg '#330000' -geometry 132x28 -e top n 100
+Mod1 t :ExecCommand xtermbg -bg '#330000' -geometry 132x28 -e top -n 100
 
 ## Currently moves all windows on all desktops!
 # Shift Control Mod1 Left :MacroCmd {ForEach {SendToPrevWorkspace 1}} {PrevWorkspace}
@@ -118,44 +129,57 @@ Mod1 t :ExecCommand xtermbg -bg '#330000' -geometry 132x28 -e top n 100
 # Shift Control Mod1 Up :MacroCmd {ForEach {SendToPrevWorkspace 3}} {PrevWorkspace}
 # Shift Control Mod1 Down :MacroCmd {ForEach {SendToNextWorkspace 3}} {NextWorkspace}
 
-# According to Hwi's xev, my key "Alt Gr" is Mode_switch, "Win right" is Multi_key, followed by Menu and Control_R
+## According to Hwi's xev, my key "Alt Gr" is Mode_switch, "Win right" is Multi_key, followed by Menu and Control_R
 
 Control Escape :RootMenu
 
-# Move between tabs
+## Move between tabs
 Mod1 Left :PrevTab
 Mod1 Right :NextTab
-Control Tab :PrevTab
+# Control Tab :PrevTab
 # Control grave :NextTab
-Control Shift Tab :NextTab
+# Control Shift Tab :NextTab
 Mod4 Left :MoveTabLeft
 Mod4 Right :MoveTabRight
 Mod4 Shift Left :MoveTabLeft
 Mod4 Shift Right :MoveTabRight
-# not working:
+## not working:
 # Mod1 braceleft :MovePrevTab
 # Mod4 braceleft :MovePrevTab
 # Mod1 braceright :MoveNextTab
 # Mod4 braceright :MoveNextTab
 
-# Move between windows
-# A couple of these are disabled so we can use them through xvncviewer
-# Mod1 Tab :NextWindow 0
-# Mod1 grave :PrevWindow 0
+## Move between windows
+## A couple of these are disabled so we can use them through xvncviewer
+## By disabling these we can use the bbkeys switcher, which displays a menu and has fewer bugs!
+## However it ignores window groupings.
+## Fluxbox currently has the bug that Alt-Tab sometimes skips N windows which Alt-grave finds.
+## Damnit now fluxbox has gone completely mad!  It cycles a few windows, on various workspaces!
+# Mod1 Tab :NextWindow {groups}
+# Mod1 grave :PrevWindow {groups}
+# Mod4 Tab :NextWindow 0
+# Mod4 grave :PrevWindow 0
+# Control Tab :ClientMenu (Workspace=[current])
 # Control grave :ClientMenu
-Control grave :ClientMenu (Workspace=[current])
+Control Tab :ClientMenu
+Control grave :ClientMenu (Class=[current])
+# Mod4 Tab :ClientMenu (Workspace!=[current])
 # Mod1 1 :ClientMenu
-Mod1 Tab :NextWindow {groups}
-Mod1 grave :PrevWindow {groups}
-Mod1 Shift Tab :NextWindow 0
 #!!!! Mod4 Up :PrevWindow {groups} (stuck=no) (shaded=no)
 #!!!! Mod1 Up :PrevWindow {groups} (stuck=no) (shaded=no)
 #!!!! Mod4 Down :NextWindow {groups} (stuck=no) (shaded=no)
 #!!!! Mod1 Down :NextWindow {groups} (stuck=no) (shaded=no)
+## Fixed them!
+# (stuck=no) (shaded=no)
+Mod1 Tab :NextWindow {groups} (Workspace=[current])
+Mod1 grave :PrevWindow {groups} (Workspace=[current])
+Mod4 Tab :NextWindow {groups}
+Mod4 grave :PrevWindow {groups}
 
-# Do things to windows
-Mod1 c :Close
-Mod4 c :Close
+## Do things to windows
+# Mod1 c :Close
+# Mod4 c :Close
+Mod1 F4 :Close
 Mod1 q :Close
 Mod4 q :KillWindow
 Mod1 a :Lower
@@ -182,7 +206,7 @@ Mod4 f :ToggleDecor
 Mod1 F9 :ExecCommand xsnapshot
 Mod4 F9 :ExecCommand xsnapshot
 
-# Changing workspace
+## Changing workspace
 Control Mod1 Left :PrevWorkspace
 Control Mod4 Left :PrevWorkspace
 Control Mod1 Right :NextWorkspace
@@ -228,11 +252,11 @@ Shift Mod1 Down :TakeToNextWorkspace 3
 # Mod1 KP_Up :BigNudgeUp
 # Mod4 KP_Up :BigNudgeUp
 ## Fluxbox-style:
-## Mod1 Keypad are reserved for bbkeys edge-positioning
-# Mod1 KP_Right :MoveRight +25
-# Mod1 KP_Left :MoveRight -25
-# Mod1 KP_Up :MoveUp +25
-# Mod1 KP_Down :MoveUp -25
+## Move windows around with Ctrl-Alt-KeypadArrows
+Control Mod1 KP_Right :MoveRight +25
+Control Mod1 KP_Left :MoveRight -25
+Control Mod1 KP_Up :MoveUp +25
+Control Mod1 KP_Down :MoveUp -25
 # Mod4 KP_Right :MoveRight +8
 # Mod4 KP_Left :MoveRight -8
 # Mod4 KP_Up :MoveUp +8
@@ -241,17 +265,19 @@ Shift Mod1 Down :TakeToNextWorkspace 3
 ## DONE: Seems to work double/triple/etc. on groups of tags - should do for each group not for each tab.
 # Shift Control Right :ForEach {MoveRight +4} {{groups}}
 # Shift Control Left :ForEach {MoveRight -4} {{groups}}
-Shift Control Up :ForEach {MoveUp +4} {{groups}}
-Shift Control Down :ForEach {MoveUp -4} {{groups}}
-## The KP stuff appears to have stopped working.  (Blame x11vnc?)
-Shift Control KP_Right :ForEach {MoveRight +4} {{groups}}
-Shift Control KP_Left :ForEach {MoveRight -4} {{groups}}
-Shift Control KP_Up :ForEach {MoveUp +4} {{groups}}
-Shift Control KP_Down :ForEach {MoveUp -4} {{groups}}
-Control Mod1 KP_Right :ForEach {MoveRight +1} {{groups}}
-Control Mod1 KP_Left :ForEach {MoveRight -1} {{groups}}
-Control Mod1 KP_Up :ForEach {MoveUp +1} {{groups}}
-Control Mod1 KP_Down :ForEach {MoveUp -1} {{groups}}
+# Shift Control Up :ForEach {MoveUp +4} {{groups}}
+# Shift Control Down :ForEach {MoveUp -4} {{groups}}
+## Fix problems where everything on the screen has translated by the same amount (e.g. fallen down 12 pixels).
+## by large amouts with Control Shift
+Control Shift KP_Right :ForEach {MoveRight +4} {{groups}}
+Control Shift KP_Left :ForEach {MoveRight -4} {{groups}}
+Control Shift KP_Up :ForEach {MoveUp +4} {{groups}}
+Control Shift KP_Down :ForEach {MoveUp -4} {{groups}}
+## by small amouts with Control Win
+Control Mod4 KP_Right :ForEach {MoveRight +1} {{groups}}
+Control Mod4 KP_Left :ForEach {MoveRight -1} {{groups}}
+Control Mod4 KP_Up :ForEach {MoveUp +1} {{groups}}
+Control Mod4 KP_Down :ForEach {MoveUp -1} {{groups}}
 
 ## Resizing windows
 # Mod1 KP_5 :VerticalDecrement
@@ -268,27 +294,27 @@ Mod4 KP_Subtract :Resize 0 -8
 
 Mod1 F2 :ExecCommand runacommand
 
-# Audio
+## Audio
 Mod1 KP_Multiply :ExecCommand volumeup 9
 Mod1 KP_Divide   :ExecCommand volumedown 9
 Mod1 KP_Add      :ExecCommand volumeup 2
 Mod1 KP_Subtract :ExecCommand volumedown 2
-# (play)
+## (play)
 # Mod1 KP_1 :ExecCommand xmms -p
 Mod1 KP_1 :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 /usr/local/xmms/bin/xmms -p
-# (stop)
+## (stop)
 Mod1 KP_3 :ExecCommand xmms -s
-# (pause)
+## (pause)
 Mod1 KP_0 :ExecCommand xmms -u
-# (back)
+## (back)
 Mod1 KP_7 :ExecCommand xmms -r
-# (forward)
+## (forward)
 #Mod1 KP_9 :ExecCommand xmms -f
 Mod1 KP_9 :ExecCommand /home/joey/j/jsh nextsong
 Mod1 KP_Delete :ExecCommand xmms -s
 Mod1 KP_5     :ExecCommand whatsplaying
 Mod4 slash    :ExecCommand whatsplaying
-# Neither of these worked:
+## Neither of these worked:
 #Control Slash :ExecCommand whatsplaying
 #Control Shift Slash :ExecCommand whatsplaying
 
@@ -311,7 +337,7 @@ Mod1 x :ExecCommand xtermbg
 # Mod4 x :ExecCommand xtermbg
 Mod4 x :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 /usr/local/xmms/bin/xmms -p
 Mod1 e :ExecCommand eterm
-Mod4 e :ExecCommand konqueror
+Mod4 e :ExecCommand ~/bin/konqueror
 # Mod1 w :ExecCommand google-chrome
 # Mod4 w :ExecCommand google-chrome
 Mod1 w :ExecCommand chromium-browser
@@ -329,4 +355,8 @@ Mod4 KP_6 :ExecCommand put_current_xwindow right
 Mod4 KP_7 :ExecCommand put_current_xwindow nw
 Mod4 KP_8 :ExecCommand put_current_xwindow top
 Mod4 KP_9 :ExecCommand put_current_xwindow ne
+
+
+
+
 

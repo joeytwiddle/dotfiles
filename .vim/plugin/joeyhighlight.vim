@@ -228,6 +228,11 @@ function! Joeyhighlight()
 	" hi MatchParen term=reverse cterm=reverse ctermbg=black ctermfg=magenta guibg=black guifg=magenta
 	hi MatchParen term=reverse cterm=none ctermbg=magenta ctermfg=grey guibg=#880088 guifg=#eeeeee
 
+	" hi link Comma Function  ## cyan
+	" hi link Comma Keyword   ## yellow
+	" hi Comma cterm=bold ctermfg=white gui=bold guifg=white
+	hi Comma cterm=bold ctermfg=darkgrey gui=bold guifg=#777777
+
 endfun
 
 :Joeyhighlight

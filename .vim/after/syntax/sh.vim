@@ -27,7 +27,8 @@ source ~/.vim/after/syntax/all.vim
 
 " I like to use ## comments in bash, so let's tell Vim about them.
 " I just added the extra b:## rule to the defaults.
-:set comments=s1:/*,mb:*,ex:*/,://,b:#,b:##,:%,:XCOMM,n:>,fb:-
+" :set comments=s1:/*,mb:*,ex:*/,://,b:#,b:##,:%,:XCOMM,n:>,fb:-
+exec "set comments=" . &comments . ",b:##"
 
 " :hi PreProc term=bold ctermfg=magenta gui=bold guifg=magenta
 

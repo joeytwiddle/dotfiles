@@ -1,5 +1,9 @@
-### Start jsh if possible:
-## Actually AFAIK this is only actually needed for jshinfo and kdelight below.
+#!/bin/bash
+
+### Start jsh if possible {{{
+## This is only actually needed for jshinfo and kdelight below.
+## But I like to have jsh loaded in the environment before my window manager
+## spawns new shells
 if ! [ "$JPATH" ]
 then
 	for JPATH in $HOME/j $HOME/jsh /usr/local/jsh /home/joey/j /home/joey/jsh NOT_FOUND
@@ -25,14 +29,15 @@ then
 		# }
 	fi
 fi
+### }}}
 
 
 
-### Popup execution of this script in an xterm (so user can see its output):
+### Popup execution of this script in an xterm (so user can see its output) {{{
 
-## Not default yet because unstable (if it breaks or if user closes xterm, X session will end).
-# [ "$USER" = joey ] && [ `hostname` = hwi ] && XINIT_POPUP_LOG=true
-XINIT_POPUP_LOG=true
+## For some reason this breaks when we are called from xdm/gdm.
+# Oh it's when fluxbox crashes, this doesn't leave an xterm running, it quits and doesn't give me the chance to start a new one.  We should loop.
+# XINIT_POPUP_LOG=true
 
 if [ "$XINIT_POPUP_LOG" ]
 then
@@ -40,12 +45,12 @@ then
 	if ! [ "$1" = -1 ] && ! [ "$1" = -2 ]
 	then
 
-		jshinfo "Calling: /usr/bin/X11/xterm -sl 1000 -bg black -fg green -e sh \"$0\" -1"
+		jshinfo "Calling: xterm -sl 1000 -bg black -fg green -e sh \"$0\" -1"
 		if which gnome-terminal >/dev/null 2>&1
 		then
 			gnome-terminal
 		else
-			/usr/bin/X11/xterm -sl 1000 -bg black -fg green -e sh "$0" -1
+			xterm -sl 1000 -bg black -fg green -e sh "$0" -1
 		fi	
 		cat /tmp/xinitrc-popup-log.out
 		exit
@@ -66,14 +71,16 @@ fi
 ## For set -x logging:
 PS4="[.xinitrc] # $PS4"
 
+### }}}
 
 
-### Config:
+
+### Config: {{{
 
 ## Put your favourite WMs at the top.  The first one present will be chosen.
 ## TESTING kdelight again
+# compiz
 WindowManagers="
-compiz
 kdelight
 startkde
 fluxbox
@@ -102,28 +109,31 @@ then
 	fi
 fi
 
-if [ "$RUNNING_GENTOO" ] && ( [ "$DISPLAY" = :0 ] || [ "$DISPLAY" = :0.0 ] )
-then
-WindowManagers="kdelight
-startkde
-fluxbox
-$WindowManagers"
-fi
+# if [ "$RUNNING_GENTOO" ] && ( [ "$DISPLAY" = :0 ] || [ "$DISPLAY" = :0.0 ] )
+# then
+# WindowManagers="kdelight
+# startkde
+# fluxbox
+# $WindowManagers"
+# fi
 
 NEWLINE="
 "
 ## Alter config based on display number:
-if [ "$DISPLAY" = ":0" ] || [ "$DISPLAY" = :0.0 ]
-then START_A_PANEL=true
-elif [ "$DISPLAY" = ":1" ] || [ "$DISPLAY" = ":2" ] || [ "$DISPLAY" = :1.0 ] || [ "$DISPLAY" = :2.0 ]
-then WindowManagers="fluxbox""$NEWLINE""WindowMaker""$NEWLINE""$WindowManagers"
-elif [ "$DISPLAY" = ":3" ]
-then WindowManagers="startkde""$NEWLINE""$WindowManagers"
-fi
+# if [ "$DISPLAY" = ":0" ] || [ "$DISPLAY" = :0.0 ]
+# then START_A_PANEL=true
+# elif [ "$DISPLAY" = ":1" ]
+# then : # WindowManagers="compiz""$NEWLINE""$WindowManagers"
+# elif [ "$DISPLAY" = ":1" ] || [ "$DISPLAY" = ":2" ] || [ "$DISPLAY" = :1.0 ] || [ "$DISPLAY" = :2.0 ]
+# then WindowManagers="fluxbox""$NEWLINE""WindowMaker""$NEWLINE""$WindowManagers"
+# elif [ "$DISPLAY" = ":3" ]
+# then WindowManagers="startkde""$NEWLINE""$WindowManagers"
+# fi
 
 ## Find the first existing WM:
 for WinMan in $WindowManagers
 do
+	[ "$WinMan" = compiz ] && [ "$RUNNING_GENTOO" = 1 ] && WinMan="compiz-manager" ## For Gentoo.  Actually it may be Debian that is the odd one using "compiz".  :P
 	if which "$WinMan"
 	then
 		echo "Found ok: $WinMan"
@@ -153,6 +163,14 @@ setxkbmap -print gb | xkbcomp - "$DISPLAY"
 
 unset COLUMNS
 
+# xrandr -s 1024x768
+
+## TESTING: may work faster from bbkeys or fluxkeys if pre-loaded
+##          this technique might only work if we . fluxbox, and probably not even then :P
+## The actual issue is that using put_current_xwindow from a keybind is sometimes very slow (I hear swap humming) but that could be part of X, rather than loading the script itself?
+## So alternatively, we could move the scripts to /dev/shm/ and put it on the PATH?!
+. importshfn "$JPATH"/tools/put_current_xwindow
+
 if [ -d $HOME/X11_big_cursor ] && false
 then
 	jshinfo "Initialising big cursor."
@@ -174,7 +192,7 @@ then
 	# twm &
 	# ion &
 	fluxbox &
-	bbkeys -i &
+	bbkeys &
 	## Unlike X, and despite the exit 1, Xvnc keeps running when this script exits!
 	exit 1
 	# vncserver -kill $DISPLAY
@@ -214,7 +232,7 @@ xterm -geometry 80x24+570+680 &
 	# done
 	# jshinfo "[.xinitrc] Finished background grid animation."
 
-	# randomwallpaper &
+	( sleep 2 ; nice -n 15 randomwallpaper ) &
 	# xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/abstract/mosaic.jpg
 	# xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/abstract/mindflow.jpg
 	# jxsetbg /stuff/wallpapers/abstract/mindflow.jpg
@@ -243,12 +261,16 @@ fi
 xset -b
 ## Increase keyboard rate
 # xset r rate 400 50
-xset r rate 270 65
 # xset r rate 280 90
-xset m 2/3
+xset r rate 270 65
+## For my over-sensitive mouse:
+# xset m 2/3
+# xset m 2/3 3
+xset m 4/5 3
 
-## Got problems with []s
+## Got problems with characters displaying as squares [] ?
 # xset fp- unix/:7100
+xset fp+ unix/:7101   ## xfstt
 
 ## Allow connections to X display from anywhere
 # xhost +
@@ -268,7 +290,7 @@ xset m 2/3
 	sleep 2
 
 	if [ ! "$WinMan" = fluxbox ] && [ -x /usr/bin/bbkeys ]
-	then bbkeys -i &
+	then bbkeys &
 	fi
 
 	WSI="$JPATH/code/workspace_indicator.py"
@@ -295,7 +317,9 @@ xset m 2/3
 
 	# xgamma -rgamma 0.7 -ggamma 1.0 -bgamma 1.0 ## for Tim's red-ish monitor
 	# xgamma -rgamma 0.8 -ggamma 1.2 -bgamma 1.2 ## for Tim's red-ish monitor
-	# xgamma -rgamma 1.0 -ggamma 1.4 -bgamma 1.4 ## Brighter so I can read my greys!
+	## OK so first I adjust the monitor's settings to get pure white, then I apply xgamma to fix greys.
+	xgamma -rgamma 1.0 -ggamma 1.4 -bgamma 1.4 ## Brighter so I can read my greys!
+	# xgamma -rgamma 1.1 -ggamma 1.4 -bgamma 1.3 ## When the bloody thing goes darker and bluer!
 
 	jshinfo "DISPLAY = $DISPLAY"
 
@@ -310,7 +334,10 @@ xset m 2/3
 			## This appears to be hanging my machine again, and I don't think it's even running any GL!
 			## If you dare to test it again, don't test in both Gentoo and Debian chroot at the same time!
 			# sleep 2
-			xscreensaver -nosplash &
+			if ps aux | grep xscreensaver >/dev/null
+			then : ## Even with multiple displays, we don't want more than one xscreensaver gobbling up CPU.
+			else xscreensaver -nosplash &
+			fi
 
 			# sleep 2
 			# /opt/ymessenger/bin/ymessenger & # Yahoo! Messenger
@@ -342,9 +369,14 @@ xset m 2/3
 
 ) &
 
+## Re-enable Ctrl+Alt+Backspace to close X, since Gentoo removed it.
+setxkbmap -option terminate:ctrl_alt_bksp
+
+### End Config. }}}
 
 
-### Start window manager in the foreground.
+
+### Start window manager in the foreground. {{{
 
 date
 echo "Starting window manager: $WinMan"
@@ -359,11 +391,14 @@ echo "Starting window manager: $WinMan"
 NEXTWMFILE=$HOME/.nextwinman.$DISPLAY.dat
 CURRENTWMFILE=$HOME/.currentwinman.$DISPLAY.dat
 
-"$WinMan"
+# if [ "$WinMan" = "compiz" ]
+# then WinMan="compiz ccp"
+# fi
+
+$WinMan
 
 ## I had problems with my keyboard so I wanted the WinMan to actually exit when i closed it.
 # fluxbox ; WindowMaker ; exit
-
 
 
 # echo "$WinMan" > $NEXTWMFILE
@@ -385,10 +420,16 @@ do
 	## Allows user time to start their own WinMan if desired.
 	sleep 2
 
-done
+done | tee .xinitrc.log
 
 jshinfo "[.xinitrc] No $NEXTWMFILE found."
 jshinfo "[.xinitrc] X session ended."
 
 `jwhich xterm` -bg darkred -fg white -title "--- X session eneded. Press Ctrl+D to exit. ---"
+
+wait
+
+fluxbox --replace
+
+### }}}
 

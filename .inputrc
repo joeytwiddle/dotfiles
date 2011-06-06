@@ -15,3 +15,8 @@ set bell-style visual
 # # As with zsh, we fake small deletes
 # "\C-b" "\C-f \C-x"
 # "\C-z" "\C-d \C-v"
+
+## PageUp/Down to search history for a line like the current
+"\e[5~": history-search-backward
+"\e[6~": history-search-forward
+

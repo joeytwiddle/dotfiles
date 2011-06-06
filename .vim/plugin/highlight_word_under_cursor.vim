@@ -9,6 +9,8 @@
 if exists('g:hiword') && g:hiword == 0
 else
 
+" if exists('*HighlightWord')
+
 function! HighlightWord()
   " set cul
   let l:word = "FAIL"
@@ -62,6 +64,8 @@ endfunction
 function! Cursor_Moved()
   let l:word = expand("<cword>")
   if (l:word == s:lastWord) " e.g. user has moved 1 char in the word - hide highlighting now.
+    " echo "User moved within word"
+    " or we have just been called twice =/
     call UnHighlightWord()
     " TODO: Isn't this inefficient, causing syntax calls EVERY time we move?!
   else
@@ -100,8 +104,9 @@ endfunction
 " " autocmd CursorHold * call s:Cursor_Moved()
 " " set updatetime=4000
 
+"" We use autocmd! to clear any existing autocmds registered on that event.
 " autocmd CursorMoved * call UnHighlightWord()
-autocmd CursorHold * call Cursor_Moved()
+autocmd! CursorHold * call Cursor_Moved()
 " autocmd CursorMoved * call UnHighlightWord()
 set updatetime=500
 
