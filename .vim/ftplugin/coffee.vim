@@ -17,3 +17,9 @@ setlocal commentstring=#\ %s
 if exists("coffee_compile_on_save")
   autocmd BufWritePost,FileWritePost *.coffee silent !coffee -c <afile> &
 endif
+
+"" Added by Joey (perhaps futilely trying to undo my config which has not yet run!):
+:set ts=2
+:set sw=2
+:set expandtab
+
