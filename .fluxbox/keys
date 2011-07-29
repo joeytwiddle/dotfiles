@@ -85,6 +85,8 @@ OnTitlebar Mod4 Mouse2 :MacroCmd {Focus} {StartTabbing}
 # OnDesktop Mouse3 :rootMenu
 OnDesktop Mouse4 :PrevWorkspace 3
 OnDesktop Mouse5 :NextWorkspace 3
+OnDesktop Shift Mouse4 :PrevWorkspace
+OnDesktop Shift Mouse5 :NextWorkspace
 
 OnToolbar Mouse4 :PrevWorkspace
 OnToolbar Mouse5 :NextWorkspace
@@ -149,32 +151,33 @@ Mod4 Shift Right :MoveTabRight
 # Mod1 braceright :MoveNextTab
 # Mod4 braceright :MoveNextTab
 
-## Move between windows
-## A couple of these are disabled so we can use them through xvncviewer
-## By disabling these we can use the bbkeys switcher, which displays a menu and has fewer bugs!
-## However it ignores window groupings.
-## Fluxbox currently has the bug that Alt-Tab sometimes skips N windows which Alt-grave finds.
-## Damnit now fluxbox has gone completely mad!  It cycles a few windows, on various workspaces!
+### Move between windows using Window Cycling
+## I often disable the core set, so that I can use the bbkeys switcher instead
+## Sometimes I disable some of them so they are not captured by Fluxbox and can be passed through xvncviewer
+## Bug: ignores window groupings.
+## Bug: Fluxbox currently has the bug that Alt-Tab sometimes skips N windows which Alt-grave finds.
+## Bug: Damnit now fluxbox has gone completely mad!  It cycles a few windows, on various workspaces!
 # Mod1 Tab :NextWindow {groups}
 # Mod1 grave :PrevWindow {groups}
 # Mod4 Tab :NextWindow 0
 # Mod4 grave :PrevWindow 0
+## Fixed them!
+Mod1 Tab :NextWindow {groups} (Workspace=[current])
+Mod1 grave :PrevWindow {groups} (Workspace=[current])
+Mod4 Tab :NextWindow {groups}
+Mod4 grave :PrevWindow {groups}
+
+## Move between windows using a Window List Menu
 # Control Tab :ClientMenu (Workspace=[current])
 # Control grave :ClientMenu
 Control Tab :ClientMenu
 Control grave :ClientMenu (Class=[current])
 # Mod4 Tab :ClientMenu (Workspace!=[current])
 # Mod1 1 :ClientMenu
-#!!!! Mod4 Up :PrevWindow {groups} (stuck=no) (shaded=no)
-#!!!! Mod1 Up :PrevWindow {groups} (stuck=no) (shaded=no)
-#!!!! Mod4 Down :NextWindow {groups} (stuck=no) (shaded=no)
-#!!!! Mod1 Down :NextWindow {groups} (stuck=no) (shaded=no)
-## Fixed them!
-# (stuck=no) (shaded=no)
-Mod1 Tab :NextWindow {groups} (Workspace=[current])
-Mod1 grave :PrevWindow {groups} (Workspace=[current])
-Mod4 Tab :NextWindow {groups}
-Mod4 grave :PrevWindow {groups}
+# Mod4 Up :PrevWindow {groups} (stuck=no) (shaded=no)
+# Mod1 Up :PrevWindow {groups} (stuck=no) (shaded=no)
+# Mod4 Down :NextWindow {groups} (stuck=no) (shaded=no)
+# Mod1 Down :NextWindow {groups} (stuck=no) (shaded=no)
 
 ## Do things to windows
 # Mod1 c :Close
@@ -329,13 +332,16 @@ Mod4 k :ExecCommand save_desktop
 Mod4 l :ExecCommand load_desktop
 
 # Mod1 x :ExecCommand xterm -bg black -fg white -font '-*-fixed-*-r-*-*-12-*-*-*-*-*-*-*'
-# Mod4 x :ExecCommand xterm -bg black -fg white -font '-*-fixed-*-r-*-*-12-*-*-*-*-*-*-*'
-# Mod1 x :ExecCommand xterm
 # Mod4 x :ExecCommand xterm
+
 ## This got me the font I wanted:
-Mod1 x :ExecCommand xtermbg
+# Mod1 x :ExecCommand xtermbg
+## TESTING if inlining makes it faster (was sometimes pretty sluggish under Fluxbox)
+Mod1 x :ExecCommand xterm -cc 33:48,37:48,45-47:48,64:48,126:48 -rightbar +sb -sl 5000 -vb -si -sk -bg black -fg white -font '-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1' -rightbar -j -s
+
 # Mod4 x :ExecCommand xtermbg
 Mod4 x :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 /usr/local/xmms/bin/xmms -p
+
 Mod1 e :ExecCommand eterm
 Mod4 e :ExecCommand ~/bin/konqueror
 # Mod1 w :ExecCommand google-chrome
@@ -355,8 +361,4 @@ Mod4 KP_6 :ExecCommand put_current_xwindow right
 Mod4 KP_7 :ExecCommand put_current_xwindow nw
 Mod4 KP_8 :ExecCommand put_current_xwindow top
 Mod4 KP_9 :ExecCommand put_current_xwindow ne
-
-
-
-
 

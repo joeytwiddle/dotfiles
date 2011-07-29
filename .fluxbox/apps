@@ -1,5 +1,5 @@
 [app] (name=xv) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{623 611}
+  [Position]	(UPPERLEFT)	{59 135}
   [Deco]	{NORMAL}
   [Sticky]	{yes}
   [Layer]	{2}
@@ -11,8 +11,8 @@
 [end]
 [app] (name=xmms) (class=Xmms)
   [Workspace]	{1}
-  [Position]	(UPPERLEFT)	{14 460}
-  [Deco]	{0x5ff}
+  [Position]	(UPPERLEFT)	{594 111}
+  [Deco]	{NONE}
   [Layer]	{8}
   [Close]	{yes}
 [end]
@@ -31,28 +31,32 @@
   [Close]	{yes}
 [end]
 [app] (name=MPlayer) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{2 16}
+  [Position]	(UPPERLEFT)	{-24 890}
   [Sticky]	{no}
   [Layer]	{8}
   [Close]	{yes}
 [end]
 [app] (name=smplayer) (class=Smplayer)
-  [Dimensions]	{899 643}
-  [Position]	(UPPERLEFT)	{8 168}
+  [Dimensions]	{1075 703}
+  [Position]	(UPPERLEFT)	{63 174}
   [Sticky]	{yes}
-  [Layer]	{6}
+  [Layer]	{8}
   [Close]	{yes}
   [Alpha]	{121 75}
 [end]
 [app] (name=gimp) (class=Gimp) (role=gimp-image-window)
   [Dimensions]	{930 814}
-  [Position]	(UPPERLEFT)	{290 145}
+  [Position]	(UPPERLEFT)	{241 96}
   [Close]	{yes}
 [end]
 [app] (name=gimp) (class=Gimp) (role=gimp-toolbox)
   [Dimensions]	{224 1018}
   [Position]	(UPPERLEFT)	{0 0}
   [Close]	{yes}
+[end]
+[group]
+ [app] (title=Manual: .*)
+  [Sticky]	{yes}
 [end]
 [group]
  [app] (title=Untitled.*)
@@ -69,7 +73,7 @@
  [app] (name=google-chrome)
  [app] (name=chromium-browser)
  [app] (name=chrome)
-  [Position]	(UPPERLEFT)	{131 5}
+  [Position]	(UPPERLEFT)	{128 5}
   [Close]	{yes}
 [end]
 [group]
@@ -79,6 +83,7 @@
  [app] (name=gvim) (class=Gvim)
  [app] (title=.* - VIM)
  [app] (title=[Vim] .*)
+ [app] (title=[VIM] .*)
 [end]
 [group]
  [app] (name=kopete)
@@ -107,10 +112,15 @@
   [Workspace]	{1}
 [end]
 [app] (name=gkrellm) (class=Gkrellm)
-  [Position]	(UPPERLEFT)	{1143 5}
+  [Position]	(UPPERLEFT)	{1140 0}
   [Sticky]	{yes}
   [Close]	{yes}
 [end]
 [app] (name=explorer.exe) (class=Wine)
   [Sticky]	{yes}
+[end]
+[app] (name=ktorrent) (class=Ktorrent) (role=MainWindow#1)
+  [Workspace]	{5}
+  [Dimensions]	{1085 875}
+  [Position]	(UPPERLEFT)	{98 65}
 [end]
