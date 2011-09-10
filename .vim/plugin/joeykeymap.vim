@@ -47,8 +47,8 @@ nmap <C-X>x :vnew \| vimshell bash<CR>
 "" These two work best with MiniBufExplorer
 noremap <C-PageDown> :bnext<Enter>
 noremap <C-PageUp> :bprev<Enter>
-inoremap <C-PageDown> <Esc>:bnext<Enter>
-inoremap <C-PageUp> <Esc>:bprev<Enter>
+inoremap <C-PageDown> <Esc>:bnext<Enter>i
+inoremap <C-PageUp> <Esc>:bprev<Enter>i
 "" (not working?)
 " inoremap <C-PageUp> <Esc><C-PageUp>a
 " inoremap <C-PageDown> <Esc><C-PageDown>a

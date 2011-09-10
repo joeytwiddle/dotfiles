@@ -481,6 +481,15 @@ if g:miniBufExplMapCTabSwitchBufs == 1 || !exists('g:miniBufExplMapCTabSwitchWin
   let g:miniBufExplMapCTabSwitchWindows = 0
 endif 
 
+" }}}
+" ShowUnlistedBuffers {{{
+" Added by Joey, to not hide buffers which it will make us scroll through
+" anyway!  The alternative solution is not to scroll through unlisted buffers.
+"
+if !exists('g:miniBufExplShowUnlistedBuffers')
+  let g:miniBufExplShowUnlistedBuffers = 1
+endif
+
 "
 " If we have enabled control + vim direction key remapping
 " then perform the remapping
@@ -1102,7 +1111,7 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
     " Otherwise, continue.
     if (a:delBufNum == -1 || l:i != a:delBufNum)
       " Make sure the buffer in question is listed.
-      if(getbufvar(l:i, '&buflisted') == 1)
+      if(getbufvar(l:i, '&buflisted') == 1 || g:miniBufExplShowUnlistedBuffers)
         " Get the name of the buffer.
         let l:BufName = bufname(l:i)
         " Check to see if the buffer is a blank or not. If the buffer does have
@@ -1475,15 +1484,10 @@ function! <SID>MBESelectBuffer()
         exec "Tlist"
       endif
     elseif word == "Wrap"
-      " We use our own toggle variable here, but it would be better to check
-      " the current existing setting instead.
-      if !exists('g:wrapping') || g:wrapping == 0
-        let g:wrapping = 1
-        wincmd p
+    wincmd p
+      if &wrap == 0
         set wrap
       else
-        let g:wrapping = 0
-        wincmd p
         set nowrap
       endif
     elseif word == "Fold"

@@ -86,3 +86,17 @@ function! ToHex(i) " only one digit ie. 0-15!
 	return strpart("0123456789ABCDEF",a:i,1)
 endfunction
 
+
+
+function! JExecVimCommand()
+	let command = input(":", "", "command")
+	execute command
+endfunction
+
+if has("menu")
+	amenu &Joey's\ Tools.&Execute\ VIM\ Command :call JExecVimCommand()<CR>
+endif
+
+"" TODO: This does not work!  It inserts the string, rather than running the command :P
+inoremap <C-h> :call JExecVimCommand()<CR>
+

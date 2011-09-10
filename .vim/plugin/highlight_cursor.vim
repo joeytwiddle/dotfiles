@@ -66,5 +66,5 @@ map <C-g> :call HighlightCursorToggle()<CR>
 " :call HighlightCursorToggle()
 
 if has("menu")
-	amenu &Joey's\ Tools.&Toggle\ emergency\ cursor\ <C-C> :call HighlightCursorToggle()<CR>
+	amenu &Joey's\ Tools.&Toggle\ emergency\ cursor\ <C-g> :call HighlightCursorToggle()<CR>
 endif

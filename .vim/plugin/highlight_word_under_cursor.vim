@@ -108,7 +108,10 @@ endfunction
 " autocmd CursorMoved * call UnHighlightWord()
 autocmd! CursorHold * call Cursor_Moved()
 " autocmd CursorMoved * call UnHighlightWord()
-set updatetime=500
+" set updatetime=500
+"" On rather long files with complex syntax, this operation can be rather
+"" heavy, and lock vim up a bit.  So we run it less often that the ideal.
+set updatetime=1500
 
 let g:last_pos = 0
 let s:lastWord = ""

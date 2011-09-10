@@ -18,6 +18,7 @@ function! Joeyhighlight()
 	"highlight Normal ctermfg=grey guibg=Black guifg=#cccccc
 	"highlight Normal ctermfg=lightgrey guibg=Black guifg=#cccccc
 	" highlight Normal ctermfg=lightgrey guibg=#2b3735 guifg=#cccccc
+	"highlight Normal ctermfg=LightGray guibg=#000000 guifg=LightGray
 	highlight Normal ctermfg=lightgrey guifg=#dddddd guibg=#000000
 
 	"" Some slightly lighter (off-black) backgrounds:
@@ -33,8 +34,6 @@ function! Joeyhighlight()
 
 	"highlight WarningMsg ctermbg=black ctermfg=red cterm=bold
 	highlight WarningMsg term=reverse,bold cterm=reverse,bold gui=reverse,bold ctermbg=yellow ctermfg=red guibg=yellow guifg=red
-
-	"highlight Normal ctermfg=LightGray guibg=#000000 guifg=LightGray
 
 	highlight DiffLine ctermbg=Magenta ctermfg=White
 	"highlight Search term=reverse,bold ctermbg=White guibg=White ctermfg=Black guifg=Black
@@ -205,12 +204,16 @@ function! Joeyhighlight()
 	highlight StatusLine term=reverse,underline cterm=none,underline ctermfg=darkblue ctermbg=white gui=none,underline guifg=#000066 guibg=white
 	" highlight StatusLineNC term=reverse,bold,italic,underline cterm=none,bold,italic,underline ctermfg=darkgrey ctermbg=black gui=none,italic,underline guifg=#222222 guibg=#bbbbbb " Looks wrong in Konsole
 	highlight StatusLineNC term=reverse,italic,underline cterm=none,italic,underline ctermfg=grey ctermbg=black gui=none,italic,underline guifg=#222222 guibg=#bbbbbb
+	"" The underline is not normally noticeable, until we put two lines right
+	"" next to each other, with minwinheight=0 - then it stops them merging!
 	" highlight StatusLineNC ctermfg=darkgrey
 	" highlight StatusLine ctermfg=darkred guifg=darkred
 	" highlight StatusLineNC cterm=reverse,bold,underline ctermbg=black ctermfg=darkgrey " greyed out effect x-term
 	"" This theme comes out nice in X-Term.  Somehow NC is always reversed!
 	" hi StatusLine ctermbg=blue ctermfg=black
 	" hi StatusLineNC ctermbg=black ctermfg=blue
+	"" I want my VertSplit to be the same as StatusLineNC but without italics or underline!
+	highlight VertSplit term=reverse cterm=none ctermbg=grey ctermfg=black gui=none guifg=#222222 guibg=#bbbbbb
 
 	" Fold colours
 	highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000080 guifg=White
@@ -232,6 +235,9 @@ function! Joeyhighlight()
 	" hi link Comma Keyword   ## yellow
 	" hi Comma cterm=bold ctermfg=white gui=bold guifg=white
 	hi Comma cterm=bold ctermfg=darkgrey gui=bold guifg=#777777
+
+	hi Pmenu cterm=bold guibg=#bb00bb gui=bold
+	hi Pmenusel gui=bold guifg=white guibg=#660066
 
 endfun
 

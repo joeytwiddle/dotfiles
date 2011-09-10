@@ -79,6 +79,12 @@
 	" Now it's not too rubbish, let's actually use it.
 	" set wrap
 
+	if exists("+breakindent")
+		:set breakindent
+		:set showbreak=\\\ 
+		:set wrap
+	endif
+
 	" My term font is LucidaTypewriter which is quite thick, so I only want bold in the GUI.
 	:highlight SpecialKey ctermfg=darkblue cterm=none guifg=#000088 gui=bold
 	" :set expandtab

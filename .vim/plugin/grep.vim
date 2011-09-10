@@ -439,9 +439,10 @@ function! s:RunGrepRecursive(grep_cmd, ...)
     call s:RunGrepCmd(cmd, pattern)
 endfunction
 
-" RunGrepBuffer()
-" Grep for a pattern in all the opened buffers
-function! s:RunGrepBuffer(...)
+" GetBufferFilenames()
+" returns a space-separated string of all the buffernames
+function! s:GetBufferFilenames()
+
     " Get a list of all the buffer names
     let last_bufno = bufnr("$")
 
@@ -455,6 +456,16 @@ function! s:RunGrepBuffer(...)
         let i = i + 1
     endwhile
 
+    return filenames
+
+endfunction
+
+
+" RunGrepBuffer()
+" Grep for a pattern in all the opened buffers
+function! s:RunGrepBuffer(...)
+
+    let filenames = s:GetBufferFilenames()
     " No buffers
     if filenames == ""
         return
@@ -616,5 +627,6 @@ command! -nargs=* Ragrep call s:RunGrepRecursive('agrep', <q-args>)
 
 "" Joey notes: I had to remove s: from all RunGrep's to allow this:
 if has("menu")
-	amenu &Joey's\ Tools.&Grep\ (F3) :call RunGrep('grep')<CR>
+	amenu &Joey's\ Tools.&Grep\ Files\ (F3) :call RunGrep('grep')<CR>
+	amenu &Joey's\ Tools.&Grep\ Buffers :call RunGrepBuffer('grep')<CR>
 endif
