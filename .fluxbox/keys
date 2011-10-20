@@ -8,6 +8,51 @@ OnLeftGrip Move1 :StartResizing bottomleft
 OnRightGrip Move1 :StartResizing bottomright
 OnWindowBorder Move1 :StartMoving
 
+### Some older defaults:
+# !mouse actions added by fluxbox-update_configs
+# OnTitlebar Mouse2 :StartTabbing
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnTitlebar Double Mouse1 :Shade
+# OnTitlebar Mouse3 :WindowMenu
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
+# OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnToolbar Mouse4 :NextWorkspace
+# OnToolbar Mouse5 :PrevWorkspace
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnDesktop Mouse1 :HideMenus
+# OnDesktop Mouse2 :WorkspaceMenu
+# OnDesktop Mouse3 :RootMenu
+# OnDesktop Mouse4 :NextWorkspace
+# OnDesktop Mouse5 :PrevWorkspace
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnTitlebar Mouse2 :StartTabbing
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnTitlebar Double Mouse1 :Shade
+# OnTitlebar Mouse3 :WindowMenu
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
+# OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnToolbar Mouse4 :NextWorkspace
+# OnToolbar Mouse5 :PrevWorkspace
+# 
+# !mouse actions added by fluxbox-update_configs
+# OnDesktop Mouse1 :HideMenus
+# OnDesktop Mouse2 :WorkspaceMenu
+# OnDesktop Mouse3 :RootMenu
+# OnDesktop Mouse4 :NextWorkspace
+# OnDesktop Mouse5 :PrevWorkspace
+
 ## Joey's keybindings for Fluxbox, some of which require jsh scripts
 ## Mod1 is Alt - some people might be annoyed if they want to access application
 ## menus.  Mod4 is Win key.  That's where most people will want the extra
@@ -17,64 +62,45 @@ OnWindowBorder Move1 :StartMoving
 ## Note: You were having problems with some actions happening before others.
 ## It might be possible to solve this using {Delay {Command...} 1}
 
-# !mouse actions added by fluxbox-update_configs
-# OnTitlebar Mouse2 :StartTabbing
-# 
-# !mouse actions added by fluxbox-update_configs
-# OnTitlebar Double Mouse1 :Shade
-# OnTitlebar Mouse3 :WindowMenu
-# 
-# !mouse actions added by fluxbox-update_configs
-# OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
-# OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
-# 
-# !mouse actions added by fluxbox-update_configs
-# OnToolbar Mouse4 :NextWorkspace
-# OnToolbar Mouse5 :PrevWorkspace
-# 
-# !mouse actions added by fluxbox-update_configs
-# OnDesktop Mouse1 :HideMenus
-# OnDesktop Mouse2 :WorkspaceMenu
-# OnDesktop Mouse3 :RootMenu
-# OnDesktop Mouse4 :NextWorkspace
-# OnDesktop Mouse5 :PrevWorkspace
-# 
-# !mouse actions added by fluxbox-update_configs
-# OnTitlebar Mouse2 :StartTabbing
-# 
-# !mouse actions added by fluxbox-update_configs
-# OnTitlebar Double Mouse1 :Shade
-# OnTitlebar Mouse3 :WindowMenu
-# 
-# !mouse actions added by fluxbox-update_configs
-# OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
-# OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
-# 
-# !mouse actions added by fluxbox-update_configs
-# OnToolbar Mouse4 :NextWorkspace
-# OnToolbar Mouse5 :PrevWorkspace
-# 
-# !mouse actions added by fluxbox-update_configs
-# OnDesktop Mouse1 :HideMenus
-# OnDesktop Mouse2 :WorkspaceMenu
-# OnDesktop Mouse3 :RootMenu
-# OnDesktop Mouse4 :NextWorkspace
-# OnDesktop Mouse5 :PrevWorkspace
+## Move between windows (window cycling)
+## Disable these to use bbkey's for switching instead (it has a nice menu).  bbkeys may need restarting after reconfiguring fluxbox!
+## Sometimes I disable some of them so they are not captured by Fluxbox and can be passed through xvncviewer
+### ==OLD== broken versions which worked in earlier versions of fluxbox:
+## Bug: ignores window groupings.
+## Bug: Fluxbox currently has the bug that Alt-Tab sometimes skips N windows which Alt-grave finds.
+## Bug: Damnit now fluxbox has gone completely mad!  It cycles a few windows, on various workspaces!
+## Done: OK fluxbox has got better, using the commands below.
+# Mod1 Tab :NextWindow {groups}
+# Mod1 grave :PrevWindow {groups}
+# Mod4 Tab :NextWindow 0
+# Mod4 grave :PrevWindow 0
+### ==NEW== Fixed versions!
+Mod1 Tab :NextWindow {groups} (Workspace=[current])
+Mod1 grave :PrevWindow {groups} (Workspace=[current])
+# Mod4 Tab :NextWindow {groups}
+# Mod4 grave :PrevWindow {groups}
 
-## Joey's:
-
-## Basic tiling - kinda sux:
-Control Mod1 a :ArrangeWindows
-
-Control Mod1 r :Reconfigure
-Control Mod4 r :Restart
-Control Shift F2 :CommandDialog
+## Move between windows using a Window List Menu
+# Control Tab :ClientMenu (Workspace=[current])
+# Control grave :ClientMenu
+Control Tab :ClientMenu
+Control grave :ClientMenu (Class=[current])
+# Mod4 Tab :ClientMenu (Workspace!=[current])
+# Mod1 1 :ClientMenu
+# Mod4 Up :PrevWindow {groups} (stuck=no) (shaded=no)
+# Mod1 Up :PrevWindow {groups} (stuck=no) (shaded=no)
+# Mod4 Down :NextWindow {groups} (stuck=no) (shaded=no)
+# Mod1 Down :NextWindow {groups} (stuck=no) (shaded=no)
 
 ## Tabbing with Middle button:
 OnTitlebar Mouse2 :MacroCmd {Focus} {StartTabbing} {Lower}
 ## These two don't work (but are inteded to avoid the lowering):
 OnTitlebar Mod1 Mouse2 :MacroCmd {Focus} {StartTabbing}
 OnTitlebar Mod4 Mouse2 :MacroCmd {Focus} {StartTabbing}
+
+Control Mod1 r :Reconfigure
+Control Mod4 r :Restart
+Control Shift F2 :CommandDialog
 
 # OnTitlebar Mouse2 :StartTabbing
 # OnTitlebar Double Mouse1 :Shade
@@ -151,34 +177,6 @@ Mod4 Shift Right :MoveTabRight
 # Mod1 braceright :MoveNextTab
 # Mod4 braceright :MoveNextTab
 
-### Move between windows using Window Cycling
-## I often disable the core set, so that I can use the bbkeys switcher instead
-## Sometimes I disable some of them so they are not captured by Fluxbox and can be passed through xvncviewer
-## Bug: ignores window groupings.
-## Bug: Fluxbox currently has the bug that Alt-Tab sometimes skips N windows which Alt-grave finds.
-## Bug: Damnit now fluxbox has gone completely mad!  It cycles a few windows, on various workspaces!
-# Mod1 Tab :NextWindow {groups}
-# Mod1 grave :PrevWindow {groups}
-# Mod4 Tab :NextWindow 0
-# Mod4 grave :PrevWindow 0
-## Fixed them!
-Mod1 Tab :NextWindow {groups} (Workspace=[current])
-Mod1 grave :PrevWindow {groups} (Workspace=[current])
-Mod4 Tab :NextWindow {groups}
-Mod4 grave :PrevWindow {groups}
-
-## Move between windows using a Window List Menu
-# Control Tab :ClientMenu (Workspace=[current])
-# Control grave :ClientMenu
-Control Tab :ClientMenu
-Control grave :ClientMenu (Class=[current])
-# Mod4 Tab :ClientMenu (Workspace!=[current])
-# Mod1 1 :ClientMenu
-# Mod4 Up :PrevWindow {groups} (stuck=no) (shaded=no)
-# Mod1 Up :PrevWindow {groups} (stuck=no) (shaded=no)
-# Mod4 Down :NextWindow {groups} (stuck=no) (shaded=no)
-# Mod1 Down :NextWindow {groups} (stuck=no) (shaded=no)
-
 ## Do things to windows
 # Mod1 c :Close
 # Mod4 c :Close
@@ -209,20 +207,38 @@ Mod4 f :ToggleDecor
 Mod1 F9 :ExecCommand xsnapshot
 Mod4 F9 :ExecCommand xsnapshot
 
-## Changing workspace
-Control Mod1 Left :PrevWorkspace
-Control Mod4 Left :PrevWorkspace
-Control Mod1 Right :NextWorkspace
-Control Mod4 Right :NextWorkspace
-Shift Mod1 Left :TakeToPrevWorkspace
-Shift Mod1 Right :TakeToNextWorkspace
-## This makes sense if you have three columns of desktops:
-Control Mod1 Up :PrevWorkspace 3
-Control Mod4 Up :PrevWorkspace 3
-Control Mod1 Down :NextWorkspace 3
-Control Mod4 Down :NextWorkspace 3
-Shift Mod1 Up :TakeToPrevWorkspace 3
-Shift Mod1 Down :TakeToNextWorkspace 3
+## Known bug with NextWorkspace that wastes the next keyboard input in an annoying way!
+## http://sourceforge.net/tracker/?func=detail&aid=3190205&group_id=35398&atid=413960
+## For the moment, I am trying bbkeys instead.
+# ## Changing workspace
+# Control Mod1 Left :PrevWorkspace
+# Control Mod4 Left :PrevWorkspace
+# Control Mod1 Right :NextWorkspace
+# Control Mod4 Right :NextWorkspace
+# Shift Mod1 Left :TakeToPrevWorkspace
+# Shift Mod1 Right :TakeToNextWorkspace
+# ## This makes sense if you have three columns of desktops:
+# Control Mod1 Up :PrevWorkspace 3
+# Control Mod4 Up :PrevWorkspace 3
+# Control Mod1 Down :NextWorkspace 3
+# Control Mod4 Down :NextWorkspace 3
+# Shift Mod1 Up :TakeToPrevWorkspace 3
+# Shift Mod1 Down :TakeToNextWorkspace 3
+
+## Workaround:
+Control Mod1 Left :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
+Control Mod4 Left :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
+Control Mod1 Right :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
+Control Mod4 Right :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
+Shift Mod1 Left :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace
+Shift Mod1 Right :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace
+Control Mod1 Up :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace 3
+Control Mod4 Up :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace 3
+Control Mod1 Down :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace 3
+Control Mod4 Down :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace 3
+Shift Mod1 Up :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace 3
+Shift Mod1 Down :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace 3
+
 # Mod1 F1 :Workspace 1
 # Mod1 F2 :Workspace 2
 # Mod1 F3 :Workspace 3
@@ -335,9 +351,9 @@ Mod4 l :ExecCommand load_desktop
 # Mod4 x :ExecCommand xterm
 
 ## This got me the font I wanted:
-# Mod1 x :ExecCommand xtermbg
+Mod1 x :ExecCommand xtermbg
 ## TESTING if inlining makes it faster (was sometimes pretty sluggish under Fluxbox)
-Mod1 x :ExecCommand xterm -cc 33:48,37:48,45-47:48,64:48,126:48 -rightbar +sb -sl 5000 -vb -si -sk -bg black -fg white -font '-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1' -rightbar -j -s
+# Mod1 x :ExecCommand xterm -cc 33:48,37:48,45-47:48,64:48,126:48 -rightbar +sb -sl 5000 -vb -si -sk -bg black -fg white -font '-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1' -rightbar -j -s
 
 # Mod4 x :ExecCommand xtermbg
 Mod4 x :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 /usr/local/xmms/bin/xmms -p
@@ -361,4 +377,7 @@ Mod4 KP_6 :ExecCommand put_current_xwindow right
 Mod4 KP_7 :ExecCommand put_current_xwindow nw
 Mod4 KP_8 :ExecCommand put_current_xwindow top
 Mod4 KP_9 :ExecCommand put_current_xwindow ne
+
+## Basic tiling - kinda sux:
+Control Mod1 a :ArrangeWindows
 

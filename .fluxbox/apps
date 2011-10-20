@@ -1,5 +1,5 @@
 [app] (name=xv) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{59 135}
+  [Position]	(UPPERLEFT)	{246 122}
   [Deco]	{NORMAL}
   [Sticky]	{yes}
   [Layer]	{2}
@@ -11,13 +11,13 @@
 [end]
 [app] (name=xmms) (class=Xmms)
   [Workspace]	{1}
-  [Position]	(UPPERLEFT)	{594 111}
+  [Position]	(UPPERLEFT)	{580 172}
   [Deco]	{NONE}
   [Layer]	{8}
   [Close]	{yes}
 [end]
 [app] (name=beebem) (class=beebem)
-  [Position]	(UPPERLEFT)	{65 226}
+  [Position]	(UPPERLEFT)	{322 185}
   [Close]	{yes}
 [end]
 [app] (name=glslideshow) (class=TopLevelShell)
@@ -37,8 +37,8 @@
   [Close]	{yes}
 [end]
 [app] (name=smplayer) (class=Smplayer)
-  [Dimensions]	{1075 703}
-  [Position]	(UPPERLEFT)	{63 174}
+  [Dimensions]	{1091 510}
+  [Position]	(UPPERLEFT)	{62 136}
   [Sticky]	{yes}
   [Layer]	{8}
   [Close]	{yes}
@@ -60,6 +60,7 @@
 [end]
 [group]
  [app] (title=Untitled.*)
+  [Deco]	{NORMAL}
 [end]
 [app] (title=Google Chrome Options)
 [end]
@@ -73,17 +74,11 @@
  [app] (name=google-chrome)
  [app] (name=chromium-browser)
  [app] (name=chrome)
-  [Position]	(UPPERLEFT)	{128 5}
+  [Position]	(UPPERLEFT)	{126 5}
   [Close]	{yes}
 [end]
 [group]
  [app] (name=x-www-browser)
-[end]
-[group]
- [app] (name=gvim) (class=Gvim)
- [app] (title=.* - VIM)
- [app] (title=[Vim] .*)
- [app] (title=[VIM] .*)
 [end]
 [group]
  [app] (name=kopete)
@@ -123,4 +118,7 @@
   [Workspace]	{5}
   [Dimensions]	{1085 875}
   [Position]	(UPPERLEFT)	{98 65}
+[end]
+[app] (name=) (class=)
+  [Position]	(UPPERLEFT)	{21 485}
 [end]
