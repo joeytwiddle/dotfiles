@@ -489,6 +489,12 @@ endif
 if !exists('g:miniBufExplShowUnlistedBuffers')
   let g:miniBufExplShowUnlistedBuffers = 1
 endif
+" TODO: turns out "unlisted" is not the problem - they really aren't shown!
+" But still there are buffers it makes me scroll through, which do not appear
+" in this list:
+"   if(getbufvar(l:i, '&buflisted') == 1 || g:miniBufExplShowUnlistedBuffers)
+" I wonder how to get hold of them for listing, or avoid them for scrolling...
+" Is :bn paging through windows which are not buffers?!
 
 "
 " If we have enabled control + vim direction key remapping
@@ -1520,6 +1526,9 @@ function! <SID>MBESelectBuffer()
       " wincmd c
       exec "wincmd p"
       exec "bdel"
+      "" TODO: Now we should cause miniBufExplorerAutoUpdate
+      "" TESTING:
+      call <SID>DisplayBuffers(-1)
     else
       echo "No command for bufnr=" . l:bufnr
     endif

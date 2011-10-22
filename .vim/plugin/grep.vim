@@ -211,7 +211,7 @@ endif
 " the Grep output window by default.  You can open it manually by using
 " the :cwindow command.
 if !exists("Grep_OpenQuickfixWindow")
-    let Grep_OpenQuickfixWindow = 1
+    let Grep_OpenQuickfixWindow = 0
 endif
 
 " Default grep file list
@@ -316,11 +316,11 @@ function! s:RunGrepCmd(cmd, pattern)
     if g:Grep_OpenQuickfixWindow == 1
         " Open the quickfix window below the current window
         botright copen
+        " Jump to the first error (mainly because it forces the focus back to
+        " the editing window, rather than leaving it in the clist.)
+        cc
+        " exe "cc"
     endif
-
-    " Jump to the first error
-    "" Joey: no, don't jump to first occurrence
-    " cc
 
     call delete(tmpfile)
 endfunction

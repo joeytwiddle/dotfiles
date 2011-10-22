@@ -154,3 +154,10 @@ noremap <C-J> 1<C-E>
 inoremap <C-K> <Esc>1<C-Y>a
 inoremap <C-J> <Esc>1<C-E>a
 
+" In keeping with my shell shortcut keys:
+cnoremap <C-D> <C-Left>
+cnoremap <C-F> <C-Right>
+" Should delete whole words, but better than nothing for now:
+cnoremap <C-X> <Backspace>
+cnoremap <C-V> <Delete>
+
