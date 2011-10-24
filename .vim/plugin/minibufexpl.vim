@@ -487,7 +487,7 @@ endif
 " anyway!  The alternative solution is not to scroll through unlisted buffers.
 "
 if !exists('g:miniBufExplShowUnlistedBuffers')
-  let g:miniBufExplShowUnlistedBuffers = 1
+  let g:miniBufExplShowUnlistedBuffers = 0
 endif
 " TODO: turns out "unlisted" is not the problem - they really aren't shown!
 " But still there are buffers it makes me scroll through, which do not appear
@@ -1125,7 +1125,11 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
         if(strlen(l:BufName))
           " Only show modifiable buffers (The idea is that we don't 
           " want to show Explorers)
-          if (getbufvar(l:i, '&modifiable') == 1 && BufName != '-MiniBufExplorer-')
+          " if (getbufvar(l:i, '&modifiable') == 1 && BufName != '-MiniBufExplorer-')
+          "" BUG: :bn and :bp visit modifiable buffers, so until I can prevent
+          "" that, I want them displayed in the list, otherwise the list is
+          "" confusing!
+          if (BufName != '-MiniBufExplorer-')
             
             " Get filename & Remove []'s & ()'s
             let l:shortBufName = fnamemodify(l:BufName, ":t")                  
@@ -1454,15 +1458,16 @@ function! <SID>MBESelectBuffer()
 
   elseif (l:bufnr<=0 || l:bufnr>=bufnr("$"))
 
-    " -2 = first menu, -3 = second menu, ...
+    " 0 = user clicked before the buffers, perhaps on a button
 
-    " Problem: we have already moved off the cursor word (due to y0 earlier?)
-    let l:save_reg = @"
-    let @" = ""
-    normal ""yi[
-    " let l:word = @"
-    let @" = l:save_reg
-    " echo "Got word = " . l:word
+    "" I don't think any of this matters :P
+    " " Problem: we have already moved off the cursor word (due to y0 earlier?)
+    " let l:save_reg = @"
+    " let @" = ""
+    " normal ""yi[
+    " " let l:word = @"
+    " let @" = l:save_reg
+    " " echo "Got word = " . l:word
 
     " let @" = ""
     " normal hEB""yE
@@ -1473,11 +1478,39 @@ function! <SID>MBESelectBuffer()
         vsplit
         exec "Explore"
       elseif exists('g:vloaded_tree_explorer')
-        " call VsTreeExplorer()
-        " wincmd j
-        wincmd p
-        exec "VSTreeExplore"
-        " wincmd H
+
+        if exists(':VSTreeExploreToggle') == 2
+            wincmd p
+            exec "VSTreeExploreToggle"
+        else
+            " call VsTreeExplorer()
+            " wincmd j
+            wincmd p
+            exec "VSTreeExplore"
+            " wincmd H
+        endif
+
+        "" Extra: Reformat my IDE-shaped window layout
+        "" I made VSTree swallow the whole of the left of the screen, but I
+        "" actually want MiniBufExplorer to swallow the whole of the top.
+        "" Look for MiniBufExplorer window, if it is visible
+        " let l:winNum = bufwinnr(bufnr('-MiniBufExplorer-'))
+        let l:winNum = <SID>FindWindow('-MiniBufExplorer-', 1)
+        if l:winNum != -1
+            "" Refocus MiniBufExplorer window
+            " exec ":win ".l:winNum
+            exec l:winNum.' wincmd w'
+            "" This is dodgy but it seems to work often.  (Sometimes taglist ends up at the top)
+            " exec "wincmd p"
+            "" Push it to fill the top again (overriding whatever
+            "" VSTreeExploreToggle did).  What we wanted to do.
+            " wincmd K
+            exec "wincmd K"
+            " exec l:winNum." wincmd K"
+            "" Refocus the newly spawned TreeExplorer
+            exec "wincmd p"
+        endif
+
       elseif exists('g:loaded_nerd_tree')
         wincmd p
         exec "NERDTree"
