@@ -316,11 +316,12 @@ function! s:RunGrepCmd(cmd, pattern)
     if g:Grep_OpenQuickfixWindow == 1
         " Open the quickfix window below the current window
         botright copen
-        " Jump to the first error (mainly because it forces the focus back to
-        " the editing window, rather than leaving it in the clist.)
-        cc
-        " exe "cc"
     endif
+
+    " Jump to the first error (mainly because it forces the focus back to
+    " the editing window, rather than leaving it in the clist.)
+    cc
+    " exe "cc"
 
     call delete(tmpfile)
 endfunction

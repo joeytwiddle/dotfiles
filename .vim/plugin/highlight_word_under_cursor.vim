@@ -42,6 +42,7 @@ function! HighlightWord()
     execute 'syntax match HLCurrentWord "'.pattern.'"'
     execute 'syntax clear HLCurrentWord'
     execute 'syntax match HLCurrentWord "'.pattern.'"'
+	 " execute 'highlight HLCurrentWord cterm=underline gui=underline'   " Problem: The match blocks any existing highlighting, so ends up looking Normal.
     " execute 'highlight HLCurrentWord term=reverse cterm=none ctermbg=darkgreen ctermfg=white guibg=darkgreen guifg=white'
     " execute 'highlight HLCurrentWord term=none cterm=none ctermbg=blue ctermfg=green guibg=darkblue guifg=green'
     " execute 'highlight HLCurrentWord term=bold cterm=bold ctermfg=green guifg=green'

@@ -53,6 +53,13 @@ inoremap <C-PageUp> <Esc>:bprev<Enter>i
 " inoremap <C-PageUp> <Esc><C-PageUp>a
 " inoremap <C-PageDown> <Esc><C-PageDown>a
 
+"" These versions work for my Eterm, provided we exported TERM=xterm
+nnoremap [6^ :bn<Enter>
+nnoremap [5^ :bp<Enter>
+"" In my console (TERM=linux), PageUp/Down send the same with/without Ctrl.
+" nnoremap [6~ :bn<Enter>
+" nnoremap [5~ :bp<Enter>
+
 " map <F8> :tabprev<Enter>
 " map <F9> :tabnext<Enter>
 " map <C-[> :tabprev<Enter>
@@ -95,10 +102,6 @@ nnoremap <Down> gj
 
 "" For GVim
 inoremap <S-Insert> <Esc>"*pa
-
-"" These work for Eterm, provided we export TERM=xterm before we run vim:
-nnoremap [6^ :bn<Enter>
-nnoremap [5^ :bp<Enter>
 
 "" Although these allow Ctrl-W Up/Down/Left/Right in Eterm, they break normal
 "" Up/Down/Left/Right in xterm.
@@ -157,7 +160,11 @@ inoremap <C-J> <Esc>1<C-E>a
 " In keeping with my shell shortcut keys:
 cnoremap <C-D> <C-Left>
 cnoremap <C-F> <C-Right>
-" Should delete whole words, but better than nothing for now:
-cnoremap <C-X> <Backspace>
-cnoremap <C-V> <Delete>
+cnoremap <C-X> <C-W>
+" This doesn't do what we want, also we want to leave Ctrl-V since it does
+" something special in Vim (insert literal char).
+" cnoremap <C-V> <C-Right><C-W>
+
+" This is how my zsh does completion, and it rocks:
+set wildmode=longest:full,full
 
