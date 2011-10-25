@@ -59,7 +59,8 @@
   [toggleMaximizeFull]         (Mod1-F12)
   [toggleMaximizeHorizontal]   (Mod1-F11)
   [toggleMaximizeVertical]     (Mod1-F10)
-  [toggleOmnipresent]          (Mod1-Control-S)
+  ## Disabled because it blocks compiz keybind and it fails!
+  # [toggleOmnipresent]          (Mod1-Control-S)
   [resizeWindowWidth]          (Mod1-Control-Shift-Left)   {-5}
   [resizeWindowWidth]          (Mod1-Control-Shift-Right)  {5}
   [resizeWindowHeight]         (Mod1-Control-Shift-Up)     {-5}
@@ -77,12 +78,12 @@
   [changeWorkspace]            (Mod1-7)                    {7}
   [changeWorkspace]            (Mod1-8)                    {8}
   ## Use these if you want bbkeys' dropdown menu.
-  [NextWindow]                 (Mod1-Tab)
-  [PrevWindow]                 (Mod1-grave)
-  [PrevWindow]                 (Mod1-Shift-Tab)
-  [NextWindowOnAllWorkspaces]  (Mod4-Tab)
-  [PrevWindowOnAllWorkspaces]  (Mod4-grave)
-  [PrevWindowOnAllWorkspaces]  (Mod4-Shift-Tab)
+  # [NextWindow]                 (Mod1-Tab)
+  # [PrevWindow]                 (Mod1-grave)
+  # [PrevWindow]                 (Mod1-Shift-Tab)
+  # [NextWindowOnAllWorkspaces]  (Mod4-Tab)
+  # [PrevWindowOnAllWorkspaces]  (Mod4-grave)
+  # [PrevWindowOnAllWorkspaces]  (Mod4-Shift-Tab)
 
   ## These were added by joey:
 
@@ -95,7 +96,7 @@
   # [nextWorkspace]              (Mod1-Control-Left)
   # [prevWorkspace]              (Mod1-Control-Right)
 
-  [toggleOmnipresent]          (Mod1-S)
+  # [toggleOmnipresent]          (Mod1-S)
   [toggleShade]                (Mod1-D)
   [Lower]                      (Mod1-A)
   [Close]                      (Mod1-Q)
