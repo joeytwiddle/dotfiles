@@ -1,6 +1,5 @@
 " Mini Buffer Explorer <minibufexpl.vim>
 " Joey's version
-" vim: ts=2 sw=2
 "
 " Joey's notes:
 " DONE: Some improvements to graphics.
@@ -600,6 +599,10 @@ if !exists('g:miniBufExplBufList')
   let g:miniBufExplBufList = ''
 endif
 
+if !exists('g:miniBufExplBufNumbers')
+  let g:miniBufExplBufNumbers = []
+endif
+
 " Variable used as a mutex so that we don't do lots
 " of AutoUpdates at the same time.
 if !exists('g:miniBufExplInAutoUpdate')
@@ -1122,6 +1125,7 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
 
   let l:fileNames = ''
   let l:maxTabWidth = 0
+  let g:miniBufExplBufList = []
 
   " Loop through every buffer less than the total number of buffers.
   while(l:i <= l:NBuffers)
@@ -1182,6 +1186,9 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
 
             let l:fileNames .= l:tabEdges . ''
 
+            " let l:bufferNumbers .= l:i . ' '
+            call add(g:miniBufExplBufNumbers, l:i)
+
             " If horizontal and tab wrap is turned on we need to add spaces
             if g:miniBufExplVSplit == 0
               " if g:miniBufExplTabWrap != 0
@@ -1217,6 +1224,7 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
   if (g:miniBufExplBufList != l:line)
     if (a:updateBufList)
       let g:miniBufExplBufList = l:line
+      " let g:miniBufExplBufNumbers = l:bufferNumbers
       let s:maxTabWidth = l:maxTabWidth
     endif
     return 1
@@ -1395,7 +1403,7 @@ function! <SID>AutoUpdate(delBufNum)
 endfunction
 
 " }}}
-" GetSelectedBuffer - From the MBE window, return the bufnum for buf under cursor {{{
+" GetSelectedBuffer - From the MBE window, return the LIST NUMBER for buf under cursor {{{
 " 
 " If we are in our explorer window then return the buffer number
 " for the buffer under the cursor.
@@ -1601,7 +1609,9 @@ function! <SID>MBESelectBuffer()
     " elseif (l:bufnr>=0)
   else
 
-    " The buffer exists.
+    " We have the number of the buffer in the current list, but what is its
+    " real buffer number?
+    let l:bufnr = g:miniBufExplBufNumbers[l:bufnr]
 
     let l:saveAutoUpdate = g:miniBufExplorerAutoUpdate
     let g:miniBufExplorerAutoUpdate = 0
@@ -2100,4 +2110,4 @@ endfunc " }}}
 "
 "=============================================================================
 " }}}
-" vim:ft=vim:fdm=marker:ff=unix:nowrap:tabstop=4:shiftwidth=4:softtabstop=4:smarttab:shiftround:expandtab
+" vim:ft=vim:fdm=marker:ff=unix:nowrap:tabstop=2:shiftwidth=2:softtabstop=2:smarttab:shiftround:expandtab
