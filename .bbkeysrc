@@ -1,8 +1,37 @@
 # ~/.bbkeysrc
 
+# NOTES:
+
+# During recent use in Fluxbox, it has been common to experience:
+# - Mod1 = Alt key, Mod2 = Win key
+# - bbkeys sometimes segfaults on Win-Tab!
+# - Sometimes after switching desktop, we were left with Fluxbox's window-cycler, not bbkeys.  One time using Win-Tab brought it back.
+
+# Currently the window-cycler (tab-switching):
+# - Does not respect fluxbox tab groupings.
+# - Does not cycle through minimised windows.
+# - Focuses the window immediately, but only raises it after a short delay.  (I think Fluxbox may be doing the raising.)
+# - Does not un-raise windows which were temporarily raised during the cycle.  (See above.)
+# - Does not engage if you Ctrl+Alt+Right to change desktop then Alt-Tab but never released Alt!  In this case, Fluxbox cycler engages.
+
+# Switching desktops:
+# - If you switch right then down rapidly, you will end up being transported down only!  But slowly it works fine.
+
 [begin]
 
  [config]
+  [option] (autoConfig)             {true}
+  [option] (autoConfigCheckTimeout) {4}
+  [option] (stylefile)              {/home/joey/linux/.fluxbox/styles/OrangeJuice}
+  [option] (honorModifiers)         {false}
+  [option] (raiseWhileCycling)      {false}
+  [option] (showCycleMenu)          {false}
+  [option] (menuTitleJustify)       {center}
+  [option] (menuTextJustify)        {left}
+  [option] (cycleMenuX)             {480}
+  [option] (cycleMenuY)             {320}
+  [option] (workspaceColumns)       {3}
+  [option] (workspaceRows)          {4}
  [end]
 
  [keybindings] (begin keybindings)
@@ -39,10 +68,6 @@
   [moveWindowDown]             (Mod1-Control-J)            {1}
   [moveWindowLeft]             (Mod1-Control-H)            {1}
   [moveWindowRight]            (Mod1-Control-L)            {1}
-  [NextWindow]                 (Mod1-Tab)
-  [NextWindowOnAllWorkspaces]  (Mod1-Control-Tab)
-  [PrevWindow]                 (Mod1-Shift-Tab)
-  [PrevWindow]                 (Mod1-grave)
   [changeWorkspace]            (Mod1-1)                    {1}
   [changeWorkspace]            (Mod1-2)                    {2}
   [changeWorkspace]            (Mod1-3)                    {3}
@@ -51,13 +76,24 @@
   [changeWorkspace]            (Mod1-6)                    {6}
   [changeWorkspace]            (Mod1-7)                    {7}
   [changeWorkspace]            (Mod1-8)                    {8}
+  ## Use these if you want bbkeys' dropdown menu.
+  [NextWindow]                 (Mod1-Tab)
+  [PrevWindow]                 (Mod1-grave)
+  [PrevWindow]                 (Mod1-Shift-Tab)
+  [NextWindowOnAllWorkspaces]  (Mod4-Tab)
+  [PrevWindowOnAllWorkspaces]  (Mod4-grave)
+  [PrevWindowOnAllWorkspaces]  (Mod4-Shift-Tab)
 
   ## These were added by joey:
 
-  [upWorkspace]                (Mod1-Control-Up)
-  [downWorkspace]              (Mod1-Control-Down)
-  [leftWorkspace]              (Mod1-Control-Left)
-  [rightWorkspace]             (Mod1-Control-Right)
+  ## Disabled after interfering with Fluxbox (sporadically)
+  # [upWorkspace]                (Mod1-Control-Up)
+  # [downWorkspace]              (Mod1-Control-Down)
+  # [leftWorkspace]              (Mod1-Control-Left)
+  # [rightWorkspace]             (Mod1-Control-Right)
+  ## Or:
+  # [nextWorkspace]              (Mod1-Control-Left)
+  # [prevWorkspace]              (Mod1-Control-Right)
 
   [toggleOmnipresent]          (Mod1-S)
   [toggleShade]                (Mod1-D)
@@ -72,13 +108,13 @@
   [Execute]                    (Mod4-Q)                    {xkill}
 
   [showRootMenu]               (Mod1-Control-Escape)
-  [Execute]                    (Mod1-F5)                   {xrefresh}
+  [Execute]                    (Mod1-F5)                   {xrefresh -solid darkorange}
   #[Execute]                    (Mod4-E)                    {kfmclient openProfile filemanagement}
   #[Execute]                    (F20)                       {kfmclient openProfile filemanagement}
   #[Execute]                    (Mod4-E)                    {nautilus /home/gideon}
   #[Execute]                    (F20)                       {nautilus /home/gideon}
 
-  ### Joey's binds follow:
+  ### Joey's command binds follow:
 
   ### Wanted for Debian, or jsh prompt isn't loaded:
   # [Execute]  (Mod1-X) {/home/joey/j/jsh xterm -e /home/joey/j/jsh}
