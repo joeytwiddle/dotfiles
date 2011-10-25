@@ -1125,7 +1125,7 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
 
   let l:fileNames = ''
   let l:maxTabWidth = 0
-  let g:miniBufExplBufList = []
+  let g:miniBufExplBufNumbers = []
 
   " Loop through every buffer less than the total number of buffers.
   while(l:i <= l:NBuffers)
