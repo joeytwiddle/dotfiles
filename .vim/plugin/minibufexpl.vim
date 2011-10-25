@@ -496,6 +496,14 @@ endif
 " I wonder how to get hold of them for listing, or avoid them for scrolling...
 " Is :bn paging through windows which are not buffers?!
 
+" }}}
+" ShowOtherBuffers {{{
+" Also added by Joey.
+"
+if !exists('g:miniBufExplShowOtherBuffers')
+  let g:miniBufExplShowOtherBuffers = 0
+endif
+
 "
 " If we have enabled control + vim direction key remapping
 " then perform the remapping
@@ -1115,28 +1123,37 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
     " If we have a delBufNum and it is the current
     " buffer then ignore the current buffer. 
     " Otherwise, continue.
-    if (a:delBufNum == -1 || l:i != a:delBufNum)
+    if (g:miniBufExplShowOtherBuffers || a:delBufNum == -1 || l:i != a:delBufNum)
       " Make sure the buffer in question is listed.
       if(getbufvar(l:i, '&buflisted') == 1 || g:miniBufExplShowUnlistedBuffers)
         " Get the name of the buffer.
         let l:BufName = bufname(l:i)
         " Check to see if the buffer is a blank or not. If the buffer does have
         " a name, process it.
-        if(strlen(l:BufName))
+        if(strlen(l:BufName) || g:miniBufExplShowOtherBuffers)
+
           " Only show modifiable buffers (The idea is that we don't 
           " want to show Explorers)
-          " if (getbufvar(l:i, '&modifiable') == 1 && BufName != '-MiniBufExplorer-')
+          if (g:miniBufExplShowOtherBuffers || (getbufvar(l:i, '&modifiable') == 1 && BufName != '-MiniBufExplorer-'))
           "" BUG: :bn and :bp visit modifiable buffers, so until I can prevent
           "" that, I want them displayed in the list, otherwise the list is
           "" confusing!
-          if (BufName != '-MiniBufExplorer-')
-            
+          " if (BufName != '-MiniBufExplorer-')
+
+          "" My last use-case issue was :cwindow being in the buffer list but
+          "" not displayed.
+          "" This is only true when :clist is current being displayed in an existing window.
+
             " Get filename & Remove []'s & ()'s
             let l:shortBufName = fnamemodify(l:BufName, ":t")                  
             let l:shortBufName = substitute(l:shortBufName, '[][()]', '', 'g') 
             " let l:tab = '['.l:i.':'.l:shortBufName.']'
             " let l:tab = '['.l:shortBufName.']'
             let l:tab = l:shortBufName
+
+            if l:tab == ""
+                let l:tab = "___"
+            endif
 
             let l:tabEdges = '| ' . l:tab . ' '
             " If the buffer is open in a window mark it
@@ -1181,7 +1198,7 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
   if exists('g:loaded_taglist')
     let l:line = l:line . "[Tags] "
   endif
-  let l:line = l:line . '[Wrap] [Fold] ' . l:fileNames . "| [X]"
+  let l:line = l:line . '[Wrap] [Fold] [Term] ' . l:fileNames . "| [X]"
   "" [Wrap] toggles dsplayed line-wrapping (:set wrap/nowrap)
   "" but it should probably be an option in the [View menu]?
   "" Let users reconfigure toolbars+buttons.
@@ -1553,6 +1570,14 @@ function! <SID>MBESelectBuffer()
         wincmd p
         set nofoldenable
         set fdc=0
+      endif
+    elseif word == "Term"
+      if exists(':ConqueTermSplit')
+        " exec "ConqueTermSplit bash"
+        exec "ConqueTermSplit zsh"
+        "" Joey's preference is zsh
+      elseif exists(":vimshell")
+        exec "vimshell"
       endif
     elseif word == "X"
       " exec "bwipeout"

@@ -21,8 +21,6 @@ map <F8> 0xj^
 " C "changes word under cursor" (replaces "change to end of line", c$)
 nmap C \ bcw
 
-nmap <C-X>x :vnew \| vimshell bash<CR>
-
 "" Various failed shortcuts for the 'follow link' command.
 " map <C-Enter> <C-]>
 " map <C-.> <C-]>
@@ -115,12 +113,13 @@ inoremap <S-Insert> <Esc>"*pa
 " nnoremap Od h
 " nnoremap Oc l
 
+nmap <C-X>x :vnew \| vimshell bash<CR>
+
 "" Quick access to ConqueTerm
 :nnoremap <C-x> :ConqueTermSplit zsh<Enter>
 :inoremap <C-x> <Esc>:echo "Hello"<Enter>
 " :inoremap <C-x> <Esc>:bdel<Enter>
-"" And my ConqueTerm settings:
-let g:ConqueTerm_ReadUnfocused = 1
+"" My ConqueTerm settings live in ~/.vimrc
 
 "" I want :q to close the buffer, not the window.
 "" Unfortunately this does not quit Vim if we are on the last buffer.
@@ -129,7 +128,7 @@ let g:ConqueTerm_ReadUnfocused = 1
 "" Meh turns out I don't always want to close the buffer.  I often use :q just
 "" to close an extra window I no longer want.
 
-"" Step through cope list (errors/search results) with Ctrl+N/P
+"" Step through quickfix list (errors/search results) with Ctrl+N/P
 :nnoremap <C-n> :cnext<Enter>
 :nnoremap <C-p> :cprev<Enter>
 "" =/- get overriden by fold keymaps :P

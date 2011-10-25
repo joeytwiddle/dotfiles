@@ -4,6 +4,12 @@
 
 " == Vim Options ==
 
+"" If you need to fix backspace, try one of these:
+" :fixdel
+" :set t_kD=^V<Delete>
+" :!echo "keycode 14 = BackSpace" | loadkeys
+"" All from the manual: :h :fixdel
+
 "" See help for 'statusline' and %{eval_expr}
 " :set titlestring=[VIM]\ %m\ %F
 "" Had to use BufEnter to act after other plugins using BufEnter!
@@ -11,8 +17,17 @@
 " :auto BufEnter * set titlestring=(VIM)\ %m\ %F
 " :auto BufEnter * set titlestring=(VIM)\ %q%w%m\ %F\ %a
 " :auto BufEnter * set titlestring=[VIM]\ %q%w%m\ %F\ %y\ %a
-:set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ %a%)
-:auto BufEnter * set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ %a%)
+"" This number does not increase if we flip through with :bn instead of :n
+" :set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ %a%)
+" :auto BufEnter * set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ %a%)
+"" OTOH, it is pretty darn useful to see the arg count even if the buffer number is wrong.
+"" Inaccurate but interesting:
+" :auto BufEnter * set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ (%n/%{bufnr('$')})%)
+" :auto BufEnter * set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ (%n/%{argc()})%)
+"" Accurate:
+:auto BufEnter * set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ (%{bufnr('$')}\ buffers)%)
+"" Percentage through file instead:
+" :auto BufEnter * set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ [%P]%)
 
 " if has("gui_kde")
 " 	set guifont=Courier\ 10\ Pitch/10/-1/5/50/0/0/0/1/0
@@ -39,14 +54,13 @@
 " :set guifont=Monospace\ 8
 "" Good for Gentoo, missing on Debian:
 " :set guifont=LucidaTypewriter\ 8
-"" Nice small font (similar to clean at this size) Works on Debian
+"" Nice small font (a little bit like clean at this size) Works on Debian
 " :set guifont=DejaVu\ Sans\ Mono\ 7
 " :set guifont=Monospace\ 7
 "" Less tall:
 " :set guifont=Liberation\ Mono\ Bold\ 7
-"" Less tall again.  This is an MS TrueType/Screen font (Win98).
+"" Less tall again.  Looks like LucidaTypewriter, which is not visible on Debian.  (Semi-Condensed appears to be the same as the default!)
 " :set guifont=Lucida\ Console\ Semi-Condensed\ 7
-"" Shortest on Debian:
 :set guifont=Lucida\ Console\ Semi-Condensed\ 8
 "" Very small and clear; quite like Teletext font
 " :set guifont=MonteCarlo\ Fixed\ 12\ 11
@@ -77,12 +91,28 @@
 
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 
+" BUG TODO: Sometimes saves a file called session.vim in my .vim/plugins folder!
+"           In fact many folders under ~/.vim/ hold auto executing .vim scripts!
+" Sometimes I quit a vim session when I only really meant to quit the current
+" file.  These intercepts save a session file whenever quitting, so if I want
+" to get the vim session back I can just reload it!
 " When quitting vim in a hurry, save a brief cache of the session:
-" TODO BUG: If you cannot write the file (e.g. you piped to vi -) then these
-"           fail, and prevent the user from quitting!
-nnoremap :q<Enter> :mksession! ~/last_session.vim<Enter>:qa<Enter>
-nnoremap :qa<Enter> :mksession! ~/last_session.vim<Enter>:qa<Enter>
-nnoremap :qa!<Enter> :mksession! ~/last_session.vim<Enter>:qa<Enter>
+" FIXED I HOPE: If you cannot write the file (e.g. you piped to vi -) then these
+"               fail, and prevent the user from quitting!
+"        FIXED: Actually I think that may have been because :qa! mapped only to :qa
+" WINDOWID is the closest we have to a unique session id for now.
+nnoremap :q<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:q<Enter>
+nnoremap :qa<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:qa<Enter>
+nnoremap :qa!<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:qa!<Enter>
+nnoremap :wq<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:wq<Enter>
+nnoremap :wqa<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:wqa<Enter>
+nnoremap :wqa!<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:wqa!<Enter>
+" If you need to avoid using these, just do ::wqa
+" TODO: I also want this to run if I close Vim accidentally, e.g. with Ctrl-w c
+" TODO: Put the above in a loop.
+
+" Can't be set here.  Needs to be set late!
+" :set winheight 40
 
 
 
@@ -94,17 +124,24 @@ let g:miniBufExplorerMoreThanOne = 1
 let g:miniBufExplMaxHeight = 6
 " let g:miniBufExplMapWindowNavVim = 1
 let g:miniBufExplMapWindowNavArrows = 1  " or use version in joeykeymap.vim
-" Can't be set here.  Needs to be set late!
-" :set winheight 40
 let g:miniBufExplUseSingleClick = 1
+" let g:miniBufExplShowUnlistedBuffers = 1
+let g:miniBufExplShowOtherBuffers = 1
+" let g:miniBufExplorerDebugLevel = 5
 
 let g:treeExplVertical = 1
 let g:treeExplWinSize = 24
 " let g:treeExplAutoClose = 0
 
-let g:ConqueTerm_Color = 1
-
 " dammit these two don't work together!
 let g:hiline = 0
 let g:hiword = 1
+
+let g:Grep_OpenQuickfixWindow = 1
+
+let g:ConqueTerm_Color = 1
+let g:ConqueTerm_CloseOnEnd = 1
+" We may want to disable this unless we can restore previous mode when we leave again.
+let g:ConqueTerm_InsertOnEnter = 1
+let g:ConqueTerm_ReadUnfocused = 1
 

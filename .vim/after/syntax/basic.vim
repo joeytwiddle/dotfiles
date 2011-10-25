@@ -29,7 +29,7 @@ exec "set comments=" . &comments . ",:REM,:;;,:;"
 " syntax region basFunc start="\<DEF PROC" end="\<ENDPROC\>" transparent fold
 " syntax clear basicMathsOperator   " basicMathsOperator breaks the next rule =/
 " syntax region basFunc start="\<DEF FN" end="^\s*=" transparent fold
-" syntax region basFunc start="^\s*\<FOR\>" end="\<NEXT\>" transparent fold   " QBasic has statement "OPEN file FOR INPUT"
+" syntax region basFunc start="^\s*\<FOR\>" end="\<NEXT\>" transparent fold   " Beware: QBasic has statement "OPEN file FOR INPUT"
 " " QBasic
 " syntax region basFunc start="^\s*\<SUB\>" end="^\s*\<END SUB\>" transparent fold
 " syntax region basFunc start="^\s*\<FUNCTION\>" end="^\s*\<END FUNCTION\>" transparent fold
@@ -38,7 +38,7 @@ exec "set comments=" . &comments . ",:REM,:;;,:;"
 
 let syntax_tmp="basic"
 unlet b:current_syntax
-source /usr/share/vim/vim71/syntax/a65.vim
+source $VIMRUNTIME/syntax/a65.vim
 let b:current_syntax=syntax_tmp
 unlet syntax_tmp
 
