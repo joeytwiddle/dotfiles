@@ -685,11 +685,18 @@ function! <SID>StartExplorer(sticky, delBufNum)
     " syn match MBEVisibleChanged     '\[[^\]]*\]\*+'
     syn match MBEButton             '\[[^]]*\]'
     syn match MBEButtonRed          '\[X\]'     " This works altho the previous could have matched it.  Later definitions take priority?
-    syn match MBEGap                '\(|\|  *\)'
-    syn match MBENormal             ' [^ *+|[\]]* '
-    syn match MBEChanged            ' [^ *+|]*+ '
-    syn match MBEVisibleNormal      '|* [^ *+|]*\* |*'
-    syn match MBEVisibleChanged     '|* [^ *+|]*\*+ |*'
+    " OLD, mostly worked but did not allow spaces:
+    "syn match MBEGap                '\(|\|  *\)'
+    "syn match MBENormal             ' [^ *+|[\]]* '
+    "syn match MBEChanged            ' [^ *+|]*+ '
+    "syn match MBEVisibleNormal      '|* [^ *+|]*\* |*'
+    "syn match MBEVisibleChanged     '|* [^ *+|]*\*+ |*'
+    syn match MBEGap                '|'
+    syn match MBENormal             ' [^*+|[\]]* *'
+    syn match MBEChanged            ' [^*+|]*+ *'
+    syn match MBEVisibleNormal      '|* [^*+|]*\* *|*'
+    syn match MBEVisibleChanged     '|* [^*+|]*\*+ *|*'
+
 
     " if !exists("g:did_minibufexplorer_syntax_inits")
       let g:did_minibufexplorer_syntax_inits = 1

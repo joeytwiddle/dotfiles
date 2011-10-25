@@ -1,8 +1,16 @@
 " ToggleMaximize v1.0
 
-" BUGS: Does not restore the originally shape of the layout entirely, e.g.
+" BUG: Does not restore the originally shape of the layout entirely, e.g.
 " windows open on the left of this one tend to remain squashed.
 
+" BUG: It restores the size of the current window, if you have changed to a
+" different window, that is the one it will restore.
+
+" BUG: If the user changes the size of the windows after maximizing, the
+" script still thinks the toggle is ON, so next time it is used it will
+" restore, rather than re-maximize.
+
+" == Options ==
 if !exists("g:ToggleMaximizeVertically")
 	let g:ToggleMaximizeVertically = 1
 endif
@@ -13,9 +21,6 @@ endif
 let s:isToggledVertically = 0
 let s:oldHeight = -1
 let s:oldwinheight = -1
-let s:isToggledHorizontally = 0
-let s:oldWidth = -1
-let s:oldwinwidth = -1
 
 function! ToggleMaximizeVertically()
 	if s:isToggledVertically == 0
@@ -29,6 +34,10 @@ function! ToggleMaximizeVertically()
 		let s:isToggledVertically = 0
 	endif
 endfunction
+
+let s:isToggledHorizontally = 0
+let s:oldWidth = -1
+let s:oldwinwidth = -1
 
 function! ToggleMaximizeHorizontally()
 	if s:isToggledHorizontally == 0
@@ -44,23 +53,22 @@ function! ToggleMaximizeHorizontally()
 endfunction
 
 function! ToggleMaximize()
-
 	if g:ToggleMaximizeVertically
 		call ToggleMaximizeVertically()
 	endif
-
 	if g:ToggleMaximizeHorizontally
 		call ToggleMaximizeHorizontally()
 	endif
-
 endfunction
+
+" == Keymaps ==
 
 noremap <C-F> :call ToggleMaximize()<Enter>
 inoremap <C-F> <Esc>:call ToggleMaximize()<Enter>a
-" noremap <C-G> :call ToggleMaximize()<Enter>
-" inoremap <C-G> <Esc>:call ToggleMaximize()<Enter>a
 noremap <C-\> :call ToggleMaximize()<Enter>
 inoremap <C-\> <Esc>:call ToggleMaximize()<Enter>a
+" noremap <C-G> :call ToggleMaximize()<Enter>
+" inoremap <C-G> <Esc>:call ToggleMaximize()<Enter>a
 " noremap <C-Z> :call ToggleMaximize()<Enter>
 " inoremap <C-Z> <Esc>:call ToggleMaximize()<Enter>a
 

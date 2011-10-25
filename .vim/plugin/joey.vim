@@ -82,7 +82,9 @@
 	if exists("+breakindent")
 		:set breakindent
 		:set showbreak=\\\ 
-		:set wrap
+		"" I would do this if it wasn't buggy (throwing errors)!
+		" :set wrap
+		"" For now, I leave it disabled until I need it.
 	endif
 
 	" My term font is LucidaTypewriter which is quite thick, so I only want bold in the GUI.
