@@ -1,14 +1,17 @@
-" ToggleMaximize v1.0
+" ToggleMaximize v1.1
 
-" BUG: Does not restore the originally shape of the layout entirely, e.g.
+" TACKLING: Does not restore the originally shape of the layout entirely, e.g.
 " windows open on the left of this one tend to remain squashed.
 
-" BUG: It restores the size of the current window, if you have changed to a
-" different window, that is the one it will restore.
+" Now it tries pretty hard to restore the windows to their previous sizes.
+" Unfortunately, telling all the windows in order what size they should be
+" does not always result in the original layout.  Sometimes later windows
+" resize earlier ones when their command is seen.  (E.g. layout 1,3,1.)
+" Ooh somehow the "final check" fixed 1,3,1!
 
-" BUG: If the user changes the size of the windows after maximizing, the
-" script still thinks the toggle is ON, so next time it is used it will
-" restore, rather than re-maximize.
+" BUG/FEATURE: Unlike a modern X window manager, if the user changes the size
+" of any windows after maximizing, the script still thinks the toggle is ON,
+" so next time it is used it will restore, rather than re-maximize.
 
 " == Options ==
 if !exists("g:ToggleMaximizeVertically")
@@ -24,13 +27,11 @@ let s:oldwinheight = -1
 
 function! ToggleMaximizeVertically()
 	if s:isToggledVertically == 0
-		let s:oldHeight = winheight(0)
-		let s:oldwinheight = &winheight
-		exec "set winheight=9999"
+		" let s:oldHeight = winheight(0)
 		let s:isToggledVertically = 1
+		resize 9999
 	else
-		exec "set winheight=".s:oldwinheight
-		exec "resize ".s:oldHeight
+		" exec "resize ".s:oldHeight
 		let s:isToggledVertically = 0
 	endif
 endfunction
@@ -41,23 +42,61 @@ let s:oldwinwidth = -1
 
 function! ToggleMaximizeHorizontally()
 	if s:isToggledHorizontally == 0
-		let s:oldWidth = winwidth(0)
-		let s:oldwinwidth = &winwidth
-		exec "set winwidth=9999"
+		" let s:oldWidth = winwidth(0)
 		let s:isToggledHorizontally = 1
+		vertical resize 9999
 	else
-		exec "set winwidth=".s:oldwinwidth
-		exec "vertical resize ".s:oldWidth
+		" exec "vertical resize ".s:oldWidth
 		let s:isToggledHorizontally = 0
 	endif
 endfunction
 
 function! ToggleMaximize()
+	if s:isToggledHorizontally == 0 && s:isToggledVertically == 0
+		call StoreLayout()
+	endif
 	if g:ToggleMaximizeVertically
 		call ToggleMaximizeVertically()
 	endif
 	if g:ToggleMaximizeHorizontally
 		call ToggleMaximizeHorizontally()
+	endif
+	if s:isToggledHorizontally == 0 && s:isToggledVertically == 0
+		call RestoreLayout()
+	endif
+endfunction
+
+" New technique to restore layout accurately when un-maximizing.
+function! StoreLayout()
+	let l:winnr = winnr()
+	windo exec "call WinStoreLayout()"
+	exec l:winnr." wincmd w"
+endfunction
+
+function! RestoreLayout()
+	let l:winnr = winnr()
+	windo exec "call WinRestoreLayout()"
+	exec l:winnr." wincmd w"
+	" This is the most important window, so let's give him a final check:
+	call WinRestoreLayout()
+endfunction
+
+function! WinStoreLayout()
+	let w:oldWidth = winwidth(0)
+	let w:oldHeight = winheight(0)
+endfunction
+
+function! WinRestoreLayout()
+	" echo "Doing resize to ".w:oldWidth."x".w:oldHeight." for win number ".winnr()." aka ".bufname('%')
+	if exists("w:oldWidth")
+		exec "vertical resize ".w:oldWidth
+		" exec "setlocal winwidth=".w:oldWidth
+		" exec "setlocal winminwidth=".w:oldWidth
+	endif
+	if exists("w:oldHeight")
+		exec "resize ".w:oldHeight
+		" exec "setlocal winheight=".w:oldHeight
+		" exec "setlocal winminheight=".w:oldHeight
 	endif
 endfunction
 
