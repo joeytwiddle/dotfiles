@@ -85,6 +85,8 @@ inoremap <C-Up> <Esc><C-w>ka
 inoremap <C-Down> <Esc><C-w>ja
 inoremap <C-Left> <Esc><C-w>ha
 inoremap <C-Right> <Esc><C-w>la
+"" Except in ConqueTerm I don't neccessarily want to return to Insert mode,
+"" if I was not in Insert mode before I entered ConqueTerm.
 
 "" Close the current window on Ctrl-W (like browser tabs).
 "" This overrides a lot of C-w defaults.  Really I want to wait and see if
