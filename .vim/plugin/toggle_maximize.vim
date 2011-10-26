@@ -9,6 +9,14 @@
 " resize earlier ones when their command is seen.  (E.g. layout 1,3,1.)
 " Ooh somehow the "final check" fixed 1,3,1!
 
+" I have restored the code to toggle only horizontally or vertically, but...
+" 
+" Layout restoration only works when resizing both horizontally and vertically
+" at the same time.  Layout may not restore correctly if only toggling
+" horizontally or vertically.
+" 
+" And also, this has broken the normal dual-axis toggle restoration!
+
 " BUG/FEATURE: Unlike a modern X window manager, if the user changes the size
 " of any windows after maximizing, the script still thinks the toggle is ON,
 " so next time it is used it will restore, rather than re-maximize.
@@ -23,30 +31,28 @@ endif
 
 let s:isToggledVertically = 0
 let s:oldHeight = -1
-let s:oldwinheight = -1
 
 function! ToggleMaximizeVertically()
 	if s:isToggledVertically == 0
-		" let s:oldHeight = winheight(0)
+		let s:oldHeight = winheight(0)
 		let s:isToggledVertically = 1
 		resize 9999
 	else
-		" exec "resize ".s:oldHeight
+		exec "resize ".s:oldHeight
 		let s:isToggledVertically = 0
 	endif
 endfunction
 
 let s:isToggledHorizontally = 0
 let s:oldWidth = -1
-let s:oldwinwidth = -1
 
 function! ToggleMaximizeHorizontally()
 	if s:isToggledHorizontally == 0
-		" let s:oldWidth = winwidth(0)
+		let s:oldWidth = winwidth(0)
 		let s:isToggledHorizontally = 1
 		vertical resize 9999
 	else
-		" exec "vertical resize ".s:oldWidth
+		exec "vertical resize ".s:oldWidth
 		let s:isToggledHorizontally = 0
 	endif
 endfunction
