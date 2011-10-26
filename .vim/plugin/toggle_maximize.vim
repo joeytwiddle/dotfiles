@@ -20,25 +20,23 @@
 " of any windows after maximizing, the script still thinks the toggle is ON,
 " so next time it is used it will restore, rather than re-maximize.
 
-" == Options ==
-if !exists("g:ToggleMaximizeVertically")
-	let g:ToggleMaximizeVertically = 1
-endif
-if !exists("g:ToggleMaximizeHorizontally")
-	let g:ToggleMaximizeHorizontally = 1
-endif
-
 let s:isToggledVertically = 0
 let s:oldHeight = -1
 let s:oldwinheight = -1
 
+function! s:WinDo(expr)
+	let l:winnr = winnr()
+	windo exec a:expr
+	exec l:winnr." wincmd w"
+endfunction
+
 function! ToggleMaximizeVertically()
 	if s:isToggledVertically == 0
-		" let s:oldHeight = winheight(0)
+		call s:WinDo("call WinStoreHeight()")
 		let s:isToggledVertically = 1
 		resize 9999
 	else
-		" exec "resize ".s:oldHeight
+		call s:WinDo("call WinRestoreHeight()")
 		let s:isToggledVertically = 0
 	endif
 endfunction
@@ -49,66 +47,73 @@ let s:oldwinwidth = -1
 
 function! ToggleMaximizeHorizontally()
 	if s:isToggledHorizontally == 0
-		" let s:oldWidth = winwidth(0)
+		call s:WinDo("call WinStoreWidth()")
 		let s:isToggledHorizontally = 1
 		vertical resize 9999
 	else
-		" exec "vertical resize ".s:oldWidth
+		call s:WinDo("call WinRestoreWidth()")
 		let s:isToggledHorizontally = 0
 	endif
 endfunction
 
 function! ToggleMaximize()
-	if s:isToggledHorizontally == 0 && s:isToggledVertically == 0
-		call StoreLayout()
-	endif
-	if g:ToggleMaximizeVertically
-		call ToggleMaximizeVertically()
-	endif
-	if g:ToggleMaximizeHorizontally
-		call ToggleMaximizeHorizontally()
-	endif
-	if s:isToggledHorizontally == 0 && s:isToggledVertically == 0
-		call RestoreLayout()
-	endif
+	" if s:isToggledHorizontally == 0 && s:isToggledVertically == 0
+		" call StoreLayout()
+	" endif
+	call ToggleMaximizeVertically()
+	call ToggleMaximizeHorizontally()
+	" if s:isToggledHorizontally == 0 && s:isToggledVertically == 0
+		" call RestoreLayout()
+	" endif
 endfunction
 
 " New technique to restore layout accurately when un-maximizing.
 function! StoreLayout()
-	let l:winnr = winnr()
-	windo exec "call WinStoreLayout()"
-	exec l:winnr." wincmd w"
+	" let l:winnr = winnr()
+	" windo exec "call WinStoreHeight()"
+	" windo exec "call WinStoreWidth()"
+	" exec l:winnr." wincmd w"
+	call s:WinDo("call WinStoreHeight()")
+	call s:WinDo("call WinStoreWidth()")
 endfunction
 
-function! RestoreLayout()
-	" When we resize one window, We do not have much control over which side
-	" moves, and what other windows expand or shrink as a result.
-	let l:winnr = winnr()
-	windo exec "call WinRestoreLayout()"
-	" Running it twice can help!
-	" That fixed a complex 1, 1[1,2,1,1,1]1, 1, 1 layout!
-	windo exec "call WinRestoreLayout()"
-	exec l:winnr." wincmd w"
-	" This is the most important window, so let's give him a final check:
-	call WinRestoreLayout()
-endfunction
-
-function! WinStoreLayout()
+function! WinStoreWidth()
 	let w:oldWidth = winwidth(0)
+endfunction
+function! WinStoreHeight()
 	let w:oldHeight = winheight(0)
 endfunction
 
-function! WinRestoreLayout()
-	" echo "Doing resize to ".w:oldWidth."x".w:oldHeight." for win number ".winnr()." aka ".bufname('%')
+function! RestoreLayout()
+	"" When we resize one window, We do not have much control over which side
+	"" moves, and what other windows expand or shrink as a result.
+	" let l:winnr = winnr()
+	" windo exec "call WinRestoreWidth()"
+	" windo exec "call WinRestoreHeight()"
+	call s:WinDo("call WinRestoreWidth()")
+	call s:WinDo("call WinRestoreHeight()")
+	"" So sometimes the above will leave a window crushed by others.
+	"" Running it a second time will often fix the layout if the first attempt
+	"" did not.
+	" windo exec "call WinRestoreWidth()"
+	" windo exec "call WinRestoreHeight()"
+	" exec l:winnr." wincmd w"
+	call s:WinDo("call WinRestoreWidth()")
+	call s:WinDo("call WinRestoreHeight()")
+	"" The focus window is the most important window, so let's give him a final check:
+	call WinRestoreWidth()
+	call WinRestoreHeight()
+endfunction
+
+function! WinRestoreWidth()
 	if exists("w:oldWidth")
 		exec "vertical resize ".w:oldWidth
-		" exec "setlocal winwidth=".w:oldWidth
-		" exec "setlocal winminwidth=".w:oldWidth
 	endif
+endfunction
+
+function! WinRestoreHeight()
 	if exists("w:oldHeight")
 		exec "resize ".w:oldHeight
-		" exec "setlocal winheight=".w:oldHeight
-		" exec "setlocal winminheight=".w:oldHeight
 	endif
 endfunction
 
