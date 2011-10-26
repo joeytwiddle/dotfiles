@@ -3,9 +3,23 @@
 
 "" Invalid:
 " set listchars=&listchars,trail:\ 
-"" Does not work due to all the \s
-" exec "set listchars=".&listchars.",trail:\ "
 
-set listchars=trail:\ 
-" set listchars=trail:\ ,tab:>-
+"" Does not work due to all the \s
+" exec "setlocal listchars=".&listchars.",trail:\ "
+
+setlocal listchars=trail:\ 
+
+" setlocal listchars=trail:\ ,tab:>-
+
+" Override Joey's defaults, and do not return to insert mode when leaving
+" Conque from insert mode.
+" The behaviour I really want, is to retain the mode I was in when I last
+" entered Conque, and I have an Autocmd to save and restore this, which fires
+" when the mouse is used, but not when these keybinds are used!
+"inoremap <buffer> <C-Up> <Esc><C-w>k
+"inoremap <buffer> <C-Down> <Esc><C-w>j
+"inoremap <buffer> <C-Left> <Esc><C-w>h
+"inoremap <buffer> <C-Right> <Esc><C-w>l
+" Aha, I have a solution.  The Auto whatnot can set these key mappings up
+" appropriately!  :)
 

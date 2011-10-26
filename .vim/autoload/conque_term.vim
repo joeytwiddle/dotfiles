@@ -992,6 +992,23 @@ function! conque_term#on_focus(...) " {{{
     if g:ConqueTerm_InsertOnEnter == 1
         " echo "Storing insert = " . &insertmode
         let s:insertModeWhenEntered = &insertmode
+
+        " Rewrite Joey's window navigation keybinds, so they will restore the
+        " previous Insert/Normal mode when using them to leave Conque window.
+        if &insertmode
+          " BUG TODO: Does not work!
+          inoremap <C-Up> <Esc><C-w>ka
+          inoremap <C-Down> <Esc><C-w>ja
+          inoremap <C-Left> <Esc><C-w>ha
+          inoremap <C-Right> <Esc><C-w>la
+          " echo "Setting insert-on-exit"
+        else
+          inoremap <C-Up> <Esc><C-w>k
+          inoremap <C-Down> <Esc><C-w>j
+          inoremap <C-Left> <Esc><C-w>h
+          inoremap <C-Right> <Esc><C-w>l
+        endif
+
         startinsert!
     endif
 
