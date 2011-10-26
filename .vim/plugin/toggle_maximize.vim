@@ -1,4 +1,11 @@
 " ToggleMaximize v1.1
+"
+" Press Ctrl-F to maximize the size of the current window, press again to
+" restore the original window layout.
+"
+" Additional feature: If you mess up your layout and want to restore it to
+" something like what you had the last time you maximized, you can:
+"   :call RestoreLayout()
 
 " TACKLING: Does not restore the originally shape of the layout entirely, e.g.
 " windows open on the left of this one tend to remain squashed.
@@ -74,7 +81,12 @@ function! StoreLayout()
 endfunction
 
 function! RestoreLayout()
+	" When we resize one window, We do not have much control over which side
+	" moves, and what other windows expand or shrink as a result.
 	let l:winnr = winnr()
+	windo exec "call WinRestoreLayout()"
+	" Running it twice can help!
+	" That fixed a complex 1, 1[1,2,1,1,1]1, 1, 1 layout!
 	windo exec "call WinRestoreLayout()"
 	exec l:winnr." wincmd w"
 	" This is the most important window, so let's give him a final check:

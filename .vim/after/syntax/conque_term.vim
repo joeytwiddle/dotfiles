@@ -7,9 +7,12 @@
 "" Does not work due to all the \s
 " exec "setlocal listchars=".&listchars.",trail:\ "
 
-setlocal listchars=trail:\ 
-
+"" For some reason setlocal still affects everyone!
+" setlocal listchars=trail:\ 
 " setlocal listchars=trail:\ ,tab:>-
+
+"" This works:
+set listchars+=trail:\ 
 
 " Override Joey's defaults, and do not return to insert mode when leaving
 " Conque from insert mode.
