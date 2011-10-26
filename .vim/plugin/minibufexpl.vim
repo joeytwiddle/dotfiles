@@ -1480,6 +1480,8 @@ function! <SID>MBESelectBuffer()
 
   let l:word = expand("<cword>")
   let l:bufnr  = <SID>GetSelectedBuffer()
+  " NOTE: Unlike originally, bufnr is the number in the displayed list, NOT
+  " the actual buffernumber of the clicked buffer.
   let l:resize = 0
 
   " echo "GetSelectedBuffer returned " . l:bufnr
@@ -1488,9 +1490,11 @@ function! <SID>MBESelectBuffer()
 
     " -1 = dunno what hit - Can't do anything
 
-  elseif (l:bufnr<=0 || l:bufnr>=bufnr("$"))
+  " elseif (l:bufnr<=0 || l:bufnr>=bufnr("$"))
+  elseif (l:bufnr<=0 || l:bufnr>len(g:miniBufExplBufNumbers))
 
-    " 0 = user clicked before the buffers, perhaps on a button
+    " 0 means user clicked before the buffers, perhaps on a button
+    " >len means user clicked after the last buffer in the list
 
     "" I don't think any of this matters :P
     " " Problem: we have already moved off the cursor word (due to y0 earlier?)
@@ -1598,10 +1602,13 @@ function! <SID>MBESelectBuffer()
       " exec "bwipeout"
       " wincmd c
       exec "wincmd p"
+      " let l:delBufNum = bufnr('%')
       exec "bdel"
-      "" TODO: Now we should cause miniBufExplorerAutoUpdate
-      "" TESTING:
-      call <SID>DisplayBuffers(-1)
+      "" This works fine when g:miniBufExplShowOtherBuffers == 0.
+      call <SID>DisplayBuffers(-1)   " not clearing the entry from the yet!
+      " Presumably we are supposed to pass the delBufNum but why do we even
+      " need to do that?  :P
+      " call <SID>DisplayBuffers(l:delBufNum)
     else
       echo "No command for bufnr=" . l:bufnr
     endif
@@ -1611,7 +1618,7 @@ function! <SID>MBESelectBuffer()
 
     " We have the number of the buffer in the current list, but what is its
     " real buffer number?
-    let l:bufnr = g:miniBufExplBufNumbers[l:bufnr]
+    let l:bufnr = g:miniBufExplBufNumbers[l:bufnr-1]
 
     let l:saveAutoUpdate = g:miniBufExplorerAutoUpdate
     let g:miniBufExplorerAutoUpdate = 0
@@ -1688,6 +1695,7 @@ function! <SID>MBEDeleteBuffer()
   let l:curLine    = line('.')
   let l:curCol     = virtcol('.')
   let l:selBuf     = <SID>GetSelectedBuffer()
+  let l:selBufName = g:miniBufExplBufNumbers[l:selBuf-1]
   let l:selBufName = bufname(l:selBuf)
 
   if l:selBufName == 'MiniBufExplorer.DBG' && g:miniBufExplorerDebugLevel > 0
