@@ -80,7 +80,7 @@ function! s:CheckBestWindow()
       if exists("w:lastUsed")
         let s:bestScore = w:lastUsed
       endif
-      let s:bestWin = curWin
+      let s:bestWin = l:curWin
     endif
   endif
 endfunction
