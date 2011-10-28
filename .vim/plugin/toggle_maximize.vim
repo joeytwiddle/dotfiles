@@ -1,47 +1,63 @@
-" ToggleMaximize v1.2.1 by joey.neuralyte.org
+" ToggleMaximize v1.2.2 by joey.neuralyte.org
+"
+" Vim can support complex window layouts, but they can put users off because
+" they reduce the size of the main editing window.  ToggleMaximize addresses
+" this issue, by allowing the user to switch between a large editor window,
+" and his own complex window layout.
 "
 " Press Ctrl-F or Ctrl-\ to maximize the size of the current window, press
 " again to restore the original window layout.
 "
 " Ctrl-V and Ctrl-H toggle maximize in horizontal/vertical direction only.
 "
-" Maximization respects the winminwidth and winminheight of other windows.
+" Maximization is forced to respect winminwidth and winminheight, so if you
+" have these set, other windows will not fully shrink to the edges.
 "
-" Additional feature: If you mess up your layout and want to restore it to
-" something like what you had the last time you maximized, you can:
-"   :call RestoreLayout()
-
+" FEATURE: If you mess up your layout and want to restore it to something like
+" what you had the last time you maximized, you can :call RestoreLayout()
+"
 " FEATURE: If the user changes the size of any windows after maximizing, the
 " script still thinks the toggle is ON, so next time it is used it will
-" restore, rather than re-maximize.
+" restore your old layout, rather than re-maximize.  (To force your new layout
+" to be adopted, you could :call StoreLayout() and then reset the toggle.)
+
+" CONSIDER: Arguably a better solution would be for "maximization" to simply
+" load a new tab with the current buffer, and for "restoration" to close it
+" and return to the previous tab.  Unfortunately that approach may conflict
+" with MiniBufExplorer, and naturally it would not support independent
+" vertical and horizontal maximizing.
 
 " ISSUES: We had problems accurately restoring the window layout, because
-" windows would interfere with each other while we were restoring their
-" settings.  Hopefully WinDoBothWays() has fixed this in most cases.
+" windows would interfere with each other while we were restoring their sizes.
+" It seems WinDoBothWays() has overcome this.
 
-" BUG: Frequently restores windows which were height 0 with height winheight,
+" BUG: Frequently restores windows which were height 0 with height &winheight,
 " (and likewise for width) due to the fact that they are visited by windo, and
 " resize 0 does nothing on the window you occupy!
-" Presumably most earlier versions had this issue also?
-" Gawd I suppose in the long term we could somehow mark windows which were
-" height 0 and try not to revisit them when restoring, hoping the other
-" windows will keep them as small as they should be!
+" Presumably most earlier versions also had this issue.
+" Any workarounds for this?  If we could record which windows which were
+" height 0, we could simply skip visiting them when restoring.  But a window
+" is never size 0 when we are actually in it, which is the only time we can
+" check its size?!
 
-" TOTEST: Large values of winwidth/height may cause problems restoring layout.
+" TOTEST: Can large values of winwidth/height cause problems restoring layout?
+
+" TODO: The user may like us to temporarily set high values for
+" winheight/width during maximization, so that the focused window stays
+" maximized if they switch between windows, but settings will be normal when
+" they restore to preferred layout.
 
 let s:isToggledVertically = 0
 let s:isToggledHorizontally = 0
 
 function! ToggleMaximize()
-	" We can't call them directly, because they both use windo to collect info,
-	" the second one may re-expand vertically windows we have hidden already
-	" squished!
-	" OK so solution: do horizontal first?
+  " We can't just call the function for each axis in turn, because they both
+  " use windo to collect data.  The second one may re-expand windows which the
+  " first one shrank!
 	"call ToggleMaximizeHorizontally()
 	"call ToggleMaximizeVertically()
-	" This will sometimes leave a 1-char wide (or &winwidth) window, which
-	" should have been 0, usually on the left side.
-	" To avoid it entirely, we should do our own WinDos here
+  " The following implementation avoids this by collecting info before
+  " resizing.
 
 	if s:isToggledVertically == 1 && s:isToggledHorizontally == 1
 		" If both axes are maximized, we restore layout
@@ -169,22 +185,22 @@ endfunction
 
 " == Keymaps ==
 
-noremap <C-F> :call ToggleMaximize()<Enter>
-inoremap <C-F> <Esc>:call ToggleMaximize()<Enter>a
-noremap <C-\> :call ToggleMaximize()<Enter>
-inoremap <C-\> <Esc>:call ToggleMaximize()<Enter>a
-"noremap <C-G> :call ToggleMaximize()<Enter>
-"inoremap <C-G> <Esc>:call ToggleMaximize()<Enter>a
-"noremap <C-Z> :call ToggleMaximize()<Enter>
-"inoremap <C-Z> <Esc>:call ToggleMaximize()<Enter>a
+noremap  <silent> <C-F> :call ToggleMaximize()<Enter>
+inoremap <silent> <C-F> <Esc>:call ToggleMaximize()<Enter>a
+noremap  <silent> <C-\> :call ToggleMaximize()<Enter>
+inoremap <silent> <C-\> <Esc>:call ToggleMaximize()<Enter>a
+"noremap  <silent> <C-G> :call ToggleMaximize()<Enter>
+"inoremap <silent> <C-G> <Esc>:call ToggleMaximize()<Enter>a
+"noremap  <silent> <C-Z> :call ToggleMaximize()<Enter>
+"inoremap <silent> <C-Z> <Esc>:call ToggleMaximize()<Enter>a
 
-noremap <C-V> :call ToggleMaximizeVertically()<Enter>
-noremap <C-H> :call ToggleMaximizeHorizontally()<Enter>
+noremap  <silent> <C-V> :call ToggleMaximizeVertically()<Enter>
+noremap  <silent> <C-H> :call ToggleMaximizeHorizontally()<Enter>
 " We will not override Ctrl-V or Ctrl-H in Insert mode; Ctrl-V is too useful,
 " and Ctrl-H might be what some systems see when the user presses Backspace.
-"inoremap <C-V> <Esc>:call ToggleMaximizeVertically()<Enter>a
-"inoremap <C-H> <Esc>:call ToggleMaximizeHorizontally()<Enter>a
+"inoremap <silent> <C-V> <Esc>:call ToggleMaximizeVertically()<Enter>a
+"inoremap <silent> <C-H> <Esc>:call ToggleMaximizeHorizontally()<Enter>a
 
 "" Does not work:
-"noremap <C-Enter> :call ToggleMaximize()<Enter>
+"noremap <silent> <C-Enter> :call ToggleMaximize()<Enter>
 
