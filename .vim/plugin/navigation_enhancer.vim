@@ -11,7 +11,16 @@
 "
 " ISSUES: The side-effects of windo are undesirable.  To avoid windo, we could
 " lazily maintain a script-global data structure representing which windows
-" may be reached from which others.
+" may be reached from which others.  Since we are mainly interesting in
+" following recent paths in reverse, we need not store every combination, but
+" only the most recent path out of a window in each direction.  When choosing
+" a path we should check that it still exists, and also seriously consider the
+" default which Vim suggested if it is new!
+" In other words, we will simply store in each window the window we were on
+" before we came here, for each of the 4 directions.  And we will re-use that
+" window when leaving in that direction, if it is still valid.  (Hmm it is
+" valid if EITHER going that way takes us to it (in which case the plugin is
+" redundant), OR if we can come back from it the opposite way.)
 "
 " BUG: localtime() is only accurate to the second, which is occasionally too
 " coarse.
