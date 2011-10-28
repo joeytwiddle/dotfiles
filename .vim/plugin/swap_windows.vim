@@ -16,6 +16,14 @@ function! DoWindowSwap()
     let markedBuf = bufnr( "%" )
     "Hide and open so that we aren't prompted and keep history
     exe 'hide buf' curBuf
+
+    " PROBLEM: If the markedBuf was e.g. the cope list, this will cause it to
+    " be closed!  So we can't load it up again 3 lines down!
+    " One solution to this is to swap them the reverse way round!
+    " Another dirty solution might be to split the window before swapping,
+    " then close the split afterwards.  This would keep the fragile buffer
+    " always visible.
+
     "Switch to dest and shuffle source->dest
     exe curNum . "wincmd w"
     "Hide and open so that we aren't prompted and keep history

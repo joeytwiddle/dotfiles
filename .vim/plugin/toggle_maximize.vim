@@ -42,13 +42,17 @@
 
 " TOTEST: Can large values of winwidth/height cause problems restoring layout?
 
-" TODO: The user may like us to temporarily set high values for
+" DONE: The user may like us to temporarily set high values for
 " winheight/width during maximization, so that the focused window stays
 " maximized if they switch between windows, but settings will be normal when
-" they restore to preferred layout.
+" they restore to preferred layout.  (This is how the script originally worked
+" anyway, before :resize!)
 
 let s:isToggledVertically = 0
 let s:isToggledHorizontally = 0
+
+let s:oldwinwidth = -1
+let s:oldwinheight = -1
 
 function! ToggleMaximize()
   " We can't just call the function for each axis in turn, because they both
@@ -61,6 +65,8 @@ function! ToggleMaximize()
 
 	if s:isToggledVertically == 1 && s:isToggledHorizontally == 1
 		" If both axes are maximized, we restore layout
+    exec "set winwidth=".s:oldwinwidth
+    exec "set winheight=".s:oldwinheight
 		call s:WinDoBothWays("call WinRestoreHeight()")
 		call s:WinDoBothWays("call WinRestoreWidth()")
 		let s:isToggledVertically = 0
@@ -78,10 +84,14 @@ function! ToggleMaximize()
 
 		" Maximize
 		if s:isToggledVertically == 0
+      let s:oldwinheight = &winheight
+      set winheight=9999
 			let s:isToggledVertically = 1
 			resize 9999
 		endif
 		if s:isToggledHorizontally == 0
+      let s:oldwinwidth = &winwidth
+      set winwidth=9999
 			let s:isToggledHorizontally = 1
 			vertical resize 9999
 		endif
@@ -93,8 +103,11 @@ function! ToggleMaximizeVertically()
 	if s:isToggledVertically == 0
 		call s:WinDo("call WinStoreHeight()")
 		let s:isToggledVertically = 1
+    let s:oldwinheight = &winheight
+    set winheight=9999
 		resize 9999
 	else
+    exec "set winheight=".s:oldwinheight
 		call s:WinDoBothWays("call WinRestoreHeight()")
 		let s:isToggledVertically = 0
 	endif
@@ -104,8 +117,11 @@ function! ToggleMaximizeHorizontally()
 	if s:isToggledHorizontally == 0
 		call s:WinDo("call WinStoreWidth()")
 		let s:isToggledHorizontally = 1
+    let s:oldwinheight = &winheight
+    set winheight=9999
 		vertical resize 9999
 	else
+    exec "set winwidth=".s:oldwinwidth
 		call s:WinDoBothWays("call WinRestoreWidth()")
 		let s:isToggledHorizontally = 0
 	endif
