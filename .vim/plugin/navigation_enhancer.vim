@@ -1,4 +1,4 @@
-" Navigation Enhancer v1.0 by JoeyTwiddle
+" Navigation Enhancer v1.2 by joey.neuralyte.org
 "
 " When moving the cursor between windows, given a choice of target windows,
 " Vim uses the *cursor position* to choose the destination window.
@@ -8,42 +8,51 @@
 "
 " So now if I casually move between windows in one direction, and then in the
 " opposite direction, I should always return to the window I started from!
+"
+" ISSUES: The side-effects of windo are undesirable.  To avoid windo, we could
+" lazily maintain a script-global data structure representing which windows
+" may be reached from which others.
+"
+" BUG: localtime() is only accurate to the second, which is occasionally too
+" coarse.
 
 " Set up event listener to store lastUsed time when leaving a window
 " But do not update window visits when traversing windows for app purposes!
-let s:updateTimes = 1
-auto BufLeave * if s:updateTimes | let w:lastUsed = localtime() | endif
+let g:updateTimes = 1   " This was a s: but g: is better for development
+auto BufLeave * if g:updateTimes | let w:lastUsed = localtime() | endif
 " NOTE: Other scripts who traverse windows, (with or without windo, e.g.
 " toggle_maximize.vim) may freshen these times when we don't want them to!
+" To work around this, perhaps we could update only when we detect movement
+" through a keybind.
 
-"" Override Vim's keymaps for window navigation
-noremap  <C-W><Up>      :call SeekBestWindow("k","j")<Enter>
-inoremap <C-W><Up>      <Esc>:call SeekBestWindow("k","j")<Enter>a
-noremap  <C-W><Down>    :call SeekBestWindow("j","k")<Enter>
-inoremap <C-W><Down>    <Esc>:call SeekBestWindow("j","k")<Enter>a
-noremap  <C-W><C-Left>  :call SeekBestWindow("h","l")<Enter>
-inoremap <C-W><C-Left>  <Esc>:call SeekBestWindow("h","l")<Enter>a
-noremap  <C-W><C-Right> :call SeekBestWindow("l","h")<Enter>
-inoremap <C-W><C-Right> <Esc>:call SeekBestWindow("l","h")<Enter>a
+"" Override Vim's default keymaps for window navigation:
+" noremap  <silent> <C-W><Up>      :call SeekBestWindow("k","j")<Enter>
+" inoremap <silent> <C-W><Up>      <Esc>:call SeekBestWindow("k","j")<Enter>a
+" noremap  <silent> <C-W><Down>    :call SeekBestWindow("j","k")<Enter>
+" inoremap <silent> <C-W><Down>    <Esc>:call SeekBestWindow("j","k")<Enter>a
+" noremap  <silent> <C-W><C-Left>  :call SeekBestWindow("h","l")<Enter>
+" inoremap <silent> <C-W><C-Left>  <Esc>:call SeekBestWindow("h","l")<Enter>a
+" noremap  <silent> <C-W><C-Right> :call SeekBestWindow("l","h")<Enter>
+" inoremap <silent> <C-W><C-Right> <Esc>:call SeekBestWindow("l","h")<Enter>a
 
-"" Or use my preferred shortcuts:
-noremap  <C-Up>    :call SeekBestWindow("k","j")<Enter>
-inoremap <C-Up>    <Esc>:call SeekBestWindow("k","j")<Enter>a
-noremap  <C-Down>  :call SeekBestWindow("j","k")<Enter>
-inoremap <C-Down>  <Esc>:call SeekBestWindow("j","k")<Enter>a
-noremap  <C-Left>  :call SeekBestWindow("h","l")<Enter>
-inoremap <C-Left>  <Esc>:call SeekBestWindow("h","l")<Enter>a
-noremap  <C-Right> :call SeekBestWindow("l","h")<Enter>
-inoremap <C-Right> <Esc>:call SeekBestWindow("l","h")<Enter>a
+"" Or leave them unchanged, and use my preferred shortcuts:
+noremap  <silent> <C-Up>         :call <SID>SeekBestWindow("k","j")<Enter>
+inoremap <silent> <C-Up>    <Esc>:call <SID>SeekBestWindow("k","j")<Enter>a
+noremap  <silent> <C-Down>       :call <SID>SeekBestWindow("j","k")<Enter>
+inoremap <silent> <C-Down>  <Esc>:call <SID>SeekBestWindow("j","k")<Enter>a
+noremap  <silent> <C-Left>       :call <SID>SeekBestWindow("h","l")<Enter>
+inoremap <silent> <C-Left>  <Esc>:call <SID>SeekBestWindow("h","l")<Enter>a
+noremap  <silent> <C-Right>      :call <SID>SeekBestWindow("l","h")<Enter>
+inoremap <silent> <C-Right> <Esc>:call <SID>SeekBestWindow("l","h")<Enter>a
 
-function! SeekBestWindow(realDirection,reverseDirection)
+function! s:SeekBestWindow(realDirection,reverseDirection)
   " User has requested travel in realDirection, and reverseDirection should be
   " the opposite of that.
   " We want to find all candidate windows in that direction, and select the
   " most recently used.
   " We will search all windows for any which can reach the current window by
   " travelling in reverseDirection.
-  let s:updateTimes = 0
+  let g:updateTimes = 0
   try
     let s:startWin = winnr()
     let s:bestScore = 0
@@ -58,7 +67,7 @@ function! SeekBestWindow(realDirection,reverseDirection)
     " Return to start window, so we can properly fire its leave event
     exec s:startWin."wincmd w"
   finally
-    let s:updateTimes = 1
+    let g:updateTimes = 1
   endtry
   " echo "Best window was ".s:bestWin." with score ".s:bestScore
   exec s:bestWin."wincmd w"
@@ -71,15 +80,16 @@ function! s:CheckBestWindow()
   endif
   exec "wincmd ".s:direction
   let l:nowWin = winnr()
-  " Go straight back (so we can read lastUsed, may also help dumb traversal)
+  " Go straight back (windo needs this, and we can see w:lastUsed)
   exec l:curWin."wincmd w"
   if l:nowWin == s:startWin
-    " Then curWin is a candidate
+    " Then curWin is a candidate!
+    if !exists("w:lastUsed")
+      let w:lastUsed = 1   " Beats fallback 0
+    endif
     " echo "Window ".l:curWin." (".bufname('%').") goes to ".l:nowWin." (which has lastUsed=".w:lastUsed.")"
-    if s:bestScore==0 || (exists("w:lastUsed") && w:lastUsed > s:bestScore)
-      if exists("w:lastUsed")
-        let s:bestScore = w:lastUsed
-      endif
+    if w:lastUsed > s:bestScore
+      let s:bestScore = w:lastUsed
       let s:bestWin = l:curWin
     endif
   endif
