@@ -169,3 +169,13 @@ cnoremap <C-X> <C-W>
 " This is how my zsh does completion, and it rocks:
 set wildmode=longest:full,full
 
+" Resize windows with Ctrl-NumPadPlus/Minus/Divide/Times:
+nnoremap Om :resize -4<Enter>
+nnoremap Ok :resize +4<Enter>
+nnoremap Oo :vert resize -6<Enter>
+nnoremap Oj :vert resize +6<Enter>
+
+" A slight tweak on Vim's default:
+nnoremap <C-W>s :split<Enter>
+nnoremap <C-W>S :vsplit<Enter>
+
