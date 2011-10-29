@@ -4099,6 +4099,10 @@ endfunction
 " window. Used after entering a tab. If this is not done, then the folds
 " are not properly created for taglist windows displayed in multiple tabs.
 function! s:Tlist_Refresh_Folds()
+
+  " This function used to throw errors when it refreshes after :tabclose
+  try  
+  
     let winnum = bufwinnr(g:TagList_title)
     if winnum == -1
         return
@@ -4134,6 +4138,9 @@ function! s:Tlist_Refresh_Folds()
     endwhile
 
     exe save_wnum . 'wincmd w'
+
+  endtry
+
 endfunction
 
 function! s:Tlist_Menu_Add_Base_Menu()

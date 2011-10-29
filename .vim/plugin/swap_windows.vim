@@ -14,6 +14,14 @@ function! DoWindowSwap()
     "Switch to source and shuffle dest->source
     exe g:markedWinNum . "wincmd w"
     let markedBuf = bufnr( "%" )
+
+    " split
+    " if !&splitbelow
+      " wincmd j
+    " endif
+    " let tmpWin = winnr()
+    " wincmd k
+
     "Hide and open so that we aren't prompted and keep history
     exe 'hide buf' curBuf
 
