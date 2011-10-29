@@ -21,11 +21,17 @@
 " restore your old layout, rather than re-maximize.  (To force your new layout
 " to be adopted, you could :call StoreLayout() and then reset the toggle.)
 
+" IMPLEMENTATION: Maximizing a window is easy.  We can use :resize and :vert
+" resize, or we can set winheight/width.  But restoring the original layout is
+" harder!  To do this, we visit all windows before maximizing, and store their
+" dimensions.  Then when restoring we visit all windows again, this time using
+" the stored data to restore their dimensions.
+
 " CONSIDER: Arguably a better solution would be for "maximization" to simply
-" load a new tab with the current buffer, and for "restoration" to close it
-" and return to the previous tab.  Unfortunately that approach may conflict
-" with MiniBufExplorer, and naturally it would not support independent
-" vertical and horizontal maximizing.
+" open a new tab with the current buffer, and for "restoration" to close it
+" and return to the previous tab.  Unfortunately if MiniBufExplorer is
+" present, he may decide to add himself to the maximized tab.  Also this
+" approach cannot support independent vertical and horizontal maximizing.
 
 " ISSUES: We had problems accurately restoring the window layout, because
 " windows would interfere with each other while we were restoring their sizes.
