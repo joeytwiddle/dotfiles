@@ -1210,7 +1210,7 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
 
   " let l:fileNames = substitute(l:fileNames,' *$','','')
   let l:line = ''
-  if exists('g:vloaded_tree_explorer') || exists('g:loaded_nerd_tree') || exists('g:loaded_netrw')
+  if exists('g:vloaded_tree_explorer') || exists('g:loaded_nerd_tree') || exists('g:loaded_netrwPlugin') || exists("loaded_winfileexplorer")
     let l:line = l:line . "[File] "
   endif
   if exists('g:loaded_taglist')
@@ -1513,13 +1513,9 @@ function! <SID>MBESelectBuffer()
     " normal hEB""yE
 
     if word == "File"
-      if exists('g:loaded_netrw')
-        wincmd p
-        vsplit
-        exec "Explore"
-      elseif exists('g:vloaded_tree_explorer')
+      if exists('g:vloaded_tree_explorer')
 
-        if exists(':VSTreeExploreToggle') == 2
+        if exists(':VSTreeExploreToggle')
             wincmd p
             exec "VSTreeExploreToggle"
         else
@@ -1535,25 +1531,28 @@ function! <SID>MBESelectBuffer()
         "" actually want MiniBufExplorer to swallow the whole of the top.
         "" Look for MiniBufExplorer window, if it is visible
         " let l:winNum = bufwinnr(bufnr('-MiniBufExplorer-'))
-        " let l:winNum = <SID>FindWindow('-MiniBufExplorer-', 1)
-        " if l:winNum != -1
-            " "" Refocus MiniBufExplorer window
-            " " exec ":win ".l:winNum
-            " exec l:winNum.' wincmd w'
-            " "" This is dodgy but it seems to work often.  (Sometimes taglist ends up at the top)
-            " " exec "wincmd p"
-            " "" Push it to fill the top again (overriding whatever
-            " "" VSTreeExploreToggle did).  What we wanted to do.
-            " " wincmd K
-            " exec "wincmd K"
-            " " exec l:winNum." wincmd K"
-            " "" Refocus the newly spawned TreeExplorer
+        let l:winNum = <SID>FindWindow('-MiniBufExplorer-', 1)
+        if l:winNum != -1
+            "" Refocus MiniBufExplorer window
+            " exec ":win ".l:winNum
+            exec l:winNum.' wincmd w'
+            "" This is dodgy but it seems to work often.  (Sometimes taglist ends up at the top)
             " exec "wincmd p"
-        " endif
-        "" Hmmm alternatively I think we could have just done:
+            "" Push it to fill the top again (overriding whatever
+            "" VSTreeExploreToggle did).  What we wanted to do.
+            " wincmd K
+            exec "wincmd K"
+            " exec l:winNum." wincmd K"
+            "" Refocus the newly spawned TreeExplorer
+            exec "wincmd p"
+        endif
+        " Finally fix MBE's height
         :MiniBufExplorer
-        "" to force a refresh.  :P
 
+      elseif exists('g:loaded_netrwPlugin')
+        wincmd p
+        vsplit
+        exec "Explore"
       elseif exists('g:loaded_nerd_tree')
         wincmd p
         exec "NERDTree"
