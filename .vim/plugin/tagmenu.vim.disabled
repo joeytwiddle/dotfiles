@@ -88,6 +88,8 @@
 "
 " Disabled until i can stop it producing errors in Add_Tags_Menu().  (Editing
 " c/vim files.)
+" OK well last time I ran it, I got no errors but it was bloody slow, so still
+" disabled!
 finish
 " ****************** Do not modify after this line ************************
 if exists("loaded_tagmenu") || &cp

@@ -43,9 +43,9 @@
 " resize 0 does nothing on the window you occupy!
 " Presumably most earlier versions also had this issue.
 " Any workarounds for this?  If we could record which windows which were
-" height 0, we could simply skip visiting them when restoring.  But a window
-" is never size 0 when we are actually in it, which is the only time we can
-" check its size?!
+" height 0, we could simply skip visiting them when restoring.  Oh look
+" winheight() can accept a window number, so we can collect window size data
+" without ever visiting them!
 
 " TOTEST: Can large values of winwidth/height cause problems restoring layout?
 
