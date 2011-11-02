@@ -1,0 +1,19 @@
+## vim: comments=:##
+
+http://fluxbox-wiki.org/index.php?title=Editing_the_apps_file
+
+xprop WM_CLASS | cut -d \" -f 2
+# | xmessage -file - -center
+
+## Unfortunately I found the apps grouping feature often counter-productive,
+## because it likes to group with apps on other workspaces, so often I will
+## start an app and will not see the window appear!
+
+## It would be acceptable if the WM auto-switched to the window on it's secret
+## workspace.
+
+[group]
+ [app] (title=Manual: .*)
+  [Sticky]	{yes}
+[end]
+
