@@ -1,5 +1,5 @@
 [app] (name=xv) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{246 122}
+  [Position]	(UPPERLEFT)	{319 188}
   [Deco]	{NORMAL}
   [Sticky]	{yes}
   [Layer]	{2}
@@ -11,13 +11,13 @@
 [end]
 [app] (name=xmms) (class=Xmms)
   [Workspace]	{1}
-  [Position]	(UPPERLEFT)	{580 172}
+  [Position]	(UPPERLEFT)	{352 41}
   [Deco]	{NONE}
   [Layer]	{8}
   [Close]	{yes}
 [end]
 [app] (name=beebem) (class=beebem)
-  [Position]	(UPPERLEFT)	{322 185}
+  [Position]	(UPPERLEFT)	{5 247}
   [Close]	{yes}
 [end]
 [app] (name=glslideshow) (class=TopLevelShell)
@@ -37,8 +37,8 @@
   [Close]	{yes}
 [end]
 [app] (name=smplayer) (class=Smplayer)
-  [Dimensions]	{1091 510}
-  [Position]	(UPPERLEFT)	{62 136}
+  [Dimensions]	{1107 518}
+  [Position]	(UPPERLEFT)	{0 0}
   [Sticky]	{yes}
   [Layer]	{8}
   [Close]	{yes}
