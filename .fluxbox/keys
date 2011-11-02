@@ -77,8 +77,8 @@ OnWindowBorder Move1 :StartMoving
 ### ==NEW== Fixed versions!
 Mod1 Tab :NextWindow {groups} (Workspace=[current])
 Mod1 grave :PrevWindow {groups} (Workspace=[current])
-# Mod4 Tab :NextWindow {groups}
-# Mod4 grave :PrevWindow {groups}
+Mod4 Tab :NextWindow {groups}
+Mod4 grave :PrevWindow {groups}
 
 ## Move between windows using a Window List Menu
 # Control Tab :ClientMenu (Workspace=[current])
@@ -113,6 +113,8 @@ OnDesktop Mouse4 :PrevWorkspace 3
 OnDesktop Mouse5 :NextWorkspace 3
 OnDesktop Shift Mouse4 :PrevWorkspace
 OnDesktop Shift Mouse5 :NextWorkspace
+OnDesktop Mod1 Mouse4 :PrevWorkspace
+OnDesktop Mod1 Mouse5 :NextWorkspace
 
 OnToolbar Mouse4 :PrevWorkspace
 OnToolbar Mouse5 :NextWorkspace
