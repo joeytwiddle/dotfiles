@@ -6,6 +6,7 @@
 " HighlightWord three times in the last second, then skip highlighting until
 " user has calmed down.
 
+" To disable the script, set g:hiword=0 in your .vimrc, or at runtime
 if exists('g:hiword') && g:hiword == 0
 else
 
@@ -42,7 +43,7 @@ function! HighlightWord()
     execute 'syntax match HLCurrentWord "'.pattern.'"'
     execute 'syntax clear HLCurrentWord'
     execute 'syntax match HLCurrentWord "'.pattern.'"'
-	 " execute 'highlight HLCurrentWord cterm=underline gui=underline'   " Problem: The match blocks any existing highlighting, so ends up looking Normal.
+    " execute 'highlight HLCurrentWord cterm=underline gui=underline'   " Problem: The match blocks any existing highlighting, so ends up looking Normal.
     " execute 'highlight HLCurrentWord term=reverse cterm=none ctermbg=darkgreen ctermfg=white guibg=darkgreen guifg=white'
     " execute 'highlight HLCurrentWord term=none cterm=none ctermbg=blue ctermfg=green guibg=darkblue guifg=green'
     " execute 'highlight HLCurrentWord term=bold cterm=bold ctermfg=green guifg=green'
@@ -63,6 +64,9 @@ function! UnHighlightWord()
 endfunction
 
 function! Cursor_Moved()
+  if exists('g:hiword') && g:hiword == 0
+    return
+  endif
   let l:word = expand("<cword>")
   if (l:word == s:lastWord) " e.g. user has moved 1 char in the word - hide highlighting now.
     " echo "User moved within word"

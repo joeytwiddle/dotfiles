@@ -637,8 +637,17 @@ let s:debugIndex = 0
 augroup MiniBufExplorer
 autocmd MiniBufExplorer BufDelete   * call <SID>DEBUG('-=> BufDelete AutoCmd', 10) |call <SID>AutoUpdate(expand('<abuf>'))
 autocmd MiniBufExplorer BufEnter    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
+" joey: BufEnter doesn't always fire (or at least the update doesn't happen,
+" once when closing a buffer and entering Conque) so trying BufExit, which
+" probably won't work either (it would fire before the buffer closes!)
+" When it fails, we could try bot!
+"autocmd MiniBufExplorer BufLeave    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
+" Forget that, trying WinEnter for the moment:
+autocmd MiniBufExplorer WinEnter    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
 autocmd MiniBufExplorer VimEnter    * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1)
 " }}}
+
+let s:userFocusedBuffer = -1
 
 " Functions
 "
@@ -654,7 +663,7 @@ function! <SID>StartExplorer(sticky, delBufNum)
   endif
 
   " Store the current buffer
-  let l:curBuf = bufnr('%')
+  let s:userFocusedBuffer = bufnr('%')
 
   " Prevent a report of our actions from showing up.
   let l:save_rep = &report
@@ -685,27 +694,31 @@ function! <SID>StartExplorer(sticky, delBufNum)
   setlocal nonumber
 
   if has("syntax")
-    syn clear
-    " syn match MBENormal             '\[[^\]]*\]'
-    " syn match MBEChanged            '\[[^\]]*\]+'
-    " syn match MBEVisibleNormal      '\[[^\]]*\]\*+\='
-    " syn match MBEVisibleChanged     '\[[^\]]*\]\*+'
-    syn match MBEButton             '\[[^]]*\]'
-    syn match MBEButtonRed          '\[X\]'     " This works altho the previous could have matched it.  Later definitions take priority?
-    " OLD, mostly worked but did not allow spaces:
-    "syn match MBEGap                '\(|\|  *\)'
-    "syn match MBENormal             ' [^ *+|[\]]* '
-    "syn match MBEChanged            ' [^ *+|]*+ '
-    "syn match MBEVisibleNormal      '|* [^ *+|]*\* |*'
-    "syn match MBEVisibleChanged     '|* [^ *+|]*\*+ |*'
-    syn match MBEGap                '|'
-    syn match MBENormal             ' [^*+|[\]]* *'
-    syn match MBEChanged            ' [^*+|]*+ *'
-    syn match MBEVisibleNormal      '|* [^*+|]*\* *|*'
-    syn match MBEVisibleChanged     '|* [^*+|]*\*+ *|*'
+    if !exists("g:did_minibufexplorer_syntax_inits")
+
+      syn clear
+      " syn match MBENormal             '\[[^\]]*\]'
+      " syn match MBEChanged            '\[[^\]]*\]+'
+      " syn match MBEVisibleNormal      '\[[^\]]*\]\*+\='
+      " syn match MBEVisibleChanged     '\[[^\]]*\]\*+'
+      syn match MBEButton             '\[[^]]*\]'
+      syn match MBEButtonRed          '\[X\]'     " This works altho the previous could have matched it.  Later definitions take priority?
+      " OLD, mostly worked but did not allow spaces:
+      "syn match MBEGap                '\(|\|  *\)'
+      "syn match MBENormal             ' [^ *+|[\]]* '
+      "syn match MBEChanged            ' [^ *+|]*+ '
+      "syn match MBEVisibleNormal      '|* [^ *+|]*\* |*'
+      "syn match MBEVisibleChanged     '|* [^ *+|]*\*+ |*'
+      syn match MBEGap                '|'
+      syn match MBENormal             ' [^*+|[\]]* *'
+      syn match MBEChanged            ' [^*+|]*+ *'
+      syn match MBEVisibleFocused     '|* [^-*+|]*\* *|*'
+      " syn match MBEVisibleNormal      '|* [^-*+|]*\- *|*'
+      " Some filthy regexp which survives -MiniBufExplorer--
+      syn match MBEVisibleNormal      '|* \([^-*+|]*.\)\- *|*'
+      syn match MBEVisibleChanged     '|* [^-*+|]*\*+ *|*'
 
 
-    " if !exists("g:did_minibufexplorer_syntax_inits")
       let g:did_minibufexplorer_syntax_inits = 1
       " highlight MBEGap            ctermfg=white ctermbg=magenta guibg=magenta
       " highlight MBEGap            term=none cterm=none ctermbg=black ctermfg=grey guibg=black guifg=grey
@@ -722,13 +735,17 @@ function! <SID>StartExplorer(sticky, delBufNum)
       highlight MBENormal         term=none cterm=none gui=none ctermbg=darkblue ctermfg=cyan guibg=darkblue guifg=cyan
       highlight MBEChanged        term=reverse cterm=none gui=none ctermbg=red ctermfg=black guibg=darkred guifg=white
       " highlight MBEVisibleNormal  term=bold cterm=bold gui=bold ctermbg=green ctermfg=black guibg=green guifg=black
-      highlight MBEVisibleNormal  term=bold,reverse cterm=bold gui=bold ctermbg=white ctermfg=blue guibg=white guifg=blue
+      " highlight MBEVisibleFocused term=bold,reverse cterm=bold gui=bold ctermbg=white ctermfg=blue guibg=white guifg=blue
+      " highlight MBEVisibleNormal  term=bold,reverse cterm=none gui=none ctermbg=grey ctermfg=black guibg=grey guifg=darkblue
+      hi link MBEVisibleFocused StatusLine
+      hi link MBEVisibleNormal StatusLineNC
       " highlight MBEVisibleChanged term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=black guibg=yellow guifg=black
       " There seems no point making MBEVisibleChanged differ from
       " MBEVisibleNormal, since it is inconsistent - it only updates when a
       " tab is switched, not when the current buffer is modified or saved.
       highlight MBEVisibleChanged  term=bold,reverse cterm=bold gui=bold ctermbg=white ctermfg=blue guibg=white guifg=blue
-    " endif
+
+    endif
   endif
 
   " If you press return in the -MiniBufExplorer- then try
@@ -757,8 +774,8 @@ function! <SID>StartExplorer(sticky, delBufNum)
  
   call <SID>DisplayBuffers(a:delBufNum)
 
-  if (l:curBuf != -1)
-    call search('\['.l:curBuf.':'.expand('#'.l:curBuf.':t').'\]')
+  if (s:userFocusedBuffer != -1)
+    call search('\['.s:userFocusedBuffer.':'.expand('#'.s:userFocusedBuffer.':t').'\]')
   else
     call <SID>DEBUG('No current buffer to search for',9)
   endif
@@ -1116,6 +1133,7 @@ function! <SID>Max(argOne, argTwo)
 endfunction
 
 " }}}
+
 " BuildBufferList - Build the text for the MBE window {{{
 " 
 " Creates the buffer list string and returns 1 if it is different than
@@ -1170,15 +1188,17 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
                 let l:tab = "___"
             endif
 
-            let l:tabEdges = '| ' . l:tab . ' '
+            let l:tabEdges = '| ' . l:tab
             " If the buffer is open in a window mark it
-            if bufwinnr(l:i) != -1 && getbufvar(l:i, '&modified') == 1
-              let l:tabEdges = '| ' . l:tab . '*+' . ' '
+            if l:i == s:userFocusedBuffer
+              let l:tabEdges .= '*'
             elseif bufwinnr(l:i) != -1
-              let l:tabEdges = '| ' . l:tab . '*' . ' '
-            elseif getbufvar(l:i, '&modified') == 1
-              let l:tabEdges = '| ' . l:tab . '+' . ' '
+              let l:tabEdges .= '-'
             endif
+            if getbufvar(l:i, '&modified') == 1
+              let l:tabEdges .= '+'
+            endif
+            let l:tabEdges .= ' '
 
             " CURRENT: | Blah | other | other2 |
             " TODO: /Blah\ <other> <other2>
@@ -1343,6 +1363,8 @@ function! <SID>AutoUpdate(delBufNum)
     call <SID>DEBUG('Terminated AutoUpdate()'    ,10)
     call <SID>DEBUG('===========================',10)
 
+    " I tried skipping both and each of these, to get refreshed after
+    " deletions, but all sucked.
     let g:miniBufExplInAutoUpdate = 0
     return
 
@@ -1367,10 +1389,15 @@ function! <SID>AutoUpdate(delBufNum)
         " otherwise only update the window if the contents have
         " changed
           let l:ListChanged = <SID>BuildBufferList(a:delBufNum, 0)
-          if (l:ListChanged)
+          " No let's update every time we are called.  Hopefully this might
+          " fix those rare occasions the list is out-of-date, and also to fix
+          " the height if the user has resized it.  (Generally they never
+          " wants MBE to be too tall.  Perhaps we should shrink, but not grow
+          " until focused?  Although focus usually means a click.)
+          " if (l:ListChanged)
             call <SID>DEBUG('About to call StartExplorer (Update MBE)', 9) 
             call <SID>StartExplorer(0, a:delBufNum)
-          endif
+          " endif
         endif
 
         " go back to the working buffer

@@ -28,11 +28,11 @@
 " dimensions.  Then when restoring we visit all windows again, this time using
 " the stored data to restore their dimensions.
 
-" CONSIDER: Arguably a better solution would be for "maximization" to simply
-" open a new tab with the current buffer, and for "restoration" to close it
-" and return to the previous tab.  Unfortunately if MiniBufExplorer is
-" present, he may decide to add himself to the maximized tab.  Also this
-" approach cannot support independent vertical and horizontal maximizing.
+" TODO: Arguably a better solution would be for "maximization" to simply open
+" a new tab with the current buffer, and for "restoration" to close it and
+" return to the previous tab.  Unfortunately if MiniBufExplorer is present, he
+" may decide to add himself to the maximized tab.  Also this approach cannot
+" support independent vertical and horizontal maximizing.
 
 " ISSUES: We had problems accurately restoring the window layout, because
 " windows would interfere with each other while we were restoring their sizes.

@@ -42,10 +42,7 @@
 	:set incsearch
 	" :set wrapmargin=8
 
-	" my defaults (rather than the default 8) but these should be
-	" overridden by modeline or whatever.
-	:set shiftwidth=3
-	:set ts=3
+	" Display tabs (as defined in listchar):
 	:set list
 
 	" :set listchars=tab:::,trail:$

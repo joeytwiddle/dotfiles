@@ -170,8 +170,8 @@ cnoremap <C-X> <C-W>
 set wildmode=longest:full,full
 
 " Resize windows with Ctrl-NumPadPlus/Minus/Divide/Times:
-nnoremap Om :resize -4<Enter>
-nnoremap Ok :resize +4<Enter>
+nnoremap Om :resize -2<Enter>
+nnoremap Ok :resize +2<Enter>
 nnoremap Oo :vert resize -6<Enter>
 nnoremap Oj :vert resize +6<Enter>
 
