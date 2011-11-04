@@ -1,0 +1,3 @@
+./CVS/Base/sh	->	/bin/bash
+./cvs	->	/home/joey/myroot/cvs/usr/bin/cvs
+./sh	->	/bin/bash
