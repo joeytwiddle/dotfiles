@@ -58,6 +58,10 @@ nnoremap [5^ :bp<Enter>
 " nnoremap [6~ :bn<Enter>
 " nnoremap [5~ :bp<Enter>
 
+"" Inside screen on pea:
+noremap [6;5~ :bn<Enter>
+noremap [5;5~ :bp<Enter>
+
 " map <F8> :tabprev<Enter>
 " map <F9> :tabnext<Enter>
 " map <C-[> :tabprev<Enter>
@@ -92,6 +96,12 @@ inoremap <C-Right> <Esc><C-w>la
 "" This overrides a lot of C-w defaults.  Really I want to wait and see if
 "" the use presses anything else.  It is pretty dangerous at the moment!
 " nnoremap <C-w> :bdel<Enter>
+
+"" Inside screen on pea:
+nnoremap [1;5A <C-w>k
+nnoremap [1;5B <C-w>j
+nnoremap [1;5D <C-w>h
+nnoremap [1;5C <C-w>l
 
 "" Here is too early, our value gets dropped.
 " :set winheight 40
