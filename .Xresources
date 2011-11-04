@@ -1,7 +1,10 @@
 ## Apply changes and test with:
-##   cat .Xresources | grep -v "^#" | xrdb -merge  ;  man xrdb  ;  top n 3
+##   cat .Xresources | grep -v "^#" | xrdb -merge
+## For testing BD/UL: man xrdb ; top n 3
 
 xterm.vt100.font: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
+xterm*background: #000000
+xterm*foreground: #ffffff
 xterm*cursorColor: #ffdd44
 xterm*pointerColor: #ffee99
 
