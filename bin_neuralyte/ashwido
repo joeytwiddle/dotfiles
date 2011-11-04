@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# We may be able to speed things up by mounting hwi with:
+#   -o cache_timeout=115200 (32 hours)
+# And make it easier to find stuff in the link spaghetti:
+#   -o transform_symlinks
+# or
+#   -o follow_symlinks
+
+## An example usage:
+# nice -n 12 ashwido jsh env LOSS=25 reencode_video_to_x264 my_video.mp4
+## This is a bad example, because hwi's upload speed is a bottleneck!
+## ashwido is really useful for heavy processing tasks that do not read a huge
+## amount of data from disk, but might write a lot.
+
+if [ "x$1" = "x" ] || [ "$1" = "--help" ]
+then
+cat << !
+
+ashwido [jsh] <command> [<args>...]
+
+  will run the given command in the current folder, but using executables and
+  libraries from an alternative root system.
+
+  It is a bit like chroot, but it uses PATH and LD_PRELOAD.
+
+  If jsh is specified, the script takes steps to unload jsh from the shell if
+  it is present, and load jsh from the chroot.
+
+  Currently the script targets Hwi's ssh-mounted root at ~/mnt/hwi .
+
+!
+exit
+fi
+
+if [ ! -d "$HOME/mnt/hwi/usr" ]
+then
+	echo "Hwi is not mounted!  Run sshfs -p 222 -o cache_timeout=115200 -o transform_symlinks joey@hwi.ath.cx:/ ~/mnt/hwi"
+	exit 1
+fi
+
+echo "If things run very slowly, you can watch on Hwi which files are being sent:"
+echo "  jwatch listopenfiles sftp"
+
+. includepath "$HOME/mnt/hwi"
+
+if [ "$1" = jsh ]
+then
+	shift
+	## Strip any existing local jsh from PATH:
+	export PATH="` echo -n "$PATH" | tr ':' '\n' | grep -v '/j/tools/*$' | tr '\n' ':' `"
+	# echo "PATH=$PATH"
+	# which jsh
+	# echo
+	export JPATH="$HOME/mnt/hwi/home/joey/j"
+	"$JPATH"/jsh "$@"
+else
+	"$@"
+fi
+
