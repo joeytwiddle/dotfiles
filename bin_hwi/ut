@@ -1,0 +1,132 @@
+#!/bin/bash
+
+processToCycle="kicker gkrellm"
+processToRenice="xchat xterm vi zsh"
+## This is stupid.  We need to pause everything owned by the user (or users) except for a few we keep running.
+processToPause="vim vi gvim chrome firefox firefox-bin swiftfox-bin iceweasel-bin plugin-container icedove-bin thunderbird-bin konqueror mandelbulber ktorrent amarokapp onchange jwatch maxima wxmaxima xmms"
+
+for p in $processToRenice
+do myrenice -n 10 "$p" | sh
+done
+
+for p in $processToPause
+do killall -STOP "$p"
+done
+
+for p in $processToCycle
+do killall "$p" && eval "cycled_$p=true"
+done
+
+demoToWatch="`find "$HOME"/.loki/ut/System/ -name "*.dem" | afterlast / | randomorder | head -n 1`"
+if [ "$demoToWatch" ]
+then
+	echo "Setting up demo: $demoToWatch"
+	(
+		echo "Playing $demoToWatch"
+		# echo "demoplay $demoToWatch?timebased?3rdperson"
+		echo "demoplay $demoToWatch?timebased"
+	) > "$HOME/.loki/ut/System/playdemo"
+fi
+
+totalKfree=`cat /proc/meminfo | egrep "^(MemFree|Cached)" | takecols 2 | awksum`
+echo "Total K Free: $totalKfree"
+if [ ! "$totalKfree" ] || [ "$totalKfree" -lt 350000 ]
+then
+	## Clear some memory so UT won't lag during play or server join process.
+	## This is counter-constructive if it clears caches containing earlier accessed UT files!
+	verbosely dd if=/dev/zero of=/dev/shm/clearing_space_for_ut.tmp bs=$((1024*1024)) count=400
+	verbosely rm -f /dev/shm/clearing_space_for_ut.tmp
+fi
+
+## Preload the most common FFA map files so I won't lose my spot on mapswitch!
+(
+
+sleep 30
+
+precache_file () {
+	for FILE
+	do
+		if nice -n 4 dd if="$FILE" of=/dev/null bs=2400 count=1024 2>/dev/null
+		then : # jshinfo "Precached $FILE"
+		# else jshwarn "Failed to precache $FILE"
+		else echo "Failed to precache $FILE"
+		fi
+	done
+}
+
+shopt -s nocaseglob
+
+(
+cat << !
+CTF-IncineratorLE-102
+CTF-Ranel-JoltEdition
+CTF-Cynosure][LE105
+CTF-Revenge-LE102
+CTF-Gataka-SE
+CTF-Orbital-LE103
+CTF-Vaultcity-LE102
+!
+) |
+
+while read MAPNAME
+do
+	MAPFILE=/usr/local/install/games/ut/Maps/"$MAPNAME".unr
+	precache_file "$MAPFILE"
+	utdep.pl "$MAPFILE"
+	:
+done |
+removeduplicatelines |
+while read DEPNAME
+do
+	## Although we don't really need the trailing * (we have the full
+	## filename already), we do need it to make use of nocaseglob!
+	precache_file /usr/local/install/games/ut/*/"$DEPNAME"*
+	echo "Cached $DEPNAME"
+	:
+done |
+osd_cat
+
+shopt -u nocaseglob
+
+) &
+
+# xrandr -s 1600x1200
+
+touch /tmp/playing_ut   ## For osd_show
+
+
+
+/usr/local/install/games/ut/ut "$@"
+
+
+
+rm -f /tmp/playing_ut
+
+# xrandr -s 1280x1024
+
+for p in $processToCycle
+do
+	eval "cyc=\$cycled_$p"
+	[ "$cyc" = true ] && verbosely $p &
+done
+
+for p in $processToPause
+do killall -CONT "$p"
+done
+
+for p in $processToRenice
+do myrenice -n 0 "$p"
+done | sudo sh
+
+
+
+( sleep 40 ; reset ; echo -n "% " ) &
+
+
+(
+	cd "$HOME"/.loki/ut/System
+	for demofile in NEW*.dem
+	do mv "$demofile" "`date -r "$demofile" +"%Y%m%d-%H%M"`.dem"
+	done
+)
+

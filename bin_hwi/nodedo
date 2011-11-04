@@ -1,0 +1,11 @@
+nodePath=/usr/local/node-v0.4.8
+
+modulesBin="$HOME/node_modules/.bin"
+me="`basename "$0"`"
+if [ -x "$nodePath/bin/$me" ]
+then "$nodePath/bin/$me" "$@"
+elif [ -x "$modulesBin/$me" ]
+then
+	echo "Using module (not global) binary $modulesBin/$me"
+	"$modulesBin/$me" "$@"
+fi

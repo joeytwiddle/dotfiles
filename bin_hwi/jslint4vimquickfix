@@ -1,0 +1,9 @@
+#!/bin/sh
+for FILE
+do
+	jslint "$FILE" |
+	grep -v "^[^ 0-9]" |  ## Header lines
+	grep -v "^    [^ ]" | ## Lines of code (context of error messages)
+	grep -v "^[ 	]*$" |
+	sed "s=^ *\([0-9]*\) \([0-9]*\),\([0-9]*\): =$FILE|\2| ="
+done

@@ -1,0 +1,17 @@
+## --indirect-rendering to fix the black window bug on nVidia and compiz < 10
+## LIBGL_ALWAYS_INDIRECT=1 for the same, may work a bit better
+## --loose-binding to improve performance on nVidia
+## --ignore-desktop-hints to ignore KDE's number-of-desktops settings
+
+( sleep 2 ; gtk-window-decorator --replace ) &
+
+# LIBGL_ALWAYS_INDIRECT=1
+exec /usr/bin/compiz "$@"
+# --ignore-desktop-hints --indirect-rendering --loose-binding 
+
+## One time using --ignore-desktop-hints brought my windows back on the right desktops when I restarted compiz!
+## OTOH the next day, removing it did the same!
+## I seem to get fewer black windows with LIBGL_ALWAYS_INDIRECT=1
+## --indirect-rendering seems to (sometimes) make things really slow and broken
+## Then again sometimes things are slow without it too!
+

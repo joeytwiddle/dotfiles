@@ -1,0 +1,6 @@
+## I think sync may be the cause of browser not reloading properly :P
+## This was after I killed chrome cos it had gone mental.
+## --enable-sync-extensions --sync-url=https://clients4.google.com/chrome-sync/dev 
+## --new-wrench-menu 
+## --flag-switches-begin ... --flag-switches-end 
+chromium-browser.real --ignore-gpu-blacklist --enable-webgl --enable-accelerated-2d-canvas --enable-accelerated-layers "$@"

@@ -1,0 +1,7 @@
+styleFile="$HOME/.gtkrc-2.0.fonts_small"
+bulber="/mnt/space/stuff/joey/src/keep/mandelbulber1.00/bin/mandelbulber"
+
+GTK2_RC_FILES="$styleFile" "$bulber" "$@"
+
+# bash -c "GTK2_RC_FILES='$styleFile' '$bulber' "$@"
+

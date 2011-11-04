@@ -1,0 +1,39 @@
+#!/bin/bash
+## DONE: queue multiple messages, or have them appear on consecutive lines.
+
+## No more spam from those noobs in # when I'm holding the flag
+## In fact screw #smo.priv too?!
+# if [ -f /tmp/playing_ut ] && ( [[ "$*" =~ ^\ \#\  ]] || [[ "$*" =~ ^\ \#smo.priv\  ]] )
+if [ -f /tmp/playing_ut ] && ( [[ "$*" =~ ^\ \#\  ]] || [[ "$*" =~ uggla ]] || [[ "$*" =~ ^\ \#(smo.priv|crtc)\  ]] )
+then exit 0
+fi
+
+# font='-*-arial-*-r-*-*-*-120-*-*-*-*-*-*'
+# font='-*-helvetica-*-r-*-*-*-120-*-*-*-*-*-*'
+font='-*-helvetica-*-r-*-*-*-140-*-*-*-*-*-*'
+# font='-*-minima ssi-*-*-normal-*-*-120-*-*-*-*-*-*'
+
+STATUS_FILE=/tmp/osd_show.status
+
+YOFFSET=90
+if [ -f "$STATUS_FILE" ]
+then . "$STATUS_FILE"
+fi
+echo "YOFFSET=$((YOFFSET+20))" > "$STATUS_FILE"
+
+echo "Sending: $*" >> /tmp/osd_show.log
+# echo "$*" | osd_cat -d 8 -o $YOFFSET -c red -f '-*-helvetica-*-r-*-*-*-100-*-*-*-*-*-*'
+(
+	echo "$*" | osd_cat -d 10 -o $YOFFSET -c '#ff2200' -f "$font" -s 2
+
+	## When CPU was busy, this was failing to trigger when it should, so I added a sleep.
+	# sleep 3
+	# if ! ps aux | grep osd_cat >/dev/null
+	# if ! ps aux | grep osd_cat | grep -v grep | grep . >/dev/null
+	if ! pgrep osd_cat >/dev/null
+	then rm -f "$STATUS_FILE"
+	fi
+	## If it continues to fail, an alternative would be to re-source STATUS_FILE,
+	## and check if the value has changed since we wrote it.
+) &
+

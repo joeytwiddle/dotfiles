@@ -1,0 +1,5 @@
+# ssh joey@gentoo.hwi.ath.cx -p 2222 eval "$@"
+# ssh joey@gentoo.hwi.ath.cx -p 2222 j/jsh "$@"
+# ssh joey@gentoo.hwi.ath.cx -p 2222 bash -c "$*"
+# ssh joey@gentoo.hwi.ath.cx -p 2222 j/jsh "$@"
+ssh joey@gentoo.hwi.ath.cx -p 2222 j/jsh "$@"
