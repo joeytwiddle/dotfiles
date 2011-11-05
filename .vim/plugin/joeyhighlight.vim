@@ -201,9 +201,14 @@ function! Joeyhighlight()
 	"highlight StatusLine term=bold,reverse cterm=bold,reverse ctermfg=cyan ctermbg=black
 	"highlight StatusLineNC term=reverse cterm=reverse ctermfg=grey ctermbg=black
 	"" cterm=bold was showing hiddens chars - specifically "^^^^^^^"s I didn't like.
-	highlight StatusLine term=reverse,underline cterm=none,underline ctermfg=darkblue ctermbg=white gui=none,underline guifg=#000066 guibg=white
+	highlight StatusLine term=reverse cterm=none ctermfg=darkblue ctermbg=white gui=none,underline guifg=#000066 guibg=white
 	" highlight StatusLineNC term=reverse,bold,italic,underline cterm=none,bold,italic,underline ctermfg=darkgrey ctermbg=black gui=none,italic,underline guifg=#222222 guibg=#bbbbbb " Looks wrong in Konsole
-	highlight StatusLineNC term=reverse,italic,underline cterm=none,italic,underline ctermfg=grey ctermbg=black gui=none,italic,underline guifg=#222222 guibg=#bbbbbb
+	" highlight StatusLineNC term=reverse,italic,underline cterm=none,italic,underline ctermfg=grey ctermbg=black gui=none,italic,underline guifg=#222222 guibg=#bbbbbb
+	"" If we make it bold, in xterm the black writing appears faded grey, hinting disabled.
+	"" Note that cterm=bold must come *after* setting the colors!
+	highlight StatusLineNC term=reverse,italic,underline ctermbg=grey ctermfg=black cterm=bold,underline gui=none,italic,underline guifg=#222222 guibg=#bbbbbb
+	"" Add underline to make it grey :f
+	" highlight StatusLineNC term=reverse,italic,underline ctermbg=grey ctermfg=black cterm=bold,underline,italic gui=none,italic,underline guifg=#222222 guibg=#bbbbbb
 	"" The underline is not normally noticeable, until we put two lines right
 	"" next to each other, with minwinheight=0 - then it stops them merging!
 	" highlight StatusLineNC ctermfg=darkgrey
