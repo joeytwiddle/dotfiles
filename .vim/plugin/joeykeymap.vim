@@ -40,43 +40,43 @@ map :htab :tabnew<Enter>:h
 
 
 "" Moving between windows
-nnoremap <C-Up> <C-w>k
-nnoremap <C-Down> <C-w>j
-nnoremap <C-Left> <C-w>h
-nnoremap <C-Right> <C-w>l
+nmap <C-Up> <C-W>k
+nmap <C-Down> <C-W>j
+nmap <C-Left> <C-W>h
+nmap <C-Right> <C-W>l
 
 "" I want them to work in insert mode also (especially with ConqueTerm)
-inoremap <C-Up> <Esc><C-w>ka
-inoremap <C-Down> <Esc><C-w>ja
-inoremap <C-Left> <Esc><C-w>ha
-inoremap <C-Right> <Esc><C-w>la
+imap <C-Up> <Esc><C-W>ka
+imap <C-Down> <Esc><C-W>ja
+imap <C-Left> <Esc><C-W>ha
+imap <C-Right> <Esc><C-W>la
 "" Except in ConqueTerm I don't neccessarily want to return to Insert mode,
 "" if I was not in Insert mode before I entered ConqueTerm.
 
 "" For Eterm.  Caused no problems for xterm the last time I tried it.
-nnoremap Oa <C-w>k
-nnoremap Ob <C-w>j
-nnoremap Od <C-w>h
-nnoremap Oc <C-w>l
+nmap Oa <C-W>k
+nmap Ob <C-W>j
+nmap Od <C-W>h
+nmap Oc <C-W>l
 
 "" For Linux console:
-nnoremap [A <C-w>k
-nnoremap [B <C-w>j
-nnoremap [D <C-w>h
-nnoremap [C <C-w>l
+nmap [A <C-W>k
+nmap [B <C-W>j
+nmap [D <C-W>h
+nmap [C <C-W>l
 
-"" Inside screen on pea (actually this is equivalent to <C-Up>):
-" nnoremap [1;5A <C-w>k
-" nnoremap [1;5B <C-w>j
-" nnoremap [1;5D <C-w>h
-" nnoremap [1;5C <C-w>l
+"" Inside screen on pea:
+nmap [1;5A <C-W>k
+nmap [1;5B <C-W>j
+nmap [1;5D <C-W>h
+nmap [1;5C <C-W>l
 
 "" I was using these to allow Ctrl-Up/Down/Left/Right in Eterm, but they broke
 "" normal Up/Down/Left/Right in xterm!
-" nnoremap OA k
-" nnoremap OB j
-" nnoremap OD h
-" nnoremap OC l
+" nmap OA k
+" nmap OB j
+" nmap OD h
+" nmap OC l
 
 
 
