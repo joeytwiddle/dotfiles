@@ -21,7 +21,19 @@
 " noremap  <silent> <C-W><C-Right> :call SeekBestWindow("l","h")<Enter>
 " inoremap <silent> <C-W><C-Right> <Esc>:call SeekBestWindow("l","h")<Enter>a
 
-"" Or leave them unchanged, and use my preferred shortcuts:
+"" Or leave the defaults unchanged, and instead override my preferred shortcuts:
+silent! unmap <C-Up>
+silent! unmap <C-Down>
+silent! unmap <C-Left>
+silent! unmap <C-Right>
+silent! iunmap <C-Up>
+silent! iunmap <C-Down>
+silent! iunmap <C-Left>
+silent! iunmap <C-Right>
+silent! unmap [1;5A
+silent! unmap [1;5B
+silent! unmap [1;5D
+silent! unmap [1;5C
 noremap  <silent> <C-Up>         :call <SID>SeekBestWindow("k","j")<Enter>
 inoremap <silent> <C-Up>    <Esc>:call <SID>SeekBestWindow("k","j")<Enter>a
 noremap  <silent> <C-Down>       :call <SID>SeekBestWindow("j","k")<Enter>
@@ -40,6 +52,7 @@ function! s:SeekBestWindow(realDirection,reverseDirection)
 
   if exists("w:lastWinInDir_".a:realDirection)
     let l:targetWin = eval("w:lastWinInDir_".a:realDirection)
+    " echo "Last window from that direction was ".l:targetWin
     exec l:targetWin."wincmd w"
     " But we should check that this movement is still valid
     " We do that by moving back again, and seeing if we get back where we
