@@ -694,7 +694,9 @@ function! <SID>StartExplorer(sticky, delBufNum)
   setlocal nonumber
 
   if has("syntax")
-    if !exists("g:did_minibufexplorer_syntax_inits")
+
+      " I don't know why but sometimes the syntax highlighting is forgotten,
+      " requiring this ro run again.  The highlighting rules are not forgotten!
 
       syn clear
       " syn match MBENormal             '\[[^\]]*\]'
@@ -710,15 +712,17 @@ function! <SID>StartExplorer(sticky, delBufNum)
       "syn match MBEVisibleNormal      '|* [^ *+|]*\* |*'
       "syn match MBEVisibleChanged     '|* [^ *+|]*\*+ |*'
       syn match MBEGap                '|'
-      syn match MBENormal             ' [^*+|[\]]* *'
-      syn match MBEChanged            ' [^*+|]*+ *'
-      syn match MBEVisibleFocused     '|* [^-*+|]*\* *|*'
+      syn match MBENormal             ' [^-*+|[\]]* *'
+      syn match MBEChanged            '|* [^-*+|]*-*+ |*'
       " syn match MBEVisibleNormal      '|* [^-*+|]*\- *|*'
       " Some filthy regexp which survives -MiniBufExplorer--
-      syn match MBEVisibleNormal      '|* \([^-*+|]*.\)\- *|*'
-      syn match MBEVisibleChanged     '|* [^-*+|]*\*+ *|*'
+      "syn match MBEVisibleNormal      '|* \([^-*+|]*.\)\- |*'
+      syn match MBEVisibleNormal      '|* [^ ]*- |*'
+      syn match MBEVisibleChanged     '|* [^-*+|]*\*+ |*'
+      syn match MBEVisibleFocused     '|* [^-*+|]*\* |*'
 
 
+    if !exists("g:did_minibufexplorer_syntax_inits")
       let g:did_minibufexplorer_syntax_inits = 1
       " highlight MBEGap            ctermfg=white ctermbg=magenta guibg=magenta
       " highlight MBEGap            term=none cterm=none ctermbg=black ctermfg=grey guibg=black guifg=grey
@@ -739,13 +743,15 @@ function! <SID>StartExplorer(sticky, delBufNum)
       " highlight MBEVisibleNormal  term=bold,reverse cterm=none gui=none ctermbg=grey ctermfg=black guibg=grey guifg=darkblue
       hi link MBEVisibleFocused StatusLine
       hi link MBEVisibleNormal StatusLineNC
+      " hi StatusLineNC ctermfg=blue
       " highlight MBEVisibleChanged term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=black guibg=yellow guifg=black
       " There seems no point making MBEVisibleChanged differ from
       " MBEVisibleNormal, since it is inconsistent - it only updates when a
       " tab is switched, not when the current buffer is modified or saved.
-      highlight MBEVisibleChanged  term=bold,reverse cterm=bold gui=bold ctermbg=white ctermfg=blue guibg=white guifg=blue
-
+      " highlight MBEVisibleChanged  term=bold,reverse cterm=bold gui=bold ctermbg=white ctermfg=blue guibg=white guifg=blue
+      highlight MBEVisibleChanged  term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=blue guibg=darkyellow guifg=blue
     endif
+
   endif
 
   " If you press return in the -MiniBufExplorer- then try
