@@ -40,8 +40,8 @@ function! HighlightWord()
     " echo "got pattern: ".l:pattern
 
     " next line is a dummy to prevent the clear from complaining on the first run
-    execute 'syntax match HLCurrentWord "'.pattern.'"'
-    execute 'syntax clear HLCurrentWord'
+    " execute 'syntax match HLCurrentWord "'.pattern.'"'
+    execute 'silent! syntax clear HLCurrentWord'
     execute 'syntax match HLCurrentWord "'.pattern.'"'
     " execute 'highlight HLCurrentWord cterm=underline gui=underline'   " Problem: The match blocks any existing highlighting, so ends up looking Normal.
     " execute 'highlight HLCurrentWord term=reverse cterm=none ctermbg=darkgreen ctermfg=white guibg=darkgreen guifg=white'
@@ -59,8 +59,8 @@ endfunction
 
 function! UnHighlightWord()
   " set nocul
-  execute "syntax match HLCurrentWord +blah+"
-  execute "syntax clear HLCurrentWord"
+  " execute "syntax match HLCurrentWord +blah+"
+  execute "silent! syntax clear HLCurrentWord"
 endfunction
 
 function! Cursor_Moved()

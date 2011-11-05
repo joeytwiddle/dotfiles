@@ -28,13 +28,15 @@ function! HighlightLine()
     " let l:pattern = substitute(l:line,'\([.^$\\][]\|\*\|\\\|\"\|\~\)','\\\1','g')
     let l:pattern = substitute(l:line,'\([.^$*\\][]\|\\\|\"\|\~\)','\\\1','g')
     let l:pattern = '^' . l:pattern . '$'
-    " next line is a dummy to prevent the clear from complaining on the first run
 
     " echo "got pattern: ".l:pattern
 
+    "" This line was a dummy to prevent the clear from complaining on the first run
+    " execute 'syntax match HLCurrentLine "'.pattern.'" contains=ALL'
+    "" But now we use silent!
+    execute 'silent! syntax clear HLCurrentLine'
     execute 'syntax match HLCurrentLine "'.pattern.'"'
-    execute 'syntax clear HLCurrentLine'
-    execute 'syntax match HLCurrentLine "'.pattern.'"'
+    " contains=ALL'
     execute 'highlight HLCurrentLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white'
     "" Freezes vim: execute "sleep 5| call UnHighlightLine()"
   endif
@@ -42,8 +44,8 @@ endfunction
 
 function! UnHighlightLine()
   " set nocul
-  execute "syntax match HLCurrentLine +blah+"
-  execute "syntax clear HLCurrentLine"
+  " execute "syntax match HLCurrentLine +blah+ contains=ALL"
+  execute "silent! syntax clear HLCurrentLine contains=ALL"
 endfunction
 
 function! Cursor_Moved()
