@@ -45,7 +45,7 @@ endfunction
 function! UnHighlightLine()
   " set nocul
   " execute "syntax match HLCurrentLine +blah+ contains=ALL"
-  execute "silent! syntax clear HLCurrentLine contains=ALL"
+  execute "silent! syntax clear HLCurrentLine"
 endfunction
 
 function! Cursor_Moved()
