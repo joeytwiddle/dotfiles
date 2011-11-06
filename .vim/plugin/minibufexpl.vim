@@ -3,10 +3,10 @@
 "
 " Joey's notes:
 " DONE: Some improvements to graphics.
-" TODO: We should highlight unselected but recently edited tabs differently
-" from untouched/skipped-thru tabs.
-" TODO: When clicking on a tab, if it is already open in a window, just switch
-" to that window.
+" CONSIDER: We should highlight unselected but recently edited tabs
+" differently from untouched/skipped-thru tabs.
+" CONSIDER: When clicking on a tab, if it is already open in a window, just
+" switch to that window.
 " Some users may prefer to open a new window when we click on a tab, rather
 " than leave the current buffer.
 "
