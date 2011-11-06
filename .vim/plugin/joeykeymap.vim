@@ -39,7 +39,7 @@ map :htab :tabnew<Enter>:h
 
 
 
-"" Moving between windows
+"" Moving between windows with Ctrl-ArrowKeys
 nmap <C-Up> <C-W>k
 nmap <C-Down> <C-W>j
 nmap <C-Left> <C-W>h
@@ -77,6 +77,8 @@ nmap [1;5C <C-W>l
 " nmap OB j
 " nmap OD h
 " nmap OC l
+
+" We allow remapping on the above so navigation_enhancer can intecept them.
 
 
 
