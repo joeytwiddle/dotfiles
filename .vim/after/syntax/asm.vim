@@ -1,4 +1,4 @@
-highlight asmComment ctermfg=darkgrey guifg=#999999 gui=none
+highlight asmComment ctermfg=darkgrey gui=none guifg=#999999
 highlight Normal ctermfg=lightgrey guifg=lightgrey
 
 "" The default asmComment definition captures everything following a '#', which
@@ -10,29 +10,33 @@ highlight Normal ctermfg=lightgrey guifg=lightgrey
 syntax match asmHashThingy /#/
 " he=e-1
 " highlight link asmHashThingy Number
-highlight asmHashThingy ctermfg=white cterm=bold
+highlight asmHashThingy cterm=bold ctermfg=white gui=bold guifg=white
 
 syn match hexNumber /\(0x\|\$\)[0-9A-Fa-f]\+/
 highlight link hexNumber Number
 highlight Number ctermfg=cyan cterm=none
 
-syntax match asmPreCondit /#\(ifdef\|else\|endif\|if\).*/
-highlight asmPreCondit ctermfg=darkblue cterm=bold
+syntax match asmPreCondit /#\(ifdef\|else\|endif\|if\|define\|undef\).*/
+highlight asmPreCondit cterm=bold ctermfg=darkblue gui=bold guifg=blue
 
 exec "set comments=" . &comments . ",:;;,:;"
 
 "" Getting messy...
-syntax match asmCommand /\<[A-Za-z][A-Za-z][A-Za-z]\>/
-highlight link asmCommand Statement
+" syntax match asmCommand /\<[A-Za-z][A-Za-z][A-Za-z]\>/
+" highlight link asmCommand Statement
+highlight link a65Opcode Statement
 
 " syn clear asmIdentifier
-highlight asmIdentifier ctermfg=cyan cterm=bold
+highlight asmIdentifier cterm=bold ctermfg=cyan gui=none guifg=cyan
 " hi Normal ctermfg=cyan cterm=none
 
 syn match asmString /"[^"]*"/
-highlight asmString ctermfg=green
+highlight asmString ctermfg=green guifg=green
 
 " Pasta also has .var2
 syn clear asmDirective
-syn match asmDirective /\.[a-z][a-z0-9]\+/
+syn match asmDirective /\(^\| \|	\)\.[a-z][a-z0-9]\+/
+
+" syn match pastaVar /%[A-Za-z0-9.]*/
+" highlight link pastaVar Identifier
 
