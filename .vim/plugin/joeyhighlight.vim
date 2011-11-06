@@ -244,6 +244,23 @@ function! Joeyhighlight()
 	hi Pmenu cterm=bold guibg=#bb00bb gui=bold
 	hi Pmenusel gui=bold guifg=white guibg=#660066
 
+	highlight CursorLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
+
+	" Make StatusLine light up temporarily when we switch window
+	augroup LightUpStatusLine
+		autocmd!
+		" autocmd WinEnter * hi StatusLine ctermbg=green ctermfg=white
+		" autocmd WinEnter * hi StatusLine ctermbg=white ctermfg=red
+		"" We must use reverse to get thick black on white:
+		" autocmd CursorHold * hi StatusLine ctermbg=black ctermfg=white cterm=reverse,bold
+		" autocmd WinEnter * hi StatusLine ctermbg=white ctermfg=green
+		" autocmd WinEnter   * hi StatusLine cterm=none ctermbg=green ctermfg=black
+		autocmd WinEnter   * hi StatusLine ctermbg=green ctermfg=darkblue gui=none guibg=green guifg=blue
+		autocmd BufEnter   * hi StatusLine ctermbg=green ctermfg=darkblue gui=none guibg=green guifg=blue
+		autocmd CursorHold * hi StatusLine ctermbg=white ctermfg=blue gui=none guibg=white guifg=blue
+	augroup END
+	set updatetime=600
+
 endfun
 
 :Joeyhighlight
