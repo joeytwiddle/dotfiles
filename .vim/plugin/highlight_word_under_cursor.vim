@@ -5,10 +5,13 @@
 " TODO: Can slow vim down.  if we are scrolling about the file, (if we've done
 " HighlightWord three times in the last second, then skip highlighting until
 " user has calmed down.
+" BUG: Is often incapable of highlighting, because syntax has already matched
+" the text, and that syntax rule does not allow sub-parsing (contains).
 
 " To disable the script, set g:hiword=0 in your .vimrc, or at runtime
 if exists('g:hiword') && g:hiword == 0
-else
+  finish
+endif
 
 " if exists('*HighlightWord')
 
@@ -42,7 +45,7 @@ function! HighlightWord()
     " next line is a dummy to prevent the clear from complaining on the first run
     " execute 'syntax match HLCurrentWord "'.pattern.'"'
     execute 'silent! syntax clear HLCurrentWord'
-    execute 'syntax match HLCurrentWord "'.pattern.'"'
+    execute 'silent! syntax match HLCurrentWord "'.pattern.'"'
     " execute 'highlight HLCurrentWord cterm=underline gui=underline'   " Problem: The match blocks any existing highlighting, so ends up looking Normal.
     " execute 'highlight HLCurrentWord term=reverse cterm=none ctermbg=darkgreen ctermfg=white guibg=darkgreen guifg=white'
     " execute 'highlight HLCurrentWord term=none cterm=none ctermbg=blue ctermfg=green guibg=darkblue guifg=green'
@@ -63,7 +66,7 @@ function! UnHighlightWord()
   execute "silent! syntax clear HLCurrentWord"
 endfunction
 
-function! Cursor_Moved()
+function! HW_Cursor_Moved()
   if exists('g:hiword') && g:hiword == 0
     return
   endif
@@ -77,49 +80,19 @@ function! Cursor_Moved()
     call HighlightWord()
     let s:lastWord = l:word
   endif
-  " let cur_pos = winline()
-  " if g:last_pos == 0
-    " call HighlightWord()
-    " let g:last_pos = cur_pos
-    " return
-  " endif
-  " let diff = g:last_pos - cur_pos
-  " " let diff = -100
-  " " if diff > 1 || diff < -1
-  " " if diff != 0
-    " call HighlightWord()
-  " " else
-    " " call UnHighlightWord()
-  " " endif
-  " let g:last_pos = cur_pos
 endfunction
 
-" function! GetRegAfter(cmd)
-  " let l:save_reg = @"
-  " let @" = ""
-  " normal ""yy
-  " let l:retv = @"
-  " let @" = l:save_reg
-  " return l:retv
-" endfunction
+augroup HighlightWordUnderCursor
+  autocmd!
+  "" We use autocmd! to clear any existing autocmds registered on that event.
+  " autocmd CursorMoved * call UnHighlightWord()
+  autocmd CursorHold * call HW_Cursor_Moved()
+augroup END
 
-" " autocmd CursorMoved,CursorMovedI * call Cursor_Moved()
-" autocmd CursorMoved * call Cursor_Moved()
-" autocmd CursorHold * call UnHighlightWord()
-" " autocmd CursorHold * call s:Cursor_Moved()
-" " set updatetime=4000
-
-"" We use autocmd! to clear any existing autocmds registered on that event.
-" autocmd CursorMoved * call UnHighlightWord()
-autocmd! CursorHold * call Cursor_Moved()
-" autocmd CursorMoved * call UnHighlightWord()
 " set updatetime=500
 "" On rather long files with complex syntax, this operation can be rather
 "" heavy, and lock vim up a bit.  So we run it less often that the ideal.
 set updatetime=1500
 
-let g:last_pos = 0
 let s:lastWord = ""
-
-endif
 
