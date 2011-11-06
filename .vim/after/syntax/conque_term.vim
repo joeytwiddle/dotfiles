@@ -11,8 +11,9 @@
 " setlocal listchars=trail:\ 
 " setlocal listchars=trail:\ ,tab:>-
 
-"" This works:
-set listchars+=trail:\ 
+" This works, but I think it's a global var, not per-window, so setlocal is
+" no better than set.
+setlocal listchars+=trail:\ 
 
 " Override Joey's defaults, and do not return to insert mode when leaving
 " Conque from insert mode.
