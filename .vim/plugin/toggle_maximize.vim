@@ -56,18 +56,11 @@
 " originally worked before :resize)  Note this does not work on windows which
 " have set winfixwidth/height.
 
-if !exists("g:ToggleMaximizeStayMaximized")
-  let g:ToggleMaximizeStayMaximized = 1
-endif
-
 let s:isToggledVertically = 0
 let s:isToggledHorizontally = 0
 
-let s:oldwinwidth  = -1
-let s:oldwinheight = -1
-
-let g:winheights = []
-let g:winwidths = []
+let s:winHeights = []
+let s:winWidths = []
 
 function! ToggleMaximize()
   call ToggleMaximizeHorizontally()
@@ -79,14 +72,9 @@ function! ToggleMaximizeVertically()
     call StoreHeights()
     let s:isToggledVertically = 1
     let s:oldwinheight = &winheight
-    if g:ToggleMaximizeStayMaximized
-      set winheight=9999
-    endif
-    resize 9999
+    set winheight=9999
   else
-    if g:ToggleMaximizeStayMaximized
-      exec "set winheight=".s:oldwinheight
-    endif
+    exec "set winheight=".s:oldwinheight
     call RestoreHeights()
     let s:isToggledVertically = 0
   endif
@@ -97,35 +85,30 @@ function! ToggleMaximizeHorizontally()
     call StoreWidths()
     let s:isToggledHorizontally = 1
     let s:oldwinwidth = &winwidth
-    if g:ToggleMaximizeStayMaximized
-      set winwidth=9999
-    endif
-    vertical resize 9999
+    set winwidth=9999
   else
-    if g:ToggleMaximizeStayMaximized
-      exec "set winwidth=".s:oldwinwidth
-    endif
+    exec "set winwidth=".s:oldwinwidth
     call RestoreWidths()
     let s:isToggledHorizontally = 0
   endif
 endfunction
 
 function! StoreHeights()
-  let g:winheights = []
+  let s:winHeights = []
   let l:count = winnr('$')
   let i=0
   while i < l:count
-    call add( g:winheights , winheight(i) )
+    call add( s:winHeights , winheight(i) )
     let i+=1
   endwhile
 endfunction
 
 function! StoreWidths()
-  let g:winwidths = []
+  let s:winWidths = []
   let l:count = winnr('$')
   let i=0
   while i < l:count
-    call add( g:winwidths , winwidth(i) )
+    call add( s:winWidths , winwidth(i) )
     let i+=1
   endwhile
 endfunction
@@ -135,9 +118,9 @@ function! RestoreHeights()
   let l:count = winnr('$')
   let i=0
   while i < l:count
-    if g:winheights[i] > 0
+    if s:winHeights[i] > 0
       exec (i+1)."wincmd w"
-      exec "resize ". g:winheights[i]
+      exec "resize ". s:winHeights[i]
     endif
     let i+=1
   endwhile
@@ -149,9 +132,9 @@ function! RestoreWidths()
   let l:count = winnr('$')
   let i=0
   while i < l:count
-    if g:winwidths[i] > 0
+    if s:winWidths[i] > 0
       exec (i+1)."wincmd w"
-      exec "vertical resize ". g:winwidths[i]
+      exec "vertical resize ". s:winWidths[i]
     endif
     let i+=1
   endwhile
