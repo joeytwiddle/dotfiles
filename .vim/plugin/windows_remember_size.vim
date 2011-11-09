@@ -1,6 +1,13 @@
 " When you set the size of a window (presently using keymaps) it remembers its
 " size, and restores to that size the next time you enter it.
 
+" Ideally instead of keymaps would could intercept user-originated calls to
+" :resize, e.g. from the mouse or from user or default mappings.
+" (There is no WinResized event to attach to.)
+
+" Alternatively, we could try *always* storing the size:
+" autocmd WinLeave * call <SID>RememberHeight() | call <SID>RememberWidth()
+
 function! s:RememberHeight()
   let w:rememberedHeight = winheight(0)
 endfunction

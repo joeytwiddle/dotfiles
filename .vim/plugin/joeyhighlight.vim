@@ -201,7 +201,9 @@ function! Joeyhighlight()
 	"highlight StatusLine term=bold,reverse cterm=bold,reverse ctermfg=cyan ctermbg=black
 	"highlight StatusLineNC term=reverse cterm=reverse ctermfg=grey ctermbg=black
 	"" cterm=bold was showing hiddens chars - specifically "^^^^^^^"s I didn't like.
-	highlight StatusLine term=reverse cterm=none ctermfg=darkblue ctermbg=white gui=none,underline guifg=#000066 guibg=white
+	" highlight StatusLine term=reverse cterm=none ctermfg=darkblue ctermbg=white gui=none,underline guifg=#000066 guibg=white
+  " We get stronger white and blue in reverse!
+	highlight StatusLine term=reverse cterm=reverse ctermfg=white ctermbg=blue gui=none,underline guifg=#000066 guibg=white
 	" highlight StatusLineNC term=reverse,bold,italic,underline cterm=none,bold,italic,underline ctermfg=darkgrey ctermbg=black gui=none,italic,underline guifg=#222222 guibg=#bbbbbb " Looks wrong in Konsole
 	" highlight StatusLineNC term=reverse,italic,underline cterm=none,italic,underline ctermfg=grey ctermbg=black gui=none,italic,underline guifg=#222222 guibg=#bbbbbb
 	"" If we make it bold, in xterm the black writing appears faded grey, hinting disabled.
@@ -250,6 +252,8 @@ function! Joeyhighlight()
     " Make StatusLine light up temporarily when we switch window
     augroup LightUpStatusLine
       autocmd!
+      "" Note: all these rules where made when cterm was not reversed!
+      "" They may look better flipped if you are using cterm=reverse.
       " autocmd WinEnter * hi StatusLine ctermbg=green ctermfg=white
       " autocmd WinEnter * hi StatusLine ctermbg=white ctermfg=red
       "" We must use reverse to get thick black on white:
