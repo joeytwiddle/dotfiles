@@ -66,6 +66,9 @@ let s:isToggledHorizontally = 0
 let s:oldwinwidth  = -1
 let s:oldwinheight = -1
 
+let g:winheights = []
+let g:winwidths = []
+
 function! ToggleMaximize()
   " We can't just call the toggle functions for each axis in turn, because
   " they both use windo to collect data.  The second one may re-expand windows
@@ -81,8 +84,10 @@ function! ToggleMaximize()
       exec "set winwidth=".s:oldwinwidth
       exec "set winheight=".s:oldwinheight
     endif
-    call s:WinDoBothWays("call WinRestoreHeight()")
-    call s:WinDoBothWays("call WinRestoreWidth()")
+    " call s:WinDoBothWays("call WinRestoreHeight()")
+    call RestoreHeights()
+    " call s:WinDoBothWays("call WinRestoreWidth()")
+    call RestoreWidths()
     let s:isToggledVertically = 0
     let s:isToggledHorizontally = 0
   else
@@ -90,10 +95,10 @@ function! ToggleMaximize()
 
     " Get data before re-arranging windows
     if s:isToggledVertically == 0
-      call s:WinDo("call WinStoreHeight()")
+      call StoreHeights()
     endif
     if s:isToggledHorizontally == 0
-      call s:WinDo("call WinStoreWidth()")
+      call StoreWidths()
     endif
 
     " Maximize
@@ -119,7 +124,8 @@ endfunction
 
 function! ToggleMaximizeVertically()
   if s:isToggledVertically == 0
-    call s:WinDo("call WinStoreHeight()")
+    " call s:WinDo("call WinStoreHeight()")
+    call StoreHeights()
     let s:isToggledVertically = 1
     let s:oldwinheight = &winheight
     if g:ToggleMaximizeStayMaximized
@@ -130,14 +136,16 @@ function! ToggleMaximizeVertically()
     if g:ToggleMaximizeStayMaximized
       exec "set winheight=".s:oldwinheight
     endif
-    call s:WinDoBothWays("call WinRestoreHeight()")
+    " call s:WinDoBothWays("call WinRestoreHeight()")
+    call RestoreHeights()
     let s:isToggledVertically = 0
   endif
 endfunction
 
 function! ToggleMaximizeHorizontally()
   if s:isToggledHorizontally == 0
-    call s:WinDo("call WinStoreWidth()")
+    " call s:WinDo("call WinStoreWidth()")
+    call StoreWidths()
     let s:isToggledHorizontally = 1
     let s:oldwinwidth = &winwidth
     if g:ToggleMaximizeStayMaximized
@@ -148,7 +156,8 @@ function! ToggleMaximizeHorizontally()
     if g:ToggleMaximizeStayMaximized
       exec "set winwidth=".s:oldwinwidth
     endif
-    call s:WinDoBothWays("call WinRestoreWidth()")
+    " call s:WinDoBothWays("call WinRestoreWidth()")
+    call RestoreWidths()
     let s:isToggledHorizontally = 0
   endif
 endfunction
@@ -163,13 +172,17 @@ endfunction
 
 function! WinRestoreHeight()
   if exists("w:oldHeight")
-    exec "resize ".w:oldHeight
+    " exec "resize ".w:oldHeight
+    let i = winnr()-1
+    exec "resize ".g:winheights[i]
   endif
 endfunction
 
 function! WinRestoreWidth()
   if exists("w:oldWidth")
-    exec "vertical resize ".w:oldWidth
+    " exec "vertical resize ".w:oldWidth
+    let i = winnr()
+    exec "vertical resize ".g:winwidths[i]
   endif
 endfunction
 
@@ -191,11 +204,71 @@ function! RestoreLayout()
   " moves, and what other windows expand or shrink as a result.  So sometimes
   " the above will leave a window crushed by others.  Running it a second
   " time in reverse can often fix the layout if the first attempt failed.
-  call s:WinDoBothWays("call WinRestoreHeight()")
-  call s:WinDoBothWays("call WinRestoreWidth()")
+  " call s:WinDoBothWays("call WinRestoreHeight()")
+  call RestoreHeights()
+  " call s:WinDoBothWays("call WinRestoreWidth()")
+  call RestoreWidths()
   "" The focus window is the most important window, so let's give him a final check:
   " call WinRestoreWidth()
   " call WinRestoreHeight()
+endfunction
+
+function! StoreHeights()
+  let g:winheights = []
+  let l:count = winnr('$')
+  " echo "count=".l:count
+  let i=0
+  while i < l:count
+    call add( g:winheights , winheight(i) )
+    " echo "Storing: [".i."] = ".g:winheights[i]
+    let i+=1
+  endwhile
+endfunction
+
+function! StoreWidths()
+  let g:winwidths = []
+  let l:count = winnr('$')
+  let i=0
+  while i < l:count
+    call add( g:winwidths , winwidth(i) )
+    let i+=1
+  endwhile
+endfunction
+
+function! RestoreHeightsOK()
+  call s:WinDoBothWays("call WinRestoreHeight()")
+endfunction
+
+function! RestoreHeights()
+  let startwin = winnr()
+  let l:count = winnr('$')
+  let i=0
+  while i < l:count
+    if g:winheights[i] > 0
+      exec (i+1)."wincmd w"
+      exec "resize ". g:winheights[i]
+    endif
+    let i+=1
+  endwhile
+  exec startwin."wincmd w"
+endfunction
+
+function! RestoreWidthsOK()
+  call s:WinDoBothWays("call WinRestoreWidth()")
+endfunction
+
+function! RestoreWidths()
+  let startwin = winnr()
+  let l:count = winnr('$')
+  let i=0
+  while i < l:count
+    if g:winwidths[i] > 0
+      exec (i+1)."wincmd w"
+      exec "vertical resize ". g:winwidths[i]
+    endif
+    let i+=1
+  endwhile
+  exec startwin."wincmd w"
 endfunction
 
 " Like :windo but returns to start window when finished.
