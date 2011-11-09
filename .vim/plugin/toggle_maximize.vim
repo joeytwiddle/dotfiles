@@ -70,56 +70,8 @@ let g:winheights = []
 let g:winwidths = []
 
 function! ToggleMaximize()
-  " We can't just call the toggle functions for each axis in turn, because
-  " they both use windo to collect data.  The second one may re-expand windows
-  " which the first one shrank!
-  "call ToggleMaximizeHorizontally()
-  "call ToggleMaximizeVertically()
-  " The following implementation avoids this by collecting data before
-  " resizing.
-
-  if s:isToggledVertically == 1 && s:isToggledHorizontally == 1
-    " If both axes are maximized, we restore layout
-    if g:ToggleMaximizeStayMaximized
-      exec "set winwidth=".s:oldwinwidth
-      exec "set winheight=".s:oldwinheight
-    endif
-    " call s:WinDoBothWays("call WinRestoreHeight()")
-    call RestoreHeights()
-    " call s:WinDoBothWays("call WinRestoreWidth()")
-    call RestoreWidths()
-    let s:isToggledVertically = 0
-    let s:isToggledHorizontally = 0
-  else
-    " Otherwise we maximize one or both axes
-
-    " Get data before re-arranging windows
-    if s:isToggledVertically == 0
-      call StoreHeights()
-    endif
-    if s:isToggledHorizontally == 0
-      call StoreWidths()
-    endif
-
-    " Maximize
-    if s:isToggledVertically == 0
-      let s:oldwinheight = &winheight
-      if g:ToggleMaximizeStayMaximized
-        set winheight=9999
-      endif
-      let s:isToggledVertically = 1
-      resize 9999
-    endif
-    if s:isToggledHorizontally == 0
-      let s:oldwinwidth = &winwidth
-      if g:ToggleMaximizeStayMaximized
-        set winwidth=9999
-      endif
-      let s:isToggledHorizontally = 1
-      vertical resize 9999
-    endif
-
-  endif
+  call ToggleMaximizeHorizontally()
+  call ToggleMaximizeVertically()
 endfunction
 
 function! ToggleMaximizeVertically()
@@ -161,11 +113,9 @@ endfunction
 function! StoreHeights()
   let g:winheights = []
   let l:count = winnr('$')
-  " echo "count=".l:count
   let i=0
   while i < l:count
     call add( g:winheights , winheight(i) )
-    " echo "Storing: [".i."] = ".g:winheights[i]
     let i+=1
   endwhile
 endfunction
