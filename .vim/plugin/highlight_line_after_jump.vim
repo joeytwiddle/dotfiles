@@ -1,5 +1,5 @@
-" Highlights the line the cursor is on, but only after jumping multiple lines,
-" and only for a short while.  Can use cursorline, or its own implementation.
+" Briefly highlights the cursor line whenever the cursor jumps vertically on
+" the screen.  Can use cursorline, or its own implementation.
 
 if exists('g:hiline') && g:hiline == 0
   finish
@@ -13,44 +13,49 @@ if !exists('g:hiline_min_lines')
   let g:hiline_min_lines = 2
 endif
 
+" CONSIDER: If syntax is window/buffer-local, we might want to use a
+" window/buffer-scoped variable here when not using cursorline.
+let s:highlightOn = 0
+
 function! HighlightLine()
   if exists('g:hiline') && g:hiline == 0
     return
   endif
-  " set cul
-  let l:line = "FAIL"
-  " let l:line = GetRegAfter('""yy')
-  let l:line = getline(".")
-  " When i checked output of :syn HLCurrentLine, we had a nasty trailing '^@' char:
-  if l:line == "FAIL"
-    echo "failed to get register got: ".l:line
-    return
-  endif
-  " echo "got register: ".l:line
-  " Sometimes we got back multiple lines, separated by ^@, which I think is one of the following:
-  let l:line = substitute(l:line,'\(\r\|\n\|\0x0000\).*','','')
-  " We still highlight empty lines, simply to ensure we unhighlight the
-  " previous focused line.
-  if 0 && l:line == ""
-    " call UnHighlightLine()
+  let s:highlightOn = 1
+  if g:hiline_use_cursorline
+    set cul
   else
-    " Convert String to regexp, by escaping regexp special chars:
-    " let l:pattern = substitute(l:line,'\([.^$\\][)(]\|\*\|\\\|"\|\~\)','\\\1','g')
-    " let l:pattern = substitute(l:line,'\([.^$\\][]\|\*\|\\\|\"\|\~\)','\\\1','g')
-    "" BUG: Does not create a suitable regexp for all inputs.
-    "" For example, the next line breaks the algorithm on the next line!
-    let l:pattern = substitute(l:line,'\([.^$*\\][]\|\\\|\"\|\~\)','\\\1','g')
-    let l:pattern = '^' . l:pattern . '$'
-
-    " echo "got pattern: ".l:pattern
-
-    if g:hiline_use_cursorline
-      set cul
+    let l:line = "FAIL"
+    " let l:line = GetRegAfter('""yy')
+    let l:line = getline(".")
+    " When i checked output of :syn HLCurrentLine, we had a nasty trailing '^@' char:
+    if l:line == "FAIL"
+      echo "failed to get register got: ".l:line
+      return
+    endif
+    " echo "got register: ".l:line
+    " Sometimes we got back multiple lines, separated by ^@, which I think is one of the following:
+    let l:line = substitute(l:line,'\(\r\|\n\|\0x0000\).*','','')
+    " We still highlight empty lines, simply to ensure we unhighlight the
+    " previous focused line.
+    if 0 && l:line == ""
+      " call UnHighlightLine()
     else
+
+      " Convert String to regexp, by escaping regexp special chars:
+      " let l:pattern = substitute(l:line,'\([.^$\\][)(]\|\*\|\\\|"\|\~\)','\\\1','g')
+      " let l:pattern = substitute(l:line,'\([.^$\\][]\|\*\|\\\|\"\|\~\)','\\\1','g')
+      "" BUG: Does not create a suitable regexp for all inputs.
+      "" For example, the next line breaks the algorithm on the next line!
+      let l:pattern = substitute(l:line,'\([.^$*\\][]\|\\\|\"\|\~\)','\\\1','g')
+      let l:pattern = '^' . l:pattern . '$'
+
+      " echo "got pattern: ".l:pattern
+
       "" This line was a dummy to prevent the clear from complaining on the first run
       " execute 'syntax match HLCurrentLine "'.pattern.'" contains=ALL'
       "" But now we use silent!
-      execute 'silent! syntax clear HLCurrentLine'
+      silent! syntax clear HLCurrentLine
       "" Also use silent for the match, in case our pattern is invalid.
       execute 'silent! syntax match HLCurrentLine "'.pattern.'"'
       " I tried contains=ALL but this would kill the highlight beneath chars
@@ -61,10 +66,12 @@ function! HighlightLine()
 endfunction
 
 function! UnHighlightLine()
+  let s:highlightOn = 0
   if g:hiline_use_cursorline
-    set nocul
+    silent! set nocul
+  else
+    silent! syntax clear HLCurrentLine
   endif
-  execute "silent! syntax clear HLCurrentLine"
 endfunction
 
 function! HL_Cursor_Moved()
@@ -81,7 +88,8 @@ function! HL_Cursor_Moved()
   if s:last_win!=winnr() || diff>=g:hiline_min_lines || diff<=-g:hiline_min_lines
     call HighlightLine()
   else
-    call UnHighlightLine()
+    " DONE: This is a bit slow to do unneccessarily!
+    if s:highlightOn | call UnHighlightLine() | end
   endif
   let s:last_pos = cur_pos
   let s:last_win = winnr()
@@ -112,5 +120,8 @@ let s:last_win = -1
 
 " set updatetime=4000
 
-highlight link HLCurrentLine CursorLine
+if !hlexists("HLCurrentLine")
+  highlight link HLCurrentLine CursorLine
+  " Not even needed if using hiline_use_cursorline!
+endif
 
