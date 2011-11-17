@@ -1,17 +1,14 @@
 "" Highlights the character under the cursor so that it appears reversed.
 "" Very useful if for some reason your normal cursor has disappeared or is
-"" missing, invisible, hidden or intermittent.  (I had this problem on a 486!)
+"" missing, invisible, hidden or intermittent.  (I have this problem on my 486.)
 
-"" Hit Ctrl-C or Ctrl-H to toggle on/off.
+"" Hit Ctrl-G to toggle on/off.
+map <C-g> :call HighlightCursorToggle()<CR>
 
 "" BUGS: If your cursor really has disappeared, this highlighting method will
 ""       not help you to edit commands in ex mode.
 
-"" TODO: Choose cursor colour to constrast :set background or :highlight Normal.
-""       I don't know how to read the output of the :set or :highlight commands.
-
-"" Also handy: keeps cursor in center of screen
-"" set scrolloff=999
+"" TODO: Choose cursor colour to constrast with &background or :highlight Normal.
 
 function! HighlightCursorRefresh()
 	if exists("g:highlightcursor")
@@ -57,10 +54,6 @@ function! HighlightCursorToggle()
 		call HighlightCursorRefresh()
 	endif
 endfunction
-
-" map <C-c> :call HighlightCursorToggle()<CR>
-" map <C-h> :call HighlightCursorToggle()<CR>
-map <C-g> :call HighlightCursorToggle()<CR>
 
 "" Uncomment this line to have the cursor highlighted as default:
 " :call HighlightCursorToggle()
