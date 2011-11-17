@@ -7,6 +7,7 @@
 " user has calmed down.
 " BUG: Is often incapable of highlighting, because syntax has already matched
 " the text, and that syntax rule does not allow sub-parsing (contains).
+" NOTE: If we want to work independently of updatetime, we could use :sleep
 
 " To disable the script, set g:hiword=0 in your .vimrc, or at runtime
 if exists('g:hiword') && g:hiword == 0
@@ -46,17 +47,7 @@ function! HighlightWord()
     " execute 'syntax match HLCurrentWord "'.pattern.'"'
     execute 'silent! syntax clear HLCurrentWord'
     execute 'silent! syntax match HLCurrentWord "'.pattern.'"'
-    " execute 'highlight HLCurrentWord cterm=underline gui=underline'   " Problem: The match blocks any existing highlighting, so ends up looking Normal.
-    " execute 'highlight HLCurrentWord term=reverse cterm=none ctermbg=darkgreen ctermfg=white guibg=darkgreen guifg=white'
-    " execute 'highlight HLCurrentWord term=none cterm=none ctermbg=blue ctermfg=green guibg=darkblue guifg=green'
-    " execute 'highlight HLCurrentWord term=bold cterm=bold ctermfg=green guifg=green'
-    " execute 'highlight HLCurrentWord ctermfg=red guifg=red'
-    " 121=light green, 179=light orange
-    " execute 'highlight HLCurrentWord ctermfg=180 guifg=orange'
-    " 130,166,172,173,203,208,214
-    " execute 'highlight HLCurrentWord ctermfg=209 guifg=orange'
-    execute 'highlight HLCurrentWord ctermfg=red guifg=orange'
-    "" Freezes vim: execute "sleep 5| call UnHighlightWord()"
+   "" Freezes vim: execute "sleep 5| call UnHighlightWord()"
   endif
 endfunction
 
@@ -95,4 +86,17 @@ augroup END
 set updatetime=1500
 
 let s:lastWord = ""
+
+if !hlexists("HLCurrentWord")
+  " highlight HLCurrentWord cterm=underline gui=underline   " Problem: The match blocks any existing highlighting, so ends up looking Normal.
+  " highlight HLCurrentWord term=reverse cterm=none ctermbg=darkgreen ctermfg=white guibg=darkgreen guifg=white
+  " highlight HLCurrentWord term=none cterm=none ctermbg=blue ctermfg=green guibg=darkblue guifg=green
+  " highlight HLCurrentWord term=bold cterm=bold ctermfg=green guifg=green
+  " highlight HLCurrentWord ctermfg=red guifg=red
+  " 121=light green, 179=light orange
+  " highlight HLCurrentWord ctermfg=180 guifg=orange
+  " 130,166,172,173,203,208,214
+  " highlight HLCurrentWord ctermfg=209 guifg=orange
+  highlight HLCurrentWord ctermfg=red guifg=orange
+endif
 
