@@ -1,4 +1,4 @@
-" ToggleMaximize v1.2.2 by joey.neuralyte.org
+" ToggleMaximize v1.3.4 by joey.neuralyte.org
 "
 " Vim can support complex window layouts, but they can put users off because
 " they reduce the size of the main editing window.  ToggleMaximize addresses
@@ -8,157 +8,164 @@
 " Press Ctrl-F or Ctrl-\ to maximize the size of the current window, press
 " again to restore the original window layout.
 "
-" Ctrl-V and Ctrl-H toggle maximize in horizontal/vertical direction only.
+" Ctrl-V and Ctrl-H toggle maximize in vertical/horizontal direction only.
 "
 " Maximization is forced to respect winminwidth and winminheight, so if you
 " have these set, other windows will not fully shrink to the edges.
+" Restoration is forced to respect winheight.
 "
-" Extra feature: If you mess up your layout and want to restore it to what you
-" had the last time you maximized, you can :call RestoreLayout()
-"
-" Extra feature/bug: If the user changes the size of any windows after
-" maximizing, the script still thinks the toggle is ON, so next time it is
-" used it will restore your old layout, rather than re-maximize.  (To force
-" your new layout to be adopted, you could :call StoreLayout() and then reset
-" the toggle.)
+" If the user changes the size of any windows after maximizing, the script
+" still thinks the toggle is ON, so next time it is used it will restore your
+" old layout, rather than re-maximize.
 
-" IMPLEMENTATION: Maximizing a window is easy.  We can use :resize and :vert
-" resize, or we can set winheight/width.  But restoring the original layout is
-" harder!  To do this, we visit all windows before maximizing, and store their
-" dimensions.  Then when restoring we visit all windows again, this time using
-" the stored data to restore their dimensions.
+" CONSIDER: Arguably a better solution would be for "maximization" to simply
+" open a new tab with the current buffer, and for "restoration" to close it
+" and return to the previous tab.
 
-" TODO: Arguably a better solution would be for "maximization" to simply open
-" a new tab with the current buffer, and for "restoration" to close it and
-" return to the previous tab.  Unfortunately if MiniBufExplorer is present, he
-" may decide to add himself to the maximized tab.  Also this approach cannot
-" support independent vertical and horizontal maximizing.
-
-" ISSUES: We had problems accurately restoring the window layout, because
-" windows would interfere with each other while we were restoring their sizes.
-" (perhaps due to winfixwidth).  It seems WinDoBothWays() has overcome this.
-
-" ADDRESSED: Frequently restores windows which were height 0 with height
-" &winheight, (and likewise for width) due to the fact that they are visited
-" by windo, and resize 0 does nothing on the window you occupy!
-" Presumably most earlier versions also had this issue.
-" Any workarounds for this?  If we could record which windows which were
-" height 0, we could simply skip visiting them when restoring.  Oh look
-" winheight() can accept a window number, so we can collect window size data
-" without ever visiting them!
-
-" TOTEST: Can large values of winwidth/height cause problems restoring layout?
-
-" DONE: (Option ToggleMaximizeStayMaximized) Temporarily set high values for
-" winheight/width during maximization, so that the focused window stays
-" maximized if the user switch between windows, but settings will be normal
-" when they restore to preferred layout.  (This is actually how the script
-" originally worked before :resize)  Note this does not work on windows which
-" have set winfixwidth/height.
+" TODO: Large values of winwidth/height can cause problems restoring layout.
+" Width is ok because we do that last, but when we visit windows to restore
+" width, winheight may alter previously correct heights!
+" SOLUTION: restore width+height at the same time.
+" SOLUTION: temporarily set winwidth/height to 1 while we are restoring.
+" Although we cannot do that if winminwidth/height are > 1.  Grrr!
+" So we might need to temporarily alter winminwidth/height too!
+" CURRENTLY: Left to the user to set winwidth/height low or live with the bug!
 
 let s:isToggledVertically = 0
 let s:isToggledHorizontally = 0
 
+let s:oldwinwidth  = -1
+let s:oldwinheight = -1
+
 let s:winHeights = []
 let s:winWidths = []
 
-function! ToggleMaximize()
-  call ToggleMaximizeHorizontally()
-  call ToggleMaximizeVertically()
+function! s:ToggleMaximize()
+  "call ToggleMaximizeHorizontally()
+  "call ToggleMaximizeVertically()
+  " We can't just call the toggle functions for each axis in turn, because
+  " they both use windo to restore size.  The second one may re-expand windows
+  " which the first one shrank, due to winwidth/winheight.
+  " The following implementation avoids this by restoring winwidth/height
+  " before resizing.
+
+  if s:isToggledVertically == 1 && s:isToggledHorizontally == 1
+    " If both axes are maximized, we restore layout
+    exec "set winwidth=".s:oldwinwidth
+    exec "set winheight=".s:oldwinheight
+    call s:RestoreHeights()
+    call s:RestoreWidths()
+    let s:isToggledVertically = 0
+    let s:isToggledHorizontally = 0
+  else
+    " Otherwise we maximize one or both axes
+    if s:isToggledVertically == 0
+      call ToggleMaximizeVertically()
+    endif
+    if s:isToggledHorizontally == 0
+      call ToggleMaximizeHorizontally()
+    endif
+  endif
 endfunction
 
-function! ToggleMaximizeVertically()
+function! s:ToggleMaximizeVertically()
   if s:isToggledVertically == 0
-    call StoreHeights()
-    let s:isToggledVertically = 1
+    call s:StoreHeights()
     let s:oldwinheight = &winheight
     set winheight=9999
+    " resize 9999
+    let s:isToggledVertically = 1
   else
     exec "set winheight=".s:oldwinheight
-    call RestoreHeights()
+    call s:RestoreHeights()
     let s:isToggledVertically = 0
   endif
 endfunction
 
-function! ToggleMaximizeHorizontally()
+function! s:ToggleMaximizeHorizontally()
   if s:isToggledHorizontally == 0
-    call StoreWidths()
-    let s:isToggledHorizontally = 1
+    call s:StoreWidths()
     let s:oldwinwidth = &winwidth
     set winwidth=9999
+    " vertical resize 9999
+    let s:isToggledHorizontally = 1
   else
     exec "set winwidth=".s:oldwinwidth
-    call RestoreWidths()
+    call s:RestoreWidths()
     let s:isToggledHorizontally = 0
   endif
 endfunction
 
-function! StoreHeights()
+" Window numbering is 1-based, but we store heights 0-based in the array.
+function! s:StoreHeights()
   let s:winHeights = []
-  let l:count = winnr('$')
-  let i=0
-  while i < l:count
-    call add( s:winHeights , winheight(i) )
-    let i+=1
-  endwhile
+  call s:IterateWindows("call s:WinStoreHeight(i)")
 endfunction
 
-function! StoreWidths()
+function! s:StoreWidths()
   let s:winWidths = []
-  let l:count = winnr('$')
-  let i=0
-  while i < l:count
-    call add( s:winWidths , winwidth(i) )
-    let i+=1
-  endwhile
+  call s:IterateWindows("call s:WinStoreWidth(i)")
 endfunction
 
-function! RestoreHeights()
-  let startwin = winnr()
-  let l:count = winnr('$')
-  let i=0
-  while i < l:count
-    if s:winHeights[i] > 0
-      exec (i+1)."wincmd w"
-      exec "resize ". s:winHeights[i]
-    endif
-    let i+=1
-  endwhile
-  exec startwin."wincmd w"
+function! s:WinStoreHeight(i)
+  call add( s:winHeights , winheight(a:i) )
 endfunction
 
-function! RestoreWidths()
-  let startwin = winnr()
+function! s:WinStoreWidth(i)
+  call add( s:winWidths , winwidth(a:i) )
+endfunction
+
+function! s:RestoreHeights()
+  call s:WinDo("call s:WinRestoreHeight()")
+endfunction
+
+function! s:RestoreWidths()
+  call s:WinDo("call s:WinRestoreWidth()")
+endfunction
+
+function! s:WinRestoreHeight()
+  exec "resize ". s:winHeights[winnr()-1]
+endfunction
+
+function! s:WinRestoreWidth()
+  exec "vert resize ". s:winWidths[winnr()-1]
+endfunction
+
+" Like :windo but returns to start window when finished.
+function! s:WinDo(expr)
+  let l:winnr = winnr()
+  windo exec a:expr
+  exec l:winnr." wincmd w"
+endfunction
+
+" Iterates through windows with i=1..n, does not visit them.
+function! s:IterateWindows(expr)
   let l:count = winnr('$')
-  let i=0
-  while i < l:count
-    if s:winWidths[i] > 0
-      exec (i+1)."wincmd w"
-      exec "vertical resize ". s:winWidths[i]
-    endif
+  let i=1
+  while i <= l:count
+    exec a:expr
     let i+=1
   endwhile
-  exec startwin."wincmd w"
 endfunction
 
 " == Keymaps ==
 
-noremap  <silent> <C-F> :call ToggleMaximize()<Enter>
-inoremap <silent> <C-F> <Esc>:call ToggleMaximize()<Enter>a
-noremap  <silent> <C-\> :call ToggleMaximize()<Enter>
-inoremap <silent> <C-\> <Esc>:call ToggleMaximize()<Enter>a
-"noremap  <silent> <C-G> :call ToggleMaximize()<Enter>
-"inoremap <silent> <C-G> <Esc>:call ToggleMaximize()<Enter>a
-"noremap  <silent> <C-Z> :call ToggleMaximize()<Enter>
-"inoremap <silent> <C-Z> <Esc>:call ToggleMaximize()<Enter>a
+nnoremap  <silent> <C-F> :call <SID>ToggleMaximize()<Enter>
+inoremap <silent> <C-F> <Esc>:call <SID>ToggleMaximize()<Enter>a
+nnoremap  <silent> <C-\> :call <SID>ToggleMaximize()<Enter>
+inoremap <silent> <C-\> <Esc>:call <SID>ToggleMaximize()<Enter>a
+"nnoremap  <silent> <C-G> :call <SID>ToggleMaximize()<Enter>
+"inoremap <silent> <C-G> <Esc>:call <SID>ToggleMaximize()<Enter>a
+"nnoremap  <silent> <C-Z> :call <SID>ToggleMaximize()<Enter>
+"inoremap <silent> <C-Z> <Esc>:call <SID>ToggleMaximize()<Enter>a
 
-noremap  <silent> <C-V> :call ToggleMaximizeVertically()<Enter>
-noremap  <silent> <C-H> :call ToggleMaximizeHorizontally()<Enter>
+nnoremap  <silent> <C-V> :call <SID>ToggleMaximizeVertically()<Enter>
+nnoremap  <silent> <C-H> :call <SID>ToggleMaximizeHorizontally()<Enter>
 " We will not override Ctrl-V or Ctrl-H in Insert mode; Ctrl-V is too useful,
 " and Ctrl-H might be what some systems see when the user presses Backspace.
-"inoremap <silent> <C-V> <Esc>:call ToggleMaximizeVertically()<Enter>a
-"inoremap <silent> <C-H> <Esc>:call ToggleMaximizeHorizontally()<Enter>a
+"inoremap <silent> <C-V> <Esc>:call <SID>ToggleMaximizeVertically()<Enter>a
+"inoremap <silent> <C-H> <Esc>:call <SID>ToggleMaximizeHorizontally()<Enter>a
 
 "" Does not work:
-"noremap <silent> <C-Enter> :call ToggleMaximize()<Enter>
+"nnoremap <silent> <C-Enter> :call <SID>ToggleMaximize()<Enter>
 
