@@ -68,6 +68,7 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 
 # brown
 # archive/package/compressed
+.gz  00;33
 .tar 00;33
 .tgz 00;33
 .bz2 00;33
@@ -77,12 +78,14 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .zip 00;33
 .z   00;33
 .Z   00;33
-.gz  00;33
-.jar 00;33
 .rar 00;33
+.jar 00;33
+.7z 00;33
 .rpm 00;33
 .deb 00;33
 .encrypted 00;33
+.ssd 00;33 # 8-bit disc image
+.jnlp 00;33 # Java WebStart Launch file
 
 # magenta = Media
 # would of course be nice to distinguish video, raster, vector, audio
@@ -128,24 +131,27 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .rm 01;35
 .mpg 01;35
 .mpeg 01;35
+.mp4 01;35
 .avi 01;35
 .mov 01;35
 .wmv 01;35
 .ogm 01;35
 .flv 01;35
+.webm 01;35
 # Audio
-.mp3 01;35
-.ogg 01;35
-.ra 00;35   # RealAudio
-.m4a 00;35  # iTunes
-.m4p 00;35  # iTunes
-.m3u 01;35
-.pls 01;35
 .wav 01;35
 .raw 01;35
 .au 01;35
 .mod 01;35
 .it 01;35
+.mp3 01;35
+.ogg 01;35
+.wma 00;35  #
+.ra 00;35   # RealAudio
+.m4a 00;35  # iTunes
+.m4p 00;35  # iTunes
+.m3u 01;35
+.pls 01;35
 # Vector images (editable / not really)
 .fig 01;35
 .obj 01;35 # tfig
@@ -163,35 +169,41 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .dl 01;37
 
 # yellow
-# Documents for reading (and editing)
+# Documents (human readable) (and editing)
 .diff 01;33
 .sync 01;33
 .txt 01;33
-.log 01;33
 .TXT 01;33
+.note 01;33
+.log 01;33
 .doc 01;33
 .DOC 01;33
+.xls 01;33
 .ppt 01;33
 .man 01;33
-.url 01;33 # actually a link - so could be grouped/coloured like a symlink
+.url 01;33 # a kind of link - could be grouped with/coloured like symlinks
+.urls 01;33 # a list of previous
 .html 01;33
 .HTML 01;33
 .htm 01;33
 .HTM 01;33
+.css 01;33
 .dvi 01;33
 .pdf 01;33
 .sdw 01;33 # StarOffice Document
 .sxi 01;33 # StarOffice Presentation
-.sxw 01;33 # OpenOffice document
+.sxw 01;33 # OpenOffice Document
+.sdd 01;33 # OpenOffice Presentation
 .mbox 01;33 # Mail folder
 # .sda 01;33 # Drawing (moved to images)
-.sdd 01;33 # Presentation
 *readme 01;33
 *README 01;33
 *INSTALL 01;33
+*LICENSE 01;33
 *FAQ 01;33
 *HELP 01;33
 *TODO 01;33
+.md 01;33   # markdown
 .nfo 01;33
 .NFO 01;33
 # patch failure: certainly deserves user attention!
@@ -201,6 +213,13 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .asc 01;33
 # Java decompile: coloured different from normal code!
 .jad 01;33
+## New OpenOffice ODFs:
+.odt 01;33   # ODF document
+.ods 01;33   # ODF spreadsheet
+.odp 01;33   # ODF presentation
+.odg 01;33   # ODF drawing
+.odb 01;33   # ODF database
+.otp 01;33   # ODF template
 
 # cyan
 # Code / input for software
@@ -239,6 +258,8 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .sql 01;36
 ## Web code: (html is in "Docs")
 .js 01;36
+.json 01;36
+.coffee 01;36
 # ...
 # .xsl 01;36
 .grm 01;36 # Joey's grammar
@@ -248,6 +269,19 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .asm 01;36
 .macro 01;36
 .fns 01;36
+.wxm 01;36 # Maxima
+.mc 01;36 # Maxima loadable
+.tm 01;36 # Maxima dump
+
+# Config files
+.config 01;36
+.conf 01;36
+.cfg 01;36
+*rc 01;36
+.cvsignore 01;36
+.gitignore 01;36
+.gitmodules 01;36
+.mf 01;36   # Java manifest file
 
 # Plain data ("output")
 .dat 00;36
@@ -265,15 +299,11 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .cdrec 00;36
 .trace 00;36
 .strace 00;36
+.inf 00;36 # Meta-information for a DFS file
 # Data I want white! (Don't remember why, maybe to encourage rename!)
 .out 00;37
 .err 00;37
-
-# Config files
-.config 01;36
-.conf 01;36
-.cfg 01;36
-*rc 01;36
+*tags 00;37 # ctags file (essentially a cache)
 
 # Don't work:
 #*tmp* 01;31
@@ -303,3 +333,4 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 EXEC 01;31
 .class 01;31
 .CLASS 01;31
+

@@ -16,7 +16,7 @@ set timeout = 60
 # color normal white black
 ## leaves background image visible:
 color normal default default
-color indicator white magenta
+color indicator brightwhite magenta
 color hdrdefault brightblue default
 color header brightcyan default "^From: "
 color header brightcyan default "^To: "

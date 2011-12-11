@@ -19,6 +19,7 @@ then
 	if [ "$JPATH" = NOT_FOUND ]
 	then
 		echo "[.xinitrc] Could not load jsh =(" >&2
+		## NOTE BUG: This is not valid sh - bash run as sh will reject it!
 		function jshinfo () {
 			echo "$@" >&2
 		}
@@ -33,10 +34,25 @@ fi
 
 
 
+## Log our output by calling self back
+## There is a better way than this probably on BashFAQ :P
+logFile="$HOME/.xinitrc-$DISPLAY.log"
+if [ "$1" = -fg ]
+then shift
+else
+	echo "Calling $0 loopback and logging to $logFile"
+	bash "$0" -fg "$@" > "$logFile" 2>&1
+	exit
+fi
+
+
+
+
 ### Popup execution of this script in an xterm (so user can see its output) {{{
 
 ## For some reason this breaks when we are called from xdm/gdm.
 # Oh it's when fluxbox crashes, this doesn't leave an xterm running, it quits and doesn't give me the chance to start a new one.  We should loop.
+# Or perhaps it was just xterm backgrounding - we should use /usr/bin/xterm..
 # XINIT_POPUP_LOG=true
 
 if [ "$XINIT_POPUP_LOG" ]
@@ -79,9 +95,9 @@ PS4="[.xinitrc] # $PS4"
 
 ## Put your favourite WMs at the top.  The first one present will be chosen.
 ## TESTING kdelight again
-# compiz
 WindowManagers="
 kdelight
+compiz
 startkde
 fluxbox
 enlightenment
@@ -163,7 +179,9 @@ setxkbmap -print gb | xkbcomp - "$DISPLAY"
 
 unset COLUMNS
 
+## I have set a larger virtual size in xorg.conf but I don't want it!
 # xrandr -s 1024x768
+xrandr -s 1280x1024
 
 ## TESTING: may work faster from bbkeys or fluxkeys if pre-loaded
 ##          this technique might only work if we . fluxbox, and probably not even then :P
@@ -262,7 +280,8 @@ xset -b
 ## Increase keyboard rate
 # xset r rate 400 50
 # xset r rate 280 90
-xset r rate 270 65
+# xset r rate 270 65
+xset r rate 270 99
 ## For my over-sensitive mouse:
 # xset m 2/3
 # xset m 2/3 3
@@ -320,6 +339,10 @@ xset fp+ unix/:7101   ## xfstt
 	## OK so first I adjust the monitor's settings to get pure white, then I apply xgamma to fix greys.
 	xgamma -rgamma 1.0 -ggamma 1.4 -bgamma 1.4 ## Brighter so I can read my greys!
 	# xgamma -rgamma 1.1 -ggamma 1.4 -bgamma 1.3 ## When the bloody thing goes darker and bluer!
+	## Are they accumulating?!
+	# xgamma -rgamma 1.8 -ggamma 2.0 -bgamma 2.0   dark
+	# xgamma -rgamma 2 -ggamma 2.5 -bgamma 2.5   bright
+	# xgamma -rgamma 2 -ggamma 2.2 -bgamma 2.2   ok/light
 
 	jshinfo "DISPLAY = $DISPLAY"
 
@@ -331,10 +354,12 @@ xset fp+ unix/:7101   ## xfstt
 		# GNOMEFP_PID="$!"
 
 		## Start other things slowly, because the Gnome2 panel takes so long!
+			## I *need* xscreensaver to turn off my monitor when idle, in case the other dpms methods don't work!
 			## This appears to be hanging my machine again, and I don't think it's even running any GL!
 			## If you dare to test it again, don't test in both Gentoo and Debian chroot at the same time!
 			# sleep 2
-			if ps aux | grep xscreensaver >/dev/null
+			## FAIL (sees itself!): if ps aux | grep xscreensaver >/dev/null
+			if pgrep xscreensaver >/dev/null
 			then : ## Even with multiple displays, we don't want more than one xscreensaver gobbling up CPU.
 			else xscreensaver -nosplash &
 			fi

@@ -25,7 +25,7 @@
   [option] (stylefile)              {/home/joey/linux/.fluxbox/styles/OrangeJuice}
   [option] (honorModifiers)         {false}
   [option] (raiseWhileCycling)      {false}
-  [option] (showCycleMenu)          {false}
+  [option] (showCycleMenu)          {true}
   [option] (menuTitleJustify)       {center}
   [option] (menuTextJustify)        {left}
   [option] (cycleMenuX)             {480}
@@ -84,10 +84,13 @@
   # [NextWindowOnAllWorkspaces]  (Mod4-Tab)
   # [PrevWindowOnAllWorkspaces]  (Mod4-grave)
   # [PrevWindowOnAllWorkspaces]  (Mod4-Shift-Tab)
+  [NextWindowOnAllWorkspaces]  (Control-Shift-Tab)
+  [PrevWindowOnAllWorkspaces]  (Control-Shift-grave)
 
   ## These were added by joey:
 
-  ## Disabled after interfering with Fluxbox (sporadically)
+  ## Disabled after interfering (sporadically) with Fluxbox's keys.
+  ## May contribute to keypress event loss in Fluxbox.
   # [upWorkspace]                (Mod1-Control-Up)
   # [downWorkspace]              (Mod1-Control-Down)
   # [leftWorkspace]              (Mod1-Control-Left)
@@ -130,6 +133,7 @@
   [Execute]  (Mod1-KP_Subtract) {volumedown 2}
   [Execute]  (Mod1-KP_Add) {volumeup 2}
 
+  [Execute]  (Mod4-X) {xmms -p}
   [Execute]  (Mod1-KP_7) {xmms -r}
   [Execute]  (Mod1-KP_9) {xmms -f}
   # [execute]  (Mod1-KP_9) {nextsong}

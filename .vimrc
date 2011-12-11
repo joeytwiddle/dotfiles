@@ -4,6 +4,13 @@
 
 " == Vim Options ==
 
+" Moved here from joey.vim in the hope that they will be overridden by
+" defaults for script-type (.vim files should open with ts=2 and expand!)
+" my defaults (rather than the default 8) but these should be
+" overridden by modeline or whatever.
+:set shiftwidth=3
+:set ts=3
+
 "" If you need to fix backspace, try one of these:
 " :fixdel
 " :set t_kD=^V<Delete>
@@ -101,15 +108,21 @@ command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | d
 "               fail, and prevent the user from quitting!
 "        FIXED: Actually I think that may have been because :qa! mapped only to :qa
 " WINDOWID is the closest we have to a unique session id for now.
-nnoremap :q<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:q<Enter>
-nnoremap :qa<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:qa<Enter>
-nnoremap :qa!<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:qa!<Enter>
-nnoremap :wq<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:wq<Enter>
-nnoremap :wqa<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:wqa<Enter>
-nnoremap :wqa!<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:wqa!<Enter>
+"nnoremap :q<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:q<Enter>
+"nnoremap :qa<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:qa<Enter>
+"nnoremap :qa!<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:qa!<Enter>
+"nnoremap :wq<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:wq<Enter>
+"nnoremap :wqa<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:wqa<Enter>
+"nnoremap :wqa!<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:wqa!<Enter>
 " If you need to avoid using these, just do ::wqa
 " TODO: I also want this to run if I close Vim accidentally, e.g. with Ctrl-w c
 " TODO: Put the above in a loop.
+
+" Now I am using sessionman.vim
+" let sessionman_save_on_exit = 1   " default
+let g:session_autosave = 1
+let g:sessionlist_stay_open = 1
+let g:sessionman_preview_sessions = 1
 
 " Can't be set here.  Needs to be set late!
 " :set winheight 40
@@ -119,9 +132,12 @@ nnoremap :wqa!<Enter> :mksession! ~/.vim/sessions/session-$WINDOWID.vim<Enter>:w
 " == Options for plugins ==
 
 let g:Tlist_Use_Right_Window = 1
+" Changing window with doesn't seem to work properly under compiz, it messes
+" the window up, requiring a Ctrl-L to fix it.
+let g:Tlist_Inc_Winwidth = 0
 
-let g:miniBufExplorerMoreThanOne = 1
-let g:miniBufExplMaxHeight = 6
+let g:miniBufExplorerMoreThanOne = 0
+" let g:miniBufExplMaxHeight = 6
 " let g:miniBufExplMapWindowNavVim = 1
 let g:miniBufExplMapWindowNavArrows = 1  " or use version in joeykeymap.vim
 let g:miniBufExplUseSingleClick = 1
@@ -133,15 +149,21 @@ let g:treeExplVertical = 1
 let g:treeExplWinSize = 24
 " let g:treeExplAutoClose = 0
 
-" dammit these two don't work together!
-let g:hiline = 0
-let g:hiword = 1
-
 let g:Grep_OpenQuickfixWindow = 1
 
 let g:ConqueTerm_Color = 1
 let g:ConqueTerm_CloseOnEnd = 1
-" We may want to disable this unless we can restore previous mode when we leave again.
 let g:ConqueTerm_InsertOnEnter = 1
-let g:ConqueTerm_ReadUnfocused = 1
+let g:ConqueTerm_ReadUnfocused = 1   " I fear this may be preventing me from leaving the window!
+
+" == Options for my plugins ==
+
+let g:hiline = 1
+let g:hiword = 1
+
+let g:search_centered = 0
+
+let g:blinking_statusline = 0
+
+let g:yaifa_max_lines = 80
 
