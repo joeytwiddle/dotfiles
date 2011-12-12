@@ -31,6 +31,12 @@
 " So we might need to temporarily alter winminwidth/height too!
 " CURRENTLY: Left to the user to set winwidth/height low or live with the bug!
 
+" SUCKS: Resizing Vim in your window manager does not cause winheight to be
+"        re-enforced (until you change window).
+
+" NOTE: Oh look there is winrestcmd()!  Could have saved us some work,
+" although it won't work on axes independently.
+
 let s:isToggledVertically = 0
 let s:isToggledHorizontally = 0
 
@@ -39,6 +45,10 @@ let s:oldwinheight = -1
 
 let s:winHeights = []
 let s:winWidths = []
+
+" SUCKS: After all that refactoring, I note that windowid-indexed values apply
+" to different windows when windows are closed or created, whereas
+" window-local variables clean themselves up more tidily.
 
 function! s:ToggleMaximize()
   "call ToggleMaximizeHorizontally()
@@ -60,10 +70,10 @@ function! s:ToggleMaximize()
   else
     " Otherwise we maximize one or both axes
     if s:isToggledVertically == 0
-      call ToggleMaximizeVertically()
+      call s:ToggleMaximizeVertically()
     endif
     if s:isToggledHorizontally == 0
-      call ToggleMaximizeHorizontally()
+      call s:ToggleMaximizeHorizontally()
     endif
   endif
 endfunction
@@ -124,11 +134,15 @@ function! s:RestoreWidths()
 endfunction
 
 function! s:WinRestoreHeight()
-  exec "resize ". s:winHeights[winnr()-1]
+  if winnr() < len(s:winHeights)
+    exec "resize ". s:winHeights[winnr()-1]
+  endif
 endfunction
 
 function! s:WinRestoreWidth()
-  exec "vert resize ". s:winWidths[winnr()-1]
+  if winnr() < len(s:winHeights)
+    exec "vert resize ". s:winWidths[winnr()-1]
+  endif
 endfunction
 
 " Like :windo but returns to start window when finished.
