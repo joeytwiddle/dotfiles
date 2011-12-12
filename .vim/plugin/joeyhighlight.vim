@@ -32,8 +32,11 @@ function! Joeyhighlight()
 
 	highlight Title ctermbg=black ctermfg=green guibg=#000060 guifg=#00ff00
 
-	"highlight WarningMsg ctermbg=black ctermfg=red cterm=bold
-	highlight WarningMsg term=reverse,bold cterm=reverse,bold gui=reverse,bold ctermbg=yellow ctermfg=red guibg=yellow guifg=red
+	" highlight WarningMsg ctermbg=black ctermfg=red cterm=bold
+	highlight WarningMsg term=reverse,bold cterm=reverse,bold gui=reverse,bold ctermbg=red ctermfg=yellow guibg=red guifg=yellow
+	" highlight ErrorMsg ctermbg=Red ctermfg=Yellow gui=bold guibg=Red guifg=Yellow
+	highlight ErrorMsg term=reverse,bold cterm=bold gui=reverse,bold ctermfg=yellow ctermbg=darkred guibg=yellow guifg=#cc0000
+	" Full red is too bright, dark red is too dark
 
 	highlight DiffLine ctermbg=Magenta ctermfg=White
 	"highlight Search term=reverse,bold ctermbg=White guibg=White ctermfg=Black guifg=Black
@@ -44,7 +47,6 @@ function! Joeyhighlight()
 	"highlight Search ctermbg=blue ctermfg=white term=bold guibg=#005500 guifg=#66ff88 gui=bold
 	"highlight Search ctermbg=blue ctermfg=white term=bold guibg=#005500 guifg=#bbffbb gui=bold
 	highlight Search ctermbg=blue ctermfg=green term=bold guibg=#005544 guifg=#aaffaa gui=bold
-	highlight ErrorMsg ctermbg=Red ctermfg=Yellow guibg=Red guifg=Yellow
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White guifg=DarkMagenta guibg=White
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#553355
 	highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#445555
