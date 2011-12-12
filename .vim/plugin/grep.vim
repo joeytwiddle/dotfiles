@@ -320,8 +320,14 @@ function! s:RunGrepCmd(cmd, pattern)
 
     " Jump to the first error (mainly because it forces the focus back to
     " the editing window, rather than leaving it in the clist.)
-    cc
+    "cc
     " exe "cc"
+    "" Now I have decided that focus on the clist is good.  I may not want to
+    "" jump to the first result, e.g. if it's in an unopened file I'm not
+    "" really interested in, then it would just pollute my buffer list.
+    "" Do nothing.
+    "" REMEMBER: To get back to the old window do C-w p
+    "" Or hit enter or maybe navigate up-down to select an occurrence.
 
     call delete(tmpfile)
 endfunction
