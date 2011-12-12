@@ -83,7 +83,8 @@ augroup END
 " set updatetime=500
 "" On rather long files with complex syntax, this operation can be rather
 "" heavy, and lock vim up a bit.  So we run it less often that the ideal.
-set updatetime=1500
+" set updatetime=1500
+"" Do not set updatetime at all.  Use the user/default value.
 
 let s:lastWord = ""
 
