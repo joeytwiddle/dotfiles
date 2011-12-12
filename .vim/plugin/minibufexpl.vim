@@ -618,7 +618,7 @@ if !exists('g:miniBufExplorerDebugOutput')
   let g:miniBufExplorerDebugOutput = ''
 endif
 
-" In debug mode 3 this variable will hold the debug output
+" TODO: Undocumented!!!
 if !exists('g:miniBufExplForceDisplay')
   let g:miniBufExplForceDisplay = 0
 endif
@@ -635,16 +635,21 @@ let s:debugIndex = 0
 " that keep our explorer updated automatically.
 "
 augroup MiniBufExplorer
-autocmd MiniBufExplorer BufDelete   * call <SID>DEBUG('-=> BufDelete AutoCmd', 10) |call <SID>AutoUpdate(expand('<abuf>'))
-autocmd MiniBufExplorer BufEnter    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
-" joey: BufEnter doesn't always fire (or at least the update doesn't happen,
-" once when closing a buffer and entering Conque) so trying BufExit, which
-" probably won't work either (it would fire before the buffer closes!)
-" When it fails, we could try bot!
-"autocmd MiniBufExplorer BufLeave    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
-" Forget that, trying WinEnter for the moment:
-autocmd MiniBufExplorer WinEnter    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
-autocmd MiniBufExplorer VimEnter    * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1)
+  au!
+  autocmd MiniBufExplorer VimEnter    * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1)
+  autocmd MiniBufExplorer BufEnter    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
+  " BufEnter doesn't fire when we change windows, but my new colors need to
+  " update to reflect the change!  So we fire on WinEnter also.
+  autocmd MiniBufExplorer WinEnter    * call <SID>DEBUG('-=> WinEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
+  " BUG: MBE does not update when we close/delete a buffer.
+  " Tried BufLeave, BufDelete and BufWipeout but MBE still shows the earlier
+  " state with the buffer present.  Does
+  "autocmd MiniBufExplorer BufLeave    * call <SID>DEBUG('-=> BufLeave  AutoCmd', 10) |call <SID>AutoUpdate(-1)
+  "autocmd MiniBufExplorer BufDelete   * call <SID>DEBUG('-=> BufDelete AutoCmd', 10) |call <SID>AutoUpdate(expand('<abuf>'))
+  "autocmd MiniBufExplorer BufWipeout  * call <SID>DEBUG('-=> BufWipeout  AutoCmd', 10) |call <SID>AutoUpdate(-1)
+  " Experiments...
+  autocmd MiniBufExplorer BufWinEnter * call <SID>DEBUG('-=> BufWinEnter AutoCmd', 10) |call <SID>AutoUpdate(-1)
+augroup END
 " }}}
 
 let s:userFocusedBuffer = -1
@@ -712,14 +717,25 @@ function! <SID>StartExplorer(sticky, delBufNum)
       "syn match MBEVisibleNormal      '|* [^ *+|]*\* |*'
       "syn match MBEVisibleChanged     '|* [^ *+|]*\*+ |*'
       syn match MBEGap                '|'
-      syn match MBENormal             ' [^-*+|[\]]* *'
-      syn match MBEChanged            '|* [^-*+|]*-*+ |*'
+
+      "" Old (may be better):
+      " syn match MBENormal             ' [^-*+|[\]]* *'
+      " syn match MBEChanged            '|* [^-*+|]*-*+ |*'
+      " syn match MBEVisibleNormal      '|* [^ ]*- |*'
+      " syn match MBEVisibleChanged     '|* [^-*+|]*\*+ |*'
+      " syn match MBEVisibleFocused     '|* [^-*+|]*\* |*'
+
+      "" New:
+      syn match MBENormal             ' [^|[\]]* *'
+      syn match MBEChanged            '|* [^|]*-*+ |*'
+      syn match MBEVisibleNormal      '|* [^|]*- |*'
+      syn match MBEVisibleChanged     '|* [^|]*\*+ |*'
+      syn match MBEVisibleFocused     '|* [^|]*\* |*'
+
       " syn match MBEVisibleNormal      '|* [^-*+|]*\- *|*'
       " Some filthy regexp which survives -MiniBufExplorer--
       "syn match MBEVisibleNormal      '|* \([^-*+|]*.\)\- |*'
-      syn match MBEVisibleNormal      '|* [^ ]*- |*'
-      syn match MBEVisibleChanged     '|* [^-*+|]*\*+ |*'
-      syn match MBEVisibleFocused     '|* [^-*+|]*\* |*'
+
 
 
     if !exists("g:did_minibufexplorer_syntax_inits")
@@ -1239,6 +1255,9 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
   if exists('g:vloaded_tree_explorer') || exists('g:loaded_nerd_tree') || exists('g:loaded_netrwPlugin') || exists("loaded_winfileexplorer")
     let l:line = l:line . "[File] "
   endif
+  if exists('g:loaded_sessionman')
+    let l:line .= "[Sess] "
+  endif
   if exists('g:loaded_taglist')
     let l:line = l:line . "[Tags] "
   endif
@@ -1548,16 +1567,16 @@ function! <SID>MBESelectBuffer()
     if word == "File"
       if exists('g:vloaded_tree_explorer')
 
+        " Window IDs may change 1) when we create the VTE, and 2) when we
+        " re-arrange MBE.  So we need to store buffer IDs not window IDs.
+        wincmd p
+        let l:lastBufNum = winbufnr(0)
         if exists(':VSTreeExploreToggle')
-            wincmd p
             exec "VSTreeExploreToggle"
         else
-            " call VsTreeExplorer()
-            " wincmd j
-            wincmd p
             exec "VSTreeExplore"
-            " wincmd H
         endif
+        let l:treeBufNum = winbufnr(0)
 
         "" Extra: Reformat my IDE-shaped window layout
         "" I made VSTree swallow the whole of the left of the screen, but I
@@ -1565,6 +1584,12 @@ function! <SID>MBESelectBuffer()
         "" Look for MiniBufExplorer window, if it is visible
         " let l:winNum = bufwinnr(bufnr('-MiniBufExplorer-'))
         let l:winNum = <SID>FindWindow('-MiniBufExplorer-', 1)
+        " BUG: I want vtree to open any file I select in my last editing
+        " window.  Lots of problems here.  Hard to get its winnr because the
+        " windows change number after the VSTree is done!  Hard to get back to
+        " it with wincmd p because that only remembers 1 and we are dealing
+        " with 3!  Furthermore, VTE likes to split the edit window whenever
+        " MBE is present, even if I do get the window association right!
         if l:winNum != -1
             "" Refocus MiniBufExplorer window
             " exec ":win ".l:winNum
@@ -1576,11 +1601,21 @@ function! <SID>MBESelectBuffer()
             " wincmd K
             exec "wincmd K"
             " exec l:winNum." wincmd K"
+            " Finally fix MBE's height (now happening automatically)
+            ":MiniBufExplorer
             "" Refocus the newly spawned TreeExplorer
-            exec "wincmd p"
+            " exec "wincmd p"
+            "" but also restore the history (don't want MBE as prev win)
+            let l:lastWinNum = bufwinnr(l:lastBufNum)
+            let l:treeWinNum = bufwinnr(l:treeBufNum)
+            " echo "Moving to lastWinNum=".lastWinNum
+            exec l:lastWinNum." wincmd w"
+            " echo "Moved to lastWinNum=".lastWinNum
+            exec l:treeWinNum." wincmd w"
+        else
+          " Finally fix MBE's height (now happening automatically)
+          ":MiniBufExplorer
         endif
-        " Finally fix MBE's height
-        :MiniBufExplorer
 
       elseif exists('g:loaded_netrwPlugin')
         wincmd p
@@ -1590,6 +1625,12 @@ function! <SID>MBESelectBuffer()
         wincmd p
         exec "NERDTree"
       endif
+    elseif word == "Sess"
+      wincmd p
+      :SessionList
+      " SessionList splits the window before opening.  We cannot specify vert
+      " here, but you can edit sessionman.vim and specify it there!
+      " We might also try :OpenSession for other plugin session.vim
     elseif word == "Tags"
       if exists('g:loaded_taglist')
         " call TList()
