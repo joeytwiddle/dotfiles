@@ -17,7 +17,7 @@ highlight link hexNumber Number
 highlight Number ctermfg=cyan cterm=none
 
 syntax match asmPreCondit /#\(ifdef\|else\|endif\|if\|define\|undef\).*/
-highlight asmPreCondit cterm=bold ctermfg=darkblue gui=bold guifg=blue
+highlight asmPreCondit cterm=bold ctermfg=blue gui=bold guifg=blue
 
 exec "set comments=" . &comments . ",:;;,:;"
 
