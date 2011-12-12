@@ -73,6 +73,7 @@ nnoremap <silent> <Plug>Kwbd :<C-u>Kwbd<CR>
 "" Encourage me to acknowledge I am doing something different:
 " command! Bclose call <SID>Kwbd(1)
 " nnoremap :bdel :Bclose
-command! CloseBuffer call <SID>Kwbd(1)
+" command! CloseBuffer call <SID>Kwbd(1)
+command! CloseBuffer :Kwbd
 nnoremap :bdel :CloseBuffer
 
