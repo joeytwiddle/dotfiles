@@ -636,19 +636,31 @@ let s:debugIndex = 0
 "
 augroup MiniBufExplorer
   au!
-  autocmd MiniBufExplorer VimEnter    * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1)
+
+  " Originals:
+  "autocmd MiniBufExplorer BufDelete   * call <SID>DEBUG('-=> BufDelete AutoCmd', 10) |call <SID>AutoUpdate(expand('<abuf>'))
+  "autocmd MiniBufExplorer BufEnter    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
+  "autocmd MiniBufExplorer VimEnter    * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1)
+
+  autocmd MiniBufExplorer BufDelete   * call <SID>DEBUG('-=> BufDelete AutoCmd', 10) |call <SID>AutoUpdate(expand('<abuf>'))
   autocmd MiniBufExplorer BufEnter    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
-  " BufEnter doesn't fire when we change windows, but my new colors need to
-  " update to reflect the change!  So we fire on WinEnter also.
-  autocmd MiniBufExplorer WinEnter    * call <SID>DEBUG('-=> WinEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
+  autocmd MiniBufExplorer VimEnter    * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1)
+
+  " My new highlight actions created wider range of situations where the MBE
+  " needs to be redrawn, and BufEnter is not fired.  They are: ...
+  " To handle these, we now also fire on WinEnter.
+  "autocmd MiniBufExplorer WinEnter    * call <SID>DEBUG('-=> WinEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
+
   " BUG: MBE does not update when we close/delete a buffer.
   " Tried BufLeave, BufDelete and BufWipeout but MBE still shows the earlier
   " state with the buffer present.  Does
   "autocmd MiniBufExplorer BufLeave    * call <SID>DEBUG('-=> BufLeave  AutoCmd', 10) |call <SID>AutoUpdate(-1)
   "autocmd MiniBufExplorer BufDelete   * call <SID>DEBUG('-=> BufDelete AutoCmd', 10) |call <SID>AutoUpdate(expand('<abuf>'))
   "autocmd MiniBufExplorer BufWipeout  * call <SID>DEBUG('-=> BufWipeout  AutoCmd', 10) |call <SID>AutoUpdate(-1)
+
   " Experiments...
-  autocmd MiniBufExplorer BufWinEnter * call <SID>DEBUG('-=> BufWinEnter AutoCmd', 10) |call <SID>AutoUpdate(-1)
+  "autocmd MiniBufExplorer BufWinEnter * call <SID>DEBUG('-=> BufWinEnter AutoCmd', 10) |call <SID>AutoUpdate(-1)
+
 augroup END
 " }}}
 
@@ -669,6 +681,11 @@ function! <SID>StartExplorer(sticky, delBufNum)
 
   " Store the current buffer
   let s:userFocusedBuffer = bufnr('%')
+  " let l:userFocusedWindow = bufwinnr(l:userFocusedWindow)
+  let l:userFocusedWindow = winnr()
+  wincmd p
+  let l:userPreviousFocusedWindow = winnr()
+  wincmd p
 
   " Prevent a report of our actions from showing up.
   let l:save_rep = &report
@@ -796,10 +813,21 @@ function! <SID>StartExplorer(sticky, delBufNum)
  
   call <SID>DisplayBuffers(a:delBufNum)
 
+  " Move cursor to the entry for the current buffer
   if (s:userFocusedBuffer != -1)
-    call search('\['.s:userFocusedBuffer.':'.expand('#'.s:userFocusedBuffer.':t').'\]')
+    " Original format: call search('\['.s:userFocusedBuffer.':'.expand('#'.s:userFocusedBuffer.':t').'\]')
+    call search('| '.expand('#'.s:userFocusedBuffer.':t').'[*+-]* |')
   else
     call <SID>DEBUG('No current buffer to search for',9)
+  endif
+
+  " Put userPreviousFocusedWindow back into history
+  if (l:userPreviousFocusedWindow != -1)
+    exec l:userPreviousFocusedWindow."wincmd w"
+  endif
+  " Return to userFocusedWindow
+  if (l:userFocusedWindow != -1)
+    exec l:userFocusedWindow."wincmd w"
   endif
 
   let &report  = l:save_rep
@@ -1670,6 +1698,7 @@ function! <SID>MBESelectBuffer()
         set nofoldenable
         set fdc=0
       endif
+      echo "Using foldmethod=".foldmethod
     elseif word == "Term"
       if exists(':ConqueTermSplit')
         " exec "ConqueTermSplit bash"
@@ -1946,6 +1975,9 @@ function! <SID>DEBUG(msg, level)
     let &report       = 10000
     set noshowcmd 
 
+    " Add window info to the log
+    let l:message = "w=".winnr()."|".a:msg
+
     " Debug output to a buffer
     if g:miniBufExplorerDebugMode == 0
         " Save the current window number so we can come back here
@@ -1966,7 +1998,7 @@ function! <SID>DEBUG(msg, level)
         endif
 
         " Write Message to DBG buffer
-        let res=append("$",s:debugIndex.':'.a:level.':'.a:msg)
+        let res=append("$",s:debugIndex.':'.a:level.':'.l:message)
         norm G
         "set nomodified
 
@@ -1975,23 +2007,23 @@ function! <SID>DEBUG(msg, level)
         exec l:prevWin.' wincmd w'
     " Debug output using VIM's echo facility
     elseif g:miniBufExplorerDebugMode == 1
-      echo s:debugIndex.':'.a:level.':'.a:msg
+      echo s:debugIndex.':'.a:level.':'.l:message
     " Debug output to a file -- VERY SLOW!!!
     " should be OK on UNIX and Win32 (not the 95/98 variants)
     elseif g:miniBufExplorerDebugMode == 2
         if has('system') || has('fork')
             if has('win32') && !has('win95')
-                let l:result = system("cmd /c 'echo ".s:debugIndex.':'.a:level.':'.a:msg." >> MiniBufExplorer.DBG'")
+                let l:result = system("cmd /c 'echo ".s:debugIndex.':'.a:level.':'.l:message." >> MiniBufExplorer.DBG'")
             endif
             if has('unix')
-                let l:result = system("echo '".s:debugIndex.':'.a:level.':'.a:msg." >> MiniBufExplorer.DBG'")
+                let l:result = system("echo '".s:debugIndex.':'.a:level.':'.l:message." >> MiniBufExplorer.DBG'")
             endif
         else
             call confirm('Error in file writing version of the debugging code, vim not compiled with system or fork. Dissabling MiniBufExplorer debugging.', 'OK')
             let g:miniBufExplorerDebugLevel = 0
         endif
     elseif g:miniBufExplorerDebugMode == 3
-        let g:miniBufExplorerDebugOutput = g:miniBufExplorerDebugOutput."\n".s:debugIndex.':'.a:level.':'.a:msg
+        let g:miniBufExplorerDebugOutput = g:miniBufExplorerDebugOutput."\n".s:debugIndex.':'.a:level.':'.l:message
     endif
     let s:debugIndex = s:debugIndex + 1
 
