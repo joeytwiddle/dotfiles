@@ -1,7 +1,7 @@
 " CVSmenu.vim : Vim menu for using CVS			vim:tw=0
 " Author : Thorsten Maerz <info@netztorte.de>		vim600:fdm=marker
-" $Revision: 1.1 $
-" $Date: 2003/04/02 05:08:28 $
+" $Revision: 1.3 $
+" $Date: 2012/04/02 14:05:46 $
 " License : LGPL
 "
 " Tested with Vim 6.0
@@ -303,7 +303,7 @@ function! CVSShowInfo(...)
   new
   let zbak=@z
   let @z = ''
-    \."\n\"CVSmenu $Revision: 1.1 $"
+    \."\n\"CVSmenu $Revision: 1.3 $"
     \."\n\"Current directory : ".expand('%:p:h')
     \."\n\"Current Root : ".root
     \."\n\"Current Repository : ".repository

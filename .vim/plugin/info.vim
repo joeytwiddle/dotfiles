@@ -25,7 +25,7 @@
 " IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 " POSSIBILITY OF SUCH DAMAGE.
 "
-" $Id: info.vim,v 1.1 2003/04/02 05:08:28 joey Exp $
+" $Id: info.vim,v 1.3 2012/04/02 14:06:24 joey Exp $
 
 let s:infoCmd = 'info --output=-'
 if has('win32')
