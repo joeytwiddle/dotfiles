@@ -41,11 +41,13 @@ function! DoWindowSwap()
 endfunction
 
 " Keybinds depend on how you want to remember the command!
-" Originally: Mark Window, Put Window
+" Originally: \mw Mark Window, \pw Put Window
 noremap <silent> <leader>mw :call MarkWindowSwap()<CR>
 noremap <silent> <leader>pw :call DoWindowSwap()<CR>
 " Then I tried: Mark Window, Swap Windows
 noremap <silent> <leader>sw :call DoWindowSwap()<CR>
 " Then I settled on: Copy Window, Paste Window
 noremap <silent> <leader>cw :call MarkWindowSwap()<CR>
+" New idea: Start on one on of the windows.  Click on the other with the mouse and do \sw
+noremap <silent> <leader>sw :call MarkWindowSwap()<CR>
 

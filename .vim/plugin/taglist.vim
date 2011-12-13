@@ -182,7 +182,7 @@ if !exists('loaded_taglist')
     " not.  Also, controls whether empty lines are used to separate the tag
     " tree.
     if !exists('Tlist_Compact_Format')
-        let Tlist_Compact_Format = 0
+        let Tlist_Compact_Format = 1
     endif
 
     " Exit Vim if only the taglist window is currently open. By default, this is
@@ -194,7 +194,7 @@ if !exists('loaded_taglist')
     " Automatically close the folds for the non-active files in the taglist
     " window
     if !exists('Tlist_File_Fold_Auto_Close')
-        let Tlist_File_Fold_Auto_Close = 0
+        let Tlist_File_Fold_Auto_Close = 1
     endif
 
     " Close the taglist window when a tag is selected
@@ -220,12 +220,12 @@ if !exists('loaded_taglist')
 
     " Enable fold column to display the folding for the tag tree
     if !exists('Tlist_Enable_Fold_Column')
-        let Tlist_Enable_Fold_Column = 1
+        let Tlist_Enable_Fold_Column = 0
     endif
 
     " Display the tags for only one file in the taglist window
     if !exists('Tlist_Show_One_File')
-        let Tlist_Show_One_File = 1
+        let Tlist_Show_One_File = 0
     endif
 
     if !exists('Tlist_Max_Submenu_Items')
@@ -653,6 +653,7 @@ function! s:Tlist_Debug_Show()
     silent! put =s:tlist_msg
     " Move the cursor to the first line
     normal! gg
+    setlocal nomodified
 endfunction
 
 " Tlist_Log_Msg
@@ -2617,12 +2618,16 @@ function! s:Tlist_Window_Toggle()
         return
     endif
 
+    let startWin = winnr()
+
     call s:Tlist_Window_Open()
 
     " Go back to the original window, if Tlist_GainFocus_On_ToggleOpen is not
     " set
     if !g:Tlist_GainFocus_On_ToggleOpen
-        call s:Tlist_Exe_Cmd_No_Acmds('wincmd p')
+        " This was failing, probably due to MBE
+        " call s:Tlist_Exe_Cmd_No_Acmds('wincmd p')
+        call s:Tlist_Exe_Cmd_No_Acmds(startWin.'wincmd w')
     endif
 
     " Update the taglist menu
@@ -4101,8 +4106,8 @@ endfunction
 function! s:Tlist_Refresh_Folds()
 
   " This function used to throw errors when it refreshes after :tabclose
-  try  
-  
+  try
+
     let winnum = bufwinnr(g:TagList_title)
     if winnum == -1
         return
