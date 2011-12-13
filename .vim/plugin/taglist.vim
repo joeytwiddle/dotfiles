@@ -640,6 +640,9 @@ endfunction
 " Tlist_Debug_Show
 " Display the taglist debug messages in a new window
 function! s:Tlist_Debug_Show()
+    echo s:tlist_msg
+    return
+
     if s:tlist_msg == ''
         call s:Tlist_Warning_Msg('Taglist: No debug messages')
         return
@@ -1147,6 +1150,9 @@ function! s:Tlist_Remove_File(file_idx, user_request)
                 \ s:tlist_{fidx}_filename . ', ' . a:user_request . ')')
 
     let save_winnr = winnr()
+    wincmd p
+    let save_prev_winnr = winnr()
+    wincmd p
     let winnum = bufwinnr(g:TagList_title)
     if winnum != -1
         " Taglist window is open, remove the file from display
@@ -1160,6 +1166,7 @@ function! s:Tlist_Remove_File(file_idx, user_request)
         call s:Tlist_Window_Remove_File_From_Display(fidx)
 
         if save_winnr != winnum
+            exe save_prev_winnr . 'wincmd w'
             exe save_winnr . 'wincmd w'
             let &eventignore = old_eventignore
         endif
@@ -1400,6 +1407,9 @@ function! s:Tlist_Window_Check_Width()
         call s:Tlist_Log_Msg("Tlist_Window_Check_Width: Changing window " .
                     \ "width from " . width . " to " . g:Tlist_WinWidth)
         let save_winnr = winnr()
+        wincmd p
+        let save_prev_winnr = winnr()
+        wincmd p
         if save_winnr != tlist_winnr
             call s:Tlist_Exe_Cmd_No_Acmds(tlist_winnr . 'wincmd w')
         endif
@@ -2477,6 +2487,9 @@ function! Tlist_Update_File(filename, ftype)
 
         " Save the current window number
         let save_winnr = winnr()
+        wincmd p
+        let save_prev_winnr = winnr()
+        wincmd p
 
         " Goto the taglist window
         call s:Tlist_Window_Goto_Window()
@@ -2498,6 +2511,7 @@ function! Tlist_Update_File(filename, ftype)
 
         if winnr() != save_winnr
             " Go back to the original window
+            call s:Tlist_Exe_Cmd_No_Acmds(save_prev_winnr . 'wincmd w')
             call s:Tlist_Exe_Cmd_No_Acmds(save_winnr . 'wincmd w')
         endif
     endif
@@ -2879,6 +2893,9 @@ function! s:Tlist_Refresh()
 
         " Save the current window number
         let save_winnr = winnr()
+        wincmd p
+        let save_prev_winnr = winnr()
+        wincmd p
 
         " Goto the taglist window
         call s:Tlist_Window_Goto_Window()
@@ -2920,6 +2937,7 @@ function! s:Tlist_Refresh()
 
         " Jump back to the original window
         if save_winnr != winnr()
+            call s:Tlist_Exe_Cmd_No_Acmds(save_prev_winnr . 'wincmd w')
             call s:Tlist_Exe_Cmd_No_Acmds(save_winnr . 'wincmd w')
         endif
 
@@ -3539,6 +3557,9 @@ function! s:Tlist_Window_Highlight_Tag(filename, cur_lnum, cntx, center)
 
     " Save the original window number
     let org_winnr = winnr()
+    wincmd p
+    let org_prev_winnr = winnr()
+    wincmd p
 
     if org_winnr == winnum
         let in_taglist_window = 1
@@ -3573,6 +3594,7 @@ function! s:Tlist_Window_Highlight_Tag(filename, cur_lnum, cntx, center)
         call winline()
 
         if !in_taglist_window
+            exe org_prev_winnr . 'wincmd w'
             exe org_winnr . 'wincmd w'
         endif
 
@@ -3612,6 +3634,7 @@ function! s:Tlist_Window_Highlight_Tag(filename, cur_lnum, cntx, center)
 
     " Go back to the original window
     if !in_taglist_window
+        exe org_prev_winnr . 'wincmd w'
         exe org_winnr . 'wincmd w'
     endif
 
@@ -3893,6 +3916,9 @@ function! s:Tlist_Session_Load(...)
     let winnum = bufwinnr(g:TagList_title)
     if winnum != -1
         let save_winnr = winnr()
+        wincmd p
+        let save_prev_winnr = winnr()
+        wincmd p
 
         " Goto the taglist window
         call s:Tlist_Window_Goto_Window()
@@ -3902,6 +3928,7 @@ function! s:Tlist_Session_Load(...)
 
         " Go back to the original window
         if save_winnr != winnr()
+            call s:Tlist_Exe_Cmd_No_Acmds(save_prev_winnr . 'wincmd w')
             call s:Tlist_Exe_Cmd_No_Acmds('wincmd p')
         endif
     endif
@@ -4038,6 +4065,9 @@ function! s:Tlist_Window_Open_File_Fold(acmd_bufnr)
 
     " Save the original window number
     let org_winnr = winnr()
+    wincmd p
+    let org_prev_winnr = winnr()
+    wincmd p
     if org_winnr == winnum
         let in_taglist_window = 1
     else
@@ -4070,6 +4100,7 @@ function! s:Tlist_Window_Open_File_Fold(acmd_bufnr)
 
     " Go back to the original window
     if !in_taglist_window
+        call s:Tlist_Exe_Cmd_No_Acmds(org_prev_winnr . 'wincmd w')
         call s:Tlist_Exe_Cmd_No_Acmds(org_winnr . 'wincmd w')
     endif
 endfunction
@@ -4113,7 +4144,10 @@ function! s:Tlist_Refresh_Folds()
         return
     endif
 
-    let save_wnum = winnr()
+    let save_winnr = winnr()
+    wincmd p
+    let save_prev_winnr = winnr()
+    wincmd p
     exe winnum . 'wincmd w'
 
     " First remove all the existing folds
@@ -4142,7 +4176,8 @@ function! s:Tlist_Refresh_Folds()
         let fidx = fidx + 1
     endwhile
 
-    exe save_wnum . 'wincmd w'
+    exe save_prev_winnr . 'wincmd w'
+    exe save_winnr . 'wincmd w'
 
   endtry
 
