@@ -1451,10 +1451,12 @@ function! <SID>AutoUpdate(delBufNum)
           " the height if the user has resized it.  (Generally they never
           " wants MBE to be too tall.  Perhaps we should shrink, but not grow
           " until focused?  Although focus usually means a click.)
-          " if (l:ListChanged)
+          if (l:ListChanged)
             call <SID>DEBUG('About to call StartExplorer (Update MBE)', 9) 
             call <SID>StartExplorer(0, a:delBufNum)
-          " endif
+          else
+            call <SID>DEBUG('Skipping update because list is unchanged', 9) 
+          endif
         endif
 
         " go back to the working buffer
@@ -1980,7 +1982,8 @@ function! <SID>DEBUG(msg, level)
     set noshowcmd 
 
     " Add window info to the log
-    let l:message = "w=".winnr()."|".a:msg
+    "let l:message = "w=".winnr()."|".a:msg
+    let l:message = a:msg
 
     " Debug output to a buffer
     if g:miniBufExplorerDebugMode == 0
