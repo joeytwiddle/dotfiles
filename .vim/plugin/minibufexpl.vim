@@ -646,6 +646,10 @@ augroup MiniBufExplorer
   autocmd MiniBufExplorer BufEnter    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
   autocmd MiniBufExplorer VimEnter    * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1)
 
+  "" Instead of the above, we can just do a lazy update.  Although this is not
+  "" so helpful for immediate navigation feedback!
+  "autocmd MiniBufExplorer CursorHold  * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1)
+
   " My new highlight actions created wider range of situations where the MBE
   " needs to be redrawn, and BufEnter is not fired.  They are: ...
   " To handle these, we now also fire on WinEnter.

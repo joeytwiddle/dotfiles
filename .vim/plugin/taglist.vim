@@ -1,9 +1,17 @@
 nmap [[ :TlistOpen<Enter><Up><Enter>
 nmap ]] :TlistOpen<Enter><Down><Enter>
 
-" BUGS:
+" BUGS TODO:
 " My new wincmd p commands are firing off autocmds in various other plugins.
 " And also re-prising 0-line height windows.
+" SOLUTION:
+" Revert recent commits introducting wincmd p to store and restore previous
+" window.
+" Instead disable activation on WinEnter
+" e.g. 5<C-w><Up> should jump 5 windows up, but each one in turn fires off a
+" crazy fountain on WinEnter events.
+" Instead we should wait on CursorHold, and then check if our buffer or window
+" has changed, before deciding whether to update.
 
 " File: taglist.vim
 " Author: Yegappan Lakshmanan (yegappan AT yahoo DOT com)
@@ -201,7 +209,7 @@ if !exists('loaded_taglist')
     " Automatically close the folds for the non-active files in the taglist
     " window
     if !exists('Tlist_File_Fold_Auto_Close')
-        let Tlist_File_Fold_Auto_Close = 1
+        let Tlist_File_Fold_Auto_Close = 0
     endif
 
     " Close the taglist window when a tag is selected
@@ -1695,7 +1703,8 @@ function! s:Tlist_Window_Init()
                     \ !g:Tlist_Process_File_Always &&
                     \ (!has('gui_running') || !g:Tlist_Show_Menu)
             " Auto refresh the taglist window
-            autocmd BufEnter * call s:Tlist_Refresh()
+            "autocmd BufEnter * call s:Tlist_Refresh()
+            autocmd CursorHold * call s:Tlist_Refresh()
         endif
 
         if !g:Tlist_Use_Horiz_Window
