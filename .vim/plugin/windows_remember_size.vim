@@ -15,6 +15,19 @@ nnoremap <silent> Oo :vert resize -6<Enter>:call <SID>RememberWidth()<Enter>
 nnoremap <silent> Oj :vert resize +6<Enter>:call <SID>RememberWidth()<Enter>
 nmap <silent> = =:call ForgetAll()<Enter>
 
+" Sometimes my X gets less happy (two Xs? VNC? UT?)
+" Then my numpad maps to nothing more special than + and - so I must define
+" them to get any behaviour.
+nnoremap <silent> - :resize -2<Enter>:call <SID>RememberHeight()<Enter>
+nnoremap <silent> + :resize +2<Enter>:call <SID>RememberHeight()<Enter>
+
+" There may or may not be a reason we do or don't want to use these.
+" Two of them are defined by zoom.vim!
+"nnoremap <silent> <C-kMinus> :resize -2<Enter>:call <SID>RememberHeight()<Enter>
+"nnoremap <silent> <C-kPlus> :resize +2<Enter>:call <SID>RememberHeight()<Enter>
+"nnoremap <silent> <C-kDivide> :vert resize -6<Enter>:call <SID>RememberWidth()<Enter>
+"nnoremap <silent> <C-kMultiply> :vert resize +6<Enter>:call <SID>RememberWidth()<Enter>
+
 function! s:RememberHeight()
   let w:rememberedHeight = winheight(0)
 endfunction

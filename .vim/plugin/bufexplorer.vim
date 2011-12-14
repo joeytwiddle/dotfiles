@@ -1,3 +1,8 @@
+"" Joey's TODO:
+" Color buffers according to recent usage
+" Bright if within the last few minutes
+" Glowing if withing the last few hours
+
 "==============================================================================
 "    Copyright: Copyright (C) 2001-2010 Jeff Lanzarotta
 "               Permission is hereby granted to use and distribute this code,

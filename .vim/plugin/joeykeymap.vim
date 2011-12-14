@@ -108,10 +108,12 @@ inoremap <C-J> <Esc>1<C-E>a
 nnoremap <C-W>S :vsplit<Enter>
 
 " Resize windows with Ctrl-NumPadPlus/Minus/Divide/Times:
-nnoremap Om :resize -2<Enter>
-nnoremap Ok :resize +2<Enter>
-nnoremap Oo :vert resize -6<Enter>
-nnoremap Oj :vert resize +6<Enter>
+"" We defer to the implementation in windows_remember_size.vim
+"" This was happening automatically before - perhaps their run order changed?
+"nnoremap Om :resize -2<Enter>
+"nnoremap Ok :resize +2<Enter>
+"nnoremap Oo :vert resize -6<Enter>
+"nnoremap Oj :vert resize +6<Enter>
 
 
 

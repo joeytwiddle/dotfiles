@@ -1,3 +1,10 @@
+nmap [[ :TlistOpen<Enter><Up><Enter>
+nmap ]] :TlistOpen<Enter><Down><Enter>
+
+" BUGS:
+" My new wincmd p commands are firing off autocmds in various other plugins.
+" And also re-prising 0-line height windows.
+
 " File: taglist.vim
 " Author: Yegappan Lakshmanan (yegappan AT yahoo DOT com)
 " Version: 4.5

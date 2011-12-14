@@ -1698,7 +1698,7 @@ function! <SID>MBESelectBuffer()
         set nofoldenable
         set fdc=0
       endif
-      echo "Using foldmethod=".foldmethod
+      echo "Using foldmethod=".&foldmethod
     elseif word == "Term"
       if exists(':ConqueTermSplit')
         " exec "ConqueTermSplit bash"
