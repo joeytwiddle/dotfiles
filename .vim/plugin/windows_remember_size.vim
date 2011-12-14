@@ -18,8 +18,8 @@ nmap <silent> = =:call ForgetAll()<Enter>
 " Sometimes my X gets less happy (two Xs? VNC? UT?)
 " Then my numpad maps to nothing more special than + and - so I must define
 " them to get any behaviour.
-nnoremap <silent> - :resize -2<Enter>:call <SID>RememberHeight()<Enter>
-nnoremap <silent> + :resize +2<Enter>:call <SID>RememberHeight()<Enter>
+"nnoremap <silent> - :resize -2<Enter>:call <SID>RememberHeight()<Enter>
+"nnoremap <silent> + :resize +2<Enter>:call <SID>RememberHeight()<Enter>
 
 " There may or may not be a reason we do or don't want to use these.
 " Two of them are defined by zoom.vim!
