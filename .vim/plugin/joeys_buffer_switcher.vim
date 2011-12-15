@@ -1,6 +1,6 @@
 function! JoeysBufferSwitch()
 
-  let searchStr = input("Type part of buffer then <Tab>: ", '', "buffer")
+  let searchStr = input("Type part of buffer then <Tab> or <Enter>: ", '', "buffer")
   "echo "Got: ".searchStr
 
   " Quick and dirty:
@@ -27,11 +27,6 @@ function! JoeysBufferSwitch()
   if len(foundWindows) == 1
     exec foundWindows[0]."wincmd w"
     return
-  else
-    echo "[JBS] ".len(foundWindows)." matching windows"
-    for wn in foundWindows
-      echo "  <".wn."> ".bufname(winbufnr(wn))
-    endfor
   endif
 
   let foundBuffers = []
@@ -39,9 +34,15 @@ function! JoeysBufferSwitch()
   let i=0
   while i < bufCount
     let bufName = bufname(i)
+    " TODO: Some buffers need to be ignored e.g. if they are closed (no longer visible)
     if bufName != ""
       if match(bufName, searchStr) >= 0
         call add(foundBuffers, i)
+      endif
+      " Special case: exact match means we return it as the only match!
+      if bufName == searchStr
+        let foundBuffers = [i]
+        break
       endif
     endif
     let i += 1
@@ -49,12 +50,17 @@ function! JoeysBufferSwitch()
   if len(foundBuffers) == 1
     exec foundBuffers[0]."b"
     return
-  else
-    echo "[JBS] ".len(foundBuffers)." matching buffers"
-    for bn in foundBuffers
-      echo "  (".bn.") ".bufname(bn)
-    endfor
   endif
+
+  echo "[JBS] ".len(foundWindows)." matching windows"
+  for wn in foundWindows
+    echo "  <".wn."> ".bufname(winbufnr(wn))
+  endfor
+  echo " "
+  echo "[JBS] ".len(foundBuffers)." matching buffers"
+  for bn in foundBuffers
+    echo "  (".bn.") ".bufname(bn)
+  endfor
 
   " Failing that, allow file?
 

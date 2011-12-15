@@ -204,5 +204,6 @@ cnoremap <C-X> <C-W>
 set wildmode=longest:full,full
 
 
-nnoremap <silent> <C-B> :BufExplorer<Enter>
+" Now overriden by joeys_buffer_switcher.vim
+"nnoremap <silent> <C-B> :BufExplorer<Enter>
 

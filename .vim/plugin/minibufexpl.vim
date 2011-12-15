@@ -648,7 +648,8 @@ augroup MiniBufExplorer
 
   "" Instead of the above, we can just do a lazy update.  Although this is not
   "" so helpful for immediate navigation feedback!
-  "autocmd MiniBufExplorer CursorHold  * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1)
+  " Search for CursorHold or ListChanged to see why we may need this.
+  autocmd MiniBufExplorer CursorHold  * call <SID>DEBUG('-=> CursorHold AutoCmd', 10) |call <SID>AutoUpdate(-1)
 
   " My new highlight actions created wider range of situations where the MBE
   " needs to be redrawn, and BufEnter is not fired.  They are: ...
@@ -1203,6 +1204,8 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
   let l:maxTabWidth = 0
   let g:miniBufExplBufNumbers = []
 
+  call <SID>DEBUG("  Inside BuildBufferList() bufnr=".bufnr('%')." and bufname=".bufname('%'),10)
+
   " Loop through every buffer less than the total number of buffers.
   while(l:i <= l:NBuffers)
     let l:i = l:i + 1
@@ -1245,6 +1248,7 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
             let l:tabEdges = '| ' . l:tab
             " If the buffer is open in a window mark it
             if l:i == s:userFocusedBuffer
+            "if l:i == bufnr('%')
               let l:tabEdges .= '*'
             elseif bufwinnr(l:i) != -1
               let l:tabEdges .= '-'
@@ -1446,17 +1450,28 @@ function! <SID>AutoUpdate(delBufNum)
         " otherwise only update the window if the contents have
         " changed
           let l:ListChanged = <SID>BuildBufferList(a:delBufNum, 0)
+          "
           " No let's update every time we are called.  Hopefully this might
           " fix those rare occasions the list is out-of-date, and also to fix
           " the height if the user has resized it.  (Generally they never
           " wants MBE to be too tall.  Perhaps we should shrink, but not grow
           " until focused?  Although focus usually means a click.)
+
+          " When we switch window, this gets fired three times, but it still
+          " can't see that the new window has been focused.
+          " If we disable change checking this problem goes away O_o
+          " probably because it switches windows itself, causing more events to be fired!
+          " The current solution is to set a CursorHold autocmd
+          " or disable this check and always update :E
+
           if (l:ListChanged)
             call <SID>DEBUG('About to call StartExplorer (Update MBE)', 9) 
             call <SID>StartExplorer(0, a:delBufNum)
           else
-            call <SID>DEBUG('Skipping update because list is unchanged', 9) 
+            " call <SID>DEBUG('Skipping update because list is unchanged', 9) 
+            call <SID>DEBUG('Skipping update, list unchanged: '.g:miniBufExplBufList,9)
           endif
+
         endif
 
         " go back to the working buffer
