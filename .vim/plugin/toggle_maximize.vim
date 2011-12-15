@@ -1,4 +1,4 @@
-" ToggleMaximize v1.3.4 by joey.neuralyte.org
+" ToggleMaximize v1.4.0 by joey.neuralyte.org
 "
 " Vim can support complex window layouts, but they can put users off because
 " they reduce the size of the main editing window.  ToggleMaximize addresses
@@ -18,9 +18,16 @@
 " still thinks the toggle is ON, so next time it is used it will restore your
 " old layout, rather than re-maximize.
 
-" CONSIDER: Arguably a better solution would be for "maximization" to simply
-" open a new tab with the current buffer, and for "restoration" to close it
-" and return to the previous tab.
+" 2011/12/15  Version 1.4 uses winrestcmd() and is a bit faster.  (Old methods
+" of restoration via WinDo() tended to trigger WinEnter events in other
+" plugins, e.g. MBE/Taglist.)
+
+" CONSIDER: An alternative solution would be for "maximization" to simply open
+" a new tab with the current buffer, and for "restoration" to close it and
+" return to the previous tab.
+
+
+"" OLD DOCS:
 
 " TODO: Large values of winwidth/height can cause problems restoring layout.
 " Width is ok because we do that last, but when we visit windows to restore
@@ -34,9 +41,6 @@
 " SUCKS: Resizing Vim in your window manager does not cause winheight to be
 "        re-enforced (until you change window).
 
-" NOTE: Oh look there is winrestcmd()!  Could have saved us some work,
-" although it won't work on axes independently.
-
 let s:isToggledVertically = 0
 let s:isToggledHorizontally = 0
 
@@ -46,9 +50,40 @@ let s:oldwinheight = -1
 let s:winHeights = []
 let s:winWidths = []
 
+let g:winrestcmd = ''
+let g:lastwinrestcmd = ''
+
 " SUCKS: After all that refactoring, I note that windowid-indexed values apply
 " to different windows when windows are closed or created, whereas
 " window-local variables clean themselves up more tidily.
+
+function! s:StoreLayout()
+  let g:winrestcmd = winrestcmd()
+  "echo "Saving layout: ".g:winrestcmd
+endfunction
+
+function! s:RestoreLayout()
+  if g:winrestcmd
+    exec "set winwidth=".s:oldwinwidth
+    exec "set winheight=".s:oldwinheight
+    "echo "Restoring layout: ".g:winrestcmd
+    exec g:winrestcmd
+    let g:lastwinrestcmd = g:winrestcmd
+    let g:winrestcmd=''
+  endif
+endfunction
+
+function! s:DoMaximization()
+  call s:StoreLayout()
+  if s:isToggledVertically
+    let s:oldwinheight = &winheight
+    set winheight=9999
+  endif
+  if s:isToggledHorizontally
+    let s:oldwinwidth = &winwidth
+    set winwidth=9999
+  endif
+endfunction
 
 function! s:ToggleMaximize()
   "call ToggleMaximizeHorizontally()
@@ -59,107 +94,39 @@ function! s:ToggleMaximize()
   " The following implementation avoids this by restoring winwidth/height
   " before resizing.
 
+  if s:isToggledVertically || s:isToggledHorizontally
+    call s:RestoreLayout()
+  endif
+
   if s:isToggledVertically == 1 && s:isToggledHorizontally == 1
-    " If both axes are maximized, we restore layout
-    exec "set winwidth=".s:oldwinwidth
-    exec "set winheight=".s:oldwinheight
-    call s:RestoreHeights()
-    call s:RestoreWidths()
     let s:isToggledVertically = 0
     let s:isToggledHorizontally = 0
   else
     " Otherwise we maximize one or both axes
     if s:isToggledVertically == 0
-      call s:ToggleMaximizeVertically()
+      let s:isToggledVertically = 1
     endif
     if s:isToggledHorizontally == 0
-      call s:ToggleMaximizeHorizontally()
+      let s:isToggledHorizontally = 1
     endif
   endif
+
+  if s:isToggledVertically || s:isToggledHorizontally
+    call s:DoMaximization()
+  endif
+
 endfunction
 
 function! s:ToggleMaximizeVertically()
-  if s:isToggledVertically == 0
-    call s:StoreHeights()
-    let s:oldwinheight = &winheight
-    set winheight=9999
-    " resize 9999
-    let s:isToggledVertically = 1
-  else
-    exec "set winheight=".s:oldwinheight
-    call s:RestoreHeights()
-    let s:isToggledVertically = 0
-  endif
+  call s:RestoreLayout()
+  let s:isToggledVertically = 1 - s:isToggledVertically
+  call s:DoMaximization()
 endfunction
 
 function! s:ToggleMaximizeHorizontally()
-  if s:isToggledHorizontally == 0
-    call s:StoreWidths()
-    let s:oldwinwidth = &winwidth
-    set winwidth=9999
-    " vertical resize 9999
-    let s:isToggledHorizontally = 1
-  else
-    exec "set winwidth=".s:oldwinwidth
-    call s:RestoreWidths()
-    let s:isToggledHorizontally = 0
-  endif
-endfunction
-
-" Window numbering is 1-based, but we store heights 0-based in the array.
-function! s:StoreHeights()
-  let s:winHeights = []
-  call s:IterateWindows("call s:WinStoreHeight(i)")
-endfunction
-
-function! s:StoreWidths()
-  let s:winWidths = []
-  call s:IterateWindows("call s:WinStoreWidth(i)")
-endfunction
-
-function! s:WinStoreHeight(i)
-  call add( s:winHeights , winheight(a:i) )
-endfunction
-
-function! s:WinStoreWidth(i)
-  call add( s:winWidths , winwidth(a:i) )
-endfunction
-
-function! s:RestoreHeights()
-  call s:WinDo("call s:WinRestoreHeight()")
-endfunction
-
-function! s:RestoreWidths()
-  call s:WinDo("call s:WinRestoreWidth()")
-endfunction
-
-function! s:WinRestoreHeight()
-  if winnr() < len(s:winHeights)
-    exec "resize ". s:winHeights[winnr()-1]
-  endif
-endfunction
-
-function! s:WinRestoreWidth()
-  if winnr() < len(s:winHeights)
-    exec "vert resize ". s:winWidths[winnr()-1]
-  endif
-endfunction
-
-" Like :windo but returns to start window when finished.
-function! s:WinDo(expr)
-  let l:winnr = winnr()
-  windo exec a:expr
-  exec l:winnr." wincmd w"
-endfunction
-
-" Iterates through windows with i=1..n, does not visit them.
-function! s:IterateWindows(expr)
-  let l:count = winnr('$')
-  let i=1
-  while i <= l:count
-    exec a:expr
-    let i+=1
-  endwhile
+  call s:RestoreLayout()
+  let s:isToggledHorizontally = 1 - s:isToggledHorizontally
+  call s:DoMaximization()
 endfunction
 
 " == Keymaps ==
