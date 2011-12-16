@@ -76,11 +76,11 @@ function! s:SeekBestWindow(realDirection,reverseDirection)
       " Window numbers have become confused.  This move is no use!
     else
       " Go to the recommended target window
-      exec l:targetWin."wincmd w"
+      noautocmd exec l:targetWin."wincmd w"
       " Check that this movement is still valid
       " We do that by moving back again, and seeing if we get back where we
       " started from.
-      exec "wincmd ".a:reverseDirection
+      noautocmd exec "wincmd ".a:reverseDirection
       if winnr() == l:startWin
         " Yes this move is fine
         exec l:targetWin."wincmd w"
@@ -92,7 +92,7 @@ function! s:SeekBestWindow(realDirection,reverseDirection)
         " pick a different route.  In that case, travelling *this way* is
         " probably trivial, and we can let Vim do it normally.
         " echo "We may no longer reach ".l:targetWin." from here!"
-        exec l:startWin."wincmd w"
+        noautocmd exec l:startWin."wincmd w"
       endif
     endif
   endif
