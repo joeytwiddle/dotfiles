@@ -1165,9 +1165,9 @@ function! s:Tlist_Remove_File(file_idx, user_request)
                 \ s:tlist_{fidx}_filename . ', ' . a:user_request . ')')
 
     let save_winnr = winnr()
-    wincmd p
+    noautocmd wincmd p
     let save_prev_winnr = winnr()
-    wincmd p
+    noautocmd wincmd p
     let winnum = bufwinnr(g:TagList_title)
     if winnum != -1
         " Taglist window is open, remove the file from display
@@ -1422,15 +1422,15 @@ function! s:Tlist_Window_Check_Width()
         call s:Tlist_Log_Msg("Tlist_Window_Check_Width: Changing window " .
                     \ "width from " . width . " to " . g:Tlist_WinWidth)
         let save_winnr = winnr()
-        wincmd p
+        noautocmd wincmd p
         let save_prev_winnr = winnr()
-        wincmd p
+        noautocmd wincmd p
         if save_winnr != tlist_winnr
             call s:Tlist_Exe_Cmd_No_Acmds(tlist_winnr . 'wincmd w')
         endif
         exe 'vert resize ' . g:Tlist_WinWidth
         if save_winnr != tlist_winnr
-            call s:Tlist_Exe_Cmd_No_Acmds('wincmd p')
+            call s:Tlist_Exe_Cmd_No_Acmds('noautocmd wincmd p')
         endif
     endif
 endfunction
@@ -2503,9 +2503,9 @@ function! Tlist_Update_File(filename, ftype)
 
         " Save the current window number
         let save_winnr = winnr()
-        wincmd p
+        noautocmd wincmd p
         let save_prev_winnr = winnr()
-        wincmd p
+        noautocmd wincmd p
 
         " Goto the taglist window
         call s:Tlist_Window_Goto_Window()
@@ -2656,8 +2656,8 @@ function! s:Tlist_Window_Toggle()
     " set
     if !g:Tlist_GainFocus_On_ToggleOpen
         " This was failing, probably due to MBE
-        " call s:Tlist_Exe_Cmd_No_Acmds('wincmd p')
-        call s:Tlist_Exe_Cmd_No_Acmds(startWin.'wincmd w')
+        " call s:Tlist_Exe_Cmd_No_Acmds('noautocmd wincmd p')
+        call s:Tlist_Exe_Cmd_No_Acmds("noautocmd ".startWin.'wincmd w')
     endif
 
     " Update the taglist menu
@@ -2909,9 +2909,9 @@ function! s:Tlist_Refresh()
 
         " Save the current window number
         let save_winnr = winnr()
-        wincmd p
+        noautocmd wincmd p
         let save_prev_winnr = winnr()
-        wincmd p
+        noautocmd wincmd p
 
         " Goto the taglist window
         call s:Tlist_Window_Goto_Window()
@@ -3195,7 +3195,7 @@ function! s:Tlist_Window_Open_File(win_ctrl, filename, tagpat)
     if a:win_ctrl == 'prevwin'
         " Open the file in the previous window, if it is usable
         let cur_win = winnr()
-        wincmd p
+        noautocmd wincmd p
         if &buftype == '' && !&previewwindow
             exe "edit " . escape(a:filename, ' ')
             let winnum = winnr()
@@ -3266,14 +3266,14 @@ function! s:Tlist_Window_Open_File(win_ctrl, filename, tagpat)
 
                     " Go to the taglist window to change the window size to
                     " the user configured value
-                    call s:Tlist_Exe_Cmd_No_Acmds('wincmd p')
+                    call s:Tlist_Exe_Cmd_No_Acmds('noautocmd wincmd p')
                     if g:Tlist_Use_Horiz_Window
                         exe 'resize ' . g:Tlist_WinHeight
                     else
                         exe 'vertical resize ' . g:Tlist_WinWidth
                     endif
                     " Go back to the file window
-                    call s:Tlist_Exe_Cmd_No_Acmds('wincmd p')
+                    call s:Tlist_Exe_Cmd_No_Acmds('noautocmd wincmd p')
                 else
                     " A plugin or help window is also present
                     wincmd w
@@ -3573,9 +3573,9 @@ function! s:Tlist_Window_Highlight_Tag(filename, cur_lnum, cntx, center)
 
     " Save the original window number
     let org_winnr = winnr()
-    wincmd p
+    noautocmd wincmd p
     let org_prev_winnr = winnr()
-    wincmd p
+    noautocmd wincmd p
 
     if org_winnr == winnum
         let in_taglist_window = 1
@@ -3932,9 +3932,9 @@ function! s:Tlist_Session_Load(...)
     let winnum = bufwinnr(g:TagList_title)
     if winnum != -1
         let save_winnr = winnr()
-        wincmd p
+        noautocmd wincmd p
         let save_prev_winnr = winnr()
-        wincmd p
+        noautocmd wincmd p
 
         " Goto the taglist window
         call s:Tlist_Window_Goto_Window()
@@ -3944,8 +3944,8 @@ function! s:Tlist_Session_Load(...)
 
         " Go back to the original window
         if save_winnr != winnr()
-            call s:Tlist_Exe_Cmd_No_Acmds(save_prev_winnr . 'wincmd w')
-            call s:Tlist_Exe_Cmd_No_Acmds('wincmd p')
+            call s:Tlist_Exe_Cmd_No_Acmds('noautocmd '.save_prev_winnr . 'wincmd w')
+            call s:Tlist_Exe_Cmd_No_Acmds('noautocmd wincmd p')
         endif
     endif
 endfunction
@@ -4081,9 +4081,9 @@ function! s:Tlist_Window_Open_File_Fold(acmd_bufnr)
 
     " Save the original window number
     let org_winnr = winnr()
-    wincmd p
+    noautocmd wincmd p
     let org_prev_winnr = winnr()
-    wincmd p
+    noautocmd wincmd p
     if org_winnr == winnum
         let in_taglist_window = 1
     else
@@ -4161,9 +4161,9 @@ function! s:Tlist_Refresh_Folds()
     endif
 
     let save_winnr = winnr()
-    wincmd p
+    noautocmd wincmd p
     let save_prev_winnr = winnr()
-    wincmd p
+    noautocmd wincmd p
     exe winnum . 'wincmd w'
 
     " First remove all the existing folds

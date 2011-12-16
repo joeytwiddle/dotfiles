@@ -9,7 +9,20 @@
 " switch to that window.
 " Some users may prefer to open a new window when we click on a tab, rather
 " than leave the current buffer.
-"
+
+"" CONSIDER: MegaBufExplorer.
+"" Re-arranges files so useful ones are next to each other.
+"" Two lines.  First shows 'old' buffers.
+"" Second shows recently saved files.
+"" Second shows recently edited files.
+""" Looking at history as a set of edits.  (Help stop me getting lost about
+""" which were the last few undos I made, could be one one of the 5 last
+""" buffers I was in!)
+"" Perhaps a set of edits grouped in one line, could then push up into the
+"" history.
+"" The next set of files edited before a write could form a new line, again to
+"" be pushed.
+
 " HINT: Type zR if you don't know how to use folds
 "
 " Script Info and Documentation  {{{
@@ -688,9 +701,10 @@ function! <SID>StartExplorer(sticky, delBufNum)
   let s:userFocusedBuffer = bufnr('%')
   " let l:userFocusedWindow = bufwinnr(l:userFocusedWindow)
   let l:userFocusedWindow = winnr()
-  wincmd p
+  noautocmd wincmd p
   let l:userPreviousFocusedWindow = winnr()
-  wincmd p
+  noautocmd wincmd p   " Maybe not needed
+  call <SID>DEBUG("StartExplorer(): Set userFocusedBuffer=".s:userFocusedBuffer." (".bufname('%').")",9)
 
   " Prevent a report of our actions from showing up.
   let l:save_rep = &report
@@ -1250,6 +1264,7 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
             if l:i == s:userFocusedBuffer
             "if l:i == bufnr('%')
               let l:tabEdges .= '*'
+              call <SID>DEBUG('[tabEdges] of '.l:tab.' set to * because userFocusedBuffer='.s:userFocusedBuffer,10)
             elseif bufwinnr(l:i) != -1
               let l:tabEdges .= '-'
             endif
@@ -1400,6 +1415,14 @@ function! <SID>AutoUpdate(delBufNum)
   call <SID>DEBUG('Entering AutoUpdate('.a:delBufNum.') : '.bufnr('%').' : '.bufname('%'),10)
   call <SID>DEBUG('===========================',10)
 
+  " We need to update these now, or BuildBufferList will build an
+  " out-of-date list!
+  " But to reduce spam, better only do this during CursorHold rather
+  " than on all BufEnter events.  Gah we can't see which event type we
+  " are in!
+  let s:userFocusedBuffer = bufnr('%')
+  call <SID>DEBUG("AutoUpdate(): Set userFocusedBuffer=".s:userFocusedBuffer." (".bufname('%').")",9)
+
   if (g:miniBufExplInAutoUpdate == 1)
     call <SID>DEBUG('AutoUpdate recursion stopped',9)
     call <SID>DEBUG('===========================',10)
@@ -1442,31 +1465,23 @@ function! <SID>AutoUpdate(delBufNum)
     if ((g:miniBufExplorerMoreThanOne == 0) || (bufnr('%') != -1 && bufname('%') != ""))
       if <SID>HasEligibleBuffers(a:delBufNum) == 1
         " if we don't have a window then create one
+
         let l:bufnr = <SID>FindWindow('-MiniBufExplorer-', 0)
         if (l:bufnr == -1)
           call <SID>DEBUG('About to call StartExplorer (Create MBE)', 9)
           call <SID>StartExplorer(0, a:delBufNum)
         else
-        " otherwise only update the window if the contents have
-        " changed
-          let l:ListChanged = <SID>BuildBufferList(a:delBufNum, 0)
-          "
-          " No let's update every time we are called.  Hopefully this might
-          " fix those rare occasions the list is out-of-date, and also to fix
-          " the height if the user has resized it.  (Generally they never
-          " wants MBE to be too tall.  Perhaps we should shrink, but not grow
-          " until focused?  Although focus usually means a click.)
+          " otherwise only update the window if the contents have
+          " changed
 
-          " When we switch window, this gets fired three times, but it still
-          " can't see that the new window has been focused.
-          " If we disable change checking this problem goes away O_o
-          " probably because it switches windows itself, causing more events to be fired!
-          " The current solution is to set a CursorHold autocmd
-          " or disable this check and always update :E
+          let l:ListChanged = <SID>BuildBufferList(a:delBufNum, 0)
 
           if (l:ListChanged)
+            """ We can't display the new list because BuildBufferList second
+            """ arg update=0
             call <SID>DEBUG('About to call StartExplorer (Update MBE)', 9) 
             call <SID>StartExplorer(0, a:delBufNum)
+            call <SID>DEBUG('List had changed: '.g:miniBufExplBufList,9)
           else
             " call <SID>DEBUG('Skipping update because list is unchanged', 9) 
             call <SID>DEBUG('Skipping update, list unchanged: '.g:miniBufExplBufList,9)
@@ -1476,7 +1491,7 @@ function! <SID>AutoUpdate(delBufNum)
 
         " go back to the working buffer
         if (bufname('%') == '-MiniBufExplorer-')
-          wincmd p
+          noautocmd wincmd p
         endif
       else
         call <SID>DEBUG('Failed in eligible check', 9)
@@ -1848,7 +1863,7 @@ function! <SID>MBEDeleteBuffer()
 
     " Save previous window so that if we show a buffer after
     " deleting. The show will come up in the correct window.
-    wincmd p
+    noautocmd wincmd p
     let l:prevWin    = winnr()
     let l:prevWinBuf = winbufnr(winnr())
 
@@ -2004,9 +2019,9 @@ function! <SID>DEBUG(msg, level)
     if g:miniBufExplorerDebugMode == 0
         " Save the current window number so we can come back here
         let l:prevWin     = winnr()
-        wincmd p
+        noautocmd wincmd p
         let l:prevPrevWin = winnr()
-        wincmd p
+        noautocmd wincmd p
 
         " Get into the debug window or create it if needed
         call <SID>FindCreateWindow('MiniBufExplorer.DBG', 1, 0, 0)
