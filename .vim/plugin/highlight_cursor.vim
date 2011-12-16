@@ -44,7 +44,7 @@ function! HighlightCursorToggle()
 		"" Clear autocmds etc.
 		call HighlightCursorOff()
 		" TODO: should restore to whatever it was before
-		set updatetime=20
+		set updatetime=1000
 	else
 		let g:highlightcursor=1
 		set updatetime=10

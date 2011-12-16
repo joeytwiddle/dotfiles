@@ -64,6 +64,7 @@ endif
 		"" TODO: After #lines in decimal, list #lines/50 with each 50 represented by a '.' character.  Much easier visually.
 		" :set foldtext=getline(v:foldstart).'\ \ \ ['.(v:foldend-v:foldstart).'\ lines]'
 
+
 		" For treelist.hs:
 		" :syntax match TreeListFoldLine ".*\(-{\|-}\|{-\|}-\).*" contains=TreeListHsTag,myFold
 		" :highlight TreeListFoldLine ctermbg=Red ctermfg=White cterm=bold

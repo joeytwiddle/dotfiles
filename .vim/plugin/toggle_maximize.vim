@@ -44,11 +44,8 @@
 let s:isToggledVertically = 0
 let s:isToggledHorizontally = 0
 
-let s:oldwinwidth  = -1
-let s:oldwinheight = -1
-
-let s:winHeights = []
-let s:winWidths = []
+let s:oldwinwidth  = 1
+let s:oldwinheight = 1
 
 let g:winrestcmd = ''
 let g:lastwinrestcmd = ''
@@ -58,8 +55,10 @@ let g:lastwinrestcmd = ''
 " window-local variables clean themselves up more tidily.
 
 function! s:StoreLayout()
+  let s:oldwinheight = &winheight
+  let s:oldwinwidth = &winwidth
   let g:winrestcmd = winrestcmd()
-  "echo "Saving layout: ".g:winrestcmd
+  "echo "Saved layout: ".g:winrestcmd
 endfunction
 
 function! s:RestoreLayout()
@@ -67,6 +66,7 @@ function! s:RestoreLayout()
     exec "set winwidth=".s:oldwinwidth
     exec "set winheight=".s:oldwinheight
     "echo "Restoring layout: ".g:winrestcmd
+    exec g:winrestcmd
     exec g:winrestcmd
     let g:lastwinrestcmd = g:winrestcmd
     let g:winrestcmd=''
@@ -76,11 +76,9 @@ endfunction
 function! s:DoMaximization()
   call s:StoreLayout()
   if s:isToggledVertically
-    let s:oldwinheight = &winheight
     set winheight=9999
   endif
   if s:isToggledHorizontally
-    let s:oldwinwidth = &winwidth
     set winwidth=9999
   endif
 endfunction

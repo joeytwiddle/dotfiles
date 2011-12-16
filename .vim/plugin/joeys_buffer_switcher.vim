@@ -9,6 +9,11 @@ function! JoeysBufferSwitch()
     "return
   "endif
 
+  if searchStr == '' && exists(":BufExplorer")
+    exec ":BufExplorer"
+    return
+  endif " else we will probably print the whole list later
+
   "" TODO: If we can find a visible window displaying that buffer, switch to
   "" the window instead of loading the buffer in the current window.
 
@@ -25,6 +30,7 @@ function! JoeysBufferSwitch()
     let i += 1
   endwhile
   if len(foundWindows) == 1
+    echo "Switching to window ".foundWindows[0]
     exec foundWindows[0]."wincmd w"
     return
   endif
@@ -41,23 +47,29 @@ function! JoeysBufferSwitch()
       endif
       " Special case: exact match means we return it as the only match!
       if bufName == searchStr
-        let foundBuffers = [i]
-        break
+        "echo "Found exact match: ".i.": ".bufName
+        " Does not work: sometimes it's a closed buffer, so :<i>b fails!
+        "let foundBuffers = [i]
+        "break
+        " Opening by name seems safer:
+        exec ":b ".bufName
+        return
       endif
     endif
     let i += 1
   endwhile
   if len(foundBuffers) == 1
+    "echo "Loading buffer ".foundBuffers[0]
     exec foundBuffers[0]."b"
     return
   endif
 
-  echo "[JBS] ".len(foundWindows)." matching windows"
+  echo "".len(foundWindows)." matching windows"
   for wn in foundWindows
     echo "  <".wn."> ".bufname(winbufnr(wn))
   endfor
   echo " "
-  echo "[JBS] ".len(foundBuffers)." matching buffers"
+  echo "".len(foundBuffers)." matching buffers"
   for bn in foundBuffers
     echo "  (".bn.") ".bufname(bn)
   endfor

@@ -250,6 +250,8 @@ function! Joeyhighlight()
 
 	highlight CursorLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
 
+	highlight TagListTagName cterm=bold ctermfg=magenta
+
   if exists("g:blinking_statusline") && g:blinking_statusline>0
     " Make StatusLine light up temporarily when we switch window
     augroup LightUpStatusLine
