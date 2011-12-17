@@ -3,7 +3,8 @@ source ~/.vim/after/syntax/all.vim
 :set tabstop=2
 :set shiftwidth=2
 " :set expandtab
-:set listchars=tab:.\ ,trail:$
+"" Dot-space is hard to see.  Stick with defaults!
+" :set listchars=tab:.\ ,trail:$
 
 " comment
 :map <F5> ^i# <Esc>j^

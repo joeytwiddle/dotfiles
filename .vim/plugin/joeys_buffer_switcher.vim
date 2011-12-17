@@ -38,7 +38,7 @@ function! JoeysBufferSwitch()
   let foundBuffers = []
   let bufCount = bufnr('$')
   let i=0
-  while i < bufCount
+  while i <= bufCount
     let bufName = bufname(i)
     " TODO: Some buffers need to be ignored e.g. if they are closed (no longer visible)
     if bufName != ""

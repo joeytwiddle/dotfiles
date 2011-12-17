@@ -1,4 +1,4 @@
-:set listchars=tab:>>,trail:>
+" :set listchars=tab:>>,trail:>
 
 :set autoindent
 :set nowrap
