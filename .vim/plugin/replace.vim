@@ -1,4 +1,4 @@
-" Search for <cword> and replace with input() in all open buffers
+" Search for word under cursor and replace with prompted input in all open buffers
 fun! Replace(...)
    let l:search = "\\<" . expand('<cword>') . "\\>"
    let l:replacement = ""
