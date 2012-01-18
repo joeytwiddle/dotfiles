@@ -127,6 +127,12 @@ function! s:ToggleMaximizeHorizontally()
   call s:DoMaximization()
 endfunction
 
+" Convenience function exposed for user:
+" (They could just memorize "exec g:winrestcmd" instead!)
+function! RestoreLayout()
+  call s:RestoreLayout()
+endfunction
+
 " == Keymaps ==
 
 nnoremap  <silent> <C-F> :call <SID>ToggleMaximize()<Enter>
