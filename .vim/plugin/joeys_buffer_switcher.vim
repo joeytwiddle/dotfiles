@@ -14,17 +14,26 @@ function! JoeysBufferSwitch()
     return
   endif " else we will probably print the whole list later
 
+  let searchExpr = '\V' . searchStr
+
   "" TODO: If we can find a visible window displaying that buffer, switch to
   "" the window instead of loading the buffer in the current window.
 
-  " TODO: Is there an exact matching buffer by string?
+  " TODO: Is there an exact matching buffer by string?  Done later...  But
+  " shouldn't we try it first?  Exact buffer should really override partial
+  " window match.  (e.g. foo.c.old is visible but we want to switch to foo.c)
 
+  " TODO: We get some weird buffers/windows when looping these lists, e.g.
+  " previously closed buffers, duplicates, etc.  We probably want to filter
+  " out some of them according to their properties.
+
+  " Search windows for partial match. Hopefully there is only 1 (unambiguous).
   let foundWindows = []
   let winCount = winnr('$')
   let i = 1
   while i <= winCount
     let winName = bufname(winbufnr(i))
-    if match(winName, searchStr) >= 0
+    if match(winName, searchExpr) >= 0
       call add(foundWindows, i)
     endif
     let i += 1
@@ -35,6 +44,7 @@ function! JoeysBufferSwitch()
     return
   endif
 
+  " Search buffers for partial or exact match.
   let foundBuffers = []
   let bufCount = bufnr('$')
   let i=0
@@ -42,7 +52,7 @@ function! JoeysBufferSwitch()
     let bufName = bufname(i)
     " TODO: Some buffers need to be ignored e.g. if they are closed (no longer visible)
     if bufName != ""
-      if match(bufName, searchStr) >= 0
+      if match(bufName, searchExpr) >= 0
         call add(foundBuffers, i)
       endif
       " Special case: exact match means we return it as the only match!
@@ -64,6 +74,15 @@ function! JoeysBufferSwitch()
     return
   endif
 
+  " Failing a matching buffer or window, the user may have tab-completed a
+  " filename offered by input().  If so
+  " if len(foundWindows) == 0 && len(foundWindows) == 0 && filereadable(searchStr)
+  if filereadable(searchStr)
+    exec ":e ".searchStr
+    return
+  endif
+  " BUG: Does not work on paths beginning with ~ or $HOME !
+
   echo "".len(foundWindows)." matching windows"
   for wn in foundWindows
     echo "  <".wn."> ".bufname(winbufnr(wn))
@@ -73,8 +92,6 @@ function! JoeysBufferSwitch()
   for bn in foundBuffers
     echo "  (".bn.") ".bufname(bn)
   endfor
-
-  " Failing that, allow file?
 
 endfunction
 
