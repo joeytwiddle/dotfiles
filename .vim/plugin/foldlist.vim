@@ -202,6 +202,9 @@ function! s:Flist(win)
         highlight link FoldListTitle Title
     endif
 
+    setlocal ts=1 sw=1
+    "sts=1
+
 endfunction
 
 "======================================================================
