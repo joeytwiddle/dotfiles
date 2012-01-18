@@ -21,8 +21,9 @@ nmap <silent> = =:call ForgetAll()<Enter>
 "nnoremap <silent> - :resize -2<Enter>:call <SID>RememberHeight()<Enter>
 "nnoremap <silent> + :resize +2<Enter>:call <SID>RememberHeight()<Enter>
 
-" There may or may not be a reason we do or don't want to use these.
-" Two of them are defined by zoom.vim!
+" ISSUE: Two of these are used in the GUI by zoom.vim!
+" Sometimes gVim does not respond to these keys, so I must do the following.
+" However we don't want to do it by default because it ... breaks something in non-GUI vim.
 "nnoremap <silent> <C-kMinus> :resize -2<Enter>:call <SID>RememberHeight()<Enter>
 "nnoremap <silent> <C-kPlus> :resize +2<Enter>:call <SID>RememberHeight()<Enter>
 "nnoremap <silent> <C-kDivide> :vert resize -6<Enter>:call <SID>RememberWidth()<Enter>
