@@ -109,17 +109,26 @@ Control Shift F2 :CommandDialog
 # OnDesktop Mouse1 :hideMenus
 # OnDesktop Mouse2 :workspaceMenu
 # OnDesktop Mouse3 :rootMenu
-OnDesktop Mouse4 :PrevWorkspace 3
-OnDesktop Mouse5 :NextWorkspace 3
-OnDesktop Shift Mouse4 :PrevWorkspace
-OnDesktop Shift Mouse5 :NextWorkspace
+OnDesktop Mouse4 :PrevWorkspace
+OnDesktop Mouse5 :NextWorkspace
 OnDesktop Mod1 Mouse4 :PrevWorkspace
 OnDesktop Mod1 Mouse5 :NextWorkspace
+OnDesktop Shift Mouse4 :PrevWorkspace 3
+OnDesktop Shift Mouse5 :NextWorkspace 3
+OnDesktop Mod4 Mouse4 :PrevWorkspace 3
+OnDesktop Mod4 Mouse5 :NextWorkspace 3
+
+## Or, to go alongside my compiz binds:
+Mod1 Mouse4 :PrevWorkspace
+Mod1 Mouse5 :NextWorkspace
+Mod4 Mouse4 :PrevWorkspace 3
+Mod4 Mouse5 :NextWorkspace 3
 
 OnToolbar Mouse4 :PrevWorkspace
 OnToolbar Mouse5 :NextWorkspace
 
-OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
+## Disable this next line for Homeworld!
+# OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
 OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
 OnWindow Mod1 Mouse2 :MacroCmd {Raise} {Focus} {StartTabbing} {Lower}
 
@@ -209,37 +218,29 @@ Mod4 f :ToggleDecor
 Mod1 F9 :ExecCommand xsnapshot
 Mod4 F9 :ExecCommand xsnapshot
 
-## Known bug with NextWorkspace that wastes the next keyboard input in an annoying way!
-## http://sourceforge.net/tracker/?func=detail&aid=3190205&group_id=35398&atid=413960
-## For the moment, I am trying bbkeys instead.
-# ## Changing workspace
-# Control Mod1 Left :PrevWorkspace
-# Control Mod4 Left :PrevWorkspace
-# Control Mod1 Right :NextWorkspace
-# Control Mod4 Right :NextWorkspace
-# Shift Mod1 Left :TakeToPrevWorkspace
-# Shift Mod1 Right :TakeToNextWorkspace
-# ## This makes sense if you have three columns of desktops:
-# Control Mod1 Up :PrevWorkspace 3
-# Control Mod4 Up :PrevWorkspace 3
-# Control Mod1 Down :NextWorkspace 3
-# Control Mod4 Down :NextWorkspace 3
-# Shift Mod1 Up :TakeToPrevWorkspace 3
-# Shift Mod1 Down :TakeToNextWorkspace 3
+## Changing workspace
+Control Mod1 Left :PrevWorkspace
+Control Mod1 Right :NextWorkspace
+Control Mod1 Up :PrevWorkspace 3
+Control Mod1 Down :NextWorkspace 3
+Shift Mod1 Left :TakeToPrevWorkspace
+Shift Mod1 Right :TakeToNextWorkspace
+Shift Mod1 Up :TakeToPrevWorkspace 3
+Shift Mod1 Down :TakeToNextWorkspace 3
+## This makes sense if you have three columns of desktops
 
-## Workaround:
-Control Mod1 Left :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
-Control Mod4 Left :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
-Control Mod1 Right :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
+## Known bug with NextWorkspace: it wastes the next keyboard input in an annoying way!
+## http://sourceforge.net/tracker/?func=detail&aid=3190205&group_id=35398&atid=413960
+## So we try this workaround, but it is pretty slow.  I think the original bug was better!
+## (20111210: I may have sped it up a bit by linking the script into ~/bin.)
+Control Mod4 Left  :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
 Control Mod4 Right :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
-Shift Mod1 Left :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace
-Shift Mod1 Right :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace
-Control Mod1 Up :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace 3
-Control Mod4 Up :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace 3
-Control Mod1 Down :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace 3
-Control Mod4 Down :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace 3
-Shift Mod1 Up :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace 3
-Shift Mod1 Down :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace 3
+Control Mod4 Up    :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace       3
+Control Mod4 Down  :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace       3
+Shift   Mod4 Left  :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace
+Shift   Mod4 Right :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace
+Shift   Mod4 Up    :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace 3
+Shift   Mod4 Down  :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace 3
 
 # Mod1 F1 :Workspace 1
 # Mod1 F2 :Workspace 2
@@ -368,6 +369,8 @@ Mod1 w :ExecCommand chromium-browser
 Mod4 w :ExecCommand chromium-browser
 
 ## Push windows to edges or corners of the screen (no resizing)
+## These got a lot faster when I linked that script into ~/bin
+## I think sometimes $JPATH/tools becomes un-cached and is then very slow to read the next time.
 Mod4 KP_1 :ExecCommand put_current_xwindow sw
 Mod4 KP_2 :ExecCommand put_current_xwindow bottom
 Mod4 KP_3 :ExecCommand put_current_xwindow se

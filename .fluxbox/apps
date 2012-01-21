@@ -1,5 +1,5 @@
 [app] (name=xv) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{319 188}
+  [Position]	(UPPERLEFT)	{309 94}
   [Deco]	{NORMAL}
   [Sticky]	{yes}
   [Layer]	{2}
@@ -11,13 +11,13 @@
 [end]
 [app] (name=xmms) (class=Xmms)
   [Workspace]	{1}
-  [Position]	(UPPERLEFT)	{352 41}
+  [Position]	(UPPERLEFT)	{432 0}
   [Deco]	{NONE}
   [Layer]	{8}
   [Close]	{yes}
 [end]
 [app] (name=beebem) (class=beebem)
-  [Position]	(UPPERLEFT)	{5 247}
+  [Position]	(UPPERLEFT)	{378 394}
   [Close]	{yes}
 [end]
 [app] (name=glslideshow) (class=TopLevelShell)
@@ -37,8 +37,8 @@
   [Close]	{yes}
 [end]
 [app] (name=smplayer) (class=Smplayer)
-  [Dimensions]	{1107 518}
-  [Position]	(UPPERLEFT)	{0 0}
+  [Dimensions]	{624 383}
+  [Position]	(UPPERLEFT)	{586 608}
   [Sticky]	{yes}
   [Layer]	{8}
   [Close]	{yes}
@@ -62,6 +62,10 @@
  [app] (title=Untitled.*)
   [Deco]	{NORMAL}
 [end]
+[group]
+ [app] (title=[Vim].*)
+ [app] (title=[Opening .* in Vim...)
+[end]
 [app] (title=Google Chrome Options)
 [end]
 [group]
@@ -74,7 +78,7 @@
  [app] (name=google-chrome)
  [app] (name=chromium-browser)
  [app] (name=chrome)
-  [Position]	(UPPERLEFT)	{126 5}
+  [Position]	(UPPERLEFT)	{68 5}
   [Close]	{yes}
 [end]
 [group]
@@ -107,7 +111,7 @@
   [Workspace]	{1}
 [end]
 [app] (name=gkrellm) (class=Gkrellm)
-  [Position]	(UPPERLEFT)	{1140 0}
+  [Position]	(UPPERLEFT)	{1135 5}
   [Sticky]	{yes}
   [Close]	{yes}
 [end]
