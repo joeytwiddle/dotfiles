@@ -14,7 +14,7 @@ below 0
 track_gtk_theme_name 0
 default_track_theme "Default"
 save_position 0
-chart_width 120
+chart_width 128
 update_HZ 1
 allow_multiple_instances 0
 float_factor 1000
@@ -29,7 +29,7 @@ clock_cal loop_chime_enable 0
 clock_cal clock_options 1
 clock_cal cal_options 1
 clock_cal cal_format %a <span foreground="$A"><big><big>%e</big></big></span> %b
-clock_cal clock_format %l:%M <span foreground="$A"><small>%S</small></span>
+clock_cal clock_format %k:%M <span foreground="$A"><small>%S</small></span>
 gkrellweather chart_visible 0
 gkrellweather panel_visible 1
 gkrellweather metric 1
@@ -63,7 +63,7 @@ proc text_format \a$p\f procs\n\a$u\f users\n\a$f\f forks
 proc chart_config 50 400 2 0 0 0 : 1 0 0 0 500 : 0 0 0 0 600
 disk assign_method 2
 disk device Disk 0 0 0 1 1 0 0
-disk chart_config Disk 40 8000000 1 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
+disk chart_config Disk 40 8000000 0 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
 disk device sda 0 0 11 0 1 -1 0
 disk device sda1 0 0 11 0 1 1 0
 disk device sda2 0 0 11 0 1 2 0
@@ -87,8 +87,6 @@ disk device sdb5 0 0 11 0 1 5 0
 disk device sdb6 0 0 11 0 1 6 0
 disk device sdb7 0 0 11 0 1 7 0
 disk device sdb8 0 0 11 0 1 8 0
-disk device sdc 0 0 11 0 1 -1 0
-disk device sdc1 0 0 11 0 1 1 0
 disk device sr0 0 0 14 0 1 -1 0
 disk device fd0 0 0 42 0 1 -1 0
 disk text_format \a$r\f read\n\a$w\f write
@@ -105,7 +103,7 @@ inet tooltip inet1
 inet text_format all \t$a\f $l\N$A\f $L
 inet update_interval all 1
 net enables eth0 1 1 0
-net enables eth2 1 1 0
+net enables eth2 1 0 0
 net chart_config eth2 50 200000 0 0 0 0 : 0 0 0 0 500 : 0 1 0 0 400
 net enables eth3 1 1 0
 net chart_config eth3 40 500000 1 0 0 0 : 0 1 0 0 500 : 0 0 0 0 500
@@ -130,20 +128,20 @@ net timer_seconds 1
 net timer_iface none
 net timer_on 
 net timer_off 
-net text_format \a$r\f in\n\a$t\f out\b\c\f$L
+net text_format \a$r\f in / $id\n\a$t\f out / $od\b\c\f$L
 net reset_mday 1
 net net_stats_window_height 515
-meminfo mem_meter 1 0 1
+meminfo mem_meter 1 1 1
 meminfo swap_meter 1 1
 meminfo swap_chart 1 1
-meminfo chart_config 25 200 0 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
+meminfo chart_config 25 30 0 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
 meminfo mem_launch 
 meminfo mem_tooltip 
 meminfo mem_data_format Mem:  $t  -  $f free
 meminfo swap_launch 
 meminfo swap_tooltip 
 meminfo swap_data_format Swap: $t  -  $f free
-meminfo text_format \a$i\f swap in\n\a$o\f swap out
+meminfo text_format \a$i\f read\n\a$o\f write
 fs "debian" "/" 0 0 0 1 0
 fs "home" "/home" 0 0 0 1 0
 fs "hwibot" "/mnt/hwibot" 0 0 0 1 0
@@ -154,11 +152,11 @@ fs "moredata" "/mnt/moredata" 0 0 0 1 0
 fs "hdb5" "/mnt/hdb5" 0 0 0 1 0
 fs "hdb6" "/mnt/hdb6" 0 0 0 1 0
 fs "hdb7" "/mnt/hdb7" 0 0 0 1 0
-fs fs_check_timeout 2
-fs nfs_check_timeout 16
+fs fs_check_timeout 15
+fs nfs_check_timeout 60
 fs auto_eject 0
 fs binary_units 0
-fs data_format $f free / $t   /$l/
+fs data_format $f / $t   $l
 mail mailbox-local mbox /var/mail/joey
 mail mua 
 mail notify 
