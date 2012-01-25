@@ -1,5 +1,5 @@
-nmap [[ :TlistOpen<Enter><Up><Enter>
-nmap ]] :TlistOpen<Enter><Down><Enter>
+nmap <silent> [[ :TlistOpen<Enter><Up><Enter>
+nmap <silent> ]] :TlistOpen<Enter><Down><Enter>
 
 " BUGS TODO:
 " My new wincmd p commands are firing off autocmds in various other plugins.

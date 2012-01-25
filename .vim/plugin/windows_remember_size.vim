@@ -13,7 +13,7 @@ nnoremap <silent> Om :resize -2<Enter>:call <SID>RememberHeight()<Enter>
 nnoremap <silent> Ok :resize +2<Enter>:call <SID>RememberHeight()<Enter>
 nnoremap <silent> Oo :vert resize -6<Enter>:call <SID>RememberWidth()<Enter>
 nnoremap <silent> Oj :vert resize +6<Enter>:call <SID>RememberWidth()<Enter>
-nmap <silent> = =:call ForgetAll()<Enter>
+nmap <silent> = =:call ForgetWindowSizes()<Enter>
 
 " Sometimes my X gets less happy (two Xs? VNC? UT?)
 " Then my numpad maps to nothing more special than + and - so I must define
@@ -28,6 +28,9 @@ nmap <silent> = =:call ForgetAll()<Enter>
 "nnoremap <silent> <C-kPlus> :resize +2<Enter>:call <SID>RememberHeight()<Enter>
 "nnoremap <silent> <C-kDivide> :vert resize -6<Enter>:call <SID>RememberWidth()<Enter>
 "nnoremap <silent> <C-kMultiply> :vert resize +6<Enter>:call <SID>RememberWidth()<Enter>
+
+" BUG: Occasionally I press the restore button and it goes mad.  This might be
+" related to me maximizing the window in X.
 
 function! s:RememberHeight()
   let w:rememberedHeight = winheight(0)
@@ -49,17 +52,17 @@ function! s:RestoreSize()
 endfunction
 
 " Exposed to user
-function! ForgetAll()
+function! ForgetWindowSizes()
   let l:winnr = winnr()
   windo unlet! w:rememberedHeight
   windo unlet! w:rememberedWidth
   exec l:winnr." wincmd w"
 endfunction
 
-" BUG: ForgetAll() sometimes changes the current window layout!
+" BUG: ForgetWindowSizes() sometimes changes the current window layout!
 " CONSIDER: Could be better to store sizes in a global, so they can be
 " forgotten easily (without visiting the windows!).
 " OTOH: Using window-local rather than windowid-indexed vars means they
 " disappear tidily when windows are closed or opened.
 " Or we could just disable our WinEnter event handler during the windo calls.
-" Or we can accept that ForgetAll might change the current window sizes!
+" Or we can accept that ForgetWindowSizes might change the current window sizes!

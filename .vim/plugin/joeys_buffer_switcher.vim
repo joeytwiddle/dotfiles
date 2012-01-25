@@ -1,7 +1,21 @@
+" BUGS TODO:
+" If you press Esc or Ctrl+C it should not proceed to the BufExplorer fallback!
+"   The try catch below didn't fix that.
+" BufExplorer sometimes requires two presses of Ctrl-O to get out of it.
+
 function! JoeysBufferSwitch()
 
-  let searchStr = input("Type part of buffer then <Tab> or <Enter>: ", '', "buffer")
-  "echo "Got: ".searchStr
+  try
+    let searchStr = input("Type part of buffer then <Tab> or <Enter>: ", '', "buffer")
+    "echo "Got: ".searchStr
+    " BUG: Sometimes instead of presenting 5 alternatives, it completes to a
+    " full file path and we don't see the other options!
+    " (This may have been a file that was opened through the buffer switcher
+    " previously.)
+  catch
+    echo "Error!"
+    return
+  endtry
 
   " Quick and dirty:
   "if searchStr != ""
@@ -75,13 +89,15 @@ function! JoeysBufferSwitch()
   endif
 
   " Failing a matching buffer or window, the user may have tab-completed a
-  " filename offered by input().  If so
+  " filename offered by input().
+  " filereadable() does not work on paths beginning with ~ or $HOME, so first:
+  let searchFile = expand(searchStr)
   " if len(foundWindows) == 0 && len(foundWindows) == 0 && filereadable(searchStr)
-  if filereadable(searchStr)
+  if filereadable(searchFile)
     exec ":e ".searchStr
+    " exec ":e ".searchFile
     return
   endif
-  " BUG: Does not work on paths beginning with ~ or $HOME !
 
   echo "".len(foundWindows)." matching windows"
   for wn in foundWindows

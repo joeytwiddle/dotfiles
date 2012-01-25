@@ -1112,7 +1112,7 @@ function! <SID>ResizeWindow()
       let l:height = line('.')
       normal gg
     endif
-  
+
     " enforce max window height
     if g:miniBufExplMaxSize != 0
       if g:miniBufExplMaxSize < l:height
@@ -1150,7 +1150,11 @@ function! <SID>ResizeWindow()
     endif
 
   endif
-  
+
+  " TODO: We should make the "currently focused" buffer visible.  The cursor
+  " does move there if we focus MBE (or was it there but the scroll wasn't?)
+  " I don't see how that happens actually, not with cursor()!
+
 endfunction
 
 " }}}

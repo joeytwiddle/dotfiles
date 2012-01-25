@@ -272,7 +272,7 @@ function! s:BEInitialize()
   let &report = 10000
 
   let s:_list = &list
-  set nolist
+  setlocal nolist
 
   setlocal nonumber
   setlocal foldcolumn=0
@@ -414,9 +414,16 @@ function! s:BEDisplayBufferList()
   setlocal noswapfile
   setlocal nowrap
 
+  " Joey added the keepjump below, so that if you want to go back to the
+  " previous buffer (perhaps you loaded BufExplorer accidentally), you only
+  " need to hit Ctrl-O once.
+  " BUG: Strangely, the second time I do it, a file from a previous session is
+  " opened!  (I also get "invalid mark" error before that, if I don't put
+  " keepjumps on everything here.)
+
   " Delete all previous lines to the black hole register
   call cursor(1,1)
-  exec 'silent! normal! "_dG'
+  exec 'keepjumps silent! normal! "_dG'
 
   call s:BESetupSyntax()
   call s:BEMapKeys()
@@ -751,7 +758,7 @@ function! s:BESelectBuffer(...)
         exec s:BEGetWinNbr(tabNbr, _bufNbr) . "wincmd w"
       endif
     else
-        "No, the use did not ask to open the selected buffer in a tab.
+        " No, the user did not ask to open the selected buffer in a tab.
 
         " Are we suppose to move to the tab where this active buffer is?
         if exists("g:bufExplorerChgWin")
@@ -775,7 +782,8 @@ function! s:BESelectBuffer(...)
       endif
 
       " Switch to the buffer.
-      exec "keepalt keepjumps silent b!" _bufNbr
+      exec "keepalt silent b!" _bufNbr
+      " Joey removed keepjumps from previous - he thinks we want to keep this jump!
     endif
 
     " Make the buffer 'listed' again.

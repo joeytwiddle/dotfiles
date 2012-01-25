@@ -282,11 +282,46 @@ endif
 " Map a key to invoke grep on a word under cursor.
 exe "nnoremap <unique> <silent> " . Grep_Key . " :call RunGrep('grep')<CR>"
 
+
+
+" THIS IS SUPPOSED TO WORK BUT DOESN'T!  By Joey.
+" Avoids the "Press ENTER or type command to continue" message by temporarily
+" increasing cmdheight and resetting it afterwards.
+function! s:AvoidPressEnterMessage()
+  let s:oldCmdHeight = &cmdheight
+  let s:oldUpdateTime = &updatetime
+  augroup AvoidPressEnterMessage
+    autocmd!
+    autocmd CursorHold * call s:ResetCmdHeight()
+    autocmd CursorHoldI * call s:ResetCmdHeight()
+    " autocmd BufEnter * call s:ResetCmdHeight()
+    "" Fails with WinEnter!
+    " autocmd WinEnter * call s:ResetCmdHeight()
+  augroup END
+  set cmdheight=5
+  set updatetime=1000
+endfunction
+
+function! s:ResetCmdHeight()
+  exec "set cmdheight=".s:oldCmdHeight
+  exec "set updatetime=".s:oldUpdateTime
+  augroup AvoidPressEnterMessage
+    autocmd!
+  augroup END
+endfunction
+
+
+
 " RunGrepCmd()
 " Run the specified grep command using the supplied pattern
 function! s:RunGrepCmd(cmd, pattern)
+
+    "" DID NOT WORK!
+    "call s:AvoidPressEnterMessage()
+
     " echo "command: " . a:cmd
-    let cmd_output = system(a:cmd)
+    " silent did not help either
+    silent let cmd_output = system(a:cmd)
     " echo "output: " . cmd_output
 
     if cmd_output == ""
@@ -305,10 +340,11 @@ function! s:RunGrepCmd(cmd, pattern)
     let old_efm = &efm
     set efm=%f:%\\s%#%l:%m
 
-    execute "silent! cfile " . tmpfile
+    " execute "silent! cfile " . tmpfile
     "" Joey: don't jump to first occurrence
     "" But disabled because it stopped working
-    " execute "silent! cgetfile " . tmpfile
+    "" Seems to be working ok now though!
+    execute "silent! cgetfile " . tmpfile
 
     let &efm = old_efm
 
@@ -331,7 +367,16 @@ function! s:RunGrepCmd(cmd, pattern)
 
     " OK I admit I re-enabled cc.  Because even if we get to focus the clist,
     " the editing windows changes to the first error immediately!
-    cc
+    "cc
+	 " Yeah so what?  One problem is I don't actually notice the buffer
+	 " changed.  Does the cursor appearing in the buffer help?  Maybe it does.
+	 " And we can scroll the list with Ctrl+N, but stopping in the quicklist
+	 " allows us to scroll with DownArrow or j (one key) and it doesn't open
+	 " buffers we didn't want to open!
+
+   "" SEE ALSO: Search for cfile and cgetfile elsewhere in this script!
+
+	 " I think we need some obvious indiciation that the buffer changed!
 
     call delete(tmpfile)
 endfunction
@@ -569,7 +614,8 @@ function! RunGrep(grep_cmd, ...)
         let grep_opt = a:1
     endif
 
-    "" Joey doesn't like -e, because he wants to pass options to grep!  (Especially -r :P )
+    "" Joey doesn't like -e, because he wants to pass his own options to grep,
+    "" e.g. -r and -i, which he does when entering the file list.
     let grep_expr_option = ''
     if a:grep_cmd == 'grep'
         let grep_path = g:Grep_Path
@@ -590,7 +636,18 @@ function! RunGrep(grep_cmd, ...)
     " No argument supplied. Get the identifier and file list from user
     " let pattern = input("Grep for pattern: ", expand("<cword>"))
     "" Joey:
-    let pattern = input("Grep for pattern: ", "\\<" . expand("<cword>") . "\\>" )
+    " let pattern = input("Grep for pattern: ", "\\<" . expand("<cword>") . "\\>" )
+    "" <cfile> grabs a little more than <cword> but not as much as <cWORD>:
+    let str = expand("<cfile>")
+    " We add \<...\> wrappers only when appropriate:
+    if match(str,"^[0-9a-zA-Z_]")
+       let str = "\\<" . str
+    endif
+    if match(str,"[0-9a-zA-Z_]$")
+       let str = str . "\\>"
+    endif
+    let pattern = input("Grep for pattern: ", str)
+
     if pattern == ""
         return
     endif
