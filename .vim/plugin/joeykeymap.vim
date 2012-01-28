@@ -98,12 +98,18 @@ nnoremap <Down> gj
 
 " Scroll the page up and down with Ctrl+K/J
 " Only moves the cursor when it's near the edge
-noremap <C-K> 1<C-Y>
-noremap <C-J> 1<C-E>
-inoremap <C-K> <Esc>1<C-Y>a
-inoremap <C-J> <Esc>1<C-E>a
+" I don't know why I specified 1.  It is undesirable since it creates 31 if I
+" press 3<C-K> !
+"noremap <C-K> 1<C-Y>
+"noremap <C-J> 1<C-E>
+"inoremap <C-K> <Esc>1<C-Y>a
+"inoremap <C-J> <Esc>1<C-E>a
+noremap <C-K> <C-Y>
+noremap <C-J> <C-E>
+inoremap <C-K> <Esc><C-Y>a
+inoremap <C-J> <Esc><C-E>a
 
-" Split withdows verticall with shift-S
+" Split windows vertically with Ctrl-W Shift-S
 "nnoremap <C-W>s :split<Enter>
 nnoremap <C-W>S :vsplit<Enter>
 
@@ -206,4 +212,7 @@ set wildmode=longest:full,full
 
 " Now overriden by joeys_buffer_switcher.vim
 "nnoremap <silent> <C-B> :BufExplorer<Enter>
+
+" Make a global mark 'Q' with 'mQ' and jump back to it with 'MQ'.
+nmap M g'
 
