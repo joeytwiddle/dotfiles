@@ -9,4 +9,11 @@ function GoBackToRecentBuffer()
   endwhile
 endfunction
 
-nnoremap <silent> <C-O> :call GoBackToRecentBuffer()<Enter>
+" A bit much to override an important key?
+"nnoremap <silent> <C-O> :call GoBackToRecentBuffer()<Enter>
+" You can always use <C-I> if you need to go forwards again.
+" I never use this one:
+nnoremap <silent> <C-U> :call GoBackToRecentBuffer()<Enter>
+" You can use g; and g, to move between recent change points.
+"" Only in GVim:
+"nnoremap <silent> <C-BS> :call GoBackToRecentBuffer()<Enter>
