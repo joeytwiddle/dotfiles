@@ -113,5 +113,9 @@ endfunction
 
 command! JoeysBufferSwitch call JoeysBufferSwitch()
 
-nnoremap <C-B> :JoeysBufferSwitch<Enter>
+"nnoremap <C-B> :JoeysBufferSwitch<Enter>
+
+" Consider the alternative:
+"nnoremap <C-B> :b 
+nnoremap <C-B> :ls<CR>:b<space>
 
