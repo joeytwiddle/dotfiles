@@ -18,3 +18,19 @@ highlight! coffeeAssignSymbols cterm=bold ctermfg=white gui=bold guifg=white
 syntax match coffeeJustDot /\./
 highlight! coffeeJustDot cterm=bold ctermfg=white gui=bold guifg=white
 
+
+"" Stolen from basic.vim!
+
+syn match OperatorEquals /=/
+highlight OperatorEquals ctermfg=yellow guifg=yellow
+
+syn match OperatorPlus /+/
+"" Interferes with coffeeFunction!
+"syn match OperatorMinus /-/
+syn match OperatorMultiply /*/
+syn match OperatorDivide /\//
+highlight OperatorPlus ctermfg=green guifg=green
+"highlight OperatorMinus ctermfg=red guifg=red
+highlight OperatorMultiply ctermfg=yellow guifg=yellow
+highlight OperatorDivide ctermfg=red guifg=red
+
