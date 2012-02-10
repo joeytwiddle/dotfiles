@@ -1,0 +1,81 @@
+In Insert mode:
+
+  Ctrl-O lets you do ONE normal command (that's what I need for gvim -y!)
+
+  Ctrl-A inserts the last insert again (in normal mode that is in register ".)
+
+  Ctrl-Y insert the char from cell above the cursor
+
+Execute a register as a command using @
+
+  so @0 or @1 or @""
+
+If you made some deletes and you want an earlier delete, they are stored in the numbered registers, so...
+
+  "3p   will paste the yanked text 3 steps back
+
+:u1 | u   go to initial state
+:earlier 1f   go to state at previous file-save
+
+When diffing two files:
+  ]c   go to next difference
+  [c   go to previous difference
+  dp   put lines in current difference into other file
+  do   obtain lines for current difference from other file
+
+g;   go to position of last change
+g,   go to position of next change
+mx   create mark x
+g'x  jump to mark x
+     (use capital X for global, lower-case is buffer-local)
+
+Don't forget, while n is the repeater for * or #, ; is the repeater for f t F and T.
+
+:w !sudo tee %
+
+Lost code by breaking your undo history?  Recover with:
+
+  :earlier 1m
+  :later 10s
+
+Delete and yank current word, with "in":
+
+  diw   delete current word
+  di(   delete current parens
+  di"   delete text between quotes
+  vi{   select text in brackets
+
+  For more: :help text-objects
+
+Hex / binary editor:
+  :%!xxd
+  :%!xxd -r
+
+
+
+
+Yank matching:
+
+  :g/var/y A     yanks all lines in buffer matching var into register a
+
+
+Debug where setting was set:
+  :verbose set cindent?
+
+Edit file under cursor is gf in case Ctrl-] doesn't work.
+
+Change directory to current folder:
+  :cd %:h
+  or
+  :set autochdir
+
+gv if you want your last visual back
+
+Handy buffer switcher:
+  nnoremap <C-B> :ls<CR>:b<space>
+
+
+gF open file under cursor
+
+
+
