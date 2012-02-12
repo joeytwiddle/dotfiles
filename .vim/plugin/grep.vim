@@ -166,9 +166,9 @@
 "       :let Grep_Skip_Files = '*.bak *'
 "
 " --------------------- Do not modify after this line ---------------------
-if exists("loaded_grep") || &cp
-    finish
-endif
+" if exists("loaded_grep") || &cp
+    " finish
+" endif
 let loaded_grep = 1
 
 " Location of the grep utility
@@ -280,7 +280,7 @@ endif
 " --------------------- Do not edit after this line ------------------------
 
 " Map a key to invoke grep on a word under cursor.
-exe "nnoremap <unique> <silent> " . Grep_Key . " :call RunGrep('grep')<CR>"
+silent exe "nnoremap <unique> <silent> " . Grep_Key . " :call RunGrep('grep')<CR>"
 
 
 
@@ -316,8 +316,8 @@ endfunction
 " Run the specified grep command using the supplied pattern
 function! s:RunGrepCmd(cmd, pattern)
 
-    "" DID NOT WORK!
-    "call s:AvoidPressEnterMessage()
+    "" DOES NOT WORK!
+    call s:AvoidPressEnterMessage()
 
     " echo "command: " . a:cmd
     " silent did not help either
@@ -340,6 +340,9 @@ function! s:RunGrepCmd(cmd, pattern)
     let old_efm = &efm
     set efm=%f:%\\s%#%l:%m
 
+    normal mG
+    " echo "Current position stored in mG, use g'G to get back here."
+
     " execute "silent! cfile " . tmpfile
     "" Joey: don't jump to first occurrence
     "" But disabled because it stopped working
@@ -352,6 +355,12 @@ function! s:RunGrepCmd(cmd, pattern)
     if g:Grep_OpenQuickfixWindow == 1
         " Open the quickfix window below the current window
         botright copen
+        " We could help size it a bit
+        let targetHeight = line('$') + 1
+        if targetHeight > 20
+            let targetHeight = 20
+        endif
+        exec "resize ".targetHeight
     endif
 
     " Jump to the first error (mainly because it forces the focus back to
@@ -368,15 +377,15 @@ function! s:RunGrepCmd(cmd, pattern)
     " OK I admit I re-enabled cc.  Because even if we get to focus the clist,
     " the editing windows changes to the first error immediately!
     "cc
-	 " Yeah so what?  One problem is I don't actually notice the buffer
-	 " changed.  Does the cursor appearing in the buffer help?  Maybe it does.
-	 " And we can scroll the list with Ctrl+N, but stopping in the quicklist
-	 " allows us to scroll with DownArrow or j (one key) and it doesn't open
-	 " buffers we didn't want to open!
+    " Yeah so what?  One problem is I don't actually notice the buffer
+    " changed.  Does the cursor appearing in the buffer help?  Maybe it does.
+    " And we can scroll the list with Ctrl+N, but stopping in the quicklist
+    " allows us to scroll with DownArrow or j (one key) and it doesn't open
+    " buffers we didn't want to open!
 
-   "" SEE ALSO: Search for cfile and cgetfile elsewhere in this script!
+    "" SEE ALSO: Search for cfile and cgetfile elsewhere in this script!
 
-	 " I think we need some obvious indiciation that the buffer changed!
+    " I think we need some obvious indiciation that the buffer changed!
 
     call delete(tmpfile)
 endfunction
@@ -640,10 +649,10 @@ function! RunGrep(grep_cmd, ...)
     "" <cfile> grabs a little more than <cword> but not as much as <cWORD>:
     let str = expand("<cfile>")
     " We add \<...\> wrappers only when appropriate:
-    if match(str,"^[0-9a-zA-Z_]")
+    if match(str,"^[0-9a-zA-Z_]") >= 0
        let str = "\\<" . str
     endif
-    if match(str,"[0-9a-zA-Z_]$")
+    if match(str,"[0-9a-zA-Z_]$") >= 0
        let str = str . "\\>"
     endif
     let pattern = input("Grep for pattern: ", str)
