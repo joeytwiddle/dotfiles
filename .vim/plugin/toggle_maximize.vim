@@ -1,4 +1,4 @@
-" ToggleMaximize v1.4.0 by joey.neuralyte.org
+" ToggleMaximize v1.4.2 by joey.neuralyte.org
 "
 " Vim can support complex window layouts, but they can put users off because
 " they reduce the size of the main editing window.  ToggleMaximize addresses
@@ -12,34 +12,68 @@
 "
 " Maximization is forced to respect winminwidth and winminheight, so if you
 " have these set, other windows will not fully shrink to the edges.
-" Restoration is forced to respect winheight.
 "
 " If the user changes the size of any windows after maximizing, the script
 " still thinks the toggle is ON, so next time it is used it will restore your
-" old layout, rather than re-maximize.
-
-" 2011/12/15  Version 1.4 uses winrestcmd() and is a bit faster.  (Old methods
-" of restoration via WinDo() tended to trigger WinEnter events in other
-" plugins, e.g. MBE/Taglist.)
-
-" CONSIDER: An alternative solution would be for "maximization" to simply open
-" a new tab with the current buffer, and for "restoration" to close it and
-" return to the previous tab.
+" old layout, rather than re-maximize (unlike some window managers).
 
 
-"" OLD DOCS:
 
-" TODO: Large values of winwidth/height can cause problems restoring layout.
-" Width is ok because we do that last, but when we visit windows to restore
-" width, winheight may alter previously correct heights!
-" SOLUTION: restore width+height at the same time.
-" SOLUTION: temporarily set winwidth/height to 1 while we are restoring.
-" Although we cannot do that if winminwidth/height are > 1.  Grrr!
-" So we might need to temporarily alter winminwidth/height too!
-" CURRENTLY: Left to the user to set winwidth/height low or live with the bug!
+" WARNING BUG TODO: If we create a new window while maximized (e.g. split the
+" current window), restoring with winrestcmd completely fails!  I tend to
+" notice this because in my usual layout the current window becomes very tiny!
+"
+" WORKAROUND: *DO NOT* create or split windows while maximized!  Just
+" un-maximize to do that operation, until we fix this.  In emergencies: <C-W>=
+"
+" SOLUTION: We should continue to use the winrestcmd style of restoring sizes
+" without visiting windows, but we must track old window sizes better than it
+" does, e.g.  by buffer name, not by volatile window numbers.  I think one of
+" our older revisions implemented a global dictionary of sizes, although
+" perhaps indexed window number, not bufname.  The result of this would be
+" that newly created windows would be squished on restoration.
+"
+" ALTERNATIVE: We could try to workaround this problem by restoring normal
+" layout before any new windows are created, and re-maximizing afterwards.
+
+" NOTE: There are a couple of other things that occasionally go wrong, namely:
+" winrestcmd is still set but windows look restored.  winrestcmd is ignored.
+" winheight=9999 before and after toggle!  These may only occur when
+" re-sourcing the script during development (hopefully!).
 
 " SUCKS: Resizing Vim in your window manager does not cause winheight to be
 "        re-enforced (until you change window).
+" Hehe actually I tend to survive this because I have put MBE on cursorhold,
+" so the winheight=9999 gets reinforced often.
+
+
+
+" CONSIDER: An entirely alternative approach would be for "maximization" to
+" simply open a new tab with the current buffer, and for "restoration" to
+" close it and return to the previous tab.  This would even hide the
+" StatusLines of other windows which we currently still display.
+
+
+
+" CHANGELOG:
+"
+" 2011/12/15  Version 1.4 uses winrestcmd() and is a bit faster.  (Old methods
+" of restoration via WinDo() tended to fight with winwidth/height settings,
+" and also trigger WinEnter events in other plugins, e.g. MBE/Taglist.)
+
+
+
+" NOTES ON OLD APPROACHES:
+" Old versions used to visit the windows to resize them.  Large values of
+" winwidth/height could cause problems restoring layout.  It was left to the
+" user to set winwidth/height low or live with the bug!
+
+" SUCKS: After all that refactoring, I note that windowid-indexed values apply
+" to different windows when windows are closed or created, whereas
+" window-local variables clean themselves up more tidily.  But window-local
+" variables can only be accessed by visiting the window.
+
+
 
 let s:isToggledVertically = 0
 let s:isToggledHorizontally = 0
@@ -49,10 +83,6 @@ let s:oldwinheight = 1
 
 let g:winrestcmd = ''
 let g:lastwinrestcmd = ''
-
-" SUCKS: After all that refactoring, I note that windowid-indexed values apply
-" to different windows when windows are closed or created, whereas
-" window-local variables clean themselves up more tidily.
 
 function! s:StoreLayout()
   let s:oldwinheight = &winheight
