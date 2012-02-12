@@ -250,7 +250,8 @@ function! Joeyhighlight()
 
 	highlight CursorLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
 
-	highlight TagListTagName cterm=bold ctermfg=magenta
+	highlight TagListTagName cterm=bold ctermfg=magenta gui=bold guifg=magenta
+	highlight TagListFileName cterm=bold ctermbg=darkgray ctermfg=white gui=bold guibg=black guifg=white
 
   if exists("g:blinking_statusline") && g:blinking_statusline>0
     " Make StatusLine light up temporarily when we switch window
@@ -266,10 +267,22 @@ function! Joeyhighlight()
       "autocmd WinEnter   * hi StatusLine ctermbg=green ctermfg=darkblue gui=none guibg=green guifg=blue
       "autocmd BufEnter   * hi StatusLine ctermbg=green ctermfg=darkblue gui=none guibg=green guifg=blue
       "autocmd CursorHold * hi StatusLine ctermbg=white ctermfg=blue     gui=none guibg=white guifg=blue
-      "" Green bar for reversed cterm:
-      autocmd WinEnter   * hi StatusLine ctermfg=green ctermbg=darkblue gui=none guifg=green guibg=blue
-      autocmd BufEnter   * hi StatusLine ctermfg=green ctermbg=darkblue gui=none guifg=green guibg=blue
-      autocmd CursorHold * hi StatusLine ctermfg=white ctermbg=blue     gui=none guifg=white guibg=blue
+      "" Green and blue bar for reversed cterm:
+      "autocmd WinEnter   * hi StatusLine ctermfg=green ctermbg=darkblue gui=none guifg=green guibg=blue
+      "autocmd BufEnter   * hi StatusLine ctermfg=green ctermbg=darkblue gui=none guifg=green guibg=blue
+      "autocmd CursorHold * hi StatusLine ctermfg=white ctermbg=blue     gui=none guifg=white guibg=blue
+      "" Green and white bar for reversed cterm:  (can't get bright white grr!)
+      "autocmd WinEnter   * hi StatusLine ctermfg=green ctermbg=white gui=none guifg=green guibg=white
+      "autocmd BufEnter   * hi StatusLine ctermfg=green ctermbg=white gui=none guifg=green guibg=white
+      "autocmd CursorHold * hi StatusLine ctermfg=white ctermbg=blue     gui=none guifg=white guibg=blue
+      "" Green and bright-white bar for non-reversed cterm:
+      "autocmd WinEnter   * hi StatusLine cterm=bold ctermfg=white ctermbg=green gui=none guifg=green guibg=white
+      "autocmd BufEnter   * hi StatusLine cterm=bold ctermfg=white ctermbg=green gui=none guifg=green guibg=white
+      "autocmd CursorHold * hi StatusLine cterm=bold ctermfg=blue ctermbg=white     gui=none guifg=white guibg=blue
+      "" Yellow bar for reversed cterm:
+      autocmd WinEnter   * hi StatusLine ctermfg=yellow ctermbg=darkblue gui=none guibg=yellow guifg=blue
+      autocmd BufEnter   * hi StatusLine ctermfg=yellow ctermbg=darkblue gui=none guibg=yellow guifg=blue
+      autocmd CursorHold * hi StatusLine ctermfg=white  ctermbg=blue     gui=none guibg=white  guifg=blue
     augroup END
     set updatetime=600
   endif
