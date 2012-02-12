@@ -202,6 +202,12 @@ nmap C \ bcw
 cnoremap <C-D> <C-Left>
 cnoremap <C-F> <C-Right>
 cnoremap <C-X> <C-W>
+cnoremap <C-A> <Home>
+cnoremap <C-E> <End>
+" In cmdline, S-Left/Right is the same as C-Left/Right
+" The closest I can come to small-word jump is:
+cnoremap <C-R> <Left><Left><Left>
+cnoremap <C-T> <Right><Right><Right>
 " This doesn't do what we want, also we want to leave Ctrl-V since it does
 " something special in Vim (insert literal char).
 " cnoremap <C-V> <C-Right><C-W>
