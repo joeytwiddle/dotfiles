@@ -43,8 +43,6 @@ function! HighlightLine()
     else
 
       " Convert String to regexp, by escaping regexp special chars:
-      " let l:pattern = substitute(l:line,'\([.^$\\][)(]\|\*\|\\\|"\|\~\)','\\\1','g')
-      " let l:pattern = substitute(l:line,'\([.^$\\][]\|\*\|\\\|\"\|\~\)','\\\1','g')
       "" BUG: Does not create a suitable regexp for all inputs.
       "" For example, the next line breaks the algorithm on the next line!
       let l:pattern = substitute(l:line,'\([.^$*\\][]\|\\\|\"\|\~\)','\\\1','g')
@@ -75,24 +73,34 @@ function! UnHighlightLine()
 endfunction
 
 function! HL_Cursor_Moved()
+
   "" Line on screen - activates when cursor has moved visually.
   let cur_pos = winline()
   "" Line in file - activates when position has moved within file.
   " let cur_pos = getpos(".")[1]
+
+  let diff = s:last_pos - cur_pos
+
   " Note if we have just switched window, last_pos will be from the previous
   " window, so we also check last_win.
-  let diff = s:last_pos - cur_pos
-  " echo "Comparing: ".s:last_pos." ~ ".cur_pos
-  " let diff=99
-  " if diff != 0
-  if s:last_win!=winnr() || diff>=g:hiline_min_lines || diff<=-g:hiline_min_lines
+
+  " Do not highlight the line if it is the only line in the buffer
+  " (Since getbufline is heavy we do it only on window switch.)
+  " This prevents it looking stupid when switching to MBE.
+  "
+  let showBufferJump = s:last_win!=winnr() && len(getbufline('%',0,'$'))!=1
+  let showLineJump = s:last_win==winnr() && ( diff>=g:hiline_min_lines || diff<=-g:hiline_min_lines )
+
+  if showBufferJump || showLineJump
     call HighlightLine()
   else
-    " DONE: This is a bit slow to do unneccessarily!
+    " UnHighlightLine is a bit slow to do unneccessarily.
     if s:highlightOn | call UnHighlightLine() | end
   endif
+
   let s:last_pos = cur_pos
   let s:last_win = winnr()
+
 endfunction
 
 function! GetRegAfter(cmd)
@@ -113,12 +121,12 @@ augroup HighlightLineAfterJump
   autocmd WinLeave * call UnHighlightLine()
 augroup END
 
-set updatetime=1000
-
 let s:last_pos = -1
 let s:last_win = -1
 
+" set updatetime=1000
 " set updatetime=4000
+set updatetime=200
 
 if !hlexists("HLCurrentLine")
   highlight link HLCurrentLine CursorLine
