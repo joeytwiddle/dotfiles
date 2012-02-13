@@ -17,9 +17,11 @@ command! -narg=0 ZoomReset :call s:ZoomReset()
 " Map Ctrl-MouseWheel to zoom in/out
 nmap <C-MouseDown> :ZoomIn<CR>
 nmap <C-MouseUp> :ZoomOut<CR>
+
 " Map Ctrl-KeypadPlus/Minus to zoom in/out
-nmap <C-kPlus> :ZoomIn<CR>
-nmap <C-kMinus> :ZoomOut<CR>
+"nmap <C-kPlus> :ZoomIn<CR>
+"nmap <C-kMinus> :ZoomOut<CR>
+" I disabled these because I am using them in windows_remember_size.
 
 " guifont size + 1
 function! s:ZoomIn()
