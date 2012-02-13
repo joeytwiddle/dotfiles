@@ -1464,9 +1464,11 @@ function! <SID>AutoUpdate(delBufNum)
   
   " Only allow updates when the AutoUpdate flag is set
   " this allows us to stop updates on startup.
-  if g:miniBufExplorerAutoUpdate == 1
+  let inCmdWin = (bufname('%') == "[Command Line]")
+  if g:miniBufExplorerAutoUpdate == 1 && !inCmdWin
     " Only show MiniBufExplorer if we have a real buffer
     if ((g:miniBufExplorerMoreThanOne == 0) || (bufnr('%') != -1 && bufname('%') != ""))
+      " The cmdwin windows is unusual - it errors if we try to jump out of it.
       if <SID>HasEligibleBuffers(a:delBufNum) == 1
         " if we don't have a window then create one
 
@@ -1515,7 +1517,7 @@ function! <SID>AutoUpdate(delBufNum)
       call <SID>DEBUG('No buffers loaded...',9)
     endif
   else
-    call <SID>DEBUG('AutoUpdates are turned off, terminating',9)
+    call <SID>DEBUG('AutoUpdates are turned off (perhaps in cmdline), terminating',9)
   endif
 
   call <SID>DEBUG('===========================',10)
