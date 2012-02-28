@@ -89,6 +89,10 @@
 " Flashing cursor means lag for gaming!
 :set guicursor=a:blinkoff0
 
+" Minimal/informative foldline:
+:set foldtext=v:folddashes.'['.(v:foldend-v:foldstart+1).']'.getline(v:foldstart)
+" .substitute(getline(v:foldstart),'\/\*','','g')
+
 
 
 " == Keybinds ==
@@ -142,7 +146,7 @@ let g:miniBufExplorerMoreThanOne = 0
 let g:miniBufExplMapWindowNavArrows = 1  " or use version in joeykeymap.vim
 let g:miniBufExplUseSingleClick = 1
 " let g:miniBufExplShowUnlistedBuffers = 1
-let g:miniBufExplShowOtherBuffers = 1
+" let g:miniBufExplShowOtherBuffers = 1
 " let g:miniBufExplorerDebugLevel = 5
 
 let g:treeExplVertical = 1
@@ -156,6 +160,17 @@ let g:ConqueTerm_CloseOnEnd = 1
 let g:ConqueTerm_InsertOnEnter = 1
 let g:ConqueTerm_ReadUnfocused = 1   " I fear this may be preventing me from leaving the window!
 
+"" For taglist.vim:
+" The second part of the varname is the Vim filetype associated with the file.
+" property kinda sucks.  as does export.
+" Exports might be nice if vim would only choose the functions over them!
+"let tlist_javascript_settings = 'javascript;c:class;f:function;v:variable;p:property;e:export'
+"let tlist_coffee_settings = 'coffee;c:class;f:function;v:variable;p:property;e:export'
+let tlist_javascript_settings = 'javascript;c:class;f:function;e:export'
+let tlist_coffee_settings = 'coffee;c:class;f:function;e:export'
+let tlist_uc_settings = 'c;c:class;v:variable;f:function;m:method'
+" java,javascript,c all create tags for uc files, but c lists more!
+
 " == Options for my plugins ==
 
 let g:hiline = 1
@@ -163,7 +178,11 @@ let g:hiword = 1
 
 let g:search_centered = 0
 
-let g:blinking_statusline = 0
+let g:blinking_statusline = 1
+set updatetime=300
 
 let g:yaifa_max_lines = 80
+
+" I find groups of windows clearer/easier to navigate when they squash up.
+set winminheight=0
 
