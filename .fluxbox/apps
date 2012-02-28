@@ -1,5 +1,5 @@
 [app] (name=xv) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{309 94}
+  [Position]	(UPPERLEFT)	{14 23}
   [Deco]	{NORMAL}
   [Sticky]	{yes}
   [Layer]	{2}
@@ -11,8 +11,8 @@
 [end]
 [app] (name=xmms) (class=Xmms)
   [Workspace]	{1}
-  [Position]	(UPPERLEFT)	{432 0}
-  [Deco]	{NONE}
+  [Position]	(UPPERLEFT)	{162 393}
+  [Deco]	{0x5ff}
   [Layer]	{8}
   [Close]	{yes}
 [end]
@@ -46,7 +46,7 @@
 [end]
 [app] (name=gimp) (class=Gimp) (role=gimp-image-window)
   [Dimensions]	{930 814}
-  [Position]	(UPPERLEFT)	{241 96}
+  [Position]	(UPPERLEFT)	{261 80}
   [Close]	{yes}
 [end]
 [app] (name=gimp) (class=Gimp) (role=gimp-toolbox)
@@ -64,7 +64,7 @@
 [end]
 [group]
  [app] (title=[Vim].*)
- [app] (title=[Opening .* in Vim...)
+ [app] (title=Opening .* in Vim...)
 [end]
 [app] (title=Google Chrome Options)
 [end]
@@ -78,7 +78,7 @@
  [app] (name=google-chrome)
  [app] (name=chromium-browser)
  [app] (name=chrome)
-  [Position]	(UPPERLEFT)	{68 5}
+  [Position]	(UPPERLEFT)	{78 0}
   [Close]	{yes}
 [end]
 [group]
@@ -111,7 +111,7 @@
   [Workspace]	{1}
 [end]
 [app] (name=gkrellm) (class=Gkrellm)
-  [Position]	(UPPERLEFT)	{1135 5}
+  [Position]	(UPPERLEFT)	{1141 0}
   [Sticky]	{yes}
   [Close]	{yes}
 [end]
@@ -125,4 +125,8 @@
 [end]
 [app] (name=) (class=)
   [Position]	(UPPERLEFT)	{21 485}
+[end]
+[transient] (name=chromium-browser.real) (class=Chromium-browser.real)
+  [Dimensions]	{600 689}
+  [Position]	(UPPERLEFT)	{520 92}
 [end]
