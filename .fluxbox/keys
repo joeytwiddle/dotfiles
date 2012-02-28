@@ -354,9 +354,16 @@ Mod4 l :ExecCommand load_desktop
 # Mod4 x :ExecCommand xterm
 
 ## This got me the font I wanted:
-Mod1 x :ExecCommand xtermbg
+# Mod1 x :ExecCommand xtermbg
 ## TESTING if inlining makes it faster (was sometimes pretty sluggish under Fluxbox)
-# Mod1 x :ExecCommand xterm -cc 33:48,37:48,45-47:48,64:48,126:48 -rightbar +sb -sl 5000 -vb -si -sk -bg black -fg white -font '-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1' -rightbar -j -s
+## Without /usr/bin/ this created a forkbomb!  Must have broken unj somehow.
+## Yes this is much faster.  (But it lacks the lighter bg option.)
+# Mod1 x :ExecCommand /usr/bin/xterm -cc 33:48,37:48,45-47:48,64:48,126:48 -rightbar +sb -sl 5000 -vb -si -sk -bg black -fg white -font '-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1' -rightbar -j -s
+## Now let's try the symlink in my PATH:
+Mod1 x :ExecCommand xterm
+# The problem is my 'xtermbg' script runs my 'xterm' script and that uses 'unj'
+# which is part of jsh.  For faster startup we need to run xterm without
+# involving jsh (or trim down jsh's tools folder!).
 
 # Mod4 x :ExecCommand xtermbg
 Mod4 x :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 /usr/local/xmms/bin/xmms -p
