@@ -1,3 +1,9 @@
+### Joey's screen config
+
+# By default screen uses ^a (Ctrl-A) as its meta key, but I like to keep ^a
+# free for its shell usage (beginning-of-line), so I use the meta key ^k
+# (Ctrl-K) instead.  This is hardwired into many of the bindings below.
+
 ## Dotted around jsh are screentitle calls to describe the state of each window:
 # shell in dir	directory/
 # shell running command	#command
@@ -7,6 +13,8 @@
 # another screen	[host:screenname]
 ## Do we want state too or is that too bloated? ^ here
 ## I believe support for those not mentioned is in jsh startup: xttitleprompt
+
+maptimeout 800
 
 # caption always "%{BW} %H %{bw}%-w%{gK}%n %t%{bw}%+w%78=%{BW} %M %d %y %93=%c%="
 # hardstatus alwayslastline "%{BW}www.guckes.net/screen/%50=%{RY}host: %H %85=%{YR}%M%d %92=%{Gb}%c%="
@@ -45,30 +53,6 @@ bindkey -k kI copy
 
 ## Ctrl+X opens a new window
 # bindkey "^x" screen
-
-#### TESTING:
-## Split (default):
-# bindkey "^kS" split
-## Unsplit:
-# bindkey "^kU" only
-bindkey "^kU" remove
-bindkey "^kc" remove
-## Default: bindkey "^k<Tab>" focus
-## Ctrl-K j to switch through splits
-bindkey "^kj" focus
-bindkey "^kk" focus
-## Ctrl-Up/Down to switch through splits
-#bindkey "[1;5B" focus
-#bindkey "[1;5A" focus
-## Ctrl-K Up/Down to switch through splits
-bindkey "^kOA" focus
-bindkey "^kOB" focus
-## Ctrl-K Ctrl-Up/Down to switch through splits
-#bindkey "^k[1;5B" focus
-#bindkey "^k[1;5A" focus
-
-## Like Vim:  (might get annoying if I'm using vim!)
-bindkey "^wk" focus
 
 ## Ctrl+N opens a new window
 bindkey "^n" screen
@@ -136,5 +120,37 @@ bindkey "^n" screen
   bindkey "^m8" number 8
   bindkey "^m9" number 9
 
-maptimeout 800
+
+
+### Window splitting and split navigation
+
+## Split windows (default ^kS):
+# bindkey "^kS" split
+
+## Unsplit windows:
+# bindkey "^kU" only
+bindkey "^kU" remove
+bindkey "^kc" remove
+
+## Switch through windows.
+## screen only allows this in one direction, but I expect two directions, so I
+## bind two keys even though they both move in the same direction (forwards).
+## Default: bindkey "^k<Tab>" focus
+## Ctrl-K j to switch through splits
+bindkey "^kj" focus
+bindkey "^kk" focus
+## Ctrl-Up/Down to switch through splits
+#bindkey "[1;5B" focus
+#bindkey "[1;5A" focus
+## Ctrl-K Up/Down to switch through splits
+bindkey "^kOA" focus
+bindkey "^kOB" focus
+## Ctrl-K Ctrl-Up/Down to switch through splits
+#bindkey "^k[1;5B" focus
+#bindkey "^k[1;5A" focus
+
+## Like Vim:  (might get annoying if I'm using vim!)
+## Why didn't I also add "^wj"?
+bindkey "^wk" focus
+
 
