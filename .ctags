@@ -9,7 +9,7 @@
 
 --langdef=coffee
 --langmap=coffee:.coffee
---regex-coffee=/^class ([a-zA-Z_$][0-9a-zA-Z_$]*)( extends [a-zA-Z_$][0-9a-zA-Z_$]*)?$/\1/c,class/
+--regex-coffee=/^class @?([a-zA-Z_$][0-9a-zA-Z_$]*)( extends [a-zA-Z_$][0-9a-zA-Z_$]*)?$/\1/c,class/
 --regex-coffee=/^[ \t]*(@|this\.)([a-zA-Z_$][0-9a-zA-Z_$]*).*$/\2/e,export/
 --regex-coffee=/^[ \t]*@?([a-zA-Z_$][0-9a-zA-Z_$]*):.*[-=]>.*$/\1/f,function/
 --regex-coffee=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]+=.*[-=]>.*$/\1/f,function/
