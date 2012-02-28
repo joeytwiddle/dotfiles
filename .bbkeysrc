@@ -78,9 +78,11 @@
   [changeWorkspace]            (Mod1-7)                    {7}
   [changeWorkspace]            (Mod1-8)                    {8}
   ## Use these if you want bbkeys' dropdown menu.
-  # [NextWindow]                 (Mod1-Tab)
-  # [PrevWindow]                 (Mod1-grave)
+  [NextWindow]                 (Mod1-Tab)
+  [PrevWindow]                 (Mod1-grave)
   # [PrevWindow]                 (Mod1-Shift-Tab)
+  [NextWindow]                 (Mod1-Shift-Tab)
+  [PrevWindow]                 (Mod1-Shift-grave)
   # [NextWindowOnAllWorkspaces]  (Mod4-Tab)
   # [PrevWindowOnAllWorkspaces]  (Mod4-grave)
   # [PrevWindowOnAllWorkspaces]  (Mod4-Shift-Tab)
@@ -123,8 +125,9 @@
   ### Wanted for Debian, or jsh prompt isn't loaded:
   # [Execute]  (Mod1-X) {/home/joey/j/jsh xterm -e /home/joey/j/jsh}
   ### Wanted for Gentoo, with above jsh loads the Debian prompt and keys are crapzored!
-  # [Execute]  (Mod1-X) {xterm}
-  [Execute]  (Mod1-X) {xtermbg}
+  [Execute]  (Mod1-X) {xterm}
+  # [Execute]  (Mod1-X) {xtermbg}
+  # [Execute]  (Mod1-X) {/usr/bin/xterm}
 
   [Execute]  (Mod1-slash) {whatsplaying}
 
@@ -135,24 +138,25 @@
 
   [Execute]  (Mod4-X) {xmms -p}
   [Execute]  (Mod1-KP_7) {xmms -r}
-  [Execute]  (Mod1-KP_9) {xmms -f}
-  # [execute]  (Mod1-KP_9) {nextsong}
+  # [Execute]  (Mod1-KP_9) {xmms -f}
+  [execute]  (Mod1-KP_9) {nextsong}
   [Execute]  (Mod1-KP_0) {xmms -u}
   [Execute]  (Mod1-KP_1) {xmms -p}
   [Execute]  (Mod1-KP_3) {xmms -s}
   [Execute]  (Mod1-KP_Delete) {xmms -s}
 
   ## Push windows to edges or corners of the screen
-  [Execute]  (Mod4-KP_1) {wmctrl -r :ACTIVE: -e 1,8,692,572,292}
-  # [Execute]  (Mod4-KP_2) {wmctrl -r :ACTIVE: -e 1,350,692,572,292}
-  [Execute]  (Mod4-KP_2) {wmctrl -r :ACTIVE: -e 1,250,692,772,292}
-  [Execute]  (Mod4-KP_3) {wmctrl -r :ACTIVE: -e 1,700,692,572,292}
-  [Execute]  (Mod4-KP_4) {wmctrl -r :ACTIVE: -e 1,8,190,618,650}
-  [Execute]  (Mod4-KP_5) {wmctrl -r :ACTIVE: -e 1,128,112,1024,768}
-  [Execute]  (Mod4-KP_6) {wmctrl -r :ACTIVE: -e 1,652,190,618,650}
-  [Execute]  (Mod4-KP_7) {wmctrl -r :ACTIVE: -e 1,8,8,800,600}
-  [Execute]  (Mod4-KP_8) {wmctrl -r :ACTIVE: -e 1,128,8,1024,768}
-  [Execute]  (Mod4-KP_9) {wmctrl -r :ACTIVE: -e 1,242,8,1024,768}
+  ## Disabled whilst running alongside Fluxbox!  (Also fixed on pod btw.)
+  # [Execute]  (Mod4-KP_1) {wmctrl -r :ACTIVE: -e 1,8,692,572,292}
+  # # [Execute]  (Mod4-KP_2) {wmctrl -r :ACTIVE: -e 1,350,692,572,292}
+  # [Execute]  (Mod4-KP_2) {wmctrl -r :ACTIVE: -e 1,250,692,772,292}
+  # [Execute]  (Mod4-KP_3) {wmctrl -r :ACTIVE: -e 1,700,692,572,292}
+  # [Execute]  (Mod4-KP_4) {wmctrl -r :ACTIVE: -e 1,8,190,618,650}
+  # [Execute]  (Mod4-KP_5) {wmctrl -r :ACTIVE: -e 1,128,112,1024,768}
+  # [Execute]  (Mod4-KP_6) {wmctrl -r :ACTIVE: -e 1,652,190,618,650}
+  # [Execute]  (Mod4-KP_7) {wmctrl -r :ACTIVE: -e 1,8,8,800,600}
+  # [Execute]  (Mod4-KP_8) {wmctrl -r :ACTIVE: -e 1,128,8,1024,768}
+  # [Execute]  (Mod4-KP_9) {wmctrl -r :ACTIVE: -e 1,242,8,1024,768}
 
   ## Untested:
   [Execute]  (Mod1-minus) {volumedown}
