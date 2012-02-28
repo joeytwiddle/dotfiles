@@ -47,22 +47,28 @@ bindkey -k kI copy
 # bindkey "^x" screen
 
 #### TESTING:
-## Default: bindkey "^kS" split
+## Split (default):
+# bindkey "^kS" split
 ## Unsplit:
-bindkey "^kU" only
-# bindkey "^U" remove
+# bindkey "^kU" only
+bindkey "^kU" remove
+bindkey "^kc" remove
 ## Default: bindkey "^k<Tab>" focus
 ## Ctrl-K j to switch through splits
 bindkey "^kj" focus
+bindkey "^kk" focus
 ## Ctrl-Up/Down to switch through splits
-bindkey "[1;5B" focus
-bindkey "[1;5A" focus
+#bindkey "[1;5B" focus
+#bindkey "[1;5A" focus
 ## Ctrl-K Up/Down to switch through splits
 bindkey "^kOA" focus
 bindkey "^kOB" focus
 ## Ctrl-K Ctrl-Up/Down to switch through splits
-bindkey "^k[1;5B" focus
-bindkey "^k[1;5A" focus
+#bindkey "^k[1;5B" focus
+#bindkey "^k[1;5A" focus
+
+## Like Vim:  (might get annoying if I'm using vim!)
+bindkey "^wk" focus
 
 ## Ctrl+N opens a new window
 bindkey "^n" screen
