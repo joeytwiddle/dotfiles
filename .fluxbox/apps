@@ -1,5 +1,5 @@
 [app] (name=xv) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{14 23}
+  [Position]	(UPPERLEFT)	{421 504}
   [Deco]	{NORMAL}
   [Sticky]	{yes}
   [Layer]	{2}
@@ -11,8 +11,8 @@
 [end]
 [app] (name=xmms) (class=Xmms)
   [Workspace]	{1}
-  [Position]	(UPPERLEFT)	{162 393}
-  [Deco]	{0x5ff}
+  [Position]	(UPPERLEFT)	{547 36}
+  [Deco]	{NONE}
   [Layer]	{8}
   [Close]	{yes}
 [end]
@@ -59,17 +59,12 @@
   [Sticky]	{yes}
 [end]
 [group]
- [app] (title=Untitled.*)
-  [Deco]	{NORMAL}
-[end]
-[group]
- [app] (title=[Vim].*)
+ [app] (title=\[Vim\].*)
  [app] (title=Opening .* in Vim...)
 [end]
 [app] (title=Google Chrome Options)
 [end]
 [group]
- [app] (title=Untitled)
  [app] (title=chrome://devtools/devtools.html)
  [app] (title=Developer Tools.*)
 [end]
@@ -78,7 +73,7 @@
  [app] (name=google-chrome)
  [app] (name=chromium-browser)
  [app] (name=chrome)
-  [Position]	(UPPERLEFT)	{78 0}
+  [Position]	(UPPERLEFT)	{34 77}
   [Close]	{yes}
 [end]
 [group]
@@ -111,7 +106,7 @@
   [Workspace]	{1}
 [end]
 [app] (name=gkrellm) (class=Gkrellm)
-  [Position]	(UPPERLEFT)	{1141 0}
+  [Position]	(UPPERLEFT)	{1144 0}
   [Sticky]	{yes}
   [Close]	{yes}
 [end]
