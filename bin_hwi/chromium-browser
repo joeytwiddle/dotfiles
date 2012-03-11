@@ -1,6 +1,28 @@
 ## I think sync may be the cause of browser not reloading properly :P
 ## This was after I killed chrome cos it had gone mental.
+
 ## --enable-sync-extensions --sync-url=https://clients4.google.com/chrome-sync/dev 
 ## --new-wrench-menu 
 ## --flag-switches-begin ... --flag-switches-end 
-chromium-browser.real --ignore-gpu-blacklist --enable-webgl --enable-accelerated-2d-canvas --enable-accelerated-layers "$@"
+
+## Experimenting with this one:
+## --process-per-tab
+## No on second thought, let's try this one:
+## --process-per-site
+## The default is process-per-site-instance.
+
+### NVidia black windows when short on memory:
+## Removed --process-per-site after [15279:15279:2121525889035:ERROR:x11_util.cc(814)] X Error detected: serial 53, error_code 11 (BadAlloc (insufficient resources for operation)), request_code 136, minor_code 27 (X_GLXCreatePbuffer)
+## which I am still getting :F
+## But now I am getting:
+#[29714:29714:2122076428232:ERROR:gles2_cmd_decoder.cc(2314)] GLES2DecoderImpl::UpdateOffscreenFrameBufferSize failed because offscreen FBO was incomplete.
+#[29714:29714:2122076428398:ERROR:gles2_cmd_decoder.cc(1929)] Could not allocate offscreen buffer storage.
+#[29714:29714:2122076455775:ERROR:gpu_scheduler.cc(104)] GpuScheduler::InitializeCommon failed because decoder failed to initialize.
+#[29341:29341:2122076496274:ERROR:command_buffer_proxy.cc(126)] Failed to initialize command buffer service.
+## Well it was pretty much NVidia's fault I believe.  I didn't resort to a restart, I just closed a lot of windows and NV got some memory to work with.
+
+# To try to use hardware rendering, even without the right hardware: --ignore-gpu-blacklist --enable-webgl --enable-accelerated-2d-canvas --enable-accelerated-layers
+# To use software rendering for WebGL: -blacklist-accelerated-compositing and -blacklist-webgl
+
+chromium-browser.real --process-per-site "$@"
+
