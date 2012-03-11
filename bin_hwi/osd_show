@@ -4,7 +4,7 @@
 ## No more spam from those noobs in # when I'm holding the flag
 ## In fact screw #smo.priv too?!
 # if [ -f /tmp/playing_ut ] && ( [[ "$*" =~ ^\ \#\  ]] || [[ "$*" =~ ^\ \#smo.priv\  ]] )
-if [ -f /tmp/playing_ut ] && ( [[ "$*" =~ ^\ \#\  ]] || [[ "$*" =~ uggla ]] || [[ "$*" =~ ^\ \#(smo.priv|crtc)\  ]] )
+if [ -f /tmp/disable_osd_show ] && ( [[ "$*" =~ ^\ \#\  ]] || [[ "$*" =~ uggla ]] || [[ "$*" =~ ^\ \#(smo.priv|crtc|webgl|bbg)\  ]] )
 then exit 0
 fi
 
