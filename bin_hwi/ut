@@ -1,8 +1,22 @@
 #!/bin/bash
 
 processToCycle="kicker gkrellm"
-processToRenice="xchat xterm vi zsh"
-## This is stupid.  We need to pause everything owned by the user (or users) except for a few we keep running.
+processToRenice="xchat xterm zsh"
+
+## This blacklist is stupid.  We need to pause everything owned by the user (or users) except for a few we keep running.
+
+## I really want to pause vim and vi but this spawns a new bug:
+##
+##   Vims opened from a shell (not vims opened directly in an xterm mind) are
+##   suspended, and do not come back cleanly from 'fg' or 'reset' - we are
+##   forced to kill or quit them (stdin ':qa' works).
+##
+##   We lose ... undo history
+##   in unhidden buffers, and possibly unsaved changes.
+##
+## But I still fear sometimes vims in a particular state may impact framerate and even server switch time!
+## It may be when FileExplorer or ConqueTerm is open, or other situations ... !
+
 processToPause="vim vi gvim chrome firefox firefox-bin swiftfox-bin iceweasel-bin plugin-container icedove-bin thunderbird-bin konqueror mandelbulber ktorrent amarokapp onchange jwatch maxima wxmaxima xmms"
 
 for p in $processToRenice
@@ -46,7 +60,7 @@ sleep 30
 precache_file () {
 	for FILE
 	do
-		if nice -n 4 dd if="$FILE" of=/dev/null bs=2400 count=1024 2>/dev/null
+		if nice -n 4 dd if="$FILE" of=/dev/null bs=4800 count=1024 2>/dev/null
 		then : # jshinfo "Precached $FILE"
 		# else jshwarn "Failed to precache $FILE"
 		else echo "Failed to precache $FILE"
@@ -57,13 +71,14 @@ precache_file () {
 shopt -s nocaseglob
 
 (
+# CTF-Gataka-SE
 cat << !
 CTF-IncineratorLE-102
+CTF-Revenge-LE102
+CTF-AreaN23-LE103
+CTF-Orbital-LE103
 CTF-Ranel-JoltEdition
 CTF-Cynosure][LE105
-CTF-Revenge-LE102
-CTF-Gataka-SE
-CTF-Orbital-LE103
 CTF-Vaultcity-LE102
 !
 ) |
@@ -72,6 +87,7 @@ while read MAPNAME
 do
 	MAPFILE=/usr/local/install/games/ut/Maps/"$MAPNAME".unr
 	precache_file "$MAPFILE"
+	# echo "Precached $MAPFILE"
 	utdep.pl "$MAPFILE"
 	:
 done |
@@ -81,7 +97,7 @@ do
 	## Although we don't really need the trailing * (we have the full
 	## filename already), we do need it to make use of nocaseglob!
 	precache_file /usr/local/install/games/ut/*/"$DEPNAME"*
-	echo "Cached $DEPNAME"
+	echo "Precached $DEPNAME"
 	:
 done |
 osd_cat
@@ -92,7 +108,7 @@ shopt -u nocaseglob
 
 # xrandr -s 1600x1200
 
-touch /tmp/playing_ut   ## For osd_show
+touch /tmp/disable_osd_show   ## For osd_show
 
 
 
@@ -100,14 +116,15 @@ touch /tmp/playing_ut   ## For osd_show
 
 
 
-rm -f /tmp/playing_ut
+rm -f /tmp/disable_osd_show
 
 # xrandr -s 1280x1024
 
 for p in $processToCycle
 do
 	eval "cyc=\$cycled_$p"
-	[ "$cyc" = true ] && verbosely $p &
+	( [ "$p" = kicker ] && [ "$cyc" = true ] && verbosely env DISPLAY=:0 kicker & ) ||
+	[ "$cyc" = true ] && verbosely "$p" &
 done
 
 for p in $processToPause
