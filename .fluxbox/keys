@@ -128,7 +128,7 @@ OnToolbar Mouse4 :PrevWorkspace
 OnToolbar Mouse5 :NextWorkspace
 
 ## Disable this next line for Homeworld!
-# OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
+OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
 OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
 OnWindow Mod1 Mouse2 :MacroCmd {Raise} {Focus} {StartTabbing} {Lower}
 
