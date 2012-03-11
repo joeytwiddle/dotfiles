@@ -1,0 +1,53 @@
+# If you want to use this config instead of the default, just do:
+# GTK2_RC_FILES="$HOME/.gtkrc.fonts_tiny" <program>
+# Or symlink over "~/.gtkrc-2.0.fonts" so that "~/.gtkrc-2.0"
+# will load the theme and via "~/.gtkrc-2.0.mine" will also
+# load the desired font settings.
+
+# If we are doing that, we will bypass the user's selected theme, so we should
+# include it here.
+include "/usr/share/themes/OrangeJuice/gtk-2.0/gtkrc"
+
+## font_for_reading
+style "general"
+{
+	font_name="Arial 7"
+}
+
+gtk-font-name="Arial 7"
+
+## font_for semi-interaction semi-reading
+style "readable"
+{
+	font_name="FreeSans 8"
+	# font_name="Sans 8"
+}
+
+## font_for_interaction
+style "clickable"
+{
+	# font_name="FreeSans 8"
+	font_name="Sans 8"
+}
+
+style "fixed"
+{
+  # font="-b&h-lucidux mono-medium-r-normal-*-12-*-*-*-m-*-iso8859-1"
+  # font="-*-lucidatypewriter-medium-*-*-*-*-90-*-*-*-*-*-*"
+  # font="Monospace 8"
+  font="-urw-nimbus mono l-regular-r-normal-*-*-90-*-*-p-*-iso8859-2"
+}
+
+## For Eclipse, I really only want the explorer and output info windows to be tiny.
+widget_class "*" style "general"
+widget_class "*Entry*" style "general"
+
+## Not everything is tiny, the rest is just small.
+widget_class "*Label*"   style "readable"
+widget_class "*Button*"  style "readable"
+widget_class "*Menu*"    style "clickable"
+widget_class "*MenuBar*" style "clickable"
+widget_class "*Toolbar*" style "clickable"
+# widget_class "*Frame"    style "general"
+widget_class "*Frame"    style "fixed"
+

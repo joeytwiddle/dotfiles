@@ -1,0 +1,40 @@
+# If you want to use this config instead of the default, just do:
+# GTK2_RC_FILES="$HOME/.gtkrc.fonts_small" <program>
+# Or symlink over "~/.gtkrc-2.0.fonts" so that "~/.gtkrc-2.0"
+# will load the theme and via "~/.gtkrc-2.0.mine" will also
+# load the desired font settings.
+
+# You can have widgets as Sans 8 (screen style)
+# Or as FreeSans 8 (antialiased - just slightly fuzzy at this small size)
+
+style "joeys_widget_font"
+{
+	# font_name="FreeSans 8"
+	font_name="Sans 8"
+}
+
+# gtk-font-name="FreeSans 8"
+gtk-font-name="Sans 8"
+
+## font_for semi-interaction semi-reading
+style "joeys_reading_font"
+{
+	# font_name="Sans 8"
+	# font_name="FreeSans 8"
+
+	# We have smaller widgets, but not smaller readables!
+	font_name="FreeSans 9"
+	# I did this for wireshark.
+}
+
+widget_class "*" style "joeys_widget_font"
+
+widget_class "*Label*"   style "joeys_reading_font"
+widget_class "*Button*"  style "joeys_reading_font"
+
+widget_class "*Menu*"    style "joeys_widget_font"
+widget_class "*MenuBar*" style "joeys_widget_font"
+widget_class "*Toolbar*" style "joeys_widget_font"
+# widget_class "*Frame"    style "joeys_widget_font"
+widget_class "*Frame"    style "fixed"
+
