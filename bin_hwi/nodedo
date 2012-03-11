@@ -1,4 +1,5 @@
-nodePath=/usr/local/node-v0.4.8
+# nodePath=/usr/local/node-v0.4.8
+nodePath=/usr/local/node-v0.6.2
 
 modulesBin="$HOME/node_modules/.bin"
 me="`basename "$0"`"
@@ -8,4 +9,7 @@ elif [ -x "$modulesBin/$me" ]
 then
 	echo "Using module (not global) binary $modulesBin/$me"
 	"$modulesBin/$me" "$@"
+else
+	echo "[nodedo] No node exe found for: $me" >&2
+	exit 5
 fi
