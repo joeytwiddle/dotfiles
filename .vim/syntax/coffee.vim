@@ -93,8 +93,27 @@ highlight default link coffeeAssignSymbols SpecialChar
 
 syntax match coffeeAssignBrackets /\[.\+\]/ contained contains=TOP,coffeeAssign
 
-syntax match coffeeAssign /\%(@\|@\?\I\)\%(\i\|::\|\.\|?\|\[.\+\]\)*\s*\%(and\|or\|&&\|||\|?\|+\|-\|\/\|\*\|%\|<<\|>>\|>>>\|&\||\|\^\)\?=\@<!==\@!>\@!/
+"" Original:
+" syntax match coffeeAssign /\%(@\|@\?\I\)\%(\i\|::\|\.\|?\|\[.\+\]\)*\s*\%(and\|or\|&&\|||\|?\|+\|-\|\/\|\*\|%\|<<\|>>\|>>>\|&\||\|\^\)\?=\@<!==\@!>\@!/
+" \                         contains=@coffeeIdentifier,coffeeAssignSymbols,coffeeAssignBrackets
+
+"" Joey only wants it for local assignments
+" syntax match coffeeAssign /\%(@\|@\?\I\)\%(\i\|?\)*\s*\%(and\|or\|&&\|||\|?\|+\|-\|\/\|\*\|%\|<<\|>>\|>>>\|&\||\|\^\)\?=\@<!==\@!>\@!/
+" \                         contains=@coffeeIdentifier,coffeeAssignSymbols,coffeeAssignBrackets
+
+"" Joey introduced coffeeAssignProperty to separate local variables from properties.
+"" It didn't quite work: all assigns are highlighted as coffeeAssignProperty,
+"" except those beginning with @ which are highlighted as coffeeVar!
+"" Oh that's right, coffeeAssignProperty matches the var or property that is being
+"" assigned.
+syntax match coffeeAssign /\%(\i\|?\)*\s*\%(and\|or\|&&\|||\|?\|+\|-\|\/\|\*\|%\|<<\|>>\|>>>\|&\||\|\^\)\?=\@<!==\@!>\@!/
 \                         contains=@coffeeIdentifier,coffeeAssignSymbols,coffeeAssignBrackets
+
+syntax match coffeeAssignProperty /\(@\|@\?\I\)\%(\i\|?\)*\s*\%(and\|or\|&&\|||\|?\|+\|-\|\/\|\*\|%\|<<\|>>\|>>>\|&\||\|\^\)\?=\@<!==\@!>\@!/
+\                         contains=@coffeeIdentifier,coffeeAssignSymbols,coffeeAssignBrackets
+" Had ,coffeeObject on the end but then some variables turned purple :P
+" highlight default coffeeAssignProperty ctermfg=darkblue cterm=bold guifg=lightblue gui=bold
+highlight default coffeeAssignProperty ctermfg=white cterm=bold guifg=brightwhite gui=bold
 
 " Displays an error for reserved words.
 if !exists("coffee_no_reserved_words_error")
@@ -102,7 +121,9 @@ if !exists("coffee_no_reserved_words_error")
   highlight default link coffeeReservedError Error
 endif
 
+"" This appears to match properties declared in object literals:
 syntax match coffeeAssign /@\?\I\i*\s*:\@<!::\@!/ contains=@coffeeIdentifier,coffeeAssignSymbols
+" syntax match coffeeAssignProperty /@\?\I\i*\s*:\@<!::\@!/ contains=@coffeeIdentifier,coffeeAssignSymbols
 " Matches string assignments in object literals like {'a': 'b'}.
 syntax match coffeeAssign /\("\|'\)[^'"]\+\1\s*;\@<!::\@!/ contains=coffeeAssignString,
 \                                                      coffeeAssignSymbols
