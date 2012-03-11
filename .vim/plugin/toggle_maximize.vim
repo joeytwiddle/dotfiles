@@ -40,6 +40,10 @@
 " winrestcmd is still set but windows look restored.  winrestcmd is ignored.
 " winheight=9999 before and after toggle!  These may only occur when
 " re-sourcing the script during development (hopefully!).
+"
+" OK the problem here seems to be when I only toggle vertically, it doesn't
+" clear the winrestcmd.  I've just forgotten I'm horizontally toggled too?
+" Well if I don't have any horizontal splits then no I don't notice!
 
 " SUCKS: Resizing Vim in your window manager does not cause winheight to be
 "        re-enforced (until you change window).
