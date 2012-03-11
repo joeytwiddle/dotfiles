@@ -11,10 +11,10 @@ include "/usr/share/themes/OrangeJuice/gtk-2.0/gtkrc"
 ## font_for_reading
 style "general"
 {
-	font_name="Arial 7"
+	font_name="FreeSans 7"
 }
-
-gtk-font-name="Arial 7"
+gtk-font-name="FreeSans 7"
+# I don't know why I was using Arial 7 before - that's messy on hwi.
 
 ## font_for semi-interaction semi-reading
 style "readable"
