@@ -1,3 +1,12 @@
+
+When diffing two files:
+  ]c   go to next difference
+  [c   go to previous difference
+  do   obtain lines for current difference from other file
+  dp   put lines in current difference into other file
+[The last two are nice of you are in the left-hand window, as O and P indicate
+the direction of movement of text (on a QWERTY keyboard).]
+
 In Insert mode:
 
   Ctrl-O lets you do ONE normal command (that's what I need for gvim -y!)
@@ -16,12 +25,6 @@ If you made some deletes and you want an earlier delete, they are stored in the 
 
 :u1 | u   go to initial state
 :earlier 1f   go to state at previous file-save
-
-When diffing two files:
-  ]c   go to next difference
-  [c   go to previous difference
-  dp   put lines in current difference into other file
-  do   obtain lines for current difference from other file
 
 g;   go to position of last change
 g,   go to position of next change
