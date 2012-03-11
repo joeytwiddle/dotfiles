@@ -14,6 +14,7 @@ style "general"
 	font_name="FreeSans 7"
 }
 gtk-font-name="FreeSans 7"
+# Some alternatives: FreeSans 7, Sans 7, Arial 7
 # I don't know why I was using Arial 7 before - that's messy on hwi.
 
 ## font_for semi-interaction semi-reading
