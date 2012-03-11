@@ -1,5 +1,5 @@
 [app] (name=xv) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{421 504}
+  [Position]	(UPPERLEFT)	{147 240}
   [Deco]	{NORMAL}
   [Sticky]	{yes}
   [Layer]	{2}
@@ -37,12 +37,9 @@
   [Close]	{yes}
 [end]
 [app] (name=smplayer) (class=Smplayer)
-  [Dimensions]	{624 383}
-  [Position]	(UPPERLEFT)	{586 608}
-  [Sticky]	{yes}
+  [Sticky]	{no}
   [Layer]	{8}
   [Close]	{yes}
-  [Alpha]	{121 75}
 [end]
 [app] (name=gimp) (class=Gimp) (role=gimp-image-window)
   [Dimensions]	{930 814}
@@ -54,32 +51,37 @@
   [Position]	(UPPERLEFT)	{0 0}
   [Close]	{yes}
 [end]
-[group]
+[group]  (workspace=[current])
  [app] (title=Manual: .*)
   [Sticky]	{yes}
 [end]
-[group]
+[group]  (workspace=[current])
+ [app] (title=Untitled.*)
+  [Deco]	{NORMAL}
+[end]
+[group]  (workspace=[current])
  [app] (title=\[Vim\].*)
  [app] (title=Opening .* in Vim...)
 [end]
 [app] (title=Google Chrome Options)
 [end]
-[group]
+[group]  (workspace=[current])
+ [app] (title=Untitled)
  [app] (title=chrome://devtools/devtools.html)
  [app] (title=Developer Tools.*)
 [end]
-[group]
+[group]  (workspace=[current])
  [app] (name=Navigator)
  [app] (name=google-chrome)
+ [app] (name=x-www-browser)
  [app] (name=chromium-browser)
+ [app] (name=chromium-browser.real)
+ [app] (name=konqueror)
  [app] (name=chrome)
-  [Position]	(UPPERLEFT)	{34 77}
+  [Position]	(UPPERLEFT)	{73 5}
   [Close]	{yes}
 [end]
-[group]
- [app] (name=x-www-browser)
-[end]
-[group]
+[group]  (workspace=[current])
  [app] (name=kopete)
   [Workspace]	{7}
 [end]
@@ -106,7 +108,7 @@
   [Workspace]	{1}
 [end]
 [app] (name=gkrellm) (class=Gkrellm)
-  [Position]	(UPPERLEFT)	{1144 0}
+  [Position]	(UPPERLEFT)	{1141 0}
   [Sticky]	{yes}
   [Close]	{yes}
 [end]
