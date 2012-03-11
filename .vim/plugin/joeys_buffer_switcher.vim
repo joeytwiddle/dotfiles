@@ -3,6 +3,13 @@
 "   The try catch below didn't fix that.
 " BufExplorer sometimes requires two presses of Ctrl-O to get out of it.
 
+"" Consider some alternative:
+" nnoremap <C-B> :b 
+" nnoremap <C-B> :ls<CR>:b<space>
+
+command! JoeysBufferSwitch call JoeysBufferSwitch()
+nnoremap <C-B> :JoeysBufferSwitch<Enter>
+
 function! JoeysBufferSwitch()
 
   try
@@ -110,12 +117,4 @@ function! JoeysBufferSwitch()
   endfor
 
 endfunction
-
-command! JoeysBufferSwitch call JoeysBufferSwitch()
-
-"nnoremap <C-B> :JoeysBufferSwitch<Enter>
-
-" Consider the alternative:
-"nnoremap <C-B> :b 
-nnoremap <C-B> :ls<CR>:b<space>
 
