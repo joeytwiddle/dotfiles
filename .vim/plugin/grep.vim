@@ -646,8 +646,9 @@ function! RunGrep(grep_cmd, ...)
     " let pattern = input("Grep for pattern: ", expand("<cword>"))
     "" Joey:
     " let pattern = input("Grep for pattern: ", "\\<" . expand("<cword>") . "\\>" )
+    let str = expand("<cword>")
     "" <cfile> grabs a little more than <cword> but not as much as <cWORD>:
-    let str = expand("<cfile>")
+    " let str = expand("<cfile>")
     " We add \<...\> wrappers only when appropriate:
     if match(str,"^[0-9a-zA-Z_]") >= 0
        let str = "\\<" . str
