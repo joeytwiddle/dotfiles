@@ -16,7 +16,7 @@ inoremap <C-PageUp> <Esc>:bprev<Enter>i
 "" These versions work for my Eterm, provided we exported TERM=xterm
 nnoremap [6^ :bn<Enter>
 nnoremap [5^ :bp<Enter>
-"" In my console (TERM=linux), PageUp/Down send the same with/without Ctrl.
+"" In hwi and pod's console (TERM=linux), PageUp/Down send the same with/without Ctrl.
 " nnoremap [6~ :bn<Enter>
 " nnoremap [5~ :bp<Enter>
 
