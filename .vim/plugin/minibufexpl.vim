@@ -23,6 +23,10 @@
 "" The next set of files edited before a write could form a new line, again to
 "" be pushed.
 
+" Remember with your current setup on pod (and hwi?), nomodifiable buffers
+" are hidden, so that may be why TreeExplorer sometimes appears sometimes
+" doesn't.  Another reason is of course that you have 3 of them!
+
 " HINT: Type zR if you don't know how to use folds
 "
 " Script Info and Documentation  {{{
