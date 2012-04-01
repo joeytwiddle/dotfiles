@@ -71,7 +71,14 @@
 :set guifont=Lucida\ Console\ Semi-Condensed\ 8
 "" Very small and clear; quite like Teletext font
 " :set guifont=MonteCarlo\ Fixed\ 12\ 11
+if $SHORTHOST == "pod"
+	:set guifont=Monospace\ 10
+endif
 
+
+" These are my general defaults.  Hopefully they will get overridden by filetype plugins or whatever.
+set ts=3
+set sw=3
 
 " set tabline=%!MyTabLine()
 " set showtabline=2 " 2=always
