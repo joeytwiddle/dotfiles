@@ -158,6 +158,19 @@
   # [Execute]  (Mod4-KP_8) {wmctrl -r :ACTIVE: -e 1,128,8,1024,768}
   # [Execute]  (Mod4-KP_9) {wmctrl -r :ACTIVE: -e 1,242,8,1024,768}
 
+  ## Push windows to edges or corners of the screen (no resizing)
+  [Execute]  (Mod4-KP_1) {put_current_xwindow sw}
+  [Execute]  (Mod4-KP_2) {put_current_xwindow bottom}
+  [Execute]  (Mod4-KP_3) {put_current_xwindow se}
+  [Execute]  (Mod4-KP_4) {put_current_xwindow left}
+  # [Execute]  (Mod4-KP_5) {put_current_xwindow center_x}
+  # [Execute]  (Mod4-KP_5) {put_current_xwindow center_y}
+  [Execute]  (Mod4-KP_5) {put_current_xwindow center}
+  [Execute]  (Mod4-KP_6) {put_current_xwindow right}
+  [Execute]  (Mod4-KP_7) {put_current_xwindow nw}
+  [Execute]  (Mod4-KP_8) {put_current_xwindow top}
+  [Execute]  (Mod4-KP_9) {put_current_xwindow ne}
+
   ## Untested:
   [Execute]  (Mod1-minus) {volumedown}
   [Execute]  (Mod1-equal) {volumeup}
