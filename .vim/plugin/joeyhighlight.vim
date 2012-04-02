@@ -287,6 +287,30 @@ function! Joeyhighlight()
     set updatetime=600
   endif
 
+
+
+  "" Colors for file/folder explore, to match jsh dark:
+
+  " VTreeExplorer (vtreeexplorer.vim, :VSTreeExplore)
+  hi Directory ctermfg=green cterm=none guifg=green gui=none
+  hi TreeLnk ctermfg=green cterm=bold guifg=green gui=bold
+
+  " NERD Tree (NERD_tree.vim, :NERDTree)
+  hi link treeDirSlash Directory
+  hi link treePart Normal
+  hi link treePartFile Normal
+  hi link treeOpenable Normal
+  hi link treeClosable Normal
+  hi link treeLink TreeLnk
+  hi treeExecFile ctermfg=red cterm=bold guifg=red gui=bold
+
+  " netrw (bundled netrwPlugin.vim, :vert split +:Explore)
+  hi link netrwSymLink TreeLnk
+  hi link netrwTreeBar treePart
+  hi link netrwClassify treeDirSlash
+
+
+
 endfun
 
 :Joeyhighlight
