@@ -49,7 +49,7 @@ session.screen0.menu.alpha:	210
 session.screen0.maxOverSlit:	true
 session.screen0.workspaces:	12
 session.screen0.rootCommand:	
-session.screen0.opaqueMove:	true
+session.screen0.opaqueMove:	false
 session.screen0.clickRaises:	false
 session.screen0.desktopwheeling:	true
 session.screen0.fullMaximization:	false
