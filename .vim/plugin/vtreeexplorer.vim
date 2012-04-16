@@ -1,6 +1,6 @@
 "" File:        vtreeexplorer.vim
 "" Description: tree-like file system explorer for vim
-"" Version:     $Revision: 1.8 $ $Date: 2011/12/13 20:34:46 $
+"" Version:     $Revision: 1.9 $ $Date: 2012/04/16 10:15:26 $
 "" Author:      TS Urban (thomas.scott.urban@HORMELgmail.com)
 ""              (remove the source of SPAM from my email first)
 ""
@@ -633,7 +633,7 @@ function! s:Activate(how) " <<<
 			if exists("g:treeExplAutoClose")
 				wincmd c
 			else
-				echo "VTE on window ".bufname('%')
+				" echo "VTE on window ".bufname('%')
 				" echo "VTE on window ".bufname('%')." moving..."
 				" wincmd p
 				" echo "VTE moved to window ".bufname('%')
