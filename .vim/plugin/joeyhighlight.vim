@@ -63,8 +63,9 @@ function! Joeyhighlight()
 	" highlight Comment term=none cterm=none ctermfg=cyan guifg=#88bbbb   " for javascript, like cyan for terminal, but darker
 	" highlight Comment cterm=none ctermfg=DarkCyan gui=none guifg=LightMagenta
 	" highlight Comment cterm=bold ctermfg=blue gui=none guifg=#7070ee   " dark blue to match my xterm
-	highlight Comment cterm=bold ctermfg=darkcyan gui=none guifg=#80a0ff   " nice mid-light blue
 	" highlight Comment cterm=bold ctermfg=magenta gui=none guifg=LightMagenta
+	" highlight Comment cterm=bold ctermfg=darkcyan gui=none guifg=#80a0ff   " nice mid-light blue
+	highlight Comment cterm=bold ctermfg=darkgrey gui=bold guifg=#999999   " bold grey, nice with Lucida in xterm
 	highlight friendlyComment cterm=none ctermfg=cyan gui=none guifg=#80a0ff   " nice mid-light blue
 	highlight def link confComment Comment
 	"highlight link jComment Comment
