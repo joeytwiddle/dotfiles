@@ -30,9 +30,14 @@ function! JoeysBufferSwitch()
     "return
   "endif
 
-  if searchStr == '' && exists(":BufExplorer")
-    exec ":BufExplorer"
+  if searchStr == ''
+    " User couldn't find the file with JBS?  Open a file explorer...
+    exec ":e ."
     return
+    " if exists(":BufExplorer")
+      " exec ":BufExplorer"
+      " return
+    " endif
   endif " else we will probably print the whole list later
 
   let searchExpr = '\V' . searchStr
@@ -54,7 +59,9 @@ function! JoeysBufferSwitch()
   let i = 1
   while i <= winCount
     let winName = bufname(winbufnr(i))
-    if match(winName, searchExpr) >= 0
+    " This sucks when I search for plasma.s and it switches me to plasma.spp!
+    "if match(winName, searchExpr) >= 0
+    if winName == searchExpr
       call add(foundWindows, i)
     endif
     let i += 1
