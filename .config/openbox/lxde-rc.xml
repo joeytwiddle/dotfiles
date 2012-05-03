@@ -286,6 +286,35 @@
     <keybind key="A-grave">
       <action name="PreviousWindow"/>
     </keybind>
+    <keybind key="W-f">
+      <action name="ToggleDecorations"/>
+    </keybind>
+    <keybind key="A-i">
+      <action name="Iconify"/>
+    </keybind>
+    <keybind key="A-z">
+      <action name="ToggleMaximizeFull"/>
+    </keybind>
+    <keybind key="A-h">
+      <action name="ToggleMaximizeHorz"/>
+    </keybind>
+    <keybind key="A-v">
+      <action name="ToggleMaximizeVert"/>
+    </keybind>
+    <keybind key="A-q">
+      <action name="Close"/>
+    </keybind>
+    <keybind key="A-d">
+      <action name="ToggleShade"/>
+    </keybind>
+    <keybind key="A-s">
+      <action name="ToggleOmnipresent"/>
+    </keybind>
+    <keybind key="A-a">
+      <action name="Lower"/>
+      <action name="FocusToBottom"/>
+      <action name="Unfocus"/>
+    </keybind>
 
     <keybind key="C-A-Tab">
       <action name="NextWindow">
@@ -339,6 +368,10 @@
        screen while moving a window, in milliseconds (1000 = 1 second).
        Set this to 0 to disable warping -->
     <context name="Frame">
+
+      <!-- Disable these next THREE for Homeworld!  -->
+      <!--
+      -->
       <mousebind button="A-Left" action="Press">
         <action name="Focus"/>
         <action name="Raise"/>
@@ -349,6 +382,7 @@
       <mousebind button="A-Left" action="Drag">
         <action name="Move"/>
       </mousebind>
+
       <mousebind button="A-Right" action="Press">
         <action name="Focus"/>
         <action name="Raise"/>
