@@ -150,10 +150,10 @@
      Many programs reserve space automatically, but you can use this in other
      cases. -->
   <margins>
-    <top>0</top>
-    <bottom>0</bottom>
-    <left>0</left>
-    <right>0</right>
+    <top>12</top>
+    <bottom>4</bottom>
+    <left>4</left>
+    <right>4</right>
   </margins>
   <dock>
     <position>TopLeft</position>
@@ -206,6 +206,7 @@
         <wrap>yes</wrap>
       </action>
     </keybind>
+    <!-- /JOEY -->
 
     <keybind key="S-A-Left">
       <action name="SendToDesktopLeft">
@@ -272,10 +273,10 @@
       </action>
     </keybind>
     <!-- Keybindings for window switching -->
-    <keybind key="A-Tab">
+    <keybind key="C-A-Tab">
       <action name="NextWindow">
-        <bar>yes</bar>
-        <raise>yes</raise>
+        <panels>yes</panels>
+        <desktop>yes</desktop>
       </action>
     </keybind>
     <keybind key="A-S-Tab">
@@ -283,8 +284,29 @@
     </keybind>
 
     <!-- JOEY -->
+    <keybind key="A-Tab">
+      <action name="NextWindow">
+        <bar>yes</bar>
+        <raise>yes</raise>
+      </action>
+    </keybind>
     <keybind key="A-grave">
-      <action name="PreviousWindow"/>
+      <action name="PreviousWindow">
+        <bar>yes</bar>
+        <raise>yes</raise>
+      </action>
+    </keybind>
+    <keybind key="W-Tab">
+      <action name="NextWindow">
+        <bar>yes</bar>
+        <raise>yes</raise>
+      </action>
+    </keybind>
+    <keybind key="W-grave">
+      <action name="PreviousWindow">
+        <bar>yes</bar>
+        <raise>yes</raise>
+      </action>
     </keybind>
     <keybind key="W-f">
       <action name="ToggleDecorations"/>
@@ -315,13 +337,8 @@
       <action name="FocusToBottom"/>
       <action name="Unfocus"/>
     </keybind>
+    <!-- /JOEY -->
 
-    <keybind key="C-A-Tab">
-      <action name="NextWindow">
-        <panels>yes</panels>
-        <desktop>yes</desktop>
-      </action>
-    </keybind>
     <!-- Keybindings for running applications -->
     <keybind key="W-e">
       <action name="Execute">
@@ -332,6 +349,41 @@
         <command>pcmanfm</command>
       </action>
     </keybind>
+
+    <!-- JOEY -->
+
+    <keybind key="W-e">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>Explorer</name>
+        </startupnotify>
+        <command>explore</command>
+      </action>
+    </keybind>
+
+    <keybind key="A-w">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>Konqueror Browser</name>
+        </startupnotify>
+        <command>kfmclient openProfile webbrowsing</command>
+      </action>
+    </keybind>
+
+    <keybind key="W-w">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>Chromium Browser</name>
+        </startupnotify>
+        <command>chromium-browser</command>
+      </action>
+    </keybind>
+
+    <!-- /JOEY -->
+
     <!--keybindings for LXPanel -->
     <keybind key="W-r">
       <action name="Execute">
@@ -369,7 +421,7 @@
        Set this to 0 to disable warping -->
     <context name="Frame">
 
-      <!-- Disable these next THREE for Homeworld!  -->
+      <!-- JOEY Disable the next THREE for Homeworld!  -->
       <!--
       -->
       <mousebind button="A-Left" action="Press">
@@ -382,6 +434,7 @@
       <mousebind button="A-Left" action="Drag">
         <action name="Move"/>
       </mousebind>
+      <!-- /JOEY -->
 
       <mousebind button="A-Right" action="Press">
         <action name="Focus"/>
@@ -419,6 +472,7 @@
           <wrap>yes</wrap>
         </action>
       </mousebind>
+      <!-- /JOEY -->
 
       <mousebind button="C-A-Up" action="Click">
         <action name="DesktopPrevious"/>
@@ -449,6 +503,7 @@
         <action name="FocusToBottom"/>
         <action name="Unfocus"/>
       </mousebind>
+      <!-- These were defaults but match exactly what I use in Fluxbox! -->
       <mousebind button="Up" action="Click">
         <action name="Shade"/>
         <action name="FocusToBottom"/>
@@ -471,6 +526,7 @@
           <menu>client-menu</menu>
         </action>
       </mousebind>
+      <!-- /JOEY -->
 
     </context>
     <context name="Top">
@@ -704,6 +760,7 @@
           <wrap>yes</wrap>
         </action>
       </mousebind>
+      <!-- /JOEY -->
 
     </context>
     <context name="Root">
