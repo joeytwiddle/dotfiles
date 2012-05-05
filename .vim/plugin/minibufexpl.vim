@@ -9,6 +9,11 @@
 " switch to that window.
 " Some users may prefer to open a new window when we click on a tab, rather
 " than leave the current buffer.
+"
+" TODO: TreeExplorer is often hidden (but not always?!) hidden in MBE, yet
+" Ctrl-PageUp/Down (:bnext/prev) can reach it, making the list
+" unrepresentative for navigation!
+
 
 "" CONSIDER: MegaBufExplorer.
 "" Re-arranges files so useful ones are next to each other.
@@ -1034,6 +1039,9 @@ function! <SID>FindCreateWindow(bufName, forceEdge, isExplorer, doDebug)
         setlocal nowrap
         exec('setlocal winwidth='.g:miniBufExplMinSize)
       endif
+      setlocal list
+      "" Unfortunately this seems to be global only
+      " setlocal showbreak=
     endif
 
     if a:doDebug
@@ -1320,7 +1328,7 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
   if exists('g:loaded_taglist')
     let l:line = l:line . "[Tags] "
   endif
-  let l:line = l:line . '[Wrap] [Fold] [Term] ' . l:fileNames . "| [X]"
+  let l:line = l:line . '[Wrap] [Fold] [Term] ' . l:fileNames . "| "
   "" [Wrap] toggles dsplayed line-wrapping (:set wrap/nowrap)
   "" but it should probably be an option in the [View menu]?
   "" Let users reconfigure toolbars+buttons.
@@ -1328,6 +1336,12 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
   ""   File:Open,Save,Rename,Close,Quit
   ""   View:Wrap Lines,Tabs
   ""   Help:About
+  "" Right-align the close button:
+  let l:width = winwidth(".")
+  let l:remainder = strlen(l:line) % l:width
+  let l:needed = l:width - 3 - l:remainder
+  let l:gap = repeat(" ", l:needed)
+  let l:line = l:line . l:gap . "[X]"
 
   if (g:miniBufExplBufList != l:line)
     if (a:updateBufList)
@@ -1713,11 +1727,11 @@ function! <SID>MBESelectBuffer()
         exec "Tlist"
       endif
     elseif word == "Wrap"
-    wincmd p
+      wincmd p
       if &wrap == 0
-        set wrap
+        setlocal wrap
       else
-        set nowrap
+        setlocal nowrap
       endif
     elseif word == "Fold"
       if !exists('g:folding') || g:folding == 0
