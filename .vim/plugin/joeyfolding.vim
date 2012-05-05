@@ -38,6 +38,7 @@ endif
 		" bad :syn region myFold5 start="^$" end="^$" transparent fold
 		:syn region myFold2 matchgroup=myDummy start="\/\*" end="\*\/" fold
 		:highlight link myFold2 cComment
+		:hi link cComment Comment
 
 		" C/Java #ifdefs
 		" The first of the repeated syntax lines is simply there to ensure that the clear does not produce an error.
