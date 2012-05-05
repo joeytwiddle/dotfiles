@@ -92,7 +92,7 @@
     </font>
     <font place="OnScreenDisplay">
       <name>sans</name>
-      <size>10</size>
+      <size>11</size>
       <!-- font size in points -->
       <weight>bold</weight>
       <!-- 'bold' or 'normal' -->
