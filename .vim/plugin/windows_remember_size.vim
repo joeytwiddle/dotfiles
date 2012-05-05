@@ -1,3 +1,69 @@
+" New version: tries to automatically keep up without whatever layout changes
+" you make, by storing an unfocused and focused size for each window.
+
+autocmd WinLeave * call <SID>Leaving()
+autocmd WinEnter * call <SID>Entering()
+
+function! s:Debug(msg)
+  if exists('g:wrsDebug') && g:wrsDebug > 0
+    echo a:msg
+  endif
+endfunction
+
+function! s:Leaving()
+  let w:heightWhenFocused = winheight(0)
+  let w:widthWhenFocused = winwidth(0)
+  call s:Debug( "[exit] ".bufname('%')." saved foc ".w:widthWhenFocused.",".w:heightWhenFocused )
+  if exists('w:heightWhenUnfocused')
+    call s:Debug( "[exit] ".bufname('%')." setting ".w:widthWhenUnfocused."x".w:heightWhenUnfocused )
+    exec "resize ".w:heightWhenUnfocused
+  endif
+  if exists('w:widthWhenUnfocused')
+    exec "vert resize ".w:widthWhenUnfocused
+  endif
+endfunction
+
+function! s:Entering()
+  let w:heightWhenUnfocused = winheight(0)
+  let w:widthWhenUnfocused = winwidth(0)
+  call s:Debug( "[enter] ".bufname('%')." saved unf ".w:widthWhenUnfocused.",".w:heightWhenUnfocused )
+  if exists('w:heightWhenFocused')
+    call s:Debug( "[enter] ".bufname('%')." restoring ".w:widthWhenFocused."x".w:heightWhenFocused )
+    exec "resize ".w:heightWhenFocused
+  endif
+  if exists('w:widthWhenFocused')
+    exec "vert resize ".w:widthWhenFocused
+  endif
+endfunction
+
+" BUGS:
+" When we add a new window to the list, e.g. TagList, when switching to it, the old unfocused size of the previous window from the *old* layout is applied.
+" I think we need to forget some things when layout changes?  Forget all unfocused sizes?
+" Or perhaps when a new window enters the layout, we should quickly grab its dimensions and set those as its focused and unfocused size?
+
+" OK I like this version a lot now.  With the exception of the major bugs, which is when new windows are made, sometimes a window will end up 0 height or 0 width.
+" When we are thinking of restoring or saving values, we could check the number of windows (or even their names) to see if any change has occured.
+" New windows should be encouraged to take 50% of the space I guess, as per Vim's default.
+
+" Perhaps what we should do is have window remember their relative size rather than their actual size.  Would this be a percentage, or a ratio?
+" Then what do we do when a new window is created?  Shrink them all by 10%?  Shrink them intelligently?
+
+" NOTE: copied from older version below
+nmap <silent> Om <C-W>-
+nmap <silent> Ok <C-W>+
+nmap <silent> Oo <C-W><
+nmap <silent> Oj <C-W>>
+nnoremap <silent> <C-kMinus> <C-W>-
+nnoremap <silent> <C-kPlus> <C-W>+
+nnoremap <silent> <C-kDivide> <C-W><
+nnoremap <silent> <C-kMultiply> <C-W>>
+
+
+
+"" Old version: only stores when use changes size with common mapping.
+
+finish
+
 " When you set the size of a window (presently using keymaps) it remembers its
 " size, and restores to that size the next time you enter it.
 
@@ -54,6 +120,7 @@ nnoremap <silent> <C-kMultiply> :vert resize +6<Enter>:call <SID>RememberWidth()
 " If you are having trouble sending numberpad key codes at all:
 "nnoremap <silent> - :resize -2<Enter>:call <SID>RememberHeight()<Enter>
 "nnoremap <silent> + :resize +2<Enter>:call <SID>RememberHeight()<Enter>
+
 
 function! s:RememberHeight()
   let w:rememberedHeight = winheight(0)
