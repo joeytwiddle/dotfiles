@@ -59,13 +59,20 @@ function! JoeysBufferSwitch()
   let i = 1
   while i <= winCount
     let winName = bufname(winbufnr(i))
-    " This sucks when I search for plasma.s and it switches me to plasma.spp!
-    "if match(winName, searchExpr) >= 0
+    " Exact match causes single response
     if winName == searchExpr
+      foundWindows = []
+      call add(foundWindows, i)
+      break
+    " Otherwise we collect partial matches
+    elseif match(winName, searchExpr) >= 0
       call add(foundWindows, i)
     endif
     let i += 1
   endwhile
+  " BUG: If the user entered an exact buffer match, but this *happened* to hit
+  " exactly one partial match in the open window list, we jump to the win when
+  " we should really bring up the specific buffer.
   if len(foundWindows) == 1
     echo "Switching to window ".foundWindows[0]
     exec foundWindows[0]."wincmd w"
