@@ -503,7 +503,8 @@
         <action name="FocusToBottom"/>
         <action name="Unfocus"/>
       </mousebind>
-      <!-- These were defaults but match exactly what I use in Fluxbox! -->
+      <!-- These were defaults but almost match exactly what I use in Fluxbox! -->
+      <!--
       <mousebind button="Up" action="Click">
         <action name="Shade"/>
         <action name="FocusToBottom"/>
@@ -514,8 +515,19 @@
         <action name="Unshade"/>
         <action name="Raise"/>
       </mousebind>
+      -->
 
       <!-- JOEY -->
+      <mousebind button="Up" action="Click">
+        <action name="FocusToBottom"/>
+        <action name="Unfocus"/>
+        <action name="Lower"/>
+      </mousebind>
+      <mousebind button="Down" action="Click">
+        <action name="ToggleShade"/>
+        <action name="Raise"/>
+        <action name="Focus"/>
+      </mousebind>
       <mousebind button="Right" action="Press">
         <action name="ToggleShade"/>
       </mousebind>
