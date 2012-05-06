@@ -881,5 +881,18 @@
 
   # end of the example
 -->
+
+  <!-- JOEY -->
+  <application name="xmms" class="Xmms" role="">
+    <desktop>2</desktop>
+  </application>
+  <application class="MPlayer" role="">
+    <desktop>all</desktop>
+  </application>
+  <application name="ktorrent" class="Ktorrent" role="">
+    <desktop>6</desktop>
+  </application>
+  <!-- /JOEY -->
+
   </applications>
 </openbox_config>
