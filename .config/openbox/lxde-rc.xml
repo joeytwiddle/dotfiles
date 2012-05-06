@@ -300,12 +300,14 @@
       <action name="NextWindow">
         <bar>yes</bar>
         <raise>yes</raise>
+        <allDesktops>yes</allDesktops>
       </action>
     </keybind>
     <keybind key="W-grave">
       <action name="PreviousWindow">
         <bar>yes</bar>
         <raise>yes</raise>
+        <allDesktops>yes</allDesktops>
       </action>
     </keybind>
     <keybind key="W-f">
