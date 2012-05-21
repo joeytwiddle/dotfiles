@@ -12,23 +12,27 @@ function! Joeyhighlight()
 
 	":syntax on
 
-	"" Light on dark
-	:set background=dark
-	"highlight Normal ctermbg=black ctermfg=grey guibg=Black guifg=#cccccc
-	"highlight Normal ctermfg=grey guibg=Black guifg=#cccccc
-	"highlight Normal ctermfg=lightgrey guibg=Black guifg=#cccccc
-	" highlight Normal ctermfg=lightgrey guibg=#2b3735 guifg=#cccccc
-	"highlight Normal ctermfg=LightGray guibg=#000000 guifg=LightGray
-	highlight Normal ctermfg=lightgrey guifg=#dddddd guibg=#000000
+	"" == Dark Backgruond ==
+	" You can disable this if you prefer a white background, but the later
+	" rules are all too bright!
+	if 1
+		:set background=dark
+		"highlight Normal ctermbg=black ctermfg=grey guibg=Black guifg=#cccccc
+		"highlight Normal ctermfg=grey guibg=Black guifg=#cccccc
+		"highlight Normal ctermfg=lightgrey guibg=Black guifg=#cccccc
+		" highlight Normal ctermfg=lightgrey guibg=#2b3735 guifg=#cccccc
+		"highlight Normal ctermfg=LightGray guibg=#000000 guifg=LightGray
+		highlight Normal ctermfg=lightgrey guifg=#dddddd guibg=#000000
 
-	"" Some slightly lighter (off-black) backgrounds:
-	"" Can help *reduce* contrast if font is thin and appears faint
-	" highlight Normal guibg=#081818	" Almost black background
-	" highlight Normal guibg=#102020	" Almost black background
-	" highlight Normal guibg=#182828	" Medium/compromise
-	" highlight Normal guibg=#203030	" Lighter Faded background
-	highlight Normal guibg=#223330	" Custom greeny/cyan, softer on my broken monitor
-	" highlight Normal guibg=#304040	" Not-so-dark grey
+		"" Some slightly lighter (off-black) backgrounds:
+		"" Can help *reduce* contrast if font is thin and appears faint
+		" highlight Normal guibg=#081818	" Almost black background
+		" highlight Normal guibg=#102020	" Almost black background
+		" highlight Normal guibg=#182828	" Medium/compromise
+		" highlight Normal guibg=#203030	" Lighter Faded background
+		highlight Normal guibg=#223330	" Custom greeny/cyan, softer on my broken monitor
+		" highlight Normal guibg=#304040	" Not-so-dark grey
+	endif
 
 	highlight Title ctermbg=black ctermfg=green guibg=#000060 guifg=#00ff00
 
@@ -73,7 +77,13 @@ function! Joeyhighlight()
 	" highlight jComment cterm=bold ctermfg=magenta gui=none guifg=lightmagenta
 	highlight link jComment Comment
 	highlight SpecialChar ctermfg=Red guifg=Red
-	highlight SpecialKey cterm=bold ctermfg=darkblue gui=bold guifg=#2222aa
+
+	" Used for tabs (listchars)
+	highlight SpecialKey ctermfg=darkblue cterm=none guifg=#2222aa gui=bold
+	" Used to broken line indentation (showbreak)
+	highlight link NonText SpecialKey
+	" highlight NonText cterm=none gui=none
+
 	highlight String ctermfg=DarkGreen guifg=#80f080 cterm=NONE
 	" vimTodo links to Todo
 	highlight Todo term=reverse cterm=reverse ctermbg=black ctermfg=red guibg=red guifg=black
@@ -251,8 +261,10 @@ function! Joeyhighlight()
 
 	highlight CursorLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
 
-	highlight TagListTagName cterm=bold ctermfg=magenta gui=bold guifg=magenta
-	highlight TagListFileName cterm=bold ctermbg=darkgray ctermfg=white gui=bold guibg=black guifg=white
+	" highlight TagListFileName cterm=bold ctermbg=darkgray ctermfg=white gui=bold guibg=black guifg=white
+	hi link TagListFileName MBENormal
+	" highlight TagListTagName cterm=bold ctermfg=magenta gui=bold guifg=magenta
+	highlight TagListTagName ctermbg=magenta ctermfg=white cterm=bold guibg=magenta guifg=white gui=bold
 
   if exists("g:blinking_statusline") && g:blinking_statusline>0
     " Make StatusLine light up temporarily when we switch window
