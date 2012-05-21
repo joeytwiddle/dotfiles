@@ -14,11 +14,11 @@ function! s:Leaving()
   let w:heightWhenFocused = winheight(0)
   let w:widthWhenFocused = winwidth(0)
   call s:Debug( "[exit] ".bufname('%')." saved foc ".w:widthWhenFocused.",".w:heightWhenFocused )
-  if exists('w:heightWhenUnfocused')
+  if exists('w:heightWhenUnfocused') && w:heightWhenUnfocused < winheight(0)
     call s:Debug( "[exit] ".bufname('%')." setting ".w:widthWhenUnfocused."x".w:heightWhenUnfocused )
     exec "resize ".w:heightWhenUnfocused
   endif
-  if exists('w:widthWhenUnfocused')
+  if exists('w:widthWhenUnfocused') && w:widthWhenUnfocused < winwidth(0)
     exec "vert resize ".w:widthWhenUnfocused
   endif
 endfunction
@@ -27,11 +27,11 @@ function! s:Entering()
   let w:heightWhenUnfocused = winheight(0)
   let w:widthWhenUnfocused = winwidth(0)
   call s:Debug( "[enter] ".bufname('%')." saved unf ".w:widthWhenUnfocused.",".w:heightWhenUnfocused )
-  if exists('w:heightWhenFocused')
+  if exists('w:heightWhenFocused') && w:heightWhenFocused > winheight(0)
     call s:Debug( "[enter] ".bufname('%')." restoring ".w:widthWhenFocused."x".w:heightWhenFocused )
     exec "resize ".w:heightWhenFocused
   endif
-  if exists('w:widthWhenFocused')
+  if exists('w:widthWhenFocused') && w:widthWhenFocused > winwidth(0)
     exec "vert resize ".w:widthWhenFocused
   endif
 endfunction
