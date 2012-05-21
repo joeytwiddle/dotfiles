@@ -3,7 +3,8 @@
 
 " From the VimTips wiki
 
-" BUG: I found I had to press it twice to get sensible readings!
+" I found I had to press it twice to get sensible readings.
+" That wasn't a bug dufus.  That was the highlight-current-word script!
 
 map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
