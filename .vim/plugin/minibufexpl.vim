@@ -508,6 +508,7 @@ endif
 
 " }}}
 " ShowUnlistedBuffers {{{
+" UnlistedBuffers are not scrolled through.
 " Added by Joey, to not hide buffers which it will make us scroll through
 " anyway!  The alternative solution is not to scroll through unlisted buffers.
 "
@@ -524,9 +525,11 @@ endif
 " }}}
 " ShowOtherBuffers {{{
 " Also added by Joey.
+" OtherBuffers may be scrolled through (e.g. QuickList, NERD_tree) with :bn
+" and :bp, so until we can prevent that, they should appear in the list!
 "
 if !exists('g:miniBufExplShowOtherBuffers')
-  let g:miniBufExplShowOtherBuffers = 0
+  let g:miniBufExplShowOtherBuffers = 1
 endif
 
 "
