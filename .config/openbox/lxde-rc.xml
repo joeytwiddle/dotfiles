@@ -150,10 +150,10 @@
      Many programs reserve space automatically, but you can use this in other
      cases. -->
   <margins>
-    <top>12</top>
+    <top>6</top>
     <bottom>4</bottom>
-    <left>4</left>
-    <right>4</right>
+    <left>0</left>
+    <right>0</right>
   </margins>
   <dock>
     <position>TopLeft</position>
@@ -899,6 +899,9 @@
   <!-- JOEY -->
   <application name="xmms" class="Xmms" role="">
     <desktop>2</desktop>
+  </application>
+  <application class="Smplayer" role="">
+    <desktop>all</desktop>
   </application>
   <application class="MPlayer" role="">
     <desktop>all</desktop>
