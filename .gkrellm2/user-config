@@ -14,7 +14,7 @@ below 0
 track_gtk_theme_name 0
 default_track_theme "Default"
 save_position 0
-chart_width 120
+chart_width 154
 update_HZ 1
 allow_multiple_instances 0
 float_factor 1000
@@ -55,7 +55,7 @@ gkrelltop show_nice_processes 1
 gkrelltop show_percent 1
 gkrelltop local_updates 1
 gkrelltop exclusion_expression 
-proc enable 1 0
+proc enable 1 1
 proc launch 
 proc tooltip_comment 
 proc sensor_mode 0
@@ -79,7 +79,6 @@ disk device sda11 0 0 11 0 1 11 0
 disk device sda12 0 0 11 0 1 12 0
 disk device sda13 0 0 11 0 1 13 0
 disk device sda14 0 0 11 0 1 14 0
-disk device sda15 0 0 11 0 1 15 0
 disk device sdb 0 0 11 0 1 -1 0
 disk device sdb1 0 0 11 0 1 1 0
 disk device sdb2 0 0 11 0 1 2 0
@@ -208,22 +207,3 @@ battery alert_units_percent 0
 uptime enable 1
 uptime launch 
 uptime tooltip 
-gkrellxmms2 scroll_speed 1
-gkrellxmms2 medialib_window_width 460
-gkrellxmms2 medialib_window_height 320
-gkrellxmms2 medialib_window_pos_x 20
-gkrellxmms2 medialib_window_pos_y 20
-gkrellxmms2 medialib_search_column_id 1
-gkrellxmms2 medialib_search_column_artist 1
-gkrellxmms2 medialib_search_column_track 1
-gkrellxmms2 medialib_search_column_album 1
-gkrellxmms2 medialib_search_column_rating 1
-gkrellxmms2 medialib_playlist_column_id 1
-gkrellxmms2 medialib_playlist_column_artist 1
-gkrellxmms2 medialib_playlist_column_track 1
-gkrellxmms2 medialib_playlist_column_album 1
-gkrellxmms2 medialib_playlist_column_rating 1
-gkrellxmms2 medialib_playlist_column_pos 1
-gkrellxmms2 medialib_playlist_new_confirm 1
-gkrellxmms2 ipc_path unix:///tmp/xmms-ipc-joey
-gkrellxmms2 auto_reconnect 0
