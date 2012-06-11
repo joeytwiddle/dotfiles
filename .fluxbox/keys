@@ -217,6 +217,7 @@ Mod4 f :ToggleDecor
 # Mod4 t :ToggleTab
 Mod1 F9 :ExecCommand xsnapshot
 Mod4 F9 :ExecCommand xsnapshot
+Control F9 :ExecCommand xsnapshot -window
 
 ## Changing workspace
 Control Mod1 Left :PrevWorkspace
