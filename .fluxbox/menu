@@ -1,474 +1,120 @@
-# Automatically generated file. Do not edit (see /usr/share/doc/menu/README)
-
-
-
-Debian MENU
-
-[begin] (Debian)
-   [submenu] (Apps) {}
-      [submenu] (Databases) {}
-         [exec] (PostgreSQL Databases) { x-terminal-emulator -T "PostgreSQL Databases" -e /usr/bin/psql template1}
-      [end]
-      [submenu] (Editors) {}
-         [exec] (Emacs 20) {/usr/bin/emacs20}
-         [exec] (Gnotepad+) {/usr/bin/gnp}
-         [exec] (Kate) {/usr/bin/kate}
-         [exec] (LyX) {/usr/X11R6/bin/lyx}
-         [exec] (NEdit) {/usr/bin/X11/nedit}
-         [exec] (Vim) { x-terminal-emulator -T "Vim" -e /usr/bin/vim}
-         [exec] (Xedit) {xedit}
-         [exec] (gEdit) {/usr/X11R6/bin/gedit}
-         [exec] (gvim) {/usr/bin/gvim}
-         [exec] (kwrite) {/usr/bin/kwrite}
-         [exec] (pfaedit) {/usr/bin/pfaedit}
-         [exec] (wpe) { x-terminal-emulator -T "wpe" -e /usr/bin/wpe}
-         [exec] (xwpe) {/usr/bin/xwpe}
-      [end]
-      [submenu] (Educational) {}
-         [exec] (Celestia) {/usr/bin/celestia}
-      [end]
-      [submenu] (Emulators) {}
-         [exec] (Dos Emulator \(X11\)) {/usr/bin/xdos}
-         [exec] (Dos Emulator \(tty\)) { x-terminal-emulator -T "Dos Emulator \(tty\)" -e /usr/bin/dos}
-      [end]
-      [submenu] (Graphics) {}
-         [exec] (Bitmap) {bitmap}
-         [exec] (Gocr tcl) {/usr/bin/gocr.tcl}
-         [exec] (KIllustrator) {killustrator}
-         [exec] (Terraform) {/usr/bin/terraform}
-         [exec] (Text Xaos) { x-terminal-emulator -T "Text Xaos" -e sh -c 'cd /tmp && /usr/bin/xaos -driver aa'}
-         [exec] (Tgif) {/usr/bin/tgif}
-         [exec] (The GIMP) {/usr/X11R6/bin/gimp}
-         [exec] (Xaos) {sh -c 'cd /tmp && /usr/bin/xaos -driver x11'}
-         [exec] (Xfig) {/usr/bin/xfig}
-         [exec] (blender) {/usr/bin/blender}
-         [exec] (snowflake) {/usr/bin/snowflake}
-         [exec] (starplot) {/usr/bin/starplot}
-         [exec] (xfractint) {/usr/X11R6/bin/xtfractint}
-      [end]
-      [submenu] (Math) {}
-         [exec] (CalcTool) {/usr/bin/X11/calctool}
-         [exec] (Gnuplot) { x-terminal-emulator -T "Gnuplot" -e /usr/bin/gnuplot}
-         [exec] (Grace) {/usr/X11R6/bin/xmgrace}
-         [exec] (Octave) { x-terminal-emulator -T "Octave" -e /usr/bin/octave}
-         [exec] (Siag) {/usr/bin/siag}
-         [exec] (Siag \(text mode\)) { x-terminal-emulator -T "Siag \(text mode\)" -e /usr/bin/tsiag}
-         [exec] (Vis5D Data Importer) {/usr/bin/v5dimport}
-         [exec] (Xcalc) {xcalc}
-         [exec] (bc) { x-terminal-emulator -T "bc" -e /usr/bin/bc}
-         [exec] (dc) { x-terminal-emulator -T "dc" -e /usr/bin/dc}
-         [exec] (geomview) {/usr/bin/geomview}
-         [exec] (gstar) {/usr/bin/gstar}
-         [exec] (openuniverse) {/usr/bin/openuniverse}
-         [exec] (spacechart) {/usr/bin/spacechart}
-         [exec] (xmaxima) {/usr/bin/xmaxima}
-         [exec] (xtide) {/usr/bin/xtide}
-      [end]
-      [submenu] (Misc) {}
-         [exec] (Worker) {/usr/bin/worker}
-      [end]
-      [submenu] (Net) {}
-         [exec] (BitchX) { x-terminal-emulator -T "BitchX" -e bitchx}
-         [submenu] (Darxite) {}
-            [exec] (Start Darxite) {/usr/bin/darxite -q}
-            [exec] (Stop Darxite) {/usr/bin/darxite -k}
-            [exec] (darxite-control) {/usr/bin/darxite-control}
-         [end]
-         [exec] (Ethereal) {/usr/bin/ethereal}
-         [exec] (EveryBuddy) {/usr/bin/everybuddy}
-         [exec] (GNOME Napster) {/usr/X11R6/bin/gnome-napster}
-         [exec] (Galeon) {/usr/bin/galeon}
-         [exec] (Gnapster) {/usr/bin/gnapster}
-         [exec] (KMago) {/usr/bin/kmago}
-         [exec] (KMail) {/usr/bin/kmail}
-         [exec] (Konqueror) {/usr/bin/kfmclient openProfile webbrowsing}
-         [exec] (Links) { x-terminal-emulator -T "Links" -e /usr/bin/links}
-         [exec] (Lynx) { x-terminal-emulator -T "Lynx" -e /usr/bin/lynx}
-         [exec] (Micq) { x-terminal-emulator -T "Micq" -e /usr/bin/micq}
-         [submenu] (Mozilla Components) {}
-            [exec] (Mozilla Addressbook) {mozilla -addressbook}
-            [exec] (Mozilla Browser) {mozilla}
-            [exec] (Mozilla Composer) {mozilla -edit}
-            [exec] (Mozilla Mail) {mozilla -mail}
-            [exec] (Mozilla Mail Composer) {mozilla -compose}
-            [exec] (Mozilla News) {mozilla -news}
-         [end]
-         [exec] (Mozilla Navigator) {mozilla}
-         [exec] (Mutt) { x-terminal-emulator -T "Mutt" -e /usr/bin/mutt}
-         [submenu] (Netscape) {}
-            [exec] (Communicator\(static 4.77\) Browser) {/usr/lib/netscape/477/communicator/communicator-smotif}
-            [exec] (Communicator\(static 4.77\) Mail) {/usr/lib/netscape/477/communicator/communicator-smotif mailbox:}
-            [exec] (Communicator\(static 4.77\) News) {/usr/lib/netscape/477/communicator/communicator-smotif news:}
-         [end]
-         [exec] (SkipStone) {/usr/bin/skipstone}
-         [exec] (Slrn) { x-terminal-emulator -T "Slrn" -e slrn}
-         [exec] (Tin) { x-terminal-emulator -T "Tin" -e /usr/bin/rtin}
-         [exec] (TinyIRC) { x-terminal-emulator -T "TinyIRC" -e /usr/bin/tinyirc}
-         [exec] (VRweb VRML browser) {/usr/X11R6/bin/vrweb}
-         [exec] (XBitchX) {xbitchx}
-         [exec] (Xbiff) {xbiff}
-         [exec] (Yet Another FTP Client) { x-terminal-emulator -T "Yet Another FTP Client" -e /usr/bin/yafc}
-         [exec] (amaya) {/usr/bin/amaya}
-         [exec] (gtk-gnutella) {/usr/bin/gtk-gnutella}
-         [exec] (gtkBitchX) {gtkBitchX}
-         [exec] (irssi-gtk) {/usr/bin/irssi-gtk}
-         [exec] (irssi-text) { x-terminal-emulator -T "irssi-text" -e /usr/bin/irssi-text}
-         [exec] (licq) {/usr/bin/licq}
-         [exec] (ncftp) { x-terminal-emulator -T "ncftp" -e /usr/bin/ncftp3}
-         [exec] (pppconfig) {/usr/sbin/pppconfig --dialog || xterm -e /usr/sbin/pppconfig}
-         [exec] (tkirc) {/usr/bin/tkirc}
-         [exec] (w3m) { x-terminal-emulator -T "w3m" -e /usr/bin/w3m /usr/share/doc/w3m/MANUAL.html}
-         [exec] (wmnetselect) {/usr/bin/X11/wmnetselect}
-         [exec] (xvncviewer) {/usr/bin/X11/xvncviewer}
-      [end]
-      [submenu] (Programming) {}
-         [exec] (Allegro example programs) {/usr/bin/x-terminal-emulator -e /usr/bin/allegro-examples}
-         [exec] (BeanShell \(text\)) { x-terminal-emulator -T "BeanShell \(text\)" -e /usr/bin/bsh}
-         [exec] (BeanShell \(windowed\)) {/usr/bin/xbsh}
-         [exec] (Cervisia) {/usr/bin/cervisia}
-         [exec] (CurVeS) { x-terminal-emulator -T "CurVeS" -e /usr/bin/curves}
-         [exec] (GNU Smalltalk) { x-terminal-emulator -T "GNU Smalltalk" -e /usr/bin/gst}
-         [exec] (GNU Smalltalk \(X11\)) {gst-blox}
-         [exec] (Gdb) { x-terminal-emulator -T "Gdb" -e /usr/bin/gdb}
-         [exec] (Hugs) { x-terminal-emulator -T "Hugs" -e /usr/bin/hugs}
-         [exec] (LinCVS) {/usr/bin/x-terminal-emulator -e /usr/bin/LinCVS}
-         [exec] (Python \(v2.1\)) { x-terminal-emulator -T "Python \(v2.1\)" -e /usr/bin/python2.1}
-         [exec] (Source-Navigator) {/usr/bin/snavigator}
-         [exec] (Tclsh8.0) { x-terminal-emulator -T "Tclsh8.0" -e /usr/bin/tclsh8.0}
-         [exec] (Tclsh8.2) { x-terminal-emulator -T "Tclsh8.2" -e /usr/bin/tclsh8.2}
-         [exec] (Tclsh8.3) { x-terminal-emulator -T "Tclsh8.3" -e /usr/bin/tclsh8.3}
-         [exec] (TkWish8.3) {/usr/bin/wish8.3}
-         [exec] (cbrowser) {/usr/bin/cbrowser}
-         [exec] (gcvs) {/usr/bin/gcvs}
-      [end]
-      [submenu] (Shells) {}
-         [exec] (Ash) { x-terminal-emulator -T "Ash" -e /bin/ash -i}
-         [exec] (Bash) { x-terminal-emulator -T "Bash" -e /bin/bash -login}
-         [exec] (Pdmenu) { x-terminal-emulator -T "Pdmenu" -e /usr/bin/pdmenu}
-         [exec] (Sh) { x-terminal-emulator -T "Sh" -e /bin/sh -login}
-         [exec] (Tcsh) { x-terminal-emulator -T "Tcsh" -e /usr/bin/tcsh}
-         [exec] (Zsh) { x-terminal-emulator -T "Zsh" -e /usr/bin/zsh}
-      [end]
-      [submenu] (Sound) {}
-         [exec] (FreeAmp) {/usr/bin/freeamp}
-         [exec] (GQmpeg) {/usr/bin/gqmpeg}
-         [exec] (KMix) {/usr/bin/kmix}
-         [exec] (MP3 info) {/usr/bin/gmp3info}
-         [exec] (Mixer.app) {/usr/X11R6/bin/Mixer.app}
-         [exec] (Noatun) {/usr/bin/noatun}
-         [exec] (Snd) {/usr/X11R6/bin/snd}
-         [exec] (TkMixer) {/usr/bin/tkmixer}
-         [exec] (WMMixer) {/usr/X11R6/bin/wmmixer -s}
-         [exec] (WMMixer \(Docked\)) {/usr/X11R6/bin/wmmixer -s -w}
-         [exec] (X Cthugha) {xcthugha}
-         [exec] (XMMS) {xmms}
-         [exec] (aRts Builder) {/usr/bin/artsbuilder}
-         [exec] (aRts control) {/usr/bin/artscontrol}
-         [exec] (aumix) {/usr/X11R6/bin/xaumix}
-         [exec] (aumix GTK) {/usr/bin/aumix}
-         [exec] (knapster2) {/usr/bin/knapster2}
-         [exec] (mp3blaster) { x-terminal-emulator -T "mp3blaster" -e /usr/bin/mp3blaster}
-         [exec] (playmidi) {/usr/X11R6/bin/xplaymidi}
-         [exec] (rexima) { x-terminal-emulator -T "rexima" -e /usr/bin/rexima}
-         [exec] (transcriber) {/usr/bin/trans}
-         [exec] (wmXMMS) {wmxmms}
-         [exec] (xmix) {/usr/bin/X11/xmix}
-      [end]
-      [submenu] (System) {}
-         [submenu] (Admin) {}
-            [exec] (Choose-OS Boot Loader Config) {/usr/X11R6/bin/vchos}
-            [exec] (Dpkgiasearch query program) { x-terminal-emulator -T "Dpkgiasearch query program" -e /usr/bin/dpkg-query}
-            [exec] (Lilo-config) { x-terminal-emulator -T "Lilo-config" -e /usr/sbin/su-to-root -p root -c /usr/sbin/liloconfig}
-            [exec] (Update iasearch query index) { x-terminal-emulator -T "Update iasearch query index" -e /usr/bin/dpkg-make-index}
-            [exec] (gpm-config) { x-terminal-emulator -T "gpm-config" -e /usr/sbin/su-to-root -p root -c /usr/sbin/gpmconfig}
-         [end]
-         [exec] (G-Top) {/usr/bin/gtop}
-         [submenu] (Gnome) {}
-            [exec] (Background Properties) {/usr/bin/background-properties-capplet}
-            [exec] (Default Editor) {/usr/bin/gnome-edit-properties-capplet}
-            [exec] (Gnome Control Center) {/usr/bin/gnomecc}
-            [exec] (Keyboard Properties) {/usr/bin/keyboard-properties}
-            [exec] (Mime Types) {/usr/bin/mime-type-capplet}
-            [exec] (Mouse Properties) {/usr/bin/mouse-properties-capplet}
-            [exec] (Screensaver) {/usr/bin/screensaver-properties-capplet}
-            [exec] (Session Properties) {/usr/bin/session-properties-capplet}
-            [exec] (Sound) {/usr/bin/sound-properties}
-            [exec] (Theme Selector) {/usr/bin/theme-selector-capplet}
-            [exec] (UI Properties) {/usr/bin/ui-properties}
-            [exec] (URL Handlers) {/usr/bin/url-properties}
-            [exec] (Window Manager) {/usr/bin/wm-properties-capplet}
-         [end]
-         [submenu] (Java2) {}
-            [exec] (Plug-In Control Panel) {/usr/lib/j2re1.3/bin/JavaPluginControlPanel}
-            [exec] (Policy Tool) {/usr/lib/j2re1.3/bin/policytool}
-         [end]
-         [exec] (KDE Control Center) {/usr/bin/kcontrol}
-         [exec] (KDE System Guard) {/usr/bin/ksysguard}
-         [exec] (Konqueror) {/usr/bin/kfmclient openProfile filemanagement}
-         [exec] (Lavaps) {/usr/bin/lavaps}
-         [exec] (Loadmeter) {/usr/bin/loadmeter}
-         [exec] (Nautilus) {/usr/bin/run-nautilus}
-         [exec] (Network load on ppp0) { x-terminal-emulator -T "Network load on ppp0" -e /usr/bin/netload ppp0}
-         [exec] (Storm Package Manager) {x-terminal-emulator /usr/sbin/stormpkg}
-         [exec] (Task selector) { x-terminal-emulator -T "Task selector" -e /usr/bin/tasksel}
-         [exec] (Top) { x-terminal-emulator -T "Top" -e /usr/bin/top}
-         [exec] (Wmakerconf) {/usr/X11R6/bin/wmakerconf}
-         [exec] (X cd-roast) {/usr/bin/xcdroast}
-         [exec] (Xconsole) {xconsole}
-         [exec] (Xload) {xload}
-         [exec] (Xvidtune) {xvidtune}
-         [exec] (aptitude) { x-terminal-emulator -T "aptitude" -e /usr/bin/aptitude}
-         [exec] (lockvc) { x-terminal-emulator -T "lockvc" -e /usr/bin/lockvc}
-         [exec] (netwatch) { x-terminal-emulator -T "netwatch" -e /usr/sbin/netwatch}
-         [exec] (pstree) {/usr/bin/X11/xterm -e /usr/bin/pstree.x11}
-         [exec] (statnet) { x-terminal-emulator -T "statnet" -e /usr/sbin/statnet}
-         [exec] (trafshow) { x-terminal-emulator -T "trafshow" -e /usr/sbin/trafshow}
-         [exec] (whowatch) { x-terminal-emulator -T "whowatch" -e /usr/bin/whowatch}
-         [exec] (wmavgload) {/usr/bin/X11/wmavgload -shape -withdrawn}
-         [exec] (wmbubble) {wmbubble}
-         [exec] (wmgtemp) {/usr/bin/wmgtemp}
-         [exec] (wmload) {/usr/bin/X11/wmload -shape -withdrawn}
-         [exec] (wmsensors) {/usr/X11R6/bin/wmsensors}
-         [exec] (wmsysmon) {/usr/bin/wmsysmon}
-         [exec] (wmtop) {/usr/bin/wmtop}
-      [end]
-      [submenu] (Text) {}
-         [exec] (Dhammapada) {xdp}
-         [exec] (Fortune) {while fortune | col -x | xmessage -center -buttons OK:1,Another:0 -default OK -file - ; do :; done}
-         [exec] (clara) {/usr/bin/clara}
-      [end]
-      [submenu] (Tools) {}
-         [exec] (Editres) {editres}
-         [exec] (GNOME Address Book) {/usr/bin/gnomecard}
-         [exec] (GNOME Calendar) {/usr/bin/gnomecal}
-         [exec] (KDE Cut & Paste History \(klipper\)) {/usr/bin/klipper}
-         [exec] (KPager) {/usr/bin/kpager}
-         [exec] (Kandalf's tips) {/usr/bin/ktip}
-         [exec] (Oclock) {oclock}
-         [exec] (RegExplorer) {/usr/bin/X11/regexplorer}
-         [exec] (The Dotfile Generator) {/usr/bin/dotfile}
-         [exec] (WordNet) {/usr/bin/X11/wnb}
-         [exec] (X Window Snapshot) {xwd | xwud}
-         [exec] (XFClock) {xfclock}
-         [exec] (XFMouse) {xfmouse -i}
-         [exec] (XFTree) {xftree}
-         [exec] (XFbd) {xfbd -i}
-         [exec] (XFce) {xfce}
-         [exec] (Xclipboard) {xclipboard}
-         [exec] (Xclock \(analog\)) {xclock -analog}
-         [exec] (Xclock \(digital\)) {xclock -digital -update 1}
-         [exec] (Xcutsel) {xcutsel}
-         [exec] (Xev) {x-terminal-emulator -e xev}
-         [exec] (Xfontsel) {xfontsel}
-         [exec] (Xkill) {xkill}
-         [exec] (Xmag) {xmag}
-         [exec] (Xrefresh) {xrefresh}
-         [exec] (abbrowser) {/usr/bin/abbrowser}
-         [exec] (fspanel) {/usr/bin/fspanel}
-         [exec] (gmc) {/usr/bin/gmc}
-         [exec] (guitar) {/usr/bin/guitar}
-         [exec] (wmMoonClock) {/usr/X11R6/bin/wmMoonClock}
-         [exec] (wmbutton) {/usr/bin/wmbutton}
-         [exec] (xcolors) {/usr/X11R6/bin/xcolors}
-         [exec] (xzoom) {xzoom}
-      [end]
-      [submenu] (Viewers) {}
-         [exec] (Acrobat Reader) {/usr/bin/acroread}
-         [exec] (GV) {/usr/bin/X11/gv}
-         [exec] (GhostView) {/usr/bin/X11/ghostview}
-         [exec] (ImageMagick) {/usr/X11R6/bin/display /usr/share/doc/imagemagick/examples/logo.gif}
-         [exec] (KView) {/usr/bin/kview}
-         [exec] (Real Player) {realplayer}
-         [exec] (Tkxanim) {/usr/bin/tkxanim}
-         [exec] (XDvi) {/usr/bin/xdvi}
-         [submenu] (XawTV) {}
-            [exec] (15/16 bit) {/usr/X11R6/bin/xawtv}
-            [exec] (24/32 bit) {/usr/X11R6/bin/xawtv -b 24}
-            [exec] (8 bit\(won't work\)) {echo >/dev/null}
-         [end]
-         [exec] (Xditview) {xditview}
-         [exec] (Xpdf) {/usr/bin/xpdf}
-         [exec] (Xv) {/usr/bin/X11/xv}
-         [exec] (aKtion!) {/usr/bin/aktion}
-         [exec] (gnome-gv) {/usr/bin/gnome-gv}
-         [exec] (gqview) {/usr/bin/gqview}
-         [exec] (gxanim) {/usr/X11R6/bin/gxanim}
-         [exec] (perspic) {/usr/bin/perspic}
-         [exec] (xine) {/usr/bin/xine}
-      [end]
-      [submenu] (net) {}
-         [exec] (Evolution) {/usr/bin/evolution}
-      [end]
-   [end]
-   [submenu] (FluxBox) {}
-      [config] (Configuration)
-      [submenu] (Styles) {}
-         [stylesdir] (/usr/share/fluxbox/styles)
-         [stylesdir] (~/.fluxbox/styles)
-      [end]
-      [workspaces] (Workspaces)
-   [end]
-   [submenu] (Games) {}
-      [submenu] (Arcade) {}
-         [exec] (Allegro Demo) {/usr/games/all-demo}
-         [exec] (Armagetron) {armagetron}
-         [exec] (Bombermaze) {/usr/games/bombermaze}
-         [exec] (ClanBomber) {/usr/games/clanbomber}
-         [exec] (Galaga) {/usr/games/xgalaga}
-         [exec] (Orbit) {/usr/games/orbit}
-         [exec] (Thrust) {/usr/games/xthrust}
-         [exec] (X 0verkill) {/usr/games/xoverkill}
-         [exec] (XBill) {/usr/games/xbill}
-         [exec] (XDigger) {/usr/games/xdigger}
-         [exec] (XEvil) {/usr/games/xevil}
-         [exec] (XPilot) {xpilot}
-         [exec] (XSoldier) {/usr/games/xsoldier}
-         [exec] (Xasteroids) {/usr/games/xasteroids}
-         [exec] (Xbat) {/usr/games/xbat}
-         [exec] (Xjump) {/usr/games/xjump}
-         [exec] (Xkobo) {/usr/games/xkobo}
-         [exec] (Xoids) {/usr/games/xoids}
-         [exec] (Xonix) {/usr/games/xonix}
-         [exec] (Xracer racing game) {/usr/games/xracer}
-         [exec] (Xscorch) {xscorch}
-         [exec] (Xtron) {/usr/games/xtron}
-         [exec] (ZBlast) {xzb}
-         [exec] (bzflag) {/usr/games/bzflag}
-         [exec] (glTron) {/usr/games/gltron}
-         [exec] (moon-buggy) { x-terminal-emulator -T "moon-buggy" -e /usr/games/moon-buggy}
-         [exec] (xinv3d) {/usr/games/xinv3d}
-         [exec] (xlander) {/usr/games/xlander}
-      [end]
-      [submenu] (Board) {}
-         [exec] (GNU backgammon) {/usr/bin/gnubg}
-         [exec] (XArchon) {/usr/games/xarchon}
-         [exec] (Xbattle) {/usr/games/xbattle}
-      [end]
-      [submenu] (Card) {}
-         [exec] (xmahjongg) {/usr/games/xmahjongg}
-      [end]
-      [submenu] (Puzzles) {}
-         [exec] (GFingerPoken) {/usr/games/gfpoken}
-      [end]
-      [submenu] (Simulation) {}
-         [exec] (Xlife) {/usr/games/xlife}
-      [end]
-      [submenu] (Sports) {}
-         [exec] (Battleball) {/usr/games/battleball $DISPLAY comp}
-      [end]
-      [submenu] (Strategy) {}
-         [exec] (3D Chess) {/usr/games/3Dc}
-         [exec] (Xfrisk) {/usr/games/risk}
-         [exec] (Xfrisk client-only) {/usr/games/xfrisk}
-         [exec] (corewars) {/usr/games/corewars}
-         [exec] (spellcast) {/usr/games/spellcast}
-      [end]
-      [submenu] (Toys) {}
-         [exec] (AMOR) {/usr/bin/amor}
-         [exec] (Blast holes in windows) {blast}
-         [exec] (Light Speed) {/usr/bin/lightspeed}
-         [exec] (LinuxLogo) { x-terminal-emulator -T "LinuxLogo" -e /etc/init.d/linuxlogo display}
-         [exec] (Penguineyes with tux) {/usr/games/penguineyes --theme tux}
-         [exec] (Teddy) {/usr/bin/X11/teddy}
-         [exec] (TkXplanet) {/usr/bin/tkxplanet}
-         [exec] (XAlex) {/usr/bin/X11/xalex}
-         [exec] (XBobo) {/usr/bin/X11/xbobo}
-         [exec] (XBrummi) {/usr/bin/X11/xbrummi}
-         [exec] (XDuck) {/usr/bin/X11/xduck}
-         [exec] (XKlitze) {/usr/bin/X11/xklitze}
-         [exec] (XNamu) {/usr/bin/X11/xnamu}
-         [exec] (XOrca) {/usr/bin/X11/xorca}
-         [exec] (XPenguin) {/usr/bin/X11/xpenguin}
-         [exec] (XRuessel) {/usr/bin/X11/xruessel}
-         [exec] (XStarfish) {/usr/bin/xstarfish}
-         [exec] (XTeddy) {/usr/bin/X11/xteddy}
-         [exec] (XTuxxy) {/usr/bin/X11/xtuxxy}
-         [exec] (Xeyes) {xeyes}
-         [exec] (Xlogo) {xlogo}
-         [exec] (Xmountains) {xmountains}
-         [exec] (Xroach - start) {/usr/games/xroach}
-         [exec] (Xroach - stop) {killall -KILL xroach}
-         [exec] (cappuccino) {/usr/bin/cappuccino}
-         [exec] (gNiall) {/usr/games/gniall}
-         [exec] (oneko/cat) {/usr/X11R6/bin/oneko -fg black -bg white}
-         [exec] (oneko/dog) {/usr/X11R6/bin/oneko -dog -fg black -bg white}
-         [exec] (oneko/stop) {killall -TERM oneko}
-         [exec] (wmMatrix) {/usr/bin/nice -n +19 /usr/X11R6/bin/wmMatrix}
-         [exec] (xcruise) {/usr/games/xcruise}
-         [exec] (xearth) {/usr/bin/X11/xearth}
-         [exec] (xfireworks) {/usr/games/xfireworks}
-         [exec] (xfishtank - start) {xfishtank}
-         [exec] (xfishtank - stop) {killall -KILL xfishtank}
-         [exec] (xhangglider - start) {/usr/X11R6/bin/xhangglider}
-         [exec] (xhangglider - stop) {killall -KILL xhangglider}
-         [exec] (xpenguins - start) {xpenguins}
-         [exec] (xpenguins - stop) {kill -TERM `pidof xpenguins`}
-      [end]
-   [end]
-   [submenu] (Help) {}
-      [exec] (Debian Package Browser) {/usr/bin/dpkg-www ' '}
-      [exec] (Dwww) { x-terminal-emulator -T "Dwww" -e /usr/bin/dwww}
-      [exec] (Gnome Help) {/usr/bin/gnome-help-browser}
-      [exec] (Info) { x-terminal-emulator -T "Info" -e /usr/bin/info}
-      [exec] (KDE Help Center) {/usr/bin/khelpcenter}
-      [exec] (Xman) {xman}
-   [end]
-   [submenu] (Screen) {}
-      [ToggleCmd {Exec xcompmgr -c} {Exec pkill xcompmgr}] (Toggle Effects)
-      [submenu] (Lock) {}
-         [exec] (Lock Screen \(XScreenSaver\)) {/usr/bin/xscreensaver-command -lock}
-      [end]
-      [submenu] (Root-window) {}
-         [exec] (Xsetroot) {xsetroot}
-      [end]
-      [submenu] (Save) {}
-         [exec] (Activate ScreenSaver \(Next\)) {/usr/bin/xscreensaver-command -next}
-         [exec] (Activate ScreenSaver \(Previous\)) {/usr/bin/xscreensaver-command -prev}
-         [exec] (Activate ScreenSaver \(Random\)) {/usr/bin/xscreensaver-command -activate}
-         [exec] (Beforelight) {beforelight}
-         [exec] (Demo Screen Hacks) {/usr/bin/xscreensaver-command -demo}
-         [exec] (Disable XScreenSaver) {/usr/bin/xscreensaver-command -exit}
-         [exec] (Enable XScreenSaver) {/usr/bin/xscreensaver}
-         [exec] (Reinitialize XScreenSaver) {/usr/bin/xscreensaver-command -restart}
-         [exec] (ScreenSaver Preferences) {/usr/bin/xscreensaver-command -prefs}
-      [end]
-   [end]
-   [submenu] (Resolution) {}
-      [exec] (800x600) {xrandr -s 800x600}
-      [exec] (1024x768) {xrandr -s 1024x768}
-      [exec] (1280x1024) {xrandr -s 1280x1024}
-      [exec] (1600x1200) {xrandr -s 1600x1200}
-   [end]
-   [submenu] (WindowManagers) {}
-      [restart] (AfterStep)  {/usr/X11R6/bin/afterstep}
-      [restart] (Compiz)  {/usr/bin/compiz}
-      [exit] (Exit)
-      [restart] (FluxBox)  {/usr/local/bin/fluxbox}
-      [restart] (Fvwm)  {/usr/bin/X11/fvwm2}
-      [restart] (Gwm)  {gwm}
-      [restart] (IceWM)  {/usr/bin/X11/icewm}
-      [restart] (Ion)  {/usr/bin/ion}
-      [restart] (KDE)  {/usr/bin/kde2}
-      [restart] (Olvwm)  {/usr/X11R6/bin/olvwm}
-      [restart] (PWM)  {/usr/bin/pwm}
-      [reconfig] (Reconfigure)
-      [restart] (Restart)
-      [restart] (Sawfish)  {sawfish}
-      [restart] (Twm)  {twm}
-      [restart] (Treewm)  {treewm}
-      [restart] (Window Maker)  {/usr/X11R6/bin/wmaker}
-      [restart] (XFwm/XFce)  {startxfce}
-      [restart] (aewm)  {/usr/bin/aewm}
-      [restart] (ratpoison)  {/usr/bin/ratpoison}
-   [end]
-   [submenu] (XShells) {}
-      [exec] (Gnome Terminal) {/usr/bin/gnome-terminal}
-      [exec] (Kanji Terminal) {/usr/X11R6/bin/kterm}
-      [exec] (Konsole) {/usr/bin/konsole}
-      [exec] (OneLiner) {/usr/X11R6/bin/oneliner}
-      [exec] (PowerShell) {/usr/bin/powershell}
-      [exec] (Xterm) {xterm}
-   [end]
+# Generated by fluxbox-generate_menu
+#
+# If you read this it means you want to edit this file manually, so here
+# are some useful tips:
+#
+# - You can add your own menu-entries to ~/.fluxbox/usermenu
+#
+# - If you miss apps please let me know and I will add them for the next
+#   release.
+#
+# - The -r option prevents removing of empty menu entries and lines which
+#   makes things much more readable.
+#
+# - To prevent any other app from overwriting your menu
+#   you can change the menu name in ~/.fluxbox/init to:
+#     session.menuFile: ~/.fluxbox/my-menu
+[begin] (Fluxbox-git)
+[encoding] {UTF-8}
+      [exec] (xterm) {xterm}
+      [exec] (firefox) {firefox}
+      [exec]   (Run) {fbrun }
+[submenu] (Terminals)
+      [exec]   (xterm) {xterm}
 [end]
-
-Debian END
+[submenu] (Net)
+[submenu] (Browsers)
+      [exec]   (firefox) {firefox}
+      [exec]   (galeon) {galeon}
+      [exec]   (netscape) {netscape}
+      [exec]   (vncviewer) {vncviewer}
+      [exec]   (links-graphic) {links -driver x fluxbox.org}
+      [exec]   (konqueror) {kfmclient openProfile webbrowsing}
+      [exec]   (links) {xterm -e links fluxbox.org}
+      [exec]   (lynx) {xterm -e lynx fluxbox.org}
+[end]
+[submenu] (IM)
+      [exec]   (gaim) {gaim}
+[end]
+[submenu] (Mail)
+      [exec]   (evolution) {evolution}
+      [exec]   (thunderbird) {thunderbird}
+      [exec]   (mutt) {xterm -e mutt}
+[end]
+[submenu] (IRC)
+      [exec]   (xchat) {xchat}
+[end]
+[submenu] (P2P)
+      [exec]   (azureus) {azureus}
+[end]
+[end]
+[submenu] (Editors)
+      [exec]   (gvim) {gvim}
+      [exec]   (vim) {xterm -e vim}
+      [exec]   (vi) {xterm -e vi}
+[end]
+[submenu] (File utils)
+      [exec] (konqueror) {kfmclient openProfile filemanagement}
+[end]
+[submenu] (Multimedia)
+[submenu] (Graphics)
+      [exec]   (gqview) {gqview}
+      [exec]   (xscreensaver-demo) {xscreensaver-demo}
+[end]
+[submenu] (Audio)
+      [exec]   (aumix) {aumix}
+      [exec]   (alsamixer) {xterm -e alsamixer}
+[end]
+[submenu] (Video)
+      [exec]   (xgdb) {xgdb}
+[end]
+[submenu] (X-utils)
+      [exec]   (xfontsel) {xfontsel}
+      [exec]   (xclock) {xclock}
+      [exec] (Reload .Xdefaults) {xrdb -load $HOME/.Xdefaults}
+[end]
+[end]
+[submenu] (Office)
+      [exec]   (xclock) {xclock}
+      [exec]   (evolution) {evolution}
+      [exec]   (xpdf) {xpdf}
+      [exec]   (gv) {gv}
+[end]
+[submenu] (Games)
+      [exec] (Enemy Territory) {et}
+      [exec] (Unreal Tournament) {ut}
+[end]
+[submenu] (System Tools)
+      [exec]   (top) {xterm -e top}
+[end]
+[submenu] (Fluxbox menu)
+      [config] (Configure)
+[submenu] (System Styles) {Choose a style...}
+      [stylesdir] (/home/joey/gentoo/share/fluxbox/styles)
+[end]
+[submenu] (User Styles) {Choose a style...}
+      [stylesdir] (~/.fluxbox/styles)
+[end]
+      [workspaces] (Workspace List)
+[submenu] (Tools)
+      [exec] (Window name) {xprop WM_CLASS|cut -d \" -f 2|xmessage -file - -center}
+      [exec] (Screenshot - JPG) {import screenshot.jpg && display -resize 50% screenshot.jpg}
+      [exec] (Screenshot - PNG) {import screenshot.png && display -resize 50% screenshot.png}
+      [exec] (Run) {fbrun }
+      [exec] (Regen Menu) {fluxbox-generate_menu }
+[end]
+[submenu] (Window Managers)
+      [restart] (twm) {twm}
+      [restart] (ion) {ion}
+      [restart] (gnome) {startgnome}
+[end]
+      [exec] (Lock screen) {xscreensaver-command -lock}
+      [commanddialog] (Fluxbox Command)
+      [reconfig] (Reload config)
+      [restart] (Restart)
+      [exec] (About) {(fluxbox -v; fluxbox -info | sed 1d) | xmessage -file - -center}
+      [separator]
+      [exit] (Exit)
+[end]
+[endencoding]
+[end]
