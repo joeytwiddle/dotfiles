@@ -484,6 +484,12 @@ function! conque_term#open(...) "{{{
         let b:ConqueTerm_Var = g:ConqueTerm_Var
     endif
 
+    if empty(vim_startup_commands)
+        let b:thisConquetermWasSplitOpen = 0
+    else
+        let b:thisConquetermWasSplitOpen = 1
+    endif
+
     " save terminal instance
     let t_obj = conque_term#create_terminal_object(g:ConqueTerm_Idx, is_buffer, g:ConqueTerm_BufName, command)
     let g:ConqueTerm_Terminals[g:ConqueTerm_Idx] = t_obj
@@ -910,10 +916,21 @@ function! conque_term#init() " {{{
 
 endfunction " }}}
 
+"" Is it ok to do it per-script?  We could use a global.
+let s:updateTerm = 0
+
 " read from all known conque buffers
 function! conque_term#read_all(insert_mode) "{{{
 
-    for i in range(1, g:ConqueTerm_Idx)
+    " for i in range(1, g:ConqueTerm_Idx)
+    "" The update workaround can only act on one conque window at a time,
+    "" so we will do one now, and iterate to the others later.
+    let s:updateTerm += 1
+    if s:updateTerm > g:ConqueTerm_Idx
+      let s:updateTerm = 1
+    endif
+    let l:i = s:updateTerm
+
         try
             if !g:ConqueTerm_Terminals[i].active
                 continue
@@ -924,10 +941,27 @@ function! conque_term#read_all(insert_mode) "{{{
             if !g:ConqueTerm_Terminals[i].is_buffer && exists('*g:ConqueTerm_Terminals[i].callback')
                 call g:ConqueTerm_Terminals[i].callback(output)
             endif
+
+            "" Update workaround
+            "" If the term has a visible window, we need to:
+            "" Switch to that window
+            "" Set updatetime=0
+            "" Enter insert mode.
+            "" Set an event handler:
+            ""   Clear event handler and restore updatetime.
+            ""   Move to previous focused window.
+            ""   Maybe stop insert mode.
+            "" Return so the update can occur.
+            "" We may also need to block calls to this function.
+            "" Beware: Since we were called from CursorHold, will another
+            "" CursorHold event fire?  None of this will work if not!
+            "" TODO ...
+            " let bufname = substitute(s:saved_terminals[idx].buffer_name, '\', '', 'g')
+
         catch
             " probably a deleted buffer
         endtry
-    endfor
+    " endfor
 
     " restart updatetime
     if a:insert_mode
@@ -991,7 +1025,8 @@ function! conque_term#on_focus(...) " {{{
     " if configured, go into insert mode
     if g:ConqueTerm_InsertOnEnter == 1
         " echo "Storing insert = " . &insertmode
-        let s:insertModeWhenEntered = &insertmode
+        " BUG TODO: Is &insertmode really what you think it it?
+        let s:insertModeWhenEntered = mode()
 
         " Rewrite Joey's window navigation keybinds, so they will restore the
         " previous Insert/Normal mode when using them to leave Conque window.
@@ -1023,7 +1058,8 @@ function! conque_term#on_blur() " {{{
     endif
 
     " turn off subprocess fast polling
-    if exists('b:ConqueTerm_Var')
+    " Joey does not disable polling when g:ConqueTerm_ReadUnfocused
+    if exists('b:ConqueTerm_Var') && g:ConqueTerm_ReadUnfocused == 0
         sil exe s:py . ' ' . b:ConqueTerm_Var . '.idle()'
     endif
 
@@ -1039,16 +1075,8 @@ function! conque_term#on_blur() " {{{
     endif
 
     " if configured, return to previous insert/command mode
-    " This works when moving with the mouse, but not by keyboard!
-    " This may be because my custom movement keybinds are setup to *retain*
-    " mode, and override the changes here.
     if g:ConqueTerm_InsertOnEnter == 1
-        " echo "Restoring insert = " . s:insertModeWhenEntered
-        if s:insertModeWhenEntered
-            stopinsert!
-        else
-            stopinsert!
-        endif
+        call s:setmode(s:insertModeWhenEntered)
     endif
 
     " call user defined functions
@@ -1401,10 +1429,32 @@ function! s:term_obj.read(...) dict " {{{
         let in_buffer = 0
     endif
 
+    " We need to be focused on the conque window, or set_cursor=True will fail!
+    let oldWin = -1   " indicates no need to switch
+    if !in_buffer
+        let oldWin = winnr()
+        let oldInsertMode = mode()
+        let term = conque_term#get_instance()
+        call term.focus()
+        if exists('b:ConqueTerm_Var') && b:ConqueTerm_Var == self.var
+            let in_buffer = 1
+        endif
+        if !in_buffer
+            echo "Failed to focus conqueterm for update"
+        endif
+    endif
+
+    if in_buffer
+        let set_cursor = 'True'
+    else
+        let set_cursor = 'False'
+    endif
+
     let output = ''
 
+    " Joey tried setting set_cursor to True here, but it scrolled the currently focused buffer, not the conque buffer!
     " read!
-    sil exec s:py . " conque_tmp = " . self.var . ".read(timeout = " . read_time . ", set_cursor = False, return_output = True, update_buffer = " . up_py . ")"
+    sil exec s:py . " conque_tmp = " . self.var . ".read(timeout = " . read_time . ", set_cursor = " . set_cursor . ", return_output = True, update_buffer = " . up_py . ")"
 
     " ftw!
     try
@@ -1414,9 +1464,27 @@ function! s:term_obj.read(...) dict " {{{
         " d'oh
     endtry
 
+    if oldWin > -1
+        " stopinsert   - Wanted to do this before exec, but apparently already stopped, and breaks startinsert if we try to do it again!
+        exec oldWin.' wincmd w'
+        call s:setmode(oldInsertMode)
+    endif
+
     return output
 
 endfunction " }}}
+
+function! s:setmode(mode)
+    if a:mode == 'i'
+        startinsert
+    elseif a:mode == 'R'
+        startreplace
+    elseif a:mode == 'Rv'
+        startgreplace
+    else
+        stopinsert
+    endif
+endfunction
 
 " set output callback
 function! s:term_obj.set_callback(callback_func) dict " {{{
@@ -1439,7 +1507,8 @@ function! s:term_obj.close() dict " {{{
     try
         if self.is_buffer
             call conque_term#set_mappings('stop')
-            if exists('g:ConqueTerm_CloseOnEnd') && g:ConqueTerm_CloseOnEnd
+            " Joey checks b:thisConquetermWasSplitOpen
+            if (exists('g:ConqueTerm_CloseOnEnd') && g:ConqueTerm_CloseOnEnd) || (exists('g:ConqueTerm_CloseOnEndIfSplit') && g:ConqueTerm_CloseOnEndIfSplit && exists('b:thisConquetermWasSplitOpen') && b:thisConquetermWasSplitOpen)
                 sil exe 'bwipeout! ' . self.buffer_name
                 stopinsert!
             endif
