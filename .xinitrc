@@ -94,12 +94,13 @@ PS4="[.xinitrc] # $PS4"
 ### Config: {{{
 
 ## Put your favourite WMs at the top.  The first one present will be chosen.
-## TESTING kdelight again
+## kdelight runs the KDE3 panel 'kicker' but currently with fluxbox instead of kwin.
 WindowManagers="
+startlxde
 kdelight
+fluxbox
 compiz
 startkde
-fluxbox
 enlightenment
 WindowMaker
 wmaker
@@ -115,7 +116,12 @@ ratpoison
 fvwm2
 twm
 fvwm
+openbox
 "
+
+# If you want second desktops to run a different manager on other desktops created (e.g. :2 or
+# vnc servers), set this variable:
+WindowManagerForSecondDesktops=fluxbox
 
 if [ ! "$RUNNING_GENTOO" ]
 then
@@ -135,7 +141,13 @@ fi
 
 NEWLINE="
 "
-## Alter config based on display number:
+
+## Use a minimal window manager on second/third/... X sessions.
+if [ ! -z "$WindowManagerForSecondDesktops" ] && [ ! "$DISPLAY" = ":0" ] && [ ! "$DISPLAY" = ":0.0" ]
+then WindowManagers="${WindowManagerForSecondDesktops}${NEWLINE}${WindowManagers}"
+fi
+
+## Or alter config based on display number in other ways.
 # if [ "$DISPLAY" = ":0" ] || [ "$DISPLAY" = :0.0 ]
 # then START_A_PANEL=true
 # elif [ "$DISPLAY" = ":1" ]
