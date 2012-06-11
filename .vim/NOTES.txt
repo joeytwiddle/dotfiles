@@ -7,6 +7,10 @@ When diffing two files:
 [The last two are nice of you are in the left-hand window, as O and P indicate
 the direction of movement of text (on a QWERTY keyboard).]
 
+Editing a privileged file but not root?
+  :w !sudo tee %
+  (here :w ! write to stdin of the command, and % evaluates to a filename)
+
 In Insert mode:
 
   Ctrl-O lets you do ONE normal command (that's what I need for gvim -y!)
@@ -23,9 +27,6 @@ If you made some deletes and you want an earlier delete, they are stored in the 
 
   "3p   will paste the yanked text 3 steps back
 
-:u1 | u   go to initial state
-:earlier 1f   go to state at previous file-save
-
 g;   go to position of last change
 g,   go to position of next change
 mx   create mark x
@@ -34,12 +35,12 @@ g'x  jump to mark x
 
 Don't forget, while n is the repeater for * or #, ; is the repeater for f t F and T.
 
-:w !sudo tee %
-
 Lost code by breaking your undo history?  Recover with:
-
   :earlier 1m
   :later 10s
+Alternatively:
+  :u1 | u   go to initial state
+  :earlier 1f   go to state at previous file-save
 
 Delete and yank current word, with "in":
 
@@ -49,6 +50,12 @@ Delete and yank current word, with "in":
   vi{   select text in brackets
 
   For more: :help text-objects
+
+gF open file under cursor
+
+
+
+
 
 Hex / binary editor:
   :%!xxd
@@ -65,6 +72,9 @@ Yank matching:
 Debug where setting was set:
   :verbose set cindent?
 
+To see if a key mapping has been overriden:
+  :verbose nmap \
+
 Edit file under cursor is gf in case Ctrl-] doesn't work.
 
 Change directory to current folder:
@@ -78,7 +88,22 @@ Handy buffer switcher:
   nnoremap <C-B> :ls<CR>:b<space>
 
 
-gF open file under cursor
 
+Switch to buffer 3 quickly with: 3<Ctrl-^>
+
+
+
+== Basic stuff (for new Vim users) ==
+
+Undo and other commands to get out of bad situations:
+
+  u           undo
+  Ctrl-r      redo
+
+  Ctrl-o      go back (when you have changed file and want the old one)
+  Ctrl-i      go forward
+
+  Ctrl-w c    close window (when you have split open a new window and don't want it)
+  or :q
 
 
