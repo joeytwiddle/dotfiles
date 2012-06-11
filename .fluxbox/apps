@@ -1,5 +1,5 @@
 [app] (name=xv) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{10 27}
+  [Position]	(UPPERLEFT)	{14 21}
   [Deco]	{NORMAL}
   [Sticky]	{yes}
   [Layer]	{2}
@@ -11,13 +11,13 @@
 [end]
 [app] (name=xmms) (class=Xmms)
   [Workspace]	{1}
-  [Position]	(UPPERLEFT)	{474 63}
-  [Deco]	{NONE}
+  [Position]	(UPPERLEFT)	{54 443}
+  [Deco]	{0x5ff}
   [Layer]	{8}
   [Close]	{yes}
 [end]
 [app] (name=beebem) (class=beebem)
-  [Position]	(UPPERLEFT)	{378 394}
+  [Position]	(UPPERLEFT)	{8 368}
   [Close]	{yes}
 [end]
 [app] (name=glslideshow) (class=TopLevelShell)
@@ -37,7 +37,7 @@
   [Close]	{yes}
 [end]
 [app] (name=smplayer) (class=Smplayer)
-  [Sticky]	{no}
+  [Sticky]	{yes}
   [Layer]	{8}
   [Close]	{yes}
 [end]
@@ -78,7 +78,7 @@
  [app] (name=chromium-browser.real)
  [app] (name=konqueror)
  [app] (name=chrome)
-  [Position]	(UPPERLEFT)	{53 11}
+  [Position]	(UPPERLEFT)	{85 31}
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
@@ -108,7 +108,7 @@
   [Workspace]	{1}
 [end]
 [app] (name=gkrellm) (class=Gkrellm)
-  [Position]	(UPPERLEFT)	{1143 5}
+  [Position]	(UPPERLEFT)	{1108 9}
   [Sticky]	{yes}
   [Close]	{yes}
 [end]
