@@ -138,6 +138,8 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .ogm 01;35
 .flv 01;35
 .webm 01;35
+.h264 01;35
+.x264 01;35
 # Audio
 .wav 01;35
 .raw 01;35
@@ -238,6 +240,7 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .JAVA 01;36
 .JAV 01;36
 .jpp 01;36 # my java-macro files
+.spp 01;36 # jpp for assembly
 .hs 01;36
 .HS 01;36
 *Makefile 01;36
