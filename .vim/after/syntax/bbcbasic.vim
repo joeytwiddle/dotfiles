@@ -13,5 +13,5 @@ syn keyword basicFunction	MOD DIV
 
 syn keyword basicSpecial	HIMEM TOP LOMEM PAGE
 
-" Conflict on EOR since it is both BASIC and assembly command.
+" Conflict on EOR since it is both a BASIC function and assembly command.
 
