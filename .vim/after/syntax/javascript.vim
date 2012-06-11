@@ -1,5 +1,5 @@
 " cndent rule: Indent java anonymous classes correctly.
-:set cinoptions=j1
+":set cinoptions=j1
 
 "" Redefine defaults (added @todo) does appear in rules but does not work!
 " syn keyword javaScriptCommentTodo      TODO FIXME XXX TBD @todo contained
