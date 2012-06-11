@@ -7,6 +7,8 @@ xterm*background: #000000
 xterm*foreground: #ffffff
 xterm*cursorColor: #ffdd44
 xterm*pointerColor: #ffee99
+xterm*jumpScroll: false
+xterm*fastScroll: true
 
 ## For coloured man-pages:
 ## From: http://bugs.gentoo.org/184604
