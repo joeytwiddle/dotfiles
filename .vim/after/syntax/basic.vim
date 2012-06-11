@@ -42,9 +42,11 @@ source $VIMRUNTIME/syntax/a65.vim
 let b:current_syntax=syntax_tmp
 unlet syntax_tmp
 
-highlight Comment ctermfg=darkgrey guifg=darkgrey
-highlight basicFunction term=none ctermfg=darkyellow guifg=darkyellow
-highlight a65Opcode term=none ctermfg=cyan gui=bold guifg=cyan
+" highlight Comment ctermfg=darkgrey guifg=darkgrey
+" highlight basicFunction term=none ctermfg=darkyellow guifg=darkyellow
+hi link basicFunction Function
+" highlight a65Opcode term=none ctermfg=cyan gui=bold guifg=cyan
+hi link a65Opcode Statement
 
 syntax clear a65Comment
 " We have most ; comment covered.  a65Comment actually mis-matches some valid
