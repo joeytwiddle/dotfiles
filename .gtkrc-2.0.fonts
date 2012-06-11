@@ -1,0 +1,15 @@
+## This file is expected by .gtkrc-2.0
+
+## This should have been included from there already:
+# include "/usr/share/themes/OrangeJuice/gtk-2.0/gtkrc"
+
+style "joeys_font"
+{
+	font_name="FreeSans 9"
+}
+widget_class "*" style "joeys_font"
+
+## The above affects many GTK apps, but only the below affect Chromium's toolbar.
+## The below also determines everything in Thunderbird!
+## Alternatives: FreeSans 9, Sans 9, Arial 9
+gtk-font-name="FreeSans 9"

@@ -1,0 +1,38 @@
+## NOTE: We do not include the theme here.
+## This file and the theme are loaded from .gtkrc-2.0 or .gtkrc
+
+## NOTE: gtk1 (xmms) does not like font_name !  I think it uses font= or fontset= (xfontsel style)
+
+style "user-font"
+{
+
+  ### Some fonts which work!
+
+  ## My system's default appears to be:
+  # font="-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
+  ## But I want a smaller font.
+
+  ## All screen fonts suck, especially at larger sizes!
+  ## I quite like Bitstream Vera and Trebuchet:
+  font="-*-bitstream vera sans-medium-r-*-*-*-80-*-*-*-*-*-*"
+  # font="-*-bitstream vera sans-medium-r-*-*-*-90-*-*-*-*-*-*"
+  # font="-*-trebuchet ms-medium-r-normal-*-*-80-*-*-*-*-*-*"
+  # font="-*-trebuchet ms-medium-r-normal-*-*-90-*-*-*-*-*-*"
+
+  ## For size 90, I recommend Nimbus:
+  # fontset="-urw-nimbus sans l-regular-r-normal-*-*-80-*-*-p-*-iso8859-2"
+  # fontset="-urw-nimbus sans l-regular-r-normal-*-*-90-*-*-p-*-iso8859-2"
+
+  ## Small but neat:
+  # font="-*-arial-medium-r-normal--*-80-*-*-*-*-*-*"
+
+  ## Some more:
+  # font="-*-arial-medium-r-normal--*-90-*-*-*-*-*-*"
+  # font="-adobe-helvetica-medium-r-normal--*-80-*-*-*-*-*-*"
+  # font="-adobe-helvetica-medium-r-normal--*-90-*-*-*-*-*-*"
+  ## Lucida does not work at 90.
+  # font="-*-lucida-medium-r-*-*-*-80*-*-*-*-*-*"
+
+}
+widget_class "*" style "user-font"
+

@@ -13,7 +13,9 @@ style "joeys_widget_font"
 	font_name="Sans 8"
 }
 
-# gtk-font-name="FreeSans 8"
+## This determines the font used for lists in Icedove/Thunderbird.
+## But also the menus ffs grrr.  None of the selections below have any affect!  Everything in Thunderbird uses this font!
+# gtk-font-name="FreeSans 9"
 gtk-font-name="Sans 8"
 
 ## font_for semi-interaction semi-reading
@@ -35,6 +37,9 @@ widget_class "*Button*"  style "joeys_reading_font"
 widget_class "*Menu*"    style "joeys_widget_font"
 widget_class "*MenuBar*" style "joeys_widget_font"
 widget_class "*Toolbar*" style "joeys_widget_font"
-# widget_class "*Frame"    style "joeys_widget_font"
-widget_class "*Frame"    style "fixed"
+widget_class "*Frame"    style "joeys_widget_font"
+
+# widget_class "*Frame"    style "fixed"
+# /home/joey/linux/.gtkrc-2.0.fonts_small:41: error: invalid string constant "fixed", expected valid string constant
+
 

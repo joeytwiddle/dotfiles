@@ -1,0 +1,6 @@
+## This file is expected by .gtkrc
+## For old apps (GTK1)
+
+include "/home/joey/linux/.gtkrc-1.0.fonts_small"
+# include "/home/joey/linux/.gtkrc-1.0.fonts_complex"
+

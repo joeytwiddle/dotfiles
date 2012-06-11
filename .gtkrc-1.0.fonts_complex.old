@@ -1,0 +1,39 @@
+style "lil-tt" 
+{
+  font="-b&h-lucidux mono-medium-r-normal-*-12-*-*-*-m-*-iso8859-1"
+}
+
+style "lil-noaa" 
+{
+  font="-adobe-times-medium-r-normal-*-14-*-*-*-p-*-iso8859-1"
+}
+
+style "lil-serif" 
+{
+  font="-urw-times-medium-r-normal-*-14-*-*-*-p-*-iso8859-1"
+}
+
+style "lil-sans" 
+{
+  font="-urw-helvetica-medium-r-normal-*-13-*-*-*-p-*-iso8859-1"
+}
+
+style "big-sans" 
+{
+  font="-urw-helvetica-medium-r-normal-*-15-*-*-*-p-*-iso8859-1"
+}
+
+style "llil-sans" 
+{
+  font="-urw-helvetica-medium-r-normal-*-10-*-*-*-p-*-iso8859-1"
+}
+
+widget_class "*" style "lil-noaa"
+widget_class "*Entry*" style "lil-serif"
+widget_class "*Label*" style "lil-sans"
+widget_class "*Button*" style "lil-sans"
+widget_class "*Menu*" style "lil-sans"
+widget_class "*MenuBar*" style "big-sans"
+widget_class "*Toolbar*" style "lil-sans"
+widget_class "*Frame" style "llil-sans"
+

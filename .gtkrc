@@ -1,0 +1,8 @@
+## For old apps (GTK1)
+
+include "/usr/share/themes/OrangeJuice/gtk/gtkrc"
+
+# include "/usr/share/themes/Raleigh/gtk/gtkrc"
+
+include "/home/joey/linux/.gtkrc.mine"
+
