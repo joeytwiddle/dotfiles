@@ -3,6 +3,8 @@
 --regex-javascript=/^[ \t]*this\.([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]*=.*$/\1/e,export/
 --regex-javascript=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*):.*$/\1/p,property/
 
+--regex-javascript=/^\<function\>[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/f,function/
+
 --langmap=javascript:+.jpp,javascript:+.uc
 --langmap=java:+.jpp,java:+.uc
 --langmap=c:+.jpp,c:+.uc
@@ -15,4 +17,11 @@
 --regex-coffee=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]+=.*[-=]>.*$/\1/f,function/
 --regex-coffee=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]+=[^->\n]*$/\1/v,variable/
 --regex-coffee=/^[ \t]*@?([a-zA-Z_$][0-9a-zA-Z_$]*):.*$/\1/p,property/
+
+--langmap=Asm:+.spp
+
+--langdef=Asm-disabled
+--langmap=Asm-disabled:+.Convoluted_Silent_Comment:No_good_doubling_context_and_macro_regexps_both_here_and_in_cwd_ctags!
+--regex-Asm-disabled=/^[^;]*\.context[ \t]+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/c,context/
+--regex-Asm-disabled=/^[^;]*\.macro[ \t]+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/m,macro/
 
