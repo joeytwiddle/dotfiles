@@ -147,6 +147,12 @@ if !exists('g:ConqueTerm_CloseOnEnd')
     let g:ConqueTerm_CloseOnEnd = 0
 endif " }}}
 
+" Joey's: Automatically close IF the conqueterm was opened in a split window
+" (or a tab - bug!) {{{
+if !exists('g:ConqueTerm_CloseOnEndIfSplit')
+    let g:ConqueTerm_CloseOnEndIfSplit = 0
+endif " }}}
+
 " Send function key presses to terminal {{{
 if !exists('g:ConqueTerm_SendFunctionKeys')
     let g:ConqueTerm_SendFunctionKeys = 0
