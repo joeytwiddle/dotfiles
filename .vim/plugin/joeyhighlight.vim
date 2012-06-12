@@ -262,9 +262,13 @@ function! Joeyhighlight()
 	highlight CursorLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
 
 	" highlight TagListFileName cterm=bold ctermbg=darkgray ctermfg=white gui=bold guibg=black guifg=white
-	hi link TagListFileName MBENormal
+	" highlight link TagListFileName MBENormal
+	" highlight TagListFileName ctermbg=blue ctermfg=cyan cterm=bold guibg=blue guifg=cyan gui=none
+	highlight TagListFileName ctermbg=cyan ctermfg=white cterm=bold guibg=cyan guifg=white gui=none
+	" highlight TagListFileName ctermbg=cyan ctermfg=black cterm=none guibg=cyan guifg=black gui=none
 	" highlight TagListTagName cterm=bold ctermfg=magenta gui=bold guifg=magenta
-	highlight TagListTagName ctermbg=magenta ctermfg=white cterm=bold guibg=magenta guifg=white gui=bold
+	" highlight TagListTagName ctermbg=magenta ctermfg=white cterm=bold guibg=magenta guifg=white gui=bold
+	highlight TagListTagName ctermbg=green ctermfg=white cterm=bold guibg=green guifg=white gui=bold
 
   if exists("g:blinking_statusline") && g:blinking_statusline>0
     " Make StatusLine light up temporarily when we switch window
