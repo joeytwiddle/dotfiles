@@ -774,6 +774,22 @@ function! conque_term#set_mappings(action) "{{{
     endif
     " }}}
 
+    " Joey's fixes {{{
+    if l:action == 'start'
+        " Ctrl-V appears to freeze the shell until Ctrl-C.  Rather than that,
+        " let's have it call Normal Ctrl-V (my toggle maximize keybind).
+        sil exe 'imap <silent> <buffer> <C-V> <Esc><C-V>a'
+        " Fix for broken <Del> by replacing it with <Right><BS> since <BS> works ok.
+        "sil exe 'imap <buffer> <Del> <Right><BS>'
+        "sil exe 'imap <silent> <buffer> <Del> <Right><Esc>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_ord(127)<CR>a'
+        sil exe 'i' . map_modifier . 'map <silent> <buffer> <Del> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write(u("\x1b[C"))<CR><C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_ord(127)<CR>'
+    else
+        " Somehow these create a new bug.  thisConquetermWasSplitOpen breaks!
+        " sil exe 'i' . map_modifier . 'map <silent> <buffer> <C-V>'
+        " sil exe 'i' . map_modifier . 'map <silent> <buffer> <Del>'
+    endif
+    " }}}
+
     " <F-> keys {{{
     if g:ConqueTerm_SendFunctionKeys
         if l:action == 'start'
@@ -1030,19 +1046,27 @@ function! conque_term#on_focus(...) " {{{
 
         " Rewrite Joey's window navigation keybinds, so they will restore the
         " previous Insert/Normal mode when using them to leave Conque window.
-        if &insertmode
-          " BUG TODO: Does not work!
-          inoremap <C-Up> <Esc><C-w>ka
-          inoremap <C-Down> <Esc><C-w>ja
-          inoremap <C-Left> <Esc><C-w>ha
-          inoremap <C-Right> <Esc><C-w>la
-          " echo "Setting insert-on-exit"
-        else
-          inoremap <C-Up> <Esc><C-w>k
-          inoremap <C-Down> <Esc><C-w>j
-          inoremap <C-Left> <Esc><C-w>h
-          inoremap <C-Right> <Esc><C-w>l
-        endif
+        " DISABLED because this can now be handled by insertModeWhenEntered.
+        " if &insertmode
+          " " BUG TODO: Does not work!
+          " inoremap <C-Up> <Esc><C-w>ka
+          " inoremap <C-Down> <Esc><C-w>ja
+          " inoremap <C-Left> <Esc><C-w>ha
+          " inoremap <C-Right> <Esc><C-w>la
+          " " echo "Setting insert-on-exit"
+        " else
+          " inoremap <C-Up> <Esc><C-w>k
+          " inoremap <C-Down> <Esc><C-w>j
+          " inoremap <C-Left> <Esc><C-w>h
+          " inoremap <C-Right> <Esc><C-w>l
+        " endif
+        " But Joey actually disabled his main bind for these keys in insert
+        " mode.  We only do them in Conque because it forces user into insert
+        " mode.
+        imap <silent> <buffer> <C-Up> <Esc><C-w>k
+        imap <silent> <buffer> <C-Down> <Esc><C-w>j
+        imap <silent> <buffer> <C-Left> <Esc><C-w>h
+        imap <silent> <buffer> <C-Right> <Esc><C-w>l
 
         startinsert!
     endif
