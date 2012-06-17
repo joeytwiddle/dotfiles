@@ -1,5 +1,25 @@
-nmap <silent> [[ :TlistOpen<Enter><Up><Enter>
-nmap <silent> ]] :TlistOpen<Enter><Down><Enter>
+"" Joey's:
+"" Switch to taglist, move to next/previous line, and select tag there.
+"" Here we are basically implementing Tlist_Jump_To_NextTag/PrevTag.
+"nmap <silent> [[ :TlistOpen<Enter><Up><Enter>
+"nmap <silent> ]] :TlistOpen<Enter><Down><Enter>
+"" Search for next/previous tag line (by indent):
+" nmap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter>W<Enter>
+" nmap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter>W<Enter>
+"" Better to stay in 1st column, so taglist doesn't scroll horizontally.
+nmap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter><Enter>
+nmap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter><Enter>
+"" It is faster to call directly.
+" nnoremap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter>:call <SID>Tlist_Window_Jump_To_Tag('useopen')<CR>
+" nnoremap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter>:call <SID>Tlist_Window_Jump_To_Tag('useopen')<CR>
+"" BUG: Why are these sometimes not going to the right place?!  It's working
+"" in Java and asm, but not on .vim files, where it jumps straight to the first function.
+
+"" TODO: I think I may have made TL update rather to keenly, it destroys any
+"" folds I folded in the taglist when it refreshes, even if nothing has
+"" changed!  REVIEW: Look for my bad changes and try removing them!
+"" I have now accepted this loss.  Now I like just one file showing (clarity)
+"" and the rest folded (speed on recovery).
 
 " BUGS TODO:
 " My new wincmd p commands are firing off autocmds in various other plugins.
@@ -86,8 +106,8 @@ if !exists('loaded_taglist')
     " The taglist plugin requires the built-in Vim system() function. If this
     " function is not available, then don't load the plugin.
     if !exists('*system')
-        " echomsg 'Taglist: Vim system() built-in function is not available. ' .
-        "             \ 'Plugin is not loaded.'
+        echomsg 'Taglist: Vim system() built-in function is not available. ' .
+                    \ 'Plugin is not loaded.'
         let loaded_taglist = 'no'
         let &cpo = s:cpo_save
         finish
@@ -109,8 +129,8 @@ if !exists('loaded_taglist')
         elseif executable('tags')
             let Tlist_Ctags_Cmd = 'tags'
         else
-            " echomsg 'Taglist: Exuberant ctags (http://ctags.sf.net) ' .
-            "             \ 'not found in PATH. Plugin is not loaded.'
+            echomsg 'Taglist: Exuberant ctags (http://ctags.sf.net) ' .
+                        \ 'not found in PATH. Plugin is not loaded.'
             " Skip loading the plugin
             let loaded_taglist = 'no'
             let &cpo = s:cpo_save
@@ -1703,8 +1723,8 @@ function! s:Tlist_Window_Init()
                     \ !g:Tlist_Process_File_Always &&
                     \ (!has('gui_running') || !g:Tlist_Show_Menu)
             " Auto refresh the taglist window
-            "autocmd BufEnter * call s:Tlist_Refresh()
-            autocmd CursorHold * call s:Tlist_Refresh()
+            autocmd BufEnter * call s:Tlist_Refresh()
+            "autocmd CursorHold * call s:Tlist_Refresh()
         endif
 
         if !g:Tlist_Use_Horiz_Window
@@ -2832,7 +2852,8 @@ function! s:Tlist_Refresh()
                 \ s:Tlist_Skip_Refresh . ', ' . bufname('%') . ')')
     " If we are entering the buffer from one of the taglist functions, then
     " no need to refresh the taglist window again.
-    if s:Tlist_Skip_Refresh
+    " Joey made TlistLock work here too, by checking Tlist_Auto_Update.
+    if s:Tlist_Skip_Refresh || g:Tlist_Auto_Update == 0
         " We still need to update the taglist menu
         if g:Tlist_Show_Menu
             call s:Tlist_Menu_Update_File(0)
@@ -2857,6 +2878,7 @@ function! s:Tlist_Refresh()
 
     " If the file doesn't support tag listing, skip it
     if s:Tlist_Skip_File(filename, ftype)
+        " call s:Tlist_Log_Msg('Tlist_Refresh skipping because Tlist_Skip_File')
         return
     endif
 
@@ -2873,11 +2895,13 @@ function! s:Tlist_Refresh()
         " Check whether this file is removed based on user request
         " If it is, then don't display the tags for this file
         if s:Tlist_User_Removed_File(filename)
+            " call s:Tlist_Log_Msg('Tlist_Refresh skipping because Tlist_User_Removed_File')
             return
         endif
 
         " If the taglist should not be auto updated, then return
         if !g:Tlist_Auto_Update
+            " call s:Tlist_Log_Msg('Tlist_Refresh skipping because Tlist_Auto_Update')
             return
         endif
     endif
