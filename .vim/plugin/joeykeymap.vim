@@ -46,12 +46,20 @@ nmap <C-Left> <C-W>h
 nmap <C-Right> <C-W>l
 
 "" I want them to work in insert mode also (especially with ConqueTerm)
-imap <C-Up> <Esc><C-W>ka
-imap <C-Down> <Esc><C-W>ja
-imap <C-Left> <Esc><C-W>ha
-imap <C-Right> <Esc><C-W>la
+"imap <C-Up> <Esc><C-W>ka
+"imap <C-Down> <Esc><C-W>ja
+"imap <C-Left> <Esc><C-W>ha
+"imap <C-Right> <Esc><C-W>la
 "" Except in ConqueTerm I don't neccessarily want to return to Insert mode,
 "" if I was not in Insert mode before I entered ConqueTerm.
+" TODO: This may be interfering with navigation_enhancer and/or Conque's
+" restore-previous-insert-or-normal-mode.
+" (When I go up from ConqueTerm in insert mode, I get left in TreeExplorer,
+" not editor, or vice-versa, i.e. navigation_enhancer was being ignored.),
+" possibly because one of :startinsert or 'a' fails because both conque and
+" this bind do that!  Instead consider calling a function to perform the above
+" without erroring.
+" Just disabled them for now.  I don't think I actually use them!
 
 "" For Eterm.  Caused no problems for xterm the last time I tried it.
 nmap Oa <C-W>k
