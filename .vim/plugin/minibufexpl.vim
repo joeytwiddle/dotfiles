@@ -1103,6 +1103,7 @@ function! <SID>ResizeWindow()
   endif
 
   let l:width  = winwidth('.')
+  let l:width  = l:width - strlen(&showbreak)
 
   " Horizontal Resize
   if g:miniBufExplVSplit == 0
@@ -1737,27 +1738,33 @@ function! <SID>MBESelectBuffer()
         setlocal nowrap
       endif
     elseif word == "Fold"
+      "" Cycle through different folding modes
+      "" But before that, get out of MBE and back to user window!
+      wincmd p
+      " Consider: Instead of g:folding, perhaps b:folding *after* wincmd p?
       if !exists('g:folding') || g:folding == 0
         let g:folding = 1
-        wincmd p
         set fdc=4
         set foldenable
         set foldmethod=indent
         set foldlevel=2
       elseif g:folding == 1
         let g:folding = 2
-        wincmd p
         set foldmethod=syntax
-        :call Joeyfolding() " I have some extra rules here
+        if exists("*Joeyfolding")
+          :call Joeyfolding() " I have some extra rules here
+        endif
       elseif g:folding == 2
         let g:folding = 3
-        wincmd p
         set foldmethod=marker   " enable any existing marker folds (argh we need a pause!)
         " set foldmethod=manual   " but then switch to manual mode
         set fdc=2
+      elseif g:folding == 3 && exists(":FoldBlocks")
+        let g:folding = 4
+        " Will set foldmethod=manual
+        :FoldBlocks
       else
         let g:folding = 0
-        wincmd p
         set nofoldenable
         set fdc=0
       endif
