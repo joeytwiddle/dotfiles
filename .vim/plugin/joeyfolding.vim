@@ -118,7 +118,8 @@ endif
 	:normal zE
 
 	:set foldmethod=syntax
-	:set fdc=5
+	" This may be my favourite, but not on every window we open!
+	" :set fdc=5
 	" :set fdc=0
 
 	:set foldlevel=2
