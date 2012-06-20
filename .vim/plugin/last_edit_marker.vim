@@ -10,6 +10,10 @@ augroup LastEditMarker
   autocmd InsertLeave * normal mZ
 augroup END
 
+" ISSUES: not all edits require Insert mode.  e.g. undo or 4r0
+" And leaving Insert mode is not always an edit (e.g. Insert mode on a
+" conqueterm, or i<Esc> aborted edit).
+
 "" Alternative attempt to activate using keybind:
 " imap <Esc> <Esc>mZ
 " But triggering on <Esc> will not detect all edits, for example those using
