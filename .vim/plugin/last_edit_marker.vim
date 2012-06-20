@@ -1,19 +1,22 @@
 " Automatically adds a global mark whenever you leave Insert mode, so you can
-" easily return to the previous change, even if you are on a different buffer!
+" easily return to text you were last working on, even if you have moved to a
+" different buffer!  I tend to need this after I have been navigating around
+" files to do some research.  This saves us from hitting Ctrl-O repeatedly!
 
-" augroup LastEditMarker
-  " autocmd!
-  " autocmd InsertEnter * call s:SetLastEditMarker()
-" augroup END
+nmap <C-y> g'Z
 
-" function! s:SetLastEditMarker()
-  " normal "mL"
-" endfunction
+augroup LastEditMarker
+  autocmd!
+  autocmd InsertLeave * call s:SetLastEditMarker()
+augroup END
 
-imap <Esc> <Esc>mL
+function! s:SetLastEditMarker()
+  normal mZ
+endfunction
 
-nmap <C-y> g'L
-
-" NOTE: Triggering on <Esc> will not detect all edits, for example those using
+"" Alternative attempt to activate using keybind:
+" imap <Esc> <Esc>mZ
+" But triggering on <Esc> will not detect all edits, for example those using
 " ~ or r or d!
+" And also it manages to break lots of other things!
 
