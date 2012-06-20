@@ -7,12 +7,8 @@ nmap <C-y> g'Z
 
 augroup LastEditMarker
   autocmd!
-  autocmd InsertLeave * call s:SetLastEditMarker()
+  autocmd InsertLeave * normal mZ
 augroup END
-
-function! s:SetLastEditMarker()
-  normal mZ
-endfunction
 
 "" Alternative attempt to activate using keybind:
 " imap <Esc> <Esc>mZ
