@@ -13,7 +13,8 @@
 " Solution: The best approach appears to be, as soon as your layout breaks in
 " some way, fix it immediately with 20<C-W>+ or whatever, to minimize the
 " damage (before the new broken values get recorded).  This is a small work
-" overhead for the user, we he exchanges for the good features of this script!
+" overhead for the user, which he must exchange for the beneficial features of
+" this script!
 
 autocmd WinLeave * call <SID>Leaving()
 autocmd WinEnter * call <SID>Entering()
