@@ -11,9 +11,9 @@
 " setlocal listchars=trail:\ 
 " setlocal listchars=trail:\ ,tab:>-
 
-" This works, but I think it's a global var, not per-window, so setlocal is
-" no better than set.
-setlocal listchars+=trail:\ 
+" listchars is a global var, so setlocal is the same as set
+" TODO: set and unset this on BufEnter/BufLeave/WinEnter/WinLeave?
+set listchars+=trail:\ 
 
 " Override Joey's defaults, and do not return to insert mode when leaving
 " Conque from insert mode.
