@@ -7,11 +7,11 @@
 " nmap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter>W<Enter>
 " nmap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter>W<Enter>
 "" Better to stay in 1st column, so taglist doesn't scroll horizontally.
-nmap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter><Enter>
-nmap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter><Enter>
+" nmap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter><Enter>
+" nmap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter><Enter>
 "" It is faster to call directly.
-" nnoremap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter>:call <SID>Tlist_Window_Jump_To_Tag('useopen')<CR>
-" nnoremap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter>:call <SID>Tlist_Window_Jump_To_Tag('useopen')<CR>
+nnoremap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter>:call <SID>Tlist_Window_Jump_To_Tag('useopen')<CR>
+nnoremap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter>:call <SID>Tlist_Window_Jump_To_Tag('useopen')<CR>
 "" BUG: Why are these sometimes not going to the right place?!  It's working
 "" in Java and asm, but not on .vim files, where it jumps straight to the first function.
 
@@ -1723,8 +1723,20 @@ function! s:Tlist_Window_Init()
                     \ !g:Tlist_Process_File_Always &&
                     \ (!has('gui_running') || !g:Tlist_Show_Menu)
             " Auto refresh the taglist window
-            autocmd BufEnter * call s:Tlist_Refresh()
-            "autocmd CursorHold * call s:Tlist_Refresh()
+            "autocmd BufEnter * call s:Tlist_Refresh()
+            autocmd CursorHold * call s:Tlist_Refresh()
+            " But doing a delayed refresh can draw crap on the edit area
+            " shortly after a :w
+            " Does BufEnter somehow fix that by doing the refresh immediately with
+            " the :w ?
+            " Joey:
+            " On BufEnter it can cause slowdown when moving through windows
+            " with Ctrl-W.  But on CursorHold it runs very often.  If it is
+            " lagging CursorHold we should check it is caching/only updating
+            " when needed.
+            " I want to keep using CursorHold.  This is also what picks up
+            " that an update should be done after write, to avoid lags by
+            " waiting for user idle.
         endif
 
         if !g:Tlist_Use_Horiz_Window
