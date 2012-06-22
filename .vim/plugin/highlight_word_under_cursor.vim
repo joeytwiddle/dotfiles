@@ -9,6 +9,10 @@
 " the text, and that syntax rule does not allow sub-parsing (contains).
 " NOTE: If we want to work independently of updatetime, we could use :sleep
 
+" 20120618 - Switched to using match instead of a syntax rule, since I can't
+"            see a way to do containedin=*.  This stops the temporary rule
+"            from breaking the syntax parser and slowing vim down.
+
 " To disable the script, set g:hiword=0 in your .vimrc, or at runtime
 if exists('g:hiword') && g:hiword == 0
   finish
@@ -45,8 +49,9 @@ function! HighlightWord()
 
     " next line is a dummy to prevent the clear from complaining on the first run
     " execute 'syntax match HLCurrentWord "'.pattern.'"'
-    execute 'silent! syntax clear HLCurrentWord'
-    execute 'silent! syntax match HLCurrentWord "'.pattern.'"'
+    " execute 'silent! syntax clear HLCurrentWord'
+    " execute 'silent! syntax match HLCurrentWord "'.pattern.'"'
+    execute "match HLCurrentWord /".pattern."/"
    "" Freezes vim: execute "sleep 5| call UnHighlightWord()"
   endif
 endfunction
@@ -54,7 +59,8 @@ endfunction
 function! UnHighlightWord()
   " set nocul
   " execute "syntax match HLCurrentWord +blah+"
-  execute "silent! syntax clear HLCurrentWord"
+  " execute "silent! syntax clear HLCurrentWord"
+  execute "match"
 endfunction
 
 function! HW_Cursor_Moved()
