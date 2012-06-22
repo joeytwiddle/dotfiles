@@ -778,7 +778,11 @@ function! <SID>StartExplorer(sticky, delBufNum)
       syn match MBEChanged            '|* [^|]*-*+ |*'
       syn match MBEVisibleNormal      '|* [^|]*- |*'
       syn match MBEVisibleChanged     '|* [^|]*\*+ |*'
-      syn match MBEVisibleFocused     '|* [^|]*\* |*'
+      syn match MBEVisibleFocused     '|* [^|]*\* |'
+      " BTW I just replaced all |* with |
+      " Forcing consumption of the | may help capture filenames containing '-'
+      " But now for a better look, I am putting * back on all the less-vital
+      " window types, i.e.  everything except MBEVisibleFocused.
 
       " syn match MBEVisibleNormal      '|* [^-*+|]*\- *|*'
       " Some filthy regexp which survives -MiniBufExplorer--
@@ -796,7 +800,8 @@ function! <SID>StartExplorer(sticky, delBufNum)
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=white ctermfg=green guibg=white guifg=green
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
       " TODO: in gvim (at least under gentoo) the gui shows the []s in [File] with less-bold-green bg.
-      highlight MBEButton         term=reverse,bold cterm=none gui=none ctermbg=cyan ctermfg=darkblue guibg=cyan guifg=blue
+      " highlight MBEButton         term=reverse,bold cterm=none gui=none ctermbg=cyan ctermfg=white guibg=cyan guifg=white
+      highlight MBEButton         term=reverse,bold cterm=none gui=none ctermbg=green ctermfg=white guibg=green guifg=white
       " Blue on yellow did look quite menu-like.
       highlight MBEButtonRed      term=reverse,bold cterm=bold gui=bold ctermbg=red ctermfg=white guibg=red guifg=white
       " highlight MBENormal         ctermfg=white ctermbg=blue guibg=blue
@@ -806,7 +811,8 @@ function! <SID>StartExplorer(sticky, delBufNum)
       " highlight MBEVisibleFocused term=bold,reverse cterm=bold gui=bold ctermbg=white ctermfg=blue guibg=white guifg=blue
       " highlight MBEVisibleNormal  term=bold,reverse cterm=none gui=none ctermbg=grey ctermfg=black guibg=grey guifg=darkblue
       hi link MBEVisibleFocused StatusLine
-      hi link MBEVisibleNormal StatusLineNC
+      " hi link MBEVisibleNormal StatusLineNC
+      hi MBEVisibleNormal term=reverse ctermbg=cyan ctermfg=blue cterm=none guibg=cyan guifg=blue gui=none
       " hi StatusLineNC ctermfg=blue
       " highlight MBEVisibleChanged term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=black guibg=yellow guifg=black
       " There seems no point making MBEVisibleChanged differ from
@@ -1102,8 +1108,11 @@ function! <SID>ResizeWindow()
     return
   endif
 
-  let l:width  = winwidth('.')
-  let l:width  = l:width - strlen(&showbreak)
+  let l:subtr = 0
+  if &wrap
+    let l:subtr = strlen(&showbreak)
+  endif
+  let l:width  = winwidth('.') - l:subtr
 
   " Horizontal Resize
   if g:miniBufExplVSplit == 0
@@ -1114,9 +1123,10 @@ function! <SID>ResizeWindow()
       if (l:width == 0)
         let l:height = winheight('.')
       else
-        let l:height = (l:length / l:width) 
+        " -1*showbreak because there is no indent on first line!
+        let l:height = (l:length - l:subtr) / l:width
         " handle truncation from div
-        if (l:length % l:width) != 0
+        if ((l:length - l:subtr) % l:width) != 0
           let l:height = l:height + 1
         endif
       endif
@@ -1341,8 +1351,13 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
   ""   View:Wrap Lines,Tabs
   ""   Help:About
   "" Right-align the close button:
+  let l:subtr = 0
+  if &wrap
+    let l:subtr = strlen(&showbreak)
+  endif
   let l:width = winwidth(".")
-  let l:remainder = strlen(l:line) % l:width
+  let l:width  = l:width - l:subtr
+  let l:remainder = (strlen(l:line) - l:subtr) % l:width   " -subtr because there was no indent on first line!
   let l:needed = l:width - 3 - l:remainder
   let l:gap = repeat(" ", l:needed)
   let l:line = l:line . l:gap . "[X]"
