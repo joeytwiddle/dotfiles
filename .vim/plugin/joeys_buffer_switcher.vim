@@ -1,3 +1,9 @@
+" joeys_buffer_switcher: Ctrl-B then type/autocomplete the buffer you want to
+" switch to.  If the buffer you wanted is not open, allows autocompletion to a
+" filename to open.
+
+" CONSIDER: If the user enters a number, open that numbered buffer?
+
 " BUGS TODO:
 " If you press Esc or Ctrl+C it should not proceed to the BufExplorer fallback!
 "   The try catch below didn't fix that.
@@ -31,9 +37,10 @@ function! JoeysBufferSwitch()
   "endif
 
   if searchStr == ''
-    " User couldn't find the file with JBS?  Open a file explorer...
-    exec ":e ."
+    " User couldn't find the file with JBS?  Open a file explorer (with netrw)...
+    " exec ":e ."
     return
+    " Or open a buffer explorer...
     " if exists(":BufExplorer")
       " exec ":BufExplorer"
       " return
@@ -124,11 +131,46 @@ function! JoeysBufferSwitch()
   for wn in foundWindows
     echo "  <".wn."> ".bufname(winbufnr(wn))
   endfor
-  echo " "
   echo "".len(foundBuffers)." matching buffers"
   for bn in foundBuffers
     echo "  (".bn.") ".bufname(bn)
   endfor
 
 endfunction
+
+
+
+" An alternative from VimTips Wiki.
+
+function! BufSel(pattern)
+  let bufcount = bufnr("$")
+  let currbufnr = 1
+  let nummatches = 0
+  let firstmatchingbufnr = 0
+  while currbufnr <= bufcount
+    if(bufexists(currbufnr))
+      let currbufname = bufname(currbufnr)
+      if(match(currbufname, a:pattern) > -1)
+        echo currbufnr . ": ". bufname(currbufnr)
+        let nummatches += 1
+        let firstmatchingbufnr = currbufnr
+      endif
+    endif
+    let currbufnr = currbufnr + 1
+  endwhile
+  if(nummatches == 1)
+    execute ":buffer ". firstmatchingbufnr
+  elseif(nummatches > 1)
+    let desiredbufnr = input("Enter buffer number: ")
+    if(strlen(desiredbufnr) != 0)
+      execute ":buffer ". desiredbufnr
+    endif
+  else
+    echo "No matching buffers"
+  endif
+endfunction
+
+" I could not find a way to add -complete=file as well as buffer.
+command! -complete=buffer -nargs=1 Bs :call BufSel("<args>")
+" nnoremap <C-B> :Bs 
 
