@@ -53,7 +53,7 @@ function! Joeyhighlight()
 	highlight Search ctermbg=blue ctermfg=green term=bold guibg=#005544 guifg=#aaffaa gui=bold
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White guifg=DarkMagenta guibg=White
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#553355
-	highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#445555
+	highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#660066 guifg=white
 	"highlight Comment ctermfg=Magenta guifg=#80a080 " green-grey
 	"highlight Comment ctermfg=DarkMagenta guifg=LightMagenta
 	"highlight Comment ctermfg=DarkMagenta guifg=#d080d0
@@ -234,18 +234,20 @@ function! Joeyhighlight()
 	" hi StatusLineNC ctermbg=black ctermfg=blue
 	"" I want my VertSplit to be the same as StatusLineNC but without italics or underline!
 	highlight VertSplit term=reverse cterm=none ctermbg=grey ctermfg=black gui=none guifg=#222222 guibg=#bbbbbb
+	" Note: In xterm if you want bold black on white, you can only achieve it with reverse!  Without reverse you can only get bold dark grey or regular black on white.
 
 	" Fold colours
 	highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000080 guifg=White
 	"highlight foldColumn ctermbg=Grey ctermfg=Blue cterm=none gui=bold guifg=Green guibg=#000060
 	highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#000080
 
-	"" Green
-	"hi Cursor guibg=#44ff44
-	"hi Cursor guibg=#66ff66
-	"" Peach
-	"hi Cursor guibg=#ffaa44
-	hi Cursor guibg=#ffeecc
+	"" green
+	"hi cursor guibg=#44ff44
+	"hi cursor guibg=#66ff66
+	"" peach
+	"hi cursor guibg=#ffaa44
+	"hi cursor guibg=#ffeecc
+	hi cursor guibg=#ffcc44
 
 	" hi MatchParen term=reverse ctermbg=red guibg=red
 	" hi MatchParen term=reverse cterm=reverse ctermbg=black ctermfg=magenta guibg=black guifg=magenta
@@ -264,67 +266,72 @@ function! Joeyhighlight()
 	" highlight TagListFileName cterm=bold ctermbg=darkgray ctermfg=white gui=bold guibg=black guifg=white
 	" highlight link TagListFileName MBENormal
 	" highlight TagListFileName ctermbg=blue ctermfg=cyan cterm=bold guibg=blue guifg=cyan gui=none
-	highlight TagListFileName ctermbg=cyan ctermfg=white cterm=bold guibg=cyan guifg=white gui=none
+	highlight TagListFileName ctermbg=cyan ctermfg=white cterm=bold guibg=#00bbbb guifg=white gui=none
 	" highlight TagListFileName ctermbg=cyan ctermfg=black cterm=none guibg=cyan guifg=black gui=none
 	" highlight TagListTagName cterm=bold ctermfg=magenta gui=bold guifg=magenta
 	" highlight TagListTagName ctermbg=magenta ctermfg=white cterm=bold guibg=magenta guifg=white gui=bold
-	highlight TagListTagName ctermbg=green ctermfg=white cterm=bold guibg=green guifg=white gui=bold
+	highlight TagListTagName term=reverse ctermbg=green ctermfg=white cterm=bold guibg=#00bb00 guifg=white gui=none
 
-  if exists("g:blinking_statusline") && g:blinking_statusline>0
-    " Make StatusLine light up temporarily when we switch window
-    augroup LightUpStatusLine
-      autocmd!
-      " autocmd WinEnter * hi StatusLine ctermbg=green ctermfg=white
-      " autocmd WinEnter * hi StatusLine ctermbg=white ctermfg=red
-      "" We must use reverse to get thick black on white:
-      " autocmd CursorHold * hi StatusLine ctermbg=black ctermfg=white cterm=reverse,bold
-      " autocmd WinEnter * hi StatusLine ctermbg=white ctermfg=green
-      " autocmd WinEnter   * hi StatusLine cterm=none ctermbg=green ctermfg=black
-      "" Green bar for non-reversed cterm:
-      "autocmd WinEnter   * hi StatusLine ctermbg=green ctermfg=darkblue gui=none guibg=green guifg=blue
-      "autocmd BufEnter   * hi StatusLine ctermbg=green ctermfg=darkblue gui=none guibg=green guifg=blue
-      "autocmd CursorHold * hi StatusLine ctermbg=white ctermfg=blue     gui=none guibg=white guifg=blue
-      "" Green and blue bar for reversed cterm:
-      "autocmd WinEnter   * hi StatusLine ctermfg=green ctermbg=darkblue gui=none guifg=green guibg=blue
-      "autocmd BufEnter   * hi StatusLine ctermfg=green ctermbg=darkblue gui=none guifg=green guibg=blue
-      "autocmd CursorHold * hi StatusLine ctermfg=white ctermbg=blue     gui=none guifg=white guibg=blue
-      "" Green and white bar for reversed cterm:  (can't get bright white grr!)
-      "autocmd WinEnter   * hi StatusLine ctermfg=green ctermbg=white gui=none guifg=green guibg=white
-      "autocmd BufEnter   * hi StatusLine ctermfg=green ctermbg=white gui=none guifg=green guibg=white
-      "autocmd CursorHold * hi StatusLine ctermfg=white ctermbg=blue     gui=none guifg=white guibg=blue
-      "" Green and bright-white bar for non-reversed cterm:
-      "autocmd WinEnter   * hi StatusLine cterm=bold ctermfg=white ctermbg=green gui=none guifg=green guibg=white
-      "autocmd BufEnter   * hi StatusLine cterm=bold ctermfg=white ctermbg=green gui=none guifg=green guibg=white
-      "autocmd CursorHold * hi StatusLine cterm=bold ctermfg=blue ctermbg=white     gui=none guifg=white guibg=blue
-      "" Yellow bar for reversed cterm:
-      autocmd WinEnter   * hi StatusLine ctermfg=yellow ctermbg=darkblue gui=none guibg=yellow guifg=blue
-      autocmd BufEnter   * hi StatusLine ctermfg=yellow ctermbg=darkblue gui=none guibg=yellow guifg=blue
-      autocmd CursorHold * hi StatusLine ctermfg=white  ctermbg=blue     gui=none guibg=white  guifg=blue
-    augroup END
-    set updatetime=600
-  endif
+	if exists("g:blinking_statusline") && g:blinking_statusline>0
+		" Make StatusLine light up temporarily when we switch window
+		augroup LightUpStatusLine
+			autocmd!
+			" autocmd WinEnter * hi StatusLine ctermbg=green ctermfg=white
+			" autocmd WinEnter * hi StatusLine ctermbg=white ctermfg=red
+			"" We must use reverse to get thick black on white:
+			" autocmd CursorHold * hi StatusLine ctermbg=black ctermfg=white cterm=reverse,bold
+			" autocmd WinEnter * hi StatusLine ctermbg=white ctermfg=green
+			" autocmd WinEnter   * hi StatusLine cterm=none ctermbg=green ctermfg=black
+			"" Green bar for non-reversed cterm:
+			"autocmd WinEnter   * hi StatusLine ctermbg=green ctermfg=darkblue gui=none guibg=green guifg=blue
+			"autocmd BufEnter   * hi StatusLine ctermbg=green ctermfg=darkblue gui=none guibg=green guifg=blue
+			"autocmd CursorHold * hi StatusLine ctermbg=white ctermfg=blue     gui=none guibg=white guifg=blue
+			"" Green and blue bar for reversed cterm:
+			"autocmd WinEnter   * hi StatusLine ctermfg=green ctermbg=darkblue gui=none guifg=green guibg=blue
+			"autocmd BufEnter   * hi StatusLine ctermfg=green ctermbg=darkblue gui=none guifg=green guibg=blue
+			"autocmd CursorHold * hi StatusLine ctermfg=white ctermbg=blue     gui=none guifg=white guibg=blue
+			"" Green and white bar for reversed cterm:  (can't get bright white grr!)
+			"autocmd WinEnter   * hi StatusLine ctermfg=green ctermbg=white gui=none guifg=green guibg=white
+			"autocmd BufEnter   * hi StatusLine ctermfg=green ctermbg=white gui=none guifg=green guibg=white
+			"autocmd CursorHold * hi StatusLine ctermfg=white ctermbg=blue     gui=none guifg=white guibg=blue
+			"" Green and bright-white bar for non-reversed cterm:
+			"autocmd WinEnter   * hi StatusLine cterm=bold ctermfg=white ctermbg=green gui=none guifg=green guibg=white
+			"autocmd BufEnter   * hi StatusLine cterm=bold ctermfg=white ctermbg=green gui=none guifg=green guibg=white
+			"autocmd CursorHold * hi StatusLine cterm=bold ctermfg=blue ctermbg=white     gui=none guifg=white guibg=blue
+			"" Yellow bar for reversed cterm:
+			" autocmd WinEnter   * hi StatusLine ctermfg=yellow ctermbg=darkblue gui=none guibg=yellow guifg=blue
+			" autocmd BufEnter   * hi StatusLine ctermfg=yellow ctermbg=darkblue gui=none guibg=yellow guifg=blue
+			" autocmd CursorHold * hi StatusLine ctermfg=white  ctermbg=blue     gui=none guibg=white  guifg=blue
+			hi StatusLineLit   ctermfg=yellow ctermbg=darkblue cterm=reverse,bold gui=none guibg=yellow guifg=blue
+			hi StatusLineUnlit ctermfg=white  ctermbg=blue     cterm=reverse,bold gui=none guibg=white  guifg=blue
+			autocmd WinEnter   * hi clear StatusLine | hi link StatusLine StatusLineLit
+			autocmd BufEnter   * hi clear StatusLine | hi link StatusLine StatusLineLit
+			autocmd CursorHold * hi clear StatusLine | hi link StatusLine StatusLineUnlit
+		augroup END
+		set updatetime=600
+	endif
 
 
 
-  "" Colors for file/folder explore, to match jsh dark:
+	"" Colors for file/folder explore, to match jsh dark:
 
-  " VTreeExplorer (vtreeexplorer.vim, :VSTreeExplore)
-  hi Directory ctermfg=green cterm=none guifg=green gui=none
-  hi TreeLnk ctermfg=green cterm=bold guifg=green gui=bold
+	" VTreeExplorer (vtreeexplorer.vim, :VSTreeExplore)
+	hi Directory ctermfg=green cterm=none guifg=green gui=none
+	hi TreeLnk ctermfg=green cterm=bold guifg=green gui=bold
 
-  " NERD Tree (NERD_tree.vim, :NERDTree)
-  hi link treeDirSlash Directory
-  hi link treePart Normal
-  hi link treePartFile Normal
-  hi link treeOpenable Normal
-  hi link treeClosable Normal
-  hi link treeLink TreeLnk
-  hi treeExecFile ctermfg=red cterm=bold guifg=red gui=bold
+	" NERD Tree (NERD_tree.vim, :NERDTree)
+	hi link treeDirSlash Directory
+	hi link treePart Normal
+	hi link treePartFile Normal
+	hi link treeOpenable Normal
+	hi link treeClosable Normal
+	hi link treeLink TreeLnk
+	hi treeExecFile ctermfg=red cterm=bold guifg=red gui=bold
 
-  " netrw (bundled netrwPlugin.vim, :vert split +:Explore)
-  hi link netrwSymLink TreeLnk
-  hi link netrwTreeBar treePart
-  hi link netrwClassify treeDirSlash
+	" netrw (bundled netrwPlugin.vim, :vert split +:Explore)
+	hi link netrwSymLink TreeLnk
+	hi link netrwTreeBar treePart
+	hi link netrwClassify treeDirSlash
 
 
 
