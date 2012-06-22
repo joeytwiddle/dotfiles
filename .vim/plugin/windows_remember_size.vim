@@ -1,5 +1,19 @@
-" New version: tries to automatically keep up without whatever layout changes
-" you make, by storing an unfocused and focused size for each window.
+" == New version: tries to automatically keep up without whatever layout changes
+" you make, by storing an unfocused and focused size for each window. ==
+"
+" Explanation: Whenever you leave a window, it remembers what size it was, and
+" whenever you enter a window, it remembers what size it was before entering.
+" Thus it records "focused" and "unfocused" sizes for each window, and it will
+" try to grow/shrink windows on entering/leaving, to match the recorded value.
+"
+" Warning: This system is not perfect, specifically when opening a new window
+" (changing the layout) it has no strategy and will often shrink the new
+" window when it is unfocused.
+"
+" Solution: The best approach appears to be, as soon as your layout breaks in
+" some way, fix it immediately with 20<C-W>+ or whatever, to minimize the
+" damage (before the new broken values get recorded).  This is a small work
+" overhead for the user, we he exchanges for the good features of this script!
 
 autocmd WinLeave * call <SID>Leaving()
 autocmd WinEnter * call <SID>Entering()
@@ -60,9 +74,14 @@ nnoremap <silent> <C-kMultiply> <C-W>>
 
 
 
-"" Old version: only stores when use changes size with common mapping.
-
 finish
+
+"" == Old version: only stores when use changes size with common mapping. ==
+
+" Posterity: This version went through so many refactors, it almost visited
+" all possible approaches!  See hwi.ath.cx CVS for those alternative
+" strategies/attempts.  But note this final version was the one I thought
+" worked best.
 
 " When you set the size of a window (presently using keymaps) it remembers its
 " size, and restores to that size the next time you enter it.
