@@ -576,6 +576,8 @@ function! conque_term#set_buffer_settings(command, vim_startup_commands) "{{{
     setlocal foldcolumn=0      " reasonable left margin
     setlocal nowrap            " default to no wrap (esp with MySQL)
     setlocal noswapfile        " don't bother creating a .swp file
+    " Joey TODO: scrolloff is a global, we may need to set and restore these
+    "            when joining/leaving Conque window...
     setlocal scrolloff=0       " don't use buffer lines. it makes the 'clear' command not work as expected
     setlocal sidescrolloff=0   " don't use buffer lines. it makes the 'clear' command not work as expected
     setlocal sidescroll=1      " don't use buffer lines. it makes the 'clear' command not work as expected
@@ -1040,8 +1042,8 @@ function! conque_term#on_focus(...) " {{{
 
     " if configured, go into insert mode
     if g:ConqueTerm_InsertOnEnter == 1
-        " echo "Storing insert = " . &insertmode
-        " BUG TODO: Is &insertmode really what you think it it?
+        " NOTE: &insertmode is not what you think it is!
+        " Use mode() to find out whether you are in Insert/Normal/Replace/...
         let s:insertModeWhenEntered = mode()
 
         " Rewrite Joey's window navigation keybinds, so they will restore the
@@ -1531,8 +1533,11 @@ function! s:term_obj.close() dict " {{{
     try
         if self.is_buffer
             call conque_term#set_mappings('stop')
-            " Joey checks b:thisConquetermWasSplitOpen
+            " Joey added the two extra checks
             if (exists('g:ConqueTerm_CloseOnEnd') && g:ConqueTerm_CloseOnEnd) || (exists('g:ConqueTerm_CloseOnEndIfSplit') && g:ConqueTerm_CloseOnEndIfSplit && exists('b:thisConquetermWasSplitOpen') && b:thisConquetermWasSplitOpen)
+              " NOT WORKING: || (exists('g:ConqueTerm_CloseOnSuccess') && g:ConqueTerm_CloseOnSuccess && g:ConqueTerm_Terminals[self.idx].exitCode == 0)
+              " NOT WORKING: || (exists('g:ConqueTerm_CloseOnSuccess') && g:ConqueTerm_CloseOnSuccess && self.proc.exitCode == 0)
+              " NOT WORKING: || (exists('g:ConqueTerm_CloseOnSuccess') && g:ConqueTerm_Terminals[self.idx].proc.exitCode == 0)
                 sil exe 'bwipeout! ' . self.buffer_name
                 stopinsert!
             endif
