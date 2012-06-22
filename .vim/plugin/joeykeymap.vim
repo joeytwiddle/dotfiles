@@ -106,16 +106,17 @@ nnoremap <Down> gj
 
 " Scroll the page up and down with Ctrl+K/J
 " Only moves the cursor when it's near the edge
-" I don't know why I specified 1.  It is undesirable since it creates 31 if I
-" press 3<C-K> !
-"noremap <C-K> 1<C-Y>
-"noremap <C-J> 1<C-E>
-"inoremap <C-K> <Esc>1<C-Y>a
-"inoremap <C-J> <Esc>1<C-E>a
+"" We can prepend a number to the scroll request if desired, e.g. 5<C-K>
 noremap <C-K> <C-Y>
 noremap <C-J> <C-E>
 inoremap <C-K> <Esc><C-Y>a
 inoremap <C-J> <Esc><C-E>a
+"" Since the first two do not always trigger a CursorHold or Moved event, they fail
+"" to trigger the highlight_line_after_jump script.  The following attempt to
+"" force it fails because on occasions where the event is triggered, the
+"" highlight script sees it twice, and unhighlights the line!
+" noremap <C-K> <C-Y>:silent! call HL_Cursor_Moved()<Enter>
+" noremap <C-J> <C-E>:silent! call HL_Cursor_Moved()<Enter>
 
 " Split windows vertically with Ctrl-W Shift-S
 "nnoremap <C-W>s :split<Enter>
