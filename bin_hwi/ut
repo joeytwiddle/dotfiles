@@ -1,6 +1,6 @@
 #!/bin/bash
 
-processToCycle="kicker gkrellm"
+processToCycle="kicker gkrellm xscreensaver" # xscreensaver for other desktops ^^
 processToRenice="xchat xterm zsh"
 
 ## This blacklist is stupid.  We need to pause everything owned by the user (or users) except for a few we keep running.
@@ -17,7 +17,8 @@ processToRenice="xchat xterm zsh"
 ## But I still fear sometimes vims in a particular state may impact framerate and even server switch time!
 ## It may be when FileExplorer or ConqueTerm is open, or other situations ... !
 
-processToPause="vim vi gvim chrome firefox firefox-bin swiftfox-bin iceweasel-bin plugin-container icedove-bin thunderbird-bin konqueror mandelbulber ktorrent amarokapp onchange jwatch maxima wxmaxima xmms"
+processToPause="vim vi gvim chrome firefox firefox-bin swiftfox-bin iceweasel-bin plugin-container icedove-bin thunderbird-bin konqueror mandelbulber ktorrent amarokapp onchange jwatch maxima wxmaxima skype soffice.bin"
+# xmms 
 
 for p in $processToRenice
 do myrenice -n 10 "$p" | sh
@@ -30,6 +31,8 @@ done
 for p in $processToCycle
 do killall "$p" && eval "cycled_$p=true"
 done
+
+sudo killall joeys_amazing_fuck_this_sensors_cpufreq_daemon
 
 demoToWatch="`find "$HOME"/.loki/ut/System/ -name "*.dem" | afterlast / | randomorder | head -n 1`"
 if [ "$demoToWatch" ]
@@ -108,23 +111,73 @@ shopt -u nocaseglob
 
 # xrandr -s 1600x1200
 
+## This verified that initial taskset works fine
+# (
+	# sleep 30
+	# verbosely taskset -p `pidof ut-bin`
+	# verbosely sudo taskset -p 0x00000001 `pidof ut-bin`
+	# verbosely taskset -p `pidof ut-bin`
+# ) &
+
 touch /tmp/disable_osd_show   ## For osd_show
 
+xgamma -gamma 2.5
 
 
-/usr/local/install/games/ut/ut "$@"
+
+# RandomFork
+#
+# This is probably dangerous for old systems, and I don't seem to need it.
+#
+# Flood the CPU for four seconds so that it is running at the currect speed
+#
+# This may not be needed.  In the end I had to set cpufreq to get the game
+# running at the right speed, and to prevent the occasional lockups, I had to
+# close all GL apps, including LXDE (switch to Fluxbox).
+#
+# Another outcome might be that one of the cores is flooed, so UT gets the
+# other one?
+
+RandomFork () {
+	while [ "$SECONDS" -le "4" ]; do
+		MYRND="$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM*$RANDOM$RANDOM+$RANDOM*$RANDOM/$RANDOM*$RANDOM"
+	done
+}
+# RandomFork &
+
+sudo cpufreq-set -d 2G -u 2G
+sleep 1
+# Added aoss here but that just made it segfaults rather than give no sound, when xmms has audio device open.
+# Taskset sets a mask of which cores to use; only number 2.
+taskset -p 0x02 /usr/local/install/games/ut/ut cpufreq=2000 "$@"
+sudo cpufreq-set -d 1G -u 2.0G
 
 
+
+xgamma -rgamma 1.2 -ggamma 1.6 -bgamma 1.6
 
 rm -f /tmp/disable_osd_show
 
 # xrandr -s 1280x1024
 
+sudo su /root/bin/joeys_amazing_fuck_this_sensors_cpufreq_daemon &
+
 for p in $processToCycle
 do
 	eval "cyc=\$cycled_$p"
-	( [ "$p" = kicker ] && [ "$cyc" = true ] && verbosely env DISPLAY=:0 kicker & ) ||
-	[ "$cyc" = true ] && verbosely "$p" &
+	# If we have been asked to start a process, but we are on X server 1, do it on X server 0 instead.
+	# Do this for all apps, not just [ "$p" = kicker ] && 
+	if [ "$cyc" = true ]
+	then
+		if [ "$DISPLAY" = ":1" ]
+		then
+			verbosely env DISPLAY=:0.0 "$p" &
+			if [ "$p" = "kicker" ]
+			then verbosely "$p" &
+			fi
+		else verbosely "$p" &
+		fi
+	fi
 done
 
 for p in $processToPause
