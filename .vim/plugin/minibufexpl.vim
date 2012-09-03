@@ -232,6 +232,8 @@
 "                                     VISIBLE
 "                 MBEVisibleChanged - buffers that have CHANGED and are VISIBLE
 "
+"               Joey added: MBEVisibleFocused, MBEButton and  MBEButtonRed
+"
 "               You can either link to an existing highlighting group by
 "               adding a command like:
 "
@@ -794,14 +796,15 @@ function! <SID>StartExplorer(sticky, delBufNum)
       let g:did_minibufexplorer_syntax_inits = 1
       " highlight MBEGap            ctermfg=white ctermbg=magenta guibg=magenta
       " highlight MBEGap            term=none cterm=none ctermbg=black ctermfg=grey guibg=black guifg=grey
-      highlight MBEGap            term=bold cterm=bold gui=bold ctermbg=blue ctermfg=white guibg=darkblue guifg=white
+      " highlight MBEGap            term=bold cterm=bold gui=bold ctermbg=blue ctermfg=white guibg=darkblue guifg=white
+      hi link MBEGap MBENormal
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=white ctermfg=black guibg=white guifg=black
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=green ctermfg=white guibg=green guifg=white
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=white ctermfg=green guibg=white guifg=green
       " highlight MBEButton         term=reverse,bold cterm=bold gui=bold ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
       " TODO: in gvim (at least under gentoo) the gui shows the []s in [File] with less-bold-green bg.
       " highlight MBEButton         term=reverse,bold cterm=none gui=none ctermbg=cyan ctermfg=white guibg=cyan guifg=white
-      highlight MBEButton         term=reverse,bold cterm=none gui=none ctermbg=green ctermfg=white guibg=green guifg=white
+      highlight MBEButton         term=reverse,bold cterm=none ctermbg=green ctermfg=white guibg=green guifg=white gui=bold
       " Blue on yellow did look quite menu-like.
       highlight MBEButtonRed      term=reverse,bold cterm=bold gui=bold ctermbg=red ctermfg=white guibg=red guifg=white
       " highlight MBENormal         ctermfg=white ctermbg=blue guibg=blue
@@ -815,11 +818,15 @@ function! <SID>StartExplorer(sticky, delBufNum)
       hi MBEVisibleNormal term=reverse ctermbg=cyan ctermfg=blue cterm=none guibg=cyan guifg=blue gui=none
       " hi StatusLineNC ctermfg=blue
       " highlight MBEVisibleChanged term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=black guibg=yellow guifg=black
+
+      " FIXED:
       " There seems no point making MBEVisibleChanged differ from
       " MBEVisibleNormal, since it is inconsistent - it only updates when a
       " tab is switched, not when the current buffer is modified or saved.
+
       " highlight MBEVisibleChanged  term=bold,reverse cterm=bold gui=bold ctermbg=white ctermfg=blue guibg=white guifg=blue
-      highlight MBEVisibleChanged  term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=blue guibg=darkyellow guifg=blue
+      " highlight MBEVisibleChanged  term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=blue guibg=darkyellow guifg=blue
+      highlight MBEVisibleChanged  term=bold,reverse gui=bold ctermbg=black ctermfg=white cterm=reverse,bold guibg=white guifg=black
     endif
 
   endif
