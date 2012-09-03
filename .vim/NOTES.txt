@@ -33,7 +33,7 @@ mx   create mark x
 g'x  jump to mark x
      (use capital X for global, lower-case is buffer-local)
 
-Don't forget, while n is the repeater for * or #, ; is the repeater for f t F and T.
+Whilst n is the repeater for * or #, ; is the repeater for f t F and T.
 
 Lost code by breaking your undo history?  Recover with:
   :earlier 1m
@@ -53,6 +53,7 @@ Delete and yank current word, with "in":
 
 gF open file under cursor
 
+gD jump to definition
 
 
 
