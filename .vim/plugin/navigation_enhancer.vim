@@ -8,6 +8,9 @@
 " However I think a more intuitive approach when there may be more than one
 " potential target window is to pick the one which was *used most recently*.
 "
+" Or perhaps more accurately, we want the window that we *last entered from, in
+" that direction*.
+"
 " So now if I casually move between windows in one direction, and then in the
 " opposite direction, I should always return to the window I started from!
 
@@ -16,23 +19,24 @@
 
 "" Override Vim's default keymaps for window navigation:
 noremap  <silent> <C-W>k         :call <SID>SeekBestWindow("k","j")<Enter>
-inoremap <silent> <C-W>k         <Esc>:call <SID>SeekBestWindow("k","j")<Enter>a
 noremap  <silent> <C-W>j         :call <SID>SeekBestWindow("j","k")<Enter>
-inoremap <silent> <C-W>j         <Esc>:call <SID>SeekBestWindow("j","k")<Enter>a
 noremap  <silent> <C-W>h         :call <SID>SeekBestWindow("h","l")<Enter>
-inoremap <silent> <C-W>h         <Esc>:call <SID>SeekBestWindow("h","l")<Enter>a
 noremap  <silent> <C-W>l         :call <SID>SeekBestWindow("l","h")<Enter>
+"" I also like them to work in Insert mode!
+inoremap <silent> <C-W>k         <Esc>:call <SID>SeekBestWindow("k","j")<Enter>a
+inoremap <silent> <C-W>j         <Esc>:call <SID>SeekBestWindow("j","k")<Enter>a
+inoremap <silent> <C-W>h         <Esc>:call <SID>SeekBestWindow("h","l")<Enter>a
 inoremap <silent> <C-W>l         <Esc>:call <SID>SeekBestWindow("l","h")<Enter>a
-"" <C-W><Up>/<Down>/<Left>/<Right> automatically remap to the above in xterm.
-"" But not in GVim it seems!
-" map  <silent> <C-W><Up>    <C-W>k
-" imap <silent> <C-W><Up>    <C-W>k
-" map  <silent> <C-W><Down>  <C-W>j
-" imap <silent> <C-W><Down>  <C-W>j
-" map  <silent> <C-W><Left>  <C-W>h
-" imap <silent> <C-W><Left>  <C-W>h
-" map  <silent> <C-W><Right> <C-W>l
-" imap <silent> <C-W><Right> <C-W>l
+"" You may also use <C-W><Up>/<Down>/<Left>/<Right>
+"" Warning: these may conflict with other plugins, e.g. windows_remember_size.vim
+map  <silent> <C-W><Up>    <C-W>k
+map  <silent> <C-W><Down>  <C-W>j
+map  <silent> <C-W><Left>  <C-W>h
+map  <silent> <C-W><Right> <C-W>l
+imap <silent> <C-W><Up>    <C-W>k
+imap <silent> <C-W><Down>  <C-W>j
+imap <silent> <C-W><Left>  <C-W>h
+imap <silent> <C-W><Right> <C-W>l
 "" Also in GVim, we need to re-load joeykeymap.vim to get <C-Up> etc. calling
 "" the script binds above.
 
