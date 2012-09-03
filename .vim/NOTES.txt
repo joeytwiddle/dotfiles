@@ -55,6 +55,15 @@ gF open file under cursor
 
 gD jump to definition
 
+Paste contents of register from Insert mode:
+
+  <C-r>r     where r is the register
+
+Also:
+
+  :echo @r   Print register r, using its variable
+
+  @/         is the search register
 
 
 
