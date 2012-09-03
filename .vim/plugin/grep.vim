@@ -1,3 +1,14 @@
+" Joey's notes:
+"
+" CONSIDER: / is great for searching in a file, but sometimes (Java) I want to
+" search through lots of files.  grep.vim is still a bit clunky even if I have
+" it bound to F3.  I suggest a keybind similar to '/' (perhaps Ctrl-/ in GVim)
+" which will automatically and immediately perform a grep search, and would
+" also rebind 'n' to step through the grep results.  This would make Ctrl-/
+" feel basically identical to normal /.  We can unbind n back to its normal
+" mapping the next time the normal / is used.
+" We might even do similar for Ctrl-* and #, not forgetting ? and N.
+
 " File: grep.vim
 " Author: Yegappan Lakshmanan
 " Version: 1.3
@@ -211,7 +222,7 @@ endif
 " the Grep output window by default.  You can open it manually by using
 " the :cwindow command.
 if !exists("Grep_OpenQuickfixWindow")
-    let Grep_OpenQuickfixWindow = 0
+    let Grep_OpenQuickfixWindow = 1
 endif
 
 " Default grep file list
@@ -287,6 +298,8 @@ silent exe "nnoremap <unique> <silent> " . Grep_Key . " :call RunGrep('grep')<CR
 " THIS IS SUPPOSED TO WORK BUT DOESN'T!  By Joey.
 " Avoids the "Press ENTER or type command to continue" message by temporarily
 " increasing cmdheight and resetting it afterwards.
+" It seems to be doing what it's supposed to, but nonetheless the message is
+" displayed anyway.
 function! s:AvoidPressEnterMessage()
   let s:oldCmdHeight = &cmdheight
   let s:oldUpdateTime = &updatetime
@@ -295,7 +308,7 @@ function! s:AvoidPressEnterMessage()
     autocmd CursorHold * call s:ResetCmdHeight()
     autocmd CursorHoldI * call s:ResetCmdHeight()
     " autocmd BufEnter * call s:ResetCmdHeight()
-    "" Fails with WinEnter!
+    "" Fails with WinEnter!  Presumably that means it fails to trigger.
     " autocmd WinEnter * call s:ResetCmdHeight()
   augroup END
   set cmdheight=5
@@ -316,8 +329,8 @@ endfunction
 " Run the specified grep command using the supplied pattern
 function! s:RunGrepCmd(cmd, pattern)
 
-    "" DOES NOT WORK!
-    call s:AvoidPressEnterMessage()
+    "" DOES NOT WORK!  so disabled
+    " call s:AvoidPressEnterMessage()
 
     " echo "command: " . a:cmd
     " silent did not help either
