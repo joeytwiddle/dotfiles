@@ -1,20 +1,25 @@
-" joeys_buffer_switcher: Ctrl-B then type/autocomplete the buffer you want to
+" joeys_buffer_switcher: Ctrl-E then type/autocomplete the buffer you want to
 " switch to.  If the buffer you wanted is not open, allows autocompletion to a
 " filename to open.
 
 " CONSIDER: If the user enters a number, open that numbered buffer?
+" CONSIDER: Allow <file> completion if no matching <buffer> is open.  (Ideally
+" we only want file completion IFF buffer completion offers no results).
 
 " BUGS TODO:
 " If you press Esc or Ctrl+C it should not proceed to the BufExplorer fallback!
 "   The try catch below didn't fix that.
-" BufExplorer sometimes requires two presses of Ctrl-O to get out of it.
-
-"" Consider some alternative:
-" nnoremap <C-B> :b 
-" nnoremap <C-B> :ls<CR>:b<space>
+"   Yeah - could not find a way to differentiate between user hitting Enter
+"   and user hitting Escape.  FIXEDFORNOW: no BufExplorer fallback
+" Also, BufExplorer sometimes requires two presses of Ctrl-O to get out of it.
 
 command! JoeysBufferSwitch call JoeysBufferSwitch()
-nnoremap <C-B> :JoeysBufferSwitch<Enter>
+nnoremap <C-E> :JoeysBufferSwitch<Enter>
+
+"" Some alternatives:
+nnoremap <C-B> :BufExplorer<Enter>
+nnoremap <Leader>e :MRU<Enter>
+nnoremap <Leader>b :ls<CR>:b<space>
 
 function! JoeysBufferSwitch()
 
