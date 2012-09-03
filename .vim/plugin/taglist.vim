@@ -21,7 +21,7 @@ nnoremap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter>:call <SID
 "" I have now accepted this loss.  Now I like just one file showing (clarity)
 "" and the rest folded (speed on recovery).
 
-" BUGS TODO:
+" FIXED I think:
 " My new wincmd p commands are firing off autocmds in various other plugins.
 " And also re-prising 0-line height windows.
 " SOLUTION:
@@ -30,8 +30,8 @@ nnoremap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter>:call <SID
 " Instead disable activation on WinEnter
 " e.g. 5<C-w><Up> should jump 5 windows up, but each one in turn fires off a
 " crazy fountain on WinEnter events.
-" Instead we should wait on CursorHold, and then check if our buffer or window
-" has changed, before deciding whether to update.
+" DONE: Instead we should wait on CursorHold, and then check if our buffer or
+" window has changed, before deciding whether to update.
 
 " File: taglist.vim
 " Author: Yegappan Lakshmanan (yegappan AT yahoo DOT com)
@@ -519,7 +519,7 @@ let s:tlist_def_verilog_settings = 'verilog;m:module;c:constant;P:parameter;' .
             \ 'e:event;r:register;t:task;w:write;p:port;v:variable;f:function'
 
 " vim language
-let s:tlist_def_vim_settings = 'vim;a:autocmds;v:variable;f:function'
+let s:tlist_def_vim_settings = 'vim;a:autocmds;v:variable;f:function;c:command'
 
 " yacc language
 let s:tlist_def_yacc_settings = 'yacc;l:label'
@@ -1716,8 +1716,8 @@ function! s:Tlist_Window_Init()
         endif
         " Exit Vim itself if only the taglist window is present (optional)
         if g:Tlist_Exit_OnlyWindow
-	    autocmd BufEnter __Tag_List__ nested
-			\ call s:Tlist_Window_Exit_Only_Window()
+          autocmd BufEnter __Tag_List__ nested
+                \ call s:Tlist_Window_Exit_Only_Window()
         endif
         if s:tlist_app_name != "winmanager" &&
                     \ !g:Tlist_Process_File_Always &&
@@ -1725,18 +1725,21 @@ function! s:Tlist_Window_Init()
             " Auto refresh the taglist window
             "autocmd BufEnter * call s:Tlist_Refresh()
             autocmd CursorHold * call s:Tlist_Refresh()
-            " But doing a delayed refresh can draw crap on the edit area
-            " shortly after a :w
-            " Does BufEnter somehow fix that by doing the refresh immediately with
-            " the :w ?
             " Joey:
             " On BufEnter it can cause slowdown when moving through windows
-            " with Ctrl-W.  But on CursorHold it runs very often.  If it is
-            " lagging CursorHold we should check it is caching/only updating
-            " when needed.
-            " I want to keep using CursorHold.  This is also what picks up
-            " that an update should be done after write, to avoid lags by
-            " waiting for user idle.
+            " with Ctrl-W.  But on CursorHold it runs when the cursor has
+            " returned to the editing window.  If it is lagging CursorHold we
+            " should check it is caching/only updating when needed, but still
+            " sometimes they will be needed!
+            " The options are between:
+            "   Slow save and no crap on screen.
+            "   Faster save with :w but maybe crap on screen shortly after.
+            " One possible solution might be, to NOT do the refresh here, but
+            " wait until Ctrl-] is pressed, or the TL window is switched too.
+            " I.e. be really lazy, until we are actually needed.
+            " It's worth noting however, that waiting for CursorHold is useful
+            " when I page through a number of buffers.  It lets me flick
+            " through them much faster, and then updates tlist when I stop.
         endif
 
         if !g:Tlist_Use_Horiz_Window
