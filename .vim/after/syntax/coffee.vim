@@ -36,18 +36,27 @@ highlight! coffeeJustDot cterm=bold ctermfg=white gui=bold guifg=white
 
 "" Stolen from basic.vim!
 
-syn match OperatorEquals /=/
-highlight OperatorEquals ctermfg=yellow guifg=yellow
+" We must prevent = and + from interfering with coffeeFunction -> and =>
+" Should already fall under coffeeAssignSymbols
+syn match OperatorEquals /=[^>]/he=e-1
+highlight link OperatorEquals Operator
 
 syn match OperatorPlus /+/
-"" Interferes with coffeeFunction!
-"syn match OperatorMinus /-/
+syn match OperatorMinus /-[^>]/he=e-1
 syn match OperatorMultiply /*/
 syn match OperatorDivide /\//
 highlight OperatorPlus ctermfg=green guifg=green
-"highlight OperatorMinus ctermfg=red guifg=red
+highlight OperatorMinus ctermfg=red guifg=red
 highlight OperatorMultiply ctermfg=yellow guifg=yellow
 highlight OperatorDivide ctermfg=red guifg=red
+
+syn match OperatorOther /\(&&\|||\)/
+
+" highlight link OperatorPlus Operator
+" highlight link OperatorMinus Operator
+" highlight link OperatorMultiply Operator
+" highlight link OperatorDivide Operator
+highlight link OperatorOther Operator
 
 " I believe this should go upstream
 " But it needs to come after our stupid OperatorDivide rule!
