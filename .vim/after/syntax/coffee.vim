@@ -36,7 +36,7 @@ highlight! coffeeJustDot cterm=bold ctermfg=white gui=bold guifg=white
 
 "" Stolen from basic.vim!
 
-" We must prevent = and + from interfering with coffeeFunction -> and =>
+" We must prevent = and - from interfering with coffeeFunction -> and =>
 " Should already fall under coffeeAssignSymbols
 syn match OperatorEquals /=[^>]/he=e-1
 highlight link OperatorEquals Operator
