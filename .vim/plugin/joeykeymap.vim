@@ -206,20 +206,25 @@ nmap C \ bcw
 
 
 
-" Command-line keymaps.
-" In keeping with my shell shortcut keys:
+"" Command-line keymaps.
+"" In keeping with my shell shortcut keys:
 cnoremap <C-D> <C-Left>
 cnoremap <C-F> <C-Right>
 cnoremap <C-X> <C-W>
 cnoremap <C-A> <Home>
 cnoremap <C-E> <End>
-" In cmdline, S-Left/Right is the same as C-Left/Right
-" The closest I can come to small-word jump is:
+"" In cmdline, S-Left/Right is the same as C-Left/Right
+"" The closest I can come to small-word jump is:
 cnoremap <C-R> <Left><Left><Left>
 cnoremap <C-T> <Right><Right><Right>
-" This doesn't do what we want, also we want to leave Ctrl-V since it does
-" something special in Vim (insert literal char).
+"" Ctrl-Space just walks over the current char.
+"" I must say C-@ instead of C-Space!
+cnoremap <C-@> <Right>
+"" This doesn't do what we want, also we want to leave Ctrl-V since it does
+"" something special in Vim (insert literal char).
 " cnoremap <C-V> <C-Right><C-W>
+"" Does not work:
+" cnoremap <C-BS> <Left>
 
 " This is how my zsh does completion, and it rocks:
 set wildmode=longest:full,full
