@@ -28,6 +28,19 @@
 " THE SOFTWARE.
 " }}}
 
+" Joey's:
+"
+" TODO: ConqueTerm_ReadUnfocused works when on other windows (even in insert mode)
+" but NOT when in Normal mode in the conque window, which is daft!
+"
+" TOTEST: Does ConqueTerm_ReadUnfocused run when the conque term is present
+" in a buffer but not visible in a window?  It need not and should not!
+"
+" TODO: I would like update to eventually disable itself if the user leaves
+" Vim idle for a long time.  E.g. if the user has not used Vim for 3 minutes,
+" perhaps we can safely disable auto-update of the console until they return.
+" I want this just because it eats a bit of processing power.
+
 " **********************************************************************************************************
 " **** GLOBAL INITIALIZATION *******************************************************************************
 " **********************************************************************************************************
