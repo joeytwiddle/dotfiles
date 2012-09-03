@@ -953,6 +953,13 @@ let s:updateTerm = 0
 " read from all known conque buffers
 function! conque_term#read_all(insert_mode) "{{{
 
+    " BUG: If the conqueterm is not visible, we need not update it, but
+    " currently we do update it *and* this causes it to become visible again
+    " (window splits, which is at least better than it replacing the current
+    " buffer!).
+    " CONSIDER: Some users *might* want to update non-visible windows, if for
+    " example "new output" is marked in their MBE or something like that.
+
     " for i in range(1, g:ConqueTerm_Idx)
     "" The update workaround can only act on one conque window at a time,
     "" so we will do one now, and iterate to the others later.
