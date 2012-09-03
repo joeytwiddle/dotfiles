@@ -12,6 +12,10 @@
 " 20120618 - Switched to using match instead of a syntax rule, since I can't
 "            see a way to do containedin=*.  This stops the temporary rule
 "            from breaking the syntax parser and slowing vim down.
+"
+"            One disadvantage is that these matches will override and mask the
+"            last hlsearch performed with /, so that may disappear and appear,
+"            unlike the original behaviour.
 
 " To disable the script, set g:hiword=0 in your .vimrc, or at runtime
 if exists('g:hiword') && g:hiword == 0
@@ -38,7 +42,7 @@ function! HighlightWord()
     " Convert String to regexp, by escaping regexp special chars:
     " let l:pattern = substitute(l:word,'\([.^$\\+][)(]\|\*\)','\\\1','g')
     " let l:pattern = substitute(l:word,'\([.^$]\|\*\|\\\|\"\|\~\|\[\|\]\|+\)','\\\1','g')
-    let l:pattern = substitute(l:word,'\([.^$*\\]\|\[\|\]\|\\\|\"\|\~\)','\\\1','g')
+    let l:pattern = substitute(l:word,'\([.^$*\\/]\|\[\|\]\|\\\|\"\|\~\)','\\\1','g')
     if exists('g:hiword_partial') && g:hiword_partial != 0
       let l:pattern = l:pattern
     else

@@ -45,7 +45,7 @@ function! HighlightLine()
       " Convert String to regexp, by escaping regexp special chars:
       "" BUG: Does not create a suitable regexp for all inputs.
       "" For example, the next line breaks the algorithm on the next line!
-      let l:pattern = substitute(l:line,'\([.^$*\\][]\|\\\|\"\|\~\)','\\\1','g')
+      let l:pattern = substitute(l:line,'\([.^$*\\/][]\|\\\|\"\|\~\)','\\\1','g')
       let l:pattern = '^' . l:pattern . '$'
 
       " echo "got pattern: ".l:pattern
