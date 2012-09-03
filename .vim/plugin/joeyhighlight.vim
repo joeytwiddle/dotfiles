@@ -335,6 +335,11 @@ function! Joeyhighlight()
 
 
 
+	hi TabLine ctermbg=blue ctermfg=cyan cterm=none
+	hi TabLineSel ctermfg=green ctermbg=blue cterm=bold,reverse
+
+
+
 endfun
 
 :Joeyhighlight
