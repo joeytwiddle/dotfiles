@@ -77,7 +77,7 @@ nnoremap <silent> <C-kMultiply> <C-W>>
 
 finish
 
-"" == Old version: only stores when use changes size with common mapping. ==
+"" == Old version: only stores when user changes size with key mapping. ==
 
 " Posterity: This version went through so many refactors, it almost visited
 " all possible approaches!  See hwi.ath.cx CVS for those alternative
