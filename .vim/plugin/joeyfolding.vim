@@ -34,11 +34,14 @@ endif
 		:syn region myFold matchgroup=myDummy start="{" end="}" transparent fold
 
 		" C/Java comments
-		" bad :syn region myFold2 start="/*" end="*/" transparent fold
-		" bad :syn region myFold5 start="^$" end="^$" transparent fold
-		:syn region myFold2 matchgroup=myDummy start="\/\*" end="\*\/" fold
-		:highlight link myFold2 cComment
-		:hi link cComment Comment
+		" BUG: tiny blacklist :f
+		if &filetype != "sh"
+			" bad :syn region myFold2 start="/*" end="*/" transparent fold
+			" bad :syn region myFold5 start="^$" end="^$" transparent fold
+			:syn region myFold2 matchgroup=myDummy start="\/\*" end="\*\/" fold
+			:highlight link myFold2 cComment
+			:hi link cComment Comment
+		endif
 
 		" C/Java #ifdefs
 		" The first of the repeated syntax lines is simply there to ensure that the clear does not produce an error.
@@ -88,8 +91,6 @@ endif
 
 	endif
 
-	" :set foldmethod=manual
-
 	" " Fold colours
 	" :highlight Folded ctermbg=DarkBlue ctermfg=White guibg=#000080 guifg=White
 	" " :highlight foldColumn ctermbg=Grey ctermfg=Blue cterm=none gui=bold guifg=Green guibg=#000060
@@ -113,11 +114,15 @@ endif
 	:map <kDivide> zm
 	:map <kMultiply> zr
 
-	" This is _intended_ to clear any current folding.
-	:set foldmethod=manual
-	:normal zE
+	if &foldmethod != "diff"
 
-	:set foldmethod=syntax
+		"" This is _intended_ to clear any current folding.
+		" :set foldmethod=manual
+		" :normal zE
+
+		:set foldmethod=syntax
+
+	endif
 	" This may be my favourite, but not on every window we open!
 	" :set fdc=5
 	" :set fdc=0
