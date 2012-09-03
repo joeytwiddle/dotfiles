@@ -9,7 +9,7 @@
 " OFF!
 "
 :set shm=atT
-:set statusline=%<%f\ %m%h%r%=\ %P\ (%l,%c)%V\ \#%B%<
+:set statusline=%<%f\ %m%h%r%=\ [%2n]\ %P\ (%l,%c)%V\ \#%B%<
 " Shows time:
 " :set rulerformat=%55(%{strftime('%a\ %b\ %e\ %I:%M\ %p')}\ %5l,%-6(%c%V%)\ %P%)
 " Previous:
@@ -21,33 +21,33 @@
 
 function! VimBuddy()
     " Take a copy for others to see the messages
-    if ! exists("g:vimbuddy:msg")
-        let g:vimbuddy:msg = v:statusmsg
+    if ! exists("g:vimbuddy_msg")
+        let g:vimbuddy_msg = v:statusmsg
     endif
-    if ! exists("g:vimbuddy:warn")
-        let g:vimbuddy:warn = v:warningmsg
+    if ! exists("g:vimbuddy_warn")
+        let g:vimbuddy_warn = v:warningmsg
     endif
-    if ! exists("g:vimbuddy:err")
-        let g:vimbuddy:err = v:errmsg
+    if ! exists("g:vimbuddy_err")
+        let g:vimbuddy_err = v:errmsg
     endif
-    if ! exists("g:vimbuddy:onemore")
-        let g:vimbuddy:onemore = ""
+    if ! exists("g:vimbuddy_onemore")
+        let g:vimbuddy_onemore = ""
     endif
 
     if ( exists("g:actual_curbuf") && (g:actual_curbuf != bufnr("%")))
         " Not my buffer, sleeping
         return "|-o"
-    elseif g:vimbuddy:err != v:errmsg
+    elseif g:vimbuddy_err != v:errmsg
         let v:errmsg = v:errmsg . " "
-        let g:vimbuddy:err = v:errmsg
+        let g:vimbuddy_err = v:errmsg
         return ":-("
-    elseif g:vimbuddy:warn != v:warningmsg
+    elseif g:vimbuddy_warn != v:warningmsg
         let v:warningmsg = v:warningmsg . " "
-        let g:vimbuddy:warn = v:warningmsg
+        let g:vimbuddy_warn = v:warningmsg
         return "(-:"
-    elseif g:vimbuddy:msg != v:statusmsg
+    elseif g:vimbuddy_msg != v:statusmsg
         let v:statusmsg = v:statusmsg . " "
-        let g:vimbuddy:msg = v:statusmsg
+        let g:vimbuddy_msg = v:statusmsg
         let test = matchstr(v:statusmsg, 'lines *$')
         let num = substitute(v:statusmsg, '^\([0-9]*\).*', '\1', '') + 0
         " How impressed should we be
@@ -58,11 +58,11 @@ function! VimBuddy()
         else
             let str = ":-/"
         endif
-		  let g:vimbuddy:onemore = str
+		  let g:vimbuddy_onemore = str
 		  return str
-	 elseif g:vimbuddy:onemore != ""
-		let str = g:vimbuddy:onemore
-		let g:vimbuddy:onemore = ""
+	 elseif g:vimbuddy_onemore != ""
+		let str = g:vimbuddy_onemore
+		let g:vimbuddy_onemore = ""
 		return str
     endif
 
