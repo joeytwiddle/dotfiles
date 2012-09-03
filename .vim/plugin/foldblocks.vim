@@ -1,4 +1,10 @@
 " Fold up all blocks of text separated by 3 (or 2) empty lines.
+" This can be a useful fallback if no other folding methods are available,
+" e.g. in plain text files, or for a different folding perspective on source
+" code.
+
+" BUG: Never folds the first line.
+" BUG: Always reports error on the final failed search. (ALWAYS_REPORTS_ERROR)
 
 " DONE: should not wrap-to-top on the last search, should fold to last line
 
@@ -26,6 +32,7 @@ function! FoldBlocks(num)
 	"" Execute as many times as possible, without wrapping to top of file
 	let oldWrapScan = &wrapscan
 	set nowrapscan
+	" ALWAYS_REPORTS_ERROR
 	" If we run this with silent!, it doesn't perform the last fold below.
 	"   silent! exec "normal 999@f"
 	" If we wrap it in try endtry, it loops forever!
