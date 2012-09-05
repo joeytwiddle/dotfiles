@@ -3,7 +3,8 @@
 --regex-javascript=/^[ \t]*this\.([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]*=.*$/\1/e,export/
 --regex-javascript=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*):.*$/\1/p,property/
 
---regex-javascript=/^(DISABLED FOR NOW because it can cause functions to appear twice in the tag list - the real bug is that whilst ctags can show us inner functions, it (or taglist?) ignores them if they are inside an anonymous function, or in fact any directly called and not declared function)[ \t]*\<function\>[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/f,function/
+--regex-javascript=/^(DISABLED FOR NOW because it can cause functions to appear twice - the bug is that ctags ignores stuff inside anonymous functions)[ \t]*\<function\>[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/f,function/
+--regex-javascript=/(DISABLED FOR NOW because it can cause functions to appear twice - the bug is that ctags ignores stuff inside anonymous functions)[ \t]([a-zA-Z0-9_$.]*)[ \t]*=[ \t]*\<function\>/\1/f,function/
 
 --langmap=javascript:+.jpp,javascript:+.uc
 --langmap=java:+.jpp,java:+.uc
@@ -14,7 +15,7 @@
 --regex-coffee=/^class @?([a-zA-Z_$][0-9a-zA-Z_$]*)( extends [a-zA-Z_$][0-9a-zA-Z_$]*)?$/\1/c,class/
 --regex-coffee=/^[ \t]*(@|this\.)([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]*=.*$/\2/e,export/
 --regex-coffee=/^[ \t]*@?([a-zA-Z_$][0-9a-zA-Z_$]*):.*[-=]>.*$/\1/f,function/
---regex-coffee=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]+=.*[-=]>.*$/\1/f,function/
+--regex-coffee=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$.]*)[ \t]+=.*[-=]>.*$/\1/f,function/
 --regex-coffee=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]+=[^->\n]*$/\1/v,variable/
 --regex-coffee=/^[ \t]*@?([a-zA-Z_$][0-9a-zA-Z_$]*):.*$/\1/p,property/
 
