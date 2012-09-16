@@ -56,15 +56,20 @@
 	# Show files ignored by git:
 	ign = ls-files -o -i --exclude-standard
 
-# Joey wants to see in advance what will happen if he does a pull:
-	# whatsnew = ls-files -u
-	# whatsnew = diff-files --stat
+	# Joey's:
+	## Just a list of the files that have changed on the origin (I hope)
+	# newfiles = ls-files -u
+	# newfiles = diff-files --stat
+	## This shows change-counts in local files (and perhaps also what is new on the origin)
 	whatsnew = diff-index --color --stat origin
+	## This shows only what is new on the origin (log and diffs!)
+	## BUT ofc it only works after git fetch!
 	preview  = log -p HEAD..origin
 	# preview  = diff -p HEAD..origin
-# Hmm git log shows the diffs as well as the logs, sometimes in a different
-# order from git diff.
-# I want just a list of files...
+
+
+
+### The following options are rather more serious, because they affect how git modifies files.
 
 
 
