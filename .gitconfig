@@ -1,0 +1,104 @@
+# .gitconfig
+
+
+
+# Essential to avoid warnings
+[user]
+	name = Paul Clark
+	email = joey@neuralyte.org
+
+
+
+# Many of the following come from http://cheat.errtheblog.com/s/git
+
+# Add colors
+[color]
+	ui = auto
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
+
+
+# Highlight whitespace in diffs
+[color]
+	ui = true
+[color "diff"]
+	whitespace = blue reverse
+[core]
+	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+	excludesfile = /home/joey/linux/.gitignore
+
+
+
+# Aliases
+[alias]
+	st = status
+	ci = commit
+	br = branch
+	co = checkout
+	df = diff
+	dc = diff --cached
+	lg = log -p
+	lol = log --graph --decorate --pretty=oneline --abbrev-commit
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	ls = ls-files
+	# Show files ignored by git:
+	ign = ls-files -o -i --exclude-standard
+
+# Joey wants to see in advance what will happen if he does a pull:
+	# whatsnew = ls-files -u
+	# whatsnew = diff-files --stat
+	whatsnew = diff-index --color --stat origin
+	preview  = log -p HEAD..origin
+	# preview  = diff -p HEAD..origin
+# Hmm git log shows the diffs as well as the logs, sometimes in a different
+# order from git diff.
+# I want just a list of files...
+
+
+
+# % git config core.autocrlf true
+#
+# autocrlf setting tells git to convert the newlines to the system's standard
+# when checking out files, and to LF newlines when committing in
+#
+# I have this disabled for now, concerned about Beeb lookup tables and other binaries.
+# [core]
+	# autocrlf=true
+
+
+
+# % git config branch.autosetupmerge true
+#
+# tells git-branch and git-checkout to setup new branches so that git-pull(1)
+# will appropriately merge from that remote branch.  Recommended.  Without this,
+# you will have to add --track to your branch command or manually merge remote
+# tracking branches with "fetch" and then "merge".
+[branch]
+	autosetupmerge = true
+
+
+
+# % git config apply.whitespace nowarn
+#
+# To ignore whitespace
+#
+# I have this disabled because I use coffeescript, and in general I like
+# whitespace to be meaningful!
+#
+# [apply]
+	# whitespace = nowarn
+
+
+
