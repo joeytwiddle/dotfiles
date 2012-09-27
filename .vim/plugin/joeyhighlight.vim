@@ -263,14 +263,16 @@ function! Joeyhighlight()
 
 	highlight CursorLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
 
-	" highlight TagListFileName cterm=bold ctermbg=darkgray ctermfg=white gui=bold guibg=black guifg=white
-	" highlight link TagListFileName MBENormal
-	" highlight TagListFileName ctermbg=blue ctermfg=cyan cterm=bold guibg=blue guifg=cyan gui=none
-	highlight TagListFileName ctermbg=cyan ctermfg=white cterm=bold guibg=#00bbbb guifg=white gui=none
-	" highlight TagListFileName ctermbg=cyan ctermfg=black cterm=none guibg=cyan guifg=black gui=none
-	" highlight TagListTagName cterm=bold ctermfg=magenta gui=bold guifg=magenta
-	" highlight TagListTagName ctermbg=magenta ctermfg=white cterm=bold guibg=magenta guifg=white gui=bold
-	highlight TagListTagName term=reverse ctermbg=green ctermfg=white cterm=bold guibg=#00bb00 guifg=white gui=none
+	" highlight MyTagListFileName cterm=bold ctermbg=darkgray ctermfg=white gui=bold guibg=black guifg=white
+	" highlight link MyTagListFileName MBENormal
+	" highlight MyTagListFileName ctermbg=blue ctermfg=cyan cterm=bold guibg=blue guifg=cyan gui=none
+	" highlight MyTagListFileName ctermbg=cyan ctermfg=white cterm=bold guibg=#00bbbb guifg=white gui=none
+	" highlight MyTagListFileName ctermbg=cyan ctermfg=black cterm=none guibg=cyan guifg=black gui=none
+	highlight MyTagListFileName ctermbg=black ctermfg=cyan cterm=bold guibg=black guifg=cyan gui=bold
+	" highlight MyTagListTagName cterm=bold ctermfg=magenta gui=bold guifg=magenta
+	" highlight MyTagListTagName ctermbg=magenta ctermfg=white cterm=bold guibg=magenta guifg=white gui=bold
+	" highlight MyTagListTagName term=reverse ctermbg=green ctermfg=white cterm=bold guibg=#00bb00 guifg=white gui=none
+	highlight MyTagListTagName term=reverse ctermbg=none ctermfg=green cterm=bold guibg=none guifg=green gui=bold
 
 	if exists("g:blinking_statusline") && g:blinking_statusline>0
 		" Make StatusLine light up temporarily when we switch window
@@ -302,6 +304,9 @@ function! Joeyhighlight()
 			" autocmd WinEnter   * hi StatusLine ctermfg=yellow ctermbg=darkblue gui=none guibg=yellow guifg=blue
 			" autocmd BufEnter   * hi StatusLine ctermfg=yellow ctermbg=darkblue gui=none guibg=yellow guifg=blue
 			" autocmd CursorHold * hi StatusLine ctermfg=white  ctermbg=blue     gui=none guibg=white  guifg=blue
+			"" New implementation:  Don't overwrite StatusLine explicitly, instead link
+			"" it to one of StatusLineLit/Unlit, which can be edited by user at
+			"" runtime.
 			hi StatusLineLit   ctermfg=yellow ctermbg=darkblue cterm=reverse,bold gui=none guibg=yellow guifg=blue
 			hi StatusLineUnlit ctermfg=white  ctermbg=blue     cterm=reverse,bold gui=none guibg=white  guifg=blue
 			autocmd WinEnter   * hi clear StatusLine | hi link StatusLine StatusLineLit
@@ -311,9 +316,10 @@ function! Joeyhighlight()
 		set updatetime=600
 	endif
 
+	hi WildMenu ctermbg=green ctermfg=black guibg=green guifg=black
 
 
-	"" Colors for file/folder explore, to match jsh dark:
+	"" Colors for file/folder explorers, trying to match jsh dark theme:
 
 	" VTreeExplorer (vtreeexplorer.vim, :VSTreeExplore)
 	hi Directory ctermfg=green cterm=none guifg=green gui=none
@@ -332,6 +338,7 @@ function! Joeyhighlight()
 	hi link netrwSymLink TreeLnk
 	hi link netrwTreeBar treePart
 	hi link netrwClassify treeDirSlash
+	hi link netrwExe treeExecFile
 
 
 

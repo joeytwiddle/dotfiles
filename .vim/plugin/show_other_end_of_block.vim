@@ -16,10 +16,17 @@ map <silent> <F9> :call ShowOtherEnd()<Enter>
 
 function! ShowOtherEnd()
 
+  let startx = wincol()
+  let starty = winline()
+
   normal %
+  let fary = winline()
   " normal "syy
   normal 0"sy$
-  normal %
+  "" This is not guaranteed to take us back, some structures have more than 2
+  "" visitable nodes.
+  " normal %
+  call cursor(starty,startx)
 
   echo @s
 

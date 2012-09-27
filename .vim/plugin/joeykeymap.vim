@@ -207,32 +207,75 @@ nmap C \ bcw
 
 
 "" Command-line keymaps.
-"" In keeping with my shell shortcut keys:
-cnoremap <C-D> <C-Left>
-cnoremap <C-F> <C-Right>
-cnoremap <C-X> <C-W>
 cnoremap <C-A> <Home>
 cnoremap <C-E> <End>
+"" In keeping with my shell shortcut keys
+"" Word jump
+cnoremap <C-D> <C-Left>
+cnoremap <C-F> <C-Right>
+"" Small-word jump.  But Vim doesn't offer one!
 "" In cmdline, S-Left/Right is the same as C-Left/Right
-"" The closest I can come to small-word jump is:
+"" So here is a near approximation:
 cnoremap <C-R> <Left><Left><Left>
 cnoremap <C-T> <Right><Right><Right>
-"" Ctrl-Space just walks over the current char.
-"" I must say C-@ instead of C-Space!
-cnoremap <C-@> <Right>
+"" Word swallow Ctrl-X Ctrl-V
+cnoremap <C-X> <C-W>
 "" This doesn't do what we want, also we want to leave Ctrl-V since it does
 "" something special in Vim (insert literal char).
 " cnoremap <C-V> <C-Right><C-W>
+"" Lazy move.  Ctrl-Space just walks over the current char.
+"" I must say C-@ instead of C-Space!
+cnoremap <C-@> <Right>
 "" Does not work:
 " cnoremap <C-BS> <Left>
 
-" This is how my zsh does completion, and it rocks:
+"" Now the same for Insert-mode?  Well a select few perhaps...
+inoremap <C-X> <Esc>dbxi
+"" Except we won't do <C-V> because that has a useful meaning already
+inoremap <C-D> <Esc>bi
+"" And <C-F> already means toggle fullscreen.
+"inoremap <C-F> <Esc>ea
+inoremap <C-F> <Esc>wi
+"inoremap <C-A> <Home>
+"inoremap <C-E> <End>
+"" By default <C-A> performs the last . which could be pretty handy.
+"" Default <C-E> copies 1 char from the cell above (useful in the 80s).
+
+" This is how my zsh does completion, and it rocks (unless for some reason you
+" always want the first match of multiples, then you must always Tab twice).
 set wildmode=longest:full,full
 
 
-" Now overriden by joeys_buffer_switcher.vim
-"nnoremap <silent> <C-B> :BufExplorer<Enter>
-
 " Make a global mark 'Q' with 'mQ' and jump back to it with 'MQ'.
 nmap M g'
+
+
+" Quick toggles of frequently used functions
+nnoremap <Leader>t :Tlist<Enter>
+nnoremap <Leader>w :set invwrap<Enter>
+
+" Quick buffer switching (beyond Ctrl-PageUp/Down)
+"" Select buffer by number or name with completion
+nnoremap <C-E> :ls<CR>:b<space>
+"" Select file by filename with completion
+" nnoremap <C-E> :ls<CR>:e<space>
+"" Select by name with completion or file without (joeys_buffer_switcher.vim)
+nnoremap <Leader>e :JoeysBufferSwitch<Enter>
+"" Select buffer from list (bufexplorer.vim)
+nnoremap <C-B> :BufExplorer<Enter>
+"" Select from persistent list of most-recently-used files (mru.vim)
+nnoremap <Leader>b :MRU<Enter>
+" NetRW file explorer (bundled)
+nnoremap <Leader>o :Explore .<Enter>
+" NERDTree file explorer (NERD_tree.vim)
+nnoremap <Leader>f :e .<Enter>
+
+
+
+"" Close Current Buffer
+"" Ctrl-Q is the unlock terminal code, and the terminal swallows it (does not pass it to vim).
+" nnoremap <C-Q> :CloseBuffer<Enter>
+"" Ctrl-Z works ok
+nnoremap <C-Z> :CloseBuffer<Enter>
+"" CloseBuffer is implemented in (kwbd.vim)
 

@@ -1,3 +1,7 @@
+" Closing the buffer with :bdelete sucks because it closes the window too!
+" We want to close the buffer but have the window switch to the most-recent or
+" "previous" buffer.  This is what :Kwbd does, but I call it :CloseBuffer.
+
 "Keep Windows bdel - from http://vim.wikia.com/wiki/Deleting_a_buffer_without_closing_the_window
 "here is a more exotic version of my original Kwbd script
 "delete the buffer; keep windows; create a scratch buffer if no buffers left

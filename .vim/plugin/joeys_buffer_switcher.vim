@@ -14,12 +14,14 @@
 " Also, BufExplorer sometimes requires two presses of Ctrl-O to get out of it.
 
 command! JoeysBufferSwitch call JoeysBufferSwitch()
-nnoremap <C-E> :JoeysBufferSwitch<Enter>
+nnoremap <Leader>e :JoeysBufferSwitch<Enter>
 
 "" Some alternatives:
-nnoremap <C-B> :BufExplorer<Enter>
-nnoremap <Leader>e :MRU<Enter>
-nnoremap <Leader>b :ls<CR>:b<space>
+" nnoremap <C-E> :ls<CR>:b<space>
+" nnoremap <C-B> :BufExplorer<Enter>
+" nnoremap <Leader>b :MRU<Enter>
+" nnoremap <Leader>o :e .<Enter>
+" nnoremap <Leader>f :Explore .<Enter>
 
 function! JoeysBufferSwitch()
 

@@ -16,8 +16,11 @@
 " overhead for the user, which he must exchange for the beneficial features of
 " this script!
 
-autocmd WinLeave * call <SID>Leaving()
-autocmd WinEnter * call <SID>Entering()
+augroup WindowsRememberSizes
+  autocmd!
+  autocmd WinLeave * call <SID>Leaving()
+  autocmd WinEnter * call <SID>Entering()
+augroup END
 
 function! s:Debug(msg)
   if exists('g:wrsDebug') && g:wrsDebug > 0
@@ -72,6 +75,16 @@ nnoremap <silent> <C-kMinus> <C-W>-
 nnoremap <silent> <C-kPlus> <C-W>+
 nnoremap <silent> <C-kDivide> <C-W><
 nnoremap <silent> <C-kMultiply> <C-W>>
+
+" Exposed to user
+function! ForgetWindowSizes()
+  let l:winnr = winnr()
+  windo exec "unlet! w:widthWhenFocused"
+  windo exec "unlet! w:widthWhenUnfocused"
+  windo exec "unlet! w:heightWhenFocused"
+  windo exec "unlet! w:heightWhenUnfocused"
+  exec l:winnr." wincmd w"
+endfunction
 
 
 

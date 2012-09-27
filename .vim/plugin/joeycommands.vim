@@ -98,5 +98,9 @@ if has("menu")
 endif
 
 "" TODO: This does not work!  It inserts the string, rather than running the command :P
-inoremap <C-h> :call JExecVimCommand()<CR>
+"" BUG: Also <C-h> triggers on Backspace in Eterm.
+" inoremap <C-h> :call JExecVimCommand()<CR>
+"" Perhaps the idea was to allow user breakout during gVim-Easy sessions?  But
+"" that already exists on Ctrl-O.
+" inoremap <C-o> <Esc>:call JExecVimCommand()<CR>
 

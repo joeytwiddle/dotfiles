@@ -1,7 +1,11 @@
-"" Allows you to review changes between saved file and working buffer.
-"" Writes to a temp-file, then calls GNU diff, or whatever is set in DAFOD_diffcmd.
+" Allows you to review changes between saved file and working buffer.
+" Writes buffer to a temp-file, then calls GNU diff, or whatever is set in DAFOD_diffcmd.
 
-"" TOTEST: Accidentally running on unnamed buffer will give it name of tmpfile.  Bad?
+" Could be useful if Vim says "File changed on disk. (L)oad or (O)k?" you can
+" select OK then do :DiffAgainstFileOnDisk to decide whether to overwrite
+" (:w!) or read (:e!) the file.
+
+"" TOTEST: Accidentally running on unnamed buffer may give it name of tmpfile.  Bad?
 
 command! DiffAgainstFileOnDisk call DiffAgainstFileOnDisk()
 

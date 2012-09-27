@@ -14,7 +14,7 @@ if has("menu")
 	amenu &Joey's\ Tools.&Joey's\ folding :call Joeyfolding()<CR>
 endif
 
-:function! Joeyfolding()
+function! Joeyfolding()
 
 	" ------------- Syntax and highlighting ------------- 
 
@@ -43,16 +43,17 @@ endif
 			:hi link cComment Comment
 		endif
 
-		" C/Java #ifdefs
-		" The first of the repeated syntax lines is simply there to ensure that the clear does not produce an error.
-		" The clear prevents BUG where multiple sourcing repeats folds.
-		:syn region myFold3 start="#ifdef" end="#endif" transparent fold
-		:syn clear myFold3
-		:syn region myFold3 start="#ifdef" end="#endif" transparent fold
-		:syn region myFold4 start="#ifndef" end="#endif" transparent fold
-		:syn clear myFold4
-		:syn region myFold4 start="#ifdnef" end="#endif" transparent fold
-		"" TODO: clear all like myFold4
+		" C/C++ #ifdefs
+		:silent! :syn clear myFold3
+		:syn region myFold3 start="#ifdef\>" end="#endif\>" transparent fold
+		:silent! :syn clear myFold4
+		:syn region myFold4 start="#ifndef\>" end="#endif\>" transparent fold
+		:silent! :syn clear myFold4b
+		:syn region myFold4b start="#if\>" end="#endif\>" transparent fold
+		" BUG: In asm, we must clear asmComment, asmHashThingy, asmIdentifier
+		" and asmPreCondit in order for our folds to work (close) properly.
+		" But we might be able to fix this if we define our syntax rules before
+		" the general ones are loaded.
 
 		" PS
 		:syn region myFold5 matchgroup=myDummy start="% Begin" end="% End" fold transparent
@@ -127,8 +128,14 @@ endif
 	" :set fdc=5
 	" :set fdc=0
 
-	:set foldlevel=2
-	" :normal zR
-	" :normal zM
+	if !&diff
 
-:endfun
+		"" Remind user we have folding, but don't fold everything up.
+		"" TOOD: A nice (although odd) start might be: set level=1 but open first fold?
+		:set foldlevel=2
+		" :normal zR
+		" :normal zM
+
+	endif
+
+endfun

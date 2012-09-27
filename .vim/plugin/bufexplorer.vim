@@ -305,7 +305,7 @@ function! s:BEIgnoreBuffer(buf)
 
   " Do not add the BufExplorer window to the list.
   if fnamemodify(bufname(a:buf), ":t") == s:name
-    call s:BEError("The buffer name was [".s:name."] so it was skipped.")
+    " call s:BEError("The buffer name was [".s:name."] so it was skipped.")
     return 1
   endif
 
@@ -353,11 +353,11 @@ function! StartBufExplorer(open)
 
     " Make sure there is only one explorer open at a time.
     if s:running == 1
-        call s:BEError("WHAT THE 1")
+        " call s:BEError("WHAT THE 1")
         " Go to the open buffer.
         if has("gui")
-            call s:BEError("WHAT THE 2")
-            call s:BEError(name)
+            " call s:BEError("WHAT THE 2")
+            " call s:BEError(name)
             exec "drop" name
         endif
 

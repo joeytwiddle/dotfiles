@@ -1181,6 +1181,11 @@ function! s:Tlist_Remove_File(file_idx, user_request)
             return
         endif
     endif
+    " Joey fix to avoid error "E121: Undefined variable: s:tlist_21_filename"
+    if !exists("s:tlist_".fidx."_filename")
+        call s:Tlist_Log_Msg('Tlist_Remove_File (' .
+                    \ fidx . ', ' . a:user_request . ') I cannae do it captain.')
+    endif
     call s:Tlist_Log_Msg('Tlist_Remove_File (' .
                 \ s:tlist_{fidx}_filename . ', ' . a:user_request . ')')
 
@@ -1702,7 +1707,10 @@ function! s:Tlist_Window_Init()
     augroup TagListAutoCmds
         autocmd!
         " Display the tag prototype for the tag under the cursor.
-        autocmd CursorHold __Tag_List__ call s:Tlist_Window_Show_Info()
+        "" TODO: This first function is pretty efficient (unlike some of the
+        "" later ones), so we could call it on every move, not just
+        "" CursorHold.
+        autocmd CursorMoved __Tag_List__ call s:Tlist_Window_Show_Info()
         " Highlight the current tag periodically
         autocmd CursorHold * silent call s:Tlist_Window_Highlight_Tag(
                             \ fnamemodify(bufname('%'), ':p'), line('.'), 1, 0)
@@ -3428,6 +3436,19 @@ function! s:Tlist_Window_Jump_To_Tag(win_ctrl)
     call s:Tlist_Window_Open_File(a:win_ctrl, s:tlist_{fidx}_filename, tagpat)
 endfunction
 
+" EchoShort()
+" Echoes the message, but strips it if it is too long, to prevent annoying
+" "Press ENTER" dialog.
+function! s:EchoShort(msgin)
+    " Arguments are read-only
+    let l:msg = a:msgin
+    " Vim 7.2 requires "- 12", although 0 should work really!  :P
+    if len(l:msg) > &columns - 12
+        let l:msg = strpart(l:msg,0,&columns - 12)
+    endif
+    echo l:msg
+endfunction
+
 " Tlist_Window_Show_Info()
 " Display information about the entry under the cursor
 function! s:Tlist_Window_Show_Info()
@@ -3461,8 +3482,8 @@ function! s:Tlist_Window_Show_Info()
         if strlen(fname) > 50
             let fname = fnamemodify(fname, ':t')
         endif
-        echo fname . ', Filetype=' . s:tlist_{fidx}_filetype .
-                    \  ', Tag count=' . s:tlist_{fidx}_tag_count
+        call s:EchoShort( fname . ', Filetype=' . s:tlist_{fidx}_filetype .
+                    \  ', Tag count=' . s:tlist_{fidx}_tag_count )
         return
     endif
 
@@ -3487,13 +3508,13 @@ function! s:Tlist_Window_Show_Info()
             let i = i + 1
         endwhile
 
-        echo 'Tag type=' . ttype_name .
-                    \ ', Tag count=' . s:tlist_{fidx}_{ttype}_count
+        call s:EchoShort( 'Tag type=' . ttype_name .
+                    \ ', Tag count=' . s:tlist_{fidx}_{ttype}_count )
         return
     endif
 
     " Get the tag search pattern and display it
-    echo s:Tlist_Get_Tag_Prototype(fidx, tidx)
+    call s:EchoShort( s:Tlist_Get_Tag_Prototype(fidx, tidx) )
 endfunction
 
 " Tlist_Find_Nearest_Tag_Idx
