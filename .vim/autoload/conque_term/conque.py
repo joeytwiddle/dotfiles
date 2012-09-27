@@ -64,6 +64,8 @@ class Conque:
     working_columns = 80 # can be changed by CSI ? 3 l/h
     working_lines = 24 # can be changed by CSI r
 
+    exitCode = -1 # Joey
+
     # top/bottom of the scroll region
     top = 1 # relative to top of screen
     bottom = 24 # relative to top of screen
@@ -1073,6 +1075,8 @@ class Conque:
     def close(self):
         """ End the process running in the terminal. """
         self.proc.close()
+        # Joey
+        self.exitCode = self.proc.exitCode
 
     def abort(self):
         """ Forcefully end the process running in the terminal. """

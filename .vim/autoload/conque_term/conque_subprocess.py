@@ -62,6 +62,8 @@ class ConqueSubprocess:
     # stdout+stderr file descriptor
     fd = None
 
+    exitCode = -1 # unknown
+
 
     def open(self, command, env={}):
         """ Create subprocess using forkpty() """
@@ -177,8 +179,10 @@ class ConqueSubprocess:
 
         p_status = True
         try:
-            if os.waitpid(self.pid, os.WNOHANG)[0]:
+            result = os.waitpid(self.pid, os.WNOHANG)
+            if result[0]:
                 p_status = False
+                self.exitCode = result[1]
         except:
             p_status = False
 
