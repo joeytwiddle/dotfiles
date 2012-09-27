@@ -1,0 +1,569 @@
+*cvsmenu.txt*	Plugin for CVS Versioncontrol
+
+cvsmenu.vim Version : 1.78
+$Revision: 1.1 $
+$Date: 2012/09/27 23:33:53 $
+Platforms : Linux, Windows
+Requires : Vim, CVS (tested with 1.11p1)
+Vim version : 6.0ak and later
+Author : Thorsten Maerz <info@netztorte.de>	(any feedback welcome)
+Primary Site : http://ezytools.sf.net/VimTools
+License : LGPL
+Description : Integrates a menu to access CVS commands.
+
+
+Contents ~
+------------------------------------------------------------------------------
+
+    |CVS-Installation|		- How to install this script
+    |CVS-Usage|			- How to use the plugin
+    |CVS-Tips|			- More usage tips
+    |CVS-Variables|		- Setting up CVS-menu from vimrc
+    |CVS-Menu|			- Description of Menuentries
+    |CVS-Functions|		- Use CVS- commands from scripts
+    |CVS-Troubleshooting|	- If something fails
+    |CVS-Bugs|			- More features to come
+
+
+							    *CVS-Installation*
+Installation ~
+------------------------------------------------------------------------------
+General :
+  1. Have CVS installed and your $CVSROOT set correctly,
+     i.e. calling "cvs status" should work without any
+     manual input (password queries, etc).
+
+Vim 6 :
+  1. Copy cvsmenu.vim to $VIM/plugins. 
+  2. Restart Vim.
+  3. Optional: Select "|CVS-Settings-Install|.Install updates"
+
+
+								   *CVS-Usage*
+Usage ~
+------------------------------------------------------------------------------
+When editing a file, CVS commands can be accessed from the menu. All commands
+(commit,status,update,...) will affect this file.
+To run a CVS command on an entire directory, 
+  - use the command from the "Directory" submenu (single run) or
+  - use "|CVS-Settings|.Toggle buffer/dir" to use the directory instead of the
+    current buffer by default or
+  - use the command from a new (no filename!) buffer
+  - use the command from inside the fileexplorer
+To be asked for revisions when using diff,commit,update,etc., use
+"|CVS-Settings-Revision|".
+By default, command output is printed to statusline and titlebar, when run on
+a single file. It is opened in a new buffer, when run on a directory (can be
+changed with "|CVS-Settings-Output|"). 
+In the result buffer, you can use <SHIFT-CR> or <DoubleClick> to open the 
+listed files in a new window.
+Use "|CVS-Directory|.Short Status" to get a short status list of all files
+("Up-to-Date", "Needs Patch", etc).
+You can use "|CVS-LocalStatus|" to display status in offline mode.
+To get help use ":help cvs", ":help cvs-add", ":he -upd", etc.
+Executing a CVS command, which is not directly supported by this script, is
+possible with the |:CVS| command : It executes the given command and uses all
+the scripts settings on it (e.g. filtering, presets,...).
+
+
+								    *CVS-Tips*
+TIPS ~
+------------------------------------------------------------------------------
+- Read the CVS documentation (e.g. http://www.cvshome.org).
+- Use "|CVS-Info|" to display or |CVS-Settings-Info| to change current
+  settings.  If a "CVS" directory is found, info from "Root" and "Repository"
+  are displayed below the current working directory.  Change a coloured
+  options and set it with <SHIFT-CR> or a <DoubleClick>.
+- Use |CVS-Variables| to setup CVS from your vimrc.
+- Set $CVSROOT to your repository, including the access method, e.g.
+  ":pserver:user@host:dir". When using ssh (:ext:), set $CVS_RSH to "ssh".
+  The CVSROOT from CVS subdirectory has higher priority.
+- To override settings from CVS subdir, pass it using "$CVSOPT" :
+    let $CVSOPT='-z9 -d:ext:user@host:/cvsroot'
+- By default, you are not asked for revisions, for easier usage.  To enable
+  revision queries, use "|CVS-Settings-Revision| queries".  You will then be
+  able to "diff" (or "commit", etc.) to certain revisions and branches.
+- To enable revision queries by default, add ":let g:CVSqueryrevision=1" to
+  your .vimrc. Take a look at "|CVS-Info|" for further options, you may set.
+- To update to a certain revision or to merge in changes from another branch,
+  you may use "|CVS-Extra|.Update" (uses "-r" flag) or "|CVS-Extra|.Merge"
+  (uses one or two "-j" flags), which will request the needed revision
+  numbers.
+- If there are conflicts during Merge, conflicting regions are highlighted.
+- To use this script from non-GUI, you may either use wildmenus (see
+  |CVS-Troubleshooting| section) or the keymapping, that is identical to the
+  GUI-hotkeys, except you have to use <Leader> instead of <ALT>. >
+  	\ci = <ALT>ci = CVS.Commit
+- To get the full command output printed to statusline/titlebar, use
+  "|CVS-Settings-Output|.Uncompressed"
+- Vim's builtin :diff overwrites some settings (see |CVS-Diff| for details).
+  Cvsmenu has some functions to save and restore them, which may be useful as
+  a keymapping (see |CVS-Functions| for details).
+  To select/unselect current window for diffing, add this to your vimrc : >
+	:nmap <F9> :call CVSSwitchDiffMode()<cr>
+- Keymappings in output window
+	q		deletes that buffer
+	<shift-cr>	open file in new buffer (or <doublecllick>)
+- Keymappings in CVSDiff window
+	q		deletes that buffer
+	<tab>		jump to next diff
+	<s-tab>		jump to previous diff 
+
+
+							       *CVS-Variables*
+Variables ~
+------------------------------------------------------------------------------
+Cvsmenu can be configured by setting following variables (may also be copied
+from output of |CVS-Settings-Info| screen).
+The resulting command will be ("cmd" replaced by CVS command):
+"$CVSCMD $CVSOPT cmd $CVSCMDOPT"
+
+$CVS_ROOT		- Default repository location
+			  (see CVS documentation).
+$CVS_RSH		- Shell to use, e.g ssh
+			  (see CVS documentation)
+$CVSOPT			- Option to pass to CVS before the command
+			  (defaults to "-z9 ")
+$CVSCMDOPT		- Option to pass to CVS behind the command 
+			  Default = ""
+g:CVSforcedirectory	- run CVS on buffer or directory
+			  (0:off 1:once 2:forever)
+g:CVSqueryrevision	- Ask for revision on commit,diff,update,...
+			  (0:no 1:yes)
+g:CVSdumpandclose	- Toggle output to buffer or statusline
+			  (0:buffer 1:statusline 2:autoswitch)
+g:CVSsortoutput		- Group conflicts, patches, etc.
+			  (0:no sorting 1:sort)
+g:CVScompressoutput	- Make success output fit to one line
+			  (0:off 1:on)
+g:CVStitlebar		- Print output to titlebar
+			  (0:off 1:on)
+g:CVSstatusline		- Print output to statusline
+			  (0:off 1:on)
+g:CVSautocheck		- Get local status when file is read
+			  (0:off 1:on)
+g:CVSofferrevision	- Offer current revision on queries
+			  (0:off 1:on)
+g:CVSsavediff		- Automatic save/restore settings using :diff
+			  (0:off 1:on)
+g:CVSdontswitch		- Stay in current file on |CVS-Diff|
+			  (0:off 1:on)
+g:CVSjoininmessage	- Message for |CVS-JoinIn|
+			  (blank: query)
+g:CVSfullstatus		- Display all fields for fullstatus
+			  (0:off 1:on)
+
+(Not included in CVSInfo)
+$HOME			- Define users working directory (Windows)
+
+
+									*:CVS*
+:CVS command ~
+------------------------------------------------------------------------------
+Sometimes you may need to call CVS with options, not provided by this script.
+This is possible  using the |:CVS| ex-command. It calls CVSDoCommand()
+(see |CVS-Functions|) and passes the given arguments.
+The CVS command will use the settings (e.g. variables like $CVSCMD) and output
+processing (dump to titlebar, etc.) from cvsmenu. >
+	:CVS --help-commands
+	:CVS export mymodule
+<
+
+								    *CVS-Menu*
+Menu commands ~
+------------------------------------------------------------------------------
+								    *CVS-Info*
+Info : ~
+  Display current CVS settings on statusline.
+								*CVS-Settings*
+							   *CVS-Settings-Info*
+Settings : ~
+  Info : ~
+    Open current CVS settings in a new buffer.
+    After changing an option, set it using <SHIFT-CR> or <DoubleClick>.
+							   *CVS-Settings-Diff*
+  Diff : ~
+    Stay in original : ~
+      When using CVSDiff(), do not switch to the diffed file.
+    Switch to diffed : ~
+      Diffed file is made current (can quickly be closed with "q"). 
+    Autorestore prev. mode : ~
+      When closing a |CVS-Diff| result, restore settings as foldcolumn, etc.
+      NOTE: This only works, if you dont diff more than two files at once.
+      Otherwise you have to use "Restore pre-diff mode" from the menu, to
+      restore settings that were backed up when cvsmenu was started.
+    No autorestore : ~
+      Disable automatic save/restore previous setting.
+    Restore pre-diff mode : ~
+      Resets options changed by :diffsplit to the state, cvsmenu was run.
+      When using Vim's builtin :diffsplit, following options are not
+      reset, when the diffed window is closed:
+	'diff',	'scrollbind', 'wrap', 
+	'foldcolumn', 'foldenable', 'foldlevel', 'foldmethod'
+      NOTE: This command works with |:diffsplit| as well as |CVS-Diff|.
+      For quick access, you may either use standard menu mapping (<ALT-c>gds)
+      or create a custom "nodiff" keymapping, such as : >
+ 		:nmap <S-F10> :call CVSRestoreDiffMode()<cr>
+<
+							 *CVS-Settings-Output*
+  Output : ~
+					    *CVS-Settings-Output-Notification*
+    Notification : ~
+      Enable statusline : ~
+        If output set to "Notification" or "Autoswitch", command output will
+	be printed to statusline.
+      Disable statusline : ~
+        Do not print to statusline.
+      Enable titlebar : ~
+        If output set to "Notification" or "Autoswitch", command output will
+	be printed to titlebar and be restored, each time you reenter that
+	buffer.
+      Disable titlebar : ~
+        Do not print to titlebar.
+    To new buffer : ~
+      All output is opened in a new buffer.
+    Notification only ~
+      All output is printed to the statusline and/or titlebar,
+      as defined in |CVS-Settings-Output-Notification|.
+    Autoswitch : ~
+      (Default) Results from multiple files are opened in a new 
+      buffer, single-file results are printed to statusline and/or titlebar.
+    Compressed : ~
+      (Default) If output is printed to statusline and the command is run on a
+      single file, the output is compressed to fit into one line.
+    Uncompressed : ~
+      Complete output is print to statusline/titlebar. 
+      Causes more "AnyKey" prompts.
+    Sorted : ~
+      Output from CVS commands are sorted to show conflicts first, then
+      updates/patches, etc.
+    Unsorted : ~
+      Command output is printed as received from CVS.
+						       *CVS-Settings-Revision*
+  Revision queries : ~
+    Enable/Disable prompting for revisions.
+    When queries enabled, commands that refer to a revision (e.g. diff, 
+    commit, update, (r)tag) ask for it.
+    If disabled, commands refer to the current revision and so need no (or
+    less) additional input
+    May be set using g:CVSqueryrevisions (see |CVS-Variables|)
+							 *CVS-Settings-Target*
+  Target : ~
+    Where to work on: Single file or directory ?
+    Usually, CVS commands refer to the file in buffer. If commands shall work
+    on the whole directory by default, this can be set here.
+    May be set using g:CVSforcedirectory (see |CVS-Variables|)
+    							*CVS-Settings-Install*
+  Install : ~
+    Install updates : ~
+      Get and install latest cvsmenu script/doc.
+    Download updates : ~
+      Get latest cvsmenu script/doc.
+      Checks out the latest version of cvsmenu.vim and cvsmenu.txt to new
+      buffers (may be installed with following menu commands).
+    Install buffer as help : ~
+      Writes current buffer to "~/.vim/doc" and runs ":helptags".
+    Install buffer as plugin : ~
+      Writes current buffer to $VIMRUNTIME/plugin.
+								 *CVS-Keyword*
+Keyword : ~
+  Appends the listed CVS keyword at current cursorposition.
+							       *CVS-Directory*
+Directory ~
+  Add, Commit, Local status, Short status, Status, Log, ~
+  Query update, Update, Remove : ~
+    Same as the commands from the main menu, but working on the whole
+    directory instead of the current buffer.
+								   *CVS-Extra*
+Extra : ~
+  Diff to rev, Log rev's, Checkout rev, Update to rev, Commit rev, ~
+  Import to rev, Join in rev : ~
+    Same as the commands from the main menu, but but explicitely query
+    the revision.
+							 *CVS-Extra-Patchfile*
+  Create patchfile : ~
+    Context : ~
+      Opens "diff -c"-like output in a new buffer.
+    Standard : ~
+      Opens "diff"-like output in a new buffer.
+    Uni : ~
+      Opens "diff -u"-like output in a new buffer.
+							     *CVS-Extra-Merge*
+  Merge revision : ~
+    Merges the changes from another branch into the
+    local copy.
+    You are always asked for the branch to merge from.
+  Merge revision diffs : ~
+    Merges changes between 1st rev. and 2nd rev. into
+    local copy.
+    You are always asked for both branch revisions to get the diffs from.
+							       *CVS-Extra-Get*
+  Get file : ~
+    Download a single file from a repository.
+    The file will be checked out to a new buffer, no files/dirs will be
+    created or changed.
+  Get file (password) : ~
+    Like "Get file", but also call CVSLogin() and CVSLogout()
+  CVS links : ~
+    Clickable Vim-Script in users $HOME directory
+    The example file shows some checkout possibilities, but it may be used for
+    everything, you can do with Vim.
+								   *CVS-Admin*
+Admin : ~
+  Login : ~
+    When using password authentification ($CVSROOT=:pserver:...), you first
+    have to login and enter a password.
+  Logout : ~
+    Log out from a pserver.
+								  *CVS-Delete*
+Delete : ~
+  Remove : ~
+    Delete from repository (optional:from working copy)
+  Release : ~
+    Tell CVS, you do not use this working copy any longer
+    (optionally delete working copy)
+								     *CVS-Tag*
+Tag : ~
+  Create tag : ~
+    Tags the current file/dir (uses "tag").
+  Remove tag : ~
+    Deletes a tag from current file/dir (uses "tag").
+  Create branch : ~
+    Create a branch from current file/dir (uses "tag").
+  Create tag by module : ~
+    Tags a module (uses "rtag").
+  Remove tag by module : ~
+    Deletes a tag from a module (uses "rtag").
+  Create branch by module : ~
+    Create a branch from a module (uses "rtag").
+							       *CVS-WatchEdit*
+Watch/Edit : ~
+  Watchers : ~
+    See, who is watching this file/dir.
+  Watch add : ~
+    Add a watch on this file/dir.
+  Watch remove	: ~
+    Delete a watch on this file/dir.
+  Watch on : ~
+    Enable watch.
+  Watch off : ~
+    Disable watch.
+  Editors : ~
+    See, who is editing this file/dir.
+  Edit	: ~
+    Start editing this file/dir.
+  Unedit : ~
+    Stop editing this file/dir.
+								    *CVS-Diff*
+Diff : ~
+  Track your changes.
+  If revision queries turned on, you will be asked for a revision to compare
+  to. Otherwise, the default revision (HEAD or Sticky) is used.
+  This revision will be checked out to a temporary file and compared to the
+  current file (same as WinCVS/gCVS).
+  Also see |CVS-Settings-Diff|.
+								*CVS-Annotate*
+Annotate : ~
+  Shows "age" of each line.
+								 *CVS-History*
+History : ~
+  Shows repositories history.
+								     *CVS-Log*
+Log : ~
+  Shows project history.
+  Output is always opened in a new buffer.
+								  *CVS-Status*
+Status : ~
+  Shows status of files in working copy.
+							     *CVS-ShortStatus*
+Short status : ~
+  Lists all files, sorted according to their status.
+  This is very helpful when run on a directory: You get a clickable 
+  (<Shift-CR> works also) list of all changed files.
+							     *CVS-LocalStatus*
+Local status : ~
+  Retrieves file information offline from the 'CVS/Entries' file.
+  Works similar to |CVS-ShortStatus|.
+								*CVS-Checkout*
+Checkout : ~
+  Check out the documents.
+  You will be asked for a destination, the module name and the revision.
+  To checkout only a specific document add it to the module name
+  (e.g. "mymodule/doc.txt"), otherwise the whole project is checked out.
+  If you omit the destination or module name, the command is cancelled.
+							     *CVS-QueryUpdate*
+Query update : ~
+  Query, if file needs upgrade before commit (works like update).
+								  *CVS-Update*
+Update : ~
+  Merge Changes from repository into current file.
+  Merges the "HEAD" revision from the CVS-Server into your current document.
+  If the buffer is empty (no filename), the whole directory is updated.
+  If revision queries turned on:
+  The working copy can be updated to a given revision by entering this 
+  revision at the first prompt (passed as "-r" parameter).
+  Differences to another version (or between two version) may be merged into
+  the local copy by entering this/these revision at second/third prompt
+  (passed as "-j" flags).
+							   *CVS-RevertChanges*
+Revert changes : ~
+  Replaces the current file with the same version from the
+  repository. This also removes the sticky bit.
+								  *CVS-Commit*
+Commit : ~
+  Submit changes to the archive.
+  After entering a log message, the currently edited file (or directory,
+  if buffer empty) will be committed to the repository (if it can be merged 
+  without conflicts).
+  To commit to a certain revision, enable revision queries.
+								     *CVS-Add*
+Add : ~
+  Mark file to add with next commit.
+  After giving a log message, the currently edited file will be added (as 
+  text) with the next commit.
+								  *CVS-Import*
+Import : ~
+  Import current file/dir into repository
+								  *CVS-JoinIn*
+JoinIn : ~
+  Call |CVS-Add| and |CVS-Commit| afterwards.
+  If g:CVSjoininmessage is nonblank, this will be used. Otherwise you are
+  asked for the message.
+
+
+							       *CVS-Functions*
+Functions ~
+------------------------------------------------------------------------------
+You can call cvsmenu functions from other scripts to automate certain tasks,
+e.g. call CVSLogin() when opening a projectfile, combine CVSCheckout() and
+CVSEdit(), download files,...
+
+CVSSwitchDiffMode() ~
+  Useful for keymapping: Toggles diffmode for the current window.
+CVSRestoreDiffMode() ~
+  Cvsmenu keeps a beckup of options, modified by Vim's builtin :diffsplit 
+  (see |CVS-Settings-Diff|), when it is started.
+  These settings can be restored using this function.
+  It is possible to create a snapshot of these options any time using
+  CVSBackupDiffMode().
+CVSInstallAsHelp(destname) ~
+  Writes local buffer to local help directory and runs ":helptags"
+CVSInstallAsPlugin(destname) ~
+  Writes local buffer to $VIMRUNTIME/plugins
+CVSMappingFromMenu(filename,...) ~
+  Reads a vimscript and generates Keymapping, using <Leader> (or an optional
+  arg.) and the underlined Menuhotkey.
+
+CVSGet(...) ~
+  Parameters :
+    1 : filename   : if not given, filename AND repository are queried
+    2 : repository : optional
+    3 : login/out  : 'i':login, 'o':logout (may be combined)
+    4 : password   : omitted:ask, '':none
+  Download single file from repository into new buffer - does not create 
+  or modify any files/directories.
+  This may be useful for keeping files in sync across networks (e.g. using 
+  ssh over internet) without creating any "CVS" directories. >
+    call CVSGet("hosts",":ext:admin@cvs.dom:/netconf")
+    call CVSGet( "VimTools/cvsmenu.vim",  
+               \ ":pserver:anonymous@cvs.ezytools.sf.net","io",'')
+CVSSaveOpts() ~
+  Saves all |CVS-Variables| (dont call twice !)
+CVSRestoreOpts() ~
+  Restores all |CVS-Variables|.
+CVSDoCommand(cmd,...) ~
+  Executes CVS command on current buffer/directory, opens output in a new
+  buffer, applies syntax highlighting and keymappings.
+CVSadd(), CVScommit, CVSshortstatus(),etc ~
+  Execute menu commands.
+
+
+							 *CVS-Troubleshooting*
+Troubleshooting ~
+------------------------------------------------------------------------------
+No menu at all : ~
+  You need the GUI-Version to use menus.
+  WRONG! Use ":help console-menus" to see how to use menus in text mode.
+
+  If there are lots of error messages, you may have the wrong fileformat
+  (win/unix cr/lf). Use ":set ff=dos" or ":set ff=unix" (and write changes) to
+  correct this.
+
+Commands "hang" after execution : ~
+  This happens, if cvs awaits user input or cannot access the $CVSROOT. This
+  may also be caused by a password query from ssh.
+
+  Check your $CVSROOT setting when checking out.
+  Check if the host given as "Root" (use "|CVS-Info|") is reachable.
+  Execute the cvs command manually from the command line.
+  
+Changing $CVSROOT has no effect : ~
+  If the working directory is controlled by CVS (i.e. it has a subdir "CVS"),
+  these settings have higher priority than $CVSROOT.
+  To override these settings, use "-d" in $CVSOPT : >
+	let $CVSOPT=-d :ext:user@host:/dir
+
+Manual helpfile installation : ~
+  1. Create the directory "~/.vim/doc/".
+  2. Get cvsmenu.txt (e.g. using |CVS-Info|) and copy it there.
+  3. Use ":helptags ~/.vim/doc" to built the tags.
+
+Help cannot be installed, ~
+Help cannot be found, ~
+CVS Links cannot be created :~
+  Check output of ":echo expand('~')". This should return your home directory.
+  On MS-Windows, you have to define $HOME for Vim to expand "~" correctly.
+
+Command results are not displayed : ~
+  Command output can either be opened in a new buffer or printed as a
+  notification. This can be set using "|CVS-Settings-Output|".
+  If output mode is "Notification only" or "Autoswitch", output can be printed
+  to statusline and/or titlebar (-->  "|CVS-Settings-Output-Notification|").
+  Maybe you disabled both notification methods.
+
+CVS commands work from console, but fail inside Vim : ~
+  If you receive messages like
+  >
+  cvs commit: cannot open CVS/Entries for reading: No such file or directory
+  cvs add: in directory .: cvs [add aborted]: there is no version here
+<
+  Then your shell seems to change the path. This happens e.g. with tcsh if
+  "dirs -L" is enabled, to start from the last directory used.
+  You can either change the configuration for the shell, or select a different
+  shell or config from Vim. To get more info, see
+  >
+  	:he shell
+<
+
+Errors : ~
+  - Unknown Option: iff   Invalid Expression:  &diff" ~
+    NOTE   DANGEROUS   NOTE
+    You are using an old version of Vim (before 6.0ak), which lacks support
+    for certain commands like diff and redraw. The redraw is extremely
+    necessary to have the CVS work on the right buffer, otherwise your
+    currently edited file may be closed without saveing changes !
+    Please update to a recent version of Vim (e.g. the full version of Vim 6.0
+    is out and working) - you will like its new features !
+  - Cannot create diffs ~
+    Vim requires an external "diff" program. Make sure you have one installed
+    on your system (Windows users may install the Cygwin package from 
+    http://www.redhat.com - it contains (beneath a lot of other -very- helpful
+    unix tools) such a programm.
+  - Cannot create to /temp/VIafoo.tmp ~
+    (or similar messages)
+    This message may be misleading: It also occurs, when an external program
+    cannot be found (may happen on :make, :grep, diff-commands,...). This was
+    also a problem in the Alpha and Beta versions of Vim 6.0 under Win9x, 
+    which is solved in the final release.
+
+
+
+								    *CVS-Bugs*
+Bugs / Todo ~
+------------------------------------------------------------------------------
+* Create repository
+* Buffer count is messed up -> ctrl-^, etc. fails
+* Autocheck sometimes collides with help.
+
+------------------------------------------------------------------------------
+vim:tw=78:ts=8:ft=help:norl:
