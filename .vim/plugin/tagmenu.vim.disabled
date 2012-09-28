@@ -329,7 +329,7 @@ function! s:Add_Tags_Menu(menu_clear)
     endif
 
     " If the tags menu for this buffer was already computed, then use it
-    if exists("b:Tmenu_cmd")
+    if exists("b:Tmenu_cmd")   " && len(b:Tmenu_cmd)<120
         exe b:Tmenu_cmd
         let s:tmenu_empty = 0
         " Update the popup menu
