@@ -3,8 +3,9 @@
 --regex-javascript=/^[ \t]*this\.([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]*=.*$/\1/e,export/
 --regex-javascript=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*):.*$/\1/p,property/
 
---regex-javascript=/^(DISABLED FOR NOW because it can cause functions to appear twice - the bug is that ctags ignores stuff inside anonymous functions)[ \t]*\<function\>[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/f,function/
---regex-javascript=/(DISABLED FOR NOW because it can cause functions to appear twice - the bug is that ctags ignores stuff inside anonymous functions)[ \t]([a-zA-Z0-9_$.]*)[ \t]*=[ \t]*\<function\>/\1/f,function/
+--regex-javascript=/^(COMMENT: ctags defaults ignore functions inside anonymous functions - the following catch them but can cause duplicates!)/\1/X,XXX/
+--regex-javascript=/^[ \t]*\<function\>[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/f,function/
+--regex-javascript=/^[ \t]([a-zA-Z0-9_$.]*)[ \t]*=[ \t]*\<function\>/\1/f,function/
 
 --langmap=javascript:+.jpp,javascript:+.uc
 --langmap=java:+.jpp,java:+.uc
@@ -25,4 +26,8 @@
 --langmap=Asm-disabled:+.Convoluted_Silent_Comment:No_good_doubling_context_and_macro_regexps_both_here_and_in_cwd_ctags!
 --regex-Asm-disabled=/^[^;]*\.context[ \t]+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/c,context/
 --regex-Asm-disabled=/^[^;]*\.macro[ \t]+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/m,macro/
+
+--langdef=dosini
+--langmap=dosini:.ini
+--regex-dosini=/^\[([^]]*)\]/\1/s,section/
 
