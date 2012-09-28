@@ -5,7 +5,7 @@
 
 --regex-javascript=/^(COMMENT: ctags defaults ignore functions inside anonymous functions - the following catch them but can cause duplicates!)/\1/X,XXX/
 --regex-javascript=/^[ \t]*\<function\>[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/f,function/
---regex-javascript=/^[ \t]([a-zA-Z0-9_$.]*)[ \t]*=[ \t]*\<function\>/\1/f,function/
+--regex-javascript=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)*[ \t]*=[ \t]*\<function\>/\1/f,function/
 
 --langmap=javascript:+.jpp,javascript:+.uc
 --langmap=java:+.jpp,java:+.uc
