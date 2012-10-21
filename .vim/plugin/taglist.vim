@@ -2973,8 +2973,10 @@ function! s:Tlist_Refresh()
         call s:Tlist_Window_Refresh_File(filename, ftype)
 
         " Open the fold for the file
-        exe "silent! " . s:tlist_{fidx}_start . "," .
-                    \ s:tlist_{fidx}_end . "foldopen!"
+        if fidx != -1
+            exe "silent! " . s:tlist_{fidx}_start . "," .
+                        \ s:tlist_{fidx}_end . "foldopen!"
+        endif
 
         if g:Tlist_Highlight_Tag_On_BufEnter && g:Tlist_Auto_Highlight_Tag
             if g:Tlist_Show_One_File && s:tlist_cur_file_idx != fidx
