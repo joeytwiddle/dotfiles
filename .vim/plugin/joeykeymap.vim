@@ -265,6 +265,9 @@ nnoremap <Leader>e :JoeysBufferSwitch<Enter>
 nnoremap <C-B> :BufExplorer<Enter>
 "" Select from persistent list of most-recently-used files (mru.vim)
 nnoremap <Leader>b :MRU<Enter>
+"" Some more alternative buffer switchers:
+"" :EasyBuffer (easybuffer.vim)
+
 " NetRW file explorer (bundled)
 nnoremap <Leader>o :Explore .<Enter>
 " NERDTree file explorer (NERD_tree.vim)
