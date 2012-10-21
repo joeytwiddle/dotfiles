@@ -7,11 +7,9 @@
 " DONE: Store and restore original position, in case % doesn't quite.
 " TODO: Suppress scroll caused by cursor jump if possible.  (Defer display update.)
 "       Failing suppression, just store scroll pos before and restore it after.
-" TODO: Auto-activate when arriving on a line/char deemed to be suitable (see
-"       list above).
-" TODO: If auto-activating, then also trim length of message string, to avoid
-"       "Press ENTER" message.  (See EchoShort in taglist.vim)
-" CONSIDER: For fun, also show number of lines in the block.
+" TODO: Auto-activate when arriving on a line/char deemed to be suitable (see list above).
+" TODO: If auto-activating, then also trim length of message string, to avoid "Press ENTER" message.  (See EchoShort in taglist.vim)
+" DONE: For fun, also show number of lines in the block.
 
 " :command! ShowOtherEnd call ShowOtherEnd()
 
@@ -24,7 +22,7 @@ function! ShowOtherEnd()
 
   normal %
 
-  let fary = winline()
+  let fary = getpos('.')[1]
   if fary != starty
 
     " normal "syy
@@ -35,8 +33,7 @@ function! ShowOtherEnd()
 
   endif
 
-  "" Another % is not guaranteed to take us back, some structures have more
-  "" than 2 visitable nodes.
+  "" Another % is not guaranteed to take us back, some structures have more than 2 visitable nodes.
   " normal %
   " call setpos('.',[??,starty,startx,??])
   call cursor(starty,startx)
