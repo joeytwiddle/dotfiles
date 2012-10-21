@@ -1,11 +1,11 @@
 " Allows you to review changes between saved file and working buffer.
 " Writes buffer to a temp-file, then calls GNU diff, or whatever is set in DAFOD_diffcmd.
 
-" Could be useful if Vim says "File changed on disk. (L)oad or (O)k?" you can
+" Can be useful if Vim says "File changed on disk. (L)oad or (O)k?" you can
 " select OK then do :DiffAgainstFileOnDisk to decide whether to overwrite
 " (:w!) or read (:e!) the file.
 
-"" TOTEST: Accidentally running on unnamed buffer may give it name of tmpfile.  Bad?
+"" TOTEST: Accidentally running on unnamed buffer may give it name of tmpfile.  Not really a problem, just inconsistent.
 
 command! DiffAgainstFileOnDisk call DiffAgainstFileOnDisk()
 
@@ -27,4 +27,11 @@ function! DiffAgainstFileOnDisk()
   " :!diff % /tmp/working_copy | diffhighlight | more
   exec "!" . g:DAFOD_diffcmd . " % /tmp/working_copy"
 endfunction
+
+"" Some similar yummies:
+
+"" Shows differences between the current buffer and the file on disk (with a split diff window).
+command! DiffAgainstFileSplit vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+"" TOTEST:
+" command! ShowChangesSinceStarting normal "9999u" | w | normal "9999<C-r>" | DiffAgainstFileSplit
 
