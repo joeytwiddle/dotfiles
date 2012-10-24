@@ -5,6 +5,9 @@
 " select OK then do :DiffAgainstFileOnDisk to decide whether to overwrite
 " (:w!) or read (:e!) the file.
 
+" Can also be useful if Vim says there is a swapfile: you can (R)ecover it,
+" diff it against the file on disk, and then decide whether to keep it or :e!
+
 "" TOTEST: Accidentally running on unnamed buffer may give it name of tmpfile.  Not really a problem, just inconsistent.
 
 command! DiffAgainstFileOnDisk call DiffAgainstFileOnDisk()
