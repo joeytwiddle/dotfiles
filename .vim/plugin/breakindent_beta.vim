@@ -1,10 +1,8 @@
 " BreakIndent Beta tries to make wrapped lines look neater and less disruptive, by updating showbreak to indent them to the same column as the currently focused line.
 "
-" Warning: Because it changes showbreak, it can cause lines to shift up and down when a new indent is applied.  To reduce this, you can enable breakindent_match_gap, breakindent_update_rarely, or breakindent_never_shrink.
+" Warning: Because it changes showbreak, it can cause lines to visibly shift up and down when a new indent is applied.  To reduce how often this happens, you can enable breakindent_update_rarely, breakindent_match_gap or breakindent_never_shrink.
 "
-" BreakIndent Beta is a pure vimscript alternative to the old breakindent patch, which I failed to get working smoothly in modern Vim.
-"
-" Unlike the original breakindent, it *cannot* present a different indent for each line.  Instead it updates the showbreak option to fit the indent of the line currently under the cursor.  Unfortunately this means that showbreak changes often, and other lines may not appear at the optimum indent, but the current line should always appear correctly.
+" BreakIndent Beta is a pure vimscript alternative to the old breakindent patch, which I failed to get working smoothly in modern Vim.  Unlike the breakindent patch, this vimscript *cannot* present a different indent for each line.  Instead it updates the showbreak option to fit the indent of the current cursor line.  Unfortunately this means that showbreak can change often, and other lines on the display may not appear at the ideal indent.
 "
 " Some commands that may be useful when wrapping long lines:
 "
@@ -13,11 +11,11 @@
 "   :set list                  " Visible tabs, breaks words anywhere
 "
 "   :set textwidth=0
-"   :set wrapmargin=0          " An attempt to disable auto-linefeed when typing
+"   :set wrapmargin=0          " Attempts to disable auto-linefeed when typing
 "   :set formatopts-=cq
 "
-"   :highlight NonText ctermfg=darkblue
-"   :let g:breakindent_match_gap = 1
+"   :highlight NonText ctermfg=darkblue     " Theme your indent symbols
+"   :let g:breakindent_match_gap = 1        " Change breakindent settings
 
 
 " == Options ==
@@ -37,6 +35,7 @@ if !exists("g:breakindent_match_gap")
   let g:breakindent_match_gap = 0
 endif
 
+" Character used to build the gap symbol.
 if !exists("g:breakindent_gapchar")
   let g:breakindent_gapchar = ':'
 endif
@@ -47,7 +46,8 @@ if !exists("g:breakindent_update_rarely")
   let g:breakindent_update_rarely = 1
 endif
 
-" When set to 1, this will only increase indent to handle deeper lines, and not reduce it when focused on shallower lines.
+" When set to 1, this will only increase indent to handle deeper lines, and not reduce it when focused on shallower lines.  If you don't mind over-indentation, but can't stand under-indentation, then this is for you.
+" There is no facility at the moment to search for the deepest indent without visiting it.
 if !exists("g:breakindent_never_shrink")
   let g:breakindent_never_shrink = 0
 endif
