@@ -41,10 +41,10 @@ if !exists("g:breakindent_gapchar")
   let g:breakindent_gapchar = ':'
 endif
 
-" This will only update the showbreak setting when we are focused on a line which is wrapping.
-" Otherwise it updates every time we stop on a line with a different indent.
+" This will only update the showbreak setting when we are focused on a line which is being wrapped.
+" If set to 0, it updates every time we stop on a line with a different indent, which can be annoying on files with a lot of indent changes.
 if !exists("g:breakindent_update_rarely")
-  let g:breakindent_update_rarely = 0
+  let g:breakindent_update_rarely = 1
 endif
 
 " When set to 1, this will only increase indent to handle deeper lines, and not reduce it when focused on shallower lines.
@@ -67,10 +67,10 @@ function! s:UpdateBreakIndent()
   let indentString = substitute(line, "[^ 	].*", "", "")
   let numtabs = len(substitute(indentString, "[^	]*", "", "g"))
   let tabwidth = &tabstop
-  let screenindent = len(indentString) - numtabs + tabwidth*numtabs
-  let screenLineLength = len(line) - len(indentString) + screenindent
+  let screenIndent = len(indentString) - numtabs + tabwidth*numtabs
+  let screenLineLength = len(line) - len(indentString) + screenIndent
 
-  let showIndent = screenindent
+  let showIndent = screenIndent
   " Sanity check - never use more than a quarter of the screen!
   let maxIndent = winwidth(".") / 4
   if showIndent > maxIndent
