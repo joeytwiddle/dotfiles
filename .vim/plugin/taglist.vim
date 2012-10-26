@@ -1467,22 +1467,22 @@ function! s:Tlist_Window_Exit_Only_Window()
     " Before quitting Vim, delete the taglist buffer so that
     " the '0 mark is correctly set to the previous buffer.
     if v:version < 700
-	if winbufnr(2) == -1
-	    bdelete
-	    quit
-	endif
+        if winbufnr(2) == -1
+            bdelete
+            quit
+        endif
     else
-	if winbufnr(2) == -1
-	    if tabpagenr('$') == 1
-		" Only one tag page is present
-		bdelete
-		quit
-	    else
-		" More than one tab page is present. Close only the current
-		" tab page
-		close
-	    endif
-	endif
+        if winbufnr(2) == -1
+            if tabpagenr('$') == 1
+                " Only one tag page is present
+                bdelete
+                quit
+            else
+                " More than one tab page is present. Close only the current
+                " tab page
+                close
+            endif
+        endif
     endif
 endfunction
 
@@ -1721,6 +1721,9 @@ function! s:Tlist_Window_Init()
         if g:Tlist_File_Fold_Auto_Close
             autocmd BufEnter * silent
                 \ call s:Tlist_Window_Open_File_Fold(expand('<abuf>'))
+            "" This works but causes flicker when window is entered
+            "" automatically (e.g. by our mappings at the top):
+            "autocmd BufEnter __Tag_List__ normal zR
         endif
         " Exit Vim itself if only the taglist window is present (optional)
         if g:Tlist_Exit_OnlyWindow
