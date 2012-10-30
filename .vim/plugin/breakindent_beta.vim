@@ -76,7 +76,7 @@ function! s:UpdateBreakIndent()
   let showIndent = screenIndent
   " Sanity check - never use more than a quarter of the screen!
   let maxIndent = winwidth(".") / 4
-  let showIndent = min(showIndent,maxIndent)
+  let showIndent = min([showIndent,maxIndent])
 
   if g:breakindent_update_rarely && screenLineLength < winwidth(".")
     return
@@ -106,7 +106,7 @@ function! s:UpdateBreakIndent()
     let gapWidth = len(firstWord)
     " Sanity check - never use more than a quarter of what is left!
     let maxWidth = (winwidth(".") - showIndent) / 4
-    let gapWidth = min(gapWidth,maxWidth)
+    let gapWidth = min([gapWidth,maxWidth])
     let bis = repeat(strpart(g:breakindent_gapchar,0,1), gapWidth) . " "
   endif
 
