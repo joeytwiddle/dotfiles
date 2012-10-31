@@ -4,8 +4,8 @@
 --regex-javascript=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*):.*$/\1/p,property/
 
 --regex-javascript=/^(COMMENT: ctags defaults ignore functions inside anonymous functions - the following catch them but can cause duplicates!)/\1/X,XXX/
---regex-javascript=/^[ \t]*\<function\>[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/f,function/
---regex-javascript=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)*[ \t]*=[ \t]*\<function\>/\1/f,function/
+--regex-javascript=/^\<function\>[ \t]*(\<[a-zA-Z_$][0-9a-zA-Z_$]*\>)/\1/f,function/
+--regex-javascript=/^(\<[a-zA-Z_$][0-9a-zA-Z_$.]*\>)*[ \t]*=[ \t]*\<function\>/\1/f,function/
 
 --langmap=javascript:+.jpp,javascript:+.uc
 --langmap=java:+.jpp,java:+.uc
@@ -13,6 +13,7 @@
 
 --langdef=coffee
 --langmap=coffee:.coffee
+--regex-coffee=/^(COMMENT: some of the .*s in below functions are over-optimistic, picking up anonymous callbacks with the wrong =)/\1/X,XXX/
 --regex-coffee=/^class @?([a-zA-Z_$][0-9a-zA-Z_$]*)( extends [a-zA-Z_$][0-9a-zA-Z_$]*)?$/\1/c,class/
 --regex-coffee=/^[ \t]*(@|this\.)([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]*=.*$/\2/e,export/
 --regex-coffee=/^[ \t]*@?([a-zA-Z_$][0-9a-zA-Z_$]*):.*[-=]>.*$/\1/f,function/
@@ -23,11 +24,34 @@
 --langmap=Asm:+.spp
 
 --langdef=Asm-disabled
---langmap=Asm-disabled:+.Convoluted_Silent_Comment:No_good_doubling_context_and_macro_regexps_both_here_and_in_cwd_ctags!
+--langmap=Asm-disabled:+.COMMENT_disabled_here_because_defined_in_cwd_of_main_asm_project
 --regex-Asm-disabled=/^[^;]*\.context[ \t]+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/c,context/
 --regex-Asm-disabled=/^[^;]*\.macro[ \t]+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/m,macro/
 
 --langdef=dosini
 --langmap=dosini:.ini
 --regex-dosini=/^\[([^]]*)\]/\1/s,section/
+
+--langdef=haxe
+--langmap=haxe:.hx
+--regex-haxe=/^package[ \t]+([A-Za-z0-9_.]+)/\1/p,package/
+--regex-haxe=/^[ \t]*[(@:macro|private|public|static|override|inline|dynamic)( \t)]*function[ \t]+([A-Za-z0-9_]+)/\1/f,function/
+--regex-haxe=/^[ \t]*([private|public|static|protected|inline][ \t]*)+var[ \t]+([A-Za-z0-9_]+)/\2/v,variable/
+--regex-haxe=/^[ \t]*package[ \t]*([A-Za-z0-9_]+)/\1/p,package/
+--regex-haxe=/^[ \t]*(extern[ \t]+)?class[ \t]+([A-Za-z0-9_]+)[ \t]*[^\{]*/\2/c,class/
+--regex-haxe=/^[ \t]*(extern[ \t]+)?interface[ \t]+([A-Za-z0-9_]+)/\2/i,interface/
+--regex-haxe=/^[ \t]*typedef[ \t]+([A-Za-z0-9_]+)/\1/d,typedef/
+--regex-haxe=/^[ \t]*enum[ \t]+([A-Za-z0-9_]+)/\1/e,enum/
+--regex-haxe=/^[ \t]*+([A-Za-z0-9_]+)(;|\([^)]*:[^)]*\))/\1/t,enum_field/
+
+--langdef=joeygrammar
+--langmap=joeygrammar:.grm
+--regex-joeygrammar=/^[ \t]*([A-Za-z0-9_$@]*)[ \t]*=/\1/r,rule/
+
+--langdef=haskell
+--langmap=haskell:.hs
+--regex-haskell=/^(COMMENT: matching = may miss functions declared with pattern matching, however those will tend to throw up multiple results which will be annoying.  We could seek :: but these are optional - the favourite probably depends on the style of the file you are editing.)/\1/X,XXX/
+--regex-haskell=/^([a-zA-Z_][a-zA-Z0-9_]*)\s*::.*/\1/d,declaration/
+--regex-haskell=/^([a-zA-Z_][a-zA-Z0-9_]*)\s*=.*/\1/f,function/
+--regex-haskell=/^([a-zA-Z_][a-zA-Z0-9_]*)\s*[^=:].*/\1/p,pattern/
 
