@@ -1,19 +1,9 @@
-"" Joey's:
-"" Switch to taglist, move to next/previous line, and select tag there.
-"" Here we are basically implementing Tlist_Jump_To_NextTag/PrevTag.
-"nmap <silent> [[ :TlistOpen<Enter><Up><Enter>
-"nmap <silent> ]] :TlistOpen<Enter><Down><Enter>
-"" Search for next/previous tag line (by indent):
-" nmap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter>W<Enter>
-" nmap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter>W<Enter>
-"" Better to stay in 1st column, so taglist doesn't scroll horizontally.
-" nmap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter><Enter>
-" nmap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter><Enter>
-"" It is faster to call directly.
-nnoremap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter>:call <SID>Tlist_Window_Jump_To_Tag('useopen')<CR>
-nnoremap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter>:call <SID>Tlist_Window_Jump_To_Tag('useopen')<CR>
-"" BUG: Why are these sometimes not going to the right place?!  It's working
-"" in Java and asm, but not on .vim files, where it jumps straight to the first function.
+" Joey's changes:
+"
+" pre-2012  Lots of stuff I don't remember
+"
+" 20121031  Added third sort-mode "tree" which shows tags in file-order but
+"           with indent derived from file.  Works but not always neatly.
 
 "" TODO: I think I may have made TL update rather to keenly, it destroys any
 "" folds I folded in the taglist when it refreshes, even if nothing has
@@ -32,6 +22,31 @@ nnoremap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter>:call <SID
 " crazy fountain on WinEnter events.
 " DONE: Instead we should wait on CursorHold, and then check if our buffer or
 " window has changed, before deciding whether to update.
+
+"" To test against the original:
+":so ~/.vim/plugin/taglist.vim.4.5
+":finish
+
+"" Joey's next/previous tag (in taglist order) keybind:
+"" Switch to taglist, move to next/previous line, and select tag there.
+"" Here we are basically implementing Tlist_Jump_To_NextTag/PrevTag.
+"nmap <silent> [[ :TlistOpen<Enter><Up><Enter>
+"nmap <silent> ]] :TlistOpen<Enter><Down><Enter>
+"" Search for next/previous tag line (by indent):
+" nmap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter>W<Enter>
+" nmap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter>W<Enter>
+"" Better to stay in 1st column, so taglist doesn't scroll horizontally.
+" nmap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter><Enter>
+" nmap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter><Enter>
+"" It is faster to call directly.
+" nnoremap <silent> [[ :TlistOpen<Enter>0:call search("^    ","b")<Enter>:call <SID>Tlist_Window_Jump_To_Tag('useopen')<CR>
+" nnoremap <silent> ]] :TlistOpen<Enter>0:call search("^    ","")<Enter>:call <SID>Tlist_Window_Jump_To_Tag('useopen')<CR>
+"" Switched to 1 or more spaces, to handle my new tree mode
+nnoremap <silent> [[ :TlistOpen<Enter>0:call search("^ ","b")<Enter>:call <SID>Tlist_Window_Jump_To_Tag('useopen')<CR>
+nnoremap <silent> ]] :TlistOpen<Enter>0:call search("^ ","")<Enter>:call <SID>Tlist_Window_Jump_To_Tag('useopen')<CR>
+"" BUG: Why are these sometimes not going to the right place?!  It's working
+"" in Java and asm, but not on .vim files, where it jumps straight to the first function.
+"" BUG TODO: When sort_type == "tree" we want a search only "^  "
 
 " File: taglist.vim
 " Author: Yegappan Lakshmanan (yegappan AT yahoo DOT com)
@@ -159,9 +174,14 @@ if !exists('loaded_taglist')
         let Tlist_Show_Menu = 0
     endif
 
-    " Tag listing sort type - 'name' or 'order'
+    " Tag listing sort type - 'name' or 'order' or 'tree'
     if !exists('Tlist_Sort_Type')
-        let Tlist_Sort_Type = 'order'
+        let Tlist_Sort_Type = 'tree'
+    endif
+
+    " Joey's:
+    if !exists('g:TagList_GroupByTagType')
+        let g:TagList_GroupByTagType = 0
     endif
 
     " Tag listing window split (horizontal/vertical) control
@@ -521,6 +541,9 @@ let s:tlist_def_verilog_settings = 'verilog;m:module;c:constant;P:parameter;' .
 " vim language
 let s:tlist_def_vim_settings = 'vim;a:autocmds;v:variable;f:function;c:command'
 
+" vim helpfiles
+let s:tlist_def_help_settings = 'help;1:section;2:heading;3:marker'
+
 " yacc language
 let s:tlist_def_yacc_settings = 'yacc;l:label'
 
@@ -553,6 +576,8 @@ let s:tlist_menu_empty = 1
 " variable is used to skip the refresh of the taglist window and is set
 " and cleared appropriately.
 let s:Tlist_Skip_Refresh = 0
+
+let s:list_of_sort_types = [ "name", "order", "tree" ]
 
 " Tlist_Window_Display_Help()
 function! s:Tlist_Window_Display_Help()
@@ -2002,51 +2027,125 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
     endif
     let file_start = s:tlist_{fidx}_start
 
-    " Add the tag names grouped by tag type to the buffer with a title
-    let i = 1
-    let ttype_cnt = s:tlist_{a:ftype}_count
-    while i <= ttype_cnt
-        let ttype = s:tlist_{a:ftype}_{i}_name
-        " Add the tag type only if there are tags for that type
-        let fidx_ttype = 's:tlist_' . fidx . '_' . ttype
-        let ttype_txt = {fidx_ttype}
-        if ttype_txt != ''
-            let txt = ' ' . s:tlist_{a:ftype}_{i}_fullname
-            if g:Tlist_Compact_Format == 0
-                let ttype_start_lnum = line('.') + 1
-                silent! put =txt
-            else
-                let ttype_start_lnum = line('.')
-                silent! put! =txt
+    " if g:TagList_GroupByTagType
+    if s:tlist_{fidx}_sort_type != "tree"
+
+        " Add the tag names grouped by tag type to the buffer with a title
+        let i = 1
+        let ttype_cnt = s:tlist_{a:ftype}_count
+        while i <= ttype_cnt
+            let ttype = s:tlist_{a:ftype}_{i}_name
+            " Add the tag type only if there are tags for that type
+            let fidx_ttype = 's:tlist_' . fidx . '_' . ttype
+            let ttype_txt = {fidx_ttype}
+            if ttype_txt != ''
+                let txt = '  ' . s:tlist_{a:ftype}_{i}_fullname
+                if g:Tlist_Compact_Format == 0
+                    let ttype_start_lnum = line('.') + 1
+                    silent! put =txt
+                else
+                    let ttype_start_lnum = line('.')
+                    silent! put! =txt
+                endif
+                silent! put =ttype_txt
+
+                let {fidx_ttype}_offset = ttype_start_lnum - file_start
+
+                " create a fold for this tag type
+                let fold_start = ttype_start_lnum
+                let fold_end = fold_start + {fidx_ttype}_count
+                exe fold_start . ',' . fold_end  . 'fold'
+
+                " Adjust the cursor position
+                if g:Tlist_Compact_Format == 0
+                    exe ttype_start_lnum + {fidx_ttype}_count
+                else
+                    exe ttype_start_lnum + {fidx_ttype}_count + 1
+                endif
+
+                if g:Tlist_Compact_Format == 0
+                    " Separate the tag types by a empty line
+                    silent! put =''
+                endif
             endif
-            silent! put =ttype_txt
+            let i = i + 1
+        endwhile
 
-            let {fidx_ttype}_offset = ttype_start_lnum - file_start
-
-            " create a fold for this tag type
-            let fold_start = ttype_start_lnum
-            let fold_end = fold_start + {fidx_ttype}_count
-            exe fold_start . ',' . fold_end  . 'fold'
-
-            " Adjust the cursor position
+        if s:tlist_{fidx}_tag_count == 0
             if g:Tlist_Compact_Format == 0
-                exe ttype_start_lnum + {fidx_ttype}_count
-            else
-                exe ttype_start_lnum + {fidx_ttype}_count + 1
-            endif
-
-            if g:Tlist_Compact_Format == 0
-                " Separate the tag types by a empty line
                 silent! put =''
             endif
         endif
-        let i = i + 1
-    endwhile
 
-    if s:tlist_{fidx}_tag_count == 0
+    else
+
+        " Joey's method - sort by order of appearance; indent to create tree
+        " TODO: Our tags appear above the filename O_o
+        " TODO: Our tags don't point at the right thing, when we try to use them.
+
+        " exe line('.') + 1
+        " OK so Tlist_Compact_Format=1 works but puts things in reverse order
+        "       Tlist_Compact_Format=0 puts things in the right order, but the
+        "       filename in the wrong place, below a large gap at the bottom!
+
+        let i = 1
+        " Add the tag names sorted in natural order
+        while i <= s:tlist_{fidx}_tag_count
+            let fidx_i = 's:tlist_' . fidx . '_' . i
+
+            " let tname_var = 's:tlist_' . fidx . '_' . i . '_tag_name'
+            " let txt = ' ' . {tname_var}
+            " let txt = ' ' . s:tlist_{fidx}_{i}_tag_name
+            let fidx_i = 's:tlist_' . fidx . '_' . i
+            "" This next call ensures the tproto_var has been parsed
+            let dummy = s:Tlist_Get_Tag_Prototype(fidx,i)
+            let tindent_var = 's:tlist_' . fidx . '_' . i . '_tag_proto_indent'
+            let indent = {tindent_var}
+            let indent = min([indent,8])
+            let txt = repeat(' ',1+indent)
+            let ttype_var = 's:tlist_' . fidx . '_' . i . '_tag_type'
+            if exists(ttype_var)
+                " let txt .= {ttype_var} . ': '
+                " let txt .= '[' . {ttype_var} . '] '
+            endif
+            let txt .= {fidx_i}_tag_name
+            if exists(ttype_var)
+                let txt .= ' (' . {ttype_var} . ')'
+            endif
+            "let proto = s:Tlist_Get_Tag_Linenum(fidx,i)
+            " let tproto_var = 's:tlist_' . fidx . '_' . i . '_tag_proto'
+            " if exists(tproto_var)
+                " let proto = ">" . {tproto_var} . "<"
+            " else
+                " let proto = "?"
+            " endif
+            " let txt .= ' : ' . proto
+            "" let ttype = {fidx_i}_tag_type
+            "let ttype = s:tlist_{fidx}_{i}_tag_type
+            "let txt = ' bananas'
+            "let ttype = 'variable'
+            "let fidx_ttype = 's:tlist_' . fidx . '_' . ttype
+
+            silent! put =txt
+
+            "let {fidx_ttype}_offset = ttype_start_lnum - file_start
+
+            " create a fold for this tag type
+            "let fold_start = ttype_start_lnum
+            "let fold_end = fold_start + 5   " {fidx_ttype}_count
+            " exe fold_start . ',' . fold_end  . 'fold'
+
+            " Any number above 0, and we space them with gaps (filename becomes visible!)
+            exe line(".") + 0
+
+            let i = i + 1
+        endwhile
+
         if g:Tlist_Compact_Format == 0
+            " Separate the file from the next by a empty line
             silent! put =''
         endif
+
     endif
 
     let s:tlist_{fidx}_end = line('.') - 1
@@ -2158,6 +2257,9 @@ function! s:Tlist_Get_Tag_Prototype(fidx, tidx)
     endif
     let tag_proto = strpart(tag_line, start, end - start)
     let {tproto_var} = substitute(tag_proto, '\s*', '', '')
+    " echo "tag_proto=".tag_proto
+    let {tproto_var}_indent = len(substitute(tag_proto, '[^ \t].*', '', ''))
+    " echo "indent = ".{tproto_var}_indent
 
     return {tproto_var}
 endfunction
@@ -2273,6 +2375,7 @@ function! s:Tlist_Parse_Tagline(tag_line)
 
     " Save the tag name
     let {fidx_tidx}_tag_name = tag_name
+    let {fidx_tidx}_tag_type = ttype     " Joey - this is only 1 char tag type!
 endfunction
 
 " Tlist_Process_File
@@ -2894,8 +2997,9 @@ function! s:Tlist_Refresh()
         return
     endif
 
-    " Skip buffers with 'buftype' set to nofile, nowrite, quickfix or help
-    if &buftype != ''
+    " Skip buffers with 'buftype' set to nofile, nowrite or quickfix
+    " Joey enabled it for help
+    if &buftype != '' && &buftype != "help"
         return
     endif
 
@@ -3047,11 +3151,14 @@ function! s:Tlist_Change_Sort(caller, action, sort_type)
         let sort_type = s:tlist_{fidx}_sort_type
 
         " Toggle the sort order from 'name' to 'order' and vice versa
-        if sort_type == 'name'
-            let s:tlist_{fidx}_sort_type = 'order'
-        else
-            let s:tlist_{fidx}_sort_type = 'name'
-        endif
+        "if sort_type == 'name'
+            "let s:tlist_{fidx}_sort_type = 'order'
+        "else
+            "let s:tlist_{fidx}_sort_type = 'name'
+        "endif
+        " Joey has turned 'toggle' into 'cycle'
+        let s:tlist_{fidx}_sort_type = remove(s:list_of_sort_types,0)
+        call add(s:list_of_sort_types,s:tlist_{fidx}_sort_type)
     else
         let s:tlist_{fidx}_sort_type = a:sort_type
     endif
@@ -3156,6 +3263,17 @@ endfunction
 " Tlist_Window_Get_Tag_Index()
 " Return the tag index for the specified line in the taglist window
 function! s:Tlist_Window_Get_Tag_Index(fidx, lnum)
+    " Joey DONE: This information does not exist if g:TagList_GroupByTagType==0
+    "            We will have to create our own data structure, and poll that? :f
+
+    " if g:TagList_GroupByTagType == 0
+    if s:tlist_{a:fidx}_sort_type == "tree"
+        let file_start_lnum = s:tlist_{a:fidx}_start
+        let tagnum = a:lnum - file_start_lnum             " assumes exactly 1 tag per line
+        " This will break if we space out any of the tags :S
+        return tagnum
+    endif
+
     let ttype = s:Tlist_Window_Get_Tag_Type_By_Linenum(a:fidx, a:lnum)
 
     " Current line doesn't belong to any of the displayed tag types
@@ -3531,7 +3649,7 @@ function! s:Tlist_Find_Nearest_Tag_Idx(fidx, linenum)
     let left = 1
     let right = s:tlist_{a:fidx}_tag_count
 
-    if sort_type == 'order'
+    if sort_type == 'order' || sort_type == 'tree'
         " Tags sorted by order, use a binary search.
         " The idea behind this function is taken from the ctags.vim script (by
         " Alexey Marinichev) available at the Vim online website.
@@ -3691,6 +3809,12 @@ function! s:Tlist_Window_Highlight_Tag(filename, cur_lnum, cntx, center)
     " Start of file + Start of tag type + offset
     let lnum = s:tlist_{fidx}_start + s:tlist_{fidx}_{ttype}_offset +
                 \ s:tlist_{fidx}_{tidx}_ttype_idx
+
+    " if g:TagList_GroupByTagType == 0
+    if s:tlist_{fidx}_sort_type == "tree"
+        let file_start_lnum = s:tlist_{fidx}_start
+        let lnum = file_start_lnum + tidx
+    endif
 
     " Goto the line containing the tag
     exe lnum
