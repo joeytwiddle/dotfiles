@@ -2080,13 +2080,14 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
     else
 
         " Joey's method - sort by order of appearance; indent to create tree
-        " TODO: Our tags appear above the filename O_o
-        " TODO: Our tags don't point at the right thing, when we try to use them.
 
-        " exe line('.') + 1
-        " OK so Tlist_Compact_Format=1 works but puts things in reverse order
-        "       Tlist_Compact_Format=0 puts things in the right order, but the
-        "       filename in the wrong place, below a large gap at the bottom!
+        let fileIndent = 0
+        if exists("s:tlist_{fidx}_indentCount")
+            let fileIndent = s:tlist_{fidx}_indentCount
+        endif
+        if fileIndent == 0
+            let fileIndent = 1
+        endif
 
         let i = 1
         " Add the tag names sorted in natural order
@@ -2101,17 +2102,22 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             let dummy = s:Tlist_Get_Tag_Prototype(fidx,i)
             let tindent_var = 's:tlist_' . fidx . '_' . i . '_tag_proto_indent'
             let indent = {tindent_var}
-            let indent = min([indent,8])
-            let txt = repeat(' ',1+indent)
+            let indent = indent / fileIndent
+            let indent = min([indent,5])
+            let txt = repeat(' ',2+2*indent)
             let ttype_var = 's:tlist_' . fidx . '_' . i . '_tag_type'
             if exists(ttype_var)
                 " let txt .= {ttype_var} . ': '
                 " let txt .= '[' . {ttype_var} . '] '
             endif
-            let txt .= {fidx_i}_tag_name
+            " let txt .= {fidx_i}_tag_name
             if exists(ttype_var)
-                let txt .= ' (' . {ttype_var} . ')'
+                " let txt .= ' (' . {ttype_var} . ')'
+                " let txt .= ' [' . {ttype_var} . ']'
+                " let txt .= ' : ' . {ttype_var}
+                let txt .= {ttype_var} . ': '
             endif
+            let txt .= {fidx_i}_tag_name
             "let proto = s:Tlist_Get_Tag_Linenum(fidx,i)
             " let tproto_var = 's:tlist_' . fidx . '_' . i . '_tag_proto'
             " if exists(tproto_var)
@@ -2597,10 +2603,29 @@ function! s:Tlist_Process_File(filename, ftype)
         let s:tlist_{fidx}_tag_count = tidx
     endif
 
+    let s:tlist_{fidx}_indentCount = s:Tlist_Guess_Indent(a:filename)
+
     call s:Tlist_Log_Msg('Processed ' . s:tlist_{fidx}_tag_count . 
                 \ ' tags in ' . a:filename)
 
     return fidx
+endfunction
+
+" Tlist_Guess_Indent (Joey's)
+" Reads the file, guessing its indent, returns number of chars
+function! s:Tlist_Guess_Indent(filename)
+    let lines = readfile(a:filename)
+    let lowestIndentCount = 0
+    for line in lines
+        let indentStr = substitute(line,'[^ \t].*','','')
+        let indentCount = len(indentStr)
+        if indentCount > 0
+            if lowestIndentCount==0 || indentCount < lowestIndentCount
+                let lowestIndentCount = indentCount
+            endif
+        endif
+    endfor
+    return lowestIndentCount
 endfunction
 
 " Tlist_Update_File
