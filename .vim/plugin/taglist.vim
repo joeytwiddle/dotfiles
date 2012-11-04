@@ -179,11 +179,6 @@ if !exists('loaded_taglist')
         let Tlist_Sort_Type = 'tree'
     endif
 
-    " Joey's:
-    if !exists('g:TagList_GroupByTagType')
-        let g:TagList_GroupByTagType = 0
-    endif
-
     " Tag listing window split (horizontal/vertical) control
     if !exists('Tlist_Use_Horiz_Window')
         let Tlist_Use_Horiz_Window = 0
@@ -289,6 +284,11 @@ if !exists('loaded_taglist')
 
     if !exists('Tlist_Max_Tag_Length')
         let Tlist_Max_Tag_Length = 10
+    endif
+
+    " Joey's:
+    if !exists('Tlist_Indent_Tree')
+        let Tlist_Indent_Tree = 1
     endif
 
     " Do not change the name of the taglist title variable. The winmanager
@@ -2027,7 +2027,6 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
     endif
     let file_start = s:tlist_{fidx}_start
 
-    " if g:TagList_GroupByTagType
     if s:tlist_{fidx}_sort_type != "tree"
 
         " Add the tag names grouped by tag type to the buffer with a title
@@ -2101,23 +2100,28 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             "" This next call ensures the tproto_var has been parsed
             let dummy = s:Tlist_Get_Tag_Prototype(fidx,i)
             let tindent_var = 's:tlist_' . fidx . '_' . i . '_tag_proto_indent'
-            let indent = {tindent_var}
-            let indent = indent / fileIndent
-            let indent = min([indent,5])
+            if g:Tlist_Indent_Tree
+                let indent = {tindent_var}
+                let indent = indent / fileIndent
+                let indent = min([indent,5])
+            else
+                let indent = 0
+            endif
             let txt = repeat(' ',2+2*indent)
             let ttype_var = 's:tlist_' . fidx . '_' . i . '_tag_type'
             if exists(ttype_var)
                 " let txt .= {ttype_var} . ': '
                 " let txt .= '[' . {ttype_var} . '] '
             endif
-            " let txt .= {fidx_i}_tag_name
+            let txt .= {fidx_i}_tag_name
             if exists(ttype_var)
                 " let txt .= ' (' . {ttype_var} . ')'
-                " let txt .= ' [' . {ttype_var} . ']'
-                " let txt .= ' : ' . {ttype_var}
-                let txt .= {ttype_var} . ': '
+                let txt .= ' [' . {ttype_var} . ']'
+                " let txt .= {ttype_var} . ': '
+                " let txt .= {ttype_var} . ': '
+                " let txt .= " : " . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var})
             endif
-            let txt .= {fidx_i}_tag_name
+            " let txt .= {fidx_i}_tag_name
             "let proto = s:Tlist_Get_Tag_Linenum(fidx,i)
             " let tproto_var = 's:tlist_' . fidx . '_' . i . '_tag_proto'
             " if exists(tproto_var)
@@ -2626,6 +2630,20 @@ function! s:Tlist_Guess_Indent(filename)
         endif
     endfor
     return lowestIndentCount
+endfunction
+
+" Tlist_Get_Full_Type_Name (Joey's)
+" Given the single-char tag type, return its full name.
+function! s:Tlist_Get_Full_Type_Name(ftype,ttype)
+    let i = 1
+    let ttype_cnt = s:tlist_{a:ftype}_count
+    while i <= ttype_cnt
+        let ttype = s:tlist_{a:ftype}_{i}_name
+        if ttype == a:ttype
+            return s:tlist_{a:ftype}_{i}_fullname
+        endif
+        let i += 1
+    endwhile
 endfunction
 
 " Tlist_Update_File
@@ -3288,10 +3306,7 @@ endfunction
 " Tlist_Window_Get_Tag_Index()
 " Return the tag index for the specified line in the taglist window
 function! s:Tlist_Window_Get_Tag_Index(fidx, lnum)
-    " Joey DONE: This information does not exist if g:TagList_GroupByTagType==0
-    "            We will have to create our own data structure, and poll that? :f
 
-    " if g:TagList_GroupByTagType == 0
     if s:tlist_{a:fidx}_sort_type == "tree"
         let file_start_lnum = s:tlist_{a:fidx}_start
         let tagnum = a:lnum - file_start_lnum             " assumes exactly 1 tag per line
@@ -3835,7 +3850,6 @@ function! s:Tlist_Window_Highlight_Tag(filename, cur_lnum, cntx, center)
     let lnum = s:tlist_{fidx}_start + s:tlist_{fidx}_{ttype}_offset +
                 \ s:tlist_{fidx}_{tidx}_ttype_idx
 
-    " if g:TagList_GroupByTagType == 0
     if s:tlist_{fidx}_sort_type == "tree"
         let file_start_lnum = s:tlist_{fidx}_start
         let lnum = file_start_lnum + tidx
