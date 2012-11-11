@@ -1,15 +1,15 @@
---langmap=javascript:+.jpp
+--regex-c=/^(COMMENT: C, Java, Javascript, Asm have defaults, so need no langdef, but we can extend them)/\1/X,XXX/
+
+--langmap=c:+.jpp,c:+.uc
+--langmap=java:+.jpp,java:+.uc
+--langmap=javascript:+.jpp,javascript:+.uc
+--regex-javascript=/^(Some of Javascript's default patterns match null on Unrealscript files.)/\1/X,XXX/
 --regex-javascript=/^[ \t]*var ([a-zA-Z_$][0-9a-zA-Z_$]*).*$/\1/v,variable/
 --regex-javascript=/^[ \t]*this\.([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]*=.*$/\1/e,export/
 --regex-javascript=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*):.*$/\1/p,property/
-
 --regex-javascript=/^(COMMENT: ctags defaults ignore functions inside anonymous functions - the following catch them but can cause duplicates!)/\1/X,XXX/
 --regex-javascript=/^\<function\>[ \t]*(\<[a-zA-Z_$][0-9a-zA-Z_$]*\>)/\1/f,function/
 --regex-javascript=/^(\<[a-zA-Z_$][0-9a-zA-Z_$.]*\>)*[ \t]*=[ \t]*\<function\>/\1/f,function/
-
---langmap=javascript:+.jpp,javascript:+.uc
---langmap=java:+.jpp,java:+.uc
---langmap=c:+.jpp,c:+.uc
 
 --langdef=coffee
 --langmap=coffee:.coffee
@@ -22,11 +22,9 @@
 --regex-coffee=/^[ \t]*@?([a-zA-Z_$][0-9a-zA-Z_$]*):.*$/\1/p,property/
 
 --langmap=Asm:+.spp
-
---langdef=Asm-disabled
---langmap=Asm-disabled:+.COMMENT_disabled_here_because_defined_in_cwd_of_main_asm_project
---regex-Asm-disabled=/^[^;]*\.context[ \t]+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/c,context/
---regex-Asm-disabled=/^[^;]*\.macro[ \t]+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/m,macro/
+--regex-Asm=/^[^;]*\.macro[ \t]+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/m,macro/
+--regex-Asm=/^[^;]*\.context[ \t]+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/c,context/
+--regex-Asm=/^([A-Za-z0-9_]+):/\1/l,label/
 
 --langdef=dosini
 --langmap=dosini:.ini
@@ -34,15 +32,15 @@
 
 --langdef=haxe
 --langmap=haxe:.hx
---regex-haxe=/^package[ \t]+([A-Za-z0-9_.]+)/\1/p,package/
+--regex-haxe=/^[ \t]*package[ \t]*([A-Za-z0-9_.]+)/\1/p,package/
 --regex-haxe=/^[ \t]*[(@:macro|private|public|static|override|inline|dynamic)( \t)]*function[ \t]+([A-Za-z0-9_]+)/\1/f,function/
---regex-haxe=/^[ \t]*([private|public|static|protected|inline][ \t]*)+var[ \t]+([A-Za-z0-9_]+)/\2/v,variable/
---regex-haxe=/^[ \t]*package[ \t]*([A-Za-z0-9_]+)/\1/p,package/
+--regex-haxe=/^[ \t]*((private|public|static|protected|inline)[ \t]*)+var[ \t]+([A-Za-z0-9_]+)/\3/v,variable/
 --regex-haxe=/^[ \t]*(extern[ \t]+)?class[ \t]+([A-Za-z0-9_]+)[ \t]*[^\{]*/\2/c,class/
 --regex-haxe=/^[ \t]*(extern[ \t]+)?interface[ \t]+([A-Za-z0-9_]+)/\2/i,interface/
 --regex-haxe=/^[ \t]*typedef[ \t]+([A-Za-z0-9_]+)/\1/d,typedef/
 --regex-haxe=/^[ \t]*enum[ \t]+([A-Za-z0-9_]+)/\1/e,enum/
---regex-haxe=/^[ \t]*+([A-Za-z0-9_]+)(;|\([^)]*:[^)]*\))/\1/t,enum_field/
+--regex-haxe=/^[ \t]+([A-Z][A-Za-z0-9_]+)(;|\([^)]*:[^)]*\))/\1/t,enum_field/
+--regex-haxe=/^(WARNING: Our enum_field regexp can fire on e.g. Log("colon: yes");)/\1/t,enum_field/
 
 --langdef=joeygrammar
 --langmap=joeygrammar:.grm
@@ -51,7 +49,28 @@
 --langdef=haskell
 --langmap=haskell:.hs
 --regex-haskell=/^(COMMENT: matching = may miss functions declared with pattern matching, however those will tend to throw up multiple results which will be annoying.  We could seek :: but these are optional - the favourite probably depends on the style of the file you are editing.)/\1/X,XXX/
---regex-haskell=/^([a-zA-Z_][a-zA-Z0-9_]*)\s*::.*/\1/d,declaration/
+--regex-haskell=/^([a-zA-Z_][a-zA-Z0-9_]*)\s*::.*/\1/s,signature/
+--regex-haskell=/^(WARNING: Patterns can produce multiple entries, and this regexp also accidentally catches data and type lines too!)/\1/X,XXX/
+--regex-haskell=/^data ([a-zA-Z_][a-zA-Z0-9_]*)/\1/d,data/
+--regex-haskell=/^type ([a-zA-Z_][a-zA-Z0-9_]*)/\1/t,type/
 --regex-haskell=/^([a-zA-Z_][a-zA-Z0-9_]*)\s*=.*/\1/f,function/
---regex-haskell=/^([a-zA-Z_][a-zA-Z0-9_]*)\s*[^=:].*/\1/p,pattern/
+--regex-haskell=/^([a-zA-Z_][a-zA-Z0-9_]*)\s+[^=:].*=/\1/p,pattern/
+--regex-haskell=/^(COMMENT: Argh, we could just go for signature and other (anything with =)!)/\1/X,XXX/
+--regex-haskell=/^DISABLED: ([a-zA-Z_][a-zA-Z0-9_]*)\s+[^=:].*=/\1/d,definition/
+--regex-haskell=/^(COMMENT: Probably what we really want is one entry (the top one) instead of multiple pattern entries.)/\1/X,XXX/
+
+--langdef=markdown
+--langmap=markdown:.md
+--regex-markdown=/^(#[^#].*)/\1/1,level1/
+--regex-markdown=/^(##[^#].*)/\1/2,level2/
+--regex-markdown=/^(###[^#].{0,19})/\1/3,level3/
+--regex-markdown=/^(=[^=].*)/\1/1,level1/
+--regex-markdown=/^(==[^=].*)/\1/2,level2/
+--regex-markdown=/^(===[^=].{0,19})/\1/3,level3/
+
+--langdef=help
+--langmap=help:.txt
+--regex-help=/^([0-9]+\. [A-Z].*)\*$/\1/s,section/
+--regex-help=/^([A-Z][A-Za-z0-9 ]*).*\*$/\1/h,heading/
+--regex-help=/[\*]([^* \t]+)[\*]$/\1/m,marker/
 
