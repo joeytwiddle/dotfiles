@@ -4,6 +4,8 @@
 "
 " 20121031  Added third sort-mode "tree" which shows tags in file-order but
 "           with indent derived from file.  Works but not always neatly.
+"
+" 20121109  Added fourth sort-mode "line" which shows the entire prototype.
 
 "" TODO: I think I may have made TL update rather to keenly, it destroys any
 "" folds I folded in the taglist when it refreshes, even if nothing has
@@ -22,6 +24,17 @@
 " crazy fountain on WinEnter events.
 " DONE: Instead we should wait on CursorHold, and then check if our buffer or
 " window has changed, before deciding whether to update.
+
+" Known limitations: "tree" mode bases tag indentation on line indentation.
+" This often works for nested structures in JS/Java, but does not indent
+" children in non-indented files such as markdown, and *does* indent tags for
+" items which are inside nothing more significant than an if (which is
+" visually wrong because the apparent parent may have the same level as the if
+" line; although it would be fine if the if line has a tag).
+"
+" The markdown issue could be approached by somewhere specifying which tags
+" should nest inside others (Tagbar does this), or more simply stating that
+" every tag is a sequential level, and should receive an extra indent.
 
 "" To test against the original:
 ":so ~/.vim/plugin/taglist.vim.4.5
@@ -577,7 +590,8 @@ let s:tlist_menu_empty = 1
 " and cleared appropriately.
 let s:Tlist_Skip_Refresh = 0
 
-let s:list_of_sort_types = [ "name", "order", "tree" ]
+let s:list_of_sort_types = [ "name", "order", "line", "tree" ]
+let s:list_of_tag_colors = [ "darkcyan", "darkyellow", "darkmagenta", "darkred", "darkgreen", "darkblue" ]
 
 " Tlist_Window_Display_Help()
 function! s:Tlist_Window_Display_Help()
@@ -2027,7 +2041,7 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
     endif
     let file_start = s:tlist_{fidx}_start
 
-    if s:tlist_{fidx}_sort_type != "tree"
+    if s:tlist_{fidx}_sort_type == "name" || s:tlist_{fidx}_sort_type == "order"
 
         " Add the tag names grouped by tag type to the buffer with a title
         let i = 1
@@ -2038,7 +2052,7 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             let fidx_ttype = 's:tlist_' . fidx . '_' . ttype
             let ttype_txt = {fidx_ttype}
             if ttype_txt != ''
-                let txt = '  ' . s:tlist_{a:ftype}_{i}_fullname
+                let txt = '  ' . s:tlist_{a:ftype}_{i}_fullname .  ':'
                 if g:Tlist_Compact_Format == 0
                     let ttype_start_lnum = line('.') + 1
                     silent! put =txt
@@ -2076,7 +2090,7 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             endif
         endif
 
-    else
+    elseif s:tlist_{fidx}_sort_type == "tree"
 
         " Joey's method - sort by order of appearance; indent to create tree
 
@@ -2096,7 +2110,6 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             " let tname_var = 's:tlist_' . fidx . '_' . i . '_tag_name'
             " let txt = ' ' . {tname_var}
             " let txt = ' ' . s:tlist_{fidx}_{i}_tag_name
-            let fidx_i = 's:tlist_' . fidx . '_' . i
             "" This next call ensures the tproto_var has been parsed
             let dummy = s:Tlist_Get_Tag_Prototype(fidx,i)
             let tindent_var = 's:tlist_' . fidx . '_' . i . '_tag_proto_indent'
@@ -2113,15 +2126,19 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
                 " let txt .= {ttype_var} . ': '
                 " let txt .= '[' . {ttype_var} . '] '
             endif
-            let txt .= {fidx_i}_tag_name
+            " let txt .= {fidx_i}_tag_name
             if exists(ttype_var)
                 " let txt .= ' (' . {ttype_var} . ')'
-                let txt .= ' [' . {ttype_var} . ']'
-                " let txt .= {ttype_var} . ': '
+                " let txt .= ' [' . {ttype_var} . ']'
+                " let txt .= '(' . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ') '
+                let txt .= s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ': '
+                " let txt .= s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ': '
+                " let txt .= '[' . {ttype_var} . '] '
                 " let txt .= {ttype_var} . ': '
                 " let txt .= " : " . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var})
+                " let txt .= " : " . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var})
             endif
-            " let txt .= {fidx_i}_tag_name
+            let txt .= {fidx_i}_tag_name
             "let proto = s:Tlist_Get_Tag_Linenum(fidx,i)
             " let tproto_var = 's:tlist_' . fidx . '_' . i . '_tag_proto'
             " if exists(tproto_var)
@@ -2148,6 +2165,43 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             " Any number above 0, and we space them with gaps (filename becomes visible!)
             exe line(".") + 0
 
+            let i = i + 1
+        endwhile
+
+        if g:Tlist_Compact_Format == 0
+            " Separate the file from the next by a empty line
+            silent! put =''
+        endif
+
+        " As a short aside, let's also create a highlight for each tag type
+        syn clear TagListTitle
+        syn clear TagListTagScope
+        let i = 1
+        let ttype_cnt = s:tlist_{a:ftype}_count
+        while i <= ttype_cnt
+            let ttype = s:tlist_{a:ftype}_{i}_name
+            let displayedType = s:Tlist_Get_Full_Type_Name(a:ftype,ttype)
+            " let groupName = "TagList_Tag_" . a:ftype . "_" . ttype
+            let groupName = "TagList_Tag_Type_Marker_" . ttype
+            "" Sometimes the hlgroup exists, but the syntax was cleared!
+            " if !hlexists(groupName)
+                let col = get(s:list_of_tag_colors, (i-1) % len(s:list_of_tag_colors))
+                exec 'syntax match '.groupName.' /^ *'.displayedType.':/'
+                " exec 'syntax match '.groupName.' /^ *'.displayedType.': /'
+                exec 'highlight '.groupName.' ctermfg='.col.' guifg='.col
+            " endif
+            let i = i + 1
+        endwhile
+
+    elseif s:tlist_{fidx}_sort_type == "line"
+
+        let i = 1
+        " Add the tag names sorted in natural order
+        while i <= s:tlist_{fidx}_tag_count
+            let fidx_i = 's:tlist_' . fidx . '_' . i
+            let txt = '  ' . s:Tlist_Get_Tag_Prototype(fidx,i)
+            silent! put =txt
+            exe line(".") + 0
             let i = i + 1
         endwhile
 
@@ -2621,6 +2675,14 @@ function! s:Tlist_Guess_Indent(filename)
     let lines = readfile(a:filename)
     let lowestIndentCount = 0
     for line in lines
+
+        " This check excludes any line starting "*" or "*/", i.e. leading
+        " Java/Scala/Haxe comments.
+        let words = split(line," ")
+        if len(words)>=1 && words[0][0] == "*"
+            continue
+        endif
+
         let indentStr = substitute(line,'[^ \t].*','','')
         let indentCount = len(indentStr)
         if indentCount > 0
@@ -2641,6 +2703,19 @@ function! s:Tlist_Get_Full_Type_Name(ftype,ttype)
         let ttype = s:tlist_{a:ftype}_{i}_name
         if ttype == a:ttype
             return s:tlist_{a:ftype}_{i}_fullname
+        endif
+        let i += 1
+    endwhile
+endfunction
+
+" Tlist_Get_Short_Type_Name (Joey's)
+" Given the full name, return the single-char tag type
+function! s:Tlist_Get_Short_Type_Name(ftype,fullname)
+    let i = 1
+    let ttype_cnt = s:tlist_{a:ftype}_count
+    while i <= ttype_cnt
+        if s:tlist_{a:ftype}_{i}_fullname == a:fullname
+            return s:tlist_{a:ftype}_{i}_name
         endif
         let i += 1
     endwhile
@@ -3202,6 +3277,10 @@ function! s:Tlist_Change_Sort(caller, action, sort_type)
         " Joey has turned 'toggle' into 'cycle'
         let s:tlist_{fidx}_sort_type = remove(s:list_of_sort_types,0)
         call add(s:list_of_sort_types,s:tlist_{fidx}_sort_type)
+        " TODO:
+        " if g:Tlist_Global_Sort_Method == 1
+        "     let g:tlist_sort_type = s:tlist_{fidx}_sort_type
+        " endif
     else
         let s:tlist_{fidx}_sort_type = a:sort_type
     endif
@@ -3307,7 +3386,7 @@ endfunction
 " Return the tag index for the specified line in the taglist window
 function! s:Tlist_Window_Get_Tag_Index(fidx, lnum)
 
-    if s:tlist_{a:fidx}_sort_type == "tree"
+    if s:tlist_{a:fidx}_sort_type == "tree" || s:tlist_{a:fidx}_sort_type == "line"
         let file_start_lnum = s:tlist_{a:fidx}_start
         let tagnum = a:lnum - file_start_lnum             " assumes exactly 1 tag per line
         " This will break if we space out any of the tags :S
