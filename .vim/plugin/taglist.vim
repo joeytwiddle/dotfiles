@@ -590,7 +590,7 @@ let s:tlist_menu_empty = 1
 " and cleared appropriately.
 let s:Tlist_Skip_Refresh = 0
 
-let s:list_of_sort_types = [ "name", "order", "line", "tree" ]
+let s:list_of_sort_types = [ "name", "order", "line", "tree", "tree2" ]
 let s:list_of_tag_colors = [ "darkcyan", "darkyellow", "darkmagenta", "darkred", "darkgreen", "darkblue" ]
 
 " Tlist_Window_Display_Help()
@@ -2090,9 +2090,15 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             endif
         endif
 
-    elseif s:tlist_{fidx}_sort_type == "tree"
+    elseif s:tlist_{fidx}_sort_type == "tree" || s:tlist_{fidx}_sort_type == "tree2"
 
         " Joey's method - sort by order of appearance; indent to create tree
+
+        if s:tlist_{fidx}_sort_type == "tree2"
+            let tagComes = "after"
+        else
+            let tagComes = "before"
+        endif
 
         let fileIndent = 0
         if exists("s:tlist_{fidx}_indentCount")
@@ -2126,19 +2132,25 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
                 " let txt .= {ttype_var} . ': '
                 " let txt .= '[' . {ttype_var} . '] '
             endif
-            " let txt .= {fidx_i}_tag_name
-            if exists(ttype_var)
-                " let txt .= ' (' . {ttype_var} . ')'
-                " let txt .= ' [' . {ttype_var} . ']'
-                " let txt .= '(' . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ') '
-                let txt .= s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ': '
-                " let txt .= s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ': '
-                " let txt .= '[' . {ttype_var} . '] '
-                " let txt .= {ttype_var} . ': '
-                " let txt .= " : " . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var})
-                " let txt .= " : " . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var})
+            if tagComes == "after"
+                let txt .= {fidx_i}_tag_name
+                if exists(ttype_var)
+                    let txt .= ' [' . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ']'
+                endif
+            else
+                if exists(ttype_var)
+                    " let txt .= ' (' . {ttype_var} . ')'
+                    " let txt .= ' [' . {ttype_var} . ']'
+                    " let txt .= '(' . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ') '
+                    let txt .= s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ': '
+                    " let txt .= s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ': '
+                    " let txt .= '[' . {ttype_var} . '] '
+                    " let txt .= {ttype_var} . ': '
+                    " let txt .= " : " . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var})
+                    " let txt .= " : " . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var})
+                endif
+                let txt .= {fidx_i}_tag_name
             endif
-            let txt .= {fidx_i}_tag_name
             "let proto = s:Tlist_Get_Tag_Linenum(fidx,i)
             " let tproto_var = 's:tlist_' . fidx . '_' . i . '_tag_proto'
             " if exists(tproto_var)
@@ -2186,8 +2198,11 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             "" Sometimes the hlgroup exists, but the syntax was cleared!
             " if !hlexists(groupName)
                 let col = get(s:list_of_tag_colors, (i-1) % len(s:list_of_tag_colors))
-                exec 'syntax match '.groupName.' /^ *'.displayedType.':/'
-                " exec 'syntax match '.groupName.' /^ *'.displayedType.': /'
+                if tagComes == "after"
+                    exec 'syntax match '.groupName.' / \['.displayedType.'\]$/'
+                else
+                    exec 'syntax match '.groupName.' /^ *'.displayedType.':/'
+                endif
                 exec 'highlight '.groupName.' ctermfg='.col.' guifg='.col
             " endif
             let i = i + 1
@@ -3386,7 +3401,7 @@ endfunction
 " Return the tag index for the specified line in the taglist window
 function! s:Tlist_Window_Get_Tag_Index(fidx, lnum)
 
-    if s:tlist_{a:fidx}_sort_type == "tree" || s:tlist_{a:fidx}_sort_type == "line"
+    if s:tlist_{a:fidx}_sort_type == "tree" || s:tlist_{a:fidx}_sort_type == "tree2" || s:tlist_{a:fidx}_sort_type == "line"
         let file_start_lnum = s:tlist_{a:fidx}_start
         let tagnum = a:lnum - file_start_lnum             " assumes exactly 1 tag per line
         " This will break if we space out any of the tags :S
@@ -3929,7 +3944,7 @@ function! s:Tlist_Window_Highlight_Tag(filename, cur_lnum, cntx, center)
     let lnum = s:tlist_{fidx}_start + s:tlist_{fidx}_{ttype}_offset +
                 \ s:tlist_{fidx}_{tidx}_ttype_idx
 
-    if s:tlist_{fidx}_sort_type == "tree"
+    if s:tlist_{fidx}_sort_type == "tree" || s:tlist_{fidx}_sort_type == "tree2"
         let file_start_lnum = s:tlist_{fidx}_start
         let lnum = file_start_lnum + tidx
     endif
