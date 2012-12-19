@@ -1,3 +1,13 @@
+" Sometimes I use Ctrl-] a few times to read some code, perhaps navigating up
+" and down in the files I visit.  Then I want to get back to where I was
+" before, but Ctrl-O may require a lot of hits.
+"
+" Here we introduce an alternative, that goes back to the previous file, not
+" the previous position.  The default mapping is on C-U.
+"
+" If you would rather go back to the last piece of code you were editing, see
+" last_edit_marker.vim
+
 " BUG TODO: If there is no previous buffer, will loop forever!  We could check
 " to see if we don't move at all, then abort.
 function GoBackToRecentBuffer()

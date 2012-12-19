@@ -16,11 +16,13 @@
 " overhead for the user, which he must exchange for the beneficial features of
 " this script!
 
-augroup WindowsRememberSizes
-  autocmd!
-  autocmd WinLeave * call <SID>Leaving()
-  autocmd WinEnter * call <SID>Entering()
-augroup END
+function! s:InitEvents()
+  augroup WindowsRememberSizes
+    autocmd!
+    autocmd WinLeave * call <SID>Leaving()
+    autocmd WinEnter * call <SID>Entering()
+  augroup END
+endfunction
 
 function! s:Debug(msg)
   if exists('g:wrsDebug') && g:wrsDebug > 0
@@ -54,6 +56,8 @@ function! s:Entering()
   endif
 endfunction
 
+call s:InitEvents()
+
 " BUGS:
 " When we add a new window to the list, e.g. TagList, when switching to it, the old unfocused size of the previous window from the *old* layout is applied.
 " I think we need to forget some things when layout changes?  Forget all unfocused sizes?
@@ -66,6 +70,22 @@ endfunction
 " Perhaps what we should do is have window remember their relative size rather than their actual size.  Would this be a percentage, or a ratio?
 " Then what do we do when a new window is created?  Shrink them all by 10%?  Shrink them intelligently?
 
+" Exposed to user
+function! ForgetWindowSizes()
+  let l:winnr = winnr()
+  "" PROBLEM: windo will cause Leave and Enter events to fire!  Solved - we temporarily clear the events.
+  augroup WindowsRememberSizes
+    autocmd!
+  augroup END
+  windo silent! exec "unlet! w:widthWhenFocused"
+  windo silent! exec "unlet! w:widthWhenUnfocused"
+  windo silent! exec "unlet! w:heightWhenFocused"
+  windo silent! exec "unlet! w:heightWhenUnfocused"
+  exec l:winnr." wincmd w"
+  call s:InitEvents()
+endfunction
+
+" Some keybinds, entirely optional
 " NOTE: copied from older version below
 nmap <silent> Om <C-W>-
 nmap <silent> Ok <C-W>+
@@ -76,15 +96,9 @@ nnoremap <silent> <C-kPlus> <C-W>+
 nnoremap <silent> <C-kDivide> <C-W><
 nnoremap <silent> <C-kMultiply> <C-W>>
 
-" Exposed to user
-function! ForgetWindowSizes()
-  let l:winnr = winnr()
-  windo exec "unlet! w:widthWhenFocused"
-  windo exec "unlet! w:widthWhenUnfocused"
-  windo exec "unlet! w:heightWhenFocused"
-  windo exec "unlet! w:heightWhenUnfocused"
-  exec l:winnr." wincmd w"
-endfunction
+
+
+
 
 
 

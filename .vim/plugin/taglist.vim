@@ -189,7 +189,7 @@ if !exists('loaded_taglist')
 
     " Tag listing sort type - 'name' or 'order' or 'tree'
     if !exists('Tlist_Sort_Type')
-        let Tlist_Sort_Type = 'tree'
+        let Tlist_Sort_Type = "tree"
     endif
 
     " Tag listing window split (horizontal/vertical) control
@@ -590,7 +590,8 @@ let s:tlist_menu_empty = 1
 " and cleared appropriately.
 let s:Tlist_Skip_Refresh = 0
 
-let s:list_of_sort_types = [ "name", "order", "line", "tree", "tree2" ]
+" The last entry is the default.  Cycling will start from the first.
+let s:list_of_sort_types = [ "tree2", "name", "order", "line", "tree" ]
 let s:list_of_tag_colors = [ "darkcyan", "darkyellow", "darkmagenta", "darkred", "darkgreen", "darkblue" ]
 
 " Tlist_Window_Display_Help()
@@ -2094,7 +2095,7 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
 
         " Joey's method - sort by order of appearance; indent to create tree
 
-        if s:tlist_{fidx}_sort_type == "tree2"
+        if s:tlist_{fidx}_sort_type == "tree"
             let tagComes = "after"
         else
             let tagComes = "before"
@@ -2135,7 +2136,7 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             if tagComes == "after"
                 let txt .= {fidx_i}_tag_name
                 if exists(ttype_var)
-                    let txt .= ' [' . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ']'
+                    let txt .= '   [' . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ']'
                 endif
             else
                 if exists(ttype_var)
@@ -2689,7 +2690,10 @@ endfunction
 function! s:Tlist_Guess_Indent(filename)
     let lines = readfile(a:filename)
     let lowestIndentCount = 0
+    let lnum = 0
     for line in lines
+
+        let lnum += 1
 
         " This check excludes any line starting "*" or "*/", i.e. leading
         " Java/Scala/Haxe comments.
@@ -2703,6 +2707,8 @@ function! s:Tlist_Guess_Indent(filename)
         if indentCount > 0
             if lowestIndentCount==0 || indentCount < lowestIndentCount
                 let lowestIndentCount = indentCount
+                "echo "Found indentchars=".lowestIndentCount." at line ".lnum
+                break   " Don't take the lowest indent, take the first!
             endif
         endif
     endfor

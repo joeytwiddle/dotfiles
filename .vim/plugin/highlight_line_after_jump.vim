@@ -126,7 +126,10 @@ let s:last_win = -1
 
 " set updatetime=1000
 " set updatetime=4000
-set updatetime=200
+" set updatetime=200   " just a quick flash
+if &updatetime > 500
+  set updatetime=500
+endif
 
 if !hlexists("HLCurrentLine")
   highlight link HLCurrentLine CursorLine

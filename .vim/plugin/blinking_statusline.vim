@@ -30,14 +30,29 @@ if exists("g:blinking_statusline") && g:blinking_statusline>0
 		" autocmd WinEnter   * hi StatusLine ctermfg=yellow ctermbg=darkblue gui=none guibg=yellow guifg=blue
 		" autocmd BufEnter   * hi StatusLine ctermfg=yellow ctermbg=darkblue gui=none guibg=yellow guifg=blue
 		" autocmd CursorHold * hi StatusLine ctermfg=white  ctermbg=blue     gui=none guibg=white  guifg=blue
+
 		"" New implementation:  Don't overwrite StatusLine explicitly, instead link
-		"" it to one of StatusLineLit/Unlit, which can be edited by user at
-		"" runtime.
+		"" it to one of StatusLineLit/Unlit, which can be edited by user at runtime.
 		hi StatusLineLit   ctermfg=yellow ctermbg=darkblue cterm=reverse,bold gui=none guibg=yellow guifg=blue
 		hi StatusLineUnlit ctermfg=white  ctermbg=blue     cterm=reverse,bold gui=none guibg=white  guifg=blue
 		autocmd WinEnter   * hi clear StatusLine | hi link StatusLine StatusLineLit
 		autocmd BufEnter   * hi clear StatusLine | hi link StatusLine StatusLineLit
 		autocmd CursorHold * hi clear StatusLine | hi link StatusLine StatusLineUnlit
+
+		"" Optional: I found a white line flashing yellow did not stand out so strongly
+		"" So I also now flash the non-focused status lines, in a darker color, making the focused one stand out.
+		"" (It also helps to show how the non-focused edges have moved.)
+		hi StatusLineNCLit   term=underline,italic,reverse cterm=bold,underline ctermfg=black ctermbg=green  gui=underline,italic guifg=#222222 guibg=green
+		hi StatusLineNCUnlit term=underline,italic,reverse cterm=bold,underline ctermfg=black ctermbg=white gui=underline,italic guifg=#222222 guibg=#bbbbbb
+		autocmd WinEnter   * hi clear StatusLineNC | hi link StatusLineNC StatusLineNCLit
+		autocmd BufEnter   * hi clear StatusLineNC | hi link StatusLineNC StatusLineNCLit
+		autocmd CursorHold * hi clear StatusLineNC | hi link StatusLineNC StatusLineNCUnlit
+		hi VertSplitLit   term=reverse cterm=bold ctermbg=green  ctermfg=black gui=none guifg=#222222 guibg=green
+		hi VertSplitUnlit term=reverse cterm=bold ctermbg=grey ctermfg=black gui=none guifg=#222222 guibg=#bbbbbb
+		autocmd WinEnter   * hi clear VertSplit | hi link VertSplit VertSplitLit
+		autocmd BufEnter   * hi clear VertSplit | hi link VertSplit VertSplitLit
+		autocmd CursorHold * hi clear VertSplit | hi link VertSplit VertSplitUnlit
+
 	augroup END
 	set updatetime=600
 endif

@@ -100,7 +100,7 @@ nmap [1;5C <C-W>l
 " :nnoremap + :cnext<Enter>
 " :nnoremap _ :cprev<Enter>
 
-"" Allow navigation on wrapped lines with arrows
+"" Navigate wrapped lines in screen space using arrows
 nnoremap <Up> gk
 nnoremap <Down> gj
 
@@ -118,7 +118,8 @@ inoremap <C-J> <Esc><C-E>a
 " noremap <C-K> <C-Y>:silent! call HL_Cursor_Moved()<Enter>
 " noremap <C-J> <C-E>:silent! call HL_Cursor_Moved()<Enter>
 
-" Split windows vertically with Ctrl-W Shift-S
+"" Split windows vertically with Ctrl-W Shift-S
+"" The default is c-W v
 "nnoremap <C-W>s :split<Enter>
 nnoremap <C-W>S :vsplit<Enter>
 
@@ -226,7 +227,9 @@ cnoremap <C-X> <C-W>
 "" Lazy move.  Ctrl-Space just walks over the current char.
 "" I must say C-@ instead of C-Space!
 cnoremap <C-@> <Right>
-"" Does not work:
+" Same for normal mode:
+inoremap <C-@> <Right>
+"" Can't map C-Backspace; BS emits C-H with or without Ctrl.
 " cnoremap <C-BS> <Left>
 
 "" Now the same for Insert-mode?  Well a select few perhaps...
@@ -241,21 +244,25 @@ inoremap <C-F> <Esc>wi
 "" By default <C-A> performs the last . which could be pretty handy.
 "" Default <C-E> copies 1 char from the cell above (useful in the 80s).
 
+"" Because we overwrote Ctrl-D, we need a new one:
+cnoremap <C-L> <C-D>
+
 " This is how my zsh does completion, and it rocks (unless for some reason you
 " always want the first match of multiples, then you must always Tab twice).
 set wildmode=longest:full,full
+" I use the default wildchar=<Tab>
 
 
 " Make a global mark 'Q' with 'mQ' and jump back to it with 'MQ'.
 nmap M g'
 
 
-" Quick toggles of frequently used functions
+" Quick toggles for most frequently used functions
 nnoremap <Leader>t :Tlist<Enter>
 nnoremap <Leader>w :set invwrap<Enter>
 
 " Quick buffer switching (beyond Ctrl-PageUp/Down)
-"" Select buffer by number or name with completion
+"" Select buffer by any part of filename and Tab completion or arrows, or by number
 nnoremap <C-E> :ls<CR>:b<space>
 "" Select file by filename with completion
 " nnoremap <C-E> :ls<CR>:e<space>

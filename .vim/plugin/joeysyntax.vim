@@ -27,13 +27,14 @@ function! Joeysyntax()
 	"" Why is this here and not in joeyhighlight.vim ?
 	" :set background=dark
 	"" TODO: Should we move all highlight lines into joeyhighlight.vim ?
-	""       We might risk forgetting to delete
+	""       We might risk forgetting to delete them there if we delete syntax here.
+  "" DONE: All highlights which set colors were moved.  Now in here and in after/syntax files when I do highlight, I try to link to an existing group.
 
 	:syntax on
 
 	"" Doesn't work for C - overidden by bracket matches?
-	:syntax match functionCall /[[:alpha:][:digit:]]+(/
-	:highlight functionCall ctermfg=cyan
+	" :syntax match functionCall /[[:alpha:][:digit:]]+(/
+	" :highlight functionCall ctermfg=cyan
 
 	" :syntax region javaClassLine start=/class / end=/{/ contains=javaClassDecl
 
@@ -42,6 +43,7 @@ function! Joeysyntax()
 
 	" for Mason
 	:syntax region jComment start="/\*"  end="\*/"
+  " TODO: Isn't this a bit heavy?
 
 	" for sh, but bad for #defines!
 	" :syntax region jShComment start="[#]*## " end='$'
@@ -67,7 +69,9 @@ function! Joeysyntax()
 	"" BUG: Doesn't always work.  Works better now.  Wish I could say containedin=*  Err, they don't seem to be working at all, only "TODO" gets highlighted, and i suspect that's a script somewhere else doing it ^^
 	" :highlight! link jTodo Todo
 	" NOTE: these DO work, if you call :Joeysyntax after vim has started.
-	:syntax keyword jTodo TODO Todo ToDo todo BUG BUGS WARN CONSIDER Consider TEST TESTING Testing containedin=Comment,jShComment,jComment,shComment,ucComment,vimComment
+	:syntax keyword jTodo TODO Todo ToDo todo BUG BUGS WARN CONSIDER Consider NOTE TEST TESTING TOTEST Testing containedin=Comment,jShComment,jComment,shComment,ucComment,vimComment
+	" Well they don't appear to work in all languages.
+	" See also the shTodo rule I overrode in ~/.vim/after/syntax/sh.vim
 	" :syntax contain jTodo BUG linksto Todo
 	" :syntax keyword jTodo TODO Todo ToDo todo BUG BUGS WARN containedin=Comment,jShComment,jComment,shComment linksto Todo
 	"" Maybe worth noting, when I type :highlight, I see something like this:
@@ -86,20 +90,24 @@ function! Joeysyntax()
 	:syntax match jXmlBits /\(<\|>\)[[:alpha:]]*/
 	:highlight jXmlBits ctermfg=red term=bold
 
-	"" Log4j:
-	" :syntax match log4jDebug " DEBUG "
-	" :syntax match log4jInfo  " INFO "
-	" :syntax match log4jWarn  " WARN "
-	" :syntax match log4jError " ERROR "
-	:syntax match log4jDebug "^.* DEBUG .*$"
-	:syntax match log4jInfo  "^.* INFO .*$"
-	:syntax match log4jWarn  "^.* WARN .*$"
-	:syntax match log4jError "^.* ERROR .*$"
+  if &filetype == "log" || substitute(bufname("%"), '.*\.', '', '') == "log"
+    "" Log4j:
+    " :syntax match log4jDebug " DEBUG "
+    " :syntax match log4jInfo  " INFO "
+    " :syntax match log4jWarn  " WARN "
+    " :syntax match log4jError " ERROR "
+    :syntax match log4jDebug "^.* DEBUG .*$"
+    :syntax match log4jInfo  "^.* INFO .*$"
+    :syntax match log4jWarn  "^.* WARN .*$"
+    :syntax match log4jError "^.* ERROR .*$"
+  endif
 
 	" if exists(":Joeyhighlight")
 		" :Joeyhighlight
 	" endif
 
+  "" This separates single comments from double comments, for files where single comments are commented code and double comments indicate documentation.
+  "" Does not seem to work on vim files.
 	" :syntax match friendlyComment /^\s*\(##\|""\|\/\/\/\/\).*/ contains=confTodo contains=shTodo
 	"" Assume a single-symbol comment is a friendlyComment if it starts with a
 	"" capital (or more strictly, capital then lowercase).

@@ -28,13 +28,14 @@ function! DiffAgainstFileOnDisk()
   " :vert diffsplit %
   " :!diff % /tmp/working_copy
   " :!diff % /tmp/working_copy | diffhighlight | more
-  exec "!" . g:DAFOD_diffcmd . " % /tmp/working_copy"
+  exec "!" . g:DAFOD_diffcmd . " /tmp/working_copy %"
 endfunction
 
 "" Some similar yummies:
 
 "" Shows differences between the current buffer and the file on disk (with a split diff window).
-command! DiffAgainstFileSplit vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
-"" TOTEST:
+"" From the manual :h DiffOrig
+command! DiffSplitAgainstFileOnDisk vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+"" TOTEST, with caution:
 " command! ShowChangesSinceStarting normal "9999u" | w | normal "9999<C-r>" | DiffAgainstFileSplit
 

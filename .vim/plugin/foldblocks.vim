@@ -32,22 +32,44 @@ function! FoldBlocks(num)
 	"" Execute as many times as possible, without wrapping to top of file
 	let oldWrapScan = &wrapscan
 	set nowrapscan
+
 	" ALWAYS_REPORTS_ERROR
-	" If we run this with silent!, it doesn't perform the last fold below.
-	"   silent! exec "normal 999@f"
-	" If we wrap it in try endtry, it loops forever!
-	"   try | normal 999@f | catch | finally | endtry
-	" So for the moment, we just accept the error:
+	" For the moment, we must accept the error:
 	normal 999@f
 	" That stops when no further gap can be found, often at the top of the
 	" last block.  We must complete the fold up to the last line.
 	normal 9999
 	normal zf
 
-	" Restore wrapscap to how it was before
-	if oldWrapScan
-		set wrapscan
-	endif
+	" Some attempts to avoid it follow
+	" If we run this with silent!, it doesn't perform the last fold below.
+	"   silent! exec "normal 999@f"
+	" If we wrap it in try endtry, it loops forever!
+	"   try | normal 999@f | catch | finally | endtry
+
+	" Another attempt to avoid errors; also failed.
+	" Now that we have reached this complexity, we should forget about using a
+	" macro, and write a walker in vimscript using search().
+	"   let previousLine = getpos(".")[1]
+	"   let secondPreviousLine = 0
+	"   while 1
+	"   	try
+	"   		normal @f
+	"   	catch
+	"   	endtry
+	"   	let currentLine = getpos(".")[1]
+	"   	if currentLine <= previousLine
+	"   		break
+	"   	endif
+	"   	let secondPreviousLine = previousLine
+	"   	let previousLine = currentLine
+	"   endwhile
+	"   call setpos(".",[0,secondPreviousLine,1,0])
+	"   normal v9999
+	"   normal zf
+
+	" Restore wrapscan to how it was before
+	let &wrapscan = oldWrapScan
 
 endfunction
 

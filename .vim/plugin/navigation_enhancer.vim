@@ -3,7 +3,7 @@
 " aka Retrace Your Steps
 "
 " When moving the cursor between windows, given a choice of target windows,
-" Vim uses the *cursor position* to choose the destination window.
+" Vim normally uses the *cursor position* to choose the destination window.
 "
 " However I think a more intuitive approach when there may be more than one
 " potential target window is to pick the one which was *used most recently*.

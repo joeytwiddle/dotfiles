@@ -1679,65 +1679,23 @@ function! <SID>MBESelectBuffer()
     " normal hEB""yE
 
     if word == "File"
-      if exists('g:vloaded_tree_explorer')
-
-        " Window IDs may change 1) when we create the VTE, and 2) when we
-        " re-arrange MBE.  So we need to store buffer IDs not window IDs.
+      " I have now put NERDTree above VTE because it groups folders at the top.
+      if exists('g:loaded_nerd_tree')
         wincmd p
-        let l:lastBufNum = winbufnr(0)
+        " exec "NERDTree"
+        call s:OpenAndRearrangeSidebar("NERDTree")
+      elseif exists('g:vloaded_tree_explorer')
         if exists(':VSTreeExploreToggle')
-            exec "VSTreeExploreToggle"
+          let cmd = "VSTreeExploreToggle"
         else
-            exec "VSTreeExplore"
+          let cmd = "VSTreeExplore"
         endif
-        let l:treeBufNum = winbufnr(0)
-
-        "" Extra: Reformat my IDE-shaped window layout
-        "" I made VSTree swallow the whole of the left of the screen, but I
-        "" actually want MiniBufExplorer to swallow the whole of the top.
-        "" Look for MiniBufExplorer window, if it is visible
-        " let l:winNum = bufwinnr(bufnr('-MiniBufExplorer-'))
-        let l:winNum = <SID>FindWindow('-MiniBufExplorer-', 1)
-        " BUG: I want vtree to open any file I select in my last editing
-        " window.  Lots of problems here.  Hard to get its winnr because the
-        " windows change number after the VSTree is done!  Hard to get back to
-        " it with wincmd p because that only remembers 1 and we are dealing
-        " with 3!  Furthermore, VTE likes to split the edit window whenever
-        " MBE is present, even if I do get the window association right!
-        if l:winNum != -1
-            "" Refocus MiniBufExplorer window
-            " exec ":win ".l:winNum
-            exec l:winNum.' wincmd w'
-            "" This is dodgy but it seems to work often.  (Sometimes taglist ends up at the top)
-            " exec "wincmd p"
-            "" Push it to fill the top again (overriding whatever
-            "" VSTreeExploreToggle did).  What we wanted to do.
-            " wincmd K
-            exec "wincmd K"
-            " exec l:winNum." wincmd K"
-            " Finally fix MBE's height (now happening automatically)
-            ":MiniBufExplorer
-            "" Refocus the newly spawned TreeExplorer
-            " exec "wincmd p"
-            "" but also restore the history (don't want MBE as prev win)
-            let l:lastWinNum = bufwinnr(l:lastBufNum)
-            let l:treeWinNum = bufwinnr(l:treeBufNum)
-            " echo "Moving to lastWinNum=".lastWinNum
-            exec l:lastWinNum." wincmd w"
-            " echo "Moved to lastWinNum=".lastWinNum
-            exec l:treeWinNum." wincmd w"
-        else
-          " Finally fix MBE's height (now happening automatically)
-          ":MiniBufExplorer
-        endif
-
+        call s:OpenAndRearrangeSidebar(cmd)
+      " Netrw is nice because it can sort by date, but no tree
       elseif exists('g:loaded_netrwPlugin')
         wincmd p
         vsplit
         exec "Explore"
-      elseif exists('g:loaded_nerd_tree')
-        wincmd p
-        exec "NERDTree"
       endif
     elseif word == "Sess"
       wincmd p
@@ -1871,6 +1829,61 @@ function! <SID>MBESelectBuffer()
   call <SID>DEBUG('===========================',10)
   call <SID>DEBUG('Completed MBESelectBuffer()',10)
   call <SID>DEBUG('===========================',10)
+
+endfunction
+
+" }}}
+" OpenAndRearrangeSidebar - Runs cmd and re-arranges layout {{{
+" 
+" cmd is expected to open a sidebar and leave the cursor in it.
+"
+function! s:OpenAndRearrangeSidebar(cmd)
+
+        " Window IDs may change 1) when we create the VTE, and 2) when we
+        " re-arrange MBE.  So we need to store buffer IDs not window IDs.
+        wincmd p
+        let l:lastBufNum = winbufnr(0)
+        exec a:cmd
+        let l:treeBufNum = winbufnr(0)
+
+        "" Extra: Reformat my IDE-shaped window layout
+        "" I made VSTree swallow the whole of the left of the screen, but I
+        "" actually want MiniBufExplorer to swallow the whole of the top.
+        "" Look for MiniBufExplorer window, if it is visible
+        " let l:winNum = bufwinnr(bufnr('-MiniBufExplorer-'))
+        let l:winNum = <SID>FindWindow('-MiniBufExplorer-', 1)
+        " BUG: I want vtree to open any file I select in my last editing
+        " window.  Lots of problems here.  Hard to get its winnr because the
+        " windows change number after the VSTree is done!  Hard to get back to
+        " it with wincmd p because that only remembers 1 and we are dealing
+        " with 3!  Furthermore, VTE likes to split the edit window whenever
+        " MBE is present, even if I do get the window association right!
+        if l:winNum != -1
+            "" Refocus MiniBufExplorer window
+            " exec ":win ".l:winNum
+            exec l:winNum.' wincmd w'
+            "" This is dodgy but it seems to work often.  (Sometimes taglist ends up at the top)
+            " exec "wincmd p"
+            "" Push it to fill the top again (overriding whatever
+            "" VSTreeExploreToggle did).  What we wanted to do.
+            " wincmd K
+            exec "wincmd K"
+            " exec l:winNum." wincmd K"
+            " Finally fix MBE's height (now happening automatically)
+            ":MiniBufExplorer
+            "" Refocus the newly spawned TreeExplorer
+            " exec "wincmd p"
+            "" but also restore the history (don't want MBE as prev win)
+            let l:lastWinNum = bufwinnr(l:lastBufNum)
+            let l:treeWinNum = bufwinnr(l:treeBufNum)
+            " echo "Moving to lastWinNum=".lastWinNum
+            exec l:lastWinNum." wincmd w"
+            " echo "Moved to lastWinNum=".lastWinNum
+            exec l:treeWinNum." wincmd w"
+        else
+          " Finally fix MBE's height (now happening automatically)
+          ":MiniBufExplorer
+        endif
 
 endfunction
 

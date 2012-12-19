@@ -1,4 +1,5 @@
 " Folds up lines in the buffer which are not in the quickfix list.
+" Vim Tip 76: http://vim.wikia.com/wiki/Show_only_lines_in_quickfix_list_for_current_buffer
 
 " Add manual fold from line1 to line2, inclusive.
 function! s:Fold(line1, line2)

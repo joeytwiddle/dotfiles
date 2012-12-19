@@ -71,6 +71,10 @@ function! HW_Cursor_Moved()
   if exists('g:hiword') && g:hiword == 0
     return
   endif
+  " I rarely want to use this on plugin/help windows, it's usually a distraction.
+  if !&modifiable
+    return
+  endif
   let l:word = expand("<cword>")
   if (l:word == s:lastWord) " e.g. user has moved 1 char in the word - hide highlighting now.
     " echo "User moved within word"

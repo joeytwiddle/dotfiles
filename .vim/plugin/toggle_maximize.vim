@@ -19,6 +19,12 @@
 
 
 
+" TODO: This might be made to work better with windows_remember_size.vim and
+" maybe other plugin, if it only restores its own remembered height or width
+" when un-toggling, without affecting the others.  But then it won't restore
+" my full layout on un-toggle, and windows_remember_size might still end up
+" remembering things we don't want.  Could turn out to be a wasted trek.
+
 " WARNING BUG TODO: If we create a new window while maximized (e.g. split the
 " current window), restoring with winrestcmd completely fails!  I tend to
 " notice this because in my usual layout the current window becomes very tiny!
