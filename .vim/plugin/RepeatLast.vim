@@ -12,17 +12,17 @@
 "
 " Assuming your mapleader is '\' (the default):
 "
-"   \?   Show a list of recent actions
+"   \?   Display a list of recently recorded actions
 "
-"   \.   Repeat the last action (similar to .)
-"
-"   4\?  Show the last four actions
+"   4\?  Display the last four recorded actions
 "
 "   4\.  Repeat the last four actions
 "
-"   3\d  Forget (drop) last 3 actions (useful to get back to earlier state)
+"   \.   Repeat the last action (similar to .)
 "
-"   \d   Drops just the last 1 action.
+"   3\D  Forget (drop) last 3 actions (useful to get back to earlier state)
+"
+"   \D   Drops just the last 1 action.
 "
 " Why is it similar to . but not the same?  Well the main difference is that
 " \. also replays *movement* actions.  So if you just moved, unlike . , \.
@@ -40,6 +40,10 @@
 " actions leaves you in the right place for the next.  But if you try to do
 " '4\.<some_movement>4\.' the <some_movement> will be recorded as new actions,
 " so the second '4\.' will not do the same as the first '4\.'!
+"
+" It uses macro recording all the time.  That means (for the moment) you
+" cannot record your own macros.  The word "recording" will forever be
+" displayed in your command-line, hiding any text echoed there.
 
 
 
@@ -49,6 +53,8 @@
 " already in progress!  This stops recording and 'x' deletes one char.  Bad!
 " We need to detect whether recording is in progress or not.
 " We could also use a less harmful register, but that's not the full solution.
+"
+" TODO: Offer a way to toggle on/off at runtime.
 
 
 
@@ -79,36 +85,55 @@
 
 " == Options ==
 
+" When 5\. is requested, will first display the actions and ask Y/N.
 if !exists("g:RepeatLast_Request_Confirmation")
   let g:RepeatLast_Request_Confirmation = 0
 endif
+" DO NOT USE THIS because...
+" NASTY BUG: If your window is small enough, the use of a confirm dialog will
+" often cause the appearance of the dreaded "Press ENTER or type command to
+" continue" message.  Whatever you press to get rid of it _will_be_recorded_!
+" That stroke will now become part of the next \. you try to use.  Argh!
+" You might avoid this by ensuring your window is at least 80 columns wide,
+" and by expanding 'cmdheight'.
 
+" For debugging, echoes data about actions as they are recorded.
 if !exists("g:RepeatLast_Show_Recording")
   let g:RepeatLast_Show_Recording = 1
 endif
 
 
 
-" We will use register x to store our stuff.  Search and replace @x and qx if
-" you want.
-"
-" We want to have this macro recording on ALL THE TIME!  This is achieved by
-" EndActionDetected().
-
-" BUG: If we are already recording a macro, this will stop it and then 'x'
-" will delete 1 char!  We need to detect whether macro recording is active.
-
-normal qx
-
-
-
 if g:RepeatLast_Show_Recording != 0 && &ch < 3
   " We need this or we won't see the echo because "recording" will overwrite it.
+  " Pushed up to 3 because occasionally we echo 2 lines.
   set ch=3
 endif
 
+" We will use register x to store our stuff.  Search and replace @x and qx if
+" you want.
+"
+" We want to have this macro recording on ALL THE TIME!  This is achieved in
+" EndActionDetected().
+
+" BUG: If we are already recording a macro, 'q' will stop it and then 'x'
+" will delete 1 char!  We need to detect whether macro recording is active!
+
+normal qx
+
+" We are going to record a history of recent actions
 let s:earlierActions = []
 let s:maxToRecord = 30
+
+" We are going to trigger a function to look for new entries in our macro.
+augroup RepeatLast
+  autocmd!
+  " autocmd CursorHold * call s:EndActionDetected("CursorHold")
+  " The CursorHold event is not called whilst in macro recording mode.
+  " CursorMoved does the job though.  Not sure if we need InsertLeave.
+  " autocmd InsertLeave * call s:EndActionDetected("InsertLeave")
+  autocmd CursorMoved * call s:EndActionDetected("CursorMoved")
+augroup END
 
 function! s:EndActionDetected(trigger)
 
@@ -120,14 +145,21 @@ function! s:EndActionDetected(trigger)
   let leadRE = s:GetEscapedMapLeader()
   let extraReport = ""
 
+  "" We do not want to record keystrokes used to invoke this plugin's
+  "" features.  We used to clear them out here.
+  ""
+  "" This is no longer needed as ShowRecent and RepeatLast now forcefully
+  "" empty the macro.  We may want to bring this stuff back, if we find
+  "" unwanted '\? ' or '\.\n' keystrokes being recorded again.
+  "
   " If we invoke \? or \. this does not get recorded immediately because no
   " CursorMoved is triggered.  So we sometimes get a long action starting
   " with \? but then followed by other stuff.  Let's strip it off the front.
   " \? is often followed by a space or \n - that is the user's response to
   " "Please press ENTER or type command to continue"
   let cleanedAction = lastAction
-  let cleanedAction = substitute(cleanedAction,"^[0-9]*". leadRE ."\?[ \r]","","")
-  let cleanedAction = substitute(cleanedAction,"^[0-9]*". leadRE ."\.[ \r]","","")
+  let cleanedAction = substitute(cleanedAction,"^[0-9]*". leadRE ."\?[ \r]?","","")
+  let cleanedAction = substitute(cleanedAction,"^[0-9]*". leadRE ."\.[ \r]?","","")
   if cleanedAction != lastAction && g:RepeatLast_Show_Recording != 0
     let extraReport = "Cleaned up action: \"". s:MyEscape(lastAction) ."\" now: \"". s:MyEscape(cleanedAction) . "\""
     echo extraReport
@@ -174,17 +206,6 @@ function! s:EndActionDetected(trigger)
 
 endfunction
 
-augroup RepeatLast
-  autocmd!
-  autocmd CursorHold * call s:EndActionDetected("CursorHold")
-  " I get the feeling the CursorHold event is not being called whilst we are in
-  " macro recording mode, but is called fine when we leave it.  Sob!
-  autocmd InsertLeave * call s:EndActionDetected("InsertLeave")
-  " InsertLeave does appear to fire!  Great!  Except without CursorHold it
-  " means we detect all movements before the edit also.  :(
-  autocmd CursorMoved * call s:EndActionDetected("CursorMoved")
-augroup END
-
 
 
 function! s:ShowRecent(num)
@@ -197,7 +218,7 @@ function! s:ShowRecent(num)
     let numWanted = numWanted - line(".") + 1
   endif
 
-  echo "Your last ".numWanted." actions were:"
+  echo "Recent actions are:"
 
   let start = len(s:earlierActions) - numWanted
   if start < 0
@@ -208,6 +229,21 @@ function! s:ShowRecent(num)
     let howFarBack = len(s:earlierActions) - i
     echo howFarBack . " \"" . s:MyEscape(s:earlierActions[i]) . "\"\n"
   endfor
+
+  " We want to discard the keystrokes that lead to this call.
+  " Force an event trigger?
+  " call s:EndActionDetected("ShowRecent")
+  " No.  Just clear the macro.
+  if g:RepeatLast_Show_Recording != 0
+    echo "Dropping hopefully unwanted action: \"". s:MyEscape(@x) ."\""
+    " Curiously, this seemt to keep displaying my *previous* stroke, and not
+    " '\?' unless I perform it a second time.
+  endif
+  " I think the qx prints "recording" over our last echoed line.  Let's make
+  " it a line we don't need to see!
+  echo "I will get hidden"
+  normal q
+  normal qx
 
 endfunction
 
@@ -245,6 +281,20 @@ function! s:RepeatLast(num)
   exec "normal ".actions
   " Start recording again
   " normal qx
+
+  " We want to discard the keystrokes that lead to this call.
+  " Force an event trigger?
+  " call s:EndActionDetected("ShowRecent")
+  " No.  Just clear the macro.
+  if g:RepeatLast_Show_Recording != 0
+    echo "Dropping hopefully unwanted action: \"". s:MyEscape(@x) ."\""
+  endif
+  " The qx prints "recording" over our last echoed line.  Let's make it a line
+  " we don't need to see!
+  echo "I will get hidden"
+  normal q
+  normal qx
+
 endfunction
 
 function! s:DropLast(num)
@@ -262,10 +312,15 @@ function! s:DropLast(num)
     echo "Larger count given than possible.  Dropping only ".numWanted
   endif
 
-  call remove(s:earlierActions, len(s:earlierActions)-numWanted, len(s:earlierActions)-1)
+  let deletedActions = remove(s:earlierActions, len(s:earlierActions)-numWanted, len(s:earlierActions)-1)
 
   echo "Deleted last ".numWanted." actions."
+  for i in range(len(deletedActions))
+    echo "- \"" . s:MyEscape(deletedActions[i]) . "\""
+  endfor
 
+  " This clear our current macro, which is needed.
+  " By all means remove the call to ShowRecent, but then grab its end block.
   call s:ShowRecent(0)
 
 endfunction
@@ -305,6 +360,6 @@ command! -count=0 ShowRecent call <SID>ShowRecent(<count>)
 map <Leader>. :RepeatLast<Enter>
 command! -count=0 RepeatLast call <SID>RepeatLast(<count>)
 
-map <Leader>d :DropLast<Enter>
+map <Leader>D :DropLast<Enter>
 command! -count=0 DropLast call <SID>DropLast(<count>)
 
