@@ -5,6 +5,9 @@
 " The '.' key is fantastic at repeating the last 1 action you made.  But
 " sometimes I do three actions, and then want to repeat them again.  Now
 " this is just 3\.
+"
+" Beware: It has to use macro recording *all the time*, so it sort of
+" takes over your Vim in that respect.  :set ch=2 to feel happier
 
 
 
@@ -16,9 +19,9 @@
 "
 "   4\?  Display the last four recorded actions
 "
-"   4\.  Repeat the last four actions
-"
 "   \.   Repeat the last action (similar to . but may replay just a movement)
+"
+"   4\.  Repeat the last four actions (including movement actions)
 "
 "   \D   Forget (drop) the last action (e.g. to discard an unwanted movement)
 "
@@ -36,7 +39,7 @@
 "
 "   :RepeatLastOff   Enables action recording, enters macro record mode.
 "
-"   :RepeatLast<Tab>  or  :RepeatLast<Ctrl-D>   More commands, to toggle info.
+"   :RepeatLast<Ctrl-D>  or  <Tab>      More commands, some toggle info.
 "
 " New feature - Auto Ignoring:
 "
@@ -46,14 +49,15 @@
 "     g:RepeatLast_Ignore_After_Use_For
 "
 "   This allows you to move to a new location between executing repeats,
-"   without recording those movement actions.  (Movement actions in the
-"   *original* executed repeat remain in history so can still be repeated.)
+"   without recording those movement actions.  (Of course, movement actions in
+"   the *original* repeat remain unaffected.)
 "
 "   Action storage can also be temporarily disabled with \| or \#
 "
 "   Once you have performed enough actions without executing a repeat, action
 "   storage will be re-enabled, and the ignored actions will be added to the
-"   history as one large entry.
+"   history as one large entry.  Although g:RepeatLast_Stop_Ignoring_On_Edit
+"   disables this recovery.
 
 
 
