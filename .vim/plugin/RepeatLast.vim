@@ -113,6 +113,12 @@
 " TODO: Since it appears Vim does not currently expose the state of recording,
 " moving to a less harmful register, e.g. 'z', might be wise.
 "
+" TODO: We could use a way to *start* recording again, if temporary Ignoring
+" is enabled but unwanted.  We could just do 10 random movements.  We could
+" make \# explicitly toggle (re-enable if ignoring is enabled).  On re-enable
+" we may want to clear the current macro; it could well be a mix of unwanted
+" and wanted.
+"
 " DONE: Offer a way to toggle on/off at runtime.
 "
 " DONE: To deal with recording of movements we don't want, an alternative
@@ -132,12 +138,13 @@
 " TODO: We might try to restore CursorHold events by periodically letting Vim
 " out of recording mode, but re-enabling recording as soon as CursorHold
 " fires!  A downside might be that we would fail to record keystrokes typed
-" very quickly after the release (before CursorHold fires).
+" very quickly after said release (before CursorHold fires).
 "
 " TODO: Accidentally doing  80\/  instead of  80\?  throws up a lot of error
 " messages: "Error detected while processing function
 "            MyRepeatedSearch..MyRepeatedSearch..MyRepeatedSearch.."
-" Does this come from another plugin?  It would be nice to prevent it.
+" This actually comes from joey.vim.  It should fail gracefully when given a
+" count.
 
 
 
@@ -182,22 +189,9 @@ endif
 if !exists("g:RepeatLast_Request_Confirmation")
   let g:RepeatLast_Request_Confirmation = 0
 endif
-" DO NOT USE THIS yet because...
-"
-" NASTY BUG: If your window is small enough, the use of a confirm dialog will
-" often cause the appearance of the dreaded "Press ENTER or type command to
-" continue" message.  Whatever you press to get rid of it _will_be_recorded_!
-"
-" That stroke will now become part of the next \. you try to use.  Argh!
-" You might avoid this by ensuring your window is at least 80 columns wide,
-" and by expanding 'cmdheight'.
-"
-" In future we could add s:skipNextStroke to avoid recording that char,
-" although if the message does not appear, it may skip a wanted stroke.  :f
-"
-" In fact this bug exists even with this disabled.  We sometimes get the
-" message from \? and whatever key we press to dismiss it will eventually be
-" recorded (although actually not until the next trigger occurs).
+" Hopefully "Ignoring" now suppresses the previous issues we had here.
+" (That the key used to dismiss the "Press ENTER or type command to continue"
+" message was being recorded.)
 
 " Useful, shows status of ignoring
 if !exists("g:RepeatLast_Show_Ignoring_Info")
@@ -207,6 +201,10 @@ endif
 " For debugging, echoes data about actions as they are recorded.
 if !exists("g:RepeatLast_Show_Recording")
   let g:RepeatLast_Show_Recording = 0
+endif
+
+if !exists("g:RepeatLast_Max_History")
+  let g:RepeatLast_Max_History = 50
 endif
 
 
@@ -263,7 +261,6 @@ let s:ignoringCount = 0
 
 " We are going to record a history of recent actions
 let s:earlierActions = []
-let s:maxToRecord = 50
 
 " We are going to trigger a function to look for new entries in our macro.
 augroup RepeatLast
@@ -373,7 +370,7 @@ function! s:EndActionDetected(trigger)
       echo extraReport . "Detected action: \"" . s:MyEscape(lastAction) . "\" (triggered by ".a:trigger.")"
     endif
     call add(s:earlierActions,lastAction)
-    if len(s:earlierActions) > s:maxToRecord
+    if len(s:earlierActions) > g:RepeatLast_Max_History
       call remove(s:earlierActions,0)
     endif
 
@@ -480,7 +477,7 @@ function! s:RepeatLast(num)
   normal! q
   normal! qx
 
-  call s:RepeatLastBlockRecordingTemporarily()
+  call s:PauseRecording()
 
 endfunction
 
