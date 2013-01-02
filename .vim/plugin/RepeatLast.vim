@@ -65,8 +65,8 @@
 "
 "   :set cmdheight=2    or more
 "
-" (This is preferable to adding frequent calls to sleep, which can pause Vim
-" long enough to show messages, but can slow down / lock up Vim when we are
+" (This is preferable to adding frequent calls to sleep, which pause Vim long
+" enough to show messages, but can slow down / lock up Vim when we are
 " pressing a lot of keys.)
 "
 " If you want to record your own macro, you can disable the plugin with
@@ -193,16 +193,6 @@ endif
 " (That the key used to dismiss the "Press ENTER or type command to continue"
 " message was being recorded.)
 
-" Useful, shows status of ignoring
-if !exists("g:RepeatLast_Show_Ignoring_Info")
-  let g:RepeatLast_Show_Ignoring_Info = 1
-endif
-
-" For debugging, echoes data about actions as they are recorded.
-if !exists("g:RepeatLast_Show_Recording")
-  let g:RepeatLast_Show_Recording = 0
-endif
-
 " How much history to record before discarding
 if !exists("g:RepeatLast_Max_History")
   let g:RepeatLast_Max_History = 50
@@ -217,6 +207,16 @@ endif
 " disables recovery of ignored events when ignoring times out.)
 if !exists("g:RepeatLast_Stop_Ignoring_On_Edit")
   let g:RepeatLast_Stop_Ignoring_On_Edit = 1
+endif
+
+" Useful, shows status of ignoring (provided ch>=2)
+if !exists("g:RepeatLast_Show_Ignoring_Info")
+  let g:RepeatLast_Show_Ignoring_Info = 1
+endif
+
+" For debugging, echoes data about actions as they are recorded.
+if !exists("g:RepeatLast_Show_Recording")
+  let g:RepeatLast_Show_Recording = 0
 endif
 
 
