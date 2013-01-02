@@ -18,25 +18,30 @@
 "
 "   4\.  Repeat the last four actions
 "
-"   \.   Repeat the last action (similar to .)
+"   \.   Repeat the last action (similar to . but may replay just a movement)
 "
-"   3\D  Forget (drop) last 3 actions (useful to get back to earlier state)
+"   \D   Forget (drop) the last action (e.g. to discard an unwanted movement)
 "
-"   \D   Drops just the last 1 action.
+"   3\D  Drop the last 3 recorded actions (useful to get back to earlier state)
 "
-" Why is it similar to . but not the same?  Well the main difference is that
-" our \. commands also replay *movement* actions.  So if you just moved,
-" unlike . , \. will replay the last movement, not the last change!  Use \D
-" to discard recently recorded but unwanted movements.
+"   \|  or  \#   Temporarily disable recording of the next few actions.
+"
+" Commands are also available for the main shortcuts above:
+"
+"   :ShowRecent   :RepeatLast   :DropLast   :PauseRecording
+"
+" Commands to toggle state at runtime:
 "
 "   :RepeatLastOn    Disables action recording, leaves macro record mode.
 "
 "   :RepeatLastOff   Enables action recording, enters macro record mode.
 "
-" New feature:
+"   :RepeatLast<Tab>  or  :RepeatLast<Ctrl-D>   More commands, to toggle info.
+"
+" New feature - Auto Ignoring:
 "
 "   After executing a repeat action, action storage will be *temporarily
-"   disabled* for the number of actions specified in
+"   disabled* for the number of actions specified in:
 "
 "     g:RepeatLast_Ignore_After_Use_For
 "
@@ -44,9 +49,7 @@
 "   without recording those movement actions.  (Movement actions in the
 "   *original* executed repeat remain in history so can still be repeated.)
 "
-"   You can also force temporary ignoring of actions with:
-"
-"     \| or \#   Do not record the next few actions.
+"   Action storage can also be temporarily disabled with \| or \#
 "
 "   Once you have performed enough actions without executing a repeat, action
 "   storage will be re-enabled, and the ignored actions will be added to the
@@ -57,16 +60,21 @@
 " == Limitations ==
 "
 " It uses macro recording ALL THE TIME.  The word "recording" will forever be
-" displayed in your command-line, hiding any text displayed there.  To see the
-" hidden messages, you can set ch=2.
+" displayed in your command-line, hiding any messages usually displayed there
+" by Vim's echo.  To make those hidden messages visible, you will need to:
 "
-" If you want to record your own macro, you will need to disable the plugin
-" with :RepeatLastOff (or you could try just pressing 'q' for a one-time
-" disable).
+"   :set cmdheight=2    or more
+"
+" (This is preferable to adding frequent calls to sleep, which can pause Vim
+" long enough to show messages, but can slow down / lock up Vim when we are
+" pressing a lot of keys.)
+"
+" If you want to record your own macro, you can disable the plugin with
+" :RepeatLastOff (or you could try just pressing 'q' for a one-time disable).
 "
 " CursorHold events do not fire in macro-recording mode.  Any visual tools,
-" taglist updates, etc. that require CursorHold will not be triggered.
-" Other events such as CursorMove, InsertLeave work fine.
+" taglist updates, etc. that require CursorHold *will not be triggered*.
+" Other events such as CursorMove, InsertLeave, BufWritePost work fine.
 
 
 
@@ -81,6 +89,8 @@
 " '4\.<some_movement>4\.' the <some_movement> will be recorded as new actions,
 " so the second '4\.' will not do the same as the first '4\.'!  We have now
 " added \D so that unwanted actions can be removed.
+"
+" Now g:RepeatLast_Ignore_After_Use_For mitigates this, unless set to zero.
 
 
 
@@ -92,7 +102,9 @@
 "
 "   3,7\X   Delete actions 3 to 7 from history (inclusive)
 "
-"           That stroke may not be allowed.  3\X 5 times should do it.  :-/
+"           That stroke may not be allowed.  3\X  5 times should do it.  :-/
+"
+" TODO: Consider renaming "movement" to "motion" throughout the docs.
 "
 " Using register x, occasionally we do 'qx' to start recording but recording
 " is already in progress!  This stops recording and 'x' deletes one char.
@@ -220,9 +232,9 @@ command! RepeatLastToggleDebugging let g:RepeatLast_Show_Recording = 1 - g:Repea
 command! RepeatLastToggleInfo let g:RepeatLast_Show_Ignoring_Info = 1 - g:RepeatLast_Show_Ignoring_Info
 
 " Pause recording temporarily (allows movement before executing a repeat)
-map <Leader># :RepeatLastPauseRecording<Enter>
-map <Leader>\| :RepeatLastPauseRecording<Enter>
-command! -count=0 RepeatLastPauseRecording call <SID>PauseRecording()
+map <Leader># :PauseRecording<Enter>
+map <Leader>\| :PauseRecording<Enter>
+command! -count=0 PauseRecording call <SID>PauseRecording()
 
 
 
