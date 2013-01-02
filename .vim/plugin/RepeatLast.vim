@@ -86,6 +86,14 @@
 
 " == Bugs and TODOs ==
 "
+" TODO: It would be convenient to add:
+"
+"   3\X     Delete the 3rd old action from history
+"
+"   3,7\X   Delete actions 3 to 7 from history (inclusive)
+"
+"           That stroke may not be allowed.  3\X 5 times should do it.  :-/
+"
 " Using register x, occasionally we do 'qx' to start recording but recording
 " is already in progress!  This stops recording and 'x' deletes one char.
 " Bad!  We need to detect whether recording is in progress or not.
@@ -395,16 +403,16 @@ function! s:ShowRecent(num)
   " Force an event trigger?
   " call s:EndActionDetected("ShowRecent")
   " No.  Just clear the macro.
-  if g:RepeatLast_Show_Recording != 0
-    echo "Dropping hopefully unwanted action: \"". s:MyEscape(@x) ."\""
-    " Curiously, this seemt to keep displaying my *previous* stroke, and not
-    " '\?' unless I perform it a second time.
-  endif
   " The qx prints "recording" over our last echoed line, even if ch is large.
   " I don't know why this happens.  Let's make it a line we don't need to see!
   echo "I will get hidden"
   normal! q
   normal! qx
+  if g:RepeatLast_Show_Recording != 0
+    echo "Dropping hopefully unwanted action: \"". s:MyEscape(@x) ."\""
+    " This kept displaying my *previous* stroke, and not the '\?' until I
+    " performed it a second time.  Better info now we echo *after* q qx.
+  endif
 
 endfunction
 
