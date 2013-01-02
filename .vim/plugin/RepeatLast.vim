@@ -179,7 +179,7 @@
 
 
 " == Options ==
-" You may toggle these at runtime
+" You may override these defaults in your .vimrc, or change them at runtime
 
 if !exists("g:RepeatLast_Ignore_After_Use_For")
   let g:RepeatLast_Ignore_After_Use_For = 10
@@ -203,8 +203,20 @@ if !exists("g:RepeatLast_Show_Recording")
   let g:RepeatLast_Show_Recording = 0
 endif
 
+" How much history to record before discarding
 if !exists("g:RepeatLast_Max_History")
   let g:RepeatLast_Max_History = 50
+endif
+
+" How much history to display on \?
+if !exists("g:RepeatLast_Show_History")
+  let g:RepeatLast_Show_History = 16
+endif
+
+" Auto-disabled ignoring when an edit is made.  (This feature also necessarily
+" disables recovery of ignored events when ignoring times out.)
+if !exists("g:RepeatLast_Stop_Ignoring_On_Edit")
+  let g:RepeatLast_Stop_Ignoring_On_Edit = 1
 endif
 
 
@@ -232,7 +244,7 @@ command! RepeatLastToggleInfo let g:RepeatLast_Show_Ignoring_Info = 1 - g:Repeat
 " Pause recording temporarily (allows movement before executing a repeat)
 map <Leader># :PauseRecording<Enter>
 map <Leader>\| :PauseRecording<Enter>
-command! -count=0 PauseRecording call <SID>PauseRecording()
+command! -count=0 PauseRecording call <SID>PauseRecordingVerbosely()
 
 
 
@@ -241,6 +253,7 @@ command! -count=0 PauseRecording call <SID>PauseRecording()
 if g:RepeatLast_Show_Recording != 0 && &ch < 3
   " We need this or we won't see the echo because "recording" will overwrite it.
   " Pushed up to 3 because occasionally we echo 2 lines.
+  " Not forced for ignoring info
   set ch=3
 endif
 
@@ -281,28 +294,46 @@ function! s:EndActionDetected(trigger)
   endif
 
   if s:ignoringCount > 0
-    let s:ignoringCount -= 1
-    if g:RepeatLast_Show_Recording != 0
-      echo "Ignoring action triggered by ".a:trigger." and ".s:ignoringCount." more."
-    endif
-    if s:ignoringCount == 0
-      if g:RepeatLast_Show_Ignoring_Info != 0
-        echo "Now listening again."
-      endif
-    endif
-    " NOTE: Because we do not clear the macro (by stop/start), these events
-    " are still being recorded.  When ignoringCount becomes 0, that whole
-    " block will enter the history.
-    return
-  endif
 
-  if a:trigger == "InsertLeave"
-    if s:ignoringCount > 0
-      if g:RepeatLast_Show_Ignoring_Info != 0
-        echo "Edits detected - no longer ignoring!"
+    " If we want to ignore only movements, but auto-re-enable when edits are
+    " detected, we can try this.
+    " But in order to separate earlier movements from the insert we must force
+    " clearing of the macro for general ignoring below.
+    if g:RepeatLast_Stop_Ignoring_On_Edit != 0 && a:trigger == "InsertLeave"
+
+      " BUG: I never see this echoed!
+        if g:RepeatLast_Show_Ignoring_Info != 0
+          echo "Edits detected - no longer ignoring!"
+          " sleep 400ms
+        endif
+      let s:ignoringCount = 0
+
+    else
+
+      let s:ignoringCount -= 1
+      if g:RepeatLast_Show_Recording != 0
+        echo "Ignoring action triggered by ".a:trigger." and ".s:ignoringCount." more."
       endif
+      if g:RepeatLast_Stop_Ignoring_On_Edit != 0
+        " To avoid our edit being polluted with previous ignored movements, we
+        " must clear them pre-emptively.  A limitation demanded by that
+        " feature.  Or perhaps we always do want to forget ignored actions!
+        normal! q
+        normal! qx
+      endif
+      if s:ignoringCount == 0
+        if g:RepeatLast_Show_Ignoring_Info != 0
+          echo "Now listening again."
+          " sleep 400ms
+        endif
+      endif
+      " NOTE: Because we do not clear the macro (by stop/start), these events
+      " are still being recorded.  When ignoringCount becomes 0, that whole
+      " block will enter the history.
+      return
+
     endif
-    let s:ignoringCount = 0
+
   endif
 
   " Stop the macro recording (its register will not be set until then)
@@ -387,26 +418,22 @@ endfunction
 
 function! s:ShowRecent(num)
 
+  " ISSUES: If ch is set higher than the list which we display (when very few
+  " actions have been recorded), then we see only the first line echoed,
+  " "Recent actions are:" but none of the actions themselves!
+  "
+  " OK we solved that by moving the macro clear 'q qx' above the list echo
+  " below.  This now causes a blank line gets display before our list, which
+  " perhaps we can live with.
+
   let numWanted = a:num
   if numWanted == 0
-    let numWanted = 16   " default
+    let numWanted = g:RepeatLast_Show_History   " default
   else
     " Fix because <count> is a range, not just the number we gave it
     let numWanted = numWanted - line(".") + 1
     " TODO: Alternative fix: <bairui> joeytwiddle: :command! -count=1 Foo echo (v:count ? v:count : <count>)
   endif
-
-  echo "Recent actions are:"
-
-  let start = len(s:earlierActions) - numWanted
-  if start < 0
-    let start = 0
-  endif
-
-  for i in range(start,len(s:earlierActions)-1)
-    let howFarBack = len(s:earlierActions) - i
-    echo howFarBack . " \"" . s:MyEscape(s:earlierActions[i]) . "\"\n"
-  endfor
 
   " We want to discard the keystrokes that lead to this call.
   " Force an event trigger?
@@ -414,11 +441,28 @@ function! s:ShowRecent(num)
   " No.  Just clear the macro.
   " The qx prints "recording" over our last echoed line, even if ch is large.
   " I don't know why this happens.  Let's make it a line we don't need to see!
-  echo "I will get hidden"
+  " OK since we moved code around, it seems this is no longer needed.
+  "echo "I will get hidden"
   normal! q
   normal! qx
+
+  echo "Recent actions are:"
+
+  if numWanted > len(s:earlierActions)
+    let numWanted = len(s:earlierActions)
+  endif
+
+  " let start = len(s:earlierActions) - numWanted
+  " for i in range(start,len(s:earlierActions)-1)
+    " let howFarBack = len(s:earlierActions) - i
+
+  for howFarBack in range(numWanted,1,-1)
+    let i = len(s:earlierActions) - howFarBack
+    echo howFarBack . " \"" . s:MyEscape(s:earlierActions[i]) . "\"\n"
+  endfor
+
   if g:RepeatLast_Show_Recording != 0
-    echo "Dropping hopefully unwanted action: \"". s:MyEscape(@x) ."\""
+    echo "Dropped hopefully unwanted action: \"". s:MyEscape(@x) ."\""
     " This kept displaying my *previous* stroke, and not the '\?' until I
     " performed it a second time.  Better info now we echo *after* q qx.
   endif
@@ -437,10 +481,15 @@ function! s:RepeatLast(num)
   endif
 
   let actions = ""
-  let start = len(s:earlierActions) - numWanted
-  if start < 0
-    let start = 0
+
+  if numWanted > len(s:earlierActions)
+    let numWanted = len(s:earlierActions)
   endif
+
+  " for howFarBack in range(numWanted,1,-1)
+    " let i = len(s:earlierActions) - howFarBack
+
+  let start = len(s:earlierActions) - numWanted
   for i in range(start,len(s:earlierActions)-1)
     let actions = actions . s:earlierActions[i]
   endfor
@@ -459,7 +508,11 @@ function! s:RepeatLast(num)
   endif
 
   " Do we need to stop the macro recording before running our actions?  It appears not!
-  " normal! q
+  " OK we do need it now we are listening on InsertLeave.  (Or an InsertLeave
+  " triggered by our actions would cause storage of current macro '4\.')
+  normal! q
+  normal! qx
+  let s:ignoringCount = 0
   exec "normal! ".actions
   " Start recording again
   " normal! qx
@@ -477,14 +530,21 @@ function! s:RepeatLast(num)
   normal! q
   normal! qx
 
-  call s:PauseRecording()
+  call s:PauseRecordingQuietly()
 
 endfunction
 
-function! s:PauseRecording()
+function! s:PauseRecordingQuietly()
   let s:ignoringCount = g:RepeatLast_Ignore_After_Use_For
+endfunction
+
+function! s:PauseRecordingVerbosely()
+  call s:PauseRecordingQuietly()
   if g:RepeatLast_Show_Ignoring_Info != 0
     echo "Ignoring the next ".s:ignoringCount." events."
+    " This pause is not too disruptive, because it comes after a request, not
+    " in the middle of editing.  We only need it if low ch would hide it.
+    if &ch == 1 | sleep 400ms | endif
   endif
 endfunction
 
