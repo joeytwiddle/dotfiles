@@ -32,10 +32,45 @@
 "   :RepeatLastOn    Disables action recording, leaves macro record mode.
 "
 "   :RepeatLastOff   Enables action recording, enters macro record mode.
+"
+" New feature:
+"
+"   After executing a repeat action, action storage will be *temporarily
+"   disabled* for the number of actions specified in
+"
+"     g:RepeatLast_Ignore_After_Use_For
+"
+"   This allows you to move to a new location between executing repeats,
+"   without recording those movement actions.  (Movement actions in the
+"   *original* executed repeat remain in history so can still be repeated.)
+"
+"   You can also force temporary ignoring of actions with:
+"
+"     \| or \#   Do not record the next few actions.
+"
+"   Once you have performed enough actions without executing a repeat, action
+"   storage will be re-enabled, and the ignored actions will be added to the
+"   history as one large entry.
 
 
 
 " == Limitations ==
+"
+" It uses macro recording ALL THE TIME.  The word "recording" will forever be
+" displayed in your command-line, hiding any text displayed there.  To see the
+" hidden messages, you can set ch=2.
+"
+" If you want to record your own macro, you will need to disable the plugin
+" with :RepeatLastOff (or you could try just pressing 'q' for a one-time
+" disable).
+"
+" CursorHold events do not fire in macro-recording mode.  Any visual tools,
+" taglist updates, etc. that require CursorHold will not be triggered.
+" Other events such as CursorMove, InsertLeave work fine.
+
+
+
+" == Old Issue now addressed by "Ignore" feature ==
 "
 " Unlike '.' we DO want to record movements (as part of a 4-action sequence).
 " Unfortunately this means we cannot freely move to a new position between
@@ -46,17 +81,6 @@
 " '4\.<some_movement>4\.' the <some_movement> will be recorded as new actions,
 " so the second '4\.' will not do the same as the first '4\.'!  We have now
 " added \D so that unwanted actions can be removed.
-"
-" It uses macro recording ALL THE TIME.  The word "recording" will forever be
-" displayed in your command-line, hiding any text displayed there.  To see the
-" hidden messages, you can set ch=2.
-"
-" If you want to record your own macro, you will need to disable the plugin
-" with :RepeatLastOff.
-"
-" Also CursorHold events do not fire in macro-recording mode.  Any visual
-" tools, taglist updates or so on that require CursorHold will not be
-" triggered.  Other events including CursorMove work fine.
 
 
 
@@ -71,7 +95,7 @@
 "
 " DONE: Offer a way to toggle on/off at runtime.
 "
-" TODO: To deal with recording of movements we don't want, an alternative
+" DONE: To deal with recording of movements we don't want, an alternative
 " (optional) approach might be to go modal.  After the first use of '4\.' stop
 " recording (at the very least movements) so that the user can move around and
 " '4\.' in other places.  Perhaps we could re-enable recording with some
@@ -125,6 +149,10 @@
 " == Options ==
 " You may toggle these at runtime
 
+if !exists("g:RepeatLast_Ignore_After_Use_For")
+  let g:RepeatLast_Ignore_After_Use_For = 10
+endif
+
 " When 5\. is requested, will first display the actions and ask Y/N.
 if !exists("g:RepeatLast_Request_Confirmation")
   let g:RepeatLast_Request_Confirmation = 0
@@ -145,6 +173,11 @@ endif
 " In fact this bug exists even with this disabled.  We sometimes get the
 " message from \? and whatever key we press to dismiss it will eventually be
 " recorded (although actually not until the next trigger occurs).
+
+" Useful, shows status of ignoring
+if !exists("g:RepeatLast_Show_Ignoring_Info")
+  let g:RepeatLast_Show_Ignoring_Info = 1
+endif
 
 " For debugging, echoes data about actions as they are recorded.
 if !exists("g:RepeatLast_Show_Recording")
@@ -169,6 +202,15 @@ command! RepeatLastOff if g:RepeatLast_Enabled | let g:RepeatLast_Enabled = 0 | 
 " These sleeps are to ensure the message is seen even if ch=1.  (Otherwise
 " in the first case it is immediately hidden by qx "recording" message.)
 
+command! RepeatLastToggleDebugging let g:RepeatLast_Show_Recording = 1 - g:RepeatLast_Show_Recording
+
+command! RepeatLastToggleInfo let g:RepeatLast_Show_Ignoring_Info = 1 - g:RepeatLast_Show_Ignoring_Info
+
+" Pause recording temporarily (allows movement before executing a repeat)
+map <Leader># :RepeatLastPauseRecording<Enter>
+map <Leader>\| :RepeatLastPauseRecording<Enter>
+command! -count=0 RepeatLastPauseRecording call <SID>PauseRecording()
+
 
 
 " == Recording Actions ==
@@ -192,6 +234,8 @@ normal! qx
 
 let g:RepeatLast_Enabled = 1
 
+let s:ignoringCount = 0
+
 " We are going to record a history of recent actions
 let s:earlierActions = []
 let s:maxToRecord = 30
@@ -203,7 +247,8 @@ augroup RepeatLast
   " The CursorHold event is not called whilst in macro recording mode.
   " CursorMoved does the job though.  Not sure if we need InsertLeave.  It
   " appears to always trigger CursorMoved immediately afterwards.
-  " autocmd InsertLeave * call s:EndActionDetected("InsertLeave")
+  " InsertLeave now wanted for ignoringCount
+  autocmd InsertLeave * call s:EndActionDetected("InsertLeave")
   autocmd CursorMoved * call s:EndActionDetected("CursorMoved")
 augroup END
 
@@ -211,6 +256,31 @@ function! s:EndActionDetected(trigger)
 
   if !g:RepeatLast_Enabled
     return
+  endif
+
+  if s:ignoringCount > 0
+    let s:ignoringCount -= 1
+    if g:RepeatLast_Show_Recording != 0
+      echo "Ignoring action triggered by ".a:trigger." and ".s:ignoringCount." more."
+    endif
+    if s:ignoringCount == 0
+      if g:RepeatLast_Show_Ignoring_Info != 0
+        echo "Now listening again."
+      endif
+    endif
+    " NOTE: Because we do not clear the macro (by stop/start), these events
+    " are still being recorded.  When ignoringCount becomes 0, that whole
+    " block will enter the history.
+    return
+  endif
+
+  if a:trigger == "InsertLeave"
+    if s:ignoringCount > 0
+      if g:RepeatLast_Show_Ignoring_Info != 0
+        echo "Edits detected - no longer ignoring!"
+      endif
+    endif
+    let s:ignoringCount = 0
   endif
 
   " Stop the macro recording (its register will not be set until then)
@@ -366,7 +436,7 @@ function! s:RepeatLast(num)
     endif
   endif
 
-  " Do we really need to stop the macro recording?  It appears not.
+  " Do we need to stop the macro recording before running our actions?  It appears not!
   " normal! q
   exec "normal! ".actions
   " Start recording again
@@ -385,6 +455,15 @@ function! s:RepeatLast(num)
   normal! q
   normal! qx
 
+  call s:RepeatLastBlockRecordingTemporarily()
+
+endfunction
+
+function! s:PauseRecording()
+  let s:ignoringCount = g:RepeatLast_Ignore_After_Use_For
+  if g:RepeatLast_Show_Ignoring_Info != 0
+    echo "Ignoring the next ".s:ignoringCount." events."
+  endif
 endfunction
 
 function! s:DropLast(num)
