@@ -113,6 +113,11 @@
 " out of recording mode, but re-enabling recording as soon as CursorHold
 " fires!  A downside might be that we would fail to record keystrokes typed
 " very quickly after the release (before CursorHold fires).
+"
+" TODO: Accidentally doing  80\/  instead of  80\?  throws up a lot of error
+" messages: "Error detected while processing function
+"            MyRepeatedSearch..MyRepeatedSearch..MyRepeatedSearch.."
+" Does this come from another plugin?  It would be nice to prevent it.
 
 
 
@@ -238,7 +243,7 @@ let s:ignoringCount = 0
 
 " We are going to record a history of recent actions
 let s:earlierActions = []
-let s:maxToRecord = 30
+let s:maxToRecord = 50
 
 " We are going to trigger a function to look for new entries in our macro.
 augroup RepeatLast
@@ -367,7 +372,7 @@ function! s:ShowRecent(num)
 
   let numWanted = a:num
   if numWanted == 0
-    let numWanted = 10   " default
+    let numWanted = 16   " default
   else
     " Fix because <count> is a range, not just the number we gave it
     let numWanted = numWanted - line(".") + 1
@@ -522,7 +527,7 @@ function! s:MyEscape(str)
   while i < len(a:str)
     let char = a:str[i]
     if char2nr(char) < 32 || char2nr(char) > 126
-      let out = out . '#' . char2nr(char)
+      let out = out . '<' . char2nr(char) . '>'
     else
       let out = out . char
     endif
