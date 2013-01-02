@@ -102,12 +102,12 @@
 " simple heuristic, like if the user makes more than 12 keystrokes without
 " re-using '\.'.
 "
-" TODO: Or we could do something like "do not officially add movement actions
-" to the history *until* they are followed by an edit action".  This would
-" allow us to move freely after a set of actions, and then repeat them without
-" having to worry about the extra movement actions.  However it would also
-" *prevent* us from ending an action-group in a movement that might move it to
-" the correct place for the next movement.
+" CONSIDER: Or we could do something like "do not officially add movement
+" actions to the history *until* they are followed by an edit action".  This
+" would allow us to move freely after a set of actions, and then repeat them
+" without having to worry about the extra movement actions.  However it would
+" also *prevent* us from ending an action-group in a movement that might move
+" it to the correct place for the next movement.
 "
 " TODO: We might try to restore CursorHold events by periodically letting Vim
 " out of recording mode, but re-enabling recording as soon as CursorHold
