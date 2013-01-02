@@ -38,8 +38,8 @@
 " == Limitations ==
 "
 " Unlike '.' we DO want to record movements (as part of a 4-action sequence).
-" Unfortunately this means we cannot freely move to a new position before
-" repeating our last actions, as that movement will become part of the repeat!
+" Unfortunately this means we cannot freely move to a new position between
+" repeating our last actions, as that movement will become part of the list!
 "
 " In other words, you can do do '4\.4\.' just fine, provided your group of
 " actions leaves you in the right place for the next.  But if you try to do
@@ -47,20 +47,48 @@
 " so the second '4\.' will not do the same as the first '4\.'!  We have now
 " added \D so that unwanted actions can be removed.
 "
-" It uses macro recording all the time.  That means (for the moment) you
-" cannot record your own macros.  The word "recording" will forever be
-" displayed in your command-line, hiding any text echoed there.
+" It uses macro recording ALL THE TIME.  The word "recording" will forever be
+" displayed in your command-line, hiding any text displayed there.  To see the
+" hidden messages, you can set ch=2.
+"
+" If you want to record your own macro, you will need to disable the plugin
+" with :RepeatLastOff.
+"
+" Also CursorHold events do not fire in macro-recording mode.  Any visual
+" tools, taglist updates or so on that require CursorHold will not be
+" triggered.  Other events including CursorMove work fine.
 
 
 
-" == Bugs ==
+" == Bugs and TODOs ==
 "
 " Using register x, occasionally we do 'qx' to start recording but recording
 " is already in progress!  This stops recording and 'x' deletes one char.
 " Bad!  We need to detect whether recording is in progress or not.
 " We could also use a less harmful register, but that's not the true solution.
+" TODO: Since it appears Vim does not currently expose the state of recording,
+" moving to a less harmful register, e.g. 'z', might be wise.
 "
 " DONE: Offer a way to toggle on/off at runtime.
+"
+" TODO: To deal with recording of movements we don't want, an alternative
+" (optional) approach might be to go modal.  After the first use of '4\.' stop
+" recording (at the very least movements) so that the user can move around and
+" '4\.' in other places.  Perhaps we could re-enable recording with some
+" simple heuristic, like if the user makes more than 12 keystrokes without
+" re-using '\.'.
+"
+" TODO: Or we could do something like "do not officially add movement actions
+" to the history *until* they are followed by an edit action".  This would
+" allow us to move freely after a set of actions, and then repeat them without
+" having to worry about the extra movement actions.  However it would also
+" *prevent* us from ending an action-group in a movement that might move it to
+" the correct place for the next movement.
+"
+" TODO: We might try to restore CursorHold events by periodically letting Vim
+" out of recording mode, but re-enabling recording as soon as CursorHold
+" fires!  A downside might be that we would fail to record keystrokes typed
+" very quickly after the release (before CursorHold fires).
 
 
 
@@ -72,8 +100,8 @@
 " The problem is, the macro might contain 12 keys which actually represent
 " only 2 actions.  For example "cwNewWord" is only one action.
 
-" Having to interactively select how much of the macro to choose will slow
-" down the process, and lose the whole advantage of this feature.
+" Having to interactively select how much of the macro to use will slow down
+" the process, and lose the whole advantage of this feature.
 
 " So... can we split up the keys the macro recorded into actions?
 "
@@ -86,6 +114,11 @@
 "     CursorMoved.  :)
 "
 "     We are taking this approach.
+
+" Other alternatives?  Possibly by watching undo history (like UndoTree does)
+" or :changes (I'm not sure we can access this), or doing raw diffs on the
+" file, we might be able to crudely discover what changes the user has made,
+" and convert these into repeatable actions.  Sounds pretty heavy.
 
 
 
@@ -168,7 +201,8 @@ augroup RepeatLast
   autocmd!
   " autocmd CursorHold * call s:EndActionDetected("CursorHold")
   " The CursorHold event is not called whilst in macro recording mode.
-  " CursorMoved does the job though.  Not sure if we need InsertLeave.
+  " CursorMoved does the job though.  Not sure if we need InsertLeave.  It
+  " appears to always trigger CursorMoved immediately afterwards.
   " autocmd InsertLeave * call s:EndActionDetected("InsertLeave")
   autocmd CursorMoved * call s:EndActionDetected("CursorMoved")
 augroup END
@@ -197,8 +231,13 @@ function! s:EndActionDetected(trigger)
   "" If we invoke \? or \. this does not get recorded immediately because no
   "" CursorMoved is triggered.  So we sometimes get a long action starting
   "" with \? but then followed by other stuff.  Let's strip it off the front.
-  "" \? is often followed by a space or \n - that is the user's response to
-  "" "Please press ENTER or type command to continue"
+  ""
+  "" \? is often followed by a space or \n that is the user's response to
+  "" "Please press ENTER or type command to continue".
+  ""
+  "" The late triggering that allowed us to detect and remove this char could
+  "" be considered desirable.  However that char might have been a valid
+  "" movement, if the message was not displayed (which we do not know!).
   "
   " let cleanedAction = lastAction
   " let cleanedAction = substitute(cleanedAction,"^[0-9]*". leadRE ."\?[ \r]?","","")
@@ -215,16 +254,16 @@ function! s:EndActionDetected(trigger)
   if lastAction == ""
 
     " This empty action is often triggered from a CursorMoved event
-    " immediately after some editing we did.  Another trigger already recorded
-    " the action, so CursorMoved has nothing to see.  We don't record or
-    " display this empty action.
+    " immediately after some editing we did.  Another trigger (e.g.
+    " InsertLeave) already recorded the action, so CursorMoved has nothing to
+    " see.  We don't record or display this empty action.
     "if g:RepeatLast_Show_Recording != 0
       "echo extraReport . "Null action triggered by ".a:trigger
     "endif
 
   " Now follow checks for actions we DO NOT want to record.
   " Note that unlike '.' we DO want to record movement as an action.
-  " TODO: We can use match(2) instead of substitute(4) != original
+  " TODO: We can use match(2) instead of substitute(4)!=original
   " 1) Detects undo actions
   elseif substitute(lastAction,"^[0-9]*u$","","") != lastAction
 
