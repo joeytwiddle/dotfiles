@@ -126,3 +126,7 @@
   [Dimensions]	{600 689}
   [Position]	(UPPERLEFT)	{520 92}
 [end]
+[transient] (name=google-chrome) (class=Google-chrome)
+  [Dimensions]	{650 775}
+  [Position]	(UPPERLEFT)	{537 102}
+[end]
