@@ -100,6 +100,14 @@
 
 " == Bugs and TODOs ==
 "
+" TODO: RepeatLast_Stop_Ignoring_On_Edit might not need to pre-clear the
+" macro, if we detect it InsertEnter instead of InsertLeave, although that
+" might lose the command that started the insert.  :P
+" And more triggers to listen on: ShellCmdPost ShellFilterPost
+" I can't find any trigger for entering or leaving command mode, but we might
+" be able to fake our own with a mapping:
+" :noremap <silent> : normal "call <SID>EndActionDetected("CommandStart") | :"
+"
 " TODO: It would be convenient to add:
 "
 "   3\X     Delete the 3rd old action from history
@@ -197,12 +205,12 @@ endif
 " (That the key used to dismiss the "Press ENTER or type command to continue"
 " message was being recorded.)
 
-" How much history to record before discarding
+" How many actions to record in history before discarding
 if !exists("g:RepeatLast_Max_History")
   let g:RepeatLast_Max_History = 50
 endif
 
-" How much history to display on \?
+" How much history to display on \? when no count is passed
 if !exists("g:RepeatLast_Show_History")
   let g:RepeatLast_Show_History = 16
 endif
@@ -227,13 +235,13 @@ endif
 
 " == Mappings and Commands ==
 
-map <Leader>? :ShowRecent<Enter>
+noremap <Leader>? :ShowRecent<Enter>
 command! -count=0 ShowRecent call <SID>ShowRecent(<count>)
 
-map <Leader>. :RepeatLast<Enter>
+noremap <Leader>. :RepeatLast<Enter>
 command! -count=0 RepeatLast call <SID>RepeatLast(<count>)
 
-map <Leader>D :DropLast<Enter>
+noremap <Leader>D :DropLast<Enter>
 command! -count=0 DropLast call <SID>DropLast(<count>)
 
 command! RepeatLastOn if !g:RepeatLast_Enabled | let g:RepeatLast_Enabled = 1 | exec "normal! qx" | echo "RepeatLast enabled." | sleep 800ms | endif
@@ -246,8 +254,8 @@ command! RepeatLastToggleDebugging let g:RepeatLast_Show_Recording = 1 - g:Repea
 command! RepeatLastToggleInfo let g:RepeatLast_Show_Ignoring_Info = 1 - g:RepeatLast_Show_Ignoring_Info
 
 " Pause recording temporarily (allows movement before executing a repeat)
-map <Leader># :PauseRecording<Enter>
-map <Leader>\| :PauseRecording<Enter>
+noremap <Leader># :PauseRecording<Enter>
+noremap <Leader>\| :PauseRecording<Enter>
 command! -count=0 PauseRecording call <SID>PauseRecordingVerbosely()
 
 
