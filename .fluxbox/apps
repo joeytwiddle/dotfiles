@@ -1,5 +1,5 @@
 [app] (name=xv) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{14 21}
+  [Position]	(UPPERLEFT)	{95 286}
   [Deco]	{NORMAL}
   [Sticky]	{yes}
   [Layer]	{2}
@@ -11,8 +11,8 @@
 [end]
 [app] (name=xmms) (class=Xmms)
   [Workspace]	{1}
-  [Position]	(UPPERLEFT)	{54 443}
-  [Deco]	{0x5ff}
+  [Position]	(UPPERLEFT)	{537 72}
+  [Deco]	{NONE}
   [Layer]	{8}
   [Close]	{yes}
 [end]
@@ -38,7 +38,7 @@
 [end]
 [app] (name=smplayer) (class=Smplayer)
   [Sticky]	{yes}
-  [Layer]	{8}
+  [Layer]	{2}
   [Close]	{yes}
 [end]
 [app] (name=gimp) (class=Gimp) (role=gimp-image-window)
@@ -78,7 +78,7 @@
  [app] (name=chromium-browser.real)
  [app] (name=konqueror)
  [app] (name=chrome)
-  [Position]	(UPPERLEFT)	{85 31}
+  [Position]	(UPPERLEFT)	{48 12}
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
@@ -108,9 +108,8 @@
   [Workspace]	{1}
 [end]
 [app] (name=gkrellm) (class=Gkrellm)
-  [Position]	(UPPERLEFT)	{1108 9}
+  [Position]	(UPPERLEFT)	{1108 15}
   [Sticky]	{yes}
-  [Close]	{yes}
 [end]
 [app] (name=explorer.exe) (class=Wine)
   [Sticky]	{yes}
@@ -126,7 +125,4 @@
 [transient] (name=chromium-browser.real) (class=Chromium-browser.real)
   [Dimensions]	{600 689}
   [Position]	(UPPERLEFT)	{520 92}
-[end]
-[transient] (name=vim) (class=Vim)
-  [Dimensions]	{456 624}
 [end]
