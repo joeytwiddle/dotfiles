@@ -123,7 +123,7 @@
 " Bad!  We need to detect whether recording is in progress or not.
 " We could also use a less harmful register, but that's not the true solution.
 " TODO: Since it appears Vim does not currently expose the state of recording,
-" moving to a less harmful register, e.g. 'z', might be wise.
+" moving to a less harmful register, e.g. 'z' or 'm', might be wise.
 "
 " TODO: We could use a way to *start* recording again, if temporary Ignoring
 " is enabled but unwanted.  We could just do 10 random movements.  We could
@@ -235,13 +235,13 @@ endif
 
 " == Mappings and Commands ==
 
-noremap <Leader>? :ShowRecent<Enter>
+nnoremap <Leader>? :ShowRecent<Enter>
 command! -count=0 ShowRecent call <SID>ShowRecent(<count>)
 
-noremap <Leader>. :RepeatLast<Enter>
+nnoremap <Leader>. :RepeatLast<Enter>
 command! -count=0 RepeatLast call <SID>RepeatLast(<count>)
 
-noremap <Leader>D :DropLast<Enter>
+nnoremap <Leader>D :DropLast<Enter>
 command! -count=0 DropLast call <SID>DropLast(<count>)
 
 command! RepeatLastOn if !g:RepeatLast_Enabled | let g:RepeatLast_Enabled = 1 | exec "normal! qx" | echo "RepeatLast enabled." | sleep 800ms | endif
@@ -254,8 +254,8 @@ command! RepeatLastToggleDebugging let g:RepeatLast_Show_Recording = 1 - g:Repea
 command! RepeatLastToggleInfo let g:RepeatLast_Show_Ignoring_Info = 1 - g:RepeatLast_Show_Ignoring_Info
 
 " Pause recording temporarily (allows movement before executing a repeat)
-noremap <Leader># :PauseRecording<Enter>
-noremap <Leader>\| :PauseRecording<Enter>
+nnoremap <Leader># :PauseRecording<Enter>
+nnoremap <Leader>\| :PauseRecording<Enter>
 command! -count=0 PauseRecording call <SID>PauseRecordingVerbosely()
 
 
