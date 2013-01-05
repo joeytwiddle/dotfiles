@@ -124,6 +124,8 @@
 " We could also use a less harmful register, but that's not the true solution.
 " TODO: Since it appears Vim does not currently expose the state of recording,
 " moving to a less harmful register, e.g. 'z' or 'm', might be wise.
+" CONSIDER: We can at least notice when recording has been disabled, because
+" the CursorHold event will eventually fire (it never fires when recording)!
 "
 " TODO: We could use a way to *start* recording again, if temporary Ignoring
 " is enabled but unwanted.  We could just do 10 random movements.  We could
@@ -157,6 +159,12 @@
 "            MyRepeatedSearch..MyRepeatedSearch..MyRepeatedSearch.."
 " This actually comes from joey.vim.  It should fail gracefully when given a
 " count.
+"
+" CONSIDER: Perhaps more advanced usage, which would also avoid complications
+" with *new* recordings might be to save repeated actions in a register, so it
+" can be recalled without worry about ignoring new movements/actions.  We
+" could even cycle the register used for saving, if we want to remember older
+" interesting action groups.
 
 
 
@@ -193,17 +201,21 @@
 " == Options ==
 " You may override these defaults in your .vimrc, or change them at runtime
 
-if !exists("g:RepeatLast_Ignore_After_Use_For")
-  let g:RepeatLast_Ignore_After_Use_For = 10
-endif
-
 " When 5\. is requested, will first display the actions and ask Y/N.
 if !exists("g:RepeatLast_Request_Confirmation")
   let g:RepeatLast_Request_Confirmation = 0
 endif
-" Hopefully "Ignoring" now suppresses the previous issues we had here.
-" (That the key used to dismiss the "Press ENTER or type command to continue"
-" message was being recorded.)
+
+if !exists("g:RepeatLast_Leader")
+  let g:RepeatLast_Leader = ','
+endif
+
+" The register used to store macros.  WARNING: May occasionally accidentally
+" fire as a normal keypress!  'm' and 'z' are recommended as they are
+" non-edits and non-movements.
+if !exists("g:RepeatLast_Register")
+  let g:RepeatLast_Register = 'm'
+endif
 
 " How many actions to record in history before discarding
 if !exists("g:RepeatLast_Max_History")
@@ -219,6 +231,10 @@ endif
 " disables recovery of ignored events when ignoring times out.)
 if !exists("g:RepeatLast_Stop_Ignoring_On_Edit")
   let g:RepeatLast_Stop_Ignoring_On_Edit = 1
+endif
+
+if !exists("g:RepeatLast_Ignore_After_Use_For")
+  let g:RepeatLast_Ignore_After_Use_For = 10
 endif
 
 " Useful, shows status of ignoring (provided ch>=2)
@@ -244,12 +260,12 @@ command! -count=0 RepeatLast call <SID>RepeatLast(<count>)
 nnoremap <Leader>D :DropLast<Enter>
 command! -count=0 DropLast call <SID>DropLast(<count>)
 
-command! RepeatLastOn if !g:RepeatLast_Enabled | let g:RepeatLast_Enabled = 1 | exec "normal! qx" | echo "RepeatLast enabled." | sleep 800ms | endif
-command! RepeatLastOff if g:RepeatLast_Enabled | let g:RepeatLast_Enabled = 0 | exec "normal! q" | echo "RepeatLast disabled." | sleep 800ms | endif
+command! RepeatLastOn call <SID>RepeatLastOn()
+command! RepeatLastOff call <SID>RepeatLastOff()
 " These sleeps are to ensure the message is seen even if ch=1.  (Otherwise
 " in the first case it is immediately hidden by qx "recording" message.)
 
-command! RepeatLastToggleDebugging let g:RepeatLast_Show_Recording = 1 - g:RepeatLast_Show_Recording
+command! RepeatLastToggleDebugging let g:RepeatLast_Show_Recording = 1 - g:RepeatLast_Show_Recording | let &ch = 5 - &ch
 
 command! RepeatLastToggleInfo let g:RepeatLast_Show_Ignoring_Info = 1 - g:RepeatLast_Show_Ignoring_Info
 
@@ -295,7 +311,7 @@ augroup RepeatLast
   " CursorMoved does the job though.  Not sure if we need InsertLeave.  It
   " appears to always trigger CursorMoved immediately afterwards.
   " InsertLeave now wanted for ignoringCount
-  autocmd InsertEnter * call s:EndActionDetected("InsertEnter")
+  " autocmd InsertEnter * call s:EndActionDetected("InsertEnter")
   autocmd InsertLeave * call s:EndActionDetected("InsertLeave")
   autocmd CursorMoved * call s:EndActionDetected("CursorMoved")
 augroup END
@@ -593,6 +609,23 @@ function! s:DropLast(num)
   " clearing code!
   call s:ShowRecent(0)
 
+endfunction
+
+function! s:RepeatLastOn()
+  if !g:RepeatLast_Enabled
+    let g:RepeatLast_Enabled = 1
+    exec "normal! qx"
+    echo "RepeatLast enabled."
+    sleep 800ms
+  endif
+endfunction
+function! s:RepeatLastOff()
+  if g:RepeatLast_Enabled
+    let g:RepeatLast_Enabled = 0
+    exec "normal! q"
+    echo "RepeatLast disabled."
+    sleep 800ms
+  endif
 endfunction
 
 
