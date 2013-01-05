@@ -1,5 +1,5 @@
 [app] (name=xv) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{95 286}
+  [Position]	(UPPERLEFT)	{0 26}
   [Deco]	{NORMAL}
   [Sticky]	{yes}
   [Layer]	{2}
@@ -11,7 +11,7 @@
 [end]
 [app] (name=xmms) (class=Xmms)
   [Workspace]	{1}
-  [Position]	(UPPERLEFT)	{537 72}
+  [Position]	(UPPERLEFT)	{90 867}
   [Deco]	{NONE}
   [Layer]	{8}
   [Close]	{yes}
@@ -56,10 +56,6 @@
   [Sticky]	{yes}
 [end]
 [group]  (workspace=[current])
- [app] (title=Untitled.*)
-  [Deco]	{NORMAL}
-[end]
-[group]  (workspace=[current])
  [app] (title=\[Vim\].*)
  [app] (title=Opening .* in Vim...)
 [end]
@@ -69,6 +65,8 @@
  [app] (title=Untitled)
  [app] (title=chrome://devtools/devtools.html)
  [app] (title=Developer Tools.*)
+  [Dimensions]	{1072 613}
+  [Position]	(UPPERLEFT)	{3 370}
 [end]
 [group]  (workspace=[current])
  [app] (name=Navigator)
@@ -78,7 +76,7 @@
  [app] (name=chromium-browser.real)
  [app] (name=konqueror)
  [app] (name=chrome)
-  [Position]	(UPPERLEFT)	{48 12}
+  [Position]	(UPPERLEFT)	{45 12}
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
@@ -129,4 +127,9 @@
 [transient] (name=google-chrome) (class=Google-chrome)
   [Dimensions]	{650 775}
   [Position]	(UPPERLEFT)	{537 102}
+[end]
+[app] (name=Global) (class=Firefox) (role=console)
+  [Dimensions]	{1030 726}
+  [Position]	(UPPERLEFT)	{5 267}
+  [Close]	{yes}
 [end]
