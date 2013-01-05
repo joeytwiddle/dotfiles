@@ -295,6 +295,7 @@ augroup RepeatLast
   " CursorMoved does the job though.  Not sure if we need InsertLeave.  It
   " appears to always trigger CursorMoved immediately afterwards.
   " InsertLeave now wanted for ignoringCount
+  autocmd InsertEnter * call s:EndActionDetected("InsertEnter")
   autocmd InsertLeave * call s:EndActionDetected("InsertLeave")
   autocmd CursorMoved * call s:EndActionDetected("CursorMoved")
 augroup END
@@ -477,6 +478,10 @@ function! s:ShowRecent(num)
     echo "Dropped hopefully unwanted action: \"". s:MyEscape(@x) ."\""
     " This kept displaying my *previous* stroke, and not the '\?' until I
     " performed it a second time.  Better info now we echo *after* q qx.
+  endif
+
+  if g:RepeatLast_Show_Ignoring_Info != 0 && s:ignoringCount > 0
+    echo "[Ignoring for another ".s:ignoringCount." events.]"
   endif
 
 endfunction
