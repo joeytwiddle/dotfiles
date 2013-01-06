@@ -70,6 +70,10 @@
 "   storage will be re-enabled, and the ignored actions will be added to the
 "   history as one large entry.  Although g:RepeatLast_Stop_Ignoring_On_Edit
 "   disables this recovery.
+"
+" Reading this file:
+"
+"   You may like to try  :FoldNicely
 
 
 
@@ -107,6 +111,25 @@
 " added \D so that unwanted actions can be removed.
 "
 " Now g:RepeatLast_Ignore_After_Use_For mitigates this, unless set to zero.
+
+
+
+" au BufReadPost RepeatLast.vim call FoldNicely()
+command FoldNicely :call FoldNicely()
+function! FoldNicely()
+  let num = 3
+  set foldmethod=manual
+  normal zE
+  normal :0
+  let @f="/^.v/\\n\\n\\nzf"
+  let oldWrapScan = &wrapscan
+  set nowrapscan
+  normal 999@f
+  normal 9999
+  normal zf
+  let &wrapscan = oldWrapScan
+  echo "Sorry about the error message."
+endfunction
 
 
 
@@ -215,7 +238,7 @@
 " Set to 1 to start recording from startup.  (Otherwise you need to remember
 " to do :RepeatLastEnable )
 if !exists("g:RepeatLast_Enabled")
-  let g:RepeatLast_Enabled = 1
+  let g:RepeatLast_Enabled = 0
 endif
 
 " Asks for confirmation before performing a set of repeats.
@@ -342,7 +365,13 @@ augroup END
 let s:ignoringCount = 0
 
 function s:StartRecording()               " originally:  normal! qx
-  exec "normal! q".g:RepeatLast_Register
+  if g:RepeatLast_Enabled
+    exec "normal! q".g:RepeatLast_Register
+  else
+    if g:RepeatLast_Show_Recording != 0
+      echo "StartRecording was called but we are disabled."
+    endif
+  endif
 endfunction
 function s:StopRecording()                " originally:  normal! q
   exec "normal! q"
@@ -734,11 +763,25 @@ function! s:MyEscape(str)
   let i = 0
   while i < len(a:str)
     let char = a:str[i]
-    if char2nr(char) < 32 || char2nr(char) > 126
-      let out = out . '<' . char2nr(char) . '>'
+    let ascnr = char2nr(char)
+    if ascnr == 13
+      let char = "<Enter>"
+    elseif ascnr == 27
+      let char = "<Esc>"
+    elseif ascnr == 32
+      let char = "<Space>"
+    elseif ascnr == 127
+      let char = "<Delete>"
+    elseif ascnr == 8
+      let char = "<Backspace>"
+    elseif ascnr >= 1 && ascnr <= 26
+      let char = "<Ctrl-" . nr2char(65 + ascnr - 1) . ">"
+    elseif ascnr >= 32 && ascnr <= 126
+      let char = char
     else
-      let out = out . char
+      let char = '<' . char2nr(char) . '>'
     endif
+    let out = out . char
     let i = i+1
   endwhile
   return out
