@@ -13,7 +13,7 @@
 
 " == Usage ==
 "
-" Assuming your mapleader is '\' (the default):
+" Assuming your mapleader is '\' (the default) adds:
 "
 "   \?   Display a list of recently recorded actions
 "
@@ -27,17 +27,29 @@
 "
 "   3\D  Drop the last 3 recorded actions (useful to get back to earlier state)
 "
-"   \|  or  \#   Temporarily disable recording of the next few actions.
+"   \|  or  \#
+"
+"        Temporarily disable recording for the next few actions
+"
+"        (Allows free movement without adding new actions to history)
+"
+"   4\G  Grab the last 4 actions and store in register 'g'
+"
+"   @g   Repeat the actions stored in register 'g'
+"
+"   :let @i=@g
+"
+"        Copy the actions to register 'i', so 'g' may be overwritten.
 "
 " Commands are also available for the main shortcuts above:
 "
-"   :ShowRecent   :RepeatLast   :DropLast   :PauseRecording
+"   :ShowRecent   :RepeatLast   :DropLast   :PauseRecording   :GrabLast
 "
 " Commands to toggle state at runtime:
 "
-"   :RepeatLastOn    Disables action recording, leaves macro record mode.
+"   :RepeatLastEnable    Disables action recording, leaves macro record mode.
 "
-"   :RepeatLastOff   Enables action recording, enters macro record mode.
+"   :RepeatLastDisable   Enables action recording, enters macro record mode.
 "
 "   :RepeatLast<Ctrl-D>  or  <Tab>      More commands, some toggle info.
 "
@@ -74,7 +86,7 @@
 " pressing a lot of keys.)
 "
 " If you want to record your own macro, you can disable the plugin with
-" :RepeatLastOff (or you could try just pressing 'q' for a one-time disable).
+" :RepeatLastDisable (or you could try just pressing 'q' for a one-time disable).
 "
 " CursorHold events do not fire in macro-recording mode.  Any visual tools,
 " taglist updates, etc. that require CursorHold *will not be triggered*.
@@ -199,27 +211,37 @@
 
 
 " == Options ==
-" You may override these defaults in your .vimrc, or change them at runtime
 
+" Set to 1 to start recording from startup.  (Otherwise you need to remember
+" to do :RepeatLastEnable )
+if !exists("g:RepeatLast_Enabled")
+  let g:RepeatLast_Enabled = 1
+endif
+
+" Asks for confirmation before performing a set of repeats.
 " When 5\. is requested, will first display the actions and ask Y/N.
 if !exists("g:RepeatLast_Request_Confirmation")
   let g:RepeatLast_Request_Confirmation = 0
 endif
+" Ideally: Should not request confirmation if doing the same as last time!
+" In fact ideally it might put it on '.' but I haven't worked out how yet.
 
 if !exists("g:RepeatLast_Leader")
-  let g:RepeatLast_Leader = ','
+  let g:RepeatLast_Leader = '\'
+  " let g:RepeatLast_Leader = &mapleader
+  " let g:RepeatLast_Leader = ','
 endif
 
 " The register used to store macros.  WARNING: May occasionally accidentally
 " fire as a normal keypress!  'm' and 'z' are recommended as they are
-" non-edits and non-movements.
+" non-edits and non-movements. TODO
 if !exists("g:RepeatLast_Register")
   let g:RepeatLast_Register = 'm'
 endif
 
 " How many actions to record in history before discarding
 if !exists("g:RepeatLast_Max_History")
-  let g:RepeatLast_Max_History = 50
+  let g:RepeatLast_Max_History = 60
 endif
 
 " How much history to display on \? when no count is passed
@@ -260,45 +282,45 @@ command! -count=0 RepeatLast call <SID>RepeatLast(<count>)
 nnoremap <Leader>D :DropLast<Enter>
 command! -count=0 DropLast call <SID>DropLast(<count>)
 
-command! RepeatLastOn call <SID>RepeatLastOn()
-command! RepeatLastOff call <SID>RepeatLastOff()
-" These sleeps are to ensure the message is seen even if ch=1.  (Otherwise
-" in the first case it is immediately hidden by qx "recording" message.)
+nnoremap <Leader>G :GrabLast<Enter>
+command! -count=0 GrabLast call <SID>GrabLast(<count>)
 
-command! RepeatLastToggleDebugging let g:RepeatLast_Show_Recording = 1 - g:RepeatLast_Show_Recording | let &ch = 5 - &ch
+"command! RepeatLastOn call <SID>RepeatLastOn()
+"command! RepeatLastOff call <SID>RepeatLastOff()
+command! RepeatLastEnable call <SID>RepeatLastOn()
+command! RepeatLastDisable call <SID>RepeatLastOff()
 
 command! RepeatLastToggleInfo let g:RepeatLast_Show_Ignoring_Info = 1 - g:RepeatLast_Show_Ignoring_Info
+
+command! RepeatLastToggleDebugging let g:RepeatLast_Show_Recording = 1 - g:RepeatLast_Show_Recording | let &ch = 5 - &ch
 
 " Pause recording temporarily (allows movement before executing a repeat)
 nnoremap <Leader># :PauseRecording<Enter>
 nnoremap <Leader>\| :PauseRecording<Enter>
 command! -count=0 PauseRecording call <SID>PauseRecordingVerbosely()
 
-
-
-" == Recording Actions ==
-
+" If requested to show debugging messages, make sure they will be visible!
+" (At ch=1 "recording" wil overwrite them immediately.)
 if g:RepeatLast_Show_Recording != 0 && &ch < 3
-  " We need this or we won't see the echo because "recording" will overwrite it.
   " Pushed up to 3 because occasionally we echo 2 lines.
-  " Not forced for ignoring info
+  " Not forced for info messages, are echoes but hidden at ch 1.
   set ch=3
 endif
 
-" We will use register x to store our stuff.  Search and replace @x and qx if
-" you want.
-"
-" We want to have this macro recording on ALL THE TIME!  This is achieved in
-" EndActionDetected().
+
+
+" We used to use register x to record the most recent event.
+" Now we use whatever is set in g:RepeatLast_Register
+
+" For this to work, we need to have this macro recording on *all the time*!
+" This is maintained in EndActionDetected().
 
 " BUG: If we are already recording a macro, 'q' will stop it and then 'x'
 " will delete 1 char!  We need to detect whether macro recording is active!
 
-normal! qx
 
-let g:RepeatLast_Enabled = 1
 
-let s:ignoringCount = 0
+" == Recording Actions ==
 
 " We are going to record a history of recent actions
 let s:earlierActions = []
@@ -311,10 +333,27 @@ augroup RepeatLast
   " CursorMoved does the job though.  Not sure if we need InsertLeave.  It
   " appears to always trigger CursorMoved immediately afterwards.
   " InsertLeave now wanted for ignoringCount
-  " autocmd InsertEnter * call s:EndActionDetected("InsertEnter")
+  autocmd InsertEnter * call s:EndActionDetected("InsertEnter")
   autocmd InsertLeave * call s:EndActionDetected("InsertLeave")
   autocmd CursorMoved * call s:EndActionDetected("CursorMoved")
 augroup END
+
+" Sometimes we skip recording events for a while
+let s:ignoringCount = 0
+
+function s:StartRecording()               " originally:  normal! qx
+  exec "normal! q".g:RepeatLast_Register
+endfunction
+function s:StopRecording()                " originally:  normal! q
+  exec "normal! q"
+endfunction
+function s:RestartRecording()
+  call s:StopRecording()
+  call s:StartRecording()
+endfunction
+function s:GetRegister()                  " originally:  let latestAction = @x
+  return eval("@".g:RepeatLast_Register)
+endfunction
 
 function! s:EndActionDetected(trigger)
 
@@ -328,11 +367,11 @@ function! s:EndActionDetected(trigger)
     " detected, we can try this.
     " But in order to separate earlier movements from the insert we must force
     " clearing of the macro for general ignoring below.
-    if g:RepeatLast_Stop_Ignoring_On_Edit != 0 && a:trigger == "InsertLeave"
+    if g:RepeatLast_Stop_Ignoring_On_Edit != 0 && (a:trigger == "InsertLeave" || a:trigger == "InsertEnter")
 
       " BUG: I never see this echoed!
         if g:RepeatLast_Show_Ignoring_Info != 0
-          echo "Edits detected - no longer ignoring!"
+          echo "Edits detected by ".a:trigger." - no longer ignoring!"
           " sleep 400ms
         endif
       let s:ignoringCount = 0
@@ -347,8 +386,8 @@ function! s:EndActionDetected(trigger)
         " To avoid our edit being polluted with previous ignored movements, we
         " must clear them pre-emptively.  A limitation demanded by that
         " feature.  Or perhaps we always do want to forget ignored actions!
-        normal! q
-        normal! qx
+        " E.g. if we don't do this: \|jjA will record the jj when it shouldn't!
+        call s:RestartRecording()
       endif
       if s:ignoringCount == 0
         if g:RepeatLast_Show_Ignoring_Info != 0
@@ -365,10 +404,17 @@ function! s:EndActionDetected(trigger)
 
   endif
 
-  " Stop the macro recording (its register will not be set until then)
-  normal! q
+  " Stop the macro recording (its register will not be set until then):
+  "
+  " BUG: If we do this on InsertEnter, it causes a bug where end-of-line edits
+  " (from 'A' or 'a') get pushed back a space (presumably by a temporary drop
+  " back to normal mode).
+  "
+  if a:trigger != "InsertEnter"
+    call s:StopRecording()
+  endif
 
-  let lastAction = @x
+  let lastAction = s:GetRegister()
 
   let leadRE = s:GetEscapedMapLeader()
   let extraReport = ""
@@ -437,8 +483,24 @@ function! s:EndActionDetected(trigger)
   endif
 
   " Start recording the next action
-  normal! qx
+  if a:trigger != "InsertEnter"
+    call s:StartRecording()
+  endif
 
+endfunction
+
+function! s:PauseRecordingQuietly()
+  let s:ignoringCount = g:RepeatLast_Ignore_After_Use_For
+endfunction
+
+function! s:PauseRecordingVerbosely()
+  call s:PauseRecordingQuietly()
+  if g:RepeatLast_Show_Ignoring_Info != 0
+    echo "Ignoring the next ".s:ignoringCount." events."
+    " This pause is not too disruptive, because it comes after a request, not
+    " in the middle of editing.  We only need it if low ch would hide it.
+    if &ch == 1 | sleep 400ms | endif
+  endif
 endfunction
 
 
@@ -472,8 +534,7 @@ function! s:ShowRecent(num)
   " I don't know why this happens.  Let's make it a line we don't need to see!
   " OK since we moved code around, it seems this is no longer needed.
   "echo "I will get hidden"
-  normal! q
-  normal! qx
+  call s:RestartRecording()
 
   echo "Recent actions are:"
 
@@ -487,17 +548,17 @@ function! s:ShowRecent(num)
 
   for howFarBack in range(numWanted,1,-1)
     let i = len(s:earlierActions) - howFarBack
-    echo howFarBack . " \"" . s:MyEscape(s:earlierActions[i]) . "\"\n"
+    echo howFarBack . " " . s:MyEscape(s:earlierActions[i]) . "\n"
   endfor
 
   if g:RepeatLast_Show_Recording != 0
-    echo "Dropped hopefully unwanted action: \"". s:MyEscape(@x) ."\""
+    echo "Dropped hopefully unwanted action: \"". s:MyEscape(s:GetRegister()) ."\""
     " This kept displaying my *previous* stroke, and not the '\?' until I
     " performed it a second time.  Better info now we echo *after* q qx.
   endif
 
-  if g:RepeatLast_Show_Ignoring_Info != 0 && s:ignoringCount > 0
-    echo "[Ignoring for another ".s:ignoringCount." events.]"
+  if s:ignoringCount > 0
+    echo "[Auto-ignoring enabled for another ".s:ignoringCount." events.]"
   endif
 
 endfunction
@@ -534,8 +595,7 @@ function! s:RepeatLast(num)
     if res != 1
       echo "Repeat cancelled."
       " Empty the macro so we won't record the command that invoked us.
-      normal! q
-      normal! qx
+      call s:RestartRecording()
       return
     endif
   endif
@@ -543,42 +603,26 @@ function! s:RepeatLast(num)
   " Do we need to stop the macro recording before running our actions?  It appears not!
   " OK we do need it now we are listening on InsertLeave.  (Or an InsertLeave
   " triggered by our actions would cause storage of current macro '4\.')
-  normal! q
-  normal! qx
+  call s:RestartRecording()
   let s:ignoringCount = 0
   exec "normal! ".actions
   " Start recording again
-  " normal! qx
+  " call s:StartRecording()
 
   " We want to discard the keystrokes that lead to this call.
   " Force an event trigger?
   " call s:EndActionDetected("ShowRecent")
   " No.  Just clear the macro.
   if g:RepeatLast_Show_Recording != 0
-    echo "Dropping hopefully unwanted action: \"". s:MyEscape(@x) ."\""
+    echo "Dropping hopefully unwanted action: \"". s:MyEscape(s:GetRegister()) ."\""
   endif
   " The qx prints "recording" over our last echoed line, even if ch is large.
   " I don't know why this happens.  Let's make it a line we don't need to see!
   echo "I will get hidden"
-  normal! q
-  normal! qx
+  call s:RestartRecording()
 
   call s:PauseRecordingQuietly()
 
-endfunction
-
-function! s:PauseRecordingQuietly()
-  let s:ignoringCount = g:RepeatLast_Ignore_After_Use_For
-endfunction
-
-function! s:PauseRecordingVerbosely()
-  call s:PauseRecordingQuietly()
-  if g:RepeatLast_Show_Ignoring_Info != 0
-    echo "Ignoring the next ".s:ignoringCount." events."
-    " This pause is not too disruptive, because it comes after a request, not
-    " in the middle of editing.  We only need it if low ch would hide it.
-    if &ch == 1 | sleep 400ms | endif
-  endif
 endfunction
 
 function! s:DropLast(num)
@@ -611,10 +655,40 @@ function! s:DropLast(num)
 
 endfunction
 
+function! s:GrabLast(num)
+
+  let numWanted = a:num
+  if numWanted == 0
+    let numWanted = 1   " default
+  else
+    " Fix because <count> is a range, not just the number we gave it
+    let numWanted = numWanted - line(".") + 1
+    " TODO: Alternative fix: <bairui> joeytwiddle: :command! -count=1 Foo echo (v:count ? v:count : <count>)
+  endif
+
+  if numWanted > len(s:earlierActions)
+    let numWanted = len(s:earlierActions)
+    echo "Larger count given than possible.  Dropping only ".numWanted
+  endif
+
+  let grabbedActions = remove(s:earlierActions, len(s:earlierActions)-numWanted, len(s:earlierActions)-1)
+
+  let @g = join(grabbedActions,"")
+
+  echo "Saved macro: @g <- \"" . s:MyEscape(@g) . "\"  Repeat with @g"
+
+endfunction
+
+" These sleeps help the user to see some feedback even if ch=1.
+"
+" It feels nowhere near as disruptive after calling a command as the sleeps we
+" tried during normal mode (which the user expects to be responsive, if they
+" are tapping/have strokes stalling).
+"
 function! s:RepeatLastOn()
   if !g:RepeatLast_Enabled
     let g:RepeatLast_Enabled = 1
-    exec "normal! qx"
+    call s:StartRecording()
     echo "RepeatLast enabled."
     sleep 800ms
   endif
@@ -622,11 +696,18 @@ endfunction
 function! s:RepeatLastOff()
   if g:RepeatLast_Enabled
     let g:RepeatLast_Enabled = 0
-    exec "normal! q"
+    call s:StopRecording()
     echo "RepeatLast disabled."
     sleep 800ms
   endif
 endfunction
+
+if g:RepeatLast_Enabled
+  call s:StartRecording()
+  "" Alternatively:
+  " let g:RepeatLastEnabled = 0
+  " call s:RepeatLastOn()
+endif
 
 
 
