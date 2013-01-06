@@ -3,10 +3,12 @@
 !mouse actions added by fluxbox-update_configs
 OnTitlebar Mouse1 :MacroCmd {Focus} {Raise} {ActivateTab}
 !mouse actions added by fluxbox-update_configs
-OnTitlebar Move1 :StartMoving
-OnLeftGrip Move1 :StartResizing bottomleft
-OnRightGrip Move1 :StartResizing bottomright
-OnWindowBorder Move1 :StartMoving
+OnTitlebar Mouse1 :StartMoving
+OnLeftGrip Mouse1 :StartResizing bottomleft
+OnRightGrip Mouse1 :StartResizing bottomright
+OnWindowBorder Mouse1 :StartMoving
+
+# OnTitlebar Mouse1 :MacroCmd {Focus} {Raise} {ActivateTab} {StartMoving}
 
 ### Some older defaults:
 # !mouse actions added by fluxbox-update_configs
@@ -83,8 +85,8 @@ Mod4 grave :PrevWindow {groups}
 ## Move between windows using a Window List Menu
 # Control Tab :ClientMenu (Workspace=[current])
 # Control grave :ClientMenu
-Control Tab :ClientMenu
-Control grave :ClientMenu (Class=[current])
+# Control Tab :ClientMenu
+# Control grave :ClientMenu (Class=[current])
 # Mod4 Tab :ClientMenu (Workspace!=[current])
 # Mod1 1 :ClientMenu
 # Mod4 Up :PrevWindow {groups} (stuck=no) (shaded=no)
@@ -100,6 +102,7 @@ OnTitlebar Mod4 Mouse2 :MacroCmd {Focus} {StartTabbing}
 
 Control Mod1 r :Reconfigure
 Control Mod4 r :Restart
+Control Mod1 q :Exit
 Control Shift F2 :CommandDialog
 
 # OnTitlebar Mouse2 :StartTabbing
@@ -109,6 +112,8 @@ Control Shift F2 :CommandDialog
 # OnDesktop Mouse1 :hideMenus
 # OnDesktop Mouse2 :workspaceMenu
 # OnDesktop Mouse3 :rootMenu
+
+## Change desktop with mousewheel on wallpaper
 OnDesktop Mouse4 :PrevWorkspace
 OnDesktop Mouse5 :NextWorkspace
 OnDesktop Mod1 Mouse4 :PrevWorkspace
@@ -180,8 +185,8 @@ Mod1 Right :NextTab
 # Control Shift Tab :NextTab
 Mod4 Left :MoveTabLeft
 Mod4 Right :MoveTabRight
-Mod4 Shift Left :MoveTabLeft
-Mod4 Shift Right :MoveTabRight
+# Mod4 Shift Left :MoveTabLeft
+# Mod4 Shift Right :MoveTabRight
 ## not working:
 # Mod1 braceleft :MovePrevTab
 # Mod4 braceleft :MovePrevTab
@@ -238,10 +243,10 @@ Control Mod4 Left  :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
 Control Mod4 Right :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
 Control Mod4 Up    :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace       3
 Control Mod4 Down  :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace       3
-Shift   Mod4 Left  :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace
-Shift   Mod4 Right :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace
-Shift   Mod4 Up    :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace 3
-Shift   Mod4 Down  :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace 3
+Mod4 Shift Left    :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace
+Mod4 Shift Right   :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace
+Mod4 Shift Up      :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace 3
+Mod4 Shift Down    :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace 3
 
 # Mod1 F1 :Workspace 1
 # Mod1 F2 :Workspace 2
@@ -324,7 +329,7 @@ Mod1 KP_Add      :ExecCommand volumeup 2
 Mod1 KP_Subtract :ExecCommand volumedown 2
 ## (play)
 # Mod1 KP_1 :ExecCommand xmms -p
-Mod1 KP_1 :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 /usr/local/xmms/bin/xmms -p
+Mod1 KP_1 :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 xmms -p
 ## (stop)
 Mod1 KP_3 :ExecCommand xmms -s
 ## (pause)
@@ -367,7 +372,7 @@ Mod1 x :ExecCommand xterm
 # involving jsh (or trim down jsh's tools folder!).
 
 # Mod4 x :ExecCommand xtermbg
-Mod4 x :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 /usr/local/xmms/bin/xmms -p
+Mod4 x :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 xmms -p
 
 Mod1 e :ExecCommand eterm
 Mod4 e :ExecCommand ~/bin/konqueror
@@ -391,6 +396,6 @@ Mod4 KP_7 :ExecCommand put_current_xwindow nw
 Mod4 KP_8 :ExecCommand put_current_xwindow top
 Mod4 KP_9 :ExecCommand put_current_xwindow ne
 
-## Basic tiling - kinda sux:
+## Basic tiling - really sucks with kicker panels or gkrellm running.
 Control Mod1 a :ArrangeWindows
 
