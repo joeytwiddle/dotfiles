@@ -344,6 +344,7 @@ augroup END
 
 " Sometimes we skip recording events for a while
 let s:ignoringCount = 0
+let s:currentlyReplaying = 0
 
 function! s:StartRecording()               " originally:  normal! qx
   if g:RepeatLast_Enabled
@@ -368,6 +369,9 @@ endfunction
 function! s:EndActionDetected(trigger)
 
   if !g:RepeatLast_Enabled
+    return
+  endif
+  if s:currentlyReplaying
     return
   endif
 
@@ -610,28 +614,34 @@ function! s:RepeatLast(num)
     endif
   endif
 
-  " Do we need to stop the macro recording before running our actions?  It appears not!
-  " OK we do need it now we are listening on InsertLeave.  (Or an InsertLeave
-  " triggered by our actions would cause storage of current macro '4\.')
-  call s:RestartRecording()
-  let s:ignoringCount = 0
-  exec "normal! ".actions
-  " Start recording again
-  " call s:StartRecording()
+  if g:RepeatLast_Show_Recording
+    echo "Replaying ".numWanted." actions: \"". s:MyEscape(actions) ."\""
+    " The qx causes our last echoed line to be emptied, even if ch is large.
+    " Let's make it a line we don't need to see!
+    echo "I will get hidden"
+  endif
 
   " We want to discard the keystrokes that lead to this call.
-  " Force an event trigger?
-  " call s:EndActionDetected("ShowRecent")
-  " No.  Just clear the macro.
-  if g:RepeatLast_Show_Recording != 0
-    echo "Dropping hopefully unwanted action: \"". s:MyEscape(s:GetRegister()) ."\""
-  endif
-  " The qx prints "recording" over our last echoed line, even if ch is large.
-  " I don't know why this happens.  Let's make it a line we don't need to see!
-  echo "I will get hidden"
-  call s:RestartRecording()
+  " Clear the currently recorded macro of actions (contains our request action).
+  call s:StopRecording()
+  let dropped1 = s:MyEscape(s:GetRegister())
+  " Prevent triggers (e.g. InsertEnter or InsertLeave) from recording actions,
+  " or auto-cancelling ignore.
+  let s:currentlyReplaying = 1
+  exec "normal! ".actions
+  let s:currentlyReplaying = 0
+
+  " Start recording again
+  "let dropped2 = s:MyEscape(s:GetRegister())
+  call s:StartRecording()
 
   call s:PauseRecordingQuietly()
+
+  if g:RepeatLast_Show_Recording != 0
+    "echo "Dropped request action: \"". dropped1 ."\" and replayed actions: \"". dropped2 ."\""
+    echo "Dropped request action: \"". dropped1 ."\""
+    echo "I will get hidden"
+  endif
 
 endfunction
 
