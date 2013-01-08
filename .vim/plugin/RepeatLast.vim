@@ -114,25 +114,6 @@
 
 
 
-" au BufReadPost RepeatLast.vim call FoldNicely()
-command FoldNicely :call FoldNicely()
-function! FoldNicely()
-  let num = 3
-  set foldmethod=manual
-  normal zE
-  normal :0
-  let @f="/^.v/\\n\\n\\nzf"
-  let oldWrapScan = &wrapscan
-  set nowrapscan
-  normal 999@f
-  normal 9999
-  normal zf
-  let &wrapscan = oldWrapScan
-  echo "Sorry about the error message."
-endfunction
-
-
-
 " == Bugs and TODOs ==
 "
 " TODO: RepeatLast_Stop_Ignoring_On_Edit might not need to pre-clear the
@@ -141,8 +122,9 @@ endfunction
 " And more triggers to listen on: ShellCmdPost ShellFilterPost
 " I can't find any trigger for entering or leaving command mode, but we might
 " be able to fake our own with a mapping:
-" :noremap <silent> : normal "call <SID>EndActionDetected("CommandStart") | :"
 "
+":nnoremap <silent> : :call <SID>EndActionDetected("CommandStart")<Enter>:
+
 " TODO: It would be convenient to add:
 "
 "   3\X     Delete the 3rd old action from history
@@ -235,10 +217,9 @@ endfunction
 
 " == Options ==
 
-" Set to 1 to start recording from startup.  (Otherwise you need to remember
-" to do :RepeatLastEnable )
+" Set to 1 to start recording from startup.  (Otherwise do :RepeatLastEnable)
 if !exists("g:RepeatLast_Enabled")
-  let g:RepeatLast_Enabled = 0
+  let g:RepeatLast_Enabled = 1
 endif
 
 " Asks for confirmation before performing a set of repeats.
@@ -364,7 +345,7 @@ augroup END
 " Sometimes we skip recording events for a while
 let s:ignoringCount = 0
 
-function s:StartRecording()               " originally:  normal! qx
+function! s:StartRecording()               " originally:  normal! qx
   if g:RepeatLast_Enabled
     exec "normal! q".g:RepeatLast_Register
   else
@@ -373,14 +354,14 @@ function s:StartRecording()               " originally:  normal! qx
     endif
   endif
 endfunction
-function s:StopRecording()                " originally:  normal! q
+function! s:StopRecording()                " originally:  normal! q
   exec "normal! q"
 endfunction
-function s:RestartRecording()
+function! s:RestartRecording()
   call s:StopRecording()
   call s:StartRecording()
 endfunction
-function s:GetRegister()                  " originally:  let latestAction = @x
+function! s:GetRegister()                  " originally:  let latestAction = @x
   return eval("@".g:RepeatLast_Register)
 endfunction
 
@@ -671,9 +652,12 @@ function! s:DropLast(num)
   endif
 
   let deletedActions = remove(s:earlierActions, len(s:earlierActions)-numWanted, len(s:earlierActions)-1)
+  if numWanted==1
+    let deletedActions = [deletedActions]
+  endif
 
   echo "Deleted last ".numWanted." actions."
-  for i in range(len(deletedActions))
+  for i in range(0,numWanted-1)
     echo "- \"" . s:MyEscape(deletedActions[i]) . "\""
   endfor
 
@@ -718,7 +702,7 @@ function! s:RepeatLastOn()
   if !g:RepeatLast_Enabled
     let g:RepeatLast_Enabled = 1
     call s:StartRecording()
-    echo "RepeatLast enabled."
+    echo "RepeatLast recording enabled."
     sleep 800ms
   endif
 endfunction
@@ -726,10 +710,12 @@ function! s:RepeatLastOff()
   if g:RepeatLast_Enabled
     let g:RepeatLast_Enabled = 0
     call s:StopRecording()
-    echo "RepeatLast disabled."
+    echo "RepeatLast recording disabled."
     sleep 800ms
   endif
 endfunction
+
+" Startup / Init
 
 if g:RepeatLast_Enabled
   call s:StartRecording()
@@ -764,26 +750,47 @@ function! s:MyEscape(str)
   while i < len(a:str)
     let char = a:str[i]
     let ascnr = char2nr(char)
-    if ascnr == 13
+
+    if ascnr == 9
+      let char = "<Tab>"
+    elseif ascnr == 13
       let char = "<Enter>"
     elseif ascnr == 27
       let char = "<Esc>"
     elseif ascnr == 32
       let char = "<Space>"
     elseif ascnr == 127
-      let char = "<Delete>"
+      let char = "<Del>"
     elseif ascnr == 8
       let char = "<Backspace>"
-    elseif ascnr >= 1 && ascnr <= 26
-      let char = "<Ctrl-" . nr2char(65 + ascnr - 1) . ">"
     elseif ascnr >= 32 && ascnr <= 126
       let char = char
+    elseif ascnr >= 1 && ascnr <= 26
+      let char = "<Ctrl-" . nr2char(65 + ascnr - 1) . ">"
     else
       let char = '<' . char2nr(char) . '>'
     endif
+
     let out = out . char
     let i = i+1
   endwhile
   return out
+endfunction
+
+au BufReadPost RepeatLast.vim call FoldNicely()
+command! FoldNicely :call FoldNicely()
+function! FoldNicely()
+  let num = 3
+  set foldmethod=manual
+  normal zE
+  normal :0
+  let @f="/^.v/\\n\\n\\nzf"
+  let oldWrapScan = &wrapscan
+  set nowrapscan
+  normal 999@f
+  normal 9999
+  normal zf
+  let &wrapscan = oldWrapScan
+  echo "Sorry about the error message."
 endfunction
 
