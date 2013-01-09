@@ -269,8 +269,8 @@ if !exists("g:RepeatLast_Show_Ignoring_Info")
 endif
 
 " For debugging, echoes data about actions as they are recorded.
-if !exists("g:RepeatLast_Show_Recording")
-  let g:RepeatLast_Show_Recording = 0
+if !exists("g:RepeatLast_Show_Debug_Info")
+  let g:RepeatLast_Show_Debug_Info = 0
 endif
 
 
@@ -296,7 +296,7 @@ command! RepeatLastDisable call <SID>RepeatLastOff()
 
 command! RepeatLastToggleInfo let g:RepeatLast_Show_Ignoring_Info = 1 - g:RepeatLast_Show_Ignoring_Info
 
-command! RepeatLastToggleDebugging let g:RepeatLast_Show_Recording = 1 - g:RepeatLast_Show_Recording | let &ch = 5 - &ch
+command! RepeatLastToggleDebugging let g:RepeatLast_Show_Debug_Info = 1 - g:RepeatLast_Show_Debug_Info | let &ch = 5 - &ch
 
 " Pause recording temporarily (allows movement before executing a repeat)
 nnoremap <Leader># :PauseRecording<Enter>
@@ -305,7 +305,7 @@ command! -count=0 PauseRecording call <SID>PauseRecordingVerbosely()
 
 " If requested to show debugging messages, make sure they will be visible!
 " (At ch=1 "recording" wil overwrite them immediately.)
-if g:RepeatLast_Show_Recording != 0 && &ch < 3
+if g:RepeatLast_Show_Debug_Info != 0 && &ch < 3
   " Pushed up to 3 because occasionally we echo 2 lines.
   " Not forced for info messages, are echoes but hidden at ch 1.
   set ch=3
@@ -350,7 +350,7 @@ function! s:StartRecording()               " originally:  normal! qx
   if g:RepeatLast_Enabled
     exec "normal! q".g:RepeatLast_Register
   else
-    if g:RepeatLast_Show_Recording != 0
+    if g:RepeatLast_Show_Debug_Info != 0
       echo "StartRecording was called but we are disabled."
     endif
   endif
@@ -393,7 +393,7 @@ function! s:EndActionDetected(trigger)
     else
 
       let s:ignoringCount -= 1
-      if g:RepeatLast_Show_Recording != 0
+      if g:RepeatLast_Show_Debug_Info != 0
         echo "Ignoring action triggered by ".a:trigger." and ".s:ignoringCount." more."
       endif
       if g:RepeatLast_Stop_Ignoring_On_Edit != 0
@@ -454,7 +454,7 @@ function! s:EndActionDetected(trigger)
   " let cleanedAction = lastAction
   " let cleanedAction = substitute(cleanedAction,"^[0-9]*". leadRE ."\?[ \r]?","","")
   " let cleanedAction = substitute(cleanedAction,"^[0-9]*". leadRE ."\.[ \r]?","","")
-  " if cleanedAction != lastAction && g:RepeatLast_Show_Recording != 0
+  " if cleanedAction != lastAction && g:RepeatLast_Show_Debug_Info != 0
     " let extraReport = "Cleaned up action: \"". s:MyEscape(lastAction) ."\" now: \"". s:MyEscape(cleanedAction) . "\""
     " echo extraReport
     " " This echo is almost always hidden by "Detected action:" later.  So
@@ -469,7 +469,7 @@ function! s:EndActionDetected(trigger)
     " immediately after some editing we did.  Another trigger (e.g.
     " InsertLeave) already recorded the action, so CursorMoved has nothing to
     " see.  We don't record or display this empty action.
-    "if g:RepeatLast_Show_Recording != 0
+    "if g:RepeatLast_Show_Debug_Info != 0
       "echo extraReport . "Null action triggered by ".a:trigger
     "endif
 
@@ -481,14 +481,14 @@ function! s:EndActionDetected(trigger)
   elseif substitute(lastAction,"^[0-9]*u$","","") != lastAction ||
        \ substitute(lastAction,"^[0-9]*$","","") != lastAction
 
-    if g:RepeatLast_Show_Recording != 0
+    if g:RepeatLast_Show_Debug_Info != 0
       echo extraReport . "Ignoring unwanted action: \"" . s:MyEscape(lastAction) . "\" (triggered by ".a:trigger.")"
     endif
 
   else
 
     " OK this is an action we do want to record
-    if g:RepeatLast_Show_Recording != 0
+    if g:RepeatLast_Show_Debug_Info != 0
       echo extraReport . "Detected action: \"" . s:MyEscape(lastAction) . "\" (triggered by ".a:trigger.")"
     endif
     call add(s:earlierActions,lastAction)
@@ -567,7 +567,7 @@ function! s:ShowRecent(num)
     echo howFarBack . " " . s:MyEscape(s:earlierActions[i]) . "\n"
   endfor
 
-  if g:RepeatLast_Show_Recording != 0
+  if g:RepeatLast_Show_Debug_Info != 0
     echo "Dropped hopefully unwanted action: \"". s:MyEscape(s:GetRegister()) ."\""
     " This kept displaying my *previous* stroke, and not the '\?' until I
     " performed it a second time.  Better info now we echo *after* q qx.
@@ -624,7 +624,7 @@ function! s:RepeatLast(num)
     endif
   endif
 
-  if g:RepeatLast_Show_Recording
+  if g:RepeatLast_Show_Debug_Info
     echo "Replaying ".numWanted." actions: \"". s:MyEscape(actions) ."\""
     " The qx causes our last echoed line to be emptied, even if ch is large.
     " Let's make it a line we don't need to see!
@@ -650,7 +650,7 @@ function! s:RepeatLast(num)
   " But start ignore mode
   call s:PauseRecordingQuietly()
 
-  if g:RepeatLast_Show_Recording != 0
+  if g:RepeatLast_Show_Debug_Info != 0
     "echo "Dropped request action: \"". dropped1 ."\" and replayed actions: \"". dropped2 ."\""
     echo "Dropped request action: \"". dropped1 ."\""
     echo "I will get hidden"
