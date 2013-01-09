@@ -477,7 +477,9 @@ function! s:EndActionDetected(trigger)
   " Note that unlike '.' we DO want to record movement as an action.
   " TODO: We can use match(2) instead of substitute(4)!=original
   " 1) Detects undo actions
-  elseif substitute(lastAction,"^[0-9]*u$","","") != lastAction
+  " 2) Detects redo actions
+  elseif substitute(lastAction,"^[0-9]*u$","","") != lastAction ||
+       \ substitute(lastAction,"^[0-9]*$","","") != lastAction
 
     if g:RepeatLast_Show_Recording != 0
       echo extraReport . "Ignoring unwanted action: \"" . s:MyEscape(lastAction) . "\" (triggered by ".a:trigger.")"
@@ -602,6 +604,14 @@ function! s:RepeatLast(num)
     let actions = actions . s:earlierActions[i]
   endfor
 
+  " Problem: normal! will ignore any leading ' ' Space chars when we execute
+  " the actions later.
+  " Assuming we were in normal mode and Space is not mapped, do the same
+  " movement using l:
+  "let actions = substitute(actions,"^ ","l","")
+  " Assuming <Ctrl-L> is not mapped, do that and then our Space.
+  let actions = substitute(actions,"^ "," ","")
+
   "echo "OK repeating: " . s:MyEscape(actions)
   " We don't get to see the echo.  Let's use a confirm instead:
   if g:RepeatLast_Request_Confirmation != 0
@@ -625,8 +635,10 @@ function! s:RepeatLast(num)
   " Clear the currently recorded macro of actions (contains our request action).
   call s:StopRecording()
   let dropped1 = s:MyEscape(s:GetRegister())
-  " Prevent triggers (e.g. InsertEnter or InsertLeave) from recording actions,
-  " or auto-cancelling ignore.
+
+  " Replay the actions
+  " But prevent triggers (e.g. InsertEnter or InsertLeave) from recording
+  " actions, or auto-cancelling ignore.
   let s:currentlyReplaying = 1
   exec "normal! ".actions
   let s:currentlyReplaying = 0
@@ -635,6 +647,7 @@ function! s:RepeatLast(num)
   "let dropped2 = s:MyEscape(s:GetRegister())
   call s:StartRecording()
 
+  " But start ignore mode
   call s:PauseRecordingQuietly()
 
   if g:RepeatLast_Show_Recording != 0
