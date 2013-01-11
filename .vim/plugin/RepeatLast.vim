@@ -29,7 +29,7 @@
 "
 "   \|  or  \#
 "
-"        Temporarily disable recording for the next few actions
+"        Temporarily enable/disable recording for the next few actions
 "
 "        (Allows free movement without adding new actions to history)
 "
@@ -119,11 +119,6 @@
 " TODO: RepeatLast_Stop_Ignoring_On_Edit might not need to pre-clear the
 " macro, if we detect it InsertEnter instead of InsertLeave, although that
 " might lose the command that started the insert.  :P
-" And more triggers to listen on: ShellCmdPost ShellFilterPost
-" I can't find any trigger for entering or leaving command mode, but we might
-" be able to fake our own with a mapping:
-"
-":nnoremap <silent> : :call <SID>EndActionDetected("CommandStart")<Enter>:
 
 " TODO: It would be convenient to add:
 "
@@ -273,6 +268,12 @@ if !exists("g:RepeatLast_Show_Debug_Info")
   let g:RepeatLast_Show_Debug_Info = 0
 endif
 
+" Experimental:
+" May lose actions executed very quickly by user (or when Vim is being slow).
+if !exists("g:RepeatLast_TriggerCursorHold")
+  let g:RepeatLast_TriggerCursorHold = 0
+endif
+
 
 
 " == Mappings and Commands ==
@@ -299,9 +300,9 @@ command! RepeatLastToggleInfo let g:RepeatLast_Show_Ignoring_Info = 1 - g:Repeat
 command! RepeatLastToggleDebugging let g:RepeatLast_Show_Debug_Info = 1 - g:RepeatLast_Show_Debug_Info | let &ch = 5 - &ch
 
 " Pause recording temporarily (allows movement before executing a repeat)
-nnoremap <Leader># :PauseRecording<Enter>
-nnoremap <Leader>\| :PauseRecording<Enter>
-command! -count=0 PauseRecording call <SID>PauseRecordingVerbosely()
+nnoremap <Leader># :TogglePauseRecording<Enter>
+nnoremap <Leader>\| :TogglePauseRecording<Enter>
+command! -count=0 TogglePauseRecording call <SID>TogglePauseRecording()
 
 " If requested to show debugging messages, make sure they will be visible!
 " (At ch=1 "recording" wil overwrite them immediately.)
@@ -340,15 +341,34 @@ augroup RepeatLast
   autocmd InsertEnter * call s:EndActionDetected("InsertEnter")
   autocmd InsertLeave * call s:EndActionDetected("InsertLeave")
   autocmd CursorMoved * call s:EndActionDetected("CursorMoved")
+  " We may need this later if g:RepeatLast_TriggerCursorHold is set.
+  autocmd CursorHold * call s:CursorHoldDone()
+  " TODO: More triggers to listen on: ShellCmdPost ShellFilterPost
 augroup END
+
+" Some things we can try to catch more actions:
+" Problem: Captures stuff before the ':' but anything typed after it is lost.
+" Would probably have trouble with visual selections too.
+"nnoremap <silent> : :call <SID>EndActionDetected("CommandStart")<Enter>:
+" Captures a : command when user hits Enter (many commands do not trigger
+" CursorMoves).  Works ok on single line commands but:
+" Problem: Messes up my Grep.vim F3 bind.
+"cnoremap <silent> <Enter> <Enter>:call <SID>EndActionDetected("CommandRun")<Enter>
 
 " Sometimes we skip recording events for a while
 let s:ignoringCount = 0
+
 let s:currentlyReplaying = 0
+let s:old_updatetime = 0   " When non-zero, we have left macro recording mode.
 
 function! s:StartRecording()               " originally:  normal! qx
   if g:RepeatLast_Enabled
     exec "normal! q".g:RepeatLast_Register
+    " This was originally in CursorHoldDone() but may as well go here.
+    if s:old_updatetime != 0
+      let &updatetime = s:old_updatetime
+      let s:old_updatetime = 0
+    endif
   else
     if g:RepeatLast_Show_Debug_Info != 0
       echo "StartRecording was called but we are disabled."
@@ -498,6 +518,14 @@ function! s:EndActionDetected(trigger)
 
   endif
 
+  if g:RepeatLast_TriggerCursorHold
+    if s:old_updatetime == 0
+      let s:old_updatetime = &updatetime
+    endif
+    let &updatetime=0
+    return
+  endif
+
   " Start recording the next action
   if a:trigger != "InsertEnter"
     call s:StartRecording()
@@ -505,18 +533,29 @@ function! s:EndActionDetected(trigger)
 
 endfunction
 
+function! s:CursorHoldDone()
+  if g:RepeatLast_TriggerCursorHold && s:old_updatetime!=0
+    call s:StartRecording()
+  endif
+endfunction
+
 function! s:PauseRecordingQuietly()
   let s:ignoringCount = g:RepeatLast_Ignore_After_Use_For
 endfunction
 
-function! s:PauseRecordingVerbosely()
-  call s:PauseRecordingQuietly()
-  if g:RepeatLast_Show_Ignoring_Info != 0
+function! s:TogglePauseRecording()
+  if s:ignoringCount == 0
+    call s:PauseRecordingQuietly()
     echo "Ignoring the next ".s:ignoringCount." events."
-    " This pause is not too disruptive, because it comes after a request, not
-    " in the middle of editing.  We only need it if low ch would hide it.
-    if &ch == 1 | sleep 400ms | endif
+  else
+    let s:ignoringCount = 0
+    echo "No longer ignoring events."
   endif
+  " This pause is not too disruptive, because it comes after a request, not
+  " in the middle of editing.  We only need it if low ch would hide it.
+  if &ch == 1 | sleep 400ms | endif
+  " Drop the action which requested this call (\| or \#)
+  call s:RestartRecording()
 endfunction
 
 
@@ -607,10 +646,13 @@ function! s:RepeatLast(num)
   " Problem: normal! will ignore any leading ' ' Space chars when we execute
   " the actions later.
   " Assuming we were in normal mode and Space is not mapped, do the same
-  " movement using l:
+  " movement using 'l' instead (although it differs at end of line):
   "let actions = substitute(actions,"^ ","l","")
   " Assuming <Ctrl-L> is not mapped, do that and then our Space.
-  let actions = substitute(actions,"^ "," ","")
+  "let actions = substitute(actions,"^ "," ","")
+  " Assuming 1 is not mapped, do "1 " to start things off:
+  "let actions = substitute(actions,"^ ","1 ","")
+  " This problem is now solved by using feedkeys() below.
 
   "echo "OK repeating: " . s:MyEscape(actions)
   " We don't get to see the echo.  Let's use a confirm instead:
@@ -640,7 +682,9 @@ function! s:RepeatLast(num)
   " But prevent triggers (e.g. InsertEnter or InsertLeave) from recording
   " actions, or auto-cancelling ignore.
   let s:currentlyReplaying = 1
-  exec "normal! ".actions
+  "exec "normal! ".actions
+  " TESTING:
+  call feedkeys(actions)
   let s:currentlyReplaying = 0
 
   " Start recording again
@@ -799,6 +843,14 @@ function! s:MyEscape(str)
   endwhile
   return out
 endfunction
+" <128>kb<Enter> Backspace
+" <128>k9<Enter> F9
+" <128>k;<Enter> F10
+" <128>F1<Enter> F11
+" <Esc>[1;5C Ctrl-Right
+" <Esc>[1;5D Ctrl-Left
+" <Esc>[1;5B Ctrl-Down
+" <Esc>[1;5A Ctrl-Up
 
 au BufReadPost RepeatLast.vim call FoldNicely()
 command! FoldNicely :call FoldNicely()
