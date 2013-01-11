@@ -69,8 +69,11 @@ function! Joeyhighlight()
 	" highlight Comment cterm=bold ctermfg=blue gui=none guifg=#7070ee   " dark blue to match my xterm
 	" highlight Comment cterm=bold ctermfg=magenta gui=none guifg=LightMagenta
 	" highlight Comment cterm=bold ctermfg=darkcyan gui=none guifg=#80a0ff   " nice mid-light blue
-	highlight Comment cterm=bold ctermfg=darkgrey gui=bold guifg=#999999   " bold grey, nice with Lucida in xterm
-	highlight friendlyComment cterm=none ctermfg=cyan gui=none guifg=#80a0ff   " nice mid-light blue
+	" highlight Comment cterm=bold ctermfg=darkgrey gui=bold guifg=#999999   " bold grey, nice with Lucida in xterm
+	highlight Comment cterm=bold ctermfg=darkgrey gui=none guifg=#a0a0a0   " bold grey, nice with Lucida in xterm, light non-bold in GUI
+	" highlight friendlyComment cterm=none ctermfg=cyan gui=none guifg=#80a0ff   " boring mid blue (just greyish)
+	highlight friendlyComment cterm=none ctermfg=cyan gui=none guifg=#cc90ff   " more magenta
+  hi link vimCommentTitle friendlyComment
 	highlight def link confComment Comment
 	"highlight link jComment Comment
 	" highlight jComment ctermfg=DarkYellow guifg=DarkYellow
@@ -276,7 +279,7 @@ function! Joeyhighlight()
 	"hi MyTagListTitle ctermfg=lightblue ctermbg=none
 	"hi MyTagListTitle ctermfg=yellow ctermbg=none
 	hi MyTagListTitle ctermfg=none ctermbg=none
-	hi MyTagListTagName ctermbg=green ctermfg=white guibg=green guifg=white
+	hi MyTagListTagName ctermbg=green ctermfg=white guibg=#00cc00 guifg=white
 	" hi MyTagListFileName ctermbg=black ctermfg=white
 	hi MyTagListFileName ctermbg=black ctermfg=cyan guibg=black guifg=cyan
 
