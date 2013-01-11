@@ -1,14 +1,15 @@
 " Briefly highlights the cursor line whenever the cursor jumps vertically on
 " the screen.  Can use cursorline, or its own implementation.
 
+" Can be disabled by letting g:hiline=0
 if exists('g:hiline') && g:hiline == 0
   finish
 endif
 
+" Defaults
 if !exists('g:hiline_use_cursorline')
   let g:hiline_use_cursorline = 1
 endif
-
 if !exists('g:hiline_min_lines')
   let g:hiline_min_lines = 2
 endif
