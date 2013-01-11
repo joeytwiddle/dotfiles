@@ -70,25 +70,26 @@ function! Joeyfolding()
 		" :set foldtext=getline(v:foldstart).'\ \ \ ['.(v:foldend-v:foldstart).'\ lines]'
 
 
-		" For treelist.hs:
-		" :syntax match TreeListFoldLine ".*\(-{\|-}\|{-\|}-\).*" contains=TreeListHsTag,myFold
-		" :highlight TreeListFoldLine ctermbg=Red ctermfg=White cterm=bold
-		"" tags are blue, blends in:
-		" :syntax match TreeListHsTag "^\(\.\|+\|-\|\*\) "
-		" :highlight TreeListHsTag ctermbg=blue ctermfg=white cterm=bold
-		:syntax match TreeListHsTag "^\(+\|-\) [^{}]*"
-		" :highlight TreeListHsTag ctermbg=darkmagenta ctermfg=white cterm=bold
-		:highlight TreeListHsTag ctermbg=darkblue ctermfg=grey cterm=none gui=bold guibg=#000060
-		:syntax match TreeListHsTagNorm "^\(\.\|\*\) "
-		:highlight TreeListHsTagNorm ctermbg=darkblue ctermfg=grey cterm=none gui=bold guibg=#000060
-		" :syn region TreeListFold matchgroup=myDummy start="-{" end="}-" transparent fold
-		"" Conflicts with TreeListFold
-		" :syntax match TreeListHsCurl "\(-{\|{-\|-}\|}\)$"
-		" :highlight TreeListHsCurl ctermbg=blue ctermfg=white cterm=bold
-		"" These two fix the strange looking holes in treelists but make tabs look weird in normal folding situations.  :-(
-		"" This listchars should do tabs cos tabs get turned into ^I :-(
-		" :set listchars=trail:\ 
-		" :highlight SpecialKey ctermbg=blue ctermfg=white
+		""" All of this has moved into 'treevim.sh'.
+		""" For treelist.hs:
+		"" :syntax match TreeListFoldLine ".*\(-{\|-}\|{-\|}-\).*" contains=TreeListHsTag,myFold
+		"" :highlight TreeListFoldLine ctermbg=Red ctermfg=White cterm=bold
+		""" tags are blue, blends in:
+		"" :syntax match TreeListHsTag "^\(\.\|+\|-\|\*\) "
+		"" :highlight TreeListHsTag ctermbg=blue ctermfg=white cterm=bold
+		":syntax match TreeListHsTag "^\(+\|-\) [^{}]*"
+		"" :highlight TreeListHsTag ctermbg=darkmagenta ctermfg=white cterm=bold
+		":syntax match TreeListHsTagNorm "^\(\.\|\*\) "
+		":highlight TreeListHsTag ctermbg=darkblue ctermfg=grey cterm=none gui=bold guibg=#000060
+		":highlight TreeListHsTagNorm ctermbg=darkblue ctermfg=grey cterm=none gui=bold guibg=#000060
+		"" :syn region TreeListFold matchgroup=myDummy start="-{" end="}-" transparent fold
+		""" Conflicts with TreeListFold
+		"" :syntax match TreeListHsCurl "\(-{\|{-\|-}\|}\)$"
+		"" :highlight TreeListHsCurl ctermbg=blue ctermfg=white cterm=bold
+		""" These two fix the strange looking holes in treelists but make tabs look weird in normal folding situations.  :-(
+		""" This listchars should do tabs cos tabs get turned into ^I :-(
+		"" :set listchars=trail:\ 
+		"" :highlight SpecialKey ctermbg=blue ctermfg=white
 
 	endif
 
