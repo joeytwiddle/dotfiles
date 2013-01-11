@@ -329,6 +329,7 @@ endif
 
 " We are going to record a history of recent actions
 let s:earlierActions = []
+let s:earlierActionTriggers = []   " only used for debugging
 
 " We are going to trigger a function to look for new entries in our macro.
 augroup RepeatLast
@@ -349,11 +350,12 @@ augroup END
 " Some things we can try to catch more actions:
 " Problem: Captures stuff before the ':' but anything typed after it is lost.
 " Would probably have trouble with visual selections too.
-"nnoremap <silent> : :call <SID>EndActionDetected("CommandStart")<Enter>:
+"nnoremap <silent> : :call <SID>EndActionDetected("CommandEnter")<Enter>:
 " Captures a : command when user hits Enter (many commands do not trigger
-" CursorMoves).  Works ok on single line commands but:
-" Problem: Messes up my Grep.vim F3 bind.
-"cnoremap <silent> <Enter> <Enter>:call <SID>EndActionDetected("CommandRun")<Enter>
+" CursorMoves).  Works ok on single line commands but...
+" Problem: Messes up my Grep.vim F3 bind (acts during confirm()?), and
+"          :FoldBlocks.
+"cnoremap <silent> <Enter> <Enter>:call <SID>EndActionDetected("CommandLeave")<Enter>
 
 " Sometimes we skip recording events for a while
 let s:ignoringCount = 0
@@ -384,6 +386,9 @@ function! s:RestartRecording()
 endfunction
 function! s:GetRegister()                  " originally:  let latestAction = @x
   return eval("@".g:RepeatLast_Register)
+endfunction
+function! s:ClearRegister()
+  exec "let @".g:RepeatLast_Register." = ''"
 endfunction
 
 function! s:EndActionDetected(trigger)
@@ -505,6 +510,15 @@ function! s:EndActionDetected(trigger)
       echo extraReport . "Ignoring unwanted action: \"" . s:MyEscape(lastAction) . "\" (triggered by ".a:trigger.")"
     endif
 
+  elseif a:trigger == "InsertEnter"
+    " Because we don't stop/start recording on InsertEnter, we should not
+    " record the actions either (or we will end up recording the same thing
+    " twice!)
+
+    if g:RepeatLast_Show_Debug_Info != 0
+      echo extraReport . "Cannot learn during ".a:trigger.", probably duplicated: \"" . s:MyEscape(lastAction) . "\""
+    endif
+
   else
 
     " OK this is an action we do want to record
@@ -512,8 +526,10 @@ function! s:EndActionDetected(trigger)
       echo extraReport . "Detected action: \"" . s:MyEscape(lastAction) . "\" (triggered by ".a:trigger.")"
     endif
     call add(s:earlierActions,lastAction)
+    call add(s:earlierActionTriggers,a:trigger)
     if len(s:earlierActions) > g:RepeatLast_Max_History
       call remove(s:earlierActions,0)
+      call remove(s:earlierActionTriggers,0)
     endif
 
   endif
@@ -523,6 +539,10 @@ function! s:EndActionDetected(trigger)
       let s:old_updatetime = &updatetime
     endif
     let &updatetime=0
+    " If we don't start recording again, it's possible that another trigger
+    " may fire, and re-store the register contents!  (e.g.  InsertLeave,
+    " CursorMoved often fire together).  To prevent storing it twice:
+    call s:ClearRegister()
     return
   endif
 
@@ -603,7 +623,11 @@ function! s:ShowRecent(num)
 
   for howFarBack in range(numWanted,1,-1)
     let i = len(s:earlierActions) - howFarBack
-    echo howFarBack . " " . s:MyEscape(s:earlierActions[i]) . "\n"
+    if g:RepeatLast_Show_Debug_Info
+      echo howFarBack . " " . s:MyEscape(s:earlierActions[i]) . "   (".s:earlierActionTriggers[i].")\n"
+    else
+      echo howFarBack . " " . s:MyEscape(s:earlierActions[i]) . "\n"
+    endif
   endfor
 
   if g:RepeatLast_Show_Debug_Info != 0
@@ -719,6 +743,7 @@ function! s:DropLast(num)
   endif
 
   let deletedActions = remove(s:earlierActions, len(s:earlierActions)-numWanted, len(s:earlierActions)-1)
+  let deletedTriggers = remove(s:earlierActionTriggers, len(s:earlierActionTriggers)-numWanted, len(s:earlierActionTriggers)-1)
   if numWanted==1
     let deletedActions = [deletedActions]
   endif
