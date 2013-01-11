@@ -35,7 +35,45 @@ endfunction
 
 "" Shows differences between the current buffer and the file on disk (with a split diff window).
 "" From the manual :h DiffOrig
-command! DiffSplitAgainstFileOnDisk vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+" command! DiffSplitAgainstFileOnDisk vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 "" TOTEST, with caution:
 " command! ShowChangesSinceStarting normal "9999u" | w | normal "9999<C-r>" | DiffAgainstFileSplit
+"" My version:
+command! DiffSplitAgainstFileOnDisk call s:DiffSplitAgainstFileOnDisk()
+
+function! s:DiffSplitAgainstFileOnDisk()
+
+  " A bit heavy, use manually only in emegencies: bufdo diffoff
+
+  " Create a new buffer in a split window, read the "alternate" file contents,
+  " and clear the messy blank line.
+  vert new
+  r #
+  0d_
+
+  " We don't want it to interact with the file, because 
+  setlocal buftype=nofile
+
+  " Give it a meaningful name
+  let tmp_title="[Disk_view_".bufname('#')."]"
+  silent exec "file " tmp_title
+
+  " setlocal nobuflisted
+
+  " Perhaps the following are not needed.  Although it doesn't auto-close, it
+  " does let me close it without complaining that it was changed earlier.
+
+  " I don't want this buffer to hang around; we will make it disappear as soon
+  " as it is no longer visible (from closing window or switching buffer).
+  setlocal bufhidden=delete
+
+  " Because we are deleting on hide, we may lose any edits made.  We avoid
+  " that by blocking edits.  We can't do this until after our init edits.
+  setlocal nomodifiable
+
+  diffthis
+  wincmd p
+  diffthis
+
+endfunction
 
