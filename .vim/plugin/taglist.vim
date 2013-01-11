@@ -592,7 +592,8 @@ let s:Tlist_Skip_Refresh = 0
 
 " The last entry is the default.  Cycling will start from the first.
 let s:list_of_sort_types = [ "tree2", "name", "order", "line", "tree" ]
-let s:list_of_tag_colors = [ "darkcyan", "darkyellow", "darkmagenta", "darkred", "darkgreen", "darkblue" ]
+let s:list_of_tag_colors     = [ "darkcyan", "darkyellow", "darkmagenta", "darkred", "darkgreen", "darkblue" ]
+let s:list_of_tag_colors_gui = [     "cyan",     "yellow",     "magenta",     "red",     "green",     "blue" ]
 
 " Tlist_Window_Display_Help()
 function! s:Tlist_Window_Display_Help()
@@ -2112,11 +2113,7 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
         let i = 1
         " Add the tag names sorted in natural order
         while i <= s:tlist_{fidx}_tag_count
-            let fidx_i = 's:tlist_' . fidx . '_' . i
 
-            " let tname_var = 's:tlist_' . fidx . '_' . i . '_tag_name'
-            " let txt = ' ' . {tname_var}
-            " let txt = ' ' . s:tlist_{fidx}_{i}_tag_name
             "" This next call ensures the tproto_var has been parsed
             let dummy = s:Tlist_Get_Tag_Prototype(fidx,i)
             let tindent_var = 's:tlist_' . fidx . '_' . i . '_tag_proto_indent'
@@ -2127,53 +2124,36 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             else
                 let indent = 0
             endif
-            let txt = repeat(' ',2+2*indent)
+            let indentStr = repeat(' ',2+2*indent)
+
+            let fidx_i = 's:tlist_' . fidx . '_' . i
+            " let tname_var = 's:tlist_' . fidx . '_' . i . '_tag_name'
+            " let tagName = {tname_var}
+            let tagName = {fidx_i}_tag_name
+            " This is the 1-char type:
             let ttype_var = 's:tlist_' . fidx . '_' . i . '_tag_type'
+            " This is the longer word, if available:
+            let full_tag_word = ""
             if exists(ttype_var)
-                " let txt .= {ttype_var} . ': '
-                " let txt .= '[' . {ttype_var} . '] '
+                let full_tag_word = s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var})
             endif
+
+            " Let's build the string!
+            let txt = indentStr
             if tagComes == "after"
-                let txt .= {fidx_i}_tag_name
-                if exists(ttype_var)
-                    let txt .= '   [' . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ']'
+                let txt .= tagName
+                if full_tag_word != ""
+                    let txt .= '   [' . full_tag_word . ']'
                 endif
             else
-                if exists(ttype_var)
-                    " let txt .= ' (' . {ttype_var} . ')'
-                    " let txt .= ' [' . {ttype_var} . ']'
-                    " let txt .= '(' . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ') '
-                    let txt .= s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ': '
-                    " let txt .= s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var}) . ': '
-                    " let txt .= '[' . {ttype_var} . '] '
-                    " let txt .= {ttype_var} . ': '
-                    " let txt .= " : " . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var})
-                    " let txt .= " : " . s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var})
+                if full_tag_word != ""
+                    " let txt .= '(' . {ttype_var} . ') '
+                    let txt .= full_tag_word . ': '
                 endif
-                let txt .= {fidx_i}_tag_name
+                let txt .= tagName
             endif
-            "let proto = s:Tlist_Get_Tag_Linenum(fidx,i)
-            " let tproto_var = 's:tlist_' . fidx . '_' . i . '_tag_proto'
-            " if exists(tproto_var)
-                " let proto = ">" . {tproto_var} . "<"
-            " else
-                " let proto = "?"
-            " endif
-            " let txt .= ' : ' . proto
-            "" let ttype = {fidx_i}_tag_type
-            "let ttype = s:tlist_{fidx}_{i}_tag_type
-            "let txt = ' bananas'
-            "let ttype = 'variable'
-            "let fidx_ttype = 's:tlist_' . fidx . '_' . ttype
 
             silent! put =txt
-
-            "let {fidx_ttype}_offset = ttype_start_lnum - file_start
-
-            " create a fold for this tag type
-            "let fold_start = ttype_start_lnum
-            "let fold_end = fold_start + 5   " {fidx_ttype}_count
-            " exe fold_start . ',' . fold_end  . 'fold'
 
             " Any number above 0, and we space them with gaps (filename becomes visible!)
             exe line(".") + 0
@@ -2199,12 +2179,13 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             "" Sometimes the hlgroup exists, but the syntax was cleared!
             " if !hlexists(groupName)
                 let col = get(s:list_of_tag_colors, (i-1) % len(s:list_of_tag_colors))
+                let colgui = get(s:list_of_tag_colors_gui, (i-1) % len(s:list_of_tag_colors_gui))
                 if tagComes == "after"
                     exec 'syntax match '.groupName.' / \['.displayedType.'\]$/'
                 else
                     exec 'syntax match '.groupName.' /^ *'.displayedType.':/'
                 endif
-                exec 'highlight '.groupName.' ctermfg='.col.' guifg='.col
+                exec 'highlight '.groupName.' ctermfg='.col.' guifg='.colgui
             " endif
             let i = i + 1
         endwhile
