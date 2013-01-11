@@ -16,6 +16,11 @@
 " overhead for the user, which he must exchange for the beneficial features of
 " this script!
 
+" TODO: We need :ForgetWidths and :ForgetHeights and :ForgetSizes to disable
+" autocmds, so we really can visit every window and forget their w:settings.
+" It would be pretty handy sometimes, when the display looks right on this
+" window, but old settings are causing trouble on others.
+
 function! s:InitEvents()
   augroup WindowsRememberSizes
     autocmd!
