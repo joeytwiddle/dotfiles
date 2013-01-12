@@ -571,9 +571,14 @@ function! s:TogglePauseRecording()
     let s:ignoringCount = 0
     echo "No longer ignoring events."
   endif
-  " This pause is not too disruptive, because it comes after a request, not
-  " in the middle of editing.  We only need it if low ch would hide it.
-  if &ch == 1 | sleep 400ms | endif
+  "" This pause is not too disruptive, because it comes after a request, not
+  "" in the middle of editing.  We only need it if low ch would hide it.
+  "if &ch == 1 | sleep 400ms | endif
+  "" No, it will be hidden at larger ch too, use a dummy line:
+  "if &ch>1
+    "echo "I will get hidden"
+  "endif
+  sleep 400ms
   " Drop the action which requested this call (\| or \#)
   call s:RestartRecording()
 endfunction
