@@ -9,7 +9,7 @@
 " the completion list, in case I was to press Tab again.  I can't have that:
 " wildmode: When there is only a single match, it is fully completed in all cases.
 " I find this problematic, because I cannot just type words, they get completed for me!
-" A fake <C-L> would do the job, except for the annoying "More" prompt on
+" A fake c_CTRL-D would do the job, except for the annoying "More" prompt on
 " large pages.
 
 command! SkyBisonBeta call <SID>SkyBisonBeta()
