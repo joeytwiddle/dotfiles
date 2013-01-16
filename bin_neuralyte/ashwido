@@ -9,9 +9,11 @@
 
 ## An example usage:
 # nice -n 12 ashwido jsh env LOSS=25 reencode_video_to_x264 my_video.mp4
-## This is a bad example, because hwi's upload speed is a bottleneck!
-## ashwido is really useful for heavy processing tasks that do not read a huge
-## amount of data from disk, but might write a lot.
+## Note: This doesn't actually work without some aid, because
+## reencode_video_to_x264 tries to mkfifo.
+## This is a bad example anyway, because hwi's upload speed is a bottleneck!
+## ashwido is only really useful for heavy processing tasks that do not read a
+## huge amount of data from disk (but might write a lot).
 
 if [ "x$1" = "x" ] || [ "$1" = "--help" ]
 then
@@ -20,14 +22,19 @@ cat << !
 ashwido [jsh] <command> [<args>...]
 
   will run the given command in the current folder, but using executables and
-  libraries from an alternative root system.
+  libraries from an alternative root system (the guest system).
 
   It is a bit like chroot, but it uses PATH and LD_PRELOAD.
 
-  If jsh is specified, the script takes steps to unload jsh from the shell if
-  it is present, and load jsh from the chroot.
+  Note that /tmp and /dev remain on the host system, even when working on the
+  guest.
+
+  If jsh is specified, the script takes steps to unload jsh from the current
+  shell if it is present, and load jsh from the chroot.
 
   Currently the script targets Hwi's ssh-mounted root at ~/mnt/hwi .
+
+E.g.: nice -n 12 ashwido jsh env LOSS=25 reencode_video_to_x264 my_video.mp4
 
 !
 exit
@@ -35,12 +42,19 @@ fi
 
 if [ ! -d "$HOME/mnt/hwi/usr" ]
 then
-	echo "Hwi is not mounted!  Run sshfs -p 222 -o cache_timeout=115200 -o transform_symlinks joey@hwi.ath.cx:/ ~/mnt/hwi"
+	echo "Hwi is not mounted!  Try the following:"
+	echo
+	echo ". includepath $HOME/myroots/sshfs/"
+	echo
+	echo "sshfs -p 222 -o cache_timeout=115200 -o transform_symlinks joey@hwi.ath.cx:/ ~/mnt/hwi"
+	echo
+	echo "With the right caching libs should load a bit faster the second time around, but beware there will still be plenty of pauses (roundtrip for every file?), especially when a shellscript with I/O runs!  It seems libc6 is opened by the server every time it is requested, although it sends faster the second time around."
+	echo
 	exit 1
 fi
 
-echo "If things run very slowly, you can watch on Hwi which files are being sent:"
-echo "  jwatch listopenfiles sftp"
+echo "If things run very slowly, you can watch from Hwi which files are being sent:" >&2
+echo "  jwatch listopenfiles sftp" >&2
 
 . includepath "$HOME/mnt/hwi"
 
@@ -53,6 +67,7 @@ then
 	# which jsh
 	# echo
 	export JPATH="$HOME/mnt/hwi/home/joey/j"
+	export PATH="$HOME/mnt/hwi/home/joey/linux/bin:$PATH"
 	"$JPATH"/jsh "$@"
 else
 	"$@"
