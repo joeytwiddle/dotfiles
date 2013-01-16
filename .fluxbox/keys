@@ -1,12 +1,15 @@
 ! fluxbox-update_configs added '(workspace=[current])' to (Next|Prev)(Window|Group)
 ! check lines marked by 'FBCV13' if they are correctly updated
 !mouse actions added by fluxbox-update_configs
-OnTitlebar Mouse1 :MacroCmd {Focus} {Raise} {ActivateTab}
+## This removed by Joey cos it blocks the next
+# OnTitlebar Move1 :MacroCmd {Focus} {Raise} {ActivateTab}
 !mouse actions added by fluxbox-update_configs
-OnTitlebar Mouse1 :StartMoving
-OnLeftGrip Mouse1 :StartResizing bottomleft
-OnRightGrip Mouse1 :StartResizing bottomright
-OnWindowBorder Mouse1 :StartMoving
+## Either of these works
+OnTitlebar Move1 :StartMoving
+# OnTitlebar Mouse1 :StartMoving
+OnLeftGrip Move1 :StartResizing BottomLeft
+OnRightGrip Move1 :StartResizing BottomRight
+OnWindowBorder Move1 :StartMoving
 
 # OnTitlebar Mouse1 :MacroCmd {Focus} {Raise} {ActivateTab} {StartMoving}
 
@@ -165,8 +168,6 @@ OnDesktop Mouse3 :rootMenu
 # Mod1 t :MacroCmd {Raise} {Focus} {StartTabbing} {Lower}
 # Mod4 t :StartTabbing
 
-Mod1 t :ExecCommand xtermbg -bg '#330000' -geometry 132x28 -e top -n 100
-
 ## Currently moves all windows on all desktops!
 # Shift Control Mod1 Left :MacroCmd {ForEach {SendToPrevWorkspace 1}} {PrevWorkspace}
 # Shift Control Mod1 Right :MacroCmd {ForEach {SendToNextWorkspace 1}} {NextWorkspace}
@@ -220,9 +221,13 @@ Mod1 f :ToggleDecor
 Mod4 f :ToggleDecor
 # Mod1 t :ToggleTab
 # Mod4 t :ToggleTab
+
 Mod1 F9 :ExecCommand xsnapshot
 Mod4 F9 :ExecCommand xsnapshot
 Control F9 :ExecCommand xsnapshot -window
+
+## Run top in an xterm to peek on the system and processes
+Mod1 t :ExecCommand xtermbg -bg '#330000' -geometry 132x28 -e top -n 100
 
 ## Changing workspace
 Control Mod1 Left :PrevWorkspace
