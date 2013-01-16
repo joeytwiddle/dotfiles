@@ -13,6 +13,8 @@ setlocal formatoptions-=t formatoptions+=croql
 setlocal comments=s:###,m:\ ,e:###,:#
 setlocal commentstring=#\ %s
 
+
+
 "" Added by Joey (perhaps futilely trying to undo my config which has not yet run!):
 :set ts=2
 :set sw=2
@@ -28,6 +30,9 @@ let &comments=":##,".&comments
 
 if !exists("g:coffeeAutoCompileAll")
   let g:coffeeAutoCompileAll = 1
+endif
+if !exists("g:coffeeShowJSChanges")
+  let g:coffeeShowJSChanges = 0
 endif
 
 augroup CoffeeAutoCompile_AuGroup
@@ -57,10 +62,8 @@ let s:previewWinIsOpen = 0
 
 function! s:CoffeeAutoCompile_Check(coffeefile)
 
-  let doCompile = 0
-  if exists("g:coffeeAutoCompileAll")
-    let doCompile = g:coffeeAutoCompileAll
-  endif
+  let doCompile = g:coffeeAutoCompileAll
+  " Buffer setting (true or false) overrides global
   if exists("b:coffeeCompileThisBuffer")
     let doCompile = b:coffeeCompileThisBuffer
   endif
@@ -70,7 +73,7 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
     return
   endif
 
-  if exists("g:coffeeShowChanges") && g:coffeeShowChanges != 0
+  if g:coffeeShowJSChanges != 0
     let jsFile = expand("%<").".js"
     silent exec "!cp ".jsFile." ".jsFile.".last"
   endif
@@ -81,7 +84,7 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
   let lines = readfile("/tmp/coffee.err")
   if len(lines) == 0
 
-    if exists("g:coffeeShowChanges") && g:coffeeShowChanges != 0
+    if g:coffeeShowJSChanges != 0
       silent exec "!diff ".jsFile.".last ".jsFile" > /tmp/jsdiffs.diff"
       let diffLines = readfile("/tmp/jsdiffs.diff")
       if len(diffLines) > 0
@@ -120,6 +123,9 @@ endfunction
 "
 "      silent :call     hides echo and confirm messages (still pauses on sleep)
 
+"" Optional stuff
+
+" Only needed when debugging:
 function! s:MsgUser(msg)
   "call confirm(a:msg,"Press Enter")
   " With ch=1 echo causes a Press Enter message, because :w is verbose too.
@@ -132,6 +138,7 @@ function! s:MsgUser(msg)
   endif
 endfunction
 
+" User interface (commands):
 function! s:ToggleOption(optName)
   let optName = a:optName
   if !exists(optName)
@@ -145,5 +152,5 @@ endfunction
 
 :command! CoffeeToggleCompileAll call s:ToggleOption("g:coffeeAutoCompileAll")
 :command! CoffeeToggleCompileThisBuffer call s:ToggleOption("b:coffeeCompileThisBuffer")
-:command! CoffeeToggleShowChangesToJS call s:ToggleOption("g:coffeeShowChanges")
+:command! CoffeeToggleShowChangesToJS call s:ToggleOption("g:coffeeShowJSChanges")
 
