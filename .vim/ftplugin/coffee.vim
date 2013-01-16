@@ -24,13 +24,11 @@ let &comments=":##,".&comments
 
 
 
-" Joey's coffee -> js autocompile on write
+"" Joey's coffee -> js autocompile on write
 
 if !exists("g:coffeeAutoCompileAll")
   let g:coffeeAutoCompileAll = 1
 endif
-
-"" Compile the current file on write?
 
 augroup CoffeeAutoCompile_AuGroup
 
@@ -46,7 +44,7 @@ augroup CoffeeAutoCompile_AuGroup
   " autocmd BufWritePost,FileWritePost *.coffee silent !/bin/sh -c "coffee -c <afile>" &
 
   "" I didn't find any one-liner which didn't mess up the screen in some way.
-  "" But this approach of calling a function and piping seems to work well:
+  "" But this approach pipes errors to a file, which prevents that.
   autocmd BufWritePost,FileWritePost *.coffee :call <SID>CoffeeAutoCompile_Check(bufname('%'))
 
 augroup END
@@ -54,6 +52,7 @@ augroup END
 " TODO: Two options is probably too much.  One option but per-file
 " auto-recognition (by checking comments?) might be useful.
 
+" We don't really need to track this.  :pclose seems fine whether it's open or not.
 let s:previewWinIsOpen = 0
 
 function! s:CoffeeAutoCompile_Check(coffeefile)
@@ -71,11 +70,27 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
     return
   endif
 
+  if exists("g:coffeeShowChanges") && g:coffeeShowChanges != 0
+    let jsFile = expand("%<").".js"
+    silent exec "!cp ".jsFile." ".jsFile.".last"
+  endif
+
   " call s:MsgUser("Compiling...")
   " silent! exec "!coffee -c % > /tmp/coffee.log 2> /tmp/coffee.err"
   silent! exec "!coffee -c % > /tmp/coffee.log 2> /tmp/coffee.err"
   let lines = readfile("/tmp/coffee.err")
   if len(lines) == 0
+
+    if exists("g:coffeeShowChanges") && g:coffeeShowChanges != 0
+      silent exec "!diff ".jsFile.".last ".jsFile" > /tmp/jsdiffs.diff"
+      let diffLines = readfile("/tmp/jsdiffs.diff")
+      if len(diffLines) > 0
+        silent! belowright pedit +:set\ ft=diff\ autoread /tmp/jsdiffs.diff
+        let s:previewWinIsOpen = 1
+        return
+      endif
+    endif
+
     if s:previewWinIsOpen == 1
       let s:previewWinIsOpen = 0
       pclose
@@ -128,6 +143,7 @@ function! s:ToggleOption(optName)
   "sleep 800ms
 endfunction
 
-:command! CoffeeAutoCompileAllToggle call s:ToggleOption("g:coffeeAutoCompileAll")
-:command! CoffeeAutoCompileBufferToggle call s:ToggleOption("b:coffeeCompileThisBuffer")
+:command! CoffeeToggleCompileAll call s:ToggleOption("g:coffeeAutoCompileAll")
+:command! CoffeeToggleCompileThisBuffer call s:ToggleOption("b:coffeeCompileThisBuffer")
+:command! CoffeeToggleShowChangesToJS call s:ToggleOption("g:coffeeShowChanges")
 
