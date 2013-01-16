@@ -1,0 +1,22 @@
+[begin] (Fluxbox Menu)
+
+	# This provides: xterm Reconfigure Restart and Exit
+	include-menu-defs
+
+	# This is the main Debian menu:
+	[include] (/etc/X11/fluxbox/fluxbox-menu)
+
+	#[submenu] (Debian) {}
+	#	[include] (/etc/X11/fluxbox/fluxbox-menu)
+	#[end]
+
+	#[submenu] (Git) {}
+	#	[include] (/home/joey/linux/.fluxbox/fluxbox-menu)
+	#[end]
+
+	#[submenu] (Defs) {}
+	#	[include] (/home/joey/linux/.fluxbox/menudefs.hook)
+	#[end]
+
+[end]
+
