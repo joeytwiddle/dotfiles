@@ -23,6 +23,8 @@
 "
 "   4\.  Repeat the last four actions (including movement actions)
 "
+"   n\\. Repeat the last repeated action set n times.
+"
 "   \D   Forget (drop) the last action (e.g. to discard an unwanted movement)
 "
 "   3\D  Drop the last 3 recorded actions (useful to get back to earlier state)
@@ -95,6 +97,16 @@
 " CursorHold events do not fire in macro-recording mode.  Any visual tools,
 " taglist updates, etc. that require CursorHold *will not be triggered*.
 " Other events such as CursorMove, InsertLeave, BufWritePost work fine.
+"
+" == Disadvantages ==
+"
+" Movements j and k will not return to the original column after passing
+" through shorter lines (like they do when macro recording is disabled).
+" (Only a problem when using RepeatLast_TriggerCursorHold.)
+"
+" Use of some <Tab>-completion plugins may produce unexpected behaviour when
+" replaying actions including a <Tab>-completion.  (Although Vim's built-in
+" '.' does not suffer from this.)
 
 
 
@@ -177,6 +189,36 @@
 " can be recalled without worry about ignoring new movements/actions.  We
 " could even cycle the register used for saving, if we want to remember older
 " interesting action groups.
+"
+" Summary of the problems with "recording" message masking 'echo'-ed lines:
+"
+"  1. If we start macro recording after 3 echoes but before more echoes, the
+"     last of the previous 3 lines will be cleared by "recording" message
+"     (although it will also be cleared itself too, by the following echoes).
+"     We always see a blank line at that point (after the first 2).
+"
+"     We can address this by echoing a dumb line beforehand.
+"
+"  2. If we start macro recording at the end, before returning to the user, the
+"     "recording" message appears on the last of your ch lines.  But if you
+"     have N ch lines and there were *exactly* N echoes, the last one will be
+"     hidden by the "recording" message.  If there were <N echoes no problem,
+"     we can see them all.  If there were >N echoes, the overflow message will
+"     give us a change to see them all.
+"
+"     (This summary is slightly inaccurate - the problem also exists if we
+"     'qx' and then echo.)
+"
+"     (Does this problem only exist when we use RepeatLast_TriggerCursorHold?)
+"
+"     We can also address this by echoing a dumb line beforehand.  This might
+"     cause "unnecessary" overflow, but it *is* needed, to see that last echo.
+"
+"     In either case, a dummy line is pointless if there were no previous
+"     echos??
+"
+"     Whilst we could count our own echos, we cannot count any emitted from
+"     Vim or other scripts.
 
 
 
@@ -273,6 +315,13 @@ endif
 if !exists("g:RepeatLast_TriggerCursorHold")
   let g:RepeatLast_TriggerCursorHold = 0
 endif
+" BUG TODO: It blocks recording of actions taken when in visual mode.
+
+" If set, when you repeat a group, the actions will also be saved in this
+" register.  So you can do: 5\? 5\. 20@l to repeat the 5 actions 20 times.
+if !exists("g:RepeatLast_SaveToRegister")
+  let g:RepeatLast_SaveToRegister = ''
+endif
 
 
 
@@ -289,6 +338,9 @@ command! -count=0 DropLast call <SID>DropLast(<count>)
 
 nnoremap <Leader>G :GrabLast<Enter>
 command! -count=0 GrabLast call <SID>GrabLast(<count>)
+
+nnoremap <Leader><Leader>. :ReRepeat<Enter>
+command! -count=0 ReRepeat call <SID>ReRepeat(<count>)
 
 "command! RepeatLastOn call <SID>RepeatLastOn()
 "command! RepeatLastOff call <SID>RepeatLastOff()
@@ -555,6 +607,29 @@ endfunction
 
 function! s:CursorHoldDone()
   if g:RepeatLast_TriggerCursorHold && s:old_updatetime!=0
+    "" Now the CursorHold has triggered, we must start recording which was
+    "" postponed earlier.
+
+    "" Before doing so, we could pause briefly, so any visual effects related
+    "" to CursorHold can be seen (e.g. blinking_statusline.vim or
+    "" highlight_line_after_jump.vim).  Set g:RepeatLast_TriggerCursorHold to
+    "" the number of milliseconds you want + 2.
+    ""
+    "" WARNING: If greater than user's key repeat speed, will likely prevent
+    "" recording of repeats.
+    ""
+    "" Also, looks jerky when holding a key down to scroll or move the cursor.
+    "" So we should only do it if the time between the last two actions was
+    "" high.
+    ""
+    "if g:RepeatLast_TriggerCursorHold > 2
+    "  exec "sleep ".(g:RepeatLast_TriggerCursorHold-2)."ms"
+    "endif
+    ""
+    "" Interstingly near the threshold, when I hold <Enter> I get first an
+    "" <Enter> but then a few <Ctrl-J>s.  Presumably this is because two
+    "" strokes are being sent to the xterm, but the first is lost.
+
     call s:StartRecording()
   endif
 endfunction
@@ -672,6 +747,7 @@ function! s:RepeatLast(num)
     let actions = actions . s:earlierActions[i]
   endfor
 
+  " FIXED: This problem is now solved by using feedkeys() below.
   " Problem: normal! will ignore any leading ' ' Space chars when we execute
   " the actions later.
   " Assuming we were in normal mode and Space is not mapped, do the same
@@ -681,7 +757,6 @@ function! s:RepeatLast(num)
   "let actions = substitute(actions,"^ "," ","")
   " Assuming 1 is not mapped, do "1 " to start things off:
   "let actions = substitute(actions,"^ ","1 ","")
-  " This problem is now solved by using feedkeys() below.
 
   "echo "OK repeating: " . s:MyEscape(actions)
   " We don't get to see the echo.  Let's use a confirm instead:
@@ -695,12 +770,30 @@ function! s:RepeatLast(num)
     endif
   endif
 
+  let g:RepeatLast_LastAction = actions
+
+  if exists("g:RepeatLast_SaveToRegister") && g:RepeatLast_SaveToRegister != ""
+    " let @{g:RepeatLast_SaveToRegister} = actions
+    " exec "let @".g:RepeatLast_SaveToRegister." = \"".actions."\""
+    "" Avoid escaping issues with exec:
+    exec "let @".g:RepeatLast_SaveToRegister." = g:RepeatLast_LastAction"
+  endif
+
   if g:RepeatLast_Show_Debug_Info
     echo "Replaying ".numWanted." actions: \"". s:MyEscape(actions) ."\""
     " The qx causes our last echoed line to be emptied, even if ch is large.
     " Let's make it a line we don't need to see!
     echo "I will get hidden"
   endif
+
+  call s:ExecuteActions(actions)
+
+  " But start ignore mode
+  call s:PauseRecordingQuietly()
+
+endfunction
+
+function! s:ExecuteActions(actions)
 
   " We want to discard the keystrokes that lead to this call.
   " Clear the currently recorded macro of actions (contains our request action).
@@ -711,23 +804,45 @@ function! s:RepeatLast(num)
   " But prevent triggers (e.g. InsertEnter or InsertLeave) from recording
   " actions, or auto-cancelling ignore.
   let s:currentlyReplaying = 1
-  "exec "normal! ".actions
-  " TESTING:
-  call feedkeys(actions)
+  "exec "normal! ".a:actions
+  call feedkeys(a:actions)
   let s:currentlyReplaying = 0
 
   " Start recording again
   "let dropped2 = s:MyEscape(s:GetRegister())
   call s:StartRecording()
 
-  " But start ignore mode
-  call s:PauseRecordingQuietly()
-
   if g:RepeatLast_Show_Debug_Info != 0
     "echo "Dropped request action: \"". dropped1 ."\" and replayed actions: \"". dropped2 ."\""
     echo "Dropped request action: \"". dropped1 ."\""
     echo "I will get hidden"
   endif
+
+endfunction
+
+function! s:ReRepeat(num)
+
+  let numWanted = a:num
+  if numWanted == 0
+    let numWanted = 1   " default
+  else
+    " Fix because <count> is a range, not just the number we gave it
+    let numWanted = numWanted - line(".") + 1
+    " TODO: Alternative fix: <bairui> joeytwiddle: :command! -count=1 Foo echo (v:count ? v:count : <count>)
+  endif
+
+  let actions = g:RepeatLast_LastAction
+
+  let actions = repeat(actions,numWanted)
+
+  if g:RepeatLast_Show_Debug_Info
+    echo "Replaying last replay ".numWanted." times: \"". s:MyEscape(actions) ."\""
+    " The qx causes our last echoed line to be emptied, even if ch is large.
+    " Let's make it a line we don't need to see!
+    echo "I will get hidden"
+  endif
+
+  call s:ExecuteActions(actions)
 
 endfunction
 
@@ -882,20 +997,110 @@ endfunction
 " <Esc>[1;5B Ctrl-Down
 " <Esc>[1;5A Ctrl-Up
 
-au BufReadPost RepeatLast.vim call FoldNicely()
-command! FoldNicely :call FoldNicely()
-function! FoldNicely()
-  let num = 3
-  set foldmethod=manual
-  normal zE
-  normal :0
-  let @f="/^.v/\\n\\n\\nzf"
+" Returns an escaped copy of mapleader which we can use in regexps.
+" Currently only fixes \ (returning \\).  Needs work for other strange chars.
+" Actually if we never re-enable the checks in EndActionDetected() then we
+" won't need this.
+function! s:GetEscapedMapLeader()
+  let current = '\'
+  if exists("mapleader")
+    let current = mapleader
+  endif
+  let escapedLeader = substitute(current,'\','\\\\',"g")
+  " echo "len Escaped Leader: " . len(escapedLeader)
+  return escapedLeader
+endfunction
+
+" Returns a string with all special chars turned into "#nnn" so we can display
+" it via echo without making a mess.
+function! s:MyEscape(str)
+  let out = ""
+  let i = 0
+  while i < len(a:str)
+    let char = a:str[i]
+    let ascnr = char2nr(char)
+
+    if ascnr == 9
+      let char = "<Tab>"
+    elseif ascnr == 13
+      let char = "<Enter>"
+    elseif ascnr == 27
+      let char = "<Esc>"
+    elseif ascnr == 32
+      let char = "<Space>"
+    elseif ascnr == 127
+      let char = "<Del>"
+    elseif ascnr == 8
+      let char = "<Backspace>"
+    elseif ascnr >= 32 && ascnr <= 126
+      let char = char
+    elseif ascnr >= 1 && ascnr <= 26
+      let char = "<Ctrl-" . nr2char(65 + ascnr - 1) . ">"
+    else
+      let char = '<' . char2nr(char) . '>'
+    endif
+
+    let out = out . char
+    let i = i+1
+  endwhile
+  return out
+endfunction
+" <128>kb<Enter> Backspace
+" <128>k9<Enter> F9
+" <128>k;<Enter> F10
+" <128>F1<Enter> F11
+" <Esc>[1;5C Ctrl-Right
+" <Esc>[1;5D Ctrl-Left
+" <Esc>[1;5B Ctrl-Down
+" <Esc>[1;5A Ctrl-Up
+
+
+
+" == Fold this file nicely ==
+
+command! FoldNicely :call FoldNicely(2)
+" I like to run this automatically when I open this file.
+" au BufReadPost RepeatLast.vim if $USER == "joey" | :FoldNicely | endif
+au BufReadPost RepeatLast.vim :FoldNicely
+function! FoldNicely(numBlankLines)
+
   let oldWrapScan = &wrapscan
   set nowrapscan
-  normal 999@f
-  normal 9999
-  normal zf
+  " Clear existing folds and go to top
+  set foldmethod=manual
+  normal zE
+  normal gg
+
+  "" New method, using search()
+  let seek = repeat('\n',a:numBlankLines+1)
+  let nonBlank = '^.'
+  normal v
+  while 1
+    let line = search(seek)
+    if line <= 0
+      " Build the last fold (which will drop us out of visual)
+      normal G
+      normal zf
+      break
+    endif
+    call cursor(line,1)
+    normal zf
+    normal 
+    let blankLine = search(nonBlank)
+    if blankLine <= 0 || blankLine<line
+      break
+    endif
+    call cursor(blankLine,1)
+    normal v
+  endwhile
+
+  "" Old method, always emitted one final error:
+  " let @f="/^.v/\\n\\n\\nzf"
+  " normal 999@f
+  " normal 9999
+  " normal zf
+
   let &wrapscan = oldWrapScan
-  echo "Sorry about the error message."
+
 endfunction
 
