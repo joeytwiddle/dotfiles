@@ -3,10 +3,29 @@
 " :so ~/.vim/joey/joey.vim
 
 
+"" Update ctags tags file whenever we save a buffer:
+"" I need this for Ctrl-] to work when I have e.g. added new *mapping* tag to
+"" e.g. RepeatLast.vim
+" autocmd BufWritePost,FileWritePost *.* :!ctags -a %
+"" Only if a writeable tags file exists here:
+" autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | exec "!ctags -a %" | endif
+" autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | echo "Updating tags..." | silent exec "!ctags -a %" | endif
+"" TODO: Update ../tags or ../../tags or ../../../tags if it exists.  Could
+"" TODO: Update ../tags or ../../tags or ../../../tags if it exists.  Could
+"" cache it in b:my_nearest_tagsfile.
+
 
 " >>> Options for plugins {{{
 
-	let coffee_compile_on_save=1
+	let g:RepeatLast_Enabled = 1
+	let g:RepeatLast_TriggerCursorHold = 100
+	let g:RepeatLast_SaveToRegister = 'l'
+	set ch=2
+
+	let g:coffeeAutoCompileAll = 1
+	let g:coffeeShowJSChanges = 1
+
+	" let coffee_compile_on_save=1
 
 	let g:miniBufExplorerMoreThanOne = 0
 	" let g:miniBufExplMaxHeight = 6
@@ -29,17 +48,17 @@
 		let g:Tlist_Auto_Open            = 0
 		let g:Tlist_Use_Right_Window     = 1
 		let g:Tlist_Show_One_File        = 0
-		let g:Tlist_File_Fold_Auto_Close = 1
+		let g:Tlist_File_Fold_Auto_Close = 0
 		let g:Tlist_Compact_Format       = 0
-		let g:Tlist_WinWidth             = 25
+		let g:Tlist_WinWidth             = 30
 		let g:Tlist_Inc_Winwidth         = 0
 		" Changing window width with Tlist_Inc_Winwidth doesn't seem to work properly
 		" under compiz, it messes the window up, requiring a Ctrl-L to fix it.
 
-		"" Taglist also needs to know about any custom tag types declared in ~/.ctags
+		"" Taglist needs to know about any custom tag types declared in ~/.ctags
 		"
 		" The second part of the varname is the Vim &filetype associated with the file.
-		" In other words, :echo &filetype in order to generate the string below!
+		" In other words, :echo "tlist_".&filetype."_settings" in order to generate the string below!
 		" The first word of the string is the ctags language module used to parse the file.
 		" Consult ctags --list-languages to obtain that string.
 		" For the type entries, I don't know a good way to discover these.  I just run
@@ -49,26 +68,29 @@
 		" My custom Javascript properties and exports tags kinda suck.
 		" Exports might be nice if vim would only choose the functions over them!
 		"
-		"let tlist_javascript_settings = 'javascript;c:class;f:function;v:variable;p:property;e:export'
-		"let tlist_coffee_settings = 'coffee;c:class;f:function;v:variable;p:property;e:export'
-		"let tlist_javascript_settings = 'javascript;c:class;f:function;e:export'
-		let tlist_javascript_settings = 'javascript;c:class;f:function;e:export;p:property'
+		" v:variable
+		let tlist_javascript_settings = 'javascript;c:class;f:function;e:export;p:property;a:propass'
+		" v:variable
+		let tlist_coffee_settings = 'coffee;c:class;f:function;e:export;a:propass;p:property'
 		"
-		let tlist_coffee_settings = 'coffee;c:class;f:function;e:export'
-		"
-		let tlist_uc_settings = 'c;c:class;v:variable;f:function;m:method'
+		let tlist_uc_settings = 'c;c:class;s:state;v:variable;f:function;m:method'
 		"
 		" java,javascript,c all create tags for uc files, but c lists more!
 		" Labels in asm are a big distraction from more fundamental constructs
-		" l:label;
-		let tlist_asm_settings = 'asm;c:context;m:macro;d:define'
+		let tlist_asm_settings = 'asm;c:context;m:macro;d:define' " l:label;
 		let tlist_ocaml_settings = 'ocaml;M:module;t:type;c:class;m:method;v:variable;e:exception'
 		let tlist_python_settings = 'python;c:class;m:member;f:function'
 		" BUG: It seems taglist won't even use it's own defined defaults.  I get
 		" no tags for a language until I define it here.  That can't be right,
 		" have I broken taglist?!
-		"let tlist_vim_settings = 'vim;a:autocmds;v:variable;f:function;c:command'
+		let tlist_vim_settings = 'vim;a:autocmds;v:variable;f:function;c:command;m:map;h:htag'
 		let tlist_dosini_settings = 'dosini;s:section'
+		let tlist_haxe_settings = 'haxe;p:package;d:typedef;e:enum;t:enum_field;c:class;i:interface;f:function;v:variable'
+		let tlist_grm_settings = 'joeygrammar;r:rule'
+		let tlist_haskell_settings = 'haskell;d:data;t:type;s:signature;f:function' " ;p:pattern
+		let tlist_markdown_settings = 'markdown;1:level1;2:level2;3:level3'
+		let tlist_help_settings = 'help;s:section;h:heading' " ;m:marker
+		let tlist_scala_settings = 'scala;p:package;i:include;c:class;o:object;t:trait;r:cclass;a:aclass;m:method;T:type' " V:value;v:variable;
 
 	" }}}
 
@@ -89,7 +111,7 @@
 	let g:ConqueTerm_InsertOnEnter = 1
 	let g:ConqueTerm_ReadUnfocused = 1   " I fear this may be preventing me from leaving the window!
 
-	let g:yaifa_max_lines = 80
+	let g:yaifa_max_lines = 400   " taglist.vim needs at least 100, minibufexpl.vim needs 312!
 
 	" Now I am using sessionman.vim
 	" let sessionman_save_on_exit = 1   " default
@@ -99,6 +121,10 @@
 
 	" Can't be set here.  Needs to be set late!
 	" :set winheight 40
+
+	" SkyBison
+	cnoremap <c-k> <c-r>=SkyBison("")<cr><cr>
+	" Todo: Would rather do this later so we can check if SkyBison is present.
 
 " }}}
 
@@ -126,10 +152,9 @@
 	set sw=3 "shiftwidth
 	set ts=3 "tabstop
 
-	" The default textwidth=0 will wrap to screen width, if screen width is
-	" <79.  This seems undesirable to me.  If we are wrapping, let's wrap to
-	" "the standard".
-	set textwidth=79
+	" The default textwidth=0 will wrap to screen width, if screen width is <79.  This seems undesirable to me.  If we are wrapping, let's wrap to "the standard width" 80.
+	"set textwidth=79
+	" On second thought, being a significant whitespace nazi, I don't actually want auto-wrapping when I am typing.  Leaving it at 0 helps to achieve this.
 
 	"" If you need to fix backspace, try one of these:
 	" :fixdel
@@ -149,12 +174,17 @@
 	" :auto BufEnter * set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ %a%)
 	"" OTOH, it is pretty darn useful to see the arg count even if the buffer number is wrong.
 	"" Inaccurate but interesting:
+	"" The BufEnter hook is no longer working.
 	" :auto BufEnter * set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ (%n/%{bufnr('$')})%)
 	" :auto BufEnter * set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ (%n/%{argc()})%)
 	"" Accurate:
-	:auto BufEnter * set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ (%{bufnr('$')}\ buffers)%)
+	" :auto BufEnter * set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ (%{bufnr('$')}\ buffers)%)
 	"" Percentage through file instead:
 	" :auto BufEnter * set titlestring=[VIM]%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ [%P]%)
+
+	"" Now prepending all Vim title's with "= " so they are clearly grouped in task list.
+	" :set titlestring=\=%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ [%P]%)
+	"" It will only make things worse.  :p
 
 	" if has("gui_kde")
 	" 	set guifont=Courier\ 10\ Pitch/10/-1/5/50/0/0/0/1/0
@@ -242,12 +272,12 @@
 
 	" Add a few custom filetypes:
 	au BufRead,BufNewFile {*.shlib}              set ft=sh
+	au BufRead,BufNewFile {*.grm}                set ft=grm
 	au BufRead,BufNewFile {*.json}               set ft=javascript
 	au BufRead            {*/xchatlogs/*.log}    set ft=irclog readonly
 	" From web:
 	au BufRead,BufNewFile {/usr/share/X11/xkb/*} set ft=c
-	" au BufRead,BufNewFile {*.lecnote}            set ft=lecnote
-	" au BufRead,BufNewFile {*.selfml}             set ft=selfml
+	au BufRead,BufNewFile {*.md}                 set ft=markdown
 
 	"" I need to update some of my highlights for 256 color mode, so I'm not
 	"" using it at the moment.
@@ -272,8 +302,6 @@
 	map £ <Esc>
 	imap £ <Esc>
 
-	command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
-
 	" BUG TODO: Sometimes saves a file called session.vim in my .vim/plugins folder!
 	"           In fact many folders under ~/.vim/ hold auto executing .vim scripts!
 	" Sometimes I quit a vim session when I only really meant to quit the current
@@ -297,25 +325,72 @@
 " }}}
 
 
-"" I build the list, rather than declare it, so lines can be easily added/removed.
-let vamAddons = []
-" call add(vamAddons,"vim-haxe")
-call add(vamAddons,'github:jdonaldson/vaxe')
 
-set runtimepath+=$HOME/.vim-addon-manager/vim-addon-manager/
-call vam#ActivateAddons(vamAddons, {'auto_install' : 0})
-" or
-"call scriptmanager#Activate(["vim-haxe"])
+" >>> Addons (the neat way) {{{
+
+	"" We are using VAM.  http://github.com/MarcWeber/vim-addon-manager
+	"" Note that this is NOT Debian's vim-addon-manager package!  Not is it pathogen.
+	"" I build the list, rather than declare it, so lines can be easily added/removed.
+	let vamAddons = []
+	" call add(vamAddons,"vim-haxe")                       " Haxe syntax
+	" call add(vamAddons,'github:jdonaldson/vim-haxe')     " Haxe syntax
+	call add(vamAddons,'github:jdonaldson/vaxe')           " Haxe syntax (preferred)
+	" call add(vamAddons,'github:derekwyatt/vim-scala')      " Scala syntax and more
+	" call add(vamAddons,'/stuff/joey/projects/scala/scala-dist-vim') " Older but does not load this way!
+	call add(vamAddons,'github:mbbill/undotree')           " Allows you to view undos.  I need a newer Vim for this!
+	call add(vamAddons,'github:majutsushi/tagbar')         " Nests tags in some languages.
+	" call add(vamAddons,"VOoM")                           " Another outliner
+	" call add(vamAddons,'github:xolox/vim-easytags')      " Runs ctags automatic for you, to update them
+	" call add(vamAddons,'github:vim-scripts/UltiSnips')   " Breaks my usual Tab-completion!
+	" call add(vamAddons,'github:troydm/easybuffer.vim')
+	" call add(vamAddons,'github:chrisbra/NrrwRgn')
+	" call add(vamAddons,'github:vim-scripts/YankRing.vim')
+	" call add(vamAddons,'github:michaelficarra/vim-coffee-script')   " Coffeescript syntax
+	"" DISABLED: YankRing blocks 'P' (paste) from being a repeatable action with '.' - I cannot have that!
+	"" Instead of how YankRing does it, I'd quite like to have "2p to paste the second-to-last yank.
+	call add(vamAddons,"github:paradigm/SkyBison")          " Immediate feedback on the cmdline
+
+	" This test does not work!
+	" if exists("*vam#ActivateAddons") || 1
+	let vam_found_dir = $HOME . "/.vim-addon-manager/vim-addon-manager/"
+	if isdirectory(vam_found_dir)
+
+		" set runtimepath+=$HOME/.vim-addon-manager/vim-addon-manager/
+		let &runtimepath = &runtimepath . "," . vam_found_dir
+		call vam#ActivateAddons(vamAddons, {'auto_install' : 1})
+		"" or
+		" call vam#ActivateAddons(["vim-haxe"])
+		" call vam#ActivateAddons(["github:jdonaldson/vaxe"])
+
+		"" For some unknown reason this stopped working!
+		"" So here I fix what is needed:
+		" set runtimepath+=$HOME/.vim-addon-manager/github-jdonaldson-vaxe/
+		"" Oh - the reason was joeysdefaults.vim sourcing debian.vim unnecessarily.
+
+	endif
+
+" }}}
 
 
 
-"" Plugins
-"" CVS leaves old versions in ~/.vim/plugins/CVS/Base/*.vim
-"" These get loaded by Vim!
-"" But we can disable auto-loading, and load them manually ourself, without
-"" the subdirectories.  This could cause problems, but at time of writing, I
-"" could not find any .vim files in subdirs of standard Vim plugin folders.
-set noloadplugins
-" Original: runtime! plugin/**/*.vim
-runtime! plugin/*.vim
+" >>> Custom Plugin Loader (a fix for me) {{{
+
+	"" Plugins
+	"" CVS leaves old versions in ~/.vim/plugins/CVS/Base/*.vim
+	"" These get loaded by Vim!
+	"" But we can disable auto-loading, and load them manually ourself, without
+	"" the subdirectories.  This could cause problems, but at time of writing, I
+	"" could not find any .vim files in subdirs of standard Vim plugin folders.
+	" set noloadplugins
+	" Original: runtime! plugin/**/*.vim
+	" runtime! plugin/*.vim
+
+	augroup ForbidCVS
+		autocmd!
+		autocmd SourceCmd */CVS/* :" Do nothing
+	augroup END
+
+" }}}
+
+
 
