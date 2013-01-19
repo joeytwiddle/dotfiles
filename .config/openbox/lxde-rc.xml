@@ -290,6 +290,12 @@
         <raise>yes</raise>
       </action>
     </keybind>
+    <keybind key="A-1">
+      <action name="PreviousWindow">
+        <bar>yes</bar>
+        <raise>yes</raise>
+      </action>
+    </keybind>
     <keybind key="W-Tab">
       <action name="NextWindow">
         <bar>yes</bar>
