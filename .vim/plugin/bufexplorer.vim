@@ -353,11 +353,9 @@ function! StartBufExplorer(open)
 
     " Make sure there is only one explorer open at a time.
     if s:running == 1
-        " call s:BEError("WHAT THE 1")
         " Go to the open buffer.
         if has("gui")
-            " call s:BEError("WHAT THE 2")
-            " call s:BEError(name)
+            call s:BEError(name)
             exec "drop" name
         endif
 
