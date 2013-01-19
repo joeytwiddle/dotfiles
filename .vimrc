@@ -218,11 +218,21 @@
 	" :set guifont=Liberation\ Mono\ Bold\ 7
 	"" Less tall again.  Looks like LucidaTypewriter, which is not visible on Debian.  (Semi-Condensed appears to be the same as the default!)
 	" :set guifont=Lucida\ Console\ Semi-Condensed\ 7
-	:set guifont=Lucida\ Console\ Semi-Condensed\ 8
+	" :set guifont=Lucida\ Console\ Semi-Condensed\ 8
+	"" On pod Semi-Condensed was actually wider!  So:
+	:set guifont=Lucida\ Console\ 8
 	"" Very small and clear; quite like Teletext font
 	" :set guifont=MonteCarlo\ Fixed\ 12\ 11
 	if $SHORTHOST == "pod"
-		:set guifont=Monospace\ 10
+		if exists("&guifont")
+			"" Most Linux offer Mono but it's a little tall
+			" :set guifont=Monospace\ 8
+      "" On Ubuntu Liberation is slightly shorter
+			:set guifont=Liberation\ Mono\ 8
+			" Hide the menu and toolbar which I never use.
+			:set guioptions-=m
+			:set guioptions-=T
+		endif
 	endif
 
 
