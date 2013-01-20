@@ -1548,14 +1548,14 @@ function! <SID>AutoUpdate(delBufNum)
         call <SID>StopExplorer(0)
       endif
 
-	  " VIM sometimes turns syntax highlighting off,
-	  " we can force it on, but this may cause weird
-	  " behavior so this is an optional hack to force
-	  " syntax back on when we enter a buffer
-	  if g:miniBufExplForceSyntaxEnable
-		call <SID>DEBUG('Enable Syntax', 9)
-		exec 'syntax enable'
-	  endif
+      " VIM sometimes turns syntax highlighting off,
+      " we can force it on, but this may cause weird
+      " behavior so this is an optional hack to force
+      " syntax back on when we enter a buffer
+      if g:miniBufExplForceSyntaxEnable
+        call <SID>DEBUG('Enable Syntax', 9)
+        exec 'syntax enable'
+      endif
 
     else
       call <SID>DEBUG('No buffers loaded...',9)
