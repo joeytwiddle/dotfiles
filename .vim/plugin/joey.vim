@@ -136,16 +136,37 @@
 
 
 
-	" <Leader> defaults to "\", I use ","
+	" <Leader> defaults to "\", I used "," for a while.
 	" let mapleader = ","
 
-	:nmap <Leader>/ :call MyRepeatedSearch()<CR>
+	" Search which wraps to the start of the next buffer when it reaches the end
+	" of the current one.
+	nnoremap <Leader>/ :call MyRepeatedSearch()<CR>
 
-	:fun! MyRepeatedSearch()
-		if @/ != "" && search(@/, 'W') == 0
-			n
-			call MyRepeatedSearch()
-		endif
+	function! MyRepeatedSearch()
+
+		"" Old implementation
+		"if @/ != "" && search(@/, 'W') == 0
+		"	n
+		"	call MyRepeatedSearch()
+		"endif
+
+		try
+			if @/ != "" && search(@/, 'W') == 0
+				bnext
+				" Start from top line
+				normal gg
+				"" MyRepeatedSearch() Could wrap infinitely.  But we really do want to repeat,
+				"" because this buffer might not contain the expression!
+				"" TODO: How about a while loop with an intelligent check (e.g. have
+				"" we reached the buffer we started on?)
+				"call MyRepeatedSearch()
+				search(@/, 'W')
+			endif
+		catch
+			echo "Error encountered during MyRepeatedSearch! ".errmsg
+		endtry
+
 	endfun
 
 
