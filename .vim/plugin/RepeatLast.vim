@@ -6,14 +6,16 @@
 " sometimes I do three actions, and then want to repeat them again.  Now
 " this is just 3\.
 "
-" Beware: It has to use macro recording *all the time*, so it sort of
-" takes over your Vim in that respect.  :set ch=2 to feel happier
+" BEWARE: Because it uses macro recording *all the time*, it sort of
+" takes over your Vim, and can reduce your experience.  :set ch=2 to feel
+" happier, use :RepeatLastDisable :RepeatLastEnable :RepeatLastToggleDebugging
+" and try toggling g:RepeatLast_TriggerCursorHold.
 
 
 
 " == Usage ==
 "
-" Assuming your mapleader is '\' (the default) adds:
+" Assuming your mapleader is '\' (the default), these |mappings| are created:
 "
 "   \?   Display a list of recently recorded actions
 "
@@ -21,9 +23,11 @@
 "
 "   \.   Repeat the last action (similar to . but may replay just a movement)
 "
-"   4\.  Repeat the last four actions (including movement actions)
+"   4\.  Repeat the last four recorded actions (including movement actions)
 "
-"   n\\. Repeat the last repeated action set n times.
+"   \\.  Replay the last *repeated* action-group (all 4 actions above)
+"
+"   9\\. Replay the last *repeated* action-group 9 times.
 "
 "   \D   Forget (drop) the last action (e.g. to discard an unwanted movement)
 "
@@ -127,6 +131,9 @@
 
 
 " == Bugs and TODOs ==
+"
+" TODO: RepeatLast_TriggerCursorHold completely fails to trigger in GUI!
+"       Did it always to this?
 "
 " TODO: RepeatLast_Stop_Ignoring_On_Edit might not need to pre-clear the
 " macro, if we detect it InsertEnter instead of InsertLeave, although that
@@ -273,9 +280,10 @@ if !exists("g:RepeatLast_Leader")
   " let g:RepeatLast_Leader = ','
 endif
 
-" The register used to store macros.  WARNING: May occasionally accidentally
-" fire as a normal keypress!  'm' and 'z' are recommended as they are
-" non-edits and non-movements. TODO
+" The register used to store macros when recording, gets clobbered at run-time
+" although it may appear empty when you query it.
+" WARNING: May occasionally accidentally fire as a normal keypress!  |accident|
+" Therefore 'm' or 'z' is recommended as they are non-edits and non-movements.
 if !exists("g:RepeatLast_Register")
   let g:RepeatLast_Register = 'm'
 endif
@@ -316,9 +324,14 @@ if !exists("g:RepeatLast_TriggerCursorHold")
   let g:RepeatLast_TriggerCursorHold = 0
 endif
 " BUG TODO: It blocks recording of actions taken when in visual mode.
+"   0 - do not trigger
+"   1 - do "fancy" solution (always trigger)
+"   2 - do "fancy" solution (don't always trigger)
+"   3 - always do at 0 interval
+"   4 - always do at fixed interval
 
 " If set, when you repeat a group, the actions will also be saved in this
-" register.  So you can do: 5\? 5\. 20@l to repeat the 5 actions 20 times.
+" register.  So  5\.20@l  like  5\.20\\.  will repeat 5 actions 21 times.
 if !exists("g:RepeatLast_SaveToRegister")
   let g:RepeatLast_SaveToRegister = ''
 endif
@@ -326,6 +339,7 @@ endif
 
 
 " == Mappings and Commands ==
+"                                                        *mappings*
 
 nnoremap <Leader>? :ShowRecent<Enter>
 command! -count=0 ShowRecent call <SID>ShowRecent(<count>)
@@ -372,6 +386,7 @@ endif
 " For this to work, we need to have this macro recording on *all the time*!
 " This is maintained in EndActionDetected().
 
+" *accident*
 " BUG: If we are already recording a macro, 'q' will stop it and then 'x'
 " will delete 1 char!  We need to detect whether macro recording is active!
 
@@ -380,8 +395,10 @@ endif
 " == Recording Actions ==
 
 " We are going to record a history of recent actions
-let s:earlierActions = []
-let s:earlierActionTriggers = []   " only used for debugging
+if !exists("s:earlierActions")       " we retain it through plugin reload
+  let s:earlierActions = []
+  let s:earlierActionTriggers = []   " only used for debugging
+endif
 
 " We are going to trigger a function to look for new entries in our macro.
 augroup RepeatLast
@@ -408,6 +425,9 @@ augroup END
 " Problem: Messes up my Grep.vim F3 bind (acts during confirm()?), and
 "          :FoldBlocks.
 "cnoremap <silent> <Enter> <Enter>:call <SID>EndActionDetected("CommandLeave")<Enter>
+
+" TODO: Investigate how this script manages to catch a variety of events using
+"       mappings: http://vim.wikia.com/wiki/Modified_undo_behavior
 
 " Sometimes we skip recording events for a while
 let s:ignoringCount = 0
@@ -436,7 +456,7 @@ function! s:RestartRecording()
   call s:StopRecording()
   call s:StartRecording()
 endfunction
-function! s:GetRegister()                  " originally:  let latestAction = @x
+function! s:GetRegister()                  " originally:  return @x
   return eval("@".g:RepeatLast_Register)
 endfunction
 function! s:ClearRegister()
@@ -1034,6 +1054,8 @@ function! s:MyEscape(str)
       let char = "<Backspace>"
     elseif ascnr >= 32 && ascnr <= 126
       let char = char
+    "else
+      "let nextThree = 
     elseif ascnr >= 1 && ascnr <= 26
       let char = "<Ctrl-" . nr2char(65 + ascnr - 1) . ">"
     else
@@ -1061,7 +1083,7 @@ endfunction
 command! FoldNicely :call FoldNicely(2)
 " I like to run this automatically when I open this file.
 " au BufReadPost RepeatLast.vim if $USER == "joey" | :FoldNicely | endif
-au BufReadPost RepeatLast.vim :FoldNicely
+" au BufReadPost RepeatLast.vim :FoldNicely
 function! FoldNicely(numBlankLines)
 
   let oldWrapScan = &wrapscan
