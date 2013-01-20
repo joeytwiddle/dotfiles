@@ -113,7 +113,7 @@ syntax match coffeeAssignProperty /\(@\|@\?\I\)\%(\i\|?\)*\s*\%(and\|or\|&&\|||\
 \                         contains=@coffeeIdentifier,coffeeAssignSymbols,coffeeAssignBrackets
 " Had ,coffeeObject on the end but then some variables turned purple :P
 " highlight default coffeeAssignProperty ctermfg=darkblue cterm=bold guifg=lightblue gui=bold
-highlight default coffeeAssignProperty ctermfg=white cterm=bold guifg=brightwhite gui=bold
+highlight default coffeeAssignProperty ctermfg=white cterm=bold guifg=#ffffff gui=bold
 
 " Displays an error for reserved words.
 if !exists("coffee_no_reserved_words_error")
