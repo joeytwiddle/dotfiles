@@ -65,11 +65,8 @@ Also:
 
   @/         is the search register
 
+@: is a shortcut for the last : command you ran
 
-
-Hex / binary editor:
-  :%!xxd
-  :%!xxd -r
 
 
 
@@ -100,6 +97,25 @@ Handy buffer switcher:
 
 
 Switch to buffer 3 quickly with: 3<Ctrl-^>
+
+
+
+Text via external shell/system commands (e.g. grep, awk, perl):
+
+To insert something useful (in this case the date).
+
+  v!date
+
+To filter the current file through an external program:
+
+  :%!sort -k 3
+
+  :%!grep -v "/mnt/sdb1/"
+
+Hex / binary editor:
+
+  :%!xxd
+  :%!xxd -r
 
 
 
