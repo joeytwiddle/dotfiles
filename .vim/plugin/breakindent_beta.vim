@@ -4,6 +4,15 @@
 "
 " BreakIndent Beta is a pure vimscript alternative to the old breakindent patch, which I failed to get working smoothly in modern Vim.  Unlike the breakindent patch, this vimscript *cannot* present a different indent for each line.  Instead it updates the showbreak option to fit the indent of the current cursor line.  Unfortunately this means that showbreak can change often, and other lines on the display may not appear at the ideal indent.
 "
+" To get started finding your preferred style, try out the following:
+"
+"   :let g:breakindent_char                 " Check its current value
+"   :let g:breakindent_char = '%'
+"   :let g:breakindent_symbol               " Check its current value
+"   :let g:breakindent_symbol = '\\ '
+"   :let g:breakindent_match_gap = 1
+"   :let g:breakindent_gapchar = '>'
+"
 " Since showbreak is a global, it will affect all windows; this can not be prevented.
 "
 " Some commands that may be useful when wrapping long lines:
@@ -23,12 +32,12 @@
 
 " == Options ==
 
-" This character will be used to display the indent.  I like it blank.
+" This character will be used to display the indent.  I like it blank ' '.
 if !exists("g:breakindent_char")
-  let g:breakindent_char = ' '
+  let g:breakindent_char = '\'
 endif
 
-" This string appears between the indent and the wrapped text, as a marker/indicator of wrapping.
+" This string appears after the indent but before the wrapped text, as a marker/indicator of wrapping.  Set it empty '' to match the indentation of the first line.
 if !exists("g:breakindent_symbol")
   let g:breakindent_symbol = '\\ '
 endif
