@@ -27,6 +27,10 @@ let &comments=":##,".&comments
 
 
 "" Joey's coffee -> js autocompile on write
+"
+" TODO: If coffeeShowJSChanges is used in a split window which is not the
+" last, when pedit and pclose are used it shrinks grrrr.  Remember and restore
+" win height whenever we do pedit/pclose?
 
 if !exists("g:coffeeAutoCompileAll")
   let g:coffeeAutoCompileAll = 1
@@ -60,6 +64,11 @@ augroup END
 " We don't really need to track this.  :pclose seems fine whether it's open or not.
 let s:previewWinIsOpen = 0
 
+" We set 'autoread' of the preview window because if the file does change, I
+" think it actually complains when we try to repeat `:pedit <file>`.
+" (Either that or it happens if we don't :pedit for some reason (shouldn't
+" actually happen) but focus the pwindow by moving onto it.)
+
 function! s:CoffeeAutoCompile_Check(coffeefile)
 
   let doCompile = g:coffeeAutoCompileAll
@@ -85,10 +94,14 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
   if len(lines) == 0
 
     if g:coffeeShowJSChanges != 0
-      silent exec "!diff ".jsFile.".last ".jsFile" > /tmp/jsdiffs.diff"
+      " silent exec "!diff ".jsFile.".last ".jsFile" > /tmp/jsdiffs.diff"
+      silent exec "!diff ".jsFile.".last ".jsFile." | grep '^[><+-]' > /tmp/jsdiffs.diff"
       let diffLines = readfile("/tmp/jsdiffs.diff")
       if len(diffLines) > 0
-        silent! belowright pedit +:set\ ft=diff\ autoread /tmp/jsdiffs.diff
+        if !exists("w:myHeightBeforePedit")
+          let w:myHeightBeforePedit = winheight(0)
+        endif
+        silent! belowright pedit +:set\ ft=diff\ autoread\ nobuflisted /tmp/jsdiffs.diff
         let s:previewWinIsOpen = 1
         return
       endif
@@ -97,6 +110,10 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
     if s:previewWinIsOpen == 1
       let s:previewWinIsOpen = 0
       pclose
+      if exists("w:myHeightBeforePedit")
+        exec "resize ".w:myHeightBeforePedit
+        unlet w:myHeightBeforePedit
+      endif
       " call s:MsgUser("Compilation problems resolved.")
     endif
     " If this is the only message, it won't break with ch=1 but it will be
@@ -107,9 +124,12 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
     " :r /tmp/coffee.err
     let splitbelowBefore = &splitbelow
     let &splitbelow = 1
+    if !exists("w:myHeightBeforePedit")
+      let w:myHeightBeforePedit = winheight(0)
+    endif
     " silent! is not recommended.  If the swapfile-what-to-do-dialog occurs we
     " won't see it, but Vim will block until we respond to it!
-    silent pedit /tmp/coffee.err
+    silent pedit +:set\ autoread\ nobuflisted /tmp/coffee.err
     let &splitbelow = splitbelowBefore
     let s:previewWinIsOpen = 1
     " call s:MsgUser("There were problems compiling.")
