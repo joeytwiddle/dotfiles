@@ -2304,8 +2304,11 @@ endfunction
 function! s:Tlist_Get_Tag_Prototype(fidx, tidx)
     let tproto_var = 's:tlist_' . a:fidx . '_' . a:tidx . '_tag_proto'
 
-    " Already parsed and have the tag prototype
-    if exists(tproto_var)
+    " Already parsed and have the tag prototype and indent
+    "" Joey: (Sometimes when paging off TList then unloading and reloading it,
+    "" it seems the proto was set but not the indent, producing errors without
+    "" this check.)
+    if exists(tproto_var) && exists(tproto_var."_indent")
         return {tproto_var}
     endif
 
@@ -2318,6 +2321,7 @@ function! s:Tlist_Get_Tag_Prototype(fidx, tidx)
     endif
     let tag_proto = strpart(tag_line, start, end - start)
     let {tproto_var} = substitute(tag_proto, '\s*', '', '')
+    "" Joey: This is a good time to calculate the line's indent:
     " echo "tag_proto=".tag_proto
     let {tproto_var}_indent = len(substitute(tag_proto, '[^ \t].*', '', ''))
     " echo "indent = ".{tproto_var}_indent
