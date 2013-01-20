@@ -1,6 +1,6 @@
 "" File:        vtreeexplorer.vim
 "" Description: tree-like file system explorer for vim
-"" Version:     $Revision: 1.9 $ $Date: 2012/04/16 10:15:26 $
+"" Version:     $Revision: 1.10 $ $Date: 2013/01/20 02:50:09 $
 "" Author:      TS Urban (thomas.scott.urban@HORMELgmail.com)
 ""              (remove the source of SPAM from my email first)
 ""
@@ -105,7 +105,7 @@ endfunction " >>>
 "" TreeExplorer() - set up explorer window
 function! s:TreeExplorer(split, start, toggle) " <<<
 
-	" New toggling behaviour!
+	" New toggling behaviour!  Joey?
 	if a:toggle
 		" Find the VTE if we are displaying it.
 		if s:VTreeExploreBufferNumber != -1
@@ -139,7 +139,9 @@ function! s:TreeExplorer(split, start, toggle) " <<<
 		" if starting with split, get split parameters from globals
 		let splitMode = (exists("g:treeExplVertical")) ? "vertical " : ""
 		let splitSize = (exists("g:treeExplWinSize")) ? g:treeExplWinSize : 20
-		let cmd = "topleft " . splitMode . splitSize . "new TreeExplorer"
+		" let cmd = "topleft " . splitMode . splitSize . "new TreeExplorer"
+		"" Joey's split:
+		let cmd = splitMode . splitSize . "split TreeExplorer"
 	else
 		let cmd = "e TreeExplorer"
 	endif
