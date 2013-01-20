@@ -5,13 +5,31 @@
 " map <C-PageUp> :N<Enter>
 
 "" These two work best with MiniBufExplorer
-noremap <C-PageDown> :bnext<Enter>
-noremap <C-PageUp> :bprev<Enter>
+nnoremap <C-PageDown> :bnext<Enter>
+nnoremap <C-PageUp> :bprev<Enter>
 inoremap <C-PageDown> <Esc>:bnext<Enter>i
 inoremap <C-PageUp> <Esc>:bprev<Enter>i
 "" (not working?)
 " inoremap <C-PageUp> <Esc><C-PageUp>a
 " inoremap <C-PageDown> <Esc><C-PageDown>a
+
+"" Sometimes I want to re-arrange the order of the buffers in my list.  After
+"" years of nothing, I now at least found a way to push buffers to the end, by
+"" completely removing them first with bwipeout.
+"" Loses all undo history.
+" TODO: Might belong in its own plugin file.
+nnoremap <silent> <C-S-PageDown> :call <SID>MoveCurrentBufferToEndOfList()<Enter>
+nnoremap <silent> <C-A-PageDown> :call <SID>MoveCurrentBufferToEndOfList()<Enter>
+function s:MoveCurrentBufferToEndOfList()
+	let fname = expand("%")
+	" This bwipeout may not succeed if the file has unwritten changes.
+	bwipeout
+	" TODO: Do we need to escape spaces in filenames with spaces?
+	exec "edit ".fname
+endfunction
+" Since C-S-PageDown never makes it through my xterm, we expose a user command too:
+command! MoveBufferToEnd call s:MoveCurrentBufferToEndOfList()
+" Oh!  C-A-PageDown does make it through.  :)
 
 "" These versions work for my Eterm, provided we exported TERM=xterm
 nnoremap [6^ :bn<Enter>
@@ -255,6 +273,7 @@ set wildmode=longest:full,full
 
 " Make a global mark 'Q' with 'mQ' and jump back to it with 'MQ'.
 nmap M g'
+" M usually does to-middle-line-of-window
 
 
 " Quick toggles for most frequently used functions
@@ -279,6 +298,9 @@ nnoremap <Leader>b :MRU<Enter>
 nnoremap <Leader>o :Explore .<Enter>
 " NERDTree file explorer (NERD_tree.vim)
 nnoremap <Leader>f :e .<Enter>
+nnoremap <Leader>F :VSTreeExploreToggle<Enter>
+
+nnoremap <Leader>S :SessionList<Enter>
 
 
 
