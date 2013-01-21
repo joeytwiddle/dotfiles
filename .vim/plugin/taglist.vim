@@ -2133,22 +2133,22 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             " This is the 1-char type:
             let ttype_var = 's:tlist_' . fidx . '_' . i . '_tag_type'
             " This is the longer word, if available:
-            let full_tag_word = ""
+            let displayedTagType = ""
             if exists(ttype_var)
-                let full_tag_word = s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var})
+                let displayedTagType = s:Tlist_Get_Full_Type_Name(a:ftype,{ttype_var})
             endif
 
             " Let's build the string!
             let txt = indentStr
             if tagComes == "after"
                 let txt .= tagName
-                if full_tag_word != ""
-                    let txt .= '   [' . full_tag_word . ']'
+                if displayedTagType != ""
+                    let txt .= '   [' . displayedTagType . ']'
                 endif
             else
-                if full_tag_word != ""
+                if displayedTagType != ""
                     " let txt .= '(' . {ttype_var} . ') '
-                    let txt .= full_tag_word . ': '
+                    let txt .= displayedTagType . ': '
                 endif
                 let txt .= tagName
             endif
@@ -2173,7 +2173,7 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
         let ttype_cnt = s:tlist_{a:ftype}_count
         while i <= ttype_cnt
             let ttype = s:tlist_{a:ftype}_{i}_name
-            let displayedType = s:Tlist_Get_Full_Type_Name(a:ftype,ttype)
+            let displayedTagType = s:Tlist_Get_Full_Type_Name(a:ftype,ttype)
             " let groupName = "TagList_Tag_" . a:ftype . "_" . ttype
             let groupName = "TagList_Tag_Type_Marker_" . ttype
             "" Sometimes the hlgroup exists, but the syntax was cleared!
@@ -2181,9 +2181,9 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
                 let col = get(s:list_of_tag_colors, (i-1) % len(s:list_of_tag_colors))
                 let colgui = get(s:list_of_tag_colors_gui, (i-1) % len(s:list_of_tag_colors_gui))
                 if tagComes == "after"
-                    exec 'syntax match '.groupName.' / \['.displayedType.'\]$/'
+                    exec 'syntax match '.groupName.' / \['.displayedTagType.'\]$/'
                 else
-                    exec 'syntax match '.groupName.' /^ *'.displayedType.':/'
+                    exec 'syntax match '.groupName.' /^ *'.displayedTagType.':/'
                 endif
                 exec 'highlight '.groupName.' ctermfg='.col.' guifg='.colgui
             " endif
@@ -2703,6 +2703,10 @@ endfunction
 " Tlist_Get_Full_Type_Name (Joey's)
 " Given the single-char tag type, return its full name.
 function! s:Tlist_Get_Full_Type_Name(ftype,ttype)
+
+    "" If you don't want long tagnames displayed:
+    return a:ttype
+
     let i = 1
     let ttype_cnt = s:tlist_{a:ftype}_count
     while i <= ttype_cnt
