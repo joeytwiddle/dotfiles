@@ -671,7 +671,7 @@ augroup MiniBufExplorer
 
   autocmd MiniBufExplorer BufDelete   * call <SID>DEBUG('-=> BufDelete AutoCmd', 10) |call <SID>AutoUpdate(expand('<abuf>'))
   autocmd MiniBufExplorer BufEnter    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
-  autocmd MiniBufExplorer VimEnter    * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1)
+  autocmd MiniBufExplorer VimEnter    * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1) |call <SID>PostVimEnter()
 
   "" Instead of the above, we can just do a lazy update.  Although this is not
   "" so helpful for immediate navigation feedback!
@@ -713,10 +713,10 @@ function! <SID>StartExplorer(sticky, delBufNum)
 
   " Store the current buffer
   let s:userFocusedBuffer = bufnr('%')
-  " let l:userFocusedWindow = bufwinnr(l:userFocusedWindow)
-  let l:userFocusedWindow = winnr()
+  " let s:userFocusedWindow = bufwinnr(s:userFocusedWindow)
+  let s:userFocusedWindow = winnr()
   noautocmd wincmd p
-  let l:userPreviousFocusedWindow = winnr()
+  let s:userPreviousFocusedWindow = winnr()
   noautocmd wincmd p   " Maybe not needed
   call <SID>DEBUG("StartExplorer(): Set userFocusedBuffer=".s:userFocusedBuffer." (".bufname('%').")",9)
 
@@ -865,14 +865,16 @@ function! <SID>StartExplorer(sticky, delBufNum)
     call <SID>DEBUG('No current buffer to search for',9)
   endif
 
+  call <SID>DEBUG("Returning window state: prev=".s:userPreviousFocusedWindow."  now=".s:userFocusedWindow,8)
   " Put userPreviousFocusedWindow back into history
-  if (l:userPreviousFocusedWindow != -1)
-    exec l:userPreviousFocusedWindow."wincmd w"
+  if (s:userPreviousFocusedWindow != -1)
+    exec s:userPreviousFocusedWindow.' wincmd w'
   endif
   " Return to userFocusedWindow
-  if (l:userFocusedWindow != -1)
-    exec l:userFocusedWindow."wincmd w"
+  if (s:userFocusedWindow != -1)
+    exec s:userFocusedWindow.' wincmd w'
   endif
+  call <SID>DEBUG("Now on window ".winnr()." ".bufname('%'),8)
 
   let &report  = l:save_rep
   let &showcmd = l:save_sc
@@ -1027,10 +1029,26 @@ function! <SID>FindCreateWindow(bufName, forceEdge, isExplorer, doDebug)
         endif
     endif
 
+    " There's a problem.  Because we just created a new window, it is possible
+    " that we have |invalidated_our_values| for userPreviousFocusedWindow and
+    " userFocusedWindow.
+
     let g:miniBufExplForceDisplay = 1
 
     " Try to find an existing explorer window
     let l:winNum = <SID>FindWindow(a:bufName, a:doDebug)
+
+    "" Fix for having *invalidated_our_values*:
+    "if &splitbelow || a:forceEdge
+    if l:winNum != -1 && l:winNum <= s:userPreviousFocusedWindow
+      let s:userPreviousFocusedWindow = s:userPreviousFocusedWindow + 1
+      call <SID>DEBUG("Incremented userPreviousFocusedWindow",8)
+    endif
+    if l:winNum != -1 && l:winNum <= s:userFocusedWindow
+      let s:userFocusedWindow = s:userFocusedWindow + 1
+      call <SID>DEBUG("Incremented userFocusedWindow",8)
+    endif
+
     if l:winNum != -1
       if a:doDebug
         call <SID>DEBUG('Created and then found window ('.a:bufName.'): '.l:winNum,9)
@@ -1443,6 +1461,21 @@ function! <SID>HasEligibleBuffers(delBufNum)
   
 endfunction
 
+" }}}
+" PostVimEnter - Does some stuff after startup {{{
+function! <SID>PostVimEnter()
+  " Joey's fix to defocus the MBE after we have created it even during VimEnter!
+  " This might say you are on the window you want.
+  " first buffer again.  :f
+  call <SID>DEBUG("[PVE] Now on window ".winnr()." ".bufname('%'),8)
+  " But I think because it's during VimEnter, Vim will put us back to the
+  " So IFF we have created a MBE
+  if <SID>FindWindow('-MiniBufExplorer-', 0) != -1
+    " Ensure we *will* move off the MBE (hopefully to our first edit window,
+    " but perhaps not if your Vim has also opened a sidebar)
+    call feedkeys("w")
+  endif
+endfunction
 " }}}
 " Auto Update - Function called by auto commands for auto updating the MBE {{{
 "
