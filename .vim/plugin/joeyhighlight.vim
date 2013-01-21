@@ -42,7 +42,6 @@ function! Joeyhighlight()
 	highlight ErrorMsg term=reverse,bold cterm=bold gui=reverse,bold ctermfg=yellow ctermbg=darkred guibg=yellow guifg=#cc0000
 	" Full red is too bright, dark red is too dark
 
-	highlight DiffLine ctermbg=Magenta ctermfg=White
 	"highlight Search term=reverse,bold ctermbg=White guibg=White ctermfg=Black guifg=Black
 	"highlight Search ctermbg=Blue ctermfg=White term=bold guibg=Blue guifg=White
 	"highlight Search ctermbg=Blue ctermfg=Yellow term=bold guibg=Blue guifg=Yellow
@@ -72,8 +71,8 @@ function! Joeyhighlight()
 	" highlight Comment cterm=bold ctermfg=darkgrey gui=bold guifg=#999999   " bold grey, nice with Lucida in xterm
 	highlight Comment cterm=bold ctermfg=darkgrey gui=none guifg=#a0a0a0   " bold grey, nice with Lucida in xterm, light non-bold in GUI
 	" highlight friendlyComment cterm=none ctermfg=cyan gui=none guifg=#80a0ff   " boring mid blue (just greyish)
-	highlight friendlyComment cterm=none ctermfg=cyan gui=none guifg=#cc90ff   " more magenta
-  hi link vimCommentTitle friendlyComment
+	highlight friendlyComment ctermfg=darkblue cterm=bold gui=none guifg=darkblue gui=bold
+	hi link vimCommentTitle friendlyComment
 	highlight def link confComment Comment
 	"highlight link jComment Comment
 	" highlight jComment ctermfg=DarkYellow guifg=DarkYellow
@@ -125,7 +124,7 @@ function! Joeyhighlight()
 	"highlight link shDeref shVariable
 	highlight shDeref term=underline cterm=none ctermfg=6 guifg=#30a0a0
 
-	" For vimdiffs
+	"" For vimdiff / diff mode
 	"highlight DiffAdd ctermbg=Green cterm=bold guibg=DarkGreen
 	"highlight DiffDelete ctermbg=Blue guibg=DarkBlue
 	" Black and Yellow
@@ -140,20 +139,23 @@ function! Joeyhighlight()
 	" Strongly mark lines with changes (white bg):
 	"highlight DiffChange ctermfg=black ctermbg=white cterm=bold gui=bold guifg=White guibg=Black
 	"highlight DiffDelete term=none ctermbg=black ctermfg=blue cterm=none guifg=#000050 guibg=#000050 gui=none
-	highlight DiffAdd ctermbg=green ctermfg=white cterm=bold guibg=DarkGreen guifg=White gui=bold
-	highlight DiffText ctermbg=red ctermfg=yellow cterm=bold guibg=red guifg=DarkRed gui=bold
 	"highlight DiffChange ctermfg=black ctermbg=white cterm=bold gui=bold guifg=White guibg=Black
 	"highlight DiffChange ctermfg=white ctermbg=black cterm=bold gui=bold guifg=White guibg=Black
 	" Lines with changes only marked with brighter white fg, which doesn't always show:
-	highlight DiffChange ctermfg=white ctermbg=black cterm=bold gui=bold guifg=White guibg=Black
-	highlight DiffDelete term=none ctermbg=blue ctermfg=blue cterm=none guifg=DarkBlue guibg=DarkBlue gui=none
+	"highlight DiffChange ctermfg=white ctermbg=black cterm=bold gui=bold guifg=White guibg=Black
+	"highlight DiffDelete term=none ctermbg=blue ctermfg=blue cterm=none guifg=DarkBlue guibg=DarkBlue gui=none
+	"highlight DiffAdd ctermbg=green ctermfg=white cterm=bold guibg=DarkGreen guifg=White gui=bold
+	"highlight DiffText ctermbg=red ctermfg=yellow cterm=bold guibg=red guifg=DarkRed gui=bold
+	" Moved to traffic_lights_diff.vim
 
-	"highlight diffRemoved term=none ctermbg=red ctermfg=white cterm=none guifg=Grey guibg=DarkRed gui=none
-	"highlight link diffAdded DiffAdd
-	"highlight link diffChanged DiffChange
-	highlight diffRemoved term=bold ctermbg=black ctermfg=red cterm=bold guifg=Grey guibg=DarkRed gui=none
-	highlight diffAdded   term=bold ctermbg=black ctermfg=green cterm=bold guifg=Grey guibg=DarkRed gui=none
-	highlight diffChanged term=bold ctermbg=black ctermfg=yellow cterm=bold guifg=Grey guibg=DarkRed gui=none
+	""" For diff or patch files
+	""highlight diffRemoved term=none ctermbg=red ctermfg=white cterm=none guifg=Grey guibg=DarkRed gui=none
+	""highlight link diffAdded DiffAdd
+	""highlight link diffChanged DiffChange
+	"highlight diffRemoved term=bold ctermbg=black ctermfg=red    cterm=bold guibg=DarkRed    guifg=white gui=none
+	"highlight diffAdded   term=bold ctermbg=black ctermfg=green  cterm=bold guibg=DarkGreen  guifg=white gui=none
+	"highlight diffChanged term=bold ctermbg=black ctermfg=yellow cterm=bold guibg=DarkYellow guifg=white gui=none
+	"highlight diffLine ctermbg=magenta ctermfg=white guibg=DarkMagenta guifg=white
 
 	" For jfc diffs
 	"syntax keyword difference jDiff @@>>
