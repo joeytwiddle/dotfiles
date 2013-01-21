@@ -90,28 +90,36 @@ function! Joeysyntax()
 	:syntax match jXmlBits /\(<\|>\)[[:alpha:]]*/
 	:highlight jXmlBits ctermfg=red term=bold
 
-  if &filetype == "log" || substitute(bufname("%"), '.*\.', '', '') == "log"
-    "" Log4j:
-    " :syntax match log4jDebug " DEBUG "
-    " :syntax match log4jInfo  " INFO "
-    " :syntax match log4jWarn  " WARN "
-    " :syntax match log4jError " ERROR "
-    :syntax match log4jDebug "^.* DEBUG .*$"
-    :syntax match log4jInfo  "^.* INFO .*$"
-    :syntax match log4jWarn  "^.* WARN .*$"
-    :syntax match log4jError "^.* ERROR .*$"
-  endif
+	if &filetype == "log" || substitute(bufname("%"), '.*\.', '', '') == "log"
+		"" Log4j:
+		" :syntax match log4jDebug " DEBUG "
+		" :syntax match log4jInfo  " INFO "
+		" :syntax match log4jWarn  " WARN "
+		" :syntax match log4jError " ERROR "
+		:syntax match log4jDebug "^.* DEBUG .*$"
+		:syntax match log4jInfo  "^.* INFO .*$"
+		:syntax match log4jWarn  "^.* WARN .*$"
+		:syntax match log4jError "^.* ERROR .*$"
+	endif
 
 	" if exists(":Joeyhighlight")
 		" :Joeyhighlight
 	" endif
 
-  "" This separates single comments from double comments, for files where single comments are commented code and double comments indicate documentation.
-  "" Does not seem to work on vim files.
+	"" This separates single comments from double comments, for files where single comments are commented code and double comments indicate documentation.
+	"" Does not seem to work on vim files.
 	" :syntax match friendlyComment /^\s*\(##\|""\|\/\/\/\/\).*/ contains=confTodo contains=shTodo
-	"" Assume a single-symbol comment is a friendlyComment if it starts with a
-	"" capital (or more strictly, capital then lowercase).
-	:syntax match friendlyComment +^\s*\(##\|""\|////\|// [A-Z]\|# [A-Z][a-z]\|" [A-Z][a-z]\).*+  contains=confTodo contains=shTodo
+  "" Also assume a single-symbol comment is a human comment if it starts with
+  "" a capital (or more strictly, capital then lowercase).
+	" :syntax match friendlyComment +^\s*\(##\|""\|////\|// [A-Z]\|# [A-Z][a-z]\|" [A-Z][a-z]\).*+  contains=confTodo contains=shTodo
+	"" Disabled cos it was a bit sucky.
+	"" Now going for something more like vimTitle:
+	" :syntax match friendlyComment +^\s*\(#\|"\|//\|##\|""\|////\) \([A-Za-z0-9]*:\|[A-Z]*\>\)+ contains=confTodo contains=shTodo
+	"" Well that's even worse.  We need to be containedin a Comment!
+	"" This is what I want to express, but not valid vim:
+	" :syntax match friendlyComment +\([A-Za-z0-9]*:\|[A-Z]*\>\)+ containedin=Comment
+	"" Until then, we have to take the whole line, which looks sucky if it wraps
+	"" onto a second and loses its color.
 
 
 	:syntax match Comma /,/
