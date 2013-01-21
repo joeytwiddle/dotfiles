@@ -6,6 +6,7 @@
 function! FoldBlocks(numBlankLines)
 
   let oldWrapScan = &wrapscan
+  let oldLine = line(".")
   set nowrapscan
   " Clear existing folds and go to top
   set foldmethod=manual
@@ -42,6 +43,7 @@ function! FoldBlocks(numBlankLines)
   " normal zf
 
   let &wrapscan = oldWrapScan
+  exec oldLine.":"
 
 endfunction
 
