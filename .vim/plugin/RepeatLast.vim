@@ -1,15 +1,21 @@
-" RepeatLast.vim by joeytwiddle
+" RepeatLast.vim by joeytwiddle                  (Hit 'zo' to open this fold)
 "
 " Provides <count>\. to repeat the last group of actions you performed.
 "
-" The '.' key is fantastic at repeating the last 1 action you made.  But
+"                     "A beautiful monster" -- bairui
+"
+" The '.' key is fantastic for repeating the last 1 action you made.  But
 " sometimes I do three actions, and then want to repeat them again.  Now
 " this is just 3\.
 "
-" BEWARE: Because it uses macro recording *all the time*, it sort of
-" takes over your Vim, and can reduce your experience.  :set ch=2 to feel
-" happier, use :RepeatLastDisable :RepeatLastEnable :RepeatLastToggleDebugging
-" and try toggling g:RepeatLast_TriggerCursorHold.
+" BEWARE: Because it uses macro recording *all the time*, it sort of takes
+" over your Vim, and can impact your usual experience.  Be prepared!
+"
+"   :set ch=2       if the word "recording" hides messages you wanted
+"
+"   :let g:RepeatLast_TriggerCursorHold = 1  or  0   for GUI fixes
+"
+" Also: :RepeatLastDisable :RepeatLastEnable :RepeatLastToggleDebugging
 
 
 
@@ -27,7 +33,7 @@
 "
 "   \\.  Replay the last *repeated* action-group (all 4 actions above)
 "
-"   9\\. Replay the last *repeated* action-group 9 times.
+"   9\\. Replay the last *repeated* action-group 9 times (producing 9 times 4)
 "
 "   \D   Forget (drop) the last action (e.g. to discard an unwanted movement)
 "
@@ -47,15 +53,23 @@
 "
 "        Copy the actions to register 'i', so 'g' may be overwritten.
 "
+"   :let g:RepeatLast_SaveToRegister = 'p'
+"
+"        Always save any repeated action-group into @p
+"
+"   :let g:RepeatLast_TriggerCursorHold = 1
+"
+"        Try the UI fix.  May occasionally fail to record actions.
+"
 " Commands are also available for the main shortcuts above:
 "
 "   :ShowRecent   :RepeatLast   :DropLast   :PauseRecording   :GrabLast
 "
 " Commands to toggle state at runtime:
 "
-"   :RepeatLastEnable    Disables action recording, leaves macro record mode.
+"   :RepeatLastEnable    Enables action recording, enters macro record mode.
 "
-"   :RepeatLastDisable   Enables action recording, enters macro record mode.
+"   :RepeatLastDisable   Disables action recording, leaves macro record mode.
 "
 "   :RepeatLast<Ctrl-D>  or  <Tab>      More commands, some toggle info.
 "
@@ -67,17 +81,14 @@
 "     g:RepeatLast_Ignore_After_Use_For
 "
 "   This allows you to move to a new location between executing repeats,
-"   without recording those movement actions.  (Of course, movement actions in
-"   the *original* repeat remain unaffected.)
-"
-"   Action storage can also be temporarily disabled with \| or \#
+"   without recording those movement actions.
 "
 "   Once you have performed enough actions without executing a repeat, action
 "   storage will be re-enabled, and the ignored actions will be added to the
 "   history as one large entry.  Although g:RepeatLast_Stop_Ignoring_On_Edit
 "   disables this recovery.
 "
-" Reading this file:
+" Reading this rest of this file:
 "
 "   You may like to try  :FoldNicely
 
@@ -114,23 +125,15 @@
 
 
 
-" == Old Issue now addressed by "Ignore" feature ==
-"
-" Unlike '.' we DO want to record movements (as part of a 4-action sequence).
-" Unfortunately this means we cannot freely move to a new position between
-" repeating our last actions, as that movement will become part of the list!
-"
-" In other words, you can do do '4\.4\.' just fine, provided your group of
-" actions leaves you in the right place for the next.  But if you try to do
-" '4\.<some_movement>4\.' the <some_movement> will be recorded as new actions,
-" so the second '4\.' will not do the same as the first '4\.'!  We have now
-" added \D so that unwanted actions can be removed.
-"
-" Now g:RepeatLast_Ignore_After_Use_For mitigates this, unless set to zero.
-
-
-
 " == Bugs and TODOs ==
+"
+" TODO: Even using large ch and with RepeatLast_TriggerCursorHold disabled,
+"       warning messages such as "search hit BOTTOM" are hidden.  At least
+"       offer a sleep *option* so we can see these.  Or ... echo "hidden" at
+"       more opportune moments.
+"
+" TODO: Re-enable recording on *any* non-movement might be desirable.  At the
+"       moment we only re-enable on InsertEnter changes.
 "
 " TODO: RepeatLast_TriggerCursorHold completely fails to trigger in GUI!
 "       Did it always to this?
@@ -320,18 +323,19 @@ endif
 
 " Experimental:
 " May lose actions executed very quickly by user (or when Vim is being slow).
+" Or for a short while after an Escape.  e.g. i_<Esc><Enter>
 if !exists("g:RepeatLast_TriggerCursorHold")
   let g:RepeatLast_TriggerCursorHold = 0
 endif
 " BUG TODO: It blocks recording of actions taken when in visual mode.
 "   0 - do not trigger
-"   1 - do "fancy" solution (always trigger)
-"   2 - do "fancy" solution (don't always trigger)
+"   1 - do "fancy" (best) solution (always trigger)
+"   2 - do "fancy" solution (but don't always trigger)
 "   3 - always do at 0 interval
 "   4 - always do at fixed interval
 
 " If set, when you repeat a group, the actions will also be saved in this
-" register.  So  5\.20@l  like  5\.20\\.  will repeat 5 actions 21 times.
+" register.  So  5\.20@g  like  5\.20\\.  will repeat 5 actions 21 times.
 if !exists("g:RepeatLast_SaveToRegister")
   let g:RepeatLast_SaveToRegister = ''
 endif
@@ -363,7 +367,7 @@ command! RepeatLastDisable call <SID>RepeatLastOff()
 
 command! RepeatLastToggleInfo let g:RepeatLast_Show_Ignoring_Info = 1 - g:RepeatLast_Show_Ignoring_Info
 
-command! RepeatLastToggleDebugging let g:RepeatLast_Show_Debug_Info = 1 - g:RepeatLast_Show_Debug_Info | let &ch = 5 - &ch
+command! RepeatLastToggleDebugging let g:RepeatLast_Show_Debug_Info = 1 - g:RepeatLast_Show_Debug_Info | let &ch = 5 - &ch | if g:RepeatLast_TriggerCursorHold != 0 | echo "Recommend you also :let g:RepeatLast_TriggerCursorHold=0" | endif
 
 " Pause recording temporarily (allows movement before executing a repeat)
 nnoremap <Leader># :TogglePauseRecording<Enter>
@@ -380,21 +384,22 @@ endif
 
 
 
-" We used to use register x to record the most recent event.
-" Now we use whatever is set in g:RepeatLast_Register
-
 " For this to work, we need to have this macro recording on *all the time*!
 " This is maintained in EndActionDetected().
-
-" *accident*
+"
 " BUG: If we are already recording a macro, 'q' will stop it and then 'x'
 " will delete 1 char!  We need to detect whether macro recording is active!
+" AFAWK Vim does not currently expose this.
+"
+" We used to use register x to record the most recent event.  This was not
+" 100% harmless.  Now we use whatever is set in g:RepeatLast_Register.
 
 
 
 " == Recording Actions ==
 
 " We are going to record a history of recent actions
+
 if !exists("s:earlierActions")       " we retain it through plugin reload
   let s:earlierActions = []
   let s:earlierActionTriggers = []   " only used for debugging
@@ -607,10 +612,15 @@ function! s:EndActionDetected(trigger)
   endif
 
   if g:RepeatLast_TriggerCursorHold
+    " Delay entering recording mode for a moment, so that CursorHold will fire
+    " (which may perform useful visuals tasks for the user).
     if s:old_updatetime == 0
       let s:old_updatetime = &updatetime
     endif
-    let &updatetime=0
+    " NOTE: =0 works fine in terminal vim, but in gvim CursorHold never fires!
+    "       =1 does.
+    "let &updatetime=0
+    let &updatetime=1
     " If we don't start recording again, it's possible that another trigger
     " may fire, and re-store the register contents!  (e.g.  InsertLeave,
     " CursorMoved often fire together).  To prevent storing it twice:
@@ -649,6 +659,9 @@ function! s:CursorHoldDone()
     "" Interstingly near the threshold, when I hold <Enter> I get first an
     "" <Enter> but then a few <Ctrl-J>s.  Presumably this is because two
     "" strokes are being sent to the xterm, but the first is lost.
+    ""
+    "" Issue: Might we sleep before other CursorHold events have fired, losing
+    "" their effect?
 
     call s:StartRecording()
   endif
@@ -982,87 +995,61 @@ function! s:MyEscape(str)
   while i < len(a:str)
     let char = a:str[i]
     let ascnr = char2nr(char)
+    let next = ""
 
     if ascnr == 9
-      let char = "<Tab>"
+      let next = "<Tab>"
     elseif ascnr == 13
-      let char = "<Enter>"
+      let next = "<Enter>"
     elseif ascnr == 27
-      let char = "<Esc>"
+      let next = "<Esc>"
     elseif ascnr == 32
-      let char = "<Space>"
+      let next = "<Space>"
     elseif ascnr == 127
-      let char = "<Del>"
+      let next = "<Del>"
     elseif ascnr == 8
-      let char = "<Backspace>"
+      let next = "<Backspace>"
     elseif ascnr >= 32 && ascnr <= 126
-      let char = char
+      let next = char
     elseif ascnr >= 1 && ascnr <= 26
-      let char = "<Ctrl-" . nr2char(65 + ascnr - 1) . ">"
+      let next = "<Ctrl-" . nr2char(65 + ascnr - 1) . ">"
     else
-      let char = '<' . char2nr(char) . '>'
+      let nextTwo = a:str[i+1:i+2]
+      if nextTwo == "ku"
+        let next = "<Up>"
+        let i += 2
+      elseif nextTwo == "kd"
+        let next = "<Down>"
+        let i += 2
+      elseif nextTwo == "kP"
+        let next = "<PageUp>"
+        let i += 2
+      elseif nextTwo == "kN"
+        let next = "<PageDown>"
+        let i += 2
+      elseif nextTwo == "kI"
+        let next = "<Insert>"
+        let i += 2
+      elseif nextTwo == "kD"
+        let next = "<Delete>"
+        let i += 2
+      elseif nextTwo == "kh"
+        let next = "<Home>"
+        let i += 2
+      elseif nextTwo == "@7"
+        let next = "<End>"
+        let i += 2
+      elseif nextTwo == "kb"
+        let next = "<Backspace>"
+        let i += 2
+      endif
     endif
 
-    let out = out . char
-    let i = i+1
-  endwhile
-  return out
-endfunction
-" <128>kb<Enter> Backspace
-" <128>k9<Enter> F9
-" <128>k;<Enter> F10
-" <128>F1<Enter> F11
-" <Esc>[1;5C Ctrl-Right
-" <Esc>[1;5D Ctrl-Left
-" <Esc>[1;5B Ctrl-Down
-" <Esc>[1;5A Ctrl-Up
-
-" Returns an escaped copy of mapleader which we can use in regexps.
-" Currently only fixes \ (returning \\).  Needs work for other strange chars.
-" Actually if we never re-enable the checks in EndActionDetected() then we
-" won't need this.
-function! s:GetEscapedMapLeader()
-  let current = '\'
-  if exists("mapleader")
-    let current = mapleader
-  endif
-  let escapedLeader = substitute(current,'\','\\\\',"g")
-  " echo "len Escaped Leader: " . len(escapedLeader)
-  return escapedLeader
-endfunction
-
-" Returns a string with all special chars turned into "#nnn" so we can display
-" it via echo without making a mess.
-function! s:MyEscape(str)
-  let out = ""
-  let i = 0
-  while i < len(a:str)
-    let char = a:str[i]
-    let ascnr = char2nr(char)
-
-    if ascnr == 9
-      let char = "<Tab>"
-    elseif ascnr == 13
-      let char = "<Enter>"
-    elseif ascnr == 27
-      let char = "<Esc>"
-    elseif ascnr == 32
-      let char = "<Space>"
-    elseif ascnr == 127
-      let char = "<Del>"
-    elseif ascnr == 8
-      let char = "<Backspace>"
-    elseif ascnr >= 32 && ascnr <= 126
-      let char = char
-    "else
-      "let nextThree = 
-    elseif ascnr >= 1 && ascnr <= 26
-      let char = "<Ctrl-" . nr2char(65 + ascnr - 1) . ">"
-    else
-      let char = '<' . char2nr(char) . '>'
+    if next == ""
+      let next = '<' . char2nr(char) . '>'
     endif
 
-    let out = out . char
+    let out = out . next
     let i = i+1
   endwhile
   return out
@@ -1083,10 +1070,12 @@ endfunction
 command! FoldNicely :call FoldNicely(2)
 " I like to run this automatically when I open this file.
 " au BufReadPost RepeatLast.vim if $USER == "joey" | :FoldNicely | endif
-" au BufReadPost RepeatLast.vim :FoldNicely
+au BufReadPost RepeatLast.vim :FoldNicely
+
 function! FoldNicely(numBlankLines)
 
   let oldWrapScan = &wrapscan
+  let oldLine = line(".")
   set nowrapscan
   " Clear existing folds and go to top
   set foldmethod=manual
@@ -1123,6 +1112,7 @@ function! FoldNicely(numBlankLines)
   " normal zf
 
   let &wrapscan = oldWrapScan
+  exec oldLine.":"
 
 endfunction
 
