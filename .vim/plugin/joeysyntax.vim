@@ -106,6 +106,10 @@ function! Joeysyntax()
 		" :Joeyhighlight
 	" endif
 
+	"" I find myself making two types of comments: documentation text in
+	"" English, for reading by developers, and code comments for old code I am
+	"" not using.  Ideally I would like to highlight them differently!
+
 	"" This separates single comments from double comments, for files where single comments are commented code and double comments indicate documentation.
 	"" Does not seem to work on vim files.
 	" :syntax match friendlyComment /^\s*\(##\|""\|\/\/\/\/\).*/ contains=confTodo contains=shTodo
@@ -120,6 +124,13 @@ function! Joeysyntax()
 	" :syntax match friendlyComment +\([A-Za-z0-9]*:\|[A-Z]*\>\)+ containedin=Comment
 	"" Until then, we have to take the whole line, which looks sucky if it wraps
 	"" onto a second and loses its color.
+
+	"" Instead, a blacklist approach: naff-comments
+	"" Broad (space allowed, catches some text comments)
+	"syntax match naffComment +^\s*\(#\|"\|//\)\s*\([a-z0-9:]\+\).*+ contains=confTodo contains=shTodo
+	"" Narrow (no space allowed, almost always code comments)
+	syntax match naffComment +^\s*\(#\|"\|//\)\([a-z0-9:]\+\).*+ contains=confTodo contains=shTodo
+	hi naffComment ctermfg=darkblue
 
 
 	:syntax match Comma /,/
