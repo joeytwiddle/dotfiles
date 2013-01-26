@@ -860,7 +860,9 @@ function! <SID>StartExplorer(sticky, delBufNum)
   " Move cursor to the entry for the current buffer
   if (s:userFocusedBuffer != -1)
     " Original format: call search('\['.s:userFocusedBuffer.':'.expand('#'.s:userFocusedBuffer.':t').'\]')
-    call search('| '.expand('#'.s:userFocusedBuffer.':t').'[*+-]* |')
+    "" To search for buffer using regexp, we need to escape AT LEAST '~'
+    let bufnameRE = escape(expand('#'.s:userFocusedBuffer.':t'), '~')
+    call search('| '.bufnameRE.'[*+-]* |')
   else
     call <SID>DEBUG('No current buffer to search for',9)
   endif
