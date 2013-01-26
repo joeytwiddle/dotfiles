@@ -3,6 +3,11 @@ setlocal foldignore=
 
 setlocal comments=:##,:#
 
+" comment
+:map <F5> ^i# <Esc>j^
+" uncomment
+:map <F6> ^2xj^
+
 syntax match coffeeParens /[()]/
 " highlight! link coffeeParens Function
 " highlight! link coffeeParens coffeeStatement
@@ -19,7 +24,8 @@ highlight! coffeeParens cterm=bold ctermfg=cyan gui=bold guifg=#00b0b0
 "" These days I only see coffeeAssign highlight properties in an object literal
 highlight! coffeeAssign ctermfg=darkblue cterm=bold gui=bold guifg=white
 
-highlight! coffeeComment ctermfg=darkgrey cterm=bold gui=bold guifg=darkgrey
+" highlight! coffeeComment ctermfg=darkgrey cterm=bold gui=bold guifg=darkgrey
+hi link coffeeComment Comment
 
 " highlight! coffeeAssignSymbols cterm=bold ctermfg=yellow gui=bold " guifg=yellow
 " highlight! coffeeAssignSymbols cterm=bold ctermfg=cyan gui=bold guifg=cyan
@@ -42,6 +48,7 @@ syn match OperatorEquals /=[^>]/he=e-1
 highlight link OperatorEquals Operator
 
 syn match OperatorPlus /+/
+" BUG: despite the he, this check prevents the following char (e.g. a number) from being highlighted correctly.
 syn match OperatorMinus /-[^>]/he=e-1
 syn match OperatorMultiply /*/
 syn match OperatorDivide /\//
