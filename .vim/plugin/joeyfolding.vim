@@ -105,16 +105,17 @@ function! Joeyfolding()
 	":map + zo
 	":map - zc
 	" Or:
-	" :map - zc
-	" :map = zo   " No we don't want to redefine = because it's useful for indenting
-	:map _ zC
-	:map + zO
-	" :map _ zm
-	" :map + zr
-	:map <kMinus> zc
-	:map <kPlus> zo
-	:map <kDivide> zm
-	:map <kMultiply> zr
+	":map - zc
+	":map = zo   " No we don't want to redefine = because it's useful for indenting
+	":map _ zm
+	":map + zr
+	" This was the set I ended with but now I use the default keys.
+	":map _ zC
+	":map + zO
+	":map <kMinus> zc
+	":map <kPlus> zo
+	":map <kDivide> zm
+	":map <kMultiply> zr
 
 	if &foldmethod != "diff"
 
