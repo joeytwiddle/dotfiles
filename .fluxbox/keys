@@ -200,7 +200,12 @@ Mod4 Right :MoveTabRight
 Mod1 F4 :Close
 Mod1 q :Close
 Mod4 q :KillWindow
-Mod1 a :Lower
+## None of these work in 1.3.2-4
+# Mod1 a :Lower
+Mod1 a :MacroCmd {Lower} {Focus}
+# Mod1 a :MacroCmd {Lower} {Activate}
+# Mod1 a :MacroCmd {Lower} {ActivateTab} {Raise}
+# Mod1 a :MacroCmd {Lower} {Reconfig}
 Mod4 a :Lower
 Mod1 d :ShadeWindow
 Mod4 d :ShadeWindow
