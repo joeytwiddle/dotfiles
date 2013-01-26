@@ -84,29 +84,38 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
 
   if g:coffeeShowJSChanges != 0
     let jsFile = expand("%<").".js"
-    silent exec "!cp ".jsFile." ".jsFile.".last"
+    " If this is our first compile, the js file may not exist
+    if !filereadable(jsFile)
+      " Make an empty file, so we will get a diff anyway.
+      silent exec '!touch "'.jsFile.'"'
+    endif
+    silent exec '!cp -f "'.jsFile.'" "'.jsFile.'.last"'
   endif
 
   " call s:MsgUser("Compiling...")
-  " silent! exec "!coffee -c % > /tmp/coffee.log 2> /tmp/coffee.err"
-  silent! exec "!coffee -c % > /tmp/coffee.log 2> /tmp/coffee.err"
+  " silent! exec '!coffee -c "%" > /tmp/coffee.log 2> /tmp/coffee.err'
+  silent! exec '!coffee -c "%" > /tmp/coffee.log 2> /tmp/coffee.err'
   let lines = readfile("/tmp/coffee.err")
   if len(lines) == 0
 
+    "" No error
+
     if g:coffeeShowJSChanges != 0
-      " silent exec "!diff ".jsFile.".last ".jsFile" > /tmp/jsdiffs.diff"
-      silent exec "!diff ".jsFile.".last ".jsFile." | grep '^[><+-]' > /tmp/jsdiffs.diff"
+      " silent exec '!diff "'.jsFile.'.last" "'.jsFile.'" > /tmp/jsdiffs.diff'
+      silent exec '!diff "'.jsFile.'.last" "'.jsFile.'" | grep "^[><+-]" > /tmp/jsdiffs.diff'
       let diffLines = readfile("/tmp/jsdiffs.diff")
       if len(diffLines) > 0
+        "" Show changes
         if !exists("w:myHeightBeforePedit")
           let w:myHeightBeforePedit = winheight(0)
         endif
-        silent! belowright pedit +:set\ ft=diff\ autoread\ nobuflisted /tmp/jsdiffs.diff
+        silent! belowright pedit +:set\ ft=diff\ autoread\ nobuflisted\ noswapfile /tmp/jsdiffs.diff
         let s:previewWinIsOpen = 1
         return
       endif
     endif
 
+    "" Cleanup old windows
     if s:previewWinIsOpen == 1
       let s:previewWinIsOpen = 0
       pclose
@@ -121,6 +130,7 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
     " don't see it!
     " call s:MsgUser("Compiled successfully.")
   else
+    "" Error!  Show it
     " :r /tmp/coffee.err
     let splitbelowBefore = &splitbelow
     let &splitbelow = 1
@@ -129,7 +139,7 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
     endif
     " silent! is not recommended.  If the swapfile-what-to-do-dialog occurs we
     " won't see it, but Vim will block until we respond to it!
-    silent pedit +:set\ autoread\ nobuflisted /tmp/coffee.err
+    silent pedit +:set\ autoread\ nobuflisted\ noswapfile /tmp/coffee.err
     let &splitbelow = splitbelowBefore
     let s:previewWinIsOpen = 1
     " call s:MsgUser("There were problems compiling.")
