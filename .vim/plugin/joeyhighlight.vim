@@ -3,6 +3,13 @@ if has("menu")
 	amenu &Joey's\ Tools.&Joey's\ highlighting :call Joeyhighlight()<CR>
 endif
 
+augroup Joeyhighlight
+	au!
+	" My rules used to get overwritten by default vim scripts
+	" Not any more bitches!
+	autocmd BufReadPost * :Joeyhighlight
+augroup END
+
 function! Joeyhighlight()
 
 	" :colors pablo
@@ -15,8 +22,8 @@ function! Joeyhighlight()
 	"" == Dark Backgruond ==
 	" You can disable this if you prefer a white background, but the later
 	" rules are all too bright!
-	if 1
-		:set background=dark
+	if &background == "dark"
+		":set background=dark   " moved to .vimrc
 		"highlight Normal ctermbg=black ctermfg=grey guibg=Black guifg=#cccccc
 		"highlight Normal ctermfg=grey guibg=Black guifg=#cccccc
 		"highlight Normal ctermfg=lightgrey guibg=Black guifg=#cccccc
@@ -320,4 +327,6 @@ function! Joeyhighlight()
 
 endfun
 
-:Joeyhighlight
+"" No longer needed.  Rely on autocmd above.
+" :Joeyhighlight
+
