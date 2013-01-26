@@ -276,6 +276,7 @@ nmap M g'
 " M usually does to-middle-line-of-window
 
 
+
 " Quick toggles for most frequently used functions
 nnoremap <Leader>t :Tlist<Enter>
 nnoremap <Leader>w :set invwrap<Enter>
@@ -294,12 +295,18 @@ nnoremap <Leader>b :MRU<Enter>
 "" Some more alternative buffer switchers:
 "" :EasyBuffer (easybuffer.vim)
 
-" NetRW file explorer (bundled)
-nnoremap <Leader>o :Explore .<Enter>
+" vtreeexplorer (nice because it opens file in main window):
+nnoremap <Leader>f :VSTreeExploreToggle<Enter>
 " NERDTree file explorer (NERD_tree.vim)
-nnoremap <Leader>f :e .<Enter>
-nnoremap <Leader>F :VSTreeExploreToggle<Enter>
+nnoremap <Leader>F :NERDTreeToggle<Enter>
+" NetRW file explorer (bundled):
+"nnoremap <Leader>F :Vexplore<Enter>
+nnoremap <Leader>o :Explore .<Enter>
+nnoremap <Leader>O :e .<Enter>
+" Note that if g:NERDTreeHijackNetrw is not set 0, netrw windows may be
+" hijacked by NERDTree!
 
+nnoremap <Leader>s :Sopen<Enter>
 nnoremap <Leader>S :SessionList<Enter>
 
 
