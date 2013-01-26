@@ -40,9 +40,22 @@
 ":so ~/.vim/plugin/taglist.vim.4.5
 ":finish
 
-"" Joey's next/previous tag (in taglist order) keybind:
+"" Joey's next/previous tag (in taglist order) keybinds:
 "" Switch to taglist, move to next/previous line, and select tag there.
 "" Here we are basically implementing Tlist_Jump_To_NextTag/PrevTag.
+""
+"" But wait - we have some enemies!
+"" For example, this gets set every time we read a .vim file:
+""   n  ]]          *@m':call search('^\s*fu\%[nction]\>', "W")<CR>
+""           Last set from /usr/share/vim/vim72/ftplugin/vim.vim
+"" Let's make sure we unmap them first!
+""
+au BufReadPost * silent! nunmap <silent><buffer> [[
+au BufReadPost * silent! nunmap <silent><buffer> ]]
+"" silent! in case it doesn't exist
+""
+"" OK, now create our mappings:
+""
 "nmap <silent> [[ :TlistOpen<Enter><Up><Enter>
 "nmap <silent> ]] :TlistOpen<Enter><Down><Enter>
 "" Search for next/previous tag line (by indent):
@@ -60,6 +73,18 @@ nnoremap <silent> ]] :TlistOpen<Enter>0:call search("^ ","")<Enter>:call <SID>Tl
 "" BUG: Why are these sometimes not going to the right place?!  It's working
 "" in Java and asm, but not on .vim files, where it jumps straight to the first function.
 "" BUG TODO: When sort_type == "tree" we want a search only "^  "
+
+"" Joey's peek at prototype (easily invoked with <Space>, not on CursorHold until it's finished):
+"" These are not what I want.  They show info about the tag we are inside/below, not the tag under the cursor.
+"nnoremap <Space> <Space>:TlistShowPrototype<Enter>
+"nnoremap <Space> <Space>:call <SID>Tlist_Window_Show_Info()<CR>
+" This is more what I was after but too verbose:
+" And it's already bound to g] by default
+"nnoremap <Space> <Space>:exec "tselect ".expand("<cword>")<Enter>
+" This opens in the preview window; could be handy.
+"nnoremap <Space> <Space>:exec "ptjump! ".expand("<cword>")<Enter>
+" This feature has now moved to showtagdecl.vim
+
 
 " File: taglist.vim
 " Author: Yegappan Lakshmanan (yegappan AT yahoo DOT com)
@@ -300,8 +325,8 @@ if !exists('loaded_taglist')
     endif
 
     " Joey's:
-    if !exists('Tlist_Indent_Tree')
-        let Tlist_Indent_Tree = 1
+    if !exists('Tlist_Tree_Indent')
+        let Tlist_Tree_Indent = 2
     endif
 
     " Do not change the name of the taglist title variable. The winmanager
@@ -1949,6 +1974,7 @@ endfunction
 " List the tags defined in the specified file in a Vim window
 function! s:Tlist_Window_Refresh_File(filename, ftype)
     call s:Tlist_Log_Msg('Tlist_Window_Refresh_File (' . a:filename . ')')
+    set foldmethod=manual
     " First check whether the file already exists
     let fidx = s:Tlist_Get_File_Index(a:filename)
     if fidx != -1
@@ -2117,14 +2143,14 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             "" This next call ensures the tproto_var has been parsed
             let dummy = s:Tlist_Get_Tag_Prototype(fidx,i)
             let tindent_var = 's:tlist_' . fidx . '_' . i . '_tag_proto_indent'
-            if g:Tlist_Indent_Tree
+            if g:Tlist_Tree_Indent
                 let indent = {tindent_var}
                 let indent = indent / fileIndent
                 let indent = min([indent,5])
             else
                 let indent = 0
             endif
-            let indentStr = repeat(' ',2+2*indent)
+            let indentStr = repeat(' ',g:Tlist_Tree_Indent*(1+indent))
 
             let fidx_i = 's:tlist_' . fidx . '_' . i
             " let tname_var = 's:tlist_' . fidx . '_' . i . '_tag_name'
@@ -2143,7 +2169,12 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
             if tagComes == "after"
                 let txt .= tagName
                 if displayedTagType != ""
-                    let txt .= '   [' . displayedTagType . ']'
+                    " let txt .= '   [' . displayedTagType . ']'
+                    "" Push to right of window:
+                    let spaceLeft = winwidth('.') - len(txt)
+                    let spaceLeft = spaceLeft - len(displayedTagType) - 2
+                    let spaceLeft = max([1,spaceLeft])
+                    let txt .= repeat(' ',spaceLeft) . '[' . displayedTagType . ']'
                 endif
             else
                 if displayedTagType != ""
@@ -2241,6 +2272,15 @@ function! s:Tlist_Window_Refresh_File(filename, ftype)
         let end = s:tlist_{fidx}_end + 1
     endif
     call s:Tlist_Window_Update_Line_Offsets(fidx + 1, 1, end - start + 1)
+
+    " TODO: We shouldn't do this so early.  It slows things down when we are
+    " doing lots of files.  Even better might be to manually create them
+    " ourselves, as vim's indent mode does not consume the opening line.
+    if s:tlist_{fidx}_sort_type == "tree" || s:tlist_{fidx}_sort_type == "tree2"
+        " Let's change fold method for the tree
+        set foldmethod=indent
+        exec "setlocal ts=".g:Tlist_Tree_Indent." sw=".g:Tlist_Tree_Indent
+    endif
 
     " Now that we have updated the taglist window, update the tags
     " menu (if present)
@@ -2704,8 +2744,8 @@ endfunction
 " Given the single-char tag type, return its full name.
 function! s:Tlist_Get_Full_Type_Name(ftype,ttype)
 
-    "" If you don't want long tagnames displayed:
-    return a:ttype
+    "" If you always want to display short tagchar:
+    "return a:ttype
 
     let i = 1
     let ttype_cnt = s:tlist_{a:ftype}_count
@@ -4482,6 +4522,9 @@ function! s:Tlist_Refresh_Folds()
     let save_prev_winnr = winnr()
     noautocmd wincmd p
     exe winnum . 'wincmd w'
+
+    " In case we set it differently
+    set foldmethod=manual
 
     " First remove all the existing folds
     normal! zE
