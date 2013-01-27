@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# TODO: This needs to be split into two files:
+#   - One of which is the universal WM chooser (unfinished).  (It has two goals: to allow user to choose WM when WM crashes/closes, and also to prevent X from closing, with all its apps, just because WM closed!)
+#   - The other, joey's personal X bootup requirements.
+
 ### Start jsh if possible {{{
 ## This is only actually needed for jshinfo and kdelight below.
 ## But I like to have jsh loaded in the environment before my window manager
@@ -93,13 +97,18 @@ PS4="[.xinitrc] # $PS4"
 
 ### Config: {{{
 
+## Why didn't I put startlxde first?  It gives me a load of horizontal desktops instead of a set.  It doesn't put kicker on all desktops.  It ignored Alt-Shift-Direction-Alt-X if I don't let go of Alt!
+## I run fluxbox to start with, but if stuff gets heavy, I will switch to LXDE.
+## Fluxbox sets 3x4 desktops and makes kicker sticky.
+## Note: Since startlxde changes mouse+keyboard settings, I have to run xinitrc again afterwards!
+
 ## Put your favourite WMs at the top.  The first one present will be chosen.
 ## kdelight runs the KDE3 panel 'kicker' but currently with fluxbox instead of kwin.
 WindowManagers="
-startlxde
-kdelight
 fluxbox
+startlxde
 compiz
+kdelight
 startkde
 enlightenment
 WindowMaker
@@ -148,6 +157,7 @@ then WindowManagers="${WindowManagerForSecondDesktops}${NEWLINE}${WindowManagers
 fi
 
 ## Or alter config based on display number in other ways.
+START_A_PANEL=true
 # if [ "$DISPLAY" = ":0" ] || [ "$DISPLAY" = :0.0 ]
 # then START_A_PANEL=true
 # elif [ "$DISPLAY" = ":1" ]
@@ -191,16 +201,49 @@ setxkbmap -print gb | xkbcomp - "$DISPLAY"
 
 unset COLUMNS
 
-## I have set a larger virtual size in xorg.conf but I don't want it!
+## For some reason when I upgraded my nvidia whatnots, it changed my DPI (or at least, all the text sizes changed!):
+## % xdpyinfo | grep dots
+##   resolution:    130x131 dots per inch
+## So before we start a window manager, I need to fix my broken DPI.
+
+## I have set a larger virtual size in xorg.conf but I don't really want it!
+
 # xrandr -s 1024x768
+# xrandr --dpi 80x75
+# xrandr --dpi 74x75
+
 xrandr -s 1280x1024
+# xrandr --dpi 92x100   # Starts gvim in smaller font, so not what I had before!
+# xrandr --dpi 100x100  # I *think* this made konq font smaller than expected?
+# xrandr --dpi 96x100
+# xrandr --dpi 96x96
+# xrandr --dpi 100x96     # Causes GVim font sizes to appear how they used to.  (100xanything works too)
+# xrandr --dpi 120x100  # Nice square GVim
+# xrandr --dpi 100x80   # Nice square GVim
+# xrandr --dpi 120x100
+## None of the above change the aspect ratio of Lucida in gvim, although large
+## values can affect the overall font size.
+## The following reading never changes:
+##     % xdpyinfo | grep -C2 "dots per inch"
+
+## NOTE: If you don't have xrandr, but need to set DPI, a workaround is:
+# echo "Xft.dpi: 96" >> ~/.Xdefaults or ~/.Xresources
+# xrdb -merge ~/.Xdefaults
+## OR:
+# echo "Xft.dpi: 96" | xrdb -merge
+
+## I think you can disable auto-DPI config in xorg.conf Device section with:
+# Option "NoDDC"
+## (Then I think it gets derived from the ModeLine.)
 
 ## TESTING: may work faster from bbkeys or fluxkeys if pre-loaded
 ##          this technique might only work if we . fluxbox, and probably not even then :P
 ## The actual issue is that using put_current_xwindow from a keybind is sometimes very slow (I hear swap humming) but that could be part of X, rather than loading the script itself?
 ## So alternatively, we could move the scripts to /dev/shm/ and put it on the PATH?!
-. importshfn "$JPATH"/tools/put_current_xwindow
+# . importshfn "$JPATH"/tools/put_current_xwindow
+## These days I have a sylink in ~/bin/put_current_xwindow.  I think this works fast because it avoids having to search $JPATH/tools
 
+## Disabled
 if [ -d $HOME/X11_big_cursor ] && false
 then
 	jshinfo "Initialising big cursor."
@@ -293,11 +336,21 @@ xset -b
 # xset r rate 400 50
 # xset r rate 280 90
 # xset r rate 270 65
-xset r rate 270 99
-## For my over-sensitive mouse:
+## This is fun for scrolling:
+# xset r rate 270 99
+## But to actually stop in the right place, we need something smaller:
+xset r rate 270 65
+
+## Mouse acceleration
+## <acceleration> (scalar) <threshold> (pixels per update)
+## For more action, increase the former, or reduce the latter
 # xset m 2/3
 # xset m 2/3 3
-xset m 4/5 3
+# xset m 4/5 3
+# Save wrists with fast acceleration
+# xset m 12/5 10
+# Even faster:
+xset m 20/5 5
 
 ## Got problems with characters displaying as squares [] ?
 # xset fp- unix/:7100
@@ -320,9 +373,11 @@ xset fp+ unix/:7101   ## xfstt
 
 	sleep 2
 
-	if [ ! "$WinMan" = fluxbox ] && [ -x /usr/bin/bbkeys ]
-	then bbkeys &
-	fi
+	# if [ ! "$WinMan" = fluxbox ] && [ -x /usr/bin/bbkeys ]
+	# then bbkeys &
+	# fi
+	## Yes it's overkill for Fluxbox, but I tend to switch out of Fluxbox these days!
+	bbkeys&
 
 	WSI="$JPATH/code/workspace_indicator.py"
 	if [ "$WinMan" = ion ] && [ -x "$WSI" ]
@@ -344,17 +399,20 @@ xset fp+ unix/:7101   ## xfstt
 		kicker &
 	fi
 
+	# More of Joey's preferences:
+
 	# gnome-settings-daemon &
 
 	# xgamma -rgamma 0.7 -ggamma 1.0 -bgamma 1.0 ## for Tim's red-ish monitor
 	# xgamma -rgamma 0.8 -ggamma 1.2 -bgamma 1.2 ## for Tim's red-ish monitor
 	## OK so first I adjust the monitor's settings to get pure white, then I apply xgamma to fix greys.
-	xgamma -rgamma 1.0 -ggamma 1.4 -bgamma 1.4 ## Brighter so I can read my greys!
+	# xgamma -rgamma 1.0 -ggamma 1.4 -bgamma 1.4 ## Brighter so I can read my greys!
 	# xgamma -rgamma 1.1 -ggamma 1.4 -bgamma 1.3 ## When the bloody thing goes darker and bluer!
 	## Are they accumulating?!
 	# xgamma -rgamma 1.8 -ggamma 2.0 -bgamma 2.0   dark
 	# xgamma -rgamma 2 -ggamma 2.5 -bgamma 2.5   bright
 	# xgamma -rgamma 2 -ggamma 2.2 -bgamma 2.2   ok/light
+	xgamma -rgamma 1.2 -ggamma 1.6 -bgamma 1.6
 
 	jshinfo "DISPLAY = $DISPLAY"
 
@@ -403,6 +461,9 @@ xset fp+ unix/:7101   ## xfstt
 		# kill "$GNOMEFP_PID"
 
 	# fi
+
+	sleep 6
+	gkrellm &
 
 ) &
 
