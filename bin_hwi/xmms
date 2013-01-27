@@ -1,1 +1,4 @@
+extraPath=/usr/local/lib32_for_xmms
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$extraPath/lib:$extraPath/usr/lib"
+
 XLIB_SKIP_ARGB_VISUALS=1 /usr/local/xmms/bin/xmms "$@"
