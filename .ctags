@@ -1,29 +1,51 @@
 --regex-c=/^(COMMENT: C, Java, Javascript, Asm have defaults, so need no langdef, but we can extend them)/\1/X,XXX/
 
+--regex-vim=/^(COMMENT: ex-ctags already has this as 'map': \s*(map|[nvxsoilc]*map)\s+([^\s]*).*)/\2/m,mapping/
+
+--regex-vim=/\*([A-Za-z0-9_\-]+)\*/\1/h,htag/
+--regex-vim=/^(COMMENT: not needed use augroup)\s*au[tocmd]*\s+[^\s]+\s+([A-Za-z0-9]+)/\1/d,autocmd/
+
 --langmap=c:+.jpp,c:+.uc
 --langmap=java:+.jpp,java:+.uc
 --langmap=javascript:+.jpp,javascript:+.uc
---regex-javascript=/^(Some of Javascript's default patterns match null on Unrealscript files.)/\1/X,XXX/
---regex-javascript=/^[ \t]*var ([a-zA-Z_$][0-9a-zA-Z_$]*).*$/\1/v,variable/
---regex-javascript=/^[ \t]*this\.([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]*=.*$/\1/e,export/
---regex-javascript=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*):.*$/\1/p,property/
+--regex-javascript=/^(COMMENT: Some of Javascript's default patterns match null on Unrealscript files.)/\1/X,XXX/
+--regex-javascript=/^\s*var ([a-zA-Z_$][0-9a-zA-Z_$]*).*$/\1/v,variable/
+--regex-javascript=/^\s*module\.exports\.([a-zA-Z_$][0-9a-zA-Z_$]*)\s*=.*$/\1/e,export/
+--regex-javascript=/^(BUG: If what is assigned is a function, a later function rule also catches it!  Should we ignore functions, or he ignore 'this'?  In Coffee, he ignores '@' but not 'this'.)/\1/X,XXX/
+--regex-javascript=/^\s*this\.([a-zA-Z_$][0-9a-zA-Z_$]*)\s*=.*$/\1/a,assigned/
+--regex-javascript=/^\s*([a-zA-Z_$][0-9a-zA-Z_$]*):.*$/\1/p,property/
 --regex-javascript=/^(COMMENT: ctags defaults ignore functions inside anonymous functions - the following catch them but can cause duplicates!)/\1/X,XXX/
---regex-javascript=/^\<function\>[ \t]*(\<[a-zA-Z_$][0-9a-zA-Z_$]*\>)/\1/f,function/
---regex-javascript=/^(\<[a-zA-Z_$][0-9a-zA-Z_$.]*\>)*[ \t]*=[ \t]*\<function\>/\1/f,function/
+--regex-javascript=/^\s*\<function\>\s*(\<[a-zA-Z_$][0-9a-zA-Z_$]*\>)/\1/f,function/
+--regex-javascript=/^(COMMENT: The following matches functions missed by default, those defined as A.B.f=...)/\1/X,XXX/
+--regex-javascript=/^\s*([a-zA-Z_$][0-9a-zA-Z_$]*\.[a-zA-Z_$][0-9a-zA-Z_$]*\.[a-zA-Z_$][0-9a-zA-Z_$.]*)*\s*=\s*\<function\>/\1/f,function/
+--regex-javascript=/^(COMMENT: It used to be:)/\1/X,XXX/
+--regex-javascript=/^(COMMENT: \s*(\<[a-zA-Z_$][0-9a-zA-Z_$.]*\>)*\s*=\s*\<function\>)/\1/f,function/
+
+--langdef=man
+--langmap=man:+.~,man:+.man
+--regex-man=/^(COMMENT: I can't seem to get the ~ extension to match.)/\1/s,section/
+--regex-man=/^([A-Z].*)/\1/s,section/
+
+--langdef=uc
+--langmap=uc:+.jpp,uc:+.uc
+--regex-uc=/^(This is not working, although it does if we put it in the JS rules and set ft=javascript!)/\1/X,XXX/
+--regex-uc=/\<state\>\s+([a-zA-Z_$][0-9a-zA-Z_$]*).*$/\1/s,state/
 
 --langdef=coffee
 --langmap=coffee:.coffee
 --regex-coffee=/^(COMMENT: some of the .*s in below functions are over-optimistic, picking up anonymous callbacks with the wrong =)/\1/X,XXX/
 --regex-coffee=/^class @?([a-zA-Z_$][0-9a-zA-Z_$]*)( extends [a-zA-Z_$][0-9a-zA-Z_$]*)?$/\1/c,class/
---regex-coffee=/^[ \t]*(@|this\.)([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]*=.*$/\2/e,export/
---regex-coffee=/^[ \t]*@?([a-zA-Z_$][0-9a-zA-Z_$]*):.*[-=]>.*$/\1/f,function/
---regex-coffee=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$.]*)[ \t]+=.*[-=]>.*$/\1/f,function/
---regex-coffee=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]+=[^->\n]*$/\1/v,variable/
---regex-coffee=/^[ \t]*@?([a-zA-Z_$][0-9a-zA-Z_$]*):.*$/\1/p,property/
+--regex-coffee=/^(COMMENT: The second case (this|@) is not an export when inside a method, it's just a property assignment. \s*(@|this\.)([a-zA-Z_$][0-9a-zA-Z_$]*)\s*=.*)$/\2/e,export/
+--regex-coffee=/^\s*(module\.exports\.)([a-zA-Z_$][0-9a-zA-Z_$]*)\s*=.*$/\2/e,export/
+--regex-coffee=/^\s*(@[.]*|this\.)([a-zA-Z_$][0-9a-zA-Z_$]*)\s*=.*$/\2/a,assigned/
+--regex-coffee=/^\s*([a-zA-Z_$][0-9a-zA-Z_$]*):[^:]/\1/p,property/
+--regex-coffee=/^\s*([a-zA-Z_$][0-9a-zA-Z_$]*):\s*[-=]>.*$/\1/f,function/
+--regex-coffee=/^\s*([a-zA-Z_$][0-9a-zA-Z_$.:]*)\s*=.*[-=]>.*$/\1/f,function/
+--regex-coffee=/^\s*([a-zA-Z_$][0-9a-zA-Z_$]*)\s*=[^->\n]*$/\1/v,variable/
 
 --langmap=Asm:+.spp
---regex-Asm=/^[^;]*\.macro[ \t]+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/m,macro/
---regex-Asm=/^[^;]*\.context[ \t]+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/c,context/
+--regex-Asm=/^[^;]*\.macro\s+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/m,macro/
+--regex-Asm=/^[^;]*\.context\s+([a-zA-Z_$][0-9a-zA-Z_$]*)/\1/c,context/
 --regex-Asm=/^([A-Za-z0-9_]+):/\1/l,label/
 
 --langdef=dosini
@@ -32,19 +54,19 @@
 
 --langdef=haxe
 --langmap=haxe:.hx
---regex-haxe=/^[ \t]*package[ \t]*([A-Za-z0-9_.]+)/\1/p,package/
---regex-haxe=/^[ \t]*[(@:macro|private|public|static|override|inline|dynamic)( \t)]*function[ \t]+([A-Za-z0-9_]+)/\1/f,function/
---regex-haxe=/^[ \t]*((private|public|static|protected|inline)[ \t]*)+var[ \t]+([A-Za-z0-9_]+)/\3/v,variable/
---regex-haxe=/^[ \t]*(extern[ \t]+)?class[ \t]+([A-Za-z0-9_]+)[ \t]*[^\{]*/\2/c,class/
---regex-haxe=/^[ \t]*(extern[ \t]+)?interface[ \t]+([A-Za-z0-9_]+)/\2/i,interface/
---regex-haxe=/^[ \t]*typedef[ \t]+([A-Za-z0-9_]+)/\1/d,typedef/
---regex-haxe=/^[ \t]*enum[ \t]+([A-Za-z0-9_]+)/\1/e,enum/
---regex-haxe=/^[ \t]+([A-Z][A-Za-z0-9_]+)(;|\([^)]*:[^)]*\))/\1/t,enum_field/
+--regex-haxe=/^\s*package\s*([A-Za-z0-9_.]+)/\1/p,package/
+--regex-haxe=/^\s*[(@:macro|private|public|static|override|inline|dynamic)( \t)]*function\s+([A-Za-z0-9_]+)/\1/f,function/
+--regex-haxe=/^\s*((private|public|static|protected|inline)\s*)+var\s+([A-Za-z0-9_]+)/\3/v,variable/
+--regex-haxe=/^\s*(extern\s+)?class\s+([A-Za-z0-9_]+)\s*[^\{]*/\2/c,class/
+--regex-haxe=/^\s*(extern\s+)?interface\s+([A-Za-z0-9_]+)/\2/i,interface/
+--regex-haxe=/^\s*typedef\s+([A-Za-z0-9_]+)/\1/d,typedef/
+--regex-haxe=/^\s*enum\s+([A-Za-z0-9_]+)/\1/e,enum/
+--regex-haxe=/^\s+([A-Z][A-Za-z0-9_]+)(;|\([^)]*:[^)]*\))/\1/t,enum_field/
 --regex-haxe=/^(WARNING: Our enum_field regexp can fire on e.g. Log("colon: yes");)/\1/t,enum_field/
 
 --langdef=joeygrammar
 --langmap=joeygrammar:.grm
---regex-joeygrammar=/^[ \t]*([A-Za-z0-9_$@]*)[ \t]*=/\1/r,rule/
+--regex-joeygrammar=/^\s*([A-Za-z0-9_$@]*)\s*=/\1/r,rule/
 
 --langdef=haskell
 --langmap=haskell:.hs
@@ -71,6 +93,21 @@
 --langdef=help
 --langmap=help:.txt
 --regex-help=/^([0-9]+\. [A-Z].*)\*$/\1/s,section/
---regex-help=/^([A-Z][A-Za-z0-9 ]*).*\*$/\1/h,heading/
+--regex-help=/^COMMENT: ([A-Z][A-Za-z0-9 ]*).*\*$/\1/h,heading/
+--regex-help=/^([A-Z][A-Za-z0-9 ]*)\s+\*/\1/h,heading/
 --regex-help=/[\*]([^* \t]+)[\*]$/\1/m,marker/
+
+--langdef=Scala
+--langmap=Scala:.scala
+--regex-Scala=/^\s*class\s*([a-zA-Z0-9_]+)/\1/c,class/
+--regex-Scala=/^\s*object\s*([a-zA-Z0-9_]+)/\1/o,object/
+--regex-Scala=/^\s*trait\s*([a-zA-Z0-9_]+)/\1/t,trait/
+--regex-Scala=/^\s*case\s*class\s*([a-zA-Z0-9_]+)/\1/r,cclass/
+--regex-Scala=/^\s*abstract\s*class\s*([a-zA-Z0-9_]+)/\1/a,aclass/
+--regex-Scala=/^\s*((private|override)\s+)*def\s*([a-zA-Z0-9_=]+)\s*.*[:=]/\1/m,method/
+--regex-Scala=/\s*val\s*([a-zA-Z0-9_]+)\s*[:=]/\1/V,value/
+--regex-Scala=/\s*var\s*([a-zA-Z0-9_]+)\s*[:=]/\1/v,variable/
+--regex-Scala=/^\s*type\s*([a-zA-Z0-9_]+)\s*[\[<>=]/\1/T,type/
+--regex-Scala=/^\s*import\s*([a-zA-Z0-9_{}., \t=>]+$)/\1/i,include/
+--regex-Scala=/^\s*package\s*([a-zA-Z0-9_.]+$)/\1/p,package/
 
