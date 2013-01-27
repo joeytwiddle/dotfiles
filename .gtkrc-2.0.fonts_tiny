@@ -1,24 +1,31 @@
-# If you want to use this config instead of the default, just do:
+## If you want to use this config for one particular app, just do:
 # GTK2_RC_FILES="$HOME/.gtkrc.fonts_tiny" <program>
-# Or symlink over "~/.gtkrc-2.0.fonts" so that "~/.gtkrc-2.0"
-# will load the theme and via "~/.gtkrc-2.0.mine" will also
-# load the desired font settings.
-
-# If we are doing that, we will bypass the user's selected theme, so we should
-# include it here.
+## In that case we need to specify the theme here also:
 include "/usr/share/themes/OrangeJuice/gtk-2.0/gtkrc"
+## and anything else interesting you have in your .gtkrc-2.0 or
+## .gtkrc-2.0.mine!
+
+## Alternatively, to use these fonts globally, symlink "~/.gtkrc-2.0.fonts"
+## to this file, which gets loaded on my system by the following chain:
+## .gtkrc-2.0:
+# include "/usr/share/themes/OrangeJuice/gtk-2.0/gtkrc"
+# include "/home/joey/linux/.gtkrc-2.0.mine"
+## .gtkrc-2.0.mine:
+# include "/home/joey/linux/.gtkrc-2.0.fonts"
 
 ## font_for_reading
+## (Eclipse uses this in tree views: explorer, preferences tree)
 style "general"
 {
-	font_name="FreeSans 7"
+	font_name="Sans 7"
 }
-gtk-font-name="FreeSans 7"
+gtk-font-name="Sans 7"
 # Some alternatives: FreeSans 7 (small but fuzzy), FreeSans 8, Sans 7, Arial 7 Bold
 # Arial 7 looks a little scratchy, Arial Bold 7 is just a tiny bit better.
 # I don't know why I was using Arial 7 before - that's messy on hwi.
 
 ## font_for semi-interaction semi-reading
+## (Eclipse uses this in dialog text and some dialog buttons)
 style "readable"
 {
 	font_name="FreeSans 8"
@@ -26,6 +33,7 @@ style "readable"
 }
 
 ## font_for_interaction
+## (Eclipse uses this for menus)
 style "clickable"
 {
 	# font_name="FreeSans 8"
@@ -34,10 +42,11 @@ style "clickable"
 
 style "fixed"
 {
-  # font="-b&h-lucidux mono-medium-r-normal-*-12-*-*-*-m-*-iso8859-1"
-  # font="-*-lucidatypewriter-medium-*-*-*-*-90-*-*-*-*-*-*"
-  # font="Monospace 8"
-  font="-urw-nimbus mono l-regular-r-normal-*-*-90-*-*-p-*-iso8859-2"
+	# font="-b&h-lucidux mono-medium-r-normal-*-12-*-*-*-m-*-iso8859-1"
+	# font="-*-lucidatypewriter-medium-*-*-*-*-90-*-*-*-*-*-*"
+	# font="Monospace 8"
+	# font="-urw-nimbus mono l-regular-r-normal-*-*-90-*-*-p-*-iso8859-2"
+	font_name="Sans 8"
 }
 
 ## For Eclipse, I really only want the explorer and output info windows to be tiny.
