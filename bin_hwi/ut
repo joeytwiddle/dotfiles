@@ -1,9 +1,12 @@
 #!/bin/bash
 
-processToCycle="kicker gkrellm xscreensaver" # xscreensaver for other desktops ^^
-processToRenice="xchat xterm zsh"
+procsToCycle="kicker gkrellm xscreensaver" # xscreensaver for other desktops ^^
+procsToRenice="xchat xterm zsh"
+procsToPause="vim vi gvim chrome firefox firefox-bin swiftfox-bin iceweasel-bin plugin-container icedove-bin thunderbird-bin konqueror mandelbulber amarokapp onchange jwatch maxima wxmaxima soffice.bin mencoder transcode" # ktorrent
+# xmms skype 
+maxAttempts=1
 
-## This blacklist is stupid.  We need to pause everything owned by the user (or users) except for a few we keep running.
+## These blacklists are stupid.  We need to pause everything owned by the user (or users) except for a few we keep running.
 
 ## I really want to pause vim and vi but this spawns a new bug:
 ##
@@ -17,20 +20,17 @@ processToRenice="xchat xterm zsh"
 ## But I still fear sometimes vims in a particular state may impact framerate and even server switch time!
 ## It may be when FileExplorer or ConqueTerm is open, or other situations ... !
 
-processToPause="vim vi gvim chrome firefox firefox-bin swiftfox-bin iceweasel-bin plugin-container icedove-bin thunderbird-bin konqueror mandelbulber ktorrent amarokapp onchange jwatch maxima wxmaxima skype soffice.bin"
-# xmms 
-
-for p in $processToRenice
+for p in $procsToRenice
 do myrenice -n 10 "$p" | sh
 done
 
-for p in $processToPause
-do killall -STOP "$p"
-done
+killall -STOP $procsToPause
 
-for p in $processToCycle
+for p in $procsToCycle
 do killall "$p" && eval "cycled_$p=true"
 done
+
+wmctrl_store_positions
 
 sudo killall joeys_amazing_fuck_this_sensors_cpufreq_daemon
 
@@ -103,7 +103,8 @@ do
 	echo "Precached $DEPNAME"
 	:
 done |
-osd_cat
+# osd_cat
+cat >/dev/null
 
 shopt -u nocaseglob
 
@@ -122,6 +123,10 @@ shopt -u nocaseglob
 touch /tmp/disable_osd_show   ## For osd_show
 
 xgamma -gamma 2.5
+
+killall fluxbox
+sleep 1
+killall -KILL fluxbox
 
 
 
@@ -149,7 +154,22 @@ sudo cpufreq-set -d 2G -u 2G
 sleep 1
 # Added aoss here but that just made it segfaults rather than give no sound, when xmms has audio device open.
 # Taskset sets a mask of which cores to use; only number 2.
-taskset -p 0x02 /usr/local/install/games/ut/ut cpufreq=2000 "$@"
+
+## Nasty: It doesn't always start on my sys, so I attempt it 9 times :f
+timeThen=`date +"%s"`
+for attempt in `seq 1 $maxAttempts`
+do
+
+	taskset -p 0x02 /usr/local/install/games/ut/ut pktlag=12 cpufreq=2000 "$@"
+
+	timeNow=`date +"%s"`
+	if [ "$timeNow" -gt $((timeThen+10)) ]
+	then break
+	fi
+	timeThen=`date +"%s"`
+
+done
+
 sudo cpufreq-set -d 1G -u 2.0G
 
 
@@ -160,33 +180,41 @@ rm -f /tmp/disable_osd_show
 
 # xrandr -s 1280x1024
 
-sudo su /root/bin/joeys_amazing_fuck_this_sensors_cpufreq_daemon &
+sudo /root/bin/joeys_amazing_fuck_this_sensors_cpufreq_daemon &
 
-for p in $processToCycle
+sleep 1
+## fluxbox acts like a stupid bitch if it is backgrounded.
+xterm -e fluxbox &
+sleep 3
+wmctrl_restore_positions
+
+killall -CONT $procsToPause
+
+for p in $procsToRenice
+do myrenice -n 0 "$p"
+done | sudo sh
+
+for p in $procsToCycle
 do
 	eval "cyc=\$cycled_$p"
 	# If we have been asked to start a process, but we are on X server 1, do it on X server 0 instead.
 	# Do this for all apps, not just [ "$p" = kicker ] && 
 	if [ "$cyc" = true ]
 	then
+		args=""
+		if [ "$p" = xscreensaver ]
+		then args="-no-splash"
+		fi
 		if [ "$DISPLAY" = ":1" ]
 		then
-			verbosely env DISPLAY=:0.0 "$p" &
+			verbosely env DISPLAY=:0.0 "$p" $args &
 			if [ "$p" = "kicker" ]
-			then verbosely "$p" &
+			then verbosely "$p" $args &
 			fi
-		else verbosely "$p" &
+		else verbosely "$p" $args &
 		fi
 	fi
 done
-
-for p in $processToPause
-do killall -CONT "$p"
-done
-
-for p in $processToRenice
-do myrenice -n 0 "$p"
-done | sudo sh
 
 
 
