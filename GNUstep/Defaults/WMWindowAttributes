@@ -1,17 +1,13 @@
 {
-  tool_options.Gimp = {
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-tooloption.tif";
+  firefox.Firefox = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/firefox.Firefox.xpm";
   };
   gkrellm.Gkrellm = {
     Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gkrellm.Gkrellm.xpm";
   };
   SDL_App.SDL_App = {
-    NoResizebar = Yes;
     NoTitlebar = Yes;
-  };
-  VCLSalFrame.VCLSalFrame = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/VCLSalFrame.VCLSalFrame.xpm";
+    NoResizebar = Yes;
   };
   wmmixer.WMMixer = {
     Icon = GNUstepGlow.tiff;
@@ -19,256 +15,266 @@
   konsole.konsole = {
     Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/konsole.konsole.xpm";
   };
-  "gnome-panel.Gnome-panel" = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gnome-panel.Gnome-panel.xpm";
+  startupdialog.opera = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/startupdialog.opera.xpm";
   };
-  "wnck-applet.Wnck-applet" = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/wnck-applet.Wnck-applet.xpm";
-  };
-  "firefox-bin.Firefox-bin" = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/firefox-bin.Firefox-bin.xpm";
-  };
-  "x-terminal-emulator.X-terminal-emulator" = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/x-terminal-emulator.X-terminal-emulator.xpm";
-  };
-  evolution.Evolution = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/evolution.Evolution.xpm";
-  };
-  xterm.XTerm = {
-    Icon = GNUterm.tiff;
-  };
-  ktron.ktron = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/ktron.ktron.xpm";
-  };
-  image_window.Gimp = {
+  color_palette.Gimp = {
     AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-work.tif";
+    NoResizebar = Yes;
+    Icon = "wmaker-gimp-palette.tif";
   };
-  "Mozilla-bin" = {
-    Icon = "wmaker-nav.tif";
+  "gecko.Firefox-bin" = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gecko.Firefox-bin.xpm";
   };
-  asmix.asMix = {
-    Icon = BitchX.xpm;
+  ktorrent.Ktorrent = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/ktorrent.Ktorrent.xpm";
   };
-  Eclipse.TopLevelShell = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/Eclipse.TopLevelShell.xpm";
+  XMMS_Player.xmms = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/XMMS_Player.xmms.xpm";
   };
-  kaddressbook.Kaddressbook = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/kaddressbook.Kaddressbook.xpm";
+  xdvi.XDvi = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/xdvi.XDvi.xpm";
   };
   KTerm = {
     Icon = GNUterm.tiff;
   };
-  Logo.WMPanel = {
-    Icon = GNUstep.tiff;
+  Netscape = {
+    Icon = "wmaker-netscape.tif";
   };
-  ksysguard.Ksysguard = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/ksysguard.Ksysguard.xpm";
+  "firefox-bin.Firefox-bin" = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/firefox-bin.Firefox-bin.xpm";
   };
-  color_palette.Gimp = {
-    NoResizebar = Yes;
+  tool_options.Gimp = {
     AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-palette.tif";
-  };
-  tip_of_the_day.Gimp = {
-    NoResizebar = Yes;
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp2.tif";
-    KeepOnTop = Yes;
-    NoCloseButton = Yes;
-    NoMiniaturizeButton = Yes;
-  };
-  Dockit = {
-    Icon = GNUstep.tiff;
-  };
-  "gimp-2.2.Gimp-2.2" = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gimp-2.2.Gimp-2.2.xpm";
-  };
-  kwrite.kwrite = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/kwrite.kwrite.xpm";
-  };
-  brushselection.Gimp = {
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-brushes.tif";
+    Icon = "wmaker-gimp-tooloption.tif";
   };
   "gnome-control-center.Gnome-control-center" = {
     Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gnome-control-center.Gnome-control-center.xpm";
   };
-  gimp_startup.Gimp = {
-    NoResizebar = Yes;
-    AlwaysUserIcon = Yes;
-    NotMiniaturizable = Yes;
-    NotClosable = Yes;
-    Icon = "wmaker-gimp2.tif";
-    NoTitlebar = Yes;
-  };
-  WPrefs = {
-    Icon = "/usr/lib/GNUstep/Apps/WPrefs.app/WPrefs.tiff";
-  };
-  Tile.WMClip = {
-    Icon = clip.tiff;
-  };
-  "VCLSalFrame.DocumentWindow.OpenOffice.org 2.4" = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/VCLSalFrame.DocumentWindow.OpenOffice.org 2.4.xpm";
-  };
-  kicker.Kicker = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/kicker.Kicker.xpm";
-  };
-  XTerm = {
+  xterm.XTerm = {
     Icon = GNUterm.tiff;
-  };
-  kmail.kmail = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/kmail.kmail.xpm";
-  };
-  kio_uiserver.kio_uiserver = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/kio_uiserver.kio_uiserver.xpm";
-  };
-  groupLeader.WPrefs = {
-    Icon = WPrefs.xpm;
-  };
-  Rxvt = {
-    Icon = GNUterm.tiff;
-  };
-  gmc = {
-    NoAppIcon = Yes;
-    SkipWindowList = Yes;
-    Omnipresent = Yes;
-  };
-  layers_and_channels.Gimp = {
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-layers.tif";
   };
   opera.opera = {
     Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/opera.opera.xpm";
   };
-  startupdialog.opera = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/startupdialog.opera.xpm";
+  kmail.kmail = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/kmail.kmail.xpm";
   };
-  "script-fu.Script-fu" = {
-    Icon = "wmaker-gimp-script-fu.tif";
+  ksame.ksame = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/ksame.ksame.xpm";
   };
-  AWTapp.VendorShell = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/AWTapp.VendorShell.xpm";
+  emacs = {
+    Icon = "wmaker-emacs.tif";
+  };
+  WPrefs = {
+    Icon = "/usr/lib/GNUstep/Apps/WPrefs.app/WPrefs.tiff";
+  };
+  kget.Kget = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/kget.Kget.xpm";
+  };
+  "chromium-browser.real.Chromium-browser.real" = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/chromium-browser.real.Chromium-browser.real.xpm";
   };
   toolbox.Gimp = {
     NoAppIcon = Yes;
     Icon = "wmaker-gimp2.tif";
   };
-  amarokapp.Amarokapp = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/amarokapp.Amarokapp.xpm";
+  xchat.Xchat = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/xchat.Xchat.xpm";
   };
-  panel = {
-    NoAppIcon = Yes;
-  };
-  "<unknown>.<unknown>" = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/<unknown>.<unknown>.xpm";
-  };
-  "gnome-terminal.Gnome-terminal" = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gnome-terminal.Gnome-terminal.xpm";
-  };
-  emacs = {
-    Icon = "wmaker-emacs.tif";
-  };
-  "*" = {
-    Icon = defaultAppIcon.tiff;
-  };
-  ksame.ksame = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/ksame.ksame.xpm";
-  };
-  Logo.WMClip = {
-    Icon = clip.tiff;
-  };
-  "Eterm 0.9.5.Eterm" = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/Eterm 0.9.5.Eterm.xpm";
-  };
-  nedit.NEdit = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/nedit.NEdit.xpm";
-  };
-  synaptic.Synaptic = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/synaptic.Synaptic.xpm";
+  gqview.Gqview = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gqview.Gqview.xpm";
   };
   WMSoundServer = {
     Icon = Sound.tiff;
   };
-  ymessenger.bin.Ymessenger.bin = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/ymessenger.bin.Ymessenger.bin.xpm";
+  Dockit = {
+    Icon = GNUstep.tiff;
   };
-  gqview.Gqview = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gqview.Gqview.xpm";
+  ktron.ktron = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/ktron.ktron.xpm";
+  };
+  evolution.Evolution = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/evolution.Evolution.xpm";
+  };
+  "Eterm 0.9.5.Eterm" = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/Eterm 0.9.5.Eterm.xpm";
+  };
+  groupLeader.WPrefs = {
+    Icon = WPrefs.xpm;
+  };
+  "x-terminal-emulator.X-terminal-emulator" = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/x-terminal-emulator.X-terminal-emulator.xpm";
+  };
+  konqueror.konqueror = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/konqueror.konqueror.xpm";
   };
   patternselection.Gimp = {
     AlwaysUserIcon = Yes;
     Icon = "wmaker-gimp-patterns.tif";
   };
+  image_window.Gimp = {
+    AlwaysUserIcon = Yes;
+    Icon = "wmaker-gimp-work.tif";
+  };
+  gnomeicu.Gnomeicu = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gnomeicu.Gnomeicu.xpm";
+  };
+  kwrite.kwrite = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/kwrite.kwrite.xpm";
+  };
+  Rxvt = {
+    Icon = GNUterm.tiff;
+  };
+  gv.GV = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gv.GV.xpm";
+  };
+  "Script-fu" = {
+    Icon = "wmaker-gimp-script-fu.tif";
+  };
+  gmc = {
+    SkipWindowList = Yes;
+    NoAppIcon = Yes;
+    Omnipresent = Yes;
+  };
+  "wnck-applet.Wnck-applet" = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/wnck-applet.Wnck-applet.xpm";
+  };
+  kio_uiserver.kio_uiserver = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/kio_uiserver.kio_uiserver.xpm";
+  };
+  vim.Vim = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/vim.Vim.xpm";
+  };
+  Tile.WMClip = {
+    Icon = clip.tiff;
+  };
+  "Mozilla-bin" = {
+    Icon = "wmaker-nav.tif";
+  };
+  AWTapp.VendorShell = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/AWTapp.VendorShell.xpm";
+  };
+  gvim.Gvim = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gvim.Gvim.xpm";
+  };
+  "gnome-panel.Gnome-panel" = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gnome-panel.Gnome-panel.xpm";
+  };
+  "*" = {
+    Icon = defaultAppIcon.tiff;
+  };
+  "gnome-terminal.Gnome-terminal" = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gnome-terminal.Gnome-terminal.xpm";
+  };
+  Logo.WMClip = {
+    Icon = clip.tiff;
+  };
   preferences.Gimp = {
     AlwaysUserIcon = Yes;
     Icon = "wmaker-gimp-prefs.tif";
   };
-  XMMS_Player.xmms = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/XMMS_Player.xmms.xpm";
+  tip_of_the_day.Gimp = {
+    NoMiniaturizeButton = Yes;
+    AlwaysUserIcon = Yes;
+    NoResizebar = Yes;
+    Icon = "wmaker-gimp2.tif";
+    KeepOnTop = Yes;
+    NoCloseButton = Yes;
   };
-  gv.GV = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gv.GV.xpm";
+  "VCLSalFrame.DocumentWindow.OpenOffice.org 2.4" = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/VCLSalFrame.DocumentWindow.OpenOffice.org 2.4.xpm";
+  };
+  "gnome-help.Gnome-help" = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gnome-help.Gnome-help.xpm";
+  };
+  indexed_color_palette.Gimp = {
+    AlwaysUserIcon = Yes;
+    NoResizebar = Yes;
+    Icon = "wmaker-gimp-palette.tif";
+  };
+  wine.Wine = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/wine.Wine.xpm";
+  };
+  "script-fu.Script-fu" = {
+    Icon = "wmaker-gimp-script-fu.tif";
+  };
+  panel = {
+    NoAppIcon = Yes;
+  };
+  layers_and_channels.Gimp = {
+    AlwaysUserIcon = Yes;
+    Icon = "wmaker-gimp-layers.tif";
+  };
+  kicker.Kicker = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/kicker.Kicker.xpm";
+  };
+  kaddressbook.Kaddressbook = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/kaddressbook.Kaddressbook.xpm";
+  };
+  brushselection.Gimp = {
+    AlwaysUserIcon = Yes;
+    Icon = "wmaker-gimp-brushes.tif";
+  };
+  "gimp-2.2.Gimp-2.2" = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gimp-2.2.Gimp-2.2.xpm";
   };
   gradient_editor.Gimp = {
     AlwaysUserIcon = Yes;
     Icon = "wmaker-gimp-gradient.tif";
   };
-  wine.Wine = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/wine.Wine.xpm";
+  gimp_startup.Gimp = {
+    NotClosable = Yes;
+    NoTitlebar = Yes;
+    NotMiniaturizable = Yes;
+    AlwaysUserIcon = Yes;
+    NoResizebar = Yes;
+    Icon = "wmaker-gimp2.tif";
   };
-  "gnome-help.Gnome-help" = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gnome-help.Gnome-help.xpm";
+  ksysguard.Ksysguard = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/ksysguard.Ksysguard.xpm";
   };
-  "Script-fu" = {
-    Icon = "wmaker-gimp-script-fu.tif";
+  VCLSalFrame.VCLSalFrame = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/VCLSalFrame.VCLSalFrame.xpm";
   };
-  Netscape = {
-    Icon = "wmaker-netscape.tif";
+  Eclipse.TopLevelShell = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/Eclipse.TopLevelShell.xpm";
+  };
+  synaptic.Synaptic = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/synaptic.Synaptic.xpm";
   };
   NXTerm = {
     Icon = GNUterm.tiff;
   };
-  xchat.Xchat = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/xchat.Xchat.xpm";
+  "<unknown>.<unknown>" = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/<unknown>.<unknown>.xpm";
   };
-  kget.Kget = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/kget.Kget.xpm";
+  vmware.Vmware = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/vmware.Vmware.xpm";
   };
-  "gecko.Firefox-bin" = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gecko.Firefox-bin.xpm";
+  Logo.WMPanel = {
+    Icon = GNUstep.tiff;
+  };
+  asmix.asMix = {
+    Icon = BitchX.xpm;
+  };
+  XTerm = {
+    Icon = GNUterm.tiff;
   };
   Logo.WMDock = {
     Icon = GNUstep.tiff;
-  };
-  konqueror.konqueror = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/konqueror.konqueror.xpm";
-  };
-  gnomeicu.Gnomeicu = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gnomeicu.Gnomeicu.xpm";
-  };
-  "chromium-browser.real.Chromium-browser.real" = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/chromium-browser.real.Chromium-browser.real.xpm";
-  };
-  indexed_color_palette.Gimp = {
-    NoResizebar = Yes;
-    AlwaysUserIcon = Yes;
-    Icon = "wmaker-gimp-palette.tif";
-  };
-  ktorrent.Ktorrent = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/ktorrent.Ktorrent.xpm";
   };
   Gimp = {
     AlwaysUserIcon = Yes;
     Icon = "wmaker-gimp2.tif";
   };
-  gvim.Gvim = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/gvim.Gvim.xpm";
+  amarokapp.Amarokapp = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/amarokapp.Amarokapp.xpm";
   };
-  vmware.Vmware = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/vmware.Vmware.xpm";
+  nedit.NEdit = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/nedit.NEdit.xpm";
   };
-  xdvi.XDvi = {
-    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/xdvi.XDvi.xpm";
+  ymessenger.bin.Ymessenger.bin = {
+    Icon = "/home/joey/linux/GNUstep/Library/WindowMaker/CachedPixmaps/ymessenger.bin.Ymessenger.bin.xpm";
   };
 }
