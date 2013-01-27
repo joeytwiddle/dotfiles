@@ -9,10 +9,20 @@ function! s:ShowTagDecl()
   redir => output
   silent! exec "tselect ".expand("<cword>")
   redir END
+  let fname = '???'
   for line in split(output, "\n")
-    if match(line, '^        ') != -1
-      redraw | echo line
+    " None of the lines contains a line number
+    "echo line
+    if match(line,'^        ') != -1
+      redraw
+      let prototype = substitute(line,'^ *','','')
+      "echo fname.": ".prototype
+      echo prototype."   [".fname."]"
       return 0
+    else
+      let bits = split(line,' ')
+      let lastbit = bits[len(bits)-1]
+      let fname = lastbit
     endif
   endfor
 endfunction
