@@ -1,7 +1,13 @@
 # nodePath=/usr/local/node-v0.4.8
-nodePath=/usr/local/node-v0.6.2
+# nodePath=/usr/local/node-v0.6.2
+nodePath=/usr/local/node
+
+# For pure node (not this script!), if you want to use a specific module set:
+#   export NODE_PATH=/usr/local/lib/node_modules
+# Then you can require('coffee-script') or whatever.
 
 modulesBin="$HOME/node_modules/.bin"
+# modulesBin="$nodePath/bin"
 me="`basename "$0"`"
 if [ -x "$nodePath/bin/$me" ]
 then "$nodePath/bin/$me" "$@"
