@@ -37,7 +37,7 @@ TERM Eterm
 # Background color codes:
 # 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
 NORMAL 00       # global default, although everything should be something.
-FILE 01;34      # normal file unclassed below (blue)
+FILE 01;34      # Unknown/unclassed/unclassified file (blue) - everything we recognise is colored below
 DIR 00;32       # directory (green)
 LINK 01;32      # symbolic link (green)
 FIFO 40;33      # pipe
@@ -170,6 +170,7 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .gl 01;37
 .dl 01;37
 
+## How odd.  } in vim usually skips a paragraph, but here for me it stops on .ppt, and again later on .sh!
 # yellow
 # Documents (human readable) (and editing)
 .diff 01;33
@@ -275,6 +276,13 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .wxm 01;36 # Maxima
 .mc 01;36 # Maxima loadable
 .tm 01;36 # Maxima dump
+## Haxe:
+.hx 01;36 # Haxe source
+.hxp 01;36 # Haxe project
+.hxp 01;36 # Haxe project
+.hxml 01;36 # Haxe build-file?
+## More languages:
+.lua 01;36
 
 # Config files
 .config 01;36
@@ -311,13 +319,19 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 # Don't work:
 #*tmp* 01;31
 
+# bright white Compiled files (I don't have a color for these!)
+.o 01;37
+.so 01;37
+.swf 01;37
+
 # white
-# Redundant files
+# Redundant files: including old files, backups, tempfiles/swapfiles, and files
+# from legacy (DOS/Windows) or non-native (Amiga/Mac/Mobile) systems.
 *tmp 00;37
 *core 00;37
 *~ 00;37
-*.ini 00;37
-## TODO: consider undeprecating legacy OS files
+*.ini 00;37 # could go to data
+## TODO: consider undeprecating legacy OS files?
 *.bat 00;37
 *.com 00;37
 *.exe 00;37
