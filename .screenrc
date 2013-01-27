@@ -54,8 +54,12 @@ bindkey -k kI copy
 ## Ctrl+X opens a new window
 # bindkey "^x" screen
 
-## Ctrl+N opens a new window
-bindkey "^n" screen
+## Ctrl+N opens a new window.  Disabled now - saved for vim.
+# bindkey "^n" screen
+## For some reason (probably Vim) my fingers kept doing this instead of ^c (the default), so I added it.
+## But be careful, my old settings had ^kc close the window!
+bindkey "^kc" screen
+bindkey "^kn" screen
 ## Trying to split and open new window:
 # bindkey "^v" stuff "^kS^kc"
 
@@ -126,11 +130,13 @@ bindkey "^n" screen
 
 ## Split windows (default ^kS):
 # bindkey "^kS" split
+bindkey "^ks" split
 
 ## Unsplit windows:
 # bindkey "^kU" only
 bindkey "^kU" remove
-bindkey "^kc" remove
+bindkey "^ku" remove
+# bindkey "^kc" remove
 
 ## Switch through windows.
 ## screen only allows this in one direction, but I expect two directions, so I
@@ -139,6 +145,7 @@ bindkey "^kc" remove
 ## Ctrl-K j to switch through splits
 bindkey "^kj" focus
 bindkey "^kk" focus
+bindkey "^k^k" focus
 ## Ctrl-Up/Down to switch through splits
 #bindkey "[1;5B" focus
 #bindkey "[1;5A" focus
