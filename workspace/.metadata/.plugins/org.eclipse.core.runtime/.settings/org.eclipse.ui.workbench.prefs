@@ -37,3 +37,4 @@ JoeysJava6_persp=<?xml version\="1.0" encoding\="UTF-8"?>\n<perspective editorAr
 org.eclipse.ui.workbench.VIEW_MESSAGE_TEXT_FONT=1|Sans|12|0|GTK|1|;
 PLUGINS_NOT_ACTIVATED_ON_STARTUP=
 org.eclipse.jface.headerfont=1|Sans|10.0|0|GTK|1|;
+
