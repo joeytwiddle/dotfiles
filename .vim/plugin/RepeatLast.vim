@@ -127,6 +127,16 @@
 
 " == Bugs and TODOs ==
 "
+" TODO: Change the timing of RepeatLast_TriggerCursorHold according to the
+"       recent typing speed of the user, so we can trigger it slowly when we
+"       are confident the user won't interrupt it.  Or better, don't set a
+"       longer updatetime, do a longer sleep (yes may cause freeze, but won't
+"       lose any keystrokes).
+"
+" TODO: \| \? \. etc. should probably warn us if RepeatLast is disabled!
+"
+" TODO: Commands are kinda useless.  Make them optional or remove them!
+"
 " TODO: Even using large ch and with RepeatLast_TriggerCursorHold disabled,
 "       warning messages such as "search hit BOTTOM" are hidden.  At least
 "       offer a sleep *option* so we can see these.  Or ... echo "hidden" at
@@ -141,7 +151,7 @@
 " TODO: RepeatLast_Stop_Ignoring_On_Edit might not need to pre-clear the
 " macro, if we detect it InsertEnter instead of InsertLeave, although that
 " might lose the command that started the insert.  :P
-
+"
 " TODO: It would be convenient to add:
 "
 "   3\X     Delete the 3rd old action from history
@@ -855,6 +865,11 @@ endfunction
 
 function! s:ReRepeat(num)
 
+  if !exists("g:RepeatLast_LastAction")
+    echoerr 'No last action available!  Need \. before \\.'
+    return
+  endif
+
   let numWanted = a:num
   if numWanted == 0
     let numWanted = 1   " default
@@ -995,7 +1010,10 @@ function! s:MyEscape(str)
   while i < len(a:str)
     let char = a:str[i]
     let ascnr = char2nr(char)
+
+    " We will try to find a nice string to represent the char here
     let next = ""
+    let swallowed = 1     " Assume we advance one char.  Adjust below if neccessary.
 
     if ascnr == 9
       let next = "<Tab>"
@@ -1003,7 +1021,8 @@ function! s:MyEscape(str)
       let next = "<Enter>"
     elseif ascnr == 27
       let next = "<Esc>"
-    elseif ascnr == 32
+    " We only symbolise ' ' if at the start or end.
+    elseif ascnr == 32 && ( i==0 || i==len(a:str)-1 )
       let next = "<Space>"
     elseif ascnr == 127
       let next = "<Del>"
@@ -1013,48 +1032,46 @@ function! s:MyEscape(str)
       let next = char
     elseif ascnr >= 1 && ascnr <= 26
       let next = "<Ctrl-" . nr2char(65 + ascnr - 1) . ">"
-    else
-      let nextTwo = a:str[i+1:i+2]
-      if nextTwo == "ku"
-        let next = "<Up>"
-        let i += 2
-      elseif nextTwo == "kd"
-        let next = "<Down>"
-        let i += 2
-      elseif nextTwo == "kP"
-        let next = "<PageUp>"
-        let i += 2
-      elseif nextTwo == "kN"
-        let next = "<PageDown>"
-        let i += 2
-      elseif nextTwo == "kI"
-        let next = "<Insert>"
-        let i += 2
-      elseif nextTwo == "kD"
-        let next = "<Delete>"
-        let i += 2
-      elseif nextTwo == "kh"
-        let next = "<Home>"
-        let i += 2
-      elseif nextTwo == "@7"
-        let next = "<End>"
-        let i += 2
-      elseif nextTwo == "kb"
-        let next = "<Backspace>"
-        let i += 2
+    elseif ascnr == 128
+      " <128> sometimes indicates a special key
+      " Grab the next two chars if we can (i already advanced)
+      if i+2 < len(a:str)
+        let nextTwo = a:str[i+1 : i+2]
+        let swallowed += 2   " Assume we will consume them
+        if nextTwo == "ku"
+          let next = "<Up>"
+        elseif nextTwo == "kd"
+          let next = "<Down>"
+        elseif nextTwo == "kP"
+          let next = "<PageUp>"
+        elseif nextTwo == "kN"
+          let next = "<PageDown>"
+        elseif nextTwo == "kI"
+          let next = "<Insert>"
+        elseif nextTwo == "kD"
+          let next = "<Delete>"
+        elseif nextTwo == "kh"
+          let next = "<Home>"
+        elseif nextTwo == "@7"
+          let next = "<End>"
+        elseif nextTwo == "kb"
+          let next = "<Backspace>"
+        else
+          let swallowed -= 2   " We didn't consume them!
+        endif
       endif
     endif
 
+    " If we didn't find any way to display the char
     if next == ""
       let next = '<' . char2nr(char) . '>'
     endif
 
     let out = out . next
-    let i = i+1
+    let i += swallowed
   endwhile
   return out
 endfunction
-" <128>kb<Enter> Backspace
 " <128>k9<Enter> F9
 " <128>k;<Enter> F10
 " <128>F1<Enter> F11
