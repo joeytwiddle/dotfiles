@@ -38,8 +38,9 @@
 --regex-coffee=/^(COMMENT: The second case (this|@) is not an export when inside a method, it's just a property assignment. \s*(@|this\.)([a-zA-Z_$][0-9a-zA-Z_$]*)\s*=.*)$/\2/e,export/
 --regex-coffee=/^\s*(module\.exports\.)([a-zA-Z_$][0-9a-zA-Z_$]*)\s*=.*$/\2/e,export/
 --regex-coffee=/^\s*(@[.]*|this\.)([a-zA-Z_$][0-9a-zA-Z_$]*)\s*=.*$/\2/a,assigned/
+--regex-coffee=/^(COMMENT: If you have property enabled, you don't want the next rule)/\1/X,XXX/
 --regex-coffee=/^\s*([a-zA-Z_$][0-9a-zA-Z_$]*):[^:]/\1/p,property/
---regex-coffee=/^\s*([a-zA-Z_$][0-9a-zA-Z_$]*):\s*[-=]>.*$/\1/f,function/
+--regex-coffee=/^DISABLED: \s*([a-zA-Z_$][0-9a-zA-Z_$]*):\s*[-=]>.*$/\1/f,function/
 --regex-coffee=/^\s*([a-zA-Z_$][0-9a-zA-Z_$.:]*)\s*=.*[-=]>.*$/\1/f,function/
 --regex-coffee=/^\s*([a-zA-Z_$][0-9a-zA-Z_$]*)\s*=[^->\n]*$/\1/v,variable/
 
