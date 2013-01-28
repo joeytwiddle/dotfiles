@@ -1,3 +1,5 @@
+## TODO: Merge with .my_x_settings
+
 ## Apply changes and test with:
 ##   cat .Xresources | grep -v "^#" | xrdb -merge
 ## For testing BD/UL: man xrdb ; top n 3
