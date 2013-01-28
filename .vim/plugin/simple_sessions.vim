@@ -1,15 +1,26 @@
+" simple_sessions - Auto-save sessions on exit, and simple session loader.
+"
+" The loader uses NetRW for selection manager.
+"
+" When loading a session, ONLY the buffer/argument list and the working
+" directory are changed.  The session vim script is NOT sourced.  (This avoids
+" problems with broken plugin windows when sourcing a vim session.)
+"
+" Existing buffers remain open, so you may union multiple sessions.
 
+" Will automatically save the current session whenever you quit vim.
 if !exists("g:simple_sessions_autosave")
 	let g:simple_sessions_autosave = 1
 endif
 
+" The folder which sessions are stored in.
 if !exists("g:simple_sessions_folder")
 	let g:simple_sessions_folder = $HOME . "/.vim/sessions"
 endif
 
 :command! Sopen :call s:OpenSessionViewer()
 
-au VimLeavePre * call s:OnQuit()
+au VimLeavePre * call s:OnQuitSaveSession()
 
 function! s:OpenSessionViewer()
 	let s:old_cmdheight = &ch
@@ -19,7 +30,13 @@ function! s:OpenSessionViewer()
 	let g:netrw_sort_direction = "r"
 	" Open netrw:
 	edit ~/.vim/sessions/
+
+	" TODO: Might be nice to disable moving to a different folder.
+
+	" Make it disappear when we leave it.
+	" BUG: Doesn't happen when LoadFocusedSession() runs but does happen if we visit it and leave it by hand.
 	set bufhidden=wipe
+	" We could also set nobuflisted to hide it from BufExplorers.
 
 	" Now setup some handy stuff on the window
 
@@ -32,10 +49,11 @@ function! s:OpenSessionViewer()
 
 endfunction
 
-function! s:OnQuit()
+function! s:OnQuitSaveSession()
 	if g:simple_sessions_autosave
-		" let sessionName = split($PWD,'/')[-1]
-		let sessionName = join(split($PWD,'/')[-2:],'-')
+		"let sessionName = split($PWD,'/')[-1]
+		" The session name is made from the last TWO parts of the cwd path.
+		let sessionName = join(split($PWD,'/')[-2:],'#')
 		" TODO: If there is only one (real) buffer open, use his filename instead of $PWD.
 		" Tried '#' as a delimeter but it got expanded to "-MiniBufExplorer-" :f
 		let sessionFile = g:simple_sessions_folder."/".sessionName.".vim"
