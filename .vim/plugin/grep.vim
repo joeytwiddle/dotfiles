@@ -368,6 +368,8 @@ function! s:RunGrepCmd(cmd, pattern)
     if g:Grep_OpenQuickfixWindow == 1
         " Open the quickfix window below the current window
         botright copen
+        " Hide it from Buffer Explorer plugins
+        setlocal nobuflisted
         " We could help size it a bit
         let targetHeight = line('$') + 1
         if targetHeight > 20
