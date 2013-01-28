@@ -126,14 +126,20 @@ function! Joeysyntax()
 	"" onto a second and loses its color.
 
 	"" Instead, a blacklist approach: naff-comments
+	"" BUG: Can't get it working with sh syntax rules!
+	"syn clear
 	"" Broad (space allowed, catches some text comments)
 	"syntax match naffComment +^\s*\(#\|"\|//\)\s*\([a-z0-9:]\+\).*+ contains=confTodo contains=shTodo
-	"" Narrow (no space allowed, almost always code comments)
-	syntax match naffComment +^\s*\(#\|"\|//\)\([a-z0-9:]\+\).*+ contains=confTodo contains=shTodo
-	hi naffComment ctermfg=darkblue
+	"" Narrow (comment immediately followed by lower-case char)
+	"syntax match    naffComment /^\s*\(#\|"\|\/\/\)\([a-z0-9:]\).*/  contains=confTodo contains=shTodo
+	"" Slightly broader (any comment not followed by a space)
+	syntax match    naffComment /^\s*\(#\|"\|\/\/\)[^ ].*/ contains=confTodo contains=shTodo
+	syntax match notNaffComment /^\s*\(#\|"\|\/\/\) .*/    contains=confTodo contains=shTodo
+	hi naffComment ctermfg=darkblue guifg=#666666 gui=none
+	hi link notNaffComment Comment
 
 
-	:syntax match Comma /,/
+	syntax match Comma /,/
 
 endfun
 
