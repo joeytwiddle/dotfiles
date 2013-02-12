@@ -27,10 +27,7 @@ let &comments=":##,".&comments
 
 
 "" Joey's coffee -> js autocompile on write
-"
-" TODO: If coffeeShowJSChanges is used in a split window which is not the
-" last, when pedit and pclose are used it shrinks grrrr.  Remember and restore
-" win height whenever we do pedit/pclose?
+"" Now with ShowJSChanges
 
 if !exists("g:coffeeAutoCompileAll")
   let g:coffeeAutoCompileAll = 1
@@ -38,6 +35,14 @@ endif
 if !exists("g:coffeeShowJSChanges")
   let g:coffeeShowJSChanges = 0
 endif
+
+" DONE: If coffeeShowJSChanges is used in a split window which is not the
+" last, when pedit and pclose are used it shrinks grrrr.  Remember and restore
+" win height whenever we do pedit/pclose?
+"
+" TODO: Option to compile to temp/nullfolder to check success and show diff,
+" but avoid polluting the coffee source folder with js files.
+" folder.
 
 augroup CoffeeAutoCompile_AuGroup
 
@@ -110,6 +115,7 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
           let w:myHeightBeforePedit = winheight(0)
         endif
         silent! belowright pedit +:set\ ft=diff\ autoread\ nobuflisted\ noswapfile /tmp/jsdiffs.diff
+        " Not working: \ filename=JS_changes_\:w_to_clear
         let s:previewWinIsOpen = 1
         return
       endif
