@@ -102,9 +102,9 @@
 "
 "   :set cmdheight=2    or more
 "
-" (This is preferable to adding frequent calls to sleep, which pause Vim long
+" This is preferable to adding frequent calls to sleep, which pause Vim long
 " enough to show messages, but can slow down / lock up Vim when we are
-" pressing a lot of keys.)
+" pressing a lot of keys (unless I find a way to check the key buffer length).
 "
 " If you want to record your own macro, you can disable the plugin with
 " :RepeatLastDisable (or you could try just pressing 'q' for a one-time disable).
@@ -112,12 +112,14 @@
 " CursorHold events do not fire in macro-recording mode.  Any visual tools,
 " taglist updates, etc. that require CursorHold *will not be triggered*.
 " Other events such as CursorMove, InsertLeave, BufWritePost work fine.
+" The new option RepeatLast_TriggerCursorHold can now be used to force trigger
+" of CursorHold events.
 "
 " == Disadvantages ==
 "
 " Movements j and k will not return to the original column after passing
-" through shorter lines (like they do when macro recording is disabled).
-" (Only a problem when using RepeatLast_TriggerCursorHold.)
+" through shorter lines.  (This is only a problem when using
+" RepeatLast_TriggerCursorHold.)
 "
 " Use of some <Tab>-completion plugins may produce unexpected behaviour when
 " replaying actions including a <Tab>-completion.  (Although Vim's built-in
@@ -747,9 +749,9 @@ function! s:ShowRecent(num)
   for howFarBack in range(numWanted,1,-1)
     let i = len(s:earlierActions) - howFarBack
     if g:RepeatLast_Show_Debug_Info
-      echo howFarBack . " " . s:MyEscape(s:earlierActions[i]) . "   (".s:earlierActionTriggers[i].")\n"
+      echo "[".howFarBack."]" . " " . s:MyEscape(s:earlierActions[i]) . "   (".s:earlierActionTriggers[i].")\n"
     else
-      echo howFarBack . " " . s:MyEscape(s:earlierActions[i]) . "\n"
+      echo "[".howFarBack."]" . " " . s:MyEscape(s:earlierActions[i]) . "\n"
     endif
   endfor
 
