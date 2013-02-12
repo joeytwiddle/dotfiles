@@ -53,17 +53,19 @@ function! s:OnQuitSaveSession()
 	if g:simple_sessions_autosave
 		"let sessionName = split($PWD,'/')[-1]
 		" The session name is made from the last TWO parts of the cwd path.
-		let sessionName = join(split($PWD,'/')[-2:],'#')
+		" We change '/' to '#' but then need to escape '#' delimeter or it gets expanded to "-MiniBufExplorer-"!
+		let sessionName = join(split($PWD,'/')[-2:],'\#')
 		" TODO: If there is only one (real) buffer open, use his filename instead of $PWD.
-		" Tried '#' as a delimeter but it got expanded to "-MiniBufExplorer-" :f
+		" Add the number of buffers.  Essentially this is so I don't overwrite a nice long session with a small one when I open and close Vim to edit one file.
+		let sessionName .= "-" . bufnr('%')
 		let sessionFile = g:simple_sessions_folder."/".sessionName.".vim"
 		exec 'mksession! '.escape(sessionFile,' ')
 	endif
 endfunction
 
 function! s:GetFocusedFile()
-	"let fname = getline('.')
-	let fname = expand("<cword>")
+	"let fname = expand("<CWORD>")
+	let fname = getline('.')
 	let fullPath = b:netrw_curdir . "/" . fname
 	return fullPath
 endfunction
@@ -85,7 +87,7 @@ endfunction
 
 function! s:ShowSessionSummary(name)
 	let s = s:GetSessionSummary(a:name)
-	if exists("l:s")
+	if type(s) == 4   " Is a dictionary, not -1
 		let message = "[".s.path."] " . join(s.files, ", ")
 		" We alter cmdheight as needed, to display the whole message.
 		" Without setting noruler and noshowcmd, the "Press Enter" message
@@ -100,7 +102,7 @@ function! s:ShowSessionSummary(name)
 endfunction
 
 function! s:GetSessionSummary(name)
-	if a:name != '' && a:name[0] != '"'
+	if a:name != '' && a:name[0] != '"' && filereadable(a:name)
 		let lines = readfile(a:name)
 		let path = ''
 		let files = []
@@ -126,6 +128,6 @@ function! s:GetSessionSummary(name)
 		let obj.files = files
 		return obj
 	endif
-	return 0
+	return -1
 endfunction
 
