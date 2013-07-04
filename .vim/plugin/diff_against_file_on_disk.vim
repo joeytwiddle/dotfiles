@@ -24,11 +24,20 @@ if !exists("g:DAFOD_diffcmd")
 endif
 
 function! DiffAgainstFileOnDisk()
-  :w! /tmp/working_copy
-  " :vert diffsplit %
-  " :!diff % /tmp/working_copy
-  " :!diff % /tmp/working_copy | diffhighlight | more
-  exec "!" . g:DAFOD_diffcmd . " /tmp/working_copy %"
+  :w! /tmp/working_copy.$USER
+  ":vert diffsplit %
+  ":!diff % /tmp/working_copy.$USER
+  ":!diff % /tmp/working_copy.$USER | diffhighlight | more
+  "exec "!" . g:DAFOD_diffcmd . " /tmp/working_copy.$USER %"
+  exec "!" . g:DAFOD_diffcmd . " /tmp/working_copy.$USER % && echo '---- File and buffer are identical ----'"
+  " BUG: Many of my color diff commands don't return the correct exit code anyway!
+  " This is annoying because it comes *after* the "Pres ENTER" message :P
+  "if !v:shell_error
+  "  echo "File and buffer are identical!"
+  "endif
+  " Oh sick.  We can actually skip the "Press ENTER" message by performing
+  " :call feedkeys("\r") before doing the exec.  However we might not want to
+  " do that: if the files do differ, want want to show the diff!
 endfunction
 
 "" Some similar yummies:
