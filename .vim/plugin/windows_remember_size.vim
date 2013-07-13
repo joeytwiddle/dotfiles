@@ -1,3 +1,4 @@
+
 " == New version: tries to automatically keep up without whatever layout changes
 " you make, by storing an unfocused and focused size for each window. ==
 "
@@ -7,8 +8,9 @@
 " try to grow/shrink windows on entering/leaving, to match the recorded value.
 "
 " Warning: This system is not perfect, specifically when opening a new window
-" (changing the layout) it has no strategy and will often shrink the new
-" window when it is unfocused.
+" (changing the layout) it has no strategy and will often squash the new
+" window when it is unfocused (because other windows remember their old sizes,
+" so don't leave any space for the new window).
 "
 " Solution: The best approach appears to be, as soon as your layout breaks in
 " some way, fix it immediately with 20<C-W>+ or whatever, to minimize the
@@ -20,6 +22,46 @@
 " autocmds, so we really can visit every window and forget their w:settings.
 " It would be pretty handy sometimes, when the display looks right on this
 " window, but old settings are causing trouble on others.
+"
+" TODO: Do something useful on VimResized event, for example scale all
+" remembered sizes proportional to size change, and scale all open windows
+" too!  Actually NO to the last bit, and no to scaling TList/MBE/FileExplorer!
+" Vim often does what I want to achieve when I enlarge the window, it makes
+" the current window grow whilst others stay the same.  Actually TList always
+" stays the same width whether it is current window or not.  The only issue is
+" height - if the current window is below another then it grows, but if it is
+" above another then it doesn't!
+
+" Options:
+"
+" Experimental feature, set a default height for windows without any
+" remembered size, as %age of screen height, or half %age of window we just
+" split with.  (Otherwise Vim usually just gives us 50% of the height of the
+" window we just split from.) This feature works ok, for the top of two split
+" windows, but the bottom one remembers the height Vim gave it during the
+" split (50%).
+"
+"let g:wrs_default_height_pct = 80
+"
+" OK this is now doing what it should, given the <C-w>s map.
+" But that is not entirely what I want.
+"
+" What I really want is to have a focused height and an unfocused height that
+" is the same for all windows, but which shrinks for all windows as I create
+" more splits.
+"
+" NO!  What I really want is a fixed unfocused size (e.g. 5 lines) and for
+" focused size to derive entirely from that!  TODO!
+"
+" What I have now, which is working reasonably well: When we create a
+" horizontal split, we assume Vim just split our previous window into 2 even
+" parts, so apply 2*wrs_default_height_pct to get the proportional relative to
+" the size of the window before we performed the split.
+"
+" DONE: We "detect" splits by mapping a few split situations below.
+" s:wrs_ScaleUpNextSizeWhenLeaving and do so.
+
+"let g:wrsDebug = 1
 
 function! s:InitEvents()
   augroup WindowsRememberSizes
@@ -36,32 +78,83 @@ function! s:Debug(msg)
 endfunction
 
 function! s:Leaving()
+
+  " Avoid trashing remembered sizes when toggle_maximize.vim script is in use
+  if (exists("g:isToggledVertically") && g:isToggledVertically) || (exists("g:isToggledHorizontally") && g:isToggledHorizontally)
+    return
+  endif
+
   let w:heightWhenFocused = winheight(0)
   let w:widthWhenFocused = winwidth(0)
+
   call s:Debug( "[exit] ".bufname('%')." saved foc ".w:widthWhenFocused.",".w:heightWhenFocused )
+
   if exists('w:heightWhenUnfocused') && w:heightWhenUnfocused < winheight(0)
     call s:Debug( "[exit] ".bufname('%')." setting ".w:widthWhenUnfocused."x".w:heightWhenUnfocused )
     exec "resize ".w:heightWhenUnfocused
   endif
+
   if exists('w:widthWhenUnfocused') && w:widthWhenUnfocused < winwidth(0)
     exec "vert resize ".w:widthWhenUnfocused
   endif
+
+  if s:weAreAboutToSplit
+    if exists("g:wrs_default_height_pct")
+      let w:heightWhenFocused = w:heightWhenFocused * 2 * g:wrs_default_height_pct / 100
+    endif
+  endif
+
+  let s:heightOfLastWindowWeLeft = winheight(0)
+
 endfunction
 
 function! s:Entering()
+
+  " Avoid trashing remembered sizes when toggle_maximize.vim script is in use
+  if (exists("g:isToggledVertically") && g:isToggledVertically) || (exists("g:isToggledHorizontally") && g:isToggledHorizontally)
+    return
+  endif
+
   let w:heightWhenUnfocused = winheight(0)
   let w:widthWhenUnfocused = winwidth(0)
+
   call s:Debug( "[enter] ".bufname('%')." saved unf ".w:widthWhenUnfocused.",".w:heightWhenUnfocused )
+
+  if s:weAreAboutToSplit
+    " We don't do this on things like MBE
+    "if exists("g:wrs_default_height_pct") && (&buftype!="nofile" || &bufhidden=="")
+    if exists("g:wrs_default_height_pct") && &buftype!="nofile"
+      let w:heightWhenFocused = s:heightOfLastWindowWeLeft * 2 * g:wrs_default_height_pct / 100
+      let w:widthWhenFocused = winwidth(0)   " Silly workaround to prevent the Debug call from breaking :P
+    endif
+    let s:weAreAboutToSplit = 0
+  endif
+
   if exists('w:heightWhenFocused') && w:heightWhenFocused > winheight(0)
     call s:Debug( "[enter] ".bufname('%')." restoring ".w:widthWhenFocused."x".w:heightWhenFocused )
     exec "resize ".w:heightWhenFocused
   endif
+
   if exists('w:widthWhenFocused') && w:widthWhenFocused > winwidth(0)
     exec "vert resize ".w:widthWhenFocused
   endif
+
 endfunction
 
 call s:InitEvents()
+
+" Detect when we are about to split window vertically
+
+let s:weAreAboutToSplit = 0
+
+function s:WeAreAboutToSplit()
+  let s:weAreAboutToSplit = 1
+endfunction
+
+nnoremap <C-w>s :call <SID>WeAreAboutToSplit()<CR><C-w>s
+"nnoremap <C-w>s :call <SID>WeAreAboutToSplit()<CR>:split<CR>
+nnoremap :h<Space> :call <SID>WeAreAboutToSplit()<CR>:h<Space>
+nnoremap :help<Space> :call <SID>WeAreAboutToSplit()<CR>:help<Space>
 
 " BUGS:
 " When we add a new window to the list, e.g. TagList, when switching to it, the old unfocused size of the previous window from the *old* layout is applied.
@@ -79,13 +172,14 @@ call s:InitEvents()
 function! ForgetWindowSizes()
   let l:winnr = winnr()
   "" PROBLEM: windo will cause Leave and Enter events to fire!  Solved - we temporarily clear the events.
+  "" Oh Perhaps noautocmd is the better solution to that.
   augroup WindowsRememberSizes
     autocmd!
   augroup END
-  windo silent! exec "unlet! w:widthWhenFocused"
-  windo silent! exec "unlet! w:widthWhenUnfocused"
-  windo silent! exec "unlet! w:heightWhenFocused"
-  windo silent! exec "unlet! w:heightWhenUnfocused"
+  noautocmd windo silent! exec "unlet! w:widthWhenFocused"
+  noautocmd windo silent! exec "unlet! w:widthWhenUnfocused"
+  noautocmd windo silent! exec "unlet! w:heightWhenFocused"
+  noautocmd windo silent! exec "unlet! w:heightWhenUnfocused"
   exec l:winnr." wincmd w"
   call s:InitEvents()
 endfunction
