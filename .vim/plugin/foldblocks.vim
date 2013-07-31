@@ -55,3 +55,8 @@ command! FoldBlocksLite call FoldBlocks(2)
 " :command! FoldBlocks set foldmethod=manual | normal :0<Enter>zEqf/^.<Enter>v/\n\n\n<Enter>zfq99@f
 " :command! FoldBlocks set foldmethod=manual | normal :0<C-v>\nzEqf/^.<C-v>\nv/\n\n\n<C-v>\nzfq99@f
 
+"" Easier solutions from the docs:
+" This will make a fold out of paragraphs separated by blank lines:
+"   :set foldexpr=getline(v:lnum)=~'^\\s*$'&&getline(v:lnum+1)=~'\\S'?'<1':1
+" this does the same:
+"   :set foldexpr=getline(v:lnum-1)=~'^\\s*$'&&getline(v:lnum)=~'\\S'?'>1':1

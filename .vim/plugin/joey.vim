@@ -35,7 +35,7 @@
 
 	:set autoindent
 	" :set cindent
-	:set nowrap
+	" :set nowrap
 	" :set wrap
 	" :set background=dark
 

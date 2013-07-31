@@ -19,11 +19,17 @@
 
 
 
-" TODO: This might be made to work better with windows_remember_size.vim and
+" DONE: This might be made to work better with windows_remember_size.vim and
 " maybe other plugin, if it only restores its own remembered height or width
 " when un-toggling, without affecting the others.  But then it won't restore
 " my full layout on un-toggle, and windows_remember_size might still end up
 " remembering things we don't want.  Could turn out to be a wasted trek.
+"
+" Alternatively we could force toggle_maximize to un-maximize the window when
+" we move to a different one.
+"
+" Alternatively windows_remember_size could opt to ignore window sizes (not
+" remember anything) if it detects that maximization is in effect.
 
 " WARNING BUG TODO: If we create a new window while maximized (e.g. split the
 " current window), restoring with winrestcmd completely fails!  I tend to
@@ -85,8 +91,21 @@
 
 
 
-let s:isToggledVertically = 0
-let s:isToggledHorizontally = 0
+" Options:
+" When set, un-maximizes whenever you move away from a maximized window.
+if !exists('g:ToggleMaximize_RestoreWhenSwitchingWindow')
+  let g:ToggleMaximize_RestoreWhenSwitchingWindow = 0
+endif
+" This is recommended when using the windows_remember_size plugin.  That
+" plugin can detect maximization by this plugin when switching windows, but
+" not when splitting windows!
+
+
+
+"" These used to be script-wide but now exposed to global so that other
+"" plugins can read them (e.g. windows_remember_size.vim)
+let g:isToggledVertically = 0
+let g:isToggledHorizontally = 0
 
 let s:oldwinwidth  = 1
 let s:oldwinheight = 1
@@ -115,10 +134,10 @@ endfunction
 
 function! s:DoMaximization()
   call s:StoreLayout()
-  if s:isToggledVertically
+  if g:isToggledVertically
     set winheight=9999
   endif
-  if s:isToggledHorizontally
+  if g:isToggledHorizontally
     set winwidth=9999
   endif
 endfunction
@@ -132,24 +151,24 @@ function! s:ToggleMaximize()
   " The following implementation avoids this by restoring winwidth/height
   " before resizing.
 
-  if s:isToggledVertically || s:isToggledHorizontally
+  if g:isToggledVertically || g:isToggledHorizontally
     call s:RestoreLayout()
   endif
 
-  if s:isToggledVertically == 1 && s:isToggledHorizontally == 1
-    let s:isToggledVertically = 0
-    let s:isToggledHorizontally = 0
+  if g:isToggledVertically == 1 && g:isToggledHorizontally == 1
+    let g:isToggledVertically = 0
+    let g:isToggledHorizontally = 0
   else
     " Otherwise we maximize one or both axes
-    if s:isToggledVertically == 0
-      let s:isToggledVertically = 1
+    if g:isToggledVertically == 0
+      let g:isToggledVertically = 1
     endif
-    if s:isToggledHorizontally == 0
-      let s:isToggledHorizontally = 1
+    if g:isToggledHorizontally == 0
+      let g:isToggledHorizontally = 1
     endif
   endif
 
-  if s:isToggledVertically || s:isToggledHorizontally
+  if g:isToggledVertically || g:isToggledHorizontally
     call s:DoMaximization()
   endif
 
@@ -157,13 +176,13 @@ endfunction
 
 function! s:ToggleMaximizeVertically()
   call s:RestoreLayout()
-  let s:isToggledVertically = 1 - s:isToggledVertically
+  let g:isToggledVertically = 1 - g:isToggledVertically
   call s:DoMaximization()
 endfunction
 
 function! s:ToggleMaximizeHorizontally()
   call s:RestoreLayout()
-  let s:isToggledHorizontally = 1 - s:isToggledHorizontally
+  let g:isToggledHorizontally = 1 - g:isToggledHorizontally
   call s:DoMaximization()
 endfunction
 
@@ -172,6 +191,67 @@ endfunction
 function! RestoreLayout()
   call s:RestoreLayout()
 endfunction
+
+
+
+" Avoid conflicts with other plugins by temporarily un-maximising then
+" re-maximising when we switch windows.
+"
+" Unfortunately there is a flaw with this plan:  For it to work, our WinLeave
+" autocmd should trigger before all (relevant) autcmds from other plugins, but
+" our WinEnter autocmd should trigger after all the others!
+"
+" For this reason, CheckWinEnter has been changed to do nothing, and for the
+" moment this feature has become just
+" g:ToggleMaximize_RestoreWhenSwitchingWindow
+"
+" But none of this is really needed!  Now windows_remember_size.vim just
+" doesn't do any remembering when g:ToggleMaximizeVertically/Horizontally is
+" set.
+
+let s:wasToggledVertically = 0
+let s:wasToggledHorizontally = 0
+
+augroup ToggleMaximizeCheck
+  autocmd!
+  autocmd WinLeave * call s:CheckWinLeave()
+  autocmd WinEnter * call s:CheckWinEnter()
+augroup END
+
+function s:CheckWinLeave()
+  if g:ToggleMaximize_RestoreWhenSwitchingWindow
+    if g:isToggledVertically
+      let s:wasToggledVertically = 1
+    endif
+    if g:isToggledHorizontally
+      let s:wasToggledHorizontally = 1
+    endif
+    if g:isToggledVertically && g:isToggledHorizontally
+      call s:ToggleMaximize()
+    endif
+    if g:isToggledVertically
+      call s:ToggleMaximizeVertically()
+    endif
+    if g:isToggledHorizontally
+      call s:ToggleMaximizeHorizontally()
+    endif
+  endif
+endfunction
+
+function s:CheckWinEnter()
+  return
+  if s:wasToggledVertically
+    call s:ToggleMaximizeVertically()
+  endif
+  if s:wasToggledHorizontally
+    call s:ToggleMaximizeHorizontally()
+  endif
+  " Just for safety
+  let s:wasToggledVertically = 0
+  let s:wasToggledHorizontally = 0
+endfunction
+
+
 
 " == Keymaps ==
 

@@ -1,6 +1,10 @@
 " cndent rule: Indent java anonymous classes correctly.
 ":set cinoptions=j1
 
+" Reserving these variables don't make a lot of sense for NodeJS:
+syntax clear javaScriptMember
+syntax clear javaScriptGlobal
+
 "" Redefine defaults (added @todo) does appear in rules but does not work!
 " syn keyword javaScriptCommentTodo      TODO FIXME XXX TBD @todo contained
 
@@ -25,6 +29,11 @@ highlight link javaScriptStructure Normal
 highlight javascriptParens ctermfg=cyan gui=bold guifg=cyan
 " highlight javascriptParens ctermfg=cyan gui=bold guifg=#44aaff
 " highlight javascriptParens ctermfg=cyan gui=bold guifg=#ffff60
+
+" Some of the following rules mess with jade syntax, so we skip them.
+if &filetype == 'jade' || &filetype == 'blade'
+  finish
+endif
 
 syntax match javaScriptDot /\./
 " highlight link javaScriptDot Statement

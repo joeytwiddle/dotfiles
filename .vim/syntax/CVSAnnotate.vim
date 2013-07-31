@@ -1,8 +1,8 @@
-" $Id: CVSAnnotate.vim,v 1.1 2011/06/08 18:28:16 joey Exp $
+" $Id: CVSAnnotate.vim,v 1.1 2011-06-08 18:28:16 joey Exp $
 " Vim syntax file
 " Language:	CVS annotate output
 " Maintainer:	Bob Hiestand <bob@hiestandfamily.org>
-" Last Change:	$Date: 2011/06/08 18:28:16 $
+" Last Change:	$Date: 2011-06-08 18:28:16 $
 " Remark:	Used by the cvscommand plugin.  Originally written by Mathieu
 " Clabaut
 if version < 600

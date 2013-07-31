@@ -10,7 +10,7 @@
 
 " BUG TODO: If there is no previous buffer, will loop forever!  We could check
 " to see if we don't move at all, then abort.
-function GoBackToRecentBuffer()
+function! GoBackToRecentBuffer()
   let startName = bufname('%')
   while 1
     normal! 

@@ -17,6 +17,10 @@ function! s:ShowSyntaxUnderCursor()
 endfunction
 
 function! s:ShowSyntaxRule(rule)
+	if a:rule == ""
+		echo "No rule found"
+		return
+	endif
 	" Does not give source file/line
 	"exec ":verbose syntax list ".a:rule
 	exec ":verbose highlight ".a:rule

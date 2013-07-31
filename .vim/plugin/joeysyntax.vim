@@ -113,8 +113,8 @@ function! Joeysyntax()
 	"" This separates single comments from double comments, for files where single comments are commented code and double comments indicate documentation.
 	"" Does not seem to work on vim files.
 	" :syntax match friendlyComment /^\s*\(##\|""\|\/\/\/\/\).*/ contains=confTodo contains=shTodo
-  "" Also assume a single-symbol comment is a human comment if it starts with
-  "" a capital (or more strictly, capital then lowercase).
+	"" Also assume a single-symbol comment is a human comment if it starts with
+	"" a capital (or more strictly, capital then lowercase).
 	" :syntax match friendlyComment +^\s*\(##\|""\|////\|// [A-Z]\|# [A-Z][a-z]\|" [A-Z][a-z]\).*+  contains=confTodo contains=shTodo
 	"" Disabled cos it was a bit sucky.
 	"" Now going for something more like vimTitle:
@@ -136,7 +136,16 @@ function! Joeysyntax()
 	syntax match    naffComment /^\s*\(#\|"\|\/\/\)[^ ].*/ contains=confTodo contains=shTodo
 	syntax match notNaffComment /^\s*\(#\|"\|\/\/\) .*/    contains=confTodo contains=shTodo
 	hi naffComment ctermfg=darkblue guifg=#666666 gui=none
+	if &t_Co >= 256
+		"hi naffComment ctermfg=18    " very dark blue
+		hi naffComment ctermfg=239   " pretty dark grey
+	endif
 	hi link notNaffComment Comment
+
+	" OH DUDE YOU JUST WROTE THIS ABOVE!
+	" My new rule is that '// stuff' means human comment, '//stuff' means commented code.
+	":syntax match codeComment +^\s*\(#\|"\|//\|##\|""\|////\)[^ ]*+
+	"contains=confTodo contains=shTodo
 
 
 	syntax match Comma /,/

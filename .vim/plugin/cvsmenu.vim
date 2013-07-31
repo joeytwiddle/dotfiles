@@ -1,7 +1,7 @@
 " CVSmenu.vim : Vim menu for using CVS			vim:tw=0
 " Author : Thorsten Maerz <info@netztorte.de>		vim600:fdm=marker
 " $Revision: 1.4 $
-" $Date: 2013/01/20 02:42:09 $
+" $Date: 2013-01-20 02:42:09 $
 " License : LGPL
 "
 " Tested with Vim 6.0

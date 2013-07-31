@@ -17,7 +17,10 @@ function! s:ShowTagDecl()
       redraw
       let prototype = substitute(line,'^ *','','')
       "echo fname.": ".prototype
+      let oldRuler = &ruler
+      let &ruler = 0
       echo prototype."   [".fname."]"
+      let &ruler = oldRuler
       return 0
     else
       let bits = split(line,' ')

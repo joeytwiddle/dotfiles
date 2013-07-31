@@ -33,9 +33,8 @@ function! Joeyfolding()
 		" syntax is not loaded.  Probably due to "contains" conditions.
 		:syn region myFold matchgroup=myDummy start="{" end="}" transparent fold
 
-		" C/Java comments
-		" BUG: tiny blacklist :f
-		if &filetype != "sh"
+		" C/Java style comments
+		if &filetype == "c" || &filetype == "java" || &filetype == "javascript" || &filetype == "haxe"
 			" bad :syn region myFold2 start="/*" end="*/" transparent fold
 			" bad :syn region myFold5 start="^$" end="^$" transparent fold
 			:syn region myFold2 matchgroup=myDummy start="\/\*" end="\*\/" fold
@@ -56,13 +55,19 @@ function! Joeyfolding()
 		" the general ones are loaded.
 
 		" PS
-		:syn region myFold5 matchgroup=myDummy start="% Begin" end="% End" fold transparent
+		if &filetype == "ps"
+			:syn region myFold5 matchgroup=myDummy start="% Begin" end="% End" fold transparent
+		endif
 
 		" Tex
-		:syn region myFold6 matchgroup=myDummy start="\\begin" end="\\end" fold transparent
+		if &filetype == "tex" || &filetype == "latex"
+			:syn region myFold6 matchgroup=myDummy start="\\begin" end="\\end" fold transparent
+		endif
 
 		" sh
-		":syn region myFold7 matchgroup=myDummy start="\<do\>" end="\<done\>" fold transparent
+		"if &filetype == "sh"
+			":syn region myFold7 matchgroup=myDummy start="\<do\>" end="\<done\>" fold transparent
+		"endif
 
 		"" TODO: I really want this to use shiftwidth to indent the line properly.
 		""       It would read much better, and IMO is vital in some cases.

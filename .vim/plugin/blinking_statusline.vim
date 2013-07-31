@@ -53,6 +53,13 @@ if exists("g:blinking_statusline") && g:blinking_statusline>0
 		autocmd BufEnter   * hi clear VertSplit | hi link VertSplit VertSplitLit
 		autocmd CursorHold * hi clear VertSplit | hi link VertSplit VertSplitUnlit
 
+		"" My new style: Calm down.  Let's only change the newly focused window, and not blink the rest.  Blink the new status line a nice bold green (I find green contrasts better with the standard white than yellow does.)
+		hi clear StatusLineNCLit
+		hi link StatusLineNCLit StatusLineNCUnlit
+		hi clear VertSplitLit
+		hi link VertSplitLit VertSplitUnlit
+		hi StatusLineLit   ctermfg=green ctermbg=black cterm=reverse,bold guibg=green guifg=black gui=bold
+
 	augroup END
 	set updatetime=600
 endif

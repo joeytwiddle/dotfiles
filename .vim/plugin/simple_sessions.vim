@@ -1,4 +1,5 @@
 " simple_sessions - Auto-save sessions on exit, and simple session loader.
+" by joeytwiddle
 "
 " The loader uses NetRW for selection manager.
 "
@@ -57,7 +58,7 @@ function! s:OnQuitSaveSession()
 		let sessionName = join(split($PWD,'/')[-2:],'\#')
 		" TODO: If there is only one (real) buffer open, use his filename instead of $PWD.
 		" Add the number of buffers.  Essentially this is so I don't overwrite a nice long session with a small one when I open and close Vim to edit one file.
-		let sessionName .= "-" . bufnr('%')
+		let sessionName .= "-" . bufnr('$')
 		let sessionFile = g:simple_sessions_folder."/".sessionName.".vim"
 		exec 'mksession! '.escape(sessionFile,' ')
 	endif
@@ -115,7 +116,18 @@ function! s:GetSessionSummary(name)
 			if firstArg == 'cd'
 				let path = join(words)
 			elseif firstArg == 'args'
-				call add(files,join(words))
+				" Any word ending with '\' should have a space and the next word appended to it.
+				" We may need to repeat this if there were originally two spaces.
+				while 1
+					let i = match(words, '\\$')
+					if i >= 0 && i < len(words)-1
+						let addToWord = remove(words,i+1)
+						let words[i] = words[i] . ' ' . addToWord
+					else
+						break
+					endif
+				endwhile
+				call extend(files,words)
 			elseif firstArg == 'badd'
 				" The next field is usually +<line_number>
 				call remove(words,0)

@@ -1,14 +1,19 @@
 " Keep moving in given direction until we reach a new character under the
-" cursor.  (Like Ctrl-Arrow Excel.)  Bound to Ctrl-Shift-Up/Down for Vim.
+" cursor.  (Like Ctrl-Arrow in Excel.)  Bound to Ctrl-Shift-Up/Down for Vim.
+"
+" I find this most useful for:
+"
+"   - Jumping to the top or bottom of an indented block based on column
+"     (especially the tops of blocks in Coffeescript/Python).
+"
+"   - Getting to the next file in grep output.
+"
+"   - Generally getting past or out of large blocks of repetitive lines.
 
 let g:move_stay_in_column   = 1   " Will not stop on shorter lines than the one we started on
 let g:move_skip_empty_lines = 1   " Never stop on an empty line (if also unifying, never stop on whitespace)
 let g:move_unify_whitespace = 1   " Tab, space and empty-line are all considered the same.
-let g:move_once_at_start    = 1   " Argh!  New style sucks without this.  If you are on the 'c' of 'class' and want to skip all the whitespace to the next 'c', this won't do it - it will skip all the 'c's!  (Unless it happens to meet a / first.)  Really the question is, does the first move get the same char as the start?  If so, user wants to move out of first char, if not user probably wants to move out of second char (since first char would have been a single down press).  These comparisons *include* newlines/whitespace; we can't skip them!  OK now this option has been turned into just that check!
-
-" Meh it's still a bit naff.  In you are on "public" and go down, you will either skip all the publics until something different, or if the next line is empty, you will simply jump to the next public.  What is the wanted behaviour anyway?  Don't stop on whitespace but stop after it as soon as we hit a non-blank, even if it's the same? 
-
-" I guess I am confusing two features: one whitespace jumper, and one get-out-of-or-past-block, which require slightly different behaviour.  They are pretty similar - what is the difference?
+let g:move_once_at_start    = 1   " Don't stop on the very next line just because it has a different char from the current!
 
 nnoremap <silent> <C-S-Up> :call <SID>FindNextChange("k")<Enter>
 nnoremap <silent> <C-S-Down> :call <SID>FindNextChange("j")<Enter>

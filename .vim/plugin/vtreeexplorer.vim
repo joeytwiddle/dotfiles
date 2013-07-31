@@ -1,6 +1,6 @@
 "" File:        vtreeexplorer.vim
 "" Description: tree-like file system explorer for vim
-"" Version:     $Revision: 1.10 $ $Date: 2013/01/20 02:50:09 $
+"" Version:     $Revision: 1.10 $ $Date: 2013-01-20 02:50:09 $
 "" Author:      TS Urban (thomas.scott.urban@HORMELgmail.com)
 ""              (remove the source of SPAM from my email first)
 ""
@@ -625,7 +625,12 @@ function! s:Activate(how) " <<<
 		elseif a:how == "cur"
 			exec ("tabedit " . f)
 		elseif oldwin == winnr() || (&modified && s:BufInWindows(winbufnr(winnr())) < 2)
-			wincmd p
+			"" If this fires due to &modified, then we end up opening in the
+			"" flipping TreeExplorer window!
+			"" I don't have a problem with &modified because I use &hidden anyway.
+			"" But if &modified and !&hidden, then perhaps we should split to open.
+			"wincmd p
+			exec ("split")
 			" exec ("edit " . f)
 			"" We position the new buffer nicely for MinBufExplorer
 			"" NOTE: This may no longer be needed now I redefined my Ctrl+PageUp/Down.

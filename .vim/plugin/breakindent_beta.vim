@@ -92,6 +92,7 @@ function! s:UpdateBreakIndent()
   let tabwidth = &tabstop
   let screenIndent = len(indentString) - numtabs + tabwidth*numtabs
   let screenLineLength = len(line) - len(indentString) + screenIndent
+  " BUG TODO: We compare screenLineLength to winwidth(".") later, but this fails to account for the signs columns (and perhaps similarly fails for fold columns).
 
   " Calculate the first part, that brings us up to the first line.
   let showIndent = screenIndent

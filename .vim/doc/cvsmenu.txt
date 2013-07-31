@@ -2,7 +2,7 @@
 
 cvsmenu.vim Version : 1.78
 $Revision: 1.1 $
-$Date: 2012/09/27 23:33:53 $
+$Date: 2012-09-27 23:33:53 $
 Platforms : Linux, Windows
 Requires : Vim, CVS (tested with 1.11p1)
 Vim version : 6.0ak and later

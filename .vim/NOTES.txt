@@ -1,3 +1,4 @@
+== Advanced and useful vim stuff ==
 
 When diffing two files:
   ]c   go to next difference
@@ -7,21 +8,9 @@ When diffing two files:
 [The last two are nice of you are in the left-hand window, as O and P indicate
 the direction of movement of text (on a QWERTY keyboard).]
 
-Editing a privileged file but not root?
+Editing a privileged file but realise when saving you are not root?
   :w !sudo tee %
-  (here :w ! write to stdin of the command, and % evaluates to a filename)
-
-In Insert mode:
-
-  Ctrl-O lets you do ONE normal command (that's what I need for gvim -y!)
-
-  Ctrl-A inserts the last insert again (in normal mode that is in register ".)
-
-  Ctrl-Y insert the char from cell above the cursor
-
-Execute a register as a command using @
-
-  so @0 or @1 or @""
+  (here :w ! writes to stdin of the command, and % evaluates to a filename)
 
 If you made some deletes and you want an earlier delete, they are stored in the numbered registers, so...
 
@@ -32,6 +21,21 @@ g,   go to position of next change
 mx   create mark x
 g'x  jump to mark x
      (use capital X for global, lower-case is buffer-local)
+'.   go to last edited line (similar to g; but without steps)
+
+In Insert mode:
+
+  Ctrl-O lets you do ONE normal command (that's what I need for gvim -y!)
+
+  Ctrl-A inserts the last insert again (in normal mode that is in register ".)
+
+  Ctrl-Y inserts the char from the cell above the cursor (copy line above)
+
+Execute a register as a command using @
+
+  so @0 or @1 or @""
+
+@: is a shortcut for the last : command you ran
 
 Whilst n is the repeater for * or #, ; is the repeater for f t F and T.
 
@@ -42,12 +46,18 @@ Alternatively:
   :u1 | u   go to initial state
   :earlier 1f   go to state at previous file-save
 
-Delete and yank current word, with "in":
+Delete and yank current word, with "in" or "around":
 
   diw   delete current word
-  di(   delete current parens
-  di"   delete text between quotes
-  vi{   select text in brackets
+  d3iw  delete two words: current and next
+  d5iw  delete current and next two words (even numbers delete the gaps between words)
+  ci"   change text between quotes
+  ci(   change text within parens
+  vi{   select text within curly brackets
+  vib   select text within parents or curlies ("block") depending
+  viB   again curlies ("larger block") depending
+  da(   delete text including ("around") parens
+  cit   change tag
 
   For more: :help text-objects
 
@@ -55,7 +65,7 @@ gF open file under cursor
 
 gD jump to definition
 
-Paste contents of register from Insert mode:
+Paste contents of register from Insert mode (or on Cmdline):
 
   <C-r>r     where r is the register
 
@@ -64,10 +74,6 @@ Also:
   :echo @r   Print register r, using its variable
 
   @/         is the search register
-
-@: is a shortcut for the last : command you ran
-
-
 
 
 
@@ -119,6 +125,50 @@ Hex / binary editor:
 
 
 
+== Vim Scripting ==
+
+When debugging vim scripts, :scriptnames can be useful to show what has loaded.
+But this can show even more information:
+
+  vim -V9testlog
+
+Alternatively, if you want to turn this heavy logging on/off at runtime:
+
+    function! ToggleVerbose()
+        if !&verbose
+            set verbosefile=~/.log/vim/verbose.log
+            set verbose=15
+        else
+            set verbose=0
+            set verbosefile=
+        endif
+    endfunction
+
+That's logging.  If you want a step by step debugger:
+
+  vim -D ...
+
+Stop leaving Insert mode to paste from clipboard:
+
+  <Esc>"+p
+
+Stay in Insert mode and do it faster:
+
+  <Ctrl-R>+
+
+Rather than :set ignorecase to do a case-insensitive search, just drop \c at the beginning of your search expression!
+
+To copy the line under the cursor (into register k) then execute it as an ex command:
+
+  "kyy
+  :@k<Enter>
+
+or:
+
+  yyq:p<Enter>
+
+
+
 == Basic stuff (for new Vim users) ==
 
 Undo and other commands to get out of bad situations:
@@ -131,5 +181,4 @@ Undo and other commands to get out of bad situations:
 
   Ctrl-w c    close window (when you have split open a new window and don't want it)
   or :q
-
 

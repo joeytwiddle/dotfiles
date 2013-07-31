@@ -6,14 +6,24 @@ source ~/.vim/after/syntax/all.vim
 "" Dot-space is hard to see.  Stick with defaults!
 " :set listchars=tab:.\ ,trail:$
 
-" comment
-:map <F5> ^i# <Esc>j^
-" uncomment
-:map <F6> ^2xj^
+"" comment
+":nmap <buffer> <F5> ^i# <Esc>j^
+"" uncomment
+":nmap <buffer> <F6> ^2xj^
+"" comment
+:nmap <buffer> <F5> ^i#<Esc>j^
+"" uncomment
+:nmap <buffer> <F6> ^xj^
 " indent
-:map <F7> ^i  <Esc>j^
+:nmap <buffer> <F7> ^i  <Esc>j^
 " undent
-:map <F8> 02xj^
+:nmap <buffer> <F8> 02xj^
+
+"" TODO: Below will be usable only if we check that we are at start of line / in whitespace, and ^ if not.
+" comment
+":nmap <buffer> <F5> i#<Esc>j
+" uncomment
+":nmap <buffer> <F6> ^xj^
 
 " :syntax clear shCaseCommandSub
 

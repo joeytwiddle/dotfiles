@@ -23,9 +23,10 @@ function! s:SkyBisonBeta()
   " set wildmode=longest:full,full
   "" This mode works well:
   " set wildmode=list,full
-  "" The initial list mode is useful for showing lots of results (e.g.
+  "" The initial list mode <c-d> is useful for showing lots of results (e.g.
   "" folders), compared to wildmenu which only uses one line.
   "" But it can produce a "More.." pager on really longs lists, which is annoying.
+  "" Oh, that can be disabled with: :set nomore
 
   " The wildchar is disabled from working in macros (and mappings it would
   " appear) but we can use wildcharm.

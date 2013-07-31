@@ -20,7 +20,7 @@ inoremap <C-PageUp> <Esc>:bprev<Enter>i
 " TODO: Might belong in its own plugin file.
 nnoremap <silent> <C-S-PageDown> :call <SID>MoveCurrentBufferToEndOfList()<Enter>
 nnoremap <silent> <C-A-PageDown> :call <SID>MoveCurrentBufferToEndOfList()<Enter>
-function s:MoveCurrentBufferToEndOfList()
+function! s:MoveCurrentBufferToEndOfList()
 	let fname = expand("%")
 	" This bwipeout may not succeed if the file has unwritten changes.
 	bwipeout
@@ -34,13 +34,13 @@ command! MoveBufferToEnd call s:MoveCurrentBufferToEndOfList()
 "" These versions work for my Eterm, provided we exported TERM=xterm
 nnoremap [6^ :bn<Enter>
 nnoremap [5^ :bp<Enter>
-"" In hwi and pod's console (TERM=linux), PageUp/Down send the same with/without Ctrl.
+"" In hwi (Debian), pod and porridge's (Ubuntu) console, where TERM=linux, PageUp/Down send the same as Ctrl-PageUp/Ctrl-PageDown!
 " nnoremap [6~ :bn<Enter>
 " nnoremap [5~ :bp<Enter>
 
 "" Inside screen on pea:
-noremap [6;5~ :bn<Enter>
-noremap [5;5~ :bp<Enter>
+nnoremap [6;5~ :bn<Enter>
+nnoremap [5;5~ :bp<Enter>
 
 
 
@@ -125,8 +125,8 @@ nnoremap <Down> gj
 " Scroll the page up and down with Ctrl+K/J
 " Only moves the cursor when it's near the edge
 "" We can prepend a number to the scroll request if desired, e.g. 5<C-K>
-noremap <C-K> <C-Y>
-noremap <C-J> <C-E>
+"noremap <C-K> <C-Y>
+"noremap <C-J> <C-E>
 inoremap <C-K> <Esc><C-Y>a
 inoremap <C-J> <Esc><C-E>a
 "" Since the first two do not always trigger a CursorHold or Moved event, they fail
@@ -135,6 +135,11 @@ inoremap <C-J> <Esc><C-E>a
 "" highlight script sees it twice, and unhighlights the line!
 " noremap <C-K> <C-Y>:silent! call HL_Cursor_Moved()<Enter>
 " noremap <C-J> <C-E>:silent! call HL_Cursor_Moved()<Enter>
+"" We now have a similar issue with sexy_scroller.  Let's try triggering by
+"" moving and moving back.
+noremap <C-K> <C-Y><BS><Space>
+noremap <C-J> <C-E><BS><Space>
+"" OK that fires sexy_scroller, but yuck why did we ever want it to fire hiline?!
 
 "" Split windows vertically with Ctrl-W Shift-S
 "" The default is c-W v
@@ -187,26 +192,42 @@ inoremap <S-Insert> <Esc>"*pa
 
 
 "" F5 and F6 comment and uncomment the current line.
+"" TODO: These should go into after/filetype or something!
 " echo &filetype
 if "&filetype" == "xml" || "&filetype" == "xslt"
-	map <F5> ^i<!--  --><Esc>j^
-	map <F6> ^5x$xxxx^
+	nmap <buffer> <F5> ^i<!--  --><Esc>j^
+	nmap <buffer> <F6> ^5x$xxxx^
 else
-	map <F5> ^i// <Esc>j^
-	map <F6> ^3xj^
+	nmap <buffer> <F5> ^i// <Esc>j^
+	nmap <buffer> <F6> ^3xj^
 :endif
 
 "" F7 and F8 indent or unindent the current line.
 "" (Expects/requires ts=2 sw=2 and noexpandtabs!)
-map <F7> ^i  <Esc>j^
-map <F8> 0xj^
+nmap <F7> ^i  <Esc>j^
+nmap <F8> 0xj^
 
 "" Shortcut for re-joining lines broken by \n.
 "" BUG: Deletes next char if current line is empty!
 " map <F7> Js<Return><Esc> 
 
 " C "changes word under cursor" (replaces "change to end of line", c$)
-nmap C \ bcw
+" No, let's keep C acting the same as default
+"nmap C ciw
+" cd "change to end of line" (because d is letter 4 and $ is shift-4!)
+"nmap cd c$
+"nmap cd ciw
+" No, let's replace cw instead, because Vim maps cw->ce and I always use ce anyway
+"nmap cw ciw
+" No I don't always use ce!  Leave cw alone and use ciw when you need it.  :P
+" Actually since cd does nothing, we can use that.  I doubt I will remember it though.
+nmap cd ciw
+
+" $d0 leaves the char that was under the cursor; I hate that!
+"nmap d0 d0x
+"nmap d0 v0d
+" Delete the whole line, not just from here backwards
+nmap d0 0d$
 
 "" Various failed shortcuts for the 'follow link' command.
 " map <C-Enter> <C-]>
@@ -283,7 +304,8 @@ nnoremap <Leader>w :set invwrap<Enter>
 
 " Quick buffer switching (beyond Ctrl-PageUp/Down)
 "" Select buffer by any part of filename and Tab completion or arrows, or by number
-nnoremap <C-E> :ls<CR>:b<space>
+"nnoremap <C-E> :ls<CR>:b<space>
+nnoremap <C-E> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
 "" Select file by filename with completion
 " nnoremap <C-E> :ls<CR>:e<space>
 "" Select by name with completion or file without (joeys_buffer_switcher.vim)
@@ -309,6 +331,20 @@ nnoremap <Leader>O :e .<Enter>
 nnoremap <Leader>s :Sopen<Enter>
 nnoremap <Leader>S :SessionList<Enter>
 
+" A common combination (IDE vim!)
+nmap <Leader>i <Leader>f<C-w><Right><Leader>t
+
+" Toggle relative line numbers in the margin
+nmap <Leader>l :set invrelativenumber<Enter>
+
+" Toggle the paste option
+nmap <Leader>p :set invpaste<Enter>
+
+" Fold everything in the buffer except lines which match the current search pattern (or at second level, the line on either side)
+nnoremap \z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
+" Alternative, as a command:
+"command! -nargs=+ Foldsearch exe "normal /".<q-args>."^M" | setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\|\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2
+
 
 
 "" Close Current Buffer
@@ -317,4 +353,10 @@ nnoremap <Leader>S :SessionList<Enter>
 "" Ctrl-Z works ok
 nnoremap <C-Z> :CloseBuffer<Enter>
 "" CloseBuffer is implemented in (kwbd.vim)
+
+" We cannot use <Ctrl-S> for save because many terminals will just swallow
+" that as the magic "pause" key.  But shift-S = cc, so let's use that.
+nnoremap S :w<Enter>
+" Not a good idea to map 'S' in Insert mode...
+"inoremap S <Esc>:w<Enter>i
 

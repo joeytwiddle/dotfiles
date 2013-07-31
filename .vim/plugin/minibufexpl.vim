@@ -645,7 +645,7 @@ if !exists('g:miniBufExplorerDebugOutput')
   let g:miniBufExplorerDebugOutput = ''
 endif
 
-" TODO: Undocumented!!!
+" TODO: Undocumented!!!  By Joey.
 if !exists('g:miniBufExplForceDisplay')
   let g:miniBufExplForceDisplay = 0
 endif
@@ -673,15 +673,28 @@ augroup MiniBufExplorer
   autocmd MiniBufExplorer BufEnter    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
   autocmd MiniBufExplorer VimEnter    * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1) |call <SID>PostVimEnter()
 
+  "" BUG: Our PostVimEnter is no longer working with Vim 7.3 (ubuntu quantal) because vim decides to enter the MBE *after* PVE had decided that it wasn't focused!  :P
+  "" 47:10:===========================
+  "" 48:10:Completed StartExplorer()
+  "" 49:10:===========================
+  "" 50:10:===========================
+  "" 51:10:Completed AutoUpdate()
+  "" 52:10:===========================
+  "" 53:8:[PVE] Now on window 2 heart_wide_open.txt
+  "" 54:10:-=> BufEnter  AutoCmd
+  "" 55:10:===========================
+  "" 56:10:Entering AutoUpdate(-1) : 5 : -MiniBufExplorer-
+  "" 57:10:===========================
+
+  " My new highlight actions created wider range of situations where the MBE
+  " needs to be redrawn, and BufEnter is not fired.  For example, when editing a buffer and not saving, its color should change in the MBE.
+  " To handle these, we now also fire on WinEnter.
+  "autocmd MiniBufExplorer WinEnter    * call <SID>DEBUG('-=> WinEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
+
   "" Instead of the above, we can just do a lazy update.  Although this is not
   "" so helpful for immediate navigation feedback!
   " Search for CursorHold or ListChanged to see why we may need this.
   autocmd MiniBufExplorer CursorHold  * call <SID>DEBUG('-=> CursorHold AutoCmd', 10) |call <SID>AutoUpdate(-1)
-
-  " My new highlight actions created wider range of situations where the MBE
-  " needs to be redrawn, and BufEnter is not fired.  They are: ...
-  " To handle these, we now also fire on WinEnter.
-  "autocmd MiniBufExplorer WinEnter    * call <SID>DEBUG('-=> WinEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
 
   " BUG: MBE does not update when we close/delete a buffer.
   " Tried BufLeave, BufDelete and BufWipeout but MBE still shows the earlier
@@ -1475,7 +1488,10 @@ function! <SID>PostVimEnter()
   if <SID>FindWindow('-MiniBufExplorer-', 0) != -1
     " Ensure we *will* move off the MBE (hopefully to our first edit window,
     " but perhaps not if your Vim has also opened a sidebar)
-    call feedkeys("w")
+    " Does not work.
+    "call feedkeys("w")
+    "echo "DOING THE FEEDKEYS NOW wins = " . winnr("$")
+    " In fact not doing it does work!  :P
   endif
 endfunction
 " }}}

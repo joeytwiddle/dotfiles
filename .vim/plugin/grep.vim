@@ -300,6 +300,7 @@ silent exe "nnoremap <unique> <silent> " . Grep_Key . " :call RunGrep('grep')<CR
 " increasing cmdheight and resetting it afterwards.
 " It seems to be doing what it's supposed to, but nonetheless the message is
 " displayed anyway.
+" Another approach may be to adjust 'shortmess'
 function! s:AvoidPressEnterMessage()
   let s:oldCmdHeight = &cmdheight
   let s:oldUpdateTime = &updatetime
@@ -402,7 +403,26 @@ function! s:RunGrepCmd(cmd, pattern)
 
     " I think we need some obvious indiciation that the buffer changed!
 
+    call s:FoldByFiles()
+
     call delete(tmpfile)
+endfunction
+
+" If there are a lot of results, make folds for each file in the quickfix list
+function! s:FoldByFiles()
+
+    setlocal foldmethod=expr
+    setlocal foldexpr=matchstr(getline(v:lnum),'^[^\|]\\+')==#matchstr(getline(v:lnum+1),'^[^\|]\\+')?1:'<1'
+
+    if foldclosedend(1) == line('$') || line("$") < 50
+        " When all matches come from a single file, do not close that single fold;
+        " the user probably is interested in the contents.
+        " Also don't fold when the number of lines is not too large.
+        setlocal foldlevel=1
+    else
+        setlocal foldlevel=0
+    endif
+
 endfunction
 
 " RunGrepRecursive()

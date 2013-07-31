@@ -29,7 +29,8 @@ function! Joeyhighlight()
 		"highlight Normal ctermfg=lightgrey guibg=Black guifg=#cccccc
 		" highlight Normal ctermfg=lightgrey guibg=#2b3735 guifg=#cccccc
 		"highlight Normal ctermfg=LightGray guibg=#000000 guifg=LightGray
-		highlight Normal ctermfg=lightgrey guifg=#dddddd guibg=#000000
+		"highlight Normal ctermfg=lightgrey guifg=#dddddd guibg=#000000
+		highlight Normal ctermfg=lightgrey guifg=#eeeeee guibg=#000000
 
 		"" Some slightly lighter (off-black) backgrounds:
 		"" Can help *reduce* contrast if font is thin and appears faint
@@ -37,8 +38,9 @@ function! Joeyhighlight()
 		" highlight Normal guibg=#102020	" Almost black background
 		" highlight Normal guibg=#182828	" Medium/compromise
 		" highlight Normal guibg=#203030	" Lighter Faded background
-		highlight Normal guibg=#223330	" Custom greeny/cyan, softer on my broken monitor
 		" highlight Normal guibg=#304040	" Not-so-dark grey
+		" highlight Normal guibg=#223330	" Custom greeny/cyan, softer on my broken monitor
+		highlight Normal guibg=#102626	" Match xterm, porridge
 	endif
 
 	highlight Title ctermbg=black ctermfg=green guibg=#000060 guifg=#00ff00
@@ -77,8 +79,11 @@ function! Joeyhighlight()
 	" highlight Comment cterm=bold ctermfg=darkcyan gui=none guifg=#80a0ff   " nice mid-light blue
 	" highlight Comment cterm=bold ctermfg=darkgrey gui=bold guifg=#999999   " bold grey, nice with Lucida in xterm
 	highlight Comment cterm=bold ctermfg=darkgrey gui=none guifg=#a0a0a0   " bold grey, nice with Lucida in xterm, light non-bold in GUI
+	"" Unfortunately the following set white in 8-color xterm mode, so they require a check before using.
+	" highlight Comment ctermfg=8 cterm=bold gui=none guifg=#a0a0a0   " bold grey, nice with Lucida in xterm, light non-bold in GUI.  =8 is a little lighter than darkgrey in 256-color-term mode
+	" highlight Comment ctermfg=244 cterm=bold gui=none guifg=#a0a0a0   " bold grey, nice with Lucida in xterm, light non-bold in GUI.  =244 or 245 is an exact match to low-color xterm :P
 	" highlight friendlyComment cterm=none ctermfg=cyan gui=none guifg=#80a0ff   " boring mid blue (just greyish)
-	highlight friendlyComment ctermfg=darkblue cterm=bold gui=none guifg=darkblue gui=bold
+	highlight friendlyComment ctermfg=darkblue cterm=bold gui=none guifg=#7777ff gui=bold
 	hi link vimCommentTitle friendlyComment
 	highlight def link confComment Comment
 	"highlight link jComment Comment
@@ -270,10 +275,13 @@ function! Joeyhighlight()
 	" hi Comma cterm=bold ctermfg=white gui=bold guifg=white
 	hi Comma cterm=bold ctermfg=darkgrey gui=bold guifg=#777777
 
-	hi Pmenu cterm=bold guibg=#bb00bb gui=bold
-	hi Pmenusel gui=bold guifg=white guibg=#660066
+	" Ubuntu made it look naff, so filled out all the colors
+	hi Pmenu ctermbg=magenta ctermfg=white cterm=bold guibg=#bb00bb guifg=white gui=bold
+	hi Pmenusel ctermbg=black ctermfg=white cterm=bold guibg=#660066 guifg=white gui=bold
 
 	highlight CursorLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
+	highlight clear CursorColumn
+	highlight link CursorColumn CursorLine
 
 	" highlight MyTagListFileName cterm=bold ctermbg=darkgray ctermfg=white gui=bold guibg=black guifg=white
 	" highlight link MyTagListFileName MBENormal
@@ -324,6 +332,13 @@ function! Joeyhighlight()
 	hi TabLineSel ctermfg=green ctermbg=blue cterm=bold,reverse
 
 
+	hi LineNr ctermfg=darkmagenta guifg=magenta
+
+
+	hi SignColumn guibg=black
+
+	hi EchoMsg ctermfg=green guifg=green
+	:echohl EchoMsg
 
 endfun
 

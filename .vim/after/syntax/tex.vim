@@ -1,10 +1,10 @@
 source ~/.vim/after/syntax/all.vim
 
 " comment
-:map <F5> ^i% <Esc>j^
+:nmap <buffer> <F5> ^i% <Esc>j^
 " uncomment
-:map <F6> ^2xj^
+:nmap <buffer> <F6> ^2xj^
 " indent
-:map <F7> ^i  <Esc>j^
+:nmap <buffer> <F7> ^i  <Esc>j^
 " undent
-:map <F8> 02xj^
+:nmap <buffer> <F8> 02xj^

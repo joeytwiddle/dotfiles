@@ -1,4 +1,15 @@
 
+iab \f function) {<CR>}<Up><End><Left><Left><Left>
+"iab -> function) {ODODOD
+"iab { {<CR>}<Up><End>
+"iab ( ()<Left>
+
+
+
+" CheckNotCoffee - If the user opens a Javascript file which was generated
+" from Coffeescript, lock the buffer so the user cannot modify it (they should
+" find and modify the coffee file instead).
+
 " TODO: We may want to move this to a different file, so it can work with a
 " variety of file types / extensions and patterns.
 

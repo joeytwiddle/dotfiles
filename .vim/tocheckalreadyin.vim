@@ -27,13 +27,13 @@
 :syntax on
 
 " comment
-:map <F5> ^i// <Esc>j^
+:nmap <F5> ^i// <Esc>j^
 " uncomment
-:map <F6> ^3xj^
+:nmap <F6> ^3xj^
 " indent
-:map <F7> ^i  <Esc>j^
+:nmap <F7> ^i  <Esc>j^
 " undent
-:map <F8> 0xj^
+:nmap <F8> 0xj^
 
 " Make these work for modifiable only - they seriously warp the online help!
 ":autocmd BufReadPost   *.* set ts=8 | set expandtab | retab | set ts=2 | set noexpandtab | retab!

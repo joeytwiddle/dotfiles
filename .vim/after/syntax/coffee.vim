@@ -3,10 +3,15 @@ setlocal foldignore=
 
 setlocal comments=:##,:#
 
+"" comment
+":nmap <buffer> <F5> ^i# <Esc>j^
+"" uncomment
+":nmap <buffer> <F6> ^2xj^
+
 " comment
-:map <F5> ^i# <Esc>j^
+:nmap <buffer> <F5> ^i#<Esc>j^
 " uncomment
-:map <F6> ^2xj^
+:nmap <buffer> <F6> ^1xj^
 
 syntax match coffeeParens /[()]/
 " highlight! link coffeeParens Function
