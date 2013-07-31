@@ -11,6 +11,13 @@ OnLeftGrip Move1 :StartResizing BottomLeft
 OnRightGrip Move1 :StartResizing BottomRight
 OnWindowBorder Move1 :StartMoving
 
+## Disable this next line for Homeworld!
+OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
+OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+OnWindow Mod1 Mouse2 :MacroCmd {Raise} {Focus} {StartTabbing} {Lower}
+# Workaround when Alt-Left-Drag is disabled:
+OnWindow Mod4 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
+
 # OnTitlebar Mouse1 :MacroCmd {Focus} {Raise} {ActivateTab} {StartMoving}
 
 ### Some older defaults:
@@ -117,8 +124,9 @@ Control Shift F2 :CommandDialog
 # OnDesktop Mouse3 :rootMenu
 
 ## Change desktop with mousewheel on wallpaper
-OnDesktop Mouse4 :PrevWorkspace
-OnDesktop Mouse5 :NextWorkspace
+## These next two are really no fun when you have a scrollbar on your laptop's mousepad!
+#OnDesktop Mouse4 :PrevWorkspace
+#OnDesktop Mouse5 :NextWorkspace
 OnDesktop Mod1 Mouse4 :PrevWorkspace
 OnDesktop Mod1 Mouse5 :NextWorkspace
 OnDesktop Shift Mouse4 :PrevWorkspace 3
@@ -134,11 +142,6 @@ Mod4 Mouse5 :NextWorkspace 3
 
 OnToolbar Mouse4 :PrevWorkspace
 OnToolbar Mouse5 :NextWorkspace
-
-## Disable this next line for Homeworld!
-OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
-OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
-OnWindow Mod1 Mouse2 :MacroCmd {Raise} {Focus} {StartTabbing} {Lower}
 
 ## Sometimes brings the window back to the front again after (due to focus?)
 OnTitlebar Double Mouse1 :Lower
@@ -244,6 +247,10 @@ Shift Mod1 Right :TakeToNextWorkspace
 Shift Mod1 Up :TakeToPrevWorkspace 3
 Shift Mod1 Down :TakeToNextWorkspace 3
 ## This makes sense if you have three columns of desktops
+
+#Mod1 1 :Workspace 1
+#Mod1 2 :Workspace 2
+#Mod1 3 :Workspace 3
 
 ## Known bug with NextWorkspace: it wastes the next keyboard input in an annoying way!
 ## http://sourceforge.net/tracker/?func=detail&aid=3190205&group_id=35398&atid=413960
@@ -376,7 +383,8 @@ Mod4 l :ExecCommand load_desktop
 ## Yes this is much faster.  (But it lacks the lighter bg option.)
 # Mod1 x :ExecCommand /usr/bin/xterm -cc 33:48,37:48,45-47:48,64:48,126:48 -rightbar +sb -sl 5000 -vb -si -sk -bg black -fg white -font '-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1' -rightbar -j -s
 ## Now let's try the symlink in my PATH:
-Mod1 x :ExecCommand xterm
+# Mod1 x :ExecCommand xterm
+Mod1 x :ExecCommand /home/joey/j/tools/xterm
 # The problem is my 'xtermbg' script runs my 'xterm' script and that uses 'unj'
 # which is part of jsh.  For faster startup we need to run xterm without
 # involving jsh (or trim down jsh's tools folder!).

@@ -1,5 +1,4 @@
 [app] (name=xv) (class=MPlayer)
-  [Position]	(UPPERLEFT)	{0 26}
   [Deco]	{NORMAL}
   [Sticky]	{yes}
   [Layer]	{2}
@@ -11,7 +10,6 @@
 [end]
 [app] (name=xmms) (class=Xmms)
   [Workspace]	{1}
-  [Position]	(UPPERLEFT)	{90 867}
   [Deco]	{NONE}
   [Layer]	{8}
   [Close]	{yes}
@@ -38,17 +36,13 @@
 [end]
 [app] (name=smplayer) (class=Smplayer)
   [Sticky]	{yes}
-  [Layer]	{2}
+  [Layer]	{8}
   [Close]	{yes}
 [end]
 [app] (name=gimp) (class=Gimp) (role=gimp-image-window)
-  [Dimensions]	{1076 922}
-  [Position]	(UPPERLEFT)	{204 102}
   [Close]	{yes}
 [end]
 [app] (name=gimp) (class=Gimp) (role=gimp-toolbox)
-  [Dimensions]	{224 1018}
-  [Position]	(UPPERLEFT)	{0 0}
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
@@ -65,8 +59,7 @@
  [app] (title=Untitled)
  [app] (title=chrome://devtools/devtools.html)
  [app] (title=Developer Tools.*)
-  [Dimensions]	{1072 613}
-  [Position]	(UPPERLEFT)	{3 370}
+  [Close]	{yes}
 [end]
 [group]  (workspace=[current])
  [app] (name=Navigator)
@@ -76,7 +69,6 @@
  [app] (name=chromium-browser.real)
  [app] (name=konqueror)
  [app] (name=chrome)
-  [Position]	(UPPERLEFT)	{45 12}
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
@@ -106,7 +98,7 @@
   [Workspace]	{1}
 [end]
 [app] (name=gkrellm) (class=Gkrellm)
-  [Position]	(UPPERLEFT)	{1108 15}
+  [Position]	(UPPERLEFT)	{1506 0}
   [Sticky]	{yes}
 [end]
 [app] (name=explorer.exe) (class=Wine)
@@ -129,7 +121,13 @@
   [Position]	(UPPERLEFT)	{537 102}
 [end]
 [app] (name=Global) (class=Firefox) (role=console)
-  [Dimensions]	{1030 726}
-  [Position]	(UPPERLEFT)	{5 267}
   [Close]	{yes}
+[end]
+[transient] (name=chromium-browser) (class=Chromium-browser)
+  [Dimensions]	{646 809}
+  [Position]	(UPPERLEFT)	{673 124}
+[end]
+[group]  (workspace=[current])
+ [app] (title=joeys_get_for_chromium.*)
+ [app] (name=joeys_get_for_chromium.*)
 [end]

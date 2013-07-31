@@ -66,14 +66,14 @@
   [moveWindowDown]             (Mod1-Control-J)            {1}
   [moveWindowLeft]             (Mod1-Control-H)            {1}
   [moveWindowRight]            (Mod1-Control-L)            {1}
-  [changeWorkspace]            (Mod1-1)                    {4}
-  [changeWorkspace]            (Mod1-2)                    {5}
-  [changeWorkspace]            (Mod1-3)                    {8}
-  [changeWorkspace]            (Mod1-4)                    {2}
-  [changeWorkspace]            (Mod1-5)                    {6}
-  [changeWorkspace]            (Mod1-6)                    {1}
-  [changeWorkspace]            (Mod1-7)                    {7}
-  [changeWorkspace]            (Mod1-8)                    {8}
+  #[changeWorkspace]            (Mod1-1)                    {4}
+  #[changeWorkspace]            (Mod1-2)                    {5}
+  #[changeWorkspace]            (Mod1-3)                    {8}
+  #[changeWorkspace]            (Mod1-4)                    {2}
+  #[changeWorkspace]            (Mod1-5)                    {6}
+  #[changeWorkspace]            (Mod1-6)                    {1}
+  #[changeWorkspace]            (Mod1-7)                    {7}
+  #[changeWorkspace]            (Mod1-8)                    {8}
   ## Use these if you want bbkeys' dropdown menu.
   # [NextWindow]                 (Mod1-Tab)
   # [PrevWindow]                 (Mod1-grave)
@@ -89,11 +89,11 @@
   ## These were added by joey:
 
   ## Disabled after interfering (sporadically) with Fluxbox's keys.
-  ## May contribute to keypress event loss in Fluxbox.
-  # [upWorkspace]                (Mod1-Control-Up)
-  # [downWorkspace]              (Mod1-Control-Down)
-  # [prevWorkspace]              (Mod1-Control-Left)
-  # [nextWorkspace]              (Mod1-Control-Right)
+  ## May contribute to keypress event loss in Fluxbox?  No!  In fact using these is a workaround for that bug in Fluxbox!
+  #[upWorkspace]                (Mod1-Control-Up)
+  #[downWorkspace]              (Mod1-Control-Down)
+  #[prevWorkspace]              (Mod1-Control-Left)
+  #[nextWorkspace]              (Mod1-Control-Right)
   ## Or:
   # [leftWorkspace]              (Mod1-Control-Left)
   # [rightWorkspace]             (Mod1-Control-Right)

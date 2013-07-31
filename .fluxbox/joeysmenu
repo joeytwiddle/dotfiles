@@ -18,5 +18,10 @@
 	#	[include] (/home/joey/linux/.fluxbox/menudefs.hook)
 	#[end]
 
+	## This is kinda pointless, the actual binary used is in my .fluxbox/startup
+	#[submenu] (Window Managers TEST) {}
+	#	[restart] (FluxBox.GIT)  {/usr/local/fluxbox.git/bin/startfluxbox}
+	#[end]
+
 [end]
 

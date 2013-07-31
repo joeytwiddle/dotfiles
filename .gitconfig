@@ -4,7 +4,7 @@
 
 # Essential to avoid warnings
 [user]
-	name = Paul Clark
+	name = Paul "Joey" Clark
 	email = joey@neuralyte.org
 
 
@@ -12,32 +12,43 @@
 # Many of the following come from http://cheat.errtheblog.com/s/git
 
 # Add colors
+# Here 'white' is actually darker than the default!
 [color]
 	ui = auto
 [color "branch"]
-	current = yellow reverse
+	current = magenta bold reverse
 	local = yellow
 	remote = green
 [color "diff"]
-	meta = yellow bold
-	frag = magenta bold
+	commit = yellow bold reverse
+	meta = cyan bold
+	frag = magenta
+	func = white
+	plain = white
 	old = red bold
 	new = green bold
 [color "status"]
+	branch = magenta bold reverse
 	added = yellow
 	changed = green
 	untracked = cyan
-
-
 
 # Highlight whitespace in diffs
 [color]
 	ui = true
 [color "diff"]
 	whitespace = blue reverse
+
+
+
+# May not be for everyone!  Actually does some stuff!
+# TODO: Look up what the hell this does and document it!
 [core]
 	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
-	excludesfile = /home/joey/linux/.gitignore
+	excludesfile = /home/joey/.gitignore
+	# Wrap lines when reading diffs
+	# This sometimes drops the top of the log off the top of the screen, which is annoying
+	#pager = less -r
 
 
 
@@ -49,27 +60,48 @@
 	co = checkout
 	df = diff
 	dc = diff --cached
-	lg = log -p
-	lol = log --graph --decorate --pretty=oneline --abbrev-commit
+	# Adds file summaries to the standard log
+	lf = log --stat
+	# Adds actual diffs to the standard log
+	lg = log -p -m
+	# Summaries (without/with branches?)
+	#lol = log --graph --decorate --pretty=oneline --abbrev-commit
+	lol = log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 	prettylog = log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"
 	ls = ls-files
 	# Show files ignored by git:
 	ign = ls-files -o -i --exclude-standard
+	ll = log -U0 -p -m
+	ld = log -p --word-diff=plain -m
+	# -p shows diffs.  -m shows diffs for merges
 
 	# Joey's:
-	## Just a list of the files that have changed on the origin (I hope)
-	## You need to do a 'fetch' beforehand but not a 'merge'
-	# newfiles = ls-files -u
-	# newfiles = diff-files --stat
-	## This shows change-counts in local files (and perhaps also what is new on the origin)
-	whatsnew = diff-index --color --stat origin
-	## This shows only what is new on the origin (log and diffs!)
-	## BUT ofc it only works after git fetch!
+	# Just a list of the files that have changed on the origin (I hope)
+	# You need to do a 'fetch' beforehand but not a 'merge'
+	#newfiles = ls-files -u
+	#newfiles = diff-files --stat
+	# This shows change-counts in local files (and perhaps also what is new on the origin)
+	# It can be used to show what files will change when you go git merge FETCH_HEAD
+	# BUT note that it shows the *opposite* of what the merge will perform!
+	# I.e. additions are red, removals are green!  :P
+	whatsnewOrigin = diff-index --color --stat origin
+	# Hmmm.  If no origin is set yes in .git/config, then we need to do this:
+	whatsnew = diff-index --color --stat FETCH_HEAD
+	# This shows only what is new on the origin (log and diffs!)
+	# BUT ofc it only works after git fetch!
 	preview  = log -p HEAD..origin
-	# preview  = diff -p HEAD..origin
+	#preview  = diff -p HEAD..origin
 
+	# Just shows the number of commits by each user
 	whodidwhat = shortlog -nsw -e
+
+	recent = diff HEAD~~~
+
+	# List the aliases we have
+	alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t = \\2/' | sort
+
+
 
 
 
@@ -99,19 +131,20 @@
 
 
 
-# % git config apply.whitespace nowarn
-#
 # To ignore whitespace
+#
+# % git config apply.whitespace nowarn
 #
 # I have this disabled because I use coffeescript, and in general I like
 # whitespace to be meaningful!
 #
-# [apply]
-	# whitespace = nowarn
+#[apply]
+#	 whitespace = nowarn
 
 
 
 ## Of interest:
 # http://stackoverflow.com/questions/849308/pull-push-from-multiple-remote-locations
 # (elliot's answer: automatically push to two repositories)
+
 

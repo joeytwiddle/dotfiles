@@ -105,6 +105,7 @@ PS4="[.xinitrc] # $PS4"
 ## Put your favourite WMs at the top.  The first one present will be chosen.
 ## kdelight runs the KDE3 panel 'kicker' but currently with fluxbox instead of kwin.
 WindowManagers="
+/usr/local/fluxbox.git/bin/startfluxbox
 fluxbox
 startlxde
 compiz
@@ -212,7 +213,7 @@ unset COLUMNS
 # xrandr --dpi 80x75
 # xrandr --dpi 74x75
 
-xrandr -s 1280x1024
+# xrandr -s 1280x1024
 # xrandr --dpi 92x100   # Starts gvim in smaller font, so not what I had before!
 # xrandr --dpi 100x100  # I *think* this made konq font smaller than expected?
 # xrandr --dpi 96x100
@@ -275,36 +276,48 @@ fi
 xterm -geometry 80x24+570+680 &
 
 # set +x
-## Animated intro, and set background:
+## Animated intro, and/or set background:
 (
 
-	xsetroot -solid black
-	# xsetroot -grey -bg darkgreen -fg black
-	# for X in `seq -w 0 1 80`
-	# do
-		# Y=`expr 80 - $X`
-		# xsetroot -mod 16 16 -fg "#$Y"80"$Y" -bg "#"$Y$Y$Y
-	# done
-	# for X in `seq -w 0 1 8`
-	# do
-		# Y=`expr 8 - $X`
-		# xsetroot -mod 16 16 -fg "#$Y$Y"88"$Y$Y" -bg "#"$Y$Y$Y$Y$Y$Y
-		# sleep 1
-	# done
-	## Still appears to flicker, but I blame that on 16bpp!
-	# xsetroot -mod 16 16 -fg "#888888" -bg "#888888"
-	# for HI in `seq 7 -1 0`
-	# do
-		# # for LO in f e d c b a `seq 9 -1 0`
-		# for LO in c `seq 8 -4 0`
-		# do
-			# X="$HI$LO"
-			# xsetroot -mod 16 16 -fg "#$X"88"$X" -bg "#$X$X$X"
-			# sleep 0.01
-		# done
-	# done
-	# jshinfo "[.xinitrc] Finished background grid animation."
 
+	animatedIntro=1
+	if [ -n "$animatedIntro" ]
+	then
+
+		xsetroot -mod 16 16 -fg "#808080" -bg "#808080"
+		## Give the wm a chance to start first!  Otherwise it makes our animation jitter.
+		sleep 2
+		## Fade from mid-grey to a green-on-black grid
+		animDelay=0.01
+		for HI in `seq 7 -1 0`
+		do
+			# for LO in f e d c b a `seq 9 -1 0`
+			for LO in e c a `seq 8 -2 0`
+			do
+				X="$HI$LO"
+				xsetroot -mod 16 16 -fg "#$X"80"$X" -bg "#$X$X$X"
+				sleep $animDelay
+			done
+		done
+
+		## then from green-on-black grid down to black
+		for HI in `seq 7 -1 0`
+		do
+			for LO in e c a `seq 8 -2 0`
+			do
+				X="$HI$LO"
+				xsetroot -mod 16 16 -fg "#00"$X"00" -bg "#000000"
+				sleep $animDelay
+			done
+		done
+		xsetroot -solid black
+		jshinfo "[.xinitrc] Finished background grid animation."
+
+	else
+		xsetroot -solid black
+	fi
+
+	## Delay because without animation randomwallpaper is heavy and delays wm startup.
 	( sleep 2 ; nice -n 15 randomwallpaper ) &
 	# xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/abstract/mosaic.jpg
 	# xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/abstract/mindflow.jpg
@@ -353,8 +366,8 @@ xset r rate 270 65
 xset m 20/5 5
 
 ## Got problems with characters displaying as squares [] ?
-# xset fp- unix/:7100
-xset fp+ unix/:7101   ## xfstt
+xset fp- unix/:7100     ## xfstt on ubuntu
+# xset fp+ unix/:7101   ## xfstt
 
 ## Allow connections to X display from anywhere
 # xhost +
@@ -396,23 +409,27 @@ xset fp+ unix/:7101   ## xfstt
 		## Increased sleep from 5 to 10 because gnomeICU and xmms-applet were failing to show their visuals.
 		## Needs to wait for window manager to start (enlightenment):
 		# panel &
-		kicker &
+		# kicker &
+		/opt/trinity/bin/kicker &
 	fi
 
 	# More of Joey's preferences:
 
 	# gnome-settings-daemon &
 
-	# xgamma -rgamma 0.7 -ggamma 1.0 -bgamma 1.0 ## for Tim's red-ish monitor
-	# xgamma -rgamma 0.8 -ggamma 1.2 -bgamma 1.2 ## for Tim's red-ish monitor
-	## OK so first I adjust the monitor's settings to get pure white, then I apply xgamma to fix greys.
-	# xgamma -rgamma 1.0 -ggamma 1.4 -bgamma 1.4 ## Brighter so I can read my greys!
-	# xgamma -rgamma 1.1 -ggamma 1.4 -bgamma 1.3 ## When the bloody thing goes darker and bluer!
-	## Are they accumulating?!
-	# xgamma -rgamma 1.8 -ggamma 2.0 -bgamma 2.0   dark
-	# xgamma -rgamma 2 -ggamma 2.5 -bgamma 2.5   bright
-	# xgamma -rgamma 2 -ggamma 2.2 -bgamma 2.2   ok/light
-	xgamma -rgamma 1.2 -ggamma 1.6 -bgamma 1.6
+	if [ "$HOSTNAME" = hwi ]
+	then
+		# xgamma -rgamma 0.7 -ggamma 1.0 -bgamma 1.0 ## for Tim's red-ish monitor
+		# xgamma -rgamma 0.8 -ggamma 1.2 -bgamma 1.2 ## for Tim's red-ish monitor
+		## OK so first I adjust the monitor's settings to get pure white, then I apply xgamma to fix greys.
+		# xgamma -rgamma 1.0 -ggamma 1.4 -bgamma 1.4 ## Brighter so I can read my greys!
+		# xgamma -rgamma 1.1 -ggamma 1.4 -bgamma 1.3 ## When the bloody thing goes darker and bluer!
+		## Are they accumulating?!
+		# xgamma -rgamma 1.8 -ggamma 2.0 -bgamma 2.0   dark
+		# xgamma -rgamma 2 -ggamma 2.5 -bgamma 2.5   bright
+		# xgamma -rgamma 2 -ggamma 2.2 -bgamma 2.2   ok/light
+		xgamma -rgamma 1.2 -ggamma 1.6 -bgamma 1.6
+	fi
 
 	jshinfo "DISPLAY = $DISPLAY"
 

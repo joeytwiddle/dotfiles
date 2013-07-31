@@ -5,7 +5,7 @@
 # You can set your favourite wallpaper here if you don't want
 # to do it from your style.
 #
-# bsetbg -f ~/pictures/wallpaper.png
+# fbsetbg -f ~/pictures/wallpaper.png
 #
 # This sets a black background
 
@@ -32,6 +32,15 @@
 # xmodmap ~/.Xmodmap
 
 
+#set -x
+#exec 1> ~/jsh.log
+#exec 2> ~/jsh.error
+
+export JPATH="$HOME/j"
+. "$JPATH/startj"
+echo "PATH is now: $PATH"
+export PATH
+
 
 # Applications you want to run with fluxbox.
 # MAKE SURE THAT APPS THAT KEEP RUNNING HAVE AN ''&'' AT THE END.
@@ -41,12 +50,27 @@
 # wmsmixer -w &
 # idesk &
 
+bbkeys &
+lxpanel &
+randomwallpaper &
+gkrellm &
+
+(
+  sleep 2
+  xscreensaver -no-splash &
+  sleep 2
+  /opt/trinity/bin/kicker &
+  sleep 2   # Longer delay will put it in lxpanel?
+  nm-applet &
+) &
+
 # And last but not least we start fluxbox.
 # Because it is the last app you have to run it with ''exec'' before it.
 
 exec fluxbox
+#exec /usr/local/fluxbox.git/bin/fluxbox
 # or if you want to keep a log:
-# exec fluxbox -log "$HOME/.fluxbox/log.txt"
+#exec fluxbox -log "$HOME/.fluxbox/log.txt"
 
 # j/jsh fluxbox
 

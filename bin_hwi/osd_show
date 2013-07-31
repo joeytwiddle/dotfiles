@@ -4,8 +4,21 @@
 ## No more spam from those noobs in # when I'm holding the flag
 ## In fact screw #smo.priv too?!
 # if [ -f /tmp/playing_ut ] && ( [[ "$*" =~ ^\ \#\  ]] || [[ "$*" =~ ^\ \#smo.priv\  ]] )
-if [ -f /tmp/disable_osd_show ] && ( [[ "$*" =~ ^\ \#\  ]] || [[ "$*" =~ uggla ]] || [[ "$*" =~ ^\ \#(smo.priv|crtc|webgl|bbg)\  ]] )
-then exit 0
+if [ -f /tmp/disable_osd_show ]
+then
+	# Mask specific channels: [[ "$*" =~ ^\ \#(smo.priv|crtc|webgl|bbg)\  ]]
+	# Mask all channels and uggla, allow other PMs through.
+	if [[ "$*" =~ ^\ \# ]] || [[ "$*" =~ uggla ]]
+	then exit 0
+	fi
+	## Otherwise, if we are going to show something, I'm probably running UT in a second X session
+	export DISPLAY=":1"
+fi
+
+if pgrep x11vnc >/dev/null
+then
+	echo "Not displaying because x11vnc is running and NVidia is crashy: $*"
+	exit 0
 fi
 
 # font='-*-arial-*-r-*-*-*-120-*-*-*-*-*-*'
@@ -21,7 +34,7 @@ then . "$STATUS_FILE"
 fi
 echo "YOFFSET=$((YOFFSET+20))" > "$STATUS_FILE"
 
-echo "Sending: $*" >> /tmp/osd_show.log
+# echo "Sending: $*" >> /tmp/osd_show.log
 # echo "$*" | osd_cat -d 8 -o $YOFFSET -c red -f '-*-helvetica-*-r-*-*-*-100-*-*-*-*-*-*'
 (
 	echo "$*" | osd_cat -d 10 -o $YOFFSET -c '#ff2200' -f "$font" -s 2
