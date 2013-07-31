@@ -1,7 +1,10 @@
 --regex-c=/^(COMMENT: C, Java, Javascript, Asm have defaults, so need no langdef, but we can extend them)/\1/X,XXX/
 
 --regex-vim=/^(COMMENT: ex-ctags already has this as 'map': \s*(map|[nvxsoilc]*map)\s+([^\s]*).*)/\2/m,mapping/
+--regex-vim=/^(COMMENT: python functions)/\1/X,XXX/
+--regex-vim=/^\s*def\s+([a-zA-Z0-9_$]+)/\1/f,function/
 
+--regex-vim=/^(COMMENT: htag matches any *bold* text, so I don't recommend displaying these, but they may still be useful for Ctrl-})/\1/X,XXX/
 --regex-vim=/\*([A-Za-z0-9_\-]+)\*/\1/h,htag/
 --regex-vim=/^(COMMENT: not needed use augroup)\s*au[tocmd]*\s+[^\s]+\s+([A-Za-z0-9]+)/\1/d,autocmd/
 
@@ -15,11 +18,28 @@
 --regex-javascript=/^\s*this\.([a-zA-Z_$][0-9a-zA-Z_$]*)\s*=.*$/\1/a,assigned/
 --regex-javascript=/^\s*([a-zA-Z_$][0-9a-zA-Z_$]*):.*$/\1/p,property/
 --regex-javascript=/^(COMMENT: ctags defaults ignore functions inside anonymous functions - the following catch them but can cause duplicates!)/\1/X,XXX/
---regex-javascript=/^\s*\<function\>\s*(\<[a-zA-Z_$][0-9a-zA-Z_$]*\>)/\1/f,function/
---regex-javascript=/^(COMMENT: The following matches functions missed by default, those defined as A.B.f=...)/\1/X,XXX/
---regex-javascript=/^\s*([a-zA-Z_$][0-9a-zA-Z_$]*\.[a-zA-Z_$][0-9a-zA-Z_$]*\.[a-zA-Z_$][0-9a-zA-Z_$.]*)*\s*=\s*\<function\>/\1/f,function/
+--regex-javascript=/^(COMMENT: \s*\<function\>\s*(\<[a-zA-Z_$][0-9a-zA-Z_$]*\>) END_COMMENT)/\1/f,function/
+--regex-javascript=/^(COMMENT: The following matches functions missed by default, those defined as A.B.f=...  Oh these are now showing up!  Eh I really don't get the pattern.  ctags seems to be catching Project.statics.markDelete just fine on its own, but not ProjectProvider.prototype.findMyProjects!)/\1/X,XXX/
+--regex-javascript=/^(COMMENT: \s*([a-zA-Z_$][0-9a-zA-Z_$]*\.[a-zA-Z_$][0-9a-zA-Z_$]*\.[a-zA-Z_$][0-9a-zA-Z_$.]*)*\s*=\s*\<function\> END_COMMENT)/\1/f,function/
+--regex-javascript=/^(COMMENT: However, it's worth extracting a tag just for *the last part*, for Ctrl-] in Vim, if not for viewing. END_COMMENT)/\1/f,function/
+--regex-javascript=/\s*[a-zA-Z_$][0-9a-zA-Z_$]*\.prototype.([a-zA-Z_$][0-9a-zA-Z_$.]*)*\s*=\s*\<function\>/\1/f,function/
+--regex-javascript=/\s*[a-zA-Z_$][0-9a-zA-Z_$]*\.[^p][^r][^o][^t][0-9a-zA-Z_$]*\.([a-zA-Z_$][0-9a-zA-Z_$.]*)*\s*=\s*\<function\>/\1/_,deep_function/
+--regex-javascript=/^(COMMENT: But functions assigned to a location with 3 or more dots are not ...)/\1/X,XXX/
+--regex-javascript=/^\s*(([a-zA-Z_$][0-9a-zA-Z_$]*\.){3,}[a-zA-Z_$][0-9a-zA-Z_$]*)*\s*=\s*\<function\>/\1/f,function/
+--regex-javascript=/^(COMMENT: The following matches functions missed by default, those defined as properties - this assumes you are not already using the 'property' rule above)/\1/X,XXX/
+--regex-javascript=/^\s*["']?([a-zA-Z_$][0-9a-zA-Z_$]*)["']?\s*:\s*function\>/\1/f,function/
 --regex-javascript=/^(COMMENT: It used to be:)/\1/X,XXX/
 --regex-javascript=/^(COMMENT: \s*(\<[a-zA-Z_$][0-9a-zA-Z_$.]*\>)*\s*=\s*\<function\>)/\1/f,function/
+--regex-javascript=/^(COMMENT: Express routes: (only if var app is used))/\1/X,XXX/
+--regex-javascript=/^\s*\app\.(get|put|post|delete)\(\s*["']([^"']+)["']/\2 (\1)/r,route/
+
+--langdef=opa
+--langmap=opa:+.opa
+--regex-opa=/^\s*\<type\>\s*(\<[a-zA-Z_$.][0-9a-zA-Z_$.]*\>)/\1/t,type/
+--regex-opa=/^\s*\<database\>\s*(\<[a-zA-Z_$.][0-9a-zA-Z_$.]*\>)/\1/d,database/
+--regex-opa=/^\s*\<module\>\s*(\<[a-zA-Z_$.][0-9a-zA-Z_$.]*\>)/\1/m,module/
+--regex-opa=/^(\<[a-zA-Z_$.][0-9a-zA-Z_$.]*\>)\s*=/\1/g,global/
+--regex-opa=/^\s*(client|server|)\s*\<function\>\s*(\<[a-zA-Z_$.][0-9a-zA-Z_$.]*\>)/\2/f,function/
 
 --langdef=man
 --langmap=man:+.~,man:+.man
@@ -94,8 +114,8 @@
 --langdef=help
 --langmap=help:.txt
 --regex-help=/^([0-9]+\. [A-Z].*)\*$/\1/s,section/
---regex-help=/^COMMENT: ([A-Z][A-Za-z0-9 ]*).*\*$/\1/h,heading/
---regex-help=/^([A-Z][A-Za-z0-9 ]*)\s+\*/\1/h,heading/
+--regex-help=/^COMMENT: ([A-Z][A-Za-z0-9 ]*).*\*.+\*$/\1/h,heading/
+--regex-help=/^([A-Z][A-Za-z0-9 ]*)\s+\*.+\*/\1/h,heading/
 --regex-help=/[\*]([^* \t]+)[\*]$/\1/m,marker/
 
 --langdef=Scala
@@ -111,4 +131,6 @@
 --regex-Scala=/^\s*type\s*([a-zA-Z0-9_]+)\s*[\[<>=]/\1/T,type/
 --regex-Scala=/^\s*import\s*([a-zA-Z0-9_{}., \t=>]+$)/\1/i,include/
 --regex-Scala=/^\s*package\s*([a-zA-Z0-9_.]+$)/\1/p,package/
+
+--regex-html=/^\s*<template name=.([^"']*)./\1/t,template/
 
