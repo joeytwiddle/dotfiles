@@ -403,16 +403,22 @@ function! s:RunGrepCmd(cmd, pattern)
 
     " I think we need some obvious indiciation that the buffer changed!
 
-    call s:FoldByFiles()
+    call s:FoldByFolder()
 
     call delete(tmpfile)
 endfunction
 
 " If there are a lot of results, make folds for each file in the quickfix list
-function! s:FoldByFiles()
+function! s:FoldByFolder()
 
     setlocal foldmethod=expr
-    setlocal foldexpr=matchstr(getline(v:lnum),'^[^\|]\\+')==#matchstr(getline(v:lnum+1),'^[^\|]\\+')?1:'<1'
+    " This folds by filename:
+    "setlocal foldexpr=matchstr(getline(v:lnum),'^[^\|]\\+')==#matchstr(getline(v:lnum+1),'^[^\|]\\+')?1:'<1'
+    " No not by files.  Fold by folder!
+    " Folds by everything up to the last '/' before the '|', i.e. the folder but not the filename.
+    setlocal foldexpr=matchstr(substitute(getline(v:lnum),'\|.*','',''),'^.*/')==#matchstr(substitute(getline(v:lnum+1),'\|.*','',''),'^.*/')?1:'<1'
+    "setlocal foldtext=matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/').'\ ['.(v:foldend-v:foldstart+1).'\ lines]'
+    setlocal foldtext='['.(v:foldend-v:foldstart+1).']\ '.matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/')
 
     if foldclosedend(1) == line('$') || line("$") < 50
         " When all matches come from a single file, do not close that single fold;
