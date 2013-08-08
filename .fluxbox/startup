@@ -50,6 +50,8 @@ export PATH
 # wmsmixer -w &
 # idesk &
 
+. "$HOME"/.joeys_x_essentials
+
 bbkeys &
 lxpanel &
 randomwallpaper &

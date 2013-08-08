@@ -1,0 +1,117 @@
+
+cat $HOME/.my_x_settings | grep -v "^#" | xrdb -merge
+
+## Fix my broken keymap:
+setxkbmap -print gb | xkbcomp - "$DISPLAY"
+
+## Disabled
+if [ -d $HOME/X11_big_cursor ] && false
+then
+	jshinfo "Initialising big cursor."
+	xset fp+ $HOME/X11_big_cursor
+	xset fp rehash
+	xsetroot -cursor_name X_cursor
+fi
+
+# set +x
+## Animated intro, and/or set background:
+(
+
+
+	animatedIntro=1
+	if [ -n "$animatedIntro" ]
+	then
+
+		xsetroot -mod 16 16 -fg "#808080" -bg "#808080"
+		## Give the wm a chance to start first!  Otherwise it makes our animation jitter.
+		sleep 2
+		## Fade from mid-grey to a green-on-black grid
+		animDelay=0.01
+		for HI in `seq 7 -1 0`
+		do
+			# for LO in f e d c b a `seq 9 -1 0`
+			for LO in e c a `seq 8 -2 0`
+			do
+				X="$HI$LO"
+				xsetroot -mod 16 16 -fg "#$X"80"$X" -bg "#$X$X$X"
+				sleep $animDelay
+			done
+		done
+
+		## then from green-on-black grid down to black
+		for HI in `seq 7 -1 0`
+		do
+			for LO in e c a `seq 8 -2 0`
+			do
+				X="$HI$LO"
+				xsetroot -mod 16 16 -fg "#00"$X"00" -bg "#000000"
+				sleep $animDelay
+			done
+		done
+		xsetroot -solid black
+		jshinfo "[.xinitrc] Finished background grid animation."
+
+	else
+		xsetroot -solid black
+	fi
+
+	## Delay because without animation randomwallpaper is heavy and delays wm startup.
+	( sleep 2 ; nice -n 15 randomwallpaper ) &
+	# xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/abstract/mosaic.jpg
+	# xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/abstract/mindflow.jpg
+	# jxsetbg /stuff/wallpapers/abstract/mindflow.jpg
+	# jxplanet makeicon /stuff/portablelinux/images/xplanet.gif
+	# nice -n 10 jxplanet render
+	## I sleep because something (probably kdelight) sets a boring default bg.  [Maybe not kdelight because the behaviour was different from startkde: it didn't refresh the bg/root on desktop switches)
+	# sleep 20
+	## I sleep some more to let kwin + konqueror to start, before building the image db
+	## I've diabled it now; only run by hand.
+	# sleep 60
+	# randomwallpaper
+
+) &
+
+# set -x
+
+## From fluxbox's xinitrc howto:
+# turn off screen blanking
+xset s off
+## Turn on energy star features (monitor still goes blank but wakes up for mplayer =) except under kde :-(
+if echo "$WinMan" | grep kde
+then xset -dpms
+else xset dpms 3600 3600 3600
+fi
+## Disable bell
+xset -b
+## Increase keyboard rate
+# xset r rate 400 50
+# xset r rate 280 90
+# xset r rate 270 65
+## This is fun for scrolling:
+# xset r rate 270 99
+## But to actually stop in the right place, we need something smaller:
+xset r rate 270 65
+
+## Mouse acceleration
+## <acceleration> (scalar) <threshold> (pixels per update)
+## For more action, increase the former, or reduce the latter
+# xset m 2/3
+# xset m 2/3 3
+# xset m 4/5 3
+# Save wrists with fast acceleration
+# xset m 12/5 10
+# Even faster:
+xset m 20/5 5
+
+## Got problems with characters displaying as squares [] ?
+xset fp- unix/:7100     ## xfstt on ubuntu
+# xset fp+ unix/:7101   ## xfstt
+
+## Allow connections to X display from anywhere
+# xhost +
+
+# [ -f /usr/lib/libgdkxft.so ] && export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libgdkxft.so
+
+## Keyboard
+# xmodmap /stuff/portablelinux/etc/X11/Xmodmap.hwiDeb &
+
