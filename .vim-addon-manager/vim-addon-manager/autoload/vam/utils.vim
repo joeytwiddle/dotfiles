@@ -18,7 +18,7 @@ let s:http_cmd = exists('g:netrw_http_cmd') ?
 
 " for testing it is necessary to avoid the "Press enter to continue lines".
 " Thus provide an option making all shell commands use “system”
-let s:c['shell_commands_run_method'] = get(s:c, 'shell_commands_run_method', 'bang')
+let s:c.shell_commands_run_method = get(s:c, 'shell_commands_run_method', s:c.log_to_buf ? 'system' : 'bang')
 
 " insert arguments at placeholders $ shell escaping the value
 " usage: s:shellescape("rm --arg $ -fr $p $p $p", [string, file1, file2, file3])
@@ -38,7 +38,7 @@ fun! s:ShellDSL(special, cmd, ...) abort
   let r = l[0]
   let i = 0
   for x in l[1:]
-    let list = matchlist(x, '\[\?\(\d*\)\(p\)\?\(\.[^ \t\]]*\)\?\]\?')
+    let list = matchlist(x, '\v\[?(\d*)(p)?(\.[^ \t\]]*)?\]?')
     if empty(list)
       " should not happen
       throw 's:ShellDSL, bad : '.x
@@ -55,13 +55,13 @@ fun! s:ShellDSL(special, cmd, ...) abort
       endfor
     endif
     if list[2] == 'p'
-      let p = expand(fnameescape(p))
+      let p = expand(fnameescape(p), 1)
     endif
     let r .= shellescape(p, a:special).x[len(list[0]):]
     unlet p
   endfor
   return r
-endf
+endfun
 
 fun! s:Cmd(expect_code_0, cmd) abort
   call vam#Log(a:cmd, 'PreProc')
@@ -77,14 +77,14 @@ fun! s:Cmd(expect_code_0, cmd) abort
     throw "Command “".a:cmd."” exited with error code ".v:shell_error
   endif
   return v:shell_error
-endf
+endfun
 
 " TODO improve this and move somewhere else?
 fun! vam#utils#RunShell(...) abort
   let special=(s:c.shell_commands_run_method[-4:] is# 'bang')
   let cmd = call('s:ShellDSL', [special]+a:000)
   return s:Cmd(0, cmd)
-endf
+endfun
 
 fun! vam#utils#ExecInDir(dir, ...) abort
   let special=(s:c.shell_commands_run_method[-4:] is# 'bang')
@@ -103,7 +103,7 @@ fun! vam#utils#ExecInDir(dir, ...) abort
           \ call('s:ShellDSL', [special]+a:000)
     call s:Cmd(1, cmd)
   endif
-endf
+endfun
 
 fun! vam#utils#System(...)
   let cmd=call('s:ShellDSL', [0]+a:000)
@@ -117,15 +117,15 @@ endfun
 "Usages: EndsWith('name.tar',   '.tar', '.txt') returns 1 even if .tar was .txt
 fun! s:EndsWith(name, ...)
   return  a:name =~? '\%('.substitute(join(a:000,'\|'),'\.','\\.','g').'\)$'
-endf
+endfun
 
 " Warning: Currently hooks should not depend on order of their execution
 let s:post_unpack_hooks={}
 fun s:post_unpack_hooks.fix_layout(opts, targetDir, fixDir)
   " if there are *.vim files but no */**/*.vim files they layout is likely to
   " be broken. Try fixing it
-  let rtpvimfiles=glob(a:targetDir.'/*.vim')
-  if  !empty(rtpvimfiles) && empty(glob(a:targetDir.'/*/**/*.vim'))
+  let rtpvimfiles=vam#GlobInDir(a:targetDir, '*.vim')
+  if  !empty(rtpvimfiles) && empty(glob(fnameescape(a:targetDir).'/*/**/*.vim', 1))
     " also see [fix-layout]
 
     " fixing .vim file locations was missed above. So fix it now
@@ -133,14 +133,14 @@ fun s:post_unpack_hooks.fix_layout(opts, targetDir, fixDir)
     if (!isdirectory(a:fixDir))
       call mkdir(a:fixDir, 'p')
     endif
-    for f in map(split(rtpvimfiles, "\n"), 'fnamemodify(v:val, ":t")')
+    for f in map(rtpvimfiles, 'fnamemodify(v:val, ":t")')
       call rename(a:targetDir.'/'.f, a:fixDir.'/'.f)
     endfor
   endif
 endfun
 fun s:post_unpack_hooks.change_to_unix_ff(opts, targetDir, fixDir)
   if get(a:opts, 'unix_ff', 0)
-    for f in filter(vam#utils#Glob(a:targetDir.'/**/*.vim'), 'filewritable(v:val)==1')
+    for f in filter(vam#GlobInDir(a:targetDir, '**/*.vim'), 'filewritable(v:val)==1')
       call writefile(map(readfile(f, 'b'),
                   \'((v:val[-1:] is# "\r")?(v:val[:-2]):(v:val))'), f, 'b')
     endfor
@@ -152,6 +152,16 @@ fun! s:StripIfNeeded(opts, targetDir)
 
   if strip_components!=0
     call vam#utils#StripComponents(a:targetDir, strip_components, [a:targetDir.'/archive'])
+  endif
+endfun
+
+fun! vam#utils#GuessFixDir(type)
+  if a:type  =~# '\v^%(after\/)?%(syntax|indent|%(ft)?plugin)$'
+    return a:type
+  elseif a:type is# 'color scheme'
+    return 'colors'
+  else
+    return 'plugin'
   endif
 endfun
 
@@ -182,13 +192,7 @@ fun! vam#utils#Unpack(archive, targetDir, ...)
         \ }
 
 
-  let fixDir = a:targetDir.'/plugin'
-  let type = get(opts, 'script-type', 'plugin')
-  if type  =~# '\v^%(%(after\/)?syntax|indent|ftplugin)$'
-    let fixDir = a:targetDir.'/'.type
-  elseif type is 'color scheme'
-    let fixDir = a:targetDir.'/colors'
-  endif
+  let fixDir = a:targetDir.'/'.vam#utils#GuessFixDir(get(opts, 'script-type', 'plugin'))
 
   " 7z renames .tbz, .tbz2, .tar.bz2 to .tar, but it preserves names stored by 
   " gzip (if any): if you do
@@ -289,17 +293,8 @@ fun! vam#utils#Unpack(archive, targetDir, ...)
   for key in keys(s:post_unpack_hooks)
     call call(s:post_unpack_hooks[key], hargs, {})
   endfor
-endf
+endfun
 
-" Usage: Glob($HOME.'/*')
-" FIXME won't list hidden files as well
-fun! vam#utils#Glob(path)
-  return split(glob(a:path),"\n")
-  " The following does not filter . and .. components at all and spoils ** 
-  " patterns (but it lacks `\' at the start of the line, so it is not even 
-  " executed). Commenting this line just clarifies this issue
-  " + filter(split(glob(substitute(a:path,'\*','.*','g')),"\n"),'v:val != "." && v:val != ".."')
-endf
 
 " move */* one level up, then remove first * matches
 " if you don't want all dirs to be removed add them to keepdirs
@@ -327,14 +322,14 @@ fun! vam#utils#StripComponents(dir, num, keepdirs)
     let tomove = []
     let toremove = []
     " for each a:dir/*
-    for gdir in filter(vam#utils#Glob(a:dir.'/*'),'isdirectory(v:val)')
+    for gdir in filter(vam#GlobInDir(a:dir, '*'),'isdirectory(v:val)')
       if index(a:keepdirs, gdir)!=-1 | continue | endif
       call add(toremove, gdir)
       if strip_single_dir && len(toremove)>=2
         return
       endif
       " for each gdir/*
-      for path in vam#utils#Glob(gdir.'/*')
+      for path in vam#GlobInDir(gdir, '*')
         " move out of dir
         call add(tomove, [path, a:dir.'/'.fnamemodify(path, ':t')])
       endfor
@@ -345,15 +340,15 @@ fun! vam#utils#StripComponents(dir, num, keepdirs)
     call map(tomove, 'rename(v:val[0], v:val[1])')
     call map(toremove, 'vam#utils#RmFR(v:val)')
   endfor
-endf
+endfun
 
 " also copies 0. May throw an exception on failure
-fun! vam#utils#CopyFile(a,b)
+fun! vam#utils#CopyFile(a, b) abort
   let fc = readfile(a:a, 'b')
   if writefile(fc, a:b, 'b') != 0
     throw "copying file ".a:a." to ".a:b." failed"
   endif
-endf
+endfun
 
 fun! vam#utils#Download(url, targetFile)
   if s:http_cmd is 0
@@ -361,7 +356,7 @@ fun! vam#utils#Download(url, targetFile)
   endif
   " allow redirection because of sourceforge mirrors:
   call vam#utils#RunShell(s:http_cmd.' $p $', a:targetFile, a:url)
-endf
+endfun
 
 fun! vam#utils#RmFR(dir_or_file)
   let cmd = ""
@@ -386,7 +381,7 @@ fun! vam#utils#RmFR(dir_or_file)
   else
     call vam#utils#RunShell(cmd.' $', a:dir_or_file)
   endif
-endf
+endfun
 
 
 " a "direct link" (found on the download page)
@@ -410,7 +405,7 @@ fun! vam#utils#DownloadFromMirrors(url, targetDir)
     let t = t .'/'.fnamemodify(url,':t')
   endif
   call vam#utils#Download(url, t)
-endf
+endfun
 
 
 let s:tmpDir = ""
@@ -426,15 +421,15 @@ fun! vam#utils#TempDir(name)
     let s:tmpDir = fnamemodify(tempname(), ":h".(g:is_win ? '': ':h'))
   endif
   " expand make \ out of / on Windows
-  return expand(s:tmpDir.'/'.a:name)
-endf
+  return expand(s:tmpDir.'/'.a:name, 1)
+endfun
 
 " tries finding a new name if a plugin was renamed.
 " Also tries to provide suggestions if you made trivial typos (case,
 " forgetting _ special characters and such)
 fun! vam#utils#TypoFix(name)
    return substitute(tolower(a:name), '[_/\-]*', '', 'g')
-endf
+endfun
 
 
 "{{{1 Completion

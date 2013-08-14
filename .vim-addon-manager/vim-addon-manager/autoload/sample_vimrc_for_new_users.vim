@@ -1,12 +1,19 @@
-" minimal useful unbiased recommended .vimrc: http://vim.wikia.com/wiki/Example_vimrc
+" minimal useful unbiased recommended .vimrc: 
+" http://vim.wikia.com/wiki/Example_vimrc
+" or
+" :h vimrc_example.vim
+"
+" more useful info for new users:
+" http://vim.wikia.com/wiki/Category:Getting_started
 
 
 " kept recoding the same things over and over again.
 " So I write what I think is useful to you here.
 "
 " How to use?
-" Either copy paste contents into your .vimrc (omitting the Load function)
-" or call the load function
+" Skim it - then copy paste the lines you like into your personal .vimrc file.
+" Its a rough guide giving you hints about what can be done rather than
+" what should be done
 
 
 " these markers { { { enable folding. see modeline at the bottom
@@ -46,6 +53,7 @@ noremap \b :b<space><c-d>
 " being able to open the help fast is always fine.
 " note that you can use tab / shift -tab to select next / previous match
 " also glob patterns are allowed. Eg :h com*func<tab>
+" <c-d> will show all matches at once.
 noremap \h :h<space>
 
 " open one file, use tab and shift-tab again if there are multiple files
@@ -72,7 +80,7 @@ noremap \ip :set invpaste<bar>echo &paste ? 'pasting is on' : 'pasting is off'
 
 " for windows: make backspace work. Doesn't hurt on linux. This should be
 " default!
-set bs=indent,eol,star
+set bs=indent,eol,start
 " (deprecated:) set bs=2
 
 " foreign plugin vim-addon-manager {{{1
@@ -100,6 +108,9 @@ set bs=indent,eol,star
 " Eg its plugin tmru (most recently used files) provides the command
 " TRecentlyUsedFiles you can map to easily:
 noremap \r :TRecentlyUsedFiles<cr>
+" the most simple alternative built into vim is the :oldfiles command
+" however it may not work that wel if you use many vim instances at the same
+" time
 
 " simple glob open based on tlib's List function (similar to TCommand or fuzzy
 " plugin etc)
@@ -114,7 +125,7 @@ fun! FastGlob(glob)
   " let exclude = a:exclude_pattern == ''? '' : ' | grep -v -e '.shellescape(a:exclude_pattern)
   " let cmd .= exclude
   return system(cmd)
-endf
+endfun
 noremap \go :exec 'e '. fnameescape(tlib#input#List('s','select file', split(FastGlob(input('glob pattern, curr dir:','**/*')),"\n") ))<cr>
 
 " sometimes when using tags the list is too long. filtering it by library or
@@ -123,7 +134,7 @@ noremap \go :exec 'e '. fnameescape(tlib#input#List('s','select file', split(Fas
       let tag = eval(tlib#input#List('s','select tag', map(taglist(a:regex), 'string([v:val.kind, v:val.filename, v:val.cmd])')))
       exec 'e '.fnameescape(tag[1])
       exec tag[2]
-    endf
+    endfun
     command!-nargs=1 TJump call SelectTag(<f-args>)
 
 " }}}
@@ -137,12 +148,12 @@ fun! sample_vimrc_for_new_users#Load()
   " no code. If this function is called this file is sourced
   " As alternative this can be used:
   " runtime autoload/sample_vimrc_for_new_users.vim
-endf
+endfun
 
 " create directory for files before Vim tries writing them:
 augroup CREATE_MISSING_DIR_ON_BUF_WRITE
   au!
-  autocmd BufWritePre * if !isdirectory(expand('%:h')) | call mkdir(expand('%:h'),'p') | endif
+  autocmd BufWritePre * if !isdirectory(expand('%:h', 1)) | call mkdir(expand('%:h', 1),'p') | endif
 augroup end
 
 finish

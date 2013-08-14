@@ -2,14 +2,16 @@
 
 exec vam#DefineAndBind('s:c','g:vim_addon_manager','{}')
 
-let s:c['change_to_unix_ff'] = get(s:c, 'change_to_unix_ff', (g:os=~#'unix'))
-let s:c['do_diff'] = get(s:c, 'do_diff', 1)
-let s:c['known'] = get(s:c,'known','vim-addon-manager-known-repositories')
-let s:c['MergeSources'] = get(s:c, 'MergeSources', 'vam_known_repositories#MergeSources')
-let s:c['pool_fun'] = get(s:c, 'pool_fun', 'vam#install#Pool')
-let s:c['name_rewriting'] = get(s:c, 'name_rewriting', {})
-let s:c['pre_update_hook_functions'] = get(s:c, 'pre_update_hook_functions', ['vam#install#CreatePatch'])
-let s:c['post_update_hook_functions'] = get(s:c, 'post_update_hook_functions', ['vam#install#ApplyPatch'])
+let s:c.change_to_unix_ff               = get(s:c, 'change_to_unix_ff', (g:os=~#'unix'))
+let s:c.do_diff                         = get(s:c, 'do_diff',           1)
+let s:c.known                           = get(s:c, 'known', 'vim-addon-manager-known-repositories')
+let s:c.MergeSources                    = get(s:c, 'MergeSources', 'vam_known_repositories#MergeSources')
+let s:c.pool_fun                        = get(s:c, 'pool_fun', 'vam#install#Pool')
+let s:c.name_rewriting                  = get(s:c, 'name_rewriting',    {})
+let s:c.pre_update_hook_functions       = get(s:c, 'pre_update_hook_functions', ['vam#install#CreatePatch'])
+let s:c.post_update_hook_functions      = get(s:c, 'post_update_hook_functions', ['vam#install#ApplyPatch'])
+let s:c.post_scms_update_hook_functions = get(s:c, 'post_scms_update_hook_functions', ['vam#install#ShowShortLog'])
+let s:c.pool_item_check_funs            = get(s:c, 'pool_item_check_funs', ['vam#install#CheckPoolItem'])
 
 call extend(s:c.name_rewriting, {'99git+github': 'vam#install#RewriteName'})
 
@@ -40,6 +42,19 @@ fun! s:confirm(msg, ...)
   endif
 endfun
 
+fun! vam#install#confirm(...)
+  return call('s:confirm', a:000)
+endfun
+
+fun! vam#install#CheckPoolItem(key, i)
+  let type = get(a:i, 'type', '')
+  let url = get(a:i, 'url', '')
+  if type == 'git' && url =~ ':\/\/github.com\/'
+    if url =~ '^http' | call vam#Log("pool item ".url.": should not be using http:// for consistency. If you need http see MyGitCheckout example") | endif
+    if url =~ '\.git$' | call vam#Log('pool item '.url.': github urls also work without .git suffix. Drop if for copy paste and consistency reasons') | endif
+  endif
+endfun
+
 fun! vam#install#RewriteName(name)
   if a:name[:6]==#'github:'
     " github:{Name}      {"type": "git", "url": "git://github.com/{Name}/vim-addon-{Name}}
@@ -56,9 +71,9 @@ fun! vam#install#RewriteName(name)
 endfun
 
 fun! vam#install#GetRepo(name, opts)
-  if a:name isnot# s:c['known'] | call vam#install#LoadPool() |endif
+  if a:name isnot# s:c.known | call vam#install#LoadPool() |endif
 
-  let repository = get(s:c['plugin_sources'], a:name, get(a:opts, a:name, 0))
+  let repository = get(s:c.plugin_sources, a:name, get(get(a:opts, 'plugin_sources', {}), a:name, 0))
   if repository is 0
     unlet repository
     for key in sort(keys(s:c.name_rewriting))
@@ -111,14 +126,14 @@ fun! vam#install#ReplaceAndFetchUrls(list)
       let t = n
     endif
     if exists('t')
-      let dic = vam#ReadAddonInfo(t)
+      let info = vam#ReadAddonInfo(t)
       unlet t
-      if !has_key(dic,'name') || !has_key(dic, 'repository')
+      if !has_key(info, 'name') || !has_key(info, 'repository')
         call vam#Log( n." is no valid addon-info file. It must contain both keys: name and repository")
         continue
       endif
-      let s:c['plugin_sources'][dic['name']] = dic['repository']
-      let l[idx] = dic['name']
+      let s:c.plugin_sources[info.name] = info.repository
+      let l[idx] = info.name
     endif
   endfor
   return l
@@ -140,13 +155,14 @@ fun! vam#install#RunHook(hook, info, repository, pluginDir, opts)
           \'%i', 'a:info',       'g'),
           \'%o', 'a:opts',       'g')
   endif
-endfu
+endfun
 
 " opts: same as ActivateAddons
 fun! vam#install#Install(toBeInstalledList, ...)
   let toBeInstalledList = vam#install#ReplaceAndFetchUrls(a:toBeInstalledList)
   let opts = a:0 == 0 ? {} : a:1
-  let auto_install = s:c['auto_install'] || get(opts,'auto_install',0)
+  let auto_install = get(opts, 'auto_install', s:c.auto_install)
+  let installed = []
   for name in filter(copy(toBeInstalledList), '!vam#IsPluginInstalled(v:val)')
     let repository = vam#install#GetRepo(name, opts)
     " make sure all sources are known
@@ -160,7 +176,9 @@ fun! vam#install#Install(toBeInstalledList, ...)
     " tell user about target directory. Some users don't get it the first time..
     let pluginDir = vam#PluginDirFromName(name)
 
-    call vam#DisplayAddonInfo(name)
+    " call vam#DisplayAddonInfo(name), can't use due to plugin_sources
+    call vam#Log(join(vam#DisplayAddonInfoLines(name, repository),"\n"), 'None')
+
     call vam#Log('Target: '.pluginDir, 'None')
     if (has_key(opts, 'requested_by'))
       call vam#Log('Dependency chain: '.join([name]+opts.requested_by,' < '))
@@ -211,8 +229,11 @@ fun! vam#install#Install(toBeInstalledList, ...)
         call vam#install#RunHook('post-install', info, repository, pluginDir, {})
       endif
     endif
+
+    let installed += [name]
   endfor
-endf
+  return installed
+endfun
 
 fun! vam#install#CreatePatch(info, repository, pluginDir, hook_opts)
   let a:hook_opts.diff_do_diff=(s:c.do_diff && executable('diff'))
@@ -245,7 +266,7 @@ fun! vam#install#CreatePatch(info, repository, pluginDir, hook_opts)
       call mkdir(a:pluginDir.'/archive', 'p')
 
       let rep_copy = deepcopy(a:repository)
-      let rep_copy['url'] = 'file://'.expand(archiveFileBackup)
+      let rep_copy.url = 'file://'.expand(archiveFileBackup, 1)
       call vam#install#Checkout(a:pluginDir, rep_copy)
       silent! call delete(a:pluginDir.'/version')
       try
@@ -294,10 +315,11 @@ fun! vam#install#UpdateAddon(name)
   " First, try updating using VCS. Return 1 if everything is ok, 0 if exception 
   " is thrown
   try
-    let r = vcs_checkouts#Update(pluginDir)
+    let [r, oldVersion, newVersion, sdescr] = vam#vcs#Update(pluginDir)
+    let hook_opts={'oldVersion': oldVersion, 'newVersion': newVersion, 'sdescr': sdescr}
     if r isnot# 'unknown'
       if r is# 'updated'
-        call vam#install#RunHook('post-scms-update', vam#AddonInfo(a:name), {}, pluginDir, {})
+        call vam#install#RunHook('post-scms-update', vam#AddonInfo(a:name), {}, pluginDir, hook_opts)
       endif
       return r
     endif
@@ -310,7 +332,7 @@ fun! vam#install#UpdateAddon(name)
 
   " we have to find out whether there is a new version:
   call vam#install#LoadPool()
-  let repository = get(s:c['plugin_sources'], a:name, {})
+  let repository = get(s:c.plugin_sources, a:name, {})
   if empty(repository)
     call vam#Log("Don't know how to update ".a:name." because it is not contained in plugin_sources")
     return 'failed'
@@ -337,7 +359,7 @@ fun! vam#install#UpdateAddon(name)
     " update plugin
     echom "Updating plugin ".a:name." because ".(newVersion == '?' ? 'version is unknown' : 'there is a different version')
 
-    let hook_opts={'oldVersion': oldVersion}
+    let hook_opts={'oldVersion': oldVersion, 'newVersion': newVersion}
     call vam#install#RunHook('pre-update', vam#AddonInfo(a:name), repository, pluginDir, hook_opts)
 
     " checkout new version (checkout into empty location - same as installing):
@@ -356,7 +378,7 @@ fun! vam#install#UpdateAddon(name)
     call vam#Log( "Not updating plugin ".a:name." because there is no version according to version key")
   endif
   return 'up-to-date'
-endf
+endfun
 
 fun! vam#install#Update(list)
   let list = a:list
@@ -370,7 +392,7 @@ fun! vam#install#Update(list)
   call vam#install#LoadPool(1)
 
   if empty(list) && s:confirm('Update all loaded plugins?')
-    let list = keys(s:c['activated_plugins'])
+    let list = keys(s:c.activated_plugins)
   endif
   let by_reply = {}
   for p in list
@@ -390,7 +412,7 @@ fun! vam#install#Update(list)
   for [k,v] in items(by_reply)
     call vam#Log(get(labels,k,k).' '.string(by_reply[k]).".", k is# 'failed' ? 'WarningMsg' : 'Type')
   endfor
-endf
+endfun
 
 " completion {{{
 
@@ -400,19 +422,20 @@ fun! vam#install#KnownAddons(type)
   " from pool
   call extend(k, s:c.plugin_sources)
   " Disk completion using default plugin dir location.
-  " Don’t do this if plugin_root_dir contains newline: split(glob) does not work 
-  " properly in this case. Also don’t do this if we require notinstalled 
-  " plugins.
+  " Don’t do this if plugin_root_dir contains newline on outdated vim: 
+  " split(glob) does not work properly in this case. Also don’t do this if we 
+  " require notinstalled plugins.
   if a:type isnot# 'notinstalled' &&
-        \s:c.plugin_dir_by_name is# 'vam#DefaultPluginDirFromName' &&
-        \stridx(s:c.plugin_root_dir, "\n")==-1
-    for n in split(glob(s:c.plugin_root_dir.'/*', "\n"))
-      " We don’t care about values: so no need to make it complex
-      let k[fnamemodify(n, ':t')] = 1
+        \s:c.plugin_dir_by_name is# 'vam#DefaultPluginDirFromName'
+    for dir in [s:c.plugin_root_dir]+s:c.additional_addon_dirs
+      for key in map(vam#GlobInDir(dir, '*/'), 'fnamemodify(v:val[:-2], ":t")')
+        " We don’t care about values: so no need to make it complex
+        let k[key] = 1
+      endfor
     endfor
   endif
   return sort(keys(k))
-endf
+endfun
 
 " Filters:
 " 1. Start of the name must be the same as completed name
@@ -471,7 +494,7 @@ endfun
 
 fun! vam#install#CompleteAddonName(findstart, base)
   if a:findstart
-    let match_text=matchstr(getline('.')[:col('.')-1], "[^'\"()[\\]{}\t ]*$")
+    let match_text=matchstr(getline('.')[:col('.')-2], "[^'\"()[\\]{}\t ]*$")
     return col('.')-len(match_text)-1
   else
     call map(vam#install#FilterVariants(a:base, vam#install#KnownAddons(0)),
@@ -501,25 +524,24 @@ endfun
 
 fun! vam#install#AddonCompletion(...)
   return call('vam#install#DoCompletion',a:000)
-endf
+endfun
 
 fun! vam#install#NotInstalledAddonCompletion(...)
   return call('vam#install#DoCompletion',a:000+["notinstalled"])
-endf
+endfun
 
 fun! vam#install#InstalledAddonCompletion(...)
   return call('vam#install#DoCompletion',a:000+["installed"])
-endf
+endfun
 
 fun! vam#install#UninstallCompletion(...)
   return call('vam#install#DoCompletion',a:000+["notloaded"])
-endf
+endfun
 
 fun! vam#install#UpdateCompletion(...)
   return call('vam#install#DoCompletion',a:000+["installed"])
-endf
+endfun
 "}}}
-
 
 fun! vam#install#UninstallAddons(list)
   let list = a:list
@@ -531,37 +553,21 @@ fun! vam#install#UninstallAddons(list)
   if s:confirm('Will now remove '.join(list, ', ').'. Confirm?')
     call map(list, 'vam#utils#RmFR(v:val)')
   endif
-endf
+endfun
 
 fun! vam#install#HelpTags(name)
-  let d=vam#PluginDirFromName(a:name).'/doc'
+  let d=vam#PluginRuntimePath(a:name).'/doc'
   if isdirectory(d) | exec 'helptags '.fnameescape(d) | endif
-endf
-
-" " if --strip-components fails finish this workaround:
-" " emulate it in VimL
-" fun! s:StripComponents(targetDir, num)
-"   let dostrip = 1*a:num
-"   while x in range(1, 1*a:num)
-"     let dirs = split(glob(a:targetDir.'/*'),"\n")
-"     if len(dirs) > 1
-"       throw "can't strip, multiple dirs found!"
-"     endif
-"     for f in split(glob(dirs[0].'/*'),"\n")
-"       call rename(file_or_dir, fnamemodify(f,':h:h').'/'.fnamemodify(f,':t'))
-"     endfor
-"     call remove_dir_or_file(fnamemodify(f,':h'))
-"   endwhile
-" endfun
+endfun
 
 " basename of url. if archive_name is given use that instead
 fun! vam#install#ArchiveNameFromDict(repository)
     let archiveName = fnamemodify(substitute(get(a:repository,'archive_name',''), '\.\@<=VIM$', 'vim', ''),':t')
     if empty(archiveName)
-      let archiveName = fnamemodify(a:repository['url'],':t')
+      let archiveName = fnamemodify(a:repository.url,':t')
     endif
     return archiveName
-endf
+endfun
 
 
 " may throw EXCEPTION_UNPACK
@@ -573,8 +579,9 @@ fun! vam#install#Checkout(targetDir, repository) abort
           \ ."manually."
           \ )
   endif
-  if get(a:repository,'type','') =~ 'git\|hg\|svn\|bzr'
-    call vcs_checkouts#Checkout(a:targetDir, a:repository)
+  if vam#vcs#Checkout(a:targetDir, a:repository)
+    " Successfully checked out a repository. Leaving a comment here to indicate 
+    " that an if condition has a side effect of checking out a repository.
   else
     " archive based repositories - no VCS
 
@@ -586,7 +593,7 @@ fun! vam#install#Checkout(targetDir, repository) abort
     " archive will be downloaded to this location
     let archiveFile = a:targetDir.'/archive/'.archiveName
 
-    call vam#utils#Download(a:repository['url'], archiveFile)
+    call vam#utils#Download(a:repository.url, archiveFile)
 
     call vam#utils#Unpack(archiveFile, a:targetDir,
                 \                  {'strip-components': get(a:repository,'strip-components',-1),
@@ -609,7 +616,7 @@ endfun
 
 fun! vam#install#MergeTarget()
   return split(&runtimepath,",")[0].'/after/plugin/vim-addon-manager-merged.vim'
-endf
+endfun
 
 " if you machine is under IO load starting up Vim can take some time
 " This function tries to optimize this by reading all the plugin/*.vim
@@ -631,7 +638,7 @@ fun! vam#install#MergePluginFiles(plugins, skip_pattern)
   let target = vam#install#MergeTarget()
 
   for r in a:plugins
-    if !has_key(s:c['activated_plugins'], r)
+    if !has_key(s:c.activated_plugins, r)
       throw "JoinPluginFiles: all plugins must be activated (which ensures that they have been installed). This plugin is not active: ".r
     endif
   endfor
@@ -650,7 +657,7 @@ fun! vam#install#MergePluginFiles(plugins, skip_pattern)
   let uniq = 1
   let all_contents = ""
   for r in runtimepaths
-    for file in split(glob(r.'/plugin-merged/*.vim'),"\n")
+    for file in vam#GlobInDir(r, 'plugin-merged/*.vim')
 
       if file =~ a:skip_pattern
         let all_contents .= "\" ignoring ".file."\n"
@@ -731,12 +738,11 @@ fun! vam#install#MergePluginFiles(plugins, skip_pattern)
   if !isdirectory(d) | call mkdir(d,'p') | endif
   call writefile(split(all_contents,"\n"), target)
 
-endf
+endfun
 
 fun! vam#install#UnmergePluginFiles()
   let path = fnamemodify(vam#PluginRuntimePath('vim-addon-manager'),':h')
-  for merged in split(glob(path.'/*/plugin-merged'),"\n")
-            \ +split(glob(path.'/*/*/plugin-merged'),"\n")
+  for merged in vam#GlobInDir(path, '{,*/}*/plugin-merged')
     echo "unmerging ".merged
     call rename(merged, substitute(merged,'-merged$','',''))
   endfor
@@ -748,30 +754,40 @@ endfun
 " one of those commands. Read doc/vim-addon-manager.txt to learn about the
 " pool of plugin sources. Also see option "known_repos_activation_policy"
 fun! vam#install#LoadKnownRepos()
-  let known = s:c['known']
+  let known = s:c.known
   let reason = a:0 > 0 ? a:1 : 'get more plugin sources'
-  if 0 == get(s:c['activated_plugins'], known, 0)
+  if get(s:c.activated_plugins, known, 0)
+    return 1
+  else
     let policy=get(s:c, 'known_repos_activation_policy', 'autoload')
-    if policy==?"ask"
+    if policy is? 'ask'
       let reply = s:confirm('Activate plugin '.known.' to '.reason."?", "&Yes\n&No\nN&ever (during session)")
-    elseif policy==?"never"
+    elseif policy is? 'never'
       let reply=2
     else
       let reply=1
     endif
-    if reply == 3 | let s:c.known_repos_activation_policy = "never" | endif
-    if reply == 1
+    if reply == 3
+      let s:c.known_repos_activation_policy = 'never'
+      return 0
+    elseif reply == 1
       " don't pass opts so that new_runtime_paths is not set which will
       " trigger topLevel adding -known-repos to rtp immediately
       call vam#ActivateAddons([known], {})
+      return 1
+    else
+      return 0
     endif
   endif
 endfun
 
 " The default pool of know plugins for VAM: vim-addon-manager-known-repositories
 fun! vam#install#Pool()
-  call vam#install#LoadKnownRepos()
-  return vam_known_repositories#Pool()
+  if vam#install#LoadKnownRepos()
+    return vam_known_repositories#Pool()
+  else
+    return s:c.plugin_sources
+  endif
 endfun
 
 " (re)loads pool of known plugins
@@ -781,16 +797,22 @@ fun! vam#install#LoadPool(...)
     " update plugin_sources
     let s:c.plugin_sources = call(s:c.pool_fun, [], {})
 
+    for F in s:c.pool_item_check_funs
+      for k_v in items(s:c.plugin_sources)
+        call call(F, k_v)
+      endfor
+    endfor
+
     let s:c.pool_loaded = 1
   endif
-endf
+endfun
 "}}}1
 
 
 if g:is_win
   fun! vam#install#FetchAdditionalWindowsTools() abort
-    if !isdirectory(s:c['binary_utils'].'\dist')
-      call mkdir(s:c['binary_utils'].'\dist','p')
+    if !isdirectory(s:c.binary_utils.'\dist')
+      call mkdir(s:c.binary_utils.'\dist','p')
     endif
     " we have curl, so we can fetch remaining deps using Download and Unpack
     let tools = {
@@ -806,18 +828,18 @@ if g:is_win
       for ex in v[2]
         if executable(ex) | continue | endif
       endfor
-      if !filereadable(s:c['binary_utils'].'\'.v[1])
-        call vam#utils#DownloadFromMirrors(v[0].v[1], s:c['binary_utils'])
+      if !filereadable(s:c.binary_utils.'\'.v[1])
+        call vam#utils#DownloadFromMirrors(v[0].v[1], s:c.binary_utils)
       endif
     endfor
 
     if !executable('unzip')
       " colorize this?
       echo "__ its your turn: __"
-      echom "__ move all files of the zip directory into ".s:c['binary_utils'].'/dist . Close the Explorer window and the shell window to continue. Press any key'
+      echom "__ move all files of the zip directory into ".s:c.binary_utils.'/dist . Close the Explorer window and the shell window to continue. Press any key'
       call getchar()
-      exec "!".expand(s:c['binary_utils'].'/'. tools.zip[1])
-      let $PATH=$PATH.';'.s:c['binary_utils_bin']
+      exec "!".expand(s:c.binary_utils.'/'. tools.zip[1], 1)
+      let $PATH=$PATH.';'.s:c.binary_utils_bin
       if !executable('unzip')
         throw "can't execute unzip. Something failed!"
       endif
@@ -826,7 +848,7 @@ if g:is_win
     " now we have unzip and can do rest
     for k in ["gzip","bzip2","tar","diffutils","patch"]
       if !executable(tools[k][2])
-        call vam#utils#Unpack(s:c['binary_utils'].'\'.tools[k][1], s:c['binary_utils'].'\dist')
+        call vam#utils#Unpack(s:c.binary_utils.'\'.tools[k][1], s:c.binary_utils.'\dist')
       endif
     endfor
 
@@ -835,9 +857,23 @@ if g:is_win
     "return
   "endif
   "let _7zurl = 'mirror://sourceforge/sevenzip/7-Zip/4.65/7z465.exe'
-  "call vam#utils#DownloadFromMirrors(_7zurl, s:c['binary_utils'].'/7z.exe')
+  "call vam#utils#DownloadFromMirrors(_7zurl, s:c.binary_utils.'/7z.exe')
 
-  endf
+  endfun
 endif
+
+fun! vam#install#ShowShortLog(info, repository, pluginDir, hook_opts)
+  if has_key(a:hook_opts.sdescr, 'log')
+    let c=a:hook_opts.sdescr.log
+    call vam#Log('Changes', 'PreProc')
+    " XXX wdrev() functions return result with trailing newline hence matchstr()
+    "     \S also matches newline hence double quotes and collection
+    call vam#Log(call(c[0], get(c, 1, [])+[
+          \a:pluginDir,
+          \matchstr(a:hook_opts.oldVersion, "[^ \t\r\n]*"),
+          \matchstr(a:hook_opts.newVersion, "[^ \t\r\n]*")], get(c, 2, {})),
+          \'Normal')
+  endif
+endfun
 
 " vim: et ts=8 sts=2 sw=2
