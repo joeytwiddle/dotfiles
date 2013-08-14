@@ -293,9 +293,11 @@ autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | e
 			"" At size 10 this is shorter than Andale.  In fact it is shorter than my xterm 100, although it doesn't look it!
 			"" :set guifont=Lucida\ Console\ 10
 			"" Actually it's shorter than Andale at size 9 also, although it doesn't look it!
-			:set guifont=Lucida\ Console\ 7
+			":set guifont=Lucida\ Console\ 7
 			"" And it's quite readable (and short) at size 7, although small.
 			"" I know you have come back here to switch away from Lucida Console.  Don't!
+			"" Now I have stopped using lightdm, all my fonts are appearing differently.  Lucida looks how I want it in GVim yay!
+			:set guifont=Lucida\ Console\ 8
 		endif
 		" Hide the menu and toolbar which I never use.
 		:set guioptions-=m
@@ -391,6 +393,8 @@ autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | e
 	"" So I am sticking with the default now:
 	"set completeopt=menu,preview
 
+	set winwidth=1
+
 
 " }}}
 
@@ -469,13 +473,16 @@ autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | e
 	call add(vamAddons,'github:majutsushi/tagbar')         " Nests tags in some languages.
 	" call add(vamAddons,"VOoM")                           " Another outliner
 	" call add(vamAddons,'github:xolox/vim-easytags')      " Runs ctags automatic for you, to update them
-	" call add(vamAddons,'github:vim-scripts/UltiSnips')   " Breaks my usual Tab-completion!
+	"call add(vamAddons,'github:ervandew/supertab')         " Seems a lot like another_tabcompletion.vim but the list appears backwards! =/
+	call add(vamAddons,'UltiSnips')     " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
+	let g:UltiSnipsJumpForwardTrigger="<tab>"
+	let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 	" call add(vamAddons,'github:troydm/easybuffer.vim')
 	" call add(vamAddons,'github:chrisbra/NrrwRgn')
-	" call add(vamAddons,'github:vim-scripts/YankRing.vim')
+	" call add(vamAddons,'github:vim-scripts/YankRing.vim')   " Vim's 1-9 registers provide limited support for this already
+	"" DISABLED: YankRing blocks 'P' (paste) from being a repeatable action with '.' - I cannot have that!  (Is it supported with Repeat.vim present?)
+	"" Instead of how YankRing does it, I'd quite like to have "2p to paste the second-to-last yank.  Oh Vim does that already!  xD
 	" call add(vamAddons,'github:michaelficarra/vim-coffee-script')   " Coffeescript syntax
-	"" DISABLED: YankRing blocks 'P' (paste) from being a repeatable action with '.' - I cannot have that!
-	"" Instead of how YankRing does it, I'd quite like to have "2p to paste the second-to-last yank.
 	call add(vamAddons,"github:paradigm/SkyBison")          " Immediate feedback on the cmdline.  I never use this, Tab-completion is pretty fine for me.
 	call add(vamAddons,"github:joeytwiddle/vim-diff-traffic-lights-colors")
 	call add(vamAddons,"github:gokcehan/vim-yacom")      " Toggle comments with <Leader>c
@@ -497,8 +504,10 @@ autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | e
 	"call add(vamAddons,"github:chrisbra/improvedft")     " Another one to try
 	"call add(vamAddons,"github:vim-scripts/SearchComplete") " Tab-completion in the / search interface.  This breaks <Up> and intereferes with :b and and :Grep.
 	"call add(vamAddons,"github:goldfeld/vim-seek")       " Quickly seek new position by 2 chars, on `s`
-
 	"call add(vamAddons,"github:Raimondi/vim-buffalo")    " Buffer switcher - needs some extra attention to get it working, or maybe I just need the right vim version/patch.
+	call add(vamAddons,"surround")                        " Change dict(mykey) to dict[mykey] with cs([
+	" Interesting: source folder's vimrc file for different settings in specific projects
+	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
 
 	" == My Plugins from the Cloud ==
 	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
@@ -508,6 +517,7 @@ autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | e
 	call add(vamAddons,"github:joeytwiddle/vim-seek")    " Adding multi-line support
 	let g:seek_multi_line = 1
 	let g:SeekKey = 'l'
+	let g:SeekBackKey = 'L'
 	let g:seek_subst_disable = 1
 
 	" This test does not work!  Yes it does!?

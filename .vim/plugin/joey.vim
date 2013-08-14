@@ -141,7 +141,8 @@
 
 	" Search which wraps to the start of the next buffer when it reaches the end
 	" of the current one.
-	nnoremap <Leader>/ :call MyRepeatedSearch()<CR>
+	" Disabled because I never use it, and I have another mapping here now.
+	"nnoremap <Leader>/ :call MyRepeatedSearch()<CR>
 
 	function! MyRepeatedSearch()
 

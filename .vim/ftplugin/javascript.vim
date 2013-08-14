@@ -1,8 +1,11 @@
 
+" This one causes a flash but seems to work :)
 iab \f function) {<CR>}<Up><End><Left><Left><Left>
 "iab -> function) {ODODOD
-"iab { {<CR>}<Up><End>
+" These only trigger with a space before and after them.  =/
 "iab ( ()<Left>
+"iab { {<CR>}<Up><End>
+"iab { {}<Left>
 
 
 

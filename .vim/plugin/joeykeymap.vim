@@ -221,13 +221,14 @@ nmap <F8> 0xj^
 "nmap cw ciw
 " No I don't always use ce!  Leave cw alone and use ciw when you need it.  :P
 " Actually since cd does nothing, we can use that.  I doubt I will remember it though.
-nmap cd ciw
+"nmap cd ciw
+" Since I didn't remember it, I disabled it.  Just use ciw lol!  :P
 
 " $d0 leaves the char that was under the cursor; I hate that!
-"nmap d0 d0x
+nmap d0 d0x
 "nmap d0 v0d
 " Delete the whole line, not just from here backwards
-nmap d0 0d$
+"nmap d0 0d$
 
 "" Various failed shortcuts for the 'follow link' command.
 " map <C-Enter> <C-]>
@@ -298,6 +299,16 @@ nmap M g'
 
 
 
+" When it's time to clear the search, avoid /skldjsdklfj<Enter> and just \/
+nmap <silent> <Leader>/ :nohlsearch<CR>
+
+
+
+" Forgot to sudo when opening a root file?  No problem, just :w!!
+cmap w!! w !sudo tee % >/dev/null
+
+
+
 " Quick toggles for most frequently used functions
 nnoremap <Leader>t :Tlist<Enter>
 nnoremap <Leader>w :set invwrap<Enter>
@@ -341,9 +352,14 @@ nmap <Leader>l :set invrelativenumber<Enter>
 nmap <Leader>p :set invpaste<Enter>
 
 " Fold everything in the buffer except lines which match the current search pattern (or at second level, the line on either side)
-nnoremap \z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
+nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
 " Alternative, as a command:
 "command! -nargs=+ Foldsearch exe "normal /".<q-args>."^M" | setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\|\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2
+
+
+" Quickly edit/reload the vimrc file (Derek Wyatt)
+nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 
 
@@ -359,4 +375,8 @@ nnoremap <C-Z> :CloseBuffer<Enter>
 nnoremap S :w<Enter>
 " Not a good idea to map 'S' in Insert mode...
 "inoremap S <Esc>:w<Enter>i
+
+" If there is more than one matching tag, let the user choose.
+" Occasionally there are multiple results but all pointing to the same place; it still asks the user to choose.  :S
+nnoremap <C-]> g<C-]>
 

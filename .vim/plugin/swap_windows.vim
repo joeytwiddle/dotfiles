@@ -11,6 +11,12 @@ function! DoWindowSwap()
     "Mark destination
     let curNum = winnr()
     let curBuf = bufnr( "%" )
+    if !exists("g:markedWinNum")
+        echohl WarningMsg
+        echo 'First select a window with \cw'
+        echohl None
+        return
+    endif
     "Switch to source and shuffle dest->source
     exe g:markedWinNum . "wincmd w"
     let markedBuf = bufnr( "%" )

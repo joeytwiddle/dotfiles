@@ -1,7 +1,7 @@
 
 snippet fn "anonymous function (fn)" w
-function(${1:arguments}) {
-	${0:// body...}
+function(${1}) {
+	$0
 }
 endsnippet
 
@@ -21,6 +21,13 @@ endsnippet
 snippet .forE ".forEach()" !w
 .forEach(function(${1:item}){
 	${2:// body...}
+});
+endsnippet
+
+snippet .each ".each() [JQuery]" !w
+.each(function(){
+	var \$${2:item} = \$(this);
+	$0
 });
 endsnippet
 
