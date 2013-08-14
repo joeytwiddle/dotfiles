@@ -1,5 +1,6 @@
 
-cat $HOME/.my_x_settings | grep -v "^#" | xrdb -merge
+#cat $HOME/.my_x_settings 
+cat $HOME/.Xresources | grep -v "^#" | xrdb -merge
 
 ## Fix my broken keymap:
 setxkbmap -print gb | xkbcomp - "$DISPLAY"
@@ -16,7 +17,6 @@ fi
 # set +x
 ## Animated intro, and/or set background:
 (
-
 
 	animatedIntro=1
 	if [ -n "$animatedIntro" ]
@@ -83,7 +83,7 @@ else xset dpms 3600 3600 3600
 fi
 ## Disable bell
 xset -b
-## Increase keyboard rate
+## Increase keyboard rate (delay, repeats-per-second)
 # xset r rate 400 50
 # xset r rate 280 90
 # xset r rate 270 65
