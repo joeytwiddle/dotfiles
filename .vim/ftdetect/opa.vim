@@ -1,0 +1,1 @@
+/usr/share/opa/vim/ftdetect/opa.vim
