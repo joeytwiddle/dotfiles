@@ -37,8 +37,8 @@
     */
     /* Works but destroys the border's simple 3d effect. */
     /* For the simple theme, make tabs a little bit shorter. Didn't work. */
-    margin-top: -3px !important;
-    margin-bottom: -3px !important;
+    /* margin-top: -3px !important; */
+    /* margin-bottom: -3px !important; */
     /* These do nothing */
     /*
     padding-top: 1px solid white !important;
@@ -49,30 +49,31 @@
     padding-bottom: 4px solid green !important;
     */
     /* Appears to do nothing: */
-    background-color: #ff3300;
+    /* background-color: #ff3300; */
 }
-/* Highlight the background of the current tab a bit more strongly */
-/* For some reason, border-top is only visible in Sidebar theme. */
+/* Highlight the background of the current tab a bit more strongly, and custom borders too. */
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab[selected='true'] {
     /* border-top: 1px solid red !important; */
     -moz-border-top-colors: ThreeDHighlight transparent !important;
-    padding-top: 1px solid red !important;
+    /* padding-top: 1px solid red !important; */
     background-color: rgb(96, 160, 238) !important;
+    height: 80%;
 }
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([selected='true']) {
     /* border-top: 1px solid black !important; */
     -moz-border-top-colors: ThreeDHighlight transparent !important;
-    padding-top: 1px solid black !important;
-    background-color: none !important;
-    background: -moz-linear-gradient(top,  #dddddd,  #bbbbbb) repeat-x !important;
+    /* padding-top: 1px solid black !important; */
+    /* background-color: none !important; */
+    /* background: -moz-linear-gradient(top,  #dddddd,  #bbbbbb) repeat-x !important; */
+    height: 80%;
 }
 /* Set the favicon's background too */
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab[selected='true'] * {
     background-color: rgb(96, 160, 238) !important;
 }
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([selected='true']) * {
-    background-color: none !important;
-    background: -moz-linear-gradient(top,  #dddddd,  #bbbbbb) repeat-x !important;
+    /* background-color: none !important; */
+    /* background: -moz-linear-gradient(top,  #dddddd,  #bbbbbb) repeat-x !important; */
 }
 
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([pinned="true"]) {
