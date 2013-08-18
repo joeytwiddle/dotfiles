@@ -1,0 +1,91 @@
+/*
+ * Do not remove the @namespace line -- it's required for correct functioning
+ */
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); /* set default namespace to XUL */
+
+/* This surrounds the location bar and the bookmarks toolbar */
+#navigator-toolbox {
+    /* border: 1px solid black !important; */
+}
+/* Bookmarks Bar */
+#PersonalToolbar {
+    border: 1px !important;
+}
+
+/*Added to re-enable min tab width=0 in Firefox-4 */
+.tabbrowser-tab:not([pinned]) {
+    min-width: 1px !important;
+}
+
+/* Joey's styles for TreeStyleTabs */
+/* These do make a difference, but a little opacity is still inherited, and the shadow still appears on the text (in Metal theme). */
+/* Note that they will not appear in the inspector because they are not applied when using chrome://browser/content/browser.xul */
+/* This one is probably not needed. */
+.treestyletab-tabbar-toolbar {
+    opacity: 1.0 !important;
+}
+/* This is the background which is visible when it is not filled with tabs (or when tabs are indented).  It also contains the actual tab labels. */
+.tabbrowser-tabs[treestyletab-mode="vertical"] {
+    opacity: 1.0 !important;
+}
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab {
+    opacity: 1.0 !important;
+    text-shadow: 0px 0px 0px white !important;
+    /* Use these for metal/sidebar themes, to close the large gaps between tabs.
+    margin-top: -4px !important;
+    margin-bottom: -4px !important;
+    */
+    /* Works but destroys the border's simple 3d effect. */
+    /* For the simple theme, make tabs a little bit shorter. Didn't work. */
+    margin-top: -3px !important;
+    margin-bottom: -3px !important;
+    /* These do nothing */
+    /*
+    padding-top: 1px solid white !important;
+    padding-bottom: 1px solid black !important;
+    padding-top: -2px !important;
+    padding-bottom: -2px !important;
+    padding-top: 4px solid red !important;
+    padding-bottom: 4px solid green !important;
+    */
+    /* Appears to do nothing: */
+    background-color: #ff3300;
+}
+/* Highlight the background of the current tab a bit more strongly */
+/* For some reason, border-top is only visible in Sidebar theme. */
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab[selected='true'] {
+    /* border-top: 1px solid red !important; */
+    -moz-border-top-colors: ThreeDHighlight transparent !important;
+    padding-top: 1px solid red !important;
+    background-color: rgb(96, 160, 238) !important;
+}
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([selected='true']) {
+    /* border-top: 1px solid black !important; */
+    -moz-border-top-colors: ThreeDHighlight transparent !important;
+    padding-top: 1px solid black !important;
+    background-color: none !important;
+    background: -moz-linear-gradient(top,  #dddddd,  #bbbbbb) repeat-x !important;
+}
+/* Set the favicon's background too */
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab[selected='true'] * {
+    background-color: rgb(96, 160, 238) !important;
+}
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([selected='true']) * {
+    background-color: none !important;
+    background: -moz-linear-gradient(top,  #dddddd,  #bbbbbb) repeat-x !important;
+}
+
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([pinned="true"]) {
+    /* May be a bit faster? */
+    /* Nope; ignored. */
+    box-shadow: none;
+}
+
+.tabbrowser-tabs:not([treestyletab-tabbar-position="top"]) .tabbrowser-tab, .tabbrowser-tabs:not([treestyletab-tabbar-position="top"]) .tabbrowser-tab:not([selected="true"]) {
+    /* Nope */
+    /*
+    border-top: 4px solid green;
+    border-bottom: 4px solid red;
+    */
+}
+
