@@ -273,7 +273,7 @@ function! Joeyhighlight()
 	" hi link Comma Function  ## cyan
 	" hi link Comma Keyword   ## yellow
 	" hi Comma cterm=bold ctermfg=white gui=bold guifg=white
-	hi Comma cterm=bold ctermfg=darkgrey gui=bold guifg=#777777
+	"hi Comma cterm=bold ctermfg=darkgrey gui=bold guifg=#777777
 
 	" Ubuntu made it look naff, so filled out all the colors
 	hi Pmenu ctermbg=magenta ctermfg=white cterm=bold guibg=#bb00bb guifg=white gui=bold
@@ -338,7 +338,12 @@ function! Joeyhighlight()
 	hi SignColumn guibg=black
 
 	hi EchoMsg ctermfg=green guifg=green
-	:echohl EchoMsg
+	" BUG: This will not work for long.  echohl is set and unset at realtime by scripts.
+	echohl EchoMsg
+	" However I see no workaround.  Echo messages are highlighted as 'Normal' by default.
+	" Actually that is not true...  They are highlighted as 'Normal' at startup, but then as 'None' after script has used :echohl and followed the advice in the help for :echohl !
+	" Who knows what else is highlighted as None though...
+	hi link None EchoMsg
 
 endfun
 

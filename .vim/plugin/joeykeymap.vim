@@ -348,8 +348,11 @@ nmap <Leader>i <Leader>f<C-w><Right><Leader>t
 " Toggle relative line numbers in the margin
 nmap <Leader>l :set invrelativenumber<Enter>
 
-" Toggle the paste option
+" Toggle the paste option (annoying that this doesn't show the current state)
 nmap <Leader>p :set invpaste<Enter>
+
+" Disable diff settings
+nmap <Leader>d :set nodiff fdc=0
 
 " Fold everything in the buffer except lines which match the current search pattern (or at second level, the line on either side)
 nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
@@ -375,8 +378,14 @@ nnoremap <C-Z> :CloseBuffer<Enter>
 nnoremap S :w<Enter>
 " Not a good idea to map 'S' in Insert mode...
 "inoremap S <Esc>:w<Enter>i
+" I may regret this one day, but similarly I cannot map Ctrl-q
+"nnoremap Q :qa<Enter>
+" OK this is safer, my MBE settings will require it be hit twice.  And also it can be used to close a window.
+nnoremap Q :q<Enter>
 
 " If there is more than one matching tag, let the user choose.
 " Occasionally there are multiple results but all pointing to the same place; it still asks the user to choose.  :S
+" That may be when TList is loaded *and* there is a 'tags' file in the current directory.
 nnoremap <C-]> g<C-]>
+" TODO: Would be nice if tags fail, to try gd or gD instead.
 

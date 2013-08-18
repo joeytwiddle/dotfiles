@@ -15,6 +15,9 @@ autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | e
 "" TODO: Update ../tags or ../../tags or ../../../tags if it exists.  Could
 "" cache it in b:my_nearest_tagsfile.
 
+"" Vim 7.3 started making `w` jump over '.'s in a variety of languages, which I do not want.
+autocmd BufReadPost * set iskeyword-=.
+
 
 " >>> Options for plugins {{{
 
@@ -105,7 +108,7 @@ autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | e
 	let g:NERDTreeHijackNetrw = 0
 
 	let g:Grep_OpenQuickfixWindow = 1
-	let g:Grep_Default_Filelist = ". -r -I --exclude-dir=CVS --exclude-dir=.git --exclude-dir=bin --exclude-dir=build --exclude-dir=_build --exclude-dir=node_modules --exclude=tags --exclude=\'.*.sw?\' --exclude=\\*.min.js --exclude=\'*.log\'"
+	let g:Grep_Default_Filelist = ". -r -I --exclude-dir=CVS --exclude-dir=.git --exclude-dir=bin --exclude-dir=build --exclude-dir=_build --exclude-dir=node_modules --exclude=tags --exclude=\'.*.sw?\' --exclude=\\*.min.js --exclude=\'*.log\' --exclude-dir=sessions"
 
 	let g:ConqueTerm_Color = 1
 	" let g:ConqueTerm_CloseOnEnd = 1
@@ -470,7 +473,7 @@ autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | e
 	" call add(vamAddons,'github:derekwyatt/vim-scala')      " Scala syntax and more
 	" call add(vamAddons,'/stuff/joey/projects/scala/scala-dist-vim') " Older but does not load this way!
 	call add(vamAddons,'github:mbbill/undotree')           " Allows you to view undos.  I need a newer Vim for this!
-	call add(vamAddons,'github:majutsushi/tagbar')         " Nests tags in some languages.
+	call add(vamAddons,'github:majutsushi/tagbar')         " Nests tags in some languages.  Don't actually try using this with custom .ctags settings.  It will explode until you have configured it correctly.
 	" call add(vamAddons,"VOoM")                           " Another outliner
 	" call add(vamAddons,'github:xolox/vim-easytags')      " Runs ctags automatic for you, to update them
 	"call add(vamAddons,'github:ervandew/supertab')         " Seems a lot like another_tabcompletion.vim but the list appears backwards! =/

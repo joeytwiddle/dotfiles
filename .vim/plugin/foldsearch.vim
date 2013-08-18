@@ -3,12 +3,13 @@
 "" BUG TODO: completely fails when the search appears on sequential lines
 "" Because the k to move away from the next match actually moves up to the
 "" previous line!
+let g:FoldSearch_Context = 0
 function! FoldSearch()
 	set foldmethod=manual
-	normal :0
+	normal gg
 	normal zE
-	let l:contextk=''
-	let l:contextj=''
+	let l:contextk = repeat('k', g:FoldSearch_Context)
+	let l:contextj = repeat('j', 2*g:FoldSearch_Context)
 	" let l:contextk='kk'
 	" let l:contextj='jjjj'   " need as many as k, then own :P
 	"" Recording: Find non-empty line.  Start visual.  Find double-line-break.  Create fold.
@@ -18,7 +19,7 @@ function! FoldSearch()
 	set nowrapscan
 	normal 999@f
 	"" Will stop when no further match can be found - so complete the fold up to the last line
-	normal 9999
+	normal G
 	normal zf
 	" Restore to "default":
 	set wrapscan
