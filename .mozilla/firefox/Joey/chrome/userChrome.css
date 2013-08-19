@@ -36,7 +36,7 @@
     margin-bottom: -4px !important;
     */
     /* Works but destroys the border's simple 3d effect. */
-    /* For the simple theme, make tabs a little bit shorter. Didn't work. */
+    /* For the simple theme, make tabs a little bit shorter. */
     margin-top: -2px !important;
     margin-bottom: -2px !important;
     /* These do nothing */
@@ -51,31 +51,42 @@
     /* Appears to do nothing: */
     /* background-color: #ff3300; */
 }
-/* Highlight the background of the current tab a bit more strongly, and custom borders too. */
+/* Highlight the background of the current tab a bit more strongly, remove the borders since they don't work with the shrinking above. */
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab[selected='true'] {
     /* border-top: 1px solid red !important; */
     /* -moz-border-top-colors: ThreeDHighlight transparent !important; */
+    /* -moz-border-top-colors: none; */
+    -moz-border-top-colors: none !important;
     /* padding-top: 1px solid red !important; */
     /* background-color: rgb(96, 160, 238) !important; */
     background-color: none !important;
-    background: -moz-linear-gradient(top,  rgb(116,180,255),  rgb(67,112,167)) repeat-x !important;
+    background: -moz-linear-gradient(top, rgb(174,211,255), rgb(92,154,229)) repeat-x !important;
 }
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([selected='true']) {
     /* border-top: 1px solid black !important; */
     /* -moz-border-top-colors: ThreeDHighlight transparent !important; */
+    -moz-border-top-colors: none !important;
     /* padding-top: 1px solid black !important; */
-    background-color: none !important;
+    /* background-color: none !important; */
     background: -moz-linear-gradient(top,  #dddddd,  #bbbbbb) repeat-x !important;
+}
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab[selected='true']:hover {
+    -moz-border-top-colors: none !important;
+}
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([selected='true']):hover {
+    -moz-border-top-colors: none !important;
 }
 /* Set the favicon's background too */
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab[selected='true'] * {
     /* background-color: rgb(96, 160, 238) !important; */
-    background-color: none !important;
-    background: -moz-linear-gradient(top,  rgb(106,170,245),  rgb(77,122,177)) repeat-x !important;
+    background-color: transparent !important;
+    /* background: -moz-linear-gradient(top,  rgb(106,170,245),  rgb(77,122,177)) repeat-x !important; */
+    background: transparent;
 }
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([selected='true']) * {
-    background-color: none !important;
-    background: -moz-linear-gradient(top,  #dddddd,  #bbbbbb) repeat-x !important;
+    background-color: transparent !important;
+    /* background: -moz-linear-gradient(top,  #dddddd,  #bbbbbb) repeat-x !important; */
+    background: transparent;
 }
 
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([pinned="true"]) {
