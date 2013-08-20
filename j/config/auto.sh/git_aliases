@@ -1,0 +1,39 @@
+#alias gs='git status'
+#alias gs='gitstatus'
+#alias gs='if [ -t 1 ]; then gitstatus | more; else git status; fi'
+#gs() {
+#	if [ -t 1 ]
+#	then gitstatus "$@" | more
+#	else git status "$@"
+#	fi
+#}
+alias gs='if [ -t 1 ]; then git -c color.status=always status | less -R; else git status; fi'
+alias gd='git diff'
+alias gdw='git diff --word-diff'
+alias ga='git add'
+alias gc='git commit'
+alias gf='git fetch'
+alias gp='git preview'
+alias gw='git whatsnew'
+alias gm='git merge FETCH_HEAD'
+#alias gl='git log'
+#alias gl='git log -U2 -p -m'
+# I thought it might be nice to setup less so that we can jump to the next commit with 'n'
+# Unfortunately whilst this provides the feature, git disables colors:
+#   gl | less +"/^commit.*" -r
+# Oh, fixed it.  Since this make paging commits very fast, now adding --stat
+alias gl='git -c color.ui=always log -U2 -p -m --stat | less -R "+/^commit.*"'
+alias glw='gl --word-diff'
+alias glf='git log --stat'
+alias gb='git branch'
+alias gco='git checkout'
+alias gi='git commit --interactive'
+
+# Git auto commit OR Git-add-commit
+gac() {
+	git add "$@"
+	echo -n "Commit message: "
+	read msg
+	git commit -m "$msg"
+}
+
