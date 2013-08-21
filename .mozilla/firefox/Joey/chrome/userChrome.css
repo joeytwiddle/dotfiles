@@ -37,7 +37,7 @@
     */
     /* Works but destroys the border's simple 3d effect. */
     /* For the simple theme, make tabs a little bit shorter. */
-    margin-top: -2px !important;
+    margin-top:    -2px !important;
     margin-bottom: -2px !important;
     /* These do nothing */
     /*
@@ -56,7 +56,7 @@
     /* border-top: 1px solid red !important; */
     /* -moz-border-top-colors: ThreeDHighlight transparent !important; */
     /* -moz-border-top-colors: none; */
-    -moz-border-top-colors: none !important;
+    -moz-border-top-colors: transparent !important;
     /* padding-top: 1px solid red !important; */
     /* background-color: rgb(96, 160, 238) !important; */
     background-color: none !important;
@@ -65,16 +65,16 @@
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([selected='true']) {
     /* border-top: 1px solid black !important; */
     /* -moz-border-top-colors: ThreeDHighlight transparent !important; */
-    -moz-border-top-colors: none !important;
+    -moz-border-top-colors: transparent !important;
     /* padding-top: 1px solid black !important; */
     /* background-color: none !important; */
     background: -moz-linear-gradient(top,  #dddddd,  #bbbbbb) repeat-x !important;
 }
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab[selected='true']:hover {
-    -moz-border-top-colors: none !important;
+    -moz-border-top-colors: !important;
 }
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([selected='true']):hover {
-    -moz-border-top-colors: none !important;
+    -moz-border-top-colors: !important;
 }
 /* Set the favicon's background too */
 .tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab[selected='true'] * {
