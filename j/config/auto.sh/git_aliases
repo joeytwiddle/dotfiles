@@ -1,3 +1,6 @@
+# TODO: Turn these into shellscripts so they are available from vim's command line.
+#       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)
+
 #alias gs='git status'
 #alias gs='gitstatus'
 #alias gs='if [ -t 1 ]; then gitstatus | more; else git status; fi'
@@ -39,10 +42,11 @@ alias gm='git merge FETCH_HEAD'
 #alias gl='git -c color.ui=always log -U2 -p -m --stat | less -R "+/^commit.*"'
 gl() {
 	if [ -t 1 ]
-	then git -c color.ui=always log -U2 -p -m --stat "$@" | less -R +'/^commit.*'
+	then git -c color.ui=always log -U2 -p -m --stat "$@" | less -R +'/^(commit|diff).*'
 	else git log -U2 -p -m --stat "$@"
 	fi
 }
+# It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
 alias glw='gl --word-diff'
 alias glf='git log --stat'
 
