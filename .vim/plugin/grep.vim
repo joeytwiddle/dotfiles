@@ -408,26 +408,46 @@ function! s:RunGrepCmd(cmd, pattern)
     call delete(tmpfile)
 endfunction
 
-" If there are a lot of results, make folds for each file in the quickfix list
+function! g:GetLastNonWrappedQFLine(startline)
+	let curline = a:startline
+	while 1
+		let line = getline(curline)
+		if line[0:2] != '|| '
+			return line
+		endif
+		let curline -= 1
+		if curline <= 1
+			break
+		endif
+	endwhile
+	return ''
+endfunction
+
 function! s:FoldByFolder()
 
-    setlocal foldmethod=expr
-    " This folds by filename:
-    "setlocal foldexpr=matchstr(getline(v:lnum),'^[^\|]\\+')==#matchstr(getline(v:lnum+1),'^[^\|]\\+')?1:'<1'
-    " No not by files.  Fold by folder!
-    " Folds by everything up to the last '/' before the '|', i.e. the folder but not the filename.
-    setlocal foldexpr=matchstr(substitute(getline(v:lnum),'\|.*','',''),'^.*/')==#matchstr(substitute(getline(v:lnum+1),'\|.*','',''),'^.*/')?1:getline(v:lnum+1)[0:1]=='\|\|'?'=':'<1'
-    "setlocal foldtext=matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/').'\ ['.(v:foldend-v:foldstart+1).'\ lines]'
-    setlocal foldtext='['.(v:foldend-v:foldstart+1).']\ '.matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/')
+	setlocal foldmethod=expr
+	" This actually folds by '/' count before the '|' and with bugs.
+	"setlocal foldexpr=getline(v:lnum)[0:1]=='\|\|'?'=':strlen(substitute(substitute(getline(v:lnum),'\|.*','',''),'[^/]','','g'))
+	" What we really need is to compare how many of the .../.../.../ blocks match the previous line.
+	" (Yes this will set foldlevel 3 if all the files are in a 3-deep folder, but the alternative is to check every line in the buffer, and even that is not entirely correct; the correct solution is a horizontal scan!)
+	"setlocal foldexpr=getline(v:lnum)[0:1]=='\|\|'?'=':strlen(substitute(substitute(getline(v:lnum),'\|.*','',''),'[^/]','','g'))
+	" This is better.  It folds by everything up to the last / i.e. the folder but not the filename.
+	" Without || support
+	"setlocal foldexpr=matchstr(substitute(getline(v:lnum),'\|.*','',''),'^.*/')==#matchstr(substitute(getline(v:lnum+1),'\|.*','',''),'^.*/')?1:'<1'
+	" Without poor || support
+	"setlocal foldexpr=matchstr(substitute(getline(v:lnum),'\|.*','',''),'^.*/')==#matchstr(substitute(getline(v:lnum+1),'\|.*','',''),'^.*/')?1:getline(v:lnum+1)[0:1]=='\|\|'?'=':'<1'
+	" Without good || support
+	setlocal foldexpr=matchstr(substitute(g:GetLastNonWrappedQFLine(v:lnum),'\|.*','',''),'^.*/')==#matchstr(substitute(g:GetLastNonWrappedQFLine(v:lnum+1),'\|.*','',''),'^.*/')?1:'<1'
+	"setlocal foldtext=matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/').'\ ['.(v:foldend-v:foldstart+1).'\ lines]'
+	setlocal foldtext='['.(v:foldend-v:foldstart+1).']\ '.matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/')
 
-    if foldclosedend(1) == line('$') || line("$") < 50
-        " When all matches come from a single file, do not close that single fold;
-        " the user probably is interested in the contents.
-        " Also don't fold when the number of lines is not too large.
-        setlocal foldlevel=1
-    else
-        setlocal foldlevel=0
-    endif
+	if foldclosedend(1) == line('$')
+		" When all matches come from a single file, do not close that single fold;
+		" the user probably is interested in the contents.
+		setlocal foldlevel=1
+	else
+		setlocal foldlevel=0
+	endif
 
 endfunction
 
