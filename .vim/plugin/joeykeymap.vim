@@ -352,7 +352,7 @@ nmap <Leader>l :set invrelativenumber<Enter>
 nmap <Leader>p :set invpaste<Enter>
 
 " Disable diff settings
-nmap <Leader>d :set nodiff fdc=0
+nmap <Leader>d :set nodiff fdc=0<CR>
 
 " Fold everything in the buffer except lines which match the current search pattern (or at second level, the line on either side)
 nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
@@ -384,8 +384,8 @@ nnoremap S :w<Enter>
 nnoremap Q :q<Enter>
 
 " If there is more than one matching tag, let the user choose.
-" Occasionally there are multiple results but all pointing to the same place; it still asks the user to choose.  :S
-" That may be when TList is loaded *and* there is a 'tags' file in the current directory.
 nnoremap <C-]> g<C-]>
+" Occasionally there are multiple results but all pointing to the same place; it still asks the user to choose.  :S
+" (That may be when TList is loaded *and* there is a 'tags' file in the current directory.)
 " TODO: Would be nice if tags fail, to try gd or gD instead.
 
