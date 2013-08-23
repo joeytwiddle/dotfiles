@@ -4,3 +4,8 @@
 " exec 'setlocal comments=' . &comments . ',:""'
 " exec "setlocal comments=\"" . &comments . ",:\"\""
 setlocal comments="sO:\" -,mO:\"  ,:\"\",:\""
+
+" Comment
+nnoremap <buffer> <F5> ^i"<Esc>j^
+" Uncomment
+nnoremap <buffer> <F6> ^1xj^
