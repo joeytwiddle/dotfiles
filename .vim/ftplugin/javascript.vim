@@ -1,3 +1,5 @@
+" Some yum here: http://oli.me.uk/2013/06/29/equipping-vim-for-javascript/
+" Recommends syntastic, YouCompleteMe and tern
 
 " This one causes a flash but seems to work :)
 iab \f function) {<CR>}<Up><End><Left><Left><Left>
@@ -6,6 +8,10 @@ iab \f function) {<CR>}<Up><End><Left><Left><Left>
 "iab ( ()<Left>
 "iab { {<CR>}<Up><End>
 "iab { {}<Left>
+" And then I installed UltiSnips :-P
+" and delimitMate
+" but still...
+inoremap <buffer> {<CR> {<CR><CR>}<Up><Esc>cc
 
 
 
