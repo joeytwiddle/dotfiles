@@ -410,15 +410,12 @@ endfunction
 
 function! g:GetLastNonWrappedQFLine(startline)
 	let curline = a:startline
-	while 1
+	while curline >= 1
 		let line = getline(curline)
 		if line[0:2] != '|| '
 			return line
 		endif
 		let curline -= 1
-		if curline <= 1
-			break
-		endif
 	endwhile
 	return ''
 endfunction
@@ -434,12 +431,12 @@ function! s:FoldByFolder()
 	" This is better.  It folds by everything up to the last / i.e. the folder but not the filename.
 	" Without || support
 	"setlocal foldexpr=matchstr(substitute(getline(v:lnum),'\|.*','',''),'^.*/')==#matchstr(substitute(getline(v:lnum+1),'\|.*','',''),'^.*/')?1:'<1'
-	" Without poor || support
+	" With poor || support
 	"setlocal foldexpr=matchstr(substitute(getline(v:lnum),'\|.*','',''),'^.*/')==#matchstr(substitute(getline(v:lnum+1),'\|.*','',''),'^.*/')?1:getline(v:lnum+1)[0:1]=='\|\|'?'=':'<1'
-	" Without good || support
+	" With good || support
 	setlocal foldexpr=matchstr(substitute(g:GetLastNonWrappedQFLine(v:lnum),'\|.*','',''),'^.*/')==#matchstr(substitute(g:GetLastNonWrappedQFLine(v:lnum+1),'\|.*','',''),'^.*/')?1:'<1'
-	"setlocal foldtext=matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/').'\ ['.(v:foldend-v:foldstart+1).'\ lines]'
-	setlocal foldtext='['.(v:foldend-v:foldstart+1).']\ '.matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/')
+	setlocal foldtext=matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/').'\ ['.(v:foldend-v:foldstart+1).'\ lines]'
+	"setlocal foldtext='['.(v:foldend-v:foldstart+1).']\ '.matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/')
 
 	if foldclosedend(1) == line('$')
 		" When all matches come from a single file, do not close that single fold;

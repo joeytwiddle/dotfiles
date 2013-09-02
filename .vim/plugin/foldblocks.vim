@@ -3,6 +3,9 @@
 " e.g. in plain text files, or for a different folding perspective on source
 " code.
 
+" TODO: This might be achieved in fewer lines using a foldexpr, which would
+" allow the folds to update automatically when editing a file with blocks.
+
 function! FoldBlocks(numBlankLines)
 
   let oldWrapScan = &wrapscan
