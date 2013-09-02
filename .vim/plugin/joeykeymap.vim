@@ -192,15 +192,20 @@ inoremap <S-Insert> <Esc>"*pa
 
 
 "" F5 and F6 comment and uncomment the current line.
-"" TODO: These should go into after/filetype or something!
+"" TODO: These should go into after/ftplugin/filetype.vim or something, as buffer mappings.  Alternatively we can load them on BufReadPost.  (Neatest, allow zero, one or two mappings to be chosen, and declare a dictioary of filetype => comment ?  Or what is the correct data structure if multiple keys share the same target?)
 " echo &filetype
-if "&filetype" == "xml" || "&filetype" == "xslt"
-	nmap <buffer> <F5> ^i<!--  --><Esc>j^
-	nmap <buffer> <F6> ^5x$xxxx^
-else
-	nmap <buffer> <F5> ^i// <Esc>j^
-	nmap <buffer> <F6> ^3xj^
-:endif
+nnoremap <F5> ^i//<Esc>j^
+nnoremap <F6> ^2xj^
+
+" We could push these into ftplugins.
+" Advantage: it will work if the ft is detected for a file without the given extension.
+" Disadvantage: we must define it in a separate file for every relevant ft.
+autocmd BufReadPost *.{html,xml,xslt} nnoremap <buffer> <F5> ^i<!-- <End> --><Esc>j^
+autocmd BufReadPost *.{html,xml,xslt} nnoremap <buffer> <F6> ^5x$xxxxj^
+" ULTIMATE SOLUTION:
+" Bind F5 and F6 to custom functions, for all windows.
+" Determine the language context from the location in the file, and then lookup the appropriate commenting style.
+" This would e.g. allow us to easily comment/uncomment JS, CSS and SVG inside an HTML document.
 
 "" F7 and F8 indent or unindent the current line.
 "" (Expects/requires ts=2 sw=2 and noexpandtabs!)
@@ -229,6 +234,9 @@ nmap d0 d0x
 "nmap d0 v0d
 " Delete the whole line, not just from here backwards
 "nmap d0 0d$
+
+" Docs actually suggest this, to match with D and C
+map Y y$
 
 "" Various failed shortcuts for the 'follow link' command.
 " map <C-Enter> <C-]>
@@ -382,10 +390,15 @@ nnoremap S :w<Enter>
 "nnoremap Q :qa<Enter>
 " OK this is safer, my MBE settings will require it be hit twice.  And also it can be used to close a window.
 nnoremap Q :q<Enter>
+" NOTE: If you really do want to use C-s and C-q then do this before loading vim:
+"   stty -ixon
 
 " If there is more than one matching tag, let the user choose.
 nnoremap <C-]> g<C-]>
 " Occasionally there are multiple results but all pointing to the same place; it still asks the user to choose.  :S
 " (That may be when TList is loaded *and* there is a 'tags' file in the current directory.)
 " TODO: Would be nice if tags fail, to try gd or gD instead.
+
+" Been having a nightmare with iskeyword.  Here is a fast way to reset it.
+nnoremap <Leader>k :setlocal iskeyword=65-127<Enter>
 
