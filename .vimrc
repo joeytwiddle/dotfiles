@@ -16,7 +16,8 @@ autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | e
 "" cache it in b:my_nearest_tagsfile.
 
 "" Vim 7.3 started making `w` jump over '.'s in a variety of languages, which I do not want.
-autocmd BufReadPost * set iskeyword-=.
+autocmd BufReadPost * setlocal iskeyword-=.
+
 
 
 " >>> Options for plugins {{{
@@ -87,7 +88,7 @@ autocmd BufReadPost * set iskeyword-=.
 		let tlist_grm_settings = 'joeygrammar;r:rule'
 		let tlist_haskell_settings = 'haskell;d:data;t:type;s:signature;f:function' " ;p:pattern
 		let tlist_markdown_settings = 'markdown;1:level1;2:level2;3:level3'
-		let tlist_help_settings = 'help;s:section;h:heading' " ;m:marker
+		let tlist_help_settings = 'help;s:section;h:heading;m:marker'
 		let tlist_scala_settings = 'scala;p:package;i:include;c:class;o:object;t:trait;r:cclass;a:aclass;m:method;T:type' " V:value;v:variable;
 		let tlist_man_settings = 'man;s:section'
 		let tlist_html_settings = 'html;t:template;a:anchor;f:javascript function'
@@ -150,9 +151,11 @@ autocmd BufReadPost * set iskeyword-=.
 	"nmap <C-a> :AsyncFinder<Enter>
 	" I usually have RepeatLast enabled.  If so, this works much better:
 	"nmap <C-a> q:AsyncFinder<Enter>
-	nmap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
+	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
     let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules']"
+	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
+	"nmap <C-a> :find *
 
 	" Neither of these really worked how I wanted.  How about SkyBison?
 	nmap <C-d> :e **/*<C-k>
@@ -463,6 +466,13 @@ autocmd BufReadPost * set iskeyword-=.
 
 " >>> Addons (the neat way) {{{
 
+	"" TODO: All these plugins reduce vim's startup time.
+	"" This is not just about Vim processing the scripts, a significant cost is the traversal of all the filesystem folders for the following plugins.  (To demonstrate this, try opening vim twice in a row - only the first time is slow!)
+	"" Tactics:
+	"" - Separate into essential and optional plugins.  On very slow machines, only load the former.
+	""   (I also want to separate out "must-try" plugins for sharing with others, from those plugins which I suspect not so many people will enjoy.)
+	"" - Lazy-load plugins which are only sometimes needed.  E.g. rare language-specific plugins like 'vaxe' and 'jade' could be loaded differently.  (Well they aren't actually loaded now, but their tree is added to runtimepath, slowing startup.)
+
 	"" We are using VAM.  http://github.com/MarcWeber/vim-addon-manager
 	"" Note that this is NOT Debian's vim-addon-manager package!  Nor is it pathogen.
 	"" I build the list, rather than declare it, so lines can be easily added/removed.
@@ -486,11 +496,11 @@ autocmd BufReadPost * set iskeyword-=.
 	"" DISABLED: YankRing blocks 'P' (paste) from being a repeatable action with '.' - I cannot have that!  (Is it supported with Repeat.vim present?)
 	"" Instead of how YankRing does it, I'd quite like to have "2p to paste the second-to-last yank.  Oh Vim does that already!  xD
 	" call add(vamAddons,'github:michaelficarra/vim-coffee-script')   " Coffeescript syntax
-	call add(vamAddons,"github:paradigm/SkyBison")          " Immediate feedback on the cmdline.  I never use this, Tab-completion is pretty fine for me.
+	"call add(vamAddons,"github:paradigm/SkyBison")          " Immediate feedback on the cmdline.  I never use this, Tab-completion is pretty fine for me.
 	call add(vamAddons,"github:joeytwiddle/vim-diff-traffic-lights-colors")
-	call add(vamAddons,"github:gokcehan/vim-yacom")      " Toggle comments with <Leader>c
+	"call add(vamAddons,"github:gokcehan/vim-yacom")      " Toggle comments with <Leader>c.  I never got around to trying it.  (Anyway there is a CVS binding on \c already!)
 	call add(vamAddons,"github:digitaltoad/vim-jade")    " Jade syntax
-	call add(vamAddons,"github:FredKSchott/CoVim")       " Collaborative editing with vim!
+	"call add(vamAddons,"github:FredKSchott/CoVim")       " Collaborative editing with vim!
 	" call add(vamAddons,"github:Raimondi/YAIFA")          " Indent Finder
 	call add(vamAddons,"github:vim-scripts/yaifa.vim")   " Indent Finder
 	" call add(vamAddons,"github:vim-scripts/vtreeexplorer.vim")   " File Manager (I have this in plugin/ already)
@@ -508,11 +518,22 @@ autocmd BufReadPost * set iskeyword-=.
 	"call add(vamAddons,"github:vim-scripts/SearchComplete") " Tab-completion in the / search interface.  This breaks <Up> and intereferes with :b and and :Grep.
 	"call add(vamAddons,"github:goldfeld/vim-seek")       " Quickly seek new position by 2 chars, on `s`
 	"call add(vamAddons,"github:Raimondi/vim-buffalo")    " Buffer switcher - needs some extra attention to get it working, or maybe I just need the right vim version/patch.
-	call add(vamAddons,"surround")                        " Change dict(mykey) to dict[mykey] with cs([
+	call add(vamAddons,"surround")                        " Change dict(mykey) to dict[mykey] with cs([ delete with ds( or create with ysiw[
 	" Interesting: source folder's vimrc file for different settings in specific projects
 	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
 
-	call add(vamAddons,"github:Raimondi/delimitMate")     " Mirrors (s and 's for you, but doesn't mind if you type over them.
+	"call add(vamAddons,"github:Raimondi/delimitMate")     " Mirrors (s and 's for you, but doesn't mind if you type over them.  I still had occasional issues with this (e.g. adding "s inside "s, deleting back over an end ").  But the worst issue was that things became unrepeatable with '.'.  (ysiw' repeats but inserting code with 's does not.)
+	let g:delimitMate_matchpairs = "(:),[:]"
+	" I took these out because they can be annoying when manually introducing new curlies at the top and bottom of a block.  (It gives me '{}' at the top and just '}' at the bottom.)
+	" {:},
+	" ,<:>         Might be OK for HTML, but sucks when doing math.
+	" Also BEWARE, delimitMate appears to interrupt recording of '.' actions (at least with RepeatLast enabled), so repeating things where it acted will only repeat what occurred *after* it acted.  I guess it should make use of vim-repeat, but doesn't.
+	let g:delimitMate_expand_cr = 1
+	let g:delimitMate_expand_space = 1
+	" Issues: When adding a comment in Vim, DLM thinks I am adding a String.  When adding a " at the start of a line, DLM should not pair it.
+	" Issues: Weird things happen when building up a String like "text "+var+" text".  I sometimes end up with  " " at the end of the line!
+
+	"call add(vamAddons,"github:mhinz/vim-startify")       " Session manager and MRU, on start page or on demand
 
 	" == My Plugins from the Cloud ==
 	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
