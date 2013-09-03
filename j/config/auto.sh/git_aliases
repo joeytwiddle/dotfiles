@@ -11,20 +11,35 @@
 #	fi
 #}
 gs() {
+	# Show color if not piping.  Skip to next section on 'n'.  Leave output on screen (so user can copy paste).
+	# Using more instead of less because on short output, less fills the rest of the screen with '~'s (or ''s) we don't need.  Those lines are actually caused by the search.  git's default 'pager' will do the same iff the +/ is added.
+	# More has slightly different searching behaviour than less: it will not skip to the start of a section which is already visible on the screen.
+	# -X tells less to leave its output on the screen
+	# This now now rather equivalent to the default, except for the default search.
 	if [ -t 1 ]
-	then git -c color.status=always status "$@" | less -R +'/^# [^ ].*'
+	then
+		git -c color.status=always status "$@" |
+		more
+		# The problem with doing this search with more is that more skips the first "branch" line, even though it is a match.  And it does not even allow paging up to find it!
+		#more +'/^# [^ ].*'
+		#less -R +'/^# [^ ].*' -E -X --tilde
+		#pager -R +'/^# [^ ].*' -E -X --tilde
 	else git status "$@"
 	fi
 }
 
 #alias gd='git diff'
 gd() {
+	# Show color if not piping.  Skip to next file on 'n'.
 	if [ -t 1 ]
-	then git -c color.diff=always diff "$@" | less -R +'/^diff.*'
+	then git -c color.diff=always diff "$@" | less -R +'/^diff.*' -X
 	else git diff "$@"
 	fi
 }
 alias gdw='git diff --word-diff'
+# Git Diff Staged / Cached (see which one I use most - I used gdc!)
+#alias gds='git diff --cached'
+alias gdc='git diff --cached'
 
 alias ga='git add'
 alias gc='git commit'
@@ -41,6 +56,7 @@ alias gm='git merge FETCH_HEAD'
 # Oh, fixed it.  Since this make paging commits very fast, now adding --stat
 #alias gl='git -c color.ui=always log -U2 -p -m --stat | less -R "+/^commit.*"'
 gl() {
+	# Show color if not piping.  Skip to next file or commit on 'n'.
 	if [ -t 1 ]
 	then git -c color.ui=always log -U2 -p -m --stat "$@" | less -R +'/^(commit|diff).*'
 	else git log -U2 -p -m --stat "$@"
@@ -48,7 +64,14 @@ gl() {
 }
 # It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
 alias glw='gl --word-diff'
-alias glf='git log --stat'
+# Just file stats, no diffs.  "Git log stats/summary", "Git log files" (shorter)
+alias gls='git log --stat'
+alias glf='git log --stat --pretty=oneline --pretty=format:"%C(yellow reverse)%h%C(magenta bold)%d%C(reset) %C(cyan)%s %C(blue bold)- %an (%ar)%Creset"'
+# Just commit info, one per line
+#alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'
+# Argh.  git lol in my .gitconfig is better because is shows the name of the committer.
+alias gll='git lol'
+# Git log summary
 
 alias gb='git branch'
 alias gco='git checkout'
@@ -60,5 +83,24 @@ gac() {
 	echo -n "Commit message: "
 	read msg
 	git commit -m "$msg"
+}
+
+# May rename "gitsummary"
+gitwhatsup () {
+	# Absolute path:
+	local gitDir=$(git rev-parse --show-toplevel)/.git
+	# On some systems, gives relative path:
+	#local gitDir=$(git rev-parse --git-dir)
+	local greenBackground=$(tput setab 2)
+	local whiteForeground=$(tput setaf 7)
+	#echo "${greenBackground}${whiteForeground}$(cursebold)GITDIR:$(tput init) $gitDir"
+	#echo "`curseyellow`=== Git directory ===`cursenorm`"
+	echo "$gitDir"
+	#echo "`cursecyan`$gitDir`cursenorm`"
+	#echo "${greenBackground}${whiteForeground}$(cursebold)$gitDir$(tput init)"
+	echo "  `curseyellow`=== Remotes ===`cursenorm`"
+	git remote -v | prepend_each_line "   "
+	echo "  `curseyellow`=== Branches ===`cursenorm`"
+	git branch -a | prepend_each_line "   "
 }
 
