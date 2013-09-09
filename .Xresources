@@ -2,7 +2,7 @@
 
 ## Apply changes and test with:
 ##   cat .Xresources | grep -v "^#" | xrdb -merge
-## For testing BD/UL: man xrdb ; top n 3
+## For testing BD/UL: man xrdb ; top -n 3 (hit 'z' for color)
 ## Note: If you are doing that grep from Vim's ! then you must escape the # as \#
 
 #xterm.vt100.font: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
@@ -10,7 +10,8 @@
 #xterm.vt100.font: -*-clean-bold-r-*-*-16-*-*-*-*-*-*-*
 ## On Ubuntu, vt100 was not working, but * did:
 #xterm.*.font: -*-terminus-bold-r-*-*-16-*-*-*-*-*-*-*
-xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
+#xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
+xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
 xterm*background: #000000
 xterm*foreground: #ffffff
 xterm*cursorColor: #ffdd44
