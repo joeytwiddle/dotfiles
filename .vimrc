@@ -347,11 +347,14 @@ autocmd BufReadPost * setlocal iskeyword-=.
 
 	set formatoptions+=n            " Better indent numbered lists in comments
 	set formatoptions+=l            " Don't wrap lines that were already long
-	if version >= 703
-		set formatoptions+=j            " Remove comment leaders when joining
-	end
+	" +j only joined formatoptions in version 7.3.541.  On yas I have vim-gtk=2:7.3.429-2ubuntu2.1
+	" On both my machines, vim reports version as 703.
+	"if v:version >= 703 && has('patch_FILL_THIS_IN_FROM_:h_has-patch')
+		"set formatoptions+=j            " Remove comment leaders when joining
+	"end
 
-	"if version >= 703
+	" To show the margin column
+	"if v:version >= 703
 		"set colorcolumn=+1
 	"end
 
@@ -400,6 +403,14 @@ autocmd BufReadPost * setlocal iskeyword-=.
 	"set completeopt=menu,preview
 
 	set winwidth=1
+
+	" Change cursor color for Normal/Insert mode
+	if &term =~ "xterm"
+		"let &t_EI = "\<Esc>]12;#ffdd22\x7" " Yellow/cream
+		let &t_EI = "\<Esc>]12;#ff9911\x7"  " Orange
+		"let &t_SI = "\<Esc>]12;#ff4411\x7" " Reddish-orange
+		let &t_SI = "\<Esc>]12;#00cc00\x7"  " Green
+	endif
 
 
 " }}}

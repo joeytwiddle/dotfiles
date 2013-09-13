@@ -36,10 +36,12 @@
 #exec 1> ~/jsh.log
 #exec 2> ~/jsh.error
 
-export JPATH="$HOME/j"
-. "$JPATH/startj"
-echo "PATH is now: $PATH"
-export PATH
+if [ -z "$JPATH" ]
+then
+	echo "Starting jsh before Fluxbox"
+	export JPATH="$HOME/j"
+	. "$JPATH"/startj
+fi
 
 
 # Applications you want to run with fluxbox.

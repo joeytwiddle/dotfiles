@@ -11,8 +11,8 @@ session.forcePseudoTransparency:	true
 session.groupFile:	
 session.iconbar:	true
 session.ignoreBorder:	false
-session.keyFile:	/home/joey/linux/.fluxbox/keys
-session.menuFile:	/home/joey/.fluxbox/joeysmenu
+session.keyFile:	~/.fluxbox/keys
+session.menuFile:	~/.fluxbox/joeysmenu
 session.modKey:	Mod1
 session.numLayers:	13
 session.screen0.allowRemoteActions:	false
@@ -44,7 +44,7 @@ session.screen0.maxDisableMove:	false
 session.screen0.maxDisableResize:	false
 session.screen0.maxIgnoreIncrement:	true
 session.screen0.maxOverSlit:	true
-session.screen0.menu.alpha:	240
+session.screen0.menu.alpha:	210
 session.screen0.menuAlpha:	255
 session.screen0.menuDelay:	200
 session.screen0.menuDelayClose:	200
@@ -101,12 +101,12 @@ session.screen0.windowMenu:
 session.screen0.windowPlacement:	RowSmartPlacement
 session.screen0.windowScrollAction:	
 session.screen0.windowScrollReverse:	false
-session.screen0.window.unfocus.alpha:	240
+session.screen0.window.unfocus.alpha:	210
 session.screen0.workspaceNames:	Music,Net,Sys,Dev,Code,Stats,NewDev,Dreams,Other,utDev,utSrv,UT,
 session.screen0.workspaces:	12
 session.screen0.workspacewarping:	true
-session.slitlistFile:	/home/joey/linux/.fluxbox/slitlist
-session.styleFile:	/home/joey/.fluxbox/styles/OrangeJuiceCute
+session.slitlistFile:	~/.fluxbox/slitlist
+session.styleFile:	~/.fluxbox/styles/OrangeJuiceCute
 session.styleOverlay:	~/.fluxbox/overlay
 session.tabPadding:	0
 session.tabsAttachArea:	Window

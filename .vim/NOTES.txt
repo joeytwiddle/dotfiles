@@ -16,6 +16,8 @@ If you made some deletes and you want an earlier delete, they are stored in the 
 
   "3p   will paste the yanked text 3 steps back
 
+Before doing that, you can use :reg to see the list of registers.
+
 g;   go to position of last change
 g,   go to position of next change
 mx   create mark x
