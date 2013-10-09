@@ -409,7 +409,8 @@ autocmd BufReadPost * setlocal iskeyword-=.
 		"let &t_EI = "\<Esc>]12;#ffdd22\x7" " Yellow/cream
 		let &t_EI = "\<Esc>]12;#ff9911\x7"  " Orange
 		"let &t_SI = "\<Esc>]12;#ff4411\x7" " Reddish-orange
-		let &t_SI = "\<Esc>]12;#00cc00\x7"  " Green
+		"let &t_SI = "\<Esc>]12;#00cc00\x7"  " Green
+		let &t_SI = "\<Esc>]12;#00cc55\x7"  " Aqua
 	endif
 
 
@@ -498,7 +499,8 @@ autocmd BufReadPost * setlocal iskeyword-=.
 	" call add(vamAddons,"VOoM")                           " Another outliner
 	" call add(vamAddons,'github:xolox/vim-easytags')      " Runs ctags automatic for you, to update them
 	"call add(vamAddons,'github:ervandew/supertab')         " Seems a lot like another_tabcompletion.vim but the list appears backwards! =/
-	call add(vamAddons,'UltiSnips')     " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
+	"call add(vamAddons,'UltiSnips')     " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
+	call add(vamAddons,'github:joeytwiddle/ultisnips')     " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
 	let g:UltiSnipsJumpForwardTrigger="<tab>"
 	let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 	" call add(vamAddons,'github:troydm/easybuffer.vim')
@@ -532,6 +534,9 @@ autocmd BufReadPost * setlocal iskeyword-=.
 	call add(vamAddons,"surround")                        " Change dict(mykey) to dict[mykey] with cs([ delete with ds( or create with ysiw[
 	" Interesting: source folder's vimrc file for different settings in specific projects
 	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
+	"call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
+	"let g:vim_markdown_folding_disabled=1
+	call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
 
 	"call add(vamAddons,"github:Raimondi/delimitMate")     " Mirrors (s and 's for you, but doesn't mind if you type over them.  I still had occasional issues with this (e.g. adding "s inside "s, deleting back over an end ").  But the worst issue was that things became unrepeatable with '.'.  (ysiw' repeats but inserting code with 's does not.)
 	let g:delimitMate_matchpairs = "(:),[:]"
