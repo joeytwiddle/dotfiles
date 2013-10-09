@@ -1,0 +1,20 @@
+# I seem to have some kind of US keyboard here.  I was just getting used to it when I accidentally loaded a GB layout.  Then I decided to complete it.
+
+# Set to GB keyboard layout
+setxkbmap -print gb | xkbcomp - "$DISPLAY"
+
+# Now I have no `|` and no `\`
+# Remap `¬` to `|`:
+xmodmap -e "keycode 49 = grave bar backslash sterling"
+# Use the spare "menu" key for `\`:
+xmodmap -e "keycode 135 = backslash bar"
+# I had wanted to put it on Ctrl-grave but this does not appear to be possible with xmodmap.
+
+# Make Win-Left and Win-Right do Home and End (I got so used to Meta-Left and Meta-Right on my laptops)
+# These do not work.
+#xmodmap -e "keycode 113 = Left Home"
+#xmodmap -e "keycode 114 = Right End"
+
+# Notes:
+# To list meta keys: xmodmap -pm
+
