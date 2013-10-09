@@ -23,6 +23,7 @@ xterm*fastScroll: true
 #xterm.*.faceSize2: 11
 ## Set the 'small' font:
 xterm.*.font3: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
+xterm.*.font4: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
 #xterm.vt100.font3
 
 ## For coloured man-pages:
