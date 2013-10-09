@@ -60,7 +60,9 @@ function! s:OnQuitSaveSession()
 		" Add the number of buffers.  Essentially this is so I don't overwrite a nice long session with a small one when I open and close Vim to edit one file.
 		let sessionName .= "-" . bufnr('$')
 		let sessionFile = g:simple_sessions_folder."/".sessionName.".vim"
-		call mkdir(g:simple_sessions_folder, 'p')
+		if !isdirectory(g:simple_sessions_folder)
+			call mkdir(g:simple_sessions_folder, 'p')
+		endif
 		exec 'mksession! '.escape(sessionFile,' ')
 	endif
 endfunction
