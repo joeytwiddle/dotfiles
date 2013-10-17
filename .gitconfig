@@ -101,7 +101,12 @@
 	# List the aliases we have
 	alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t = \\2/' | sort
 
-	whatisnotpushed = log origin..HEAD --pretty=oneline
+	# This does not work on a branch, since origin = origin/master.
+	#whatisnotpushed = log origin..HEAD --pretty=oneline
+	# So use @{u} = upstream instead
+	whatisnotpushed = log @{u}..HEAD --pretty=oneline
+	# Hmm why not just compare against FETCH_HEAD?
+	#whatisnotpushed = log FETCH_HEAD..HEAD --pretty=oneline
 	# You can also see the "ahead" count on the second line of git status
 
 	# Compare two branches; commits on one branch that are not reachable from another:
