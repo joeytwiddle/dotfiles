@@ -115,3 +115,10 @@ xset fp- unix/:7100     ## xfstt on ubuntu
 ## Keyboard
 # xmodmap /stuff/portablelinux/etc/X11/Xmodmap.hwiDeb &
 
+## Typing "special" characters
+#xmodmap -e "keysym Control_R = Multi_key"
+# Now you can do <Control_R> followed by ?? to get ¿
+# And here are all the other things you can do: /usr/share/X11/locale/en_US.UTF-8/Compose
+# I think this key is called "Composite" by Gnome.
+# There is another magic key too.  Alt_GR-1 to produce ¹
+
