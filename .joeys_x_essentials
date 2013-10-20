@@ -2,8 +2,11 @@
 #cat $HOME/.my_x_settings 
 cat $HOME/.Xresources | grep -v "^#" | xrdb -merge
 
-## Fix my broken keymap:
-setxkbmap -print gb | xkbcomp - "$DISPLAY"
+# E.g. if you wanted to switch to GB keyboard layout, you could put the following in that file:
+#setxkbmap -print gb | xkbcomp - "$DISPLAY"
+if [ -f "$HOME"/.custom_keyboard_settings ]
+then . "$HOME"/.custom_keyboard_settings
+fi
 
 ## Disabled
 if [ -d $HOME/X11_big_cursor ] && false
