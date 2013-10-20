@@ -80,7 +80,8 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .Z   00;33
 .rar 00;33
 .jar 00;33
-.7z 00;33
+.7z  00;33
+.xz  00;33
 .rpm 00;33
 .deb 00;33
 .encrypted 00;33
