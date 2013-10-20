@@ -1,1 +1,2 @@
-exec "set iskeyword=" . &iskeyword . ",-"
+"exec "setlocal iskeyword=" . &iskeyword . ",-"
+setlocal iskeyword+=.
