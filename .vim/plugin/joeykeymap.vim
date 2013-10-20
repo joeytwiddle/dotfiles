@@ -369,8 +369,8 @@ nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)
 
 
 " Quickly edit/reload the vimrc file (Derek Wyatt)
-nmap <silent> <leader>ev :e $MYVIMRC<CR>
-nmap <silent> <leader>sv :so $MYVIMRC<CR>
+"nmap <silent> <leader>ev :e $MYVIMRC<CR>
+"nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 
 
@@ -401,4 +401,7 @@ nnoremap <C-]> g<C-]>
 
 " Been having a nightmare with iskeyword.  Here is a fast way to reset it.
 nnoremap <Leader>k :setlocal iskeyword=65-127<Enter>
+
+" Execute the line under the cursor in ex
+nnoremap <Leader>e :execute getline(".")<CR>
 
