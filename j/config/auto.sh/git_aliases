@@ -43,8 +43,8 @@ gd() {
 }
 alias gdw='git diff --word-diff'
 # Git Diff Staged / Cached (see which one I use most - I used gdc!)
-#alias gds='git diff --cached'
-alias gdc='git diff --cached'
+#alias gds='gdc'
+alias gdc='gd --cached'
 
 alias ga='git add'
 #alias gc='git commit'
