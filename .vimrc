@@ -411,7 +411,7 @@ autocmd BufReadPost * setlocal iskeyword-=.
 		let &t_EI = "\<Esc>]12;#ffbb44\x7"  " Normal Mode = Creamy orange
 		"let &t_SI = "\<Esc>]12;#ff4411\x7" " Insert Mode = Reddish-orange
 		"let &t_SI = "\<Esc>]12;#22ff22\x7" " Insert Mode = Bright green
-		let &t_SI = "\<Esc>]12;#44ff88\x7"  " Insert Mode = Aqua
+		let &t_SI = "\<Esc>]12;#44ff77\x7"  " Insert Mode = Aqua
 	endif
 
 
