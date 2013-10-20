@@ -19,9 +19,8 @@ inoremap <s-tab> <c-r>=InsertTabWrapper ("backward")<cr>
 if exists("g:give_me_tab_completion_in_search") && g:give_me_tab_completion_in_search
     " Discussion: https://groups.google.com/forum/#!topic/vim_use/-IPWgth2h_k
 
-    " One alternative is this:
-    :nnoremap / q/20-i
-    " It will not work well with RepeatLast!
+    " One alternative is this, although it won't work if you are recording a macro.
+    nnoremap / q/20-i
 
     " <Up> and <Down> can look at related history, but that's not what I want.
 
