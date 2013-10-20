@@ -40,6 +40,17 @@
 "
 " Alternative: The real breakindent patch is being kept up-to-date at: https://retracile.net/wiki/VimBreakIndent   (Look for the "Original Format" link at the bottom of the page)
 
+" CONSIDER TODO: New feature.  There are occasionally situations where I would like more indentation than bi_b currently provides.  For example:
+"
+"     // This C comment contains a list:
+"     //   - First item.
+"     //   - This particular list item is very very
+"            \ long and so it wraps.
+"     //   - Another list item.
+"
+" As you can see, I would like the wrapped indentation to be much deeper than usual, simply because this long line is a list item.
+" Probably the best way to deal with this is to allow a regexp (or perhaps for clarity, a list of regexps) to pick out these special lines.  Each regexp might have some extra rules attached about how far to indent.  E.g. some users might prefer the \ to appear under the - in the previous example (depends whether he prefers the words aligned, or likes to see the vertical gap between '-'s).
+
 
 " == Options ==
 
