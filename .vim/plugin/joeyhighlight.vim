@@ -61,7 +61,10 @@ function! Joeyhighlight()
 	highlight Search ctermbg=blue ctermfg=green term=bold guibg=#005544 guifg=#aaffaa gui=bold
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White guifg=DarkMagenta guibg=White
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#553355
-	highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#660066 guifg=white
+	"" This actually gives us a dirty grey instead of white (in xterm):
+	" highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#660066 guifg=white
+	"" This is what I prefer, but I may have been using the above to ensure b/w terminals get reverse?
+	highlight Visual ctermbg=Magenta ctermfg=White cterm=bold gui=none guibg=#660066 guifg=white
 	"highlight Comment ctermfg=Magenta guifg=#80a080 " green-grey
 	"highlight Comment ctermfg=DarkMagenta guifg=LightMagenta
 	"highlight Comment ctermfg=DarkMagenta guifg=#d080d0
