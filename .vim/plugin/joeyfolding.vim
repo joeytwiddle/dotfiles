@@ -43,12 +43,14 @@ function! Joeyfolding()
 		endif
 
 		" C/C++ #ifdefs
-		:silent! :syn clear myFold3
-		:syn region myFold3 start="#ifdef\>" end="#endif\>" transparent fold
-		:silent! :syn clear myFold4
-		:syn region myFold4 start="#ifndef\>" end="#endif\>" transparent fold
-		:silent! :syn clear myFold4b
-		:syn region myFold4b start="#if\>" end="#endif\>" transparent fold
+		if &ft != 'asm'
+			:silent! :syn clear myFold3
+			:syn region myFold3 start="#ifdef\>" end="#endif\>" transparent fold
+			:silent! :syn clear myFold4
+			:syn region myFold4 start="#ifndef\>" end="#endif\>" transparent fold
+			:silent! :syn clear myFold4b
+			:syn region myFold4b start="#if\>" end="#endif\>" transparent fold
+		endif
 		" BUG: In asm, we must clear asmComment, asmHashThingy, asmIdentifier
 		" and asmPreCondit in order for our folds to work (close) properly.
 		" But we might be able to fix this if we define our syntax rules before
