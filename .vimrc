@@ -406,11 +406,12 @@ autocmd BufReadPost * setlocal iskeyword-=.
 
 	" Change cursor color for Normal/Insert mode
 	if &term =~ "xterm"
-		"let &t_EI = "\<Esc>]12;#ffdd22\x7" " Yellow/cream
-		let &t_EI = "\<Esc>]12;#ff9911\x7"  " Orange
-		"let &t_SI = "\<Esc>]12;#ff4411\x7" " Reddish-orange
-		"let &t_SI = "\<Esc>]12;#00cc00\x7"  " Green
-		let &t_SI = "\<Esc>]12;#00cc55\x7"  " Aqua
+		"let &t_EI = "\<Esc>]12;#ffdd22\x7" " Normal Mode = Yellow/cream
+		"let &t_EI = "\<Esc>]12;#ff9911\x7" " Normal Mode = Rich orange
+		let &t_EI = "\<Esc>]12;#ffbb44\x7"  " Normal Mode = Creamy orange
+		"let &t_SI = "\<Esc>]12;#ff4411\x7" " Insert Mode = Reddish-orange
+		"let &t_SI = "\<Esc>]12;#22ff22\x7" " Insert Mode = Bright green
+		let &t_SI = "\<Esc>]12;#44ff77\x7"  " Insert Mode = Aqua
 	endif
 
 

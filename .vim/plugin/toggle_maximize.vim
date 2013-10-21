@@ -270,6 +270,9 @@ nnoremap  <silent> <C-H> :call <SID>ToggleMaximizeHorizontally()<Enter>
 " and Ctrl-H might be what some systems see when the user presses Backspace.
 "inoremap <silent> <C-V> <Esc>:call <SID>ToggleMaximizeVertically()<Enter>a
 "inoremap <silent> <C-H> <Esc>:call <SID>ToggleMaximizeHorizontally()<Enter>a
+" Oh dear, I finally found the value of blockwise visual mode, but now I can't
+" access it!  0<C-V> still invokes our mapping.  One workaround is simply to
+" `nunmap <C-V>`!
 
 "" Does not work:
 "nnoremap <silent> <C-Enter> :call <SID>ToggleMaximize()<Enter>

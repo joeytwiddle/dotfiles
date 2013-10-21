@@ -14,7 +14,8 @@
 " Also, BufExplorer sometimes requires two presses of Ctrl-O to get out of it.
 
 command! JoeysBufferSwitch call JoeysBufferSwitch()
-nnoremap <Leader>e :JoeysBufferSwitch<Enter>
+" Disabled because I am using this for something else now:
+"nnoremap <Leader>e :JoeysBufferSwitch<Enter>
 
 "" Some alternatives:
 " nnoremap <C-E> :ls<CR>:b<space>

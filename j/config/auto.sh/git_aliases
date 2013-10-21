@@ -1,15 +1,19 @@
 # TODO: Turn these into shellscripts so they are available from vim's command line.
 #       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)
 
+# I tried declaring functions as `'name'()` instead of just `name()` to avoid existing aliases (e.g. those in oh-my-zsh's git plugin) from causing trouble by expanding the name.  An alternative is to use `function name()` but that may be less compatible with older shells.  OK well `'name'()` is incompatible with bash already!  Now trying unalias...
+# TODO: I should really do this *everywhere* I declare functions in jsh?!
+
 #alias gs='git status'
 #alias gs='gitstatus'
 #alias gs='if [ -t 1 ]; then gitstatus | more; else git status; fi'
-#gs() {
+#function gs() {
 #	if [ -t 1 ]
 #	then gitstatus "$@" | more
 #	else git status "$@"
 #	fi
 #}
+unalias gs 2>/dev/null
 gs() {
 	# Show color if not piping.  Skip to next section on 'n'.  Leave output on screen (so user can copy paste).
 	# Using more instead of less because on short output, less fills the rest of the screen with '~'s (or ''s) we don't need.  Those lines are actually caused by the search.  git's default 'pager' will do the same iff the +/ is added.
@@ -29,6 +33,7 @@ gs() {
 }
 
 #alias gd='git diff'
+unalias gd 2>/dev/null
 gd() {
 	# Show color if not piping.  Skip to next file on 'n'.
 	if [ -t 1 ]
@@ -38,11 +43,12 @@ gd() {
 }
 alias gdw='git diff --word-diff'
 # Git Diff Staged / Cached (see which one I use most - I used gdc!)
-#alias gds='git diff --cached'
-alias gdc='git diff --cached'
+#alias gds='gdc'
+alias gdc='gd --cached'
 
 alias ga='git add'
-alias gc='git commit'
+#alias gc='git commit'
+alias gc='git commit -v'
 alias gf='git fetch'
 alias gp='git preview'
 alias gw='git whatsnew'
@@ -55,18 +61,21 @@ alias gm='git merge FETCH_HEAD'
 #   gl | less +"/^commit.*" -r
 # Oh, fixed it.  Since this make paging commits very fast, now adding --stat
 #alias gl='git -c color.ui=always log -U2 -p -m --stat | less -R "+/^commit.*"'
-gl() {
+unalias gitlog 2>/dev/null
+gitlog() {
 	# Show color if not piping.  Skip to next file or commit on 'n'.
 	if [ -t 1 ]
-	then git -c color.ui=always log -U2 -p -m --stat "$@" | less -R +'/^(commit|diff).*'
-	else git log -U2 -p -m --stat "$@"
+	then git -c color.ui=always log "$@" | less -R +'/^(commit|diff).*' -X
+	else git log "$@"
 	fi
 }
+alias gl='gitlog -U2 -p -m --stat'
 # It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
 alias glw='gl --word-diff'
 # Just file stats, no diffs.  "Git log stats/summary", "Git log files" (shorter)
-alias gls='git log --stat'
-alias glf='git log --stat --pretty=oneline --pretty=format:"%C(yellow reverse)%h%C(magenta bold)%d%C(reset) %C(cyan)%s %C(blue bold)- %an (%ar)%Creset"'
+alias gls='gitlog --stat'
+alias glf='git log --stat --pretty=oneline --pretty=format:"%C(yellow bold)%h%C(reset) %C(black bold)%s %C(reset)%C(yellow)- %an (%ar)%C(magenta bold)%d%Creset"'
+# With glf, we can walk commmits with /^[^ ]+
 # Just commit info, one per line
 #alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'
 # Argh.  git lol in my .gitconfig is better because is shows the name of the committer.
@@ -78,6 +87,7 @@ alias gco='git checkout'
 alias gi='git commit --interactive'
 
 # Git auto commit OR Git-add-commit
+unalias gac 2>/dev/null
 gac() {
 	git add "$@"
 	echo -n "Commit message: "
@@ -86,7 +96,9 @@ gac() {
 }
 
 # May rename "gitsummary"
-gitwhatsup () {
+unalias gitwhatsup 2>/dev/null
+gitwhatsup() {
+	echo
 	# Absolute path:
 	local gitDir=$(git rev-parse --show-toplevel)/.git
 	# On some systems, gives relative path:
@@ -94,13 +106,21 @@ gitwhatsup () {
 	local greenBackground=$(tput setab 2)
 	local whiteForeground=$(tput setaf 7)
 	#echo "${greenBackground}${whiteForeground}$(cursebold)GITDIR:$(tput init) $gitDir"
-	#echo "`curseyellow`=== Git directory ===`cursenorm`"
+	#echo "`cursecyan`=== Git directory ===`cursenorm`"
 	echo "$gitDir"
+	echo
 	#echo "`cursecyan`$gitDir`cursenorm`"
 	#echo "${greenBackground}${whiteForeground}$(cursebold)$gitDir$(tput init)"
-	echo "  `curseyellow`=== Remotes ===`cursenorm`"
-	git remote -v | prepend_each_line "   "
-	echo "  `curseyellow`=== Branches ===`cursenorm`"
-	git branch -a | prepend_each_line "   "
+	echo "`cursecyan`=== Remotes ===`cursenorm`"
+	git remote -v #| prepend_each_line "   "
+	echo
+	echo "`cursecyan`=== Local branches ===`cursenorm`"
+	git branch -vv #| prepend_each_line "   "
+	echo
+	echo "`cursecyan`=== Remote branches ===`cursenorm`"
+	git branch -r -vv #| prepend_each_line "   "
+	echo
+	# Try `git remote update` if you can't see all the remote branches
 }
+alias gwu=gitwhatsup
 

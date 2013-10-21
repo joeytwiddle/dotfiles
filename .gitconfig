@@ -16,19 +16,22 @@
 [color]
 	ui = auto
 [color "branch"]
-	current = magenta bold reverse
-	local = yellow
-	remote = green
+	current = green bold reverse   # default = green
+	local = yellow   # default = white
+	remote = red     # default = red
 [color "diff"]
+	# Commit messages and author will be pure white; I cannot find a place to configure them.
+	# The commit id will be:
 	commit = yellow bold reverse
 	meta = cyan bold
 	frag = magenta
+	# Believe it or not, 'white' is a little bit darker than ffffff.  Put 'white' here to get a very light grey :-p
 	func = white
 	plain = white
 	old = red bold
 	new = green bold
 [color "status"]
-	branch = magenta bold reverse
+	branch = green bold reverse
 	added = yellow
 	changed = green
 	untracked = cyan
@@ -37,6 +40,7 @@
 [color]
 	ui = true
 [color "diff"]
+	# Unfortunately this only shows for *added* lines, not for *removed* lines.  At time of writing, git had no way of doing that.  http://stackoverflow.com/questions/5257553/coloring-white-space-in-git-diffs-output
 	whitespace = blue reverse
 
 
@@ -66,7 +70,7 @@
 	lg = log -p -m
 	# Summaries (without/with branches?)
 	#lol = log --graph --decorate --pretty=oneline --abbrev-commit
-	lol = log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'
+	lol = log --graph --pretty=format:'%C(yellow)%h%C(magenta bold)%d%C(reset) %s %C(cyan)- %an (%ar)%Creset'
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 	prettylog = log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"
 	ls = ls-files
@@ -90,8 +94,10 @@
 	whatsnew = diff-index --color --stat FETCH_HEAD
 	# This shows only what is new on the origin (log and diffs!)
 	# BUT ofc it only works after git fetch!
-	preview  = log -p HEAD..origin
 	#preview  = diff -p HEAD..origin
+	#preview  = log -p HEAD..origin
+	#preview  = log -p HEAD..origin/master
+	preview  = log -p HEAD..FETCH_HEAD
 
 	# Just shows the number of commits by each user
 	whodidwhat = shortlog -nsw -e
@@ -105,13 +111,20 @@
 	#whatisnotpushed = log origin..HEAD --pretty=oneline
 	# So use @{u} = upstream instead
 	whatisnotpushed = log @{u}..HEAD --pretty=oneline
-	# Hmm why not just compare against FETCH_HEAD?
+	# or perhaps just compare against FETCH_HEAD?
 	#whatisnotpushed = log FETCH_HEAD..HEAD --pretty=oneline
-	# You can also see the "ahead" count on the second line of git status
+	# The following does not work sometimes ("warning: refname 'origin/master' is ambiguous.")
+	#whatisnotpushed2 = log origin/master..HEAD --pretty=oneline
+	# As an alternative, you can read the "ahead" count on the second line of git status
 
 	# Compare two branches; commits on one branch that are not reachable from another:
 	#   git log branchA ^branchB
 	# More examples here: http://gitref.org/inspect/
+
+	# This simply runs whatever command you give it in the shell.
+	# The advantage is that shell aliases are always run in the root.
+	# So for example, you can now do "git exec make" from any sub-folder of your project, to run make in the project's root folder.
+	exec = "!exec "
 
 
 

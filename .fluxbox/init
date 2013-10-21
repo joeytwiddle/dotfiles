@@ -105,7 +105,7 @@ session.screen0.window.unfocus.alpha:	210
 session.screen0.workspaceNames:	Music,Net,Sys,Dev,Code,Stats,NewDev,Dreams,Other,utDev,utSrv,UT,
 session.screen0.workspaces:	12
 session.screen0.workspacewarping:	true
-session.slitlistFile:	/home/joey/.fluxbox/slitlist
+session.slitlistFile:	~/.fluxbox/slitlist
 session.styleFile:	~/.fluxbox/styles/OrangeJuiceCute
 session.styleOverlay:	~/.fluxbox/overlay
 session.tabPadding:	0
