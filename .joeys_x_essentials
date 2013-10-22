@@ -1,6 +1,9 @@
 
 #cat $HOME/.my_x_settings 
 cat $HOME/.Xresources | grep -v "^#" | xrdb -merge
+if [ -f "$HOME/.Xresources.local" ]
+then cat $HOME/.Xresources.local | grep -v "^#" | xrdb -merge
+fi
 
 # E.g. if you wanted to switch to GB keyboard layout, you could put the following in that file:
 #setxkbmap -print gb | xkbcomp - "$DISPLAY"
