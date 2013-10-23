@@ -49,7 +49,7 @@
 # TODO: Look up what the hell this does and document it!
 [core]
 	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
-	excludesfile = /home/joey/.gitignore
+	excludesfile = /home/joey/.gitignore.global
 	# Wrap lines when reading diffs
 	# This sometimes drops the top of the log off the top of the screen, which is annoying
 	#pager = less -r
