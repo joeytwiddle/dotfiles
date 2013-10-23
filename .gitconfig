@@ -48,7 +48,7 @@
 # May not be for everyone!  Actually does some stuff!
 # TODO: Look up what the hell this does and document it!
 [core]
-	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+	#whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 	excludesfile = /home/joey/.gitignore.global
 	# Wrap lines when reading diffs
 	# This sometimes drops the top of the log off the top of the screen, which is annoying
@@ -149,8 +149,15 @@
 # will appropriately merge from that remote branch.  Recommended.  Without this,
 # you will have to add --track to your branch command or manually merge remote
 # tracking branches with "fetch" and then "merge".
-[branch]
-	autosetupmerge = true
+#
+# Disabled because I want git to be as difficult for me as for someone without my config.
+#
+#[branch]
+#	autosetupmerge = true
+
+# In a similar vein, this will make it so that pushes will go the same place that pulls come from:
+#[push]
+#	default=tracking
 
 
 
@@ -169,5 +176,7 @@
 ## Of interest:
 # http://stackoverflow.com/questions/849308/pull-push-from-multiple-remote-locations
 # (elliot's answer: automatically push to two repositories)
+# The basics of setting up a remote tracking branch:
+# http://stackoverflow.com/questions/520650/how-do-you-make-an-existing-git-branch-track-a-remote-branch?rq=1
 
 
