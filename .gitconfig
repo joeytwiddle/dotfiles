@@ -126,6 +126,12 @@
 	# So for example, you can now do "git exec make" from any sub-folder of your project, to run make in the project's root folder.
 	exec = "!exec "
 
+	# Just a reminder for myself.  Instead of stashing uncommitted changes, you can bring them with you when you switch branch.
+	checkout-carrying-unstashed-changes = checkout -m
+
+	# You can use this to apply a stash pop to a dirty tree (to workaround the error "Cannot apply to a dirty working tree, please stage your changes").
+	stash-pop-force = !git stash show -p | git apply && git stash drop
+
 
 
 ### The following options are rather more serious, because they affect how git modifies files.
@@ -169,7 +175,7 @@
 # whitespace to be meaningful!
 #
 #[apply]
-#	 whitespace = nowarn
+#	whitespace = nowarn
 
 
 
@@ -179,4 +185,13 @@
 # The basics of setting up a remote tracking branch:
 # http://stackoverflow.com/questions/520650/how-do-you-make-an-existing-git-branch-track-a-remote-branch?rq=1
 
+
+# Use vimdiff once each file to review diffs, by typing git difftool.
+# One disadvantage is the ugliness of breaking out with Ctrl-C if you don't want to diff all the remaining files.
+# Without this, you may be presented with other options:
+#   Other options are available: merge tool candidates: opendiff kdiff3 tkdiff xxdiff meld kompare gvimdiff diffuse ecmerge p4merge araxis bc3 emerge vimdiff
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
 

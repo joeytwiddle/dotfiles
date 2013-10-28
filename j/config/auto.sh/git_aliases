@@ -120,6 +120,9 @@ gitwhatsup() {
 	echo "`cursecyan`=== Remote branches ===`cursenorm`"
 	git branch -r -vv #| prepend_each_line "   "
 	echo
+	echo "`cursecyan`=== Not yet pushed ===`cursenorm`"
+	gll "@{u}..HEAD" | cat
+	echo
 	# Try `git remote update` if you can't see all the remote branches
 }
 alias gwu=gitwhatsup
