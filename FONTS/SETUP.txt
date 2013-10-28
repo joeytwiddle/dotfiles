@@ -1,0 +1,4 @@
+sudo ln -s $PWD /usr/share/fonts/truetype/
+
+# On some systems the folder may be called truetype1
+# You may also need to run ./rebuild_font_cache.sh but I did not need this on Ubuntu 12.4
