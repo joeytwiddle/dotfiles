@@ -1,5 +1,13 @@
 # I seem to have some kind of US keyboard here.  I was just getting used to it when I accidentally loaded a GB layout.  Then I decided to complete it.
 
+# Notes:
+# To capture keycode numbers, you can use: xev
+# NOTE: Be sure to read the number after "keycode" and not the number in brackets!
+# To get the names of output chars for the right-hand side, you can look in: /usr/share/X11/xkb/symbols/us or /gb
+# On some systems that folder is in /etc/X11/xkb
+# To list meta keys: xmodmap -pm
+# Some powerful techniques are available here: http://people.uleth.ca/~daniel.odonnell/Blog/custom-keyboard-in-linuxx11
+
 # Set to GB keyboard layout
 setxkbmap -print gb | xkbcomp - "$DISPLAY"
 
@@ -15,6 +23,11 @@ xmodmap -e "keycode 135 = backslash bar"
 #xmodmap -e "keycode 113 = Left Home"
 #xmodmap -e "keycode 114 = Right End"
 
-# Notes:
-# To list meta keys: xmodmap -pm
+# Alternative
+# Set to US keyboard layout:
+setxkbmap -print us | xkbcomp - "$DISPLAY"
+
+# Swap " and @
+#xmodmap -e "keycode 11 = 2 quotedbl"
+#xmodmap -e "keycode 48 = apostrophe at"
 
