@@ -105,9 +105,11 @@ xset r rate 270 65
 # xset m 2/3 3
 # xset m 4/5 3
 # Save wrists with fast acceleration
-# xset m 12/5 10
+xset m 12/5 10
 # Even faster:
-xset m 20/5 5
+#xset m 20/5 5
+# For yas:
+#xset m 6/5 5
 
 ## Got problems with characters displaying as squares [] ?
 xset fp- unix/:7100     ## xfstt on ubuntu
