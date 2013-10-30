@@ -128,3 +128,7 @@ xset fp- unix/:7100     ## xfstt on ubuntu
 # I think this key is called "Composite" by Gnome.
 # There is another magic key too.  Alt_GR-1 to produce ¹
 
+if [ -f "$HOME"/.custom_x_settings ]
+then . "$HOME"/.custom_x_settings
+fi
+

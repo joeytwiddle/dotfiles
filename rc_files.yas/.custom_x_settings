@@ -1,0 +1,7 @@
+
+# Enable middle-click emulation when pressingn both buttons at once
+myMouseName="OM"
+mouseId=`xinput | grep "\<$myMouseName\>" | afterfirst id= | beforefirst '\s'`
+[ -n "$mouseId" ] && xinput set-prop "$mouseId" 'Evdev Middle Button Emulation' 1
+# You can also list the available options with: xinput list-prop "$mouseId"
+
