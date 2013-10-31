@@ -15,7 +15,7 @@
   [Close]	{yes}
 [end]
 [app] (name=beebem) (class=beebem)
-  [Position]	(UPPERLEFT)	{8 368}
+  [Position]	(UPPERLEFT)	{1% 6%}
   [Close]	{yes}
 [end]
 [app] (name=glslideshow) (class=TopLevelShell)

@@ -52,11 +52,11 @@ fi
 # wmsmixer -w &
 # idesk &
 
+#randomwallpaper &
 . "$HOME"/.joeys_x_essentials
 
 bbkeys &
 lxpanel &
-randomwallpaper &
 gkrellm &
 
 (
@@ -71,8 +71,8 @@ gkrellm &
 # And last but not least we start fluxbox.
 # Because it is the last app you have to run it with ''exec'' before it.
 
-exec fluxbox
-#exec /usr/local/fluxbox.git/bin/fluxbox
+#exec fluxbox
+exec /usr/local/fluxbox.git/bin/fluxbox
 # or if you want to keep a log:
 #exec fluxbox -log "$HOME/.fluxbox/log.txt"
 

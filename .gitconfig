@@ -111,11 +111,13 @@
 	#whatisnotpushed = log origin..HEAD --pretty=oneline
 	# So use @{u} = upstream instead
 	whatisnotpushed = log @{u}..HEAD --pretty=oneline
-	# or perhaps just compare against FETCH_HEAD?
+	# or perhaps just compare against FETCH_HEAD?  No, I think that is prone to failure if we switch branch.
 	#whatisnotpushed = log FETCH_HEAD..HEAD --pretty=oneline
-	# The following does not work sometimes ("warning: refname 'origin/master' is ambiguous.")
+	# The following does not work sometimes ("warning: refname 'origin/master' is ambiguous.")  And again, useless if we switch branch.
 	#whatisnotpushed2 = log origin/master..HEAD --pretty=oneline
 	# As an alternative, you can read the "ahead" count on the second line of git status
+
+	winp = log HEAD@{u}..HEAD --pretty=oneline
 
 	# Compare two branches; commits on one branch that are not reachable from another:
 	#   git log branchA ^branchB

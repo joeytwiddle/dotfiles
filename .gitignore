@@ -2,3 +2,4 @@ CVS/
 .vim-addon-manager/*/
 !.vim-addon-manager/vim-addon-manager*/
 .vim/.netrwhist
+.vim/sessions/*
