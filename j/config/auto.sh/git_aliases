@@ -108,7 +108,7 @@ gitwhatsup() {
 	local greenBackground=$(tput setab 2)
 	local whiteForeground=$(tput setaf 7)
 	#echo "${greenBackground}${whiteForeground}$(cursebold)GITDIR:$(tput init) $gitDir"
-	#echo "`cursecyan`=== Git directory ===`cursenorm`"
+	echo "`cursecyan`=== Git directory ===`cursenorm`"
 	echo "$gitDir"
 	echo
 	#echo "`cursecyan`$gitDir`cursenorm`"
@@ -124,6 +124,7 @@ gitwhatsup() {
 	echo
 	echo "`cursecyan`=== Not yet pushed ===`cursenorm`"
 	gll "@{u}..HEAD" | cat
+	echo
 	echo
 	# Try `git remote update` if you can't see all the remote branches
 }
