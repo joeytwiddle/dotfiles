@@ -105,9 +105,11 @@ xset r rate 270 65
 # xset m 2/3 3
 # xset m 4/5 3
 # Save wrists with fast acceleration
-# xset m 12/5 10
+xset m 12/5 10
 # Even faster:
-xset m 20/5 5
+#xset m 20/5 5
+# For yas:
+#xset m 6/5 5
 
 ## Got problems with characters displaying as squares [] ?
 xset fp- unix/:7100     ## xfstt on ubuntu
@@ -127,4 +129,8 @@ xset fp- unix/:7100     ## xfstt on ubuntu
 # And here are all the other things you can do: /usr/share/X11/locale/en_US.UTF-8/Compose
 # I think this key is called "Composite" by Gnome.
 # There is another magic key too.  Alt_GR-1 to produce ¹
+
+if [ -f "$HOME"/.custom_x_settings ]
+then . "$HOME"/.custom_x_settings
+fi
 

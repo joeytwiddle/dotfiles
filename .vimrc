@@ -282,13 +282,12 @@ autocmd BufReadPost * setlocal iskeyword-=.
 	"" Very small and clear; quite like Teletext font
 	" :set guifont=MonteCarlo\ Fixed\ 12\ 11
 	if exists("&guifont")
-		if $SHORTHOST == "pod"
+		if $SHORTHOST == "pod" || $SHORTHOST == "ubuntu"
 			"" Most Linux offer Mono but it's a little tall
 			" :set guifont=Monospace\ 8
 			"" On Ubuntu Liberation is slightly shorter
 			:set guifont=Liberation\ Mono\ 8
-		endif
-		if $SHORTHOST == "porridge"
+		elseif $SHORTHOST == "porridge"
 			"" Another Ubuntu, with more pixels
 			":set guifont=Monospace\ 11
 			":set guifont=Liberation\ Mono\ 11

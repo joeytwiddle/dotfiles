@@ -80,7 +80,9 @@ alias glf='git log --stat --pretty=oneline --pretty=format:"%C(yellow bold)%h%C(
 #alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'
 # Argh.  git lol in my .gitconfig is better because is shows the name of the committer.
 alias gll='git lol'
-# Git log summary
+# Git Log Summary (use glf?)
+# Git Log Grey.  Like 'gl' except we present colors the same as in gll and glf
+alias glg='gl --format=format:"%C(yellow bold)commit %H%C(reset)%nAuthor: %an %ae%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
 
 alias gb='git branch'
 alias gco='git checkout'
@@ -119,6 +121,9 @@ gitwhatsup() {
 	echo
 	echo "`cursecyan`=== Remote branches ===`cursenorm`"
 	git branch -r -vv #| prepend_each_line "   "
+	echo
+	echo "`cursecyan`=== Not yet pushed ===`cursenorm`"
+	gll "@{u}..HEAD" | cat
 	echo
 	# Try `git remote update` if you can't see all the remote branches
 }

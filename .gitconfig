@@ -48,7 +48,7 @@
 # May not be for everyone!  Actually does some stuff!
 # TODO: Look up what the hell this does and document it!
 [core]
-	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+	#whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 	excludesfile = /home/joey/.gitignore.global
 	# Wrap lines when reading diffs
 	# This sometimes drops the top of the log off the top of the screen, which is annoying
@@ -107,10 +107,14 @@
 	# List the aliases we have
 	alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t = \\2/' | sort
 
-	# The following does not work always (if the repository is fresh, and has not been pulled?)
-	whatisnotpushed = log origin..HEAD --pretty=oneline
-	# The following also does not work sometimes ("warning: refname 'origin/master' is ambiguous.")
-	whatisnotpushed2 = log origin/master..HEAD --pretty=oneline
+	# This does not work on a branch, since origin = origin/master.
+	#whatisnotpushed = log origin..HEAD --pretty=oneline
+	# So use @{u} = upstream instead
+	whatisnotpushed = log @{u}..HEAD --pretty=oneline
+	# or perhaps just compare against FETCH_HEAD?
+	#whatisnotpushed = log FETCH_HEAD..HEAD --pretty=oneline
+	# The following does not work sometimes ("warning: refname 'origin/master' is ambiguous.")
+	#whatisnotpushed2 = log origin/master..HEAD --pretty=oneline
 	# As an alternative, you can read the "ahead" count on the second line of git status
 
 	# Compare two branches; commits on one branch that are not reachable from another:
@@ -121,6 +125,12 @@
 	# The advantage is that shell aliases are always run in the root.
 	# So for example, you can now do "git exec make" from any sub-folder of your project, to run make in the project's root folder.
 	exec = "!exec "
+
+	# Just a reminder for myself.  Instead of stashing uncommitted changes, you can bring them with you when you switch branch.
+	checkout-carrying-unstashed-changes = checkout -m
+
+	# You can use this to apply a stash pop to a dirty tree (to workaround the error "Cannot apply to a dirty working tree, please stage your changes").
+	stash-pop-force = !git stash show -p | git apply && git stash drop
 
 
 
@@ -145,8 +155,15 @@
 # will appropriately merge from that remote branch.  Recommended.  Without this,
 # you will have to add --track to your branch command or manually merge remote
 # tracking branches with "fetch" and then "merge".
-[branch]
-	autosetupmerge = true
+#
+# Disabled because I want git to be as difficult for me as for someone without my config.
+#
+#[branch]
+#	autosetupmerge = true
+
+# In a similar vein, this will make it so that pushes will go the same place that pulls come from:
+#[push]
+#	default=tracking
 
 
 
@@ -158,12 +175,23 @@
 # whitespace to be meaningful!
 #
 #[apply]
-#	 whitespace = nowarn
+#	whitespace = nowarn
 
 
 
 ## Of interest:
 # http://stackoverflow.com/questions/849308/pull-push-from-multiple-remote-locations
 # (elliot's answer: automatically push to two repositories)
+# The basics of setting up a remote tracking branch:
+# http://stackoverflow.com/questions/520650/how-do-you-make-an-existing-git-branch-track-a-remote-branch?rq=1
 
+
+# Use vimdiff once each file to review diffs, by typing git difftool.
+# One disadvantage is the ugliness of breaking out with Ctrl-C if you don't want to diff all the remaining files.
+# Without this, you may be presented with other options:
+#   Other options are available: merge tool candidates: opendiff kdiff3 tkdiff xxdiff meld kompare gvimdiff diffuse ecmerge p4merge araxis bc3 emerge vimdiff
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
 
