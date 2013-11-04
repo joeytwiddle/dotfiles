@@ -72,9 +72,9 @@ gkrellm &
 # Because it is the last app you have to run it with ''exec'' before it.
 
 #exec fluxbox
-exec /usr/local/fluxbox.git/bin/fluxbox
+#exec /usr/local/fluxbox.git/bin/fluxbox
 # or if you want to keep a log:
-#exec fluxbox -log "$HOME/.fluxbox/log.txt"
+exec fluxbox -log "$HOME/.fluxbox/log.txt"
 
 # j/jsh fluxbox
 
