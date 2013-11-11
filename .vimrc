@@ -109,7 +109,7 @@ autocmd BufReadPost * setlocal iskeyword-=.
 	let g:NERDTreeHijackNetrw = 0
 
 	let g:Grep_OpenQuickfixWindow = 1
-	let g:Grep_Default_Filelist = ". -r -I --exclude-dir=CVS --exclude-dir=.git --exclude-dir=bin --exclude-dir=build --exclude-dir=_build --exclude-dir=node_modules --exclude=tags --exclude=\'.*.sw?\' --exclude=\\*.min.js --exclude=\'*.log\' --exclude-dir=sessions"
+	let g:Grep_Default_Filelist = ". -r -I --exclude-dir=CVS --exclude-dir=.git --exclude-dir=bin --exclude-dir=build --exclude-dir=_build --exclude-dir=node_modules --exclude=tags --exclude=\'.*.sw?\' --exclude=\\*.min.js --exclude=\'*.log\' --exclude-dir=sessions --exclude-dir=tmp"
 
 	let g:ConqueTerm_Color = 1
 	" let g:ConqueTerm_CloseOnEnd = 1
@@ -153,7 +153,7 @@ autocmd BufReadPost * setlocal iskeyword-=.
 	"nmap <C-a> q:AsyncFinder<Enter>
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
-    let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules']"
+	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp']"
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
 
@@ -282,12 +282,14 @@ autocmd BufReadPost * setlocal iskeyword-=.
 	"" Very small and clear; quite like Teletext font
 	" :set guifont=MonteCarlo\ Fixed\ 12\ 11
 	if exists("&guifont")
-		if $SHORTHOST == "pod" || $SHORTHOST == "ubuntu"
+		if $SHORTHOST == "pod"
 			"" Most Linux offer Mono but it's a little tall
 			" :set guifont=Monospace\ 8
+			"" I usually prefer Liberation but some days I prefer this:
+			":set guifont=Dejavu\ Sans\ Mono\ 8
 			"" On Ubuntu Liberation is slightly shorter
 			:set guifont=Liberation\ Mono\ 8
-		elseif $SHORTHOST == "porridge"
+		elseif $SHORTHOST == "porridge" || $SHORTHOST == "ubuntu"
 			"" Another Ubuntu, with more pixels
 			":set guifont=Monospace\ 11
 			":set guifont=Liberation\ Mono\ 11
