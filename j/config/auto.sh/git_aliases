@@ -74,15 +74,16 @@ alias gl='gitlog -U2 -p -m --stat'
 alias glw='gl --word-diff'
 # Just file stats, no diffs.  "Git log stats/summary", "Git log files" (shorter)
 alias gls='gitlog --stat'
-alias glf='git log --stat --pretty=oneline --pretty=format:"%C(yellow bold)%h%C(reset) %C(black bold)%s %C(reset)%C(yellow)- %an (%ar)%C(magenta bold)%d%Creset"'
+alias glf='git log --stat --pretty=oneline --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
 # With glf, we can walk commmits with /^[^ ]+
 # Just commit info, one per line
 #alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'
 # Argh.  git lol in my .gitconfig is better because is shows the name of the committer.
-alias gll='git lol'
+#alias gll='git lol'
+alias gll='git log --graph --pretty=format:"%C(yellow)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
 # Git Log Summary (use glf?)
 # Git Log Grey.  Like 'gl' except we present colors the same as in gll and glf
-alias glg='gl --format=format:"%C(yellow bold)commit %H%C(reset)%nAuthor: %an %ae%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
+alias glg='gl --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an %ae%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
 
 alias gb='git branch'
 alias gco='git checkout'
