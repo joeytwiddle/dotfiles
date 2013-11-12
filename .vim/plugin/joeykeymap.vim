@@ -13,6 +13,25 @@ inoremap <C-PageUp> <Esc>:bprev<Enter>i
 " inoremap <C-PageUp> <Esc><C-PageUp>a
 " inoremap <C-PageDown> <Esc><C-PageDown>a
 
+"" These versions work for my Eterm, provided we exported TERM=xterm
+"nnoremap [6^ :bn<Enter>
+"noremap [5^ :bp<Enter>
+"" In hwi (Debian), pod and porridge's (Ubuntu) console, where TERM=linux, PageUp/Down send the same as Ctrl-PageUp/Ctrl-PageDown!
+" nnoremap [6~ :bn<Enter>
+" nnoremap [5~ :bp<Enter>
+nmap [6^ <C-PageDown>
+nmap [5^ <C-PageUp>
+
+"" Inside screen on pea, and for xterm on Ubuntu:
+"noremap [6;5~ :bn<Enter>
+"noremap [5;5~ :bp<Enter>
+nmap [6;5~ <C-PageDown>
+nmap [5;5~ <C-PageUp>
+
+"" But in the QuickFixList, we want Ctrl-PageUp/PageDown to cycle "cope tabs", not buffers.
+autocmd BufReadPost quickfix nnoremap <buffer> <C-PageDown> :cnewer<CR>
+autocmd BufReadPost quickfix nnoremap <buffer> <C-PageUp> :colder<CR>
+
 "" Sometimes I want to re-arrange the order of the buffers in my list.  After
 "" years of nothing, I now at least found a way to push buffers to the end, by
 "" completely removing them first with bwipeout.
@@ -30,17 +49,6 @@ endfunction
 " Since C-S-PageDown never makes it through my xterm, we expose a user command too:
 command! MoveBufferToEnd call s:MoveCurrentBufferToEndOfList()
 " Oh!  C-A-PageDown does make it through.  :)
-
-"" These versions work for my Eterm, provided we exported TERM=xterm
-nnoremap [6^ :bn<Enter>
-nnoremap [5^ :bp<Enter>
-"" In hwi (Debian), pod and porridge's (Ubuntu) console, where TERM=linux, PageUp/Down send the same as Ctrl-PageUp/Ctrl-PageDown!
-" nnoremap [6~ :bn<Enter>
-" nnoremap [5~ :bp<Enter>
-
-"" Inside screen on pea:
-nnoremap [6;5~ :bn<Enter>
-nnoremap [5;5~ :bp<Enter>
 
 
 
