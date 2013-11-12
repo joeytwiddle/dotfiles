@@ -91,13 +91,16 @@
 	# I.e. additions are red, removals are green!  :P
 	whatsnewOrigin = diff-index --color --stat origin
 	# Hmmm.  If no origin is set yes in .git/config, then we need to do this:
-	whatsnew = diff-index --color --stat FETCH_HEAD
 	# This shows only what is new on the origin (log and diffs!)
 	# BUT ofc it only works after git fetch!
 	#preview  = diff -p HEAD..origin
 	#preview  = log -p HEAD..origin
 	#preview  = log -p HEAD..origin/master
-	preview  = log -p HEAD..FETCH_HEAD
+	#preview  = log -p HEAD..FETCH_HEAD
+	preview = diff-index --color --stat FETCH_HEAD
+	previewdiff = diff HEAD..FETCH_HEAD
+	#whatsnew = log --stat HEAD..FETCH_HEAD
+	whatsnew = log --graph --pretty=format:'%C(yellow bold reverse)%h%C(reset)%C(magenta bold)%d%C(black bold) %s %C(cyan)- %an (%ar)%Creset%n' --stat HEAD..FETCH_HEAD
 
 	# Just shows the number of commits by each user
 	whodidwhat = shortlog -nsw -e
@@ -110,14 +113,13 @@
 	# This does not work on a branch, since origin = origin/master.
 	#whatisnotpushed = log origin..HEAD --pretty=oneline
 	# So use @{u} = upstream instead
-	whatisnotpushed = log @{u}..HEAD --pretty=oneline
-	# or perhaps just compare against FETCH_HEAD?  No, I think that is prone to failure if we switch branch.
-	#whatisnotpushed = log FETCH_HEAD..HEAD --pretty=oneline
-	# The following does not work sometimes ("warning: refname 'origin/master' is ambiguous.")  And again, useless if we switch branch.
+	#whatisnotpushed = log @{u}..HEAD --pretty=oneline
+	#whatisnotpushed = log HEAD@{u}..HEAD --pretty=oneline
+	# or perhaps just compare against FETCH_HEAD?  That is prone to failure if we switch branch.
+	whatisnotpushed = log FETCH_HEAD..HEAD --pretty=oneline
+	# The following does not work sometimes ("warning: refname 'origin/master' is ambiguous.")  And it's useless if we are not on the master branch.  (It is more like whatisnotmergedintomaster.  You can see the number of different commits when switching between branches with git checkout.)
 	#whatisnotpushed2 = log origin/master..HEAD --pretty=oneline
 	# As an alternative, you can read the "ahead" count on the second line of git status
-
-	winp = log HEAD@{u}..HEAD --pretty=oneline
 
 	# Compare two branches; commits on one branch that are not reachable from another:
 	#   git log branchA ^branchB
