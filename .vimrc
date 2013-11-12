@@ -159,6 +159,7 @@ autocmd BufReadPost * setlocal iskeyword-=.
 
 	" Neither of these really worked how I wanted.  How about SkyBison?
 	nmap <C-d> :e **/*<C-k>
+	" This becomes a nice tool for selection but it is slow at the root of deep trees, especially since we have no way to exclude folders.
 
 	let g:gitgutter_diff_args = '-w "master@{1 week ago}"'
 
