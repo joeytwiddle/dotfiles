@@ -141,7 +141,7 @@ function! Joeyfolding()
 
 		"" Remind user we have folding, but don't fold everything up.
 		"" TOOD: A nice (although odd) start might be: set level=1 but open first fold?
-		:set foldlevel=2
+		:set foldlevel=1
 		" :normal zR
 		" :normal zM
 
