@@ -25,7 +25,7 @@ function! s:FoldByFiles()
 	setlocal foldexpr=matchstr(g:GetLastNonWrappedQFLine(v:lnum),'^[^\|]\\+')==#matchstr(g:GetLastNonWrappedQFLine(v:lnum+1),'^[^\|]\\+')?1:'<1'
 	setlocal foldtext=substitute(getline(v:foldstart),'\|.*','','').'\ ['.(v:foldend-v:foldstart+1).'\ lines]'
 
-	if foldclosedend(1) == line('$')
+	if foldclosedend(1) == line('$') || line("$") <= winheight(0)
 		" When all matches come from a single file, do not close that single fold;
 		" the user probably is interested in the contents.
 		setlocal foldlevel=1
@@ -53,7 +53,7 @@ function! s:FoldByFolder()
 	setlocal foldtext=matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/').'\ ['.(v:foldend-v:foldstart+1).'\ lines]'
 	"setlocal foldtext='['.(v:foldend-v:foldstart+1).']\ '.matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/')
 
-	if foldclosedend(1) == line('$')
+	if foldclosedend(1) == line('$') || line("$") <= winheight(0)
 		" When all matches come from a single file, do not close that single fold;
 		" the user probably is interested in the contents.
 		setlocal foldlevel=1
