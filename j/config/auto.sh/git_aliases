@@ -131,3 +131,14 @@ gitwhatsup() {
 }
 alias gwu=gitwhatsup
 
+# Git What Is Not Pushed
+alias gwinp='gll FETCH_HEAD..HEAD'
+# Git What Is Not Pushed Details
+alias gwinpd='gl FETCH_HEAD..HEAD'
+# Git To Push
+alias gtp='gwinp'
+# Git To Push Files
+alias gtpf='git topush'
+# Git To Push Details / Diff
+alias gtpd='gwinpd'
+
