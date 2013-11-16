@@ -55,7 +55,8 @@ function! s:OnQuitSaveSession()
 		"let sessionName = split($PWD,'/')[-1]
 		" The session name is made from the last TWO parts of the cwd path.
 		" We change '/' to '#' but then need to escape '#' delimeter or it gets expanded to "-MiniBufExplorer-"!
-		let sessionName = join(split($PWD,'/')[-2:],'\#')
+		" Changed '\#' into '+' because if we try to source a session file with -S, Vim tries to do something with the '#' and fails.  '|' failed the mksession below, but even when escaped, '\|' failed on sourcing!
+		let sessionName = join(split($PWD,'/')[-2:],'+')
 		" TODO: If there is only one (real) buffer open, use his filename instead of $PWD.
 		" Add the number of buffers.  Essentially this is so I don't overwrite a nice long session with a small one when I open and close Vim to edit one file.
 		let sessionName .= "-" . bufnr('$')
