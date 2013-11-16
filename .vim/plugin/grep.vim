@@ -373,8 +373,8 @@ function! s:RunGrepCmd(cmd, pattern)
         setlocal nobuflisted
         " We could help size it a bit
         let targetHeight = line('$') + 1
-        if targetHeight > 20
-            let targetHeight = 20
+        if targetHeight > &lines/4
+            let targetHeight = &lines/4
         endif
         exec "resize ".targetHeight
     endif
@@ -438,7 +438,7 @@ function! s:FoldByFolder()
 	setlocal foldtext=matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/').'\ ['.(v:foldend-v:foldstart+1).'\ lines]'
 	"setlocal foldtext='['.(v:foldend-v:foldstart+1).']\ '.matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/')
 
-	if foldclosedend(1) == line('$')
+	if foldclosedend(1) == line('$') || line("$") <= winheight(0)
 		" When all matches come from a single file, do not close that single fold;
 		" the user probably is interested in the contents.
 		setlocal foldlevel=1
