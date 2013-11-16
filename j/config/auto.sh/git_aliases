@@ -139,6 +139,8 @@ alias gwinpd='gl FETCH_HEAD..HEAD'
 alias gtp='gwinp'
 # Git To Push Files
 alias gtpf='git topush'
-# Git To Push Details / Diff
-alias gtpd='gwinpd'
+# Git To Push Log
+alias gtpl='gwinpd'
+# Git To Push Details / Diff (a direct diff, without listing each commit)
+alias gtpd='gd FETCH_HEAD..HEAD'
 
