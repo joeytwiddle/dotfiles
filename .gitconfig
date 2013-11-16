@@ -110,16 +110,22 @@
 	# List the aliases we have
 	alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t = \\2/' | sort
 
-	# This does not work on a branch, since origin = origin/master.
+	# whatisnotpushed: Preview what will be sent when you push (or if indeed a push is needed).
+	# As an alternative, you can read the "ahead" count shown on the second line of git status, or shown when switching between branches with git checkout.
+	# Comparing against the origin does not work when we are on a branch, since origin = origin/master.
 	#whatisnotpushed = log origin..HEAD --pretty=oneline
 	# So use @{u} = upstream instead
 	#whatisnotpushed = log @{u}..HEAD --pretty=oneline
 	#whatisnotpushed = log HEAD@{u}..HEAD --pretty=oneline
 	# or perhaps just compare against FETCH_HEAD?  That is prone to failure if we switch branch.
 	whatisnotpushed = log FETCH_HEAD..HEAD --pretty=oneline
-	# The following does not work sometimes ("warning: refname 'origin/master' is ambiguous.")  And it's useless if we are not on the master branch.  (It is more like whatisnotmergedintomaster.  You can see the number of different commits when switching between branches with git checkout.)
-	#whatisnotpushed2 = log origin/master..HEAD --pretty=oneline
-	# As an alternative, you can read the "ahead" count on the second line of git status
+	# I suspect @{u} is better than FETCH_HEAD because it will still apply if we switch branch.  However both suffer from the problem that we might not be pushing *to* the upstream.  Our upstream might be master, whilst we are pushing to the current branch.
+
+	# Shortcut:
+	winp   = log FETCH_HEAD..HEAD --pretty=oneline
+
+	# Files that will be pushed:
+	topush = diff-index --color --stat FETCH_HEAD
 
 	# Compare two branches; commits on one branch that are not reachable from another:
 	#   git log branchA ^branchB
