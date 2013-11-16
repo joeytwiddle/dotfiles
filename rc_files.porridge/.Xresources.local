@@ -1,2 +1,3 @@
 # This machine has many pixels, but only a laptop screen, so I prefer to use a larger font:
 xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
+# Of course, the above has no effect if you provide a -font argument when starting xterm.
