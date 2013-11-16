@@ -413,3 +413,14 @@ nnoremap <Leader>k :setlocal iskeyword=65-127<Enter>
 " Execute the line under the cursor in ex
 nnoremap <Leader>e :execute getline(".")<CR>
 
+" If my F3 mapping to grep.vim is working fine, let's skip through all the prompts.
+nmap <C-F3> <F3><CR><CR><CR>
+" The terminal version of <C-F3> is:
+nmap [1;5R <F3><CR><CR><CR>
+" Or associate it with existing search buttons * or #
+nmap <Leader>8 <F3><CR><CR><CR>
+nmap <Leader>* <F3><CR><CR><CR>
+nmap <Leader># <F3><CR><CR><CR>
+" TODO: Keep only one of the above, the one I find myself using.  :)
+" Unfortunately <C-8> sends <C-H> and is undistinguishable.
+
