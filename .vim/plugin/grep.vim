@@ -373,9 +373,8 @@ function! s:RunGrepCmd(cmd, pattern)
         setlocal nobuflisted
         " We could help size it a bit
         let targetHeight = line('$') + 1
-        if targetHeight > &lines/4
-            let targetHeight = &lines/4
-        endif
+        let maxHeight = max([ &lines / 4, winheight(0) ])
+        let targetHeight = min([ targetHeight, maxHeight ])
         exec "resize ".targetHeight
     endif
 
