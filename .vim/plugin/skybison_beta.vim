@@ -33,17 +33,23 @@ function! s:SkyBisonBeta()
   " If you only want a list, trigger <c-D> instead of wcm.
   set wildcharm=<c-z>
 
+  if !exists('g:SkyBisonBeta_After_Each_Stroke')
+    let g:SkyBisonBeta_After_Each_Stroke = '<c-z>'
+    "let g:SkyBisonBeta_After_Each_Stroke = '<c-z><c-l>'
+  endif
+  let stroke = g:SkyBisonBeta_After_Each_Stroke
+
   for i in range(65,90)
     let c = nr2char(i)
-    exec "cnoremap ".c." ".c."<c-z>"
+    exec "cnoremap " . c . " " . c . stroke
   endfor
   for i in range(97,122)
     let c = nr2char(i)
-    exec "cnoremap ".c." ".c."<c-z>"
+    exec "cnoremap " . c . " " . c . stroke
   endfor
-  exec "cnoremap / /<c-z>"
-  exec "cnoremap . .<c-z>"
-  exec "cnoremap <Space> <Space><c-z>"
+  exec "cnoremap / /" . stroke
+  exec "cnoremap . ." . stroke
+  exec "cnoremap <Space> <Space>" . stroke
 endfunction
 
 function! s:SkyBisonBetaClose()
