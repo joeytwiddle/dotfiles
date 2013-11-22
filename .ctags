@@ -9,7 +9,9 @@
 --regex-vim=/^(COMMENT: not needed use augroup)\s*au[tocmd]*\s+[^\s]+\s+([A-Za-z0-9]+)/\1/d,autocmd/
 
 --langmap=c:+.jpp,c:+.uc
+
 --langmap=java:+.jpp,java:+.uc
+
 --langmap=javascript:+.jpp,javascript:+.uc
 --regex-javascript=/^(COMMENT: Some of Javascript's default patterns match null on Unrealscript files.)/\1/X,XXX/
 --regex-javascript=/^\s*var ([a-zA-Z_$][0-9a-zA-Z_$]*).*$/\1/v,variable/
@@ -48,7 +50,7 @@
 
 --langdef=uc
 --langmap=uc:+.jpp,uc:+.uc
---regex-uc=/^(This is not working, although it does if we put it in the JS rules and set ft=javascript!)/\1/X,XXX/
+--regex-uc=/^(COMMENT: This is not working, although it does if we put it in the JS rules and set ft=javascript! O_o)/\1/X,XXX/
 --regex-uc=/\<state\>\s+([a-zA-Z_$][0-9a-zA-Z_$]*).*$/\1/s,state/
 
 --langdef=coffee
