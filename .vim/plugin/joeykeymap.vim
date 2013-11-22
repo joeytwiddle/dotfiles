@@ -421,6 +421,9 @@ nmap [1;5R <F3><CR><CR><CR>
 nmap <Leader>8 <F3><CR><CR><CR>
 nmap <Leader>* <F3><CR><CR><CR>
 nmap <Leader># <F3><CR><CR><CR>
+" Replaces :emenu <Tab>
+nmap <F4> <F3><CR><CR><CR>
 " TODO: Keep only one of the above, the one I find myself using.  :)
 " Unfortunately <C-8> sends <C-H> and is undistinguishable.
+" And <C-S-P> is equivalent to <C-P> which I am alread using for :cprev<CR>
 
