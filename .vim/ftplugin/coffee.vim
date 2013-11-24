@@ -44,6 +44,11 @@ endif
 " but avoid polluting the coffee source folder with js files.
 " folder.
 
+" TODO: Refactor this so it can be used on other filetypes.
+" e.g. for GorillaScript:   :call g:Process_And_Diff('gorillascript %','%<.js')
+" or for a complex project: :call g:Process_And_Diff('make','main.js')
+" Note that expand() does not work on '%<.js'!
+
 augroup CoffeeAutoCompile_AuGroup
 
   autocmd!
