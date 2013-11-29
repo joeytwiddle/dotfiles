@@ -565,6 +565,10 @@ autocmd BufReadPost * setlocal iskeyword-=.
 	let g:SeekBackKey = 'L'
 	let g:seek_subst_disable = 1
 
+	if filereadable($HOME."/.vimrc.local")
+		source $HOME/.vimrc.local
+	endif
+
 	" This test does not work!  Yes it does!?
 	" if exists("*vam#ActivateAddons") || 1
 	let vam_found_dir = $HOME . "/.vim-addon-manager/vim-addon-manager/"

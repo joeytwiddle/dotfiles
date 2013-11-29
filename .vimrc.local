@@ -1,0 +1,2 @@
+" Disable smooth scrolling.  Useful for remote machines.
+"let g:SexyScroller_Enabled = 0
