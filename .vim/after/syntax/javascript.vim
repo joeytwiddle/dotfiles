@@ -2,18 +2,25 @@
 ":set cinoptions=j1
 
 " Reserving these variables don't make a lot of sense for NodeJS:
+" (e.g. top, window, ...)
 syntax clear javaScriptMember
 syntax clear javaScriptGlobal
+
+"" TODO: Some of the below slow down Vim a lot.  Look in the distribution's files to see if there may be a way to make them more efficient.
 
 "" Redefine defaults (added @todo) does appear in rules but does not work!
 " syn keyword javaScriptCommentTodo      TODO FIXME XXX TBD @todo contained
 
+"highlight javaScriptOperator ctermfg=white cterm=bold guifg=white gui=bold
+highlight link javaScriptOperator Normal
+
 " I ended up putting a bunch of things I wanted highlighted into this one type
 " We could separate into: javaScriptComparison and javaScriptOperatorOther
-syntax match javaScriptOperation /\(===\|==\|!=\|!==\|<\|>\|<=\|>=\|&&\|||\|&\||\)/
-highlight link javaScriptOperation javaScriptOperator
-" highlight javaScriptOperator ctermfg=white cterm=bold guifg=white gui=bold
-highlight link javaScriptOperator Normal
+syntax match javaScriptOperation /\(===\|==\|!==\|!=\|<=\|>=\|<\|>\|&&\|||\|&\||\|!\)/
+"highlight link javaScriptOperation javaScriptOperator
+"highlight javascriptOperation ctermfg=white cterm=bold guifg=white gui=bold
+"highlight javascriptOperation ctermfg=yellow cterm=none guifg=yellow gui=none
+highlight link javaScriptOperation Normal
 
 syntax match javaScriptAssignment /\([ ]\|\>\)=\([ ]\|\<\)/
 syntax match javaScriptAssignmentOther /\(++\|--\|+=\|-=\|*=\|\/=\|&=\||=\)/
@@ -68,4 +75,10 @@ highlight OperatorPlus ctermfg=green guifg=green
 "highlight OperatorMinus ctermfg=red guifg=red
 highlight OperatorMultiply ctermfg=yellow guifg=yellow
 highlight OperatorDivide ctermfg=red guifg=red
+
+"" Added some more, getting silly now!
+"syn match ComparatorPositive /\(>\|>=\|===\|==\)/
+"syn match ComparatorNegative /\(<\|<=\|!==\|!=\)/
+"highlight ComparatorPositive ctermfg=green guifg=green
+"highlight ComparatorNegative ctermfg=red guifg=red
 
