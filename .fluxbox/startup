@@ -71,10 +71,13 @@ gkrellm &
 # And last but not least we start fluxbox.
 # Because it is the last app you have to run it with ''exec'' before it.
 
-#exec fluxbox
-#exec /usr/local/fluxbox.git/bin/fluxbox
-# or if you want to keep a log:
-exec fluxbox -log "$HOME/.fluxbox/log.txt"
-
+# The git version has some bugfixes, and some new bugs!
+# Keeping a log is optional
+if [ -e /usr/local/fluxbox.git/bin/fluxbox ]
+then
+	exec /usr/local/fluxbox.git/bin/fluxbox -log "$HOME/.fluxbox/log.txt"
+else
+	exec fluxbox
+fi
 # j/jsh fluxbox
 
