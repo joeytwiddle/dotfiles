@@ -86,18 +86,21 @@
 	#newfiles = ls-files -u
 	#newfiles = diff-files --stat
 	# This shows change-counts in local files (and perhaps also what is new on the origin)
-	# It can be used to show what files will change when you go git merge FETCH_HEAD
-	# BUT note that it shows the *opposite* of what the merge will perform!
+	# (Now using --cached to drop uncommitted changes in local files.)
+	# This can be used to show what files will change when you go git merge FETCH_HEAD
+	# BUT note that diff-index shows the *opposite* of what the merge will perform!
 	# I.e. additions are red, removals are green!  :P
-	whatsnewOrigin = diff-index --color --stat origin
-	# Hmmm.  If no origin is set yes in .git/config, then we need to do this:
+	previewmaster = diff-index --color --stat origin/master --cached
+	# Hmmm.  If no origin is set yet in .git/config, then we need to do this:
 	# This shows only what is new on the origin (log and diffs!)
 	# BUT ofc it only works after git fetch!
 	#preview  = diff -p HEAD..origin
 	#preview  = log -p HEAD..origin
 	#preview  = log -p HEAD..origin/master
 	#preview  = log -p HEAD..FETCH_HEAD
-	preview = diff-index --color --stat FETCH_HEAD
+	#preview = diff-index --color --stat FETCH_HEAD --cached
+	# Using diff --stat we can get the same thing but in the correct direction!
+	preview = diff --stat HEAD..FETCH_HEAD
 	previewdiff = diff HEAD..FETCH_HEAD
 	#whatsnew = log --stat HEAD..FETCH_HEAD
 	whatsnew = log --graph --pretty=format:'%C(yellow bold reverse)%h%C(reset)%C(magenta bold)%d%C(black bold) %s %C(cyan)- %an (%ar)%Creset%n' --stat HEAD..FETCH_HEAD
@@ -119,7 +122,7 @@
 	#whatisnotpushed = log HEAD@{u}..HEAD --pretty=oneline
 	# or perhaps just compare against FETCH_HEAD?  That is prone to failure if we switch branch.
 	whatisnotpushed = log FETCH_HEAD..HEAD --pretty=oneline
-	# I suspect @{u} is better than FETCH_HEAD because it will still apply if we switch branch.  However both suffer from the problem that we might not be pushing *to* the upstream.  Our upstream might be master, whilst we are pushing to the current branch.
+	# I suspect @{u} is better than FETCH_HEAD because it will still apply if we switch branch.  However both suffer from the problem that we might not be pushing *to* the upstream.  Upstream is where we are configured to pull from, not where we push to!  So our upstream might be master, or another branch, when we are actually pushing to the current branch (on the origin).  There is no @{d} or @{p}
 
 	# Shortcut:
 	winp   = log FETCH_HEAD..HEAD --pretty=oneline
