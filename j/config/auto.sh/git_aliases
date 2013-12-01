@@ -74,6 +74,7 @@ alias gl='gitlog -U2 -p -m --stat'
 alias glw='gl --word-diff'
 # Just file stats, no diffs.  "Git log stats/summary", "Git log files" (shorter)
 alias gls='gitlog --stat'
+# If you want to use this with --graph then it should have a %n at the end.
 alias glf='git log --stat --pretty=oneline --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
 # With glf, we can walk commmits with /^[^ ]+
 # Just commit info, one per line
