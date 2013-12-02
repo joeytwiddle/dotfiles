@@ -376,6 +376,21 @@ function! s:RunGrepCmd(cmd, pattern)
         let maxHeight = max([ &lines / 4, winheight(0) ])
         let targetHeight = min([ targetHeight, maxHeight ])
         exec "resize ".targetHeight
+        " We can set a nice title
+        " But with statusline it does not survive :colder :cnewer
+        let &l:statusline = 'Search results for ' . a:pattern . ''
+        " This gets overwritten.  Find out who is doing that with verbose.
+        " If no luck changing it, try changing w:quickfix_title instead.
+        " http://superuser.com/questions/356912/how-do-i-change-the-quickix-title-status-bar-in-vim
+        "let w:quickfix_title = '[Search results for ' . a:pattern . ']'
+        " No joy, it gets muted.
+        "
+        " OK so this appears to be an unsolved problem, which a few people have asked about on the web.
+        " I propose we create a plugin which exposes quickfixtitles#SetQuickfixTitle().
+        " This would work by mapping w:quickfix_title through a dictionary, so that when cnewer/colder are used again later, we can follow the mapping and set the statusline again!
+        " It should also perform cleanup of old entries during very long sessions with heavy use of quickfix titles.
+        "
+        " Finally, this script should only use the magic function if it can see it is available.
     endif
 
     " Jump to the first error (mainly because it forces the focus back to
@@ -400,9 +415,11 @@ function! s:RunGrepCmd(cmd, pattern)
 
     "" SEE ALSO: Search for cfile and cgetfile elsewhere in this script!
 
-    " I think we need some obvious indiciation that the buffer changed!
+    " I think we need some obvious indication that the buffer changed!
 
-    call s:FoldByFolder()
+    if exists(":FoldByFiles")
+        exec "FoldByFiles"
+    endif
 
     call delete(tmpfile)
 endfunction
@@ -417,34 +434,6 @@ function! g:GetLastNonWrappedQFLine(startline)
 		let curline -= 1
 	endwhile
 	return ''
-endfunction
-
-function! s:FoldByFolder()
-
-	setlocal foldmethod=expr
-	" This actually folds by '/' count before the '|' and with bugs.
-	"setlocal foldexpr=getline(v:lnum)[0:1]=='\|\|'?'=':strlen(substitute(substitute(getline(v:lnum),'\|.*','',''),'[^/]','','g'))
-	" What we really need is to compare how many of the .../.../.../ blocks match the previous line.
-	" (Yes this will set foldlevel 3 if all the files are in a 3-deep folder, but the alternative is to check every line in the buffer, and even that is not entirely correct; the correct solution is a horizontal scan!)
-	"setlocal foldexpr=getline(v:lnum)[0:1]=='\|\|'?'=':strlen(substitute(substitute(getline(v:lnum),'\|.*','',''),'[^/]','','g'))
-	" This is better.  It folds by everything up to the last / i.e. the folder but not the filename.
-	" Without || support
-	"setlocal foldexpr=matchstr(substitute(getline(v:lnum),'\|.*','',''),'^.*/')==#matchstr(substitute(getline(v:lnum+1),'\|.*','',''),'^.*/')?1:'<1'
-	" With poor || support
-	"setlocal foldexpr=matchstr(substitute(getline(v:lnum),'\|.*','',''),'^.*/')==#matchstr(substitute(getline(v:lnum+1),'\|.*','',''),'^.*/')?1:getline(v:lnum+1)[0:1]=='\|\|'?'=':'<1'
-	" With good || support
-	setlocal foldexpr=matchstr(substitute(g:GetLastNonWrappedQFLine(v:lnum),'\|.*','',''),'^.*/')==#matchstr(substitute(g:GetLastNonWrappedQFLine(v:lnum+1),'\|.*','',''),'^.*/')?1:'<1'
-	setlocal foldtext=matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/').'\ ['.(v:foldend-v:foldstart+1).'\ lines]'
-	"setlocal foldtext='['.(v:foldend-v:foldstart+1).']\ '.matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/')
-
-	if foldclosedend(1) == line('$') || line("$") <= winheight(0)
-		" When all matches come from a single file, do not close that single fold;
-		" the user probably is interested in the contents.
-		setlocal foldlevel=1
-	else
-		setlocal foldlevel=0
-	endif
-
 endfunction
 
 " RunGrepRecursive()
