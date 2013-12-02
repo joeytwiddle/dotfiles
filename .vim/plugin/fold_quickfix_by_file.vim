@@ -23,7 +23,8 @@ function! s:FoldByFiles()
 
 	setlocal foldmethod=expr
 	setlocal foldexpr=matchstr(g:GetLastNonWrappedQFLine(v:lnum),'^[^\|]\\+')==#matchstr(g:GetLastNonWrappedQFLine(v:lnum+1),'^[^\|]\\+')?1:'<1'
-	setlocal foldtext=substitute(getline(v:foldstart),'\|.*','','').'\ ['.(v:foldend-v:foldstart+1).'\ lines]'
+	"setlocal foldtext=substitute(getline(v:foldstart),'\|.*','','').'\ ['.(v:foldend-v:foldstart+1).'\ lines]'
+	setlocal foldtext=substitute(getline(v:foldstart),'\|.*','','').'\ ----------['.(v:foldend-v:foldstart+1).'\ lines]'
 
 	if foldclosedend(1) == line('$') || line("$") <= winheight(0)
 		" When all matches come from a single file, do not close that single fold;
@@ -50,8 +51,9 @@ function! s:FoldByFolder()
 	"setlocal foldexpr=matchstr(substitute(getline(v:lnum),'\|.*','',''),'^.*/')==#matchstr(substitute(getline(v:lnum+1),'\|.*','',''),'^.*/')?1:getline(v:lnum+1)[0:1]=='\|\|'?'=':'<1'
 	" With good || support
 	setlocal foldexpr=matchstr(substitute(g:GetLastNonWrappedQFLine(v:lnum),'\|.*','',''),'^.*/')==#matchstr(substitute(g:GetLastNonWrappedQFLine(v:lnum+1),'\|.*','',''),'^.*/')?1:'<1'
-	setlocal foldtext=matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/').'\ ['.(v:foldend-v:foldstart+1).'\ lines]'
 	"setlocal foldtext='['.(v:foldend-v:foldstart+1).']\ '.matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/')
+	"setlocal foldtext=matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/').'\ ['.(v:foldend-v:foldstart+1).'\ lines]'
+	setlocal foldtext=matchstr(substitute(getline(v:foldstart),'\|.*','',''),'^.*/').'\ ----------['.(v:foldend-v:foldstart+1).'\ lines]'
 
 	if foldclosedend(1) == line('$') || line("$") <= winheight(0)
 		" When all matches come from a single file, do not close that single fold;
@@ -78,6 +80,7 @@ function! g:CountSimilarBits(left,right)
 	return i
 endfunction
 
+" Experiment; unfinished.
 function! s:FoldByPath()
 
 	for l in range(1,line("$"))
