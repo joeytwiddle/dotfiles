@@ -134,3 +134,7 @@ if [ -f "$HOME"/.custom_x_settings ]
 then . "$HOME"/.custom_x_settings
 fi
 
+if [ -d "$HOME/Dropbox" ]
+then dropbox start
+fi
+
