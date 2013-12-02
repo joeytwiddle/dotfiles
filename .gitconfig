@@ -130,6 +130,12 @@
 	# Files that will be pushed:
 	topush = diff-index --color --stat FETCH_HEAD
 
+	# So the problem is {u} is where we are pulling from, which might be different from where we are pushing to.  To see what is not pushed, we need to compare against the remote branch we are pushing to.
+
+	# None of the above appear to work properly.  But this works, if you provide the branch_name manually:
+	#git log origin/branch_name..branch_name
+	# although it shows merges as individual commits, which can be a little confusing.
+
 	# Compare two branches; commits on one branch that are not reachable from another:
 	#   git log branchA ^branchB
 	# More examples here: http://gitref.org/inspect/
@@ -207,4 +213,11 @@
 	tool = vimdiff
 [difftool]
 	prompt = false
+
+[format]
+	# Simple:
+	#pretty = %C(yellow)%h%C(magenta bold)%d%C(reset) %s %C(cyan)- %an (%ar)%Creset
+	# Mine:
+	#pretty = %C(yellow bold reverse)%h%C(reset)%C(magenta bold)%d%C(black bold) %s %C(cyan)- %an (%ar)%Creset
+	# Unfortunately, setting these will apply to all logs, so we can't ever see a normal log!
 
