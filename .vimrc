@@ -109,7 +109,18 @@ autocmd BufReadPost * setlocal iskeyword-=.
 	let g:NERDTreeHijackNetrw = 0
 
 	let g:Grep_OpenQuickfixWindow = 1
-	let g:Grep_Default_Filelist = ". -r -I --exclude-dir=CVS --exclude-dir=.git --exclude-dir=bin --exclude-dir=build --exclude-dir=_build --exclude-dir=node_modules --exclude=tags --exclude=\'.*.sw?\' --exclude=\\*.min.js --exclude=\'*.log\' --exclude-dir=sessions --exclude-dir=tmp"
+	let g:Grep_Default_Filelist = ". -r -I"
+	" General exclude folders:
+	let g:Grep_Default_Filelist .= " --exclude-dir=CVS --exclude-dir=.git --exclude-dir=bin --exclude-dir=build --exclude-dir=node_modules"
+	" General exclude files:
+	let g:Grep_Default_Filelist .= " --exclude=tags --exclude=\'.*.sw?\' --exclude=\\*.min.js --exclude=\\*.min.css --exclude=\'*.log\'"
+	" For Haxe:
+	let g:Grep_Default_Filelist .= " --exclude-dir=_build"
+	" For ~/.vim/sessions:
+	let g:Grep_Default_Filelist .= " --exclude-dir=sessions"
+	" For Piktochart:
+	let g:Grep_Default_Filelist .= " --exclude-dir=tmp"     " Assets compiled by Ruby
+	let g:Grep_Default_Filelist .= " --exclude-dir=pikto"   " Code for old version
 
 	let g:ConqueTerm_Color = 1
 	" let g:ConqueTerm_CloseOnEnd = 1
