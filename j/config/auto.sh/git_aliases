@@ -145,3 +145,15 @@ alias gtpl='gwinpd'
 # Git To Push Details / Diff (a direct diff, without listing each commit)
 alias gtpd='gd FETCH_HEAD..HEAD'
 
+git_branch_status() {
+	# Displays status of current branch relative to upstream and downstream versions
+	# With no arguments, inspects all branches
+	# With argument `.`, displays current branch
+	# With any other argument, uses that as the branch name
+	# If the branch has no upstream (pull) specified, then assume origin/<branch_name> if it exists, otherwise assume origin/master
+	# If the branch has no downstream (push) specified, then assume origin/<branch_name>
+	# This may help: http://stackoverflow.com/questions/2969214/git-programmatically-know-by-how-much-the-branch-is-ahead-behind-a-remote-branc
+	# git branch -v can partially do this already.  It shows e.g. [behind 12] after the commit hash but before the message.  Unfortunately it has no color and does not stand out very well.
+}
+
+alias gbs='git_branch_status'
