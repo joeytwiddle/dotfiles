@@ -154,6 +154,8 @@ git_branch_status() {
 	# If the branch has no downstream (push) specified, then assume origin/<branch_name>
 	# This may help: http://stackoverflow.com/questions/2969214/git-programmatically-know-by-how-much-the-branch-is-ahead-behind-a-remote-branc
 	# git branch -v can partially do this already.  It shows e.g. [behind 12] after the commit hash but before the message.  Unfortunately it has no color and does not stand out very well.
+	# Or perhaps better: https://gist.github.com/jehiah/1288596 (from http://stackoverflow.com/questions/7773939/show-git-ahead-and-behind-info-for-all-branches-including-remotes )
+	:
 }
 
 alias gbs='git_branch_status'
