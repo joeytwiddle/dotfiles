@@ -204,8 +204,6 @@ where:
     fi
 
     current_branch=`git_get_branch_name`
-    ahead_color=`tput setaf 1 ; tput bold`
-    reset_color=`tput sgr0`
 
     git for-each-ref --format="%(refname:short) %(upstream:short)" $filter | \
     while read local remote
@@ -225,14 +223,6 @@ where:
         DELTAS=$(git rev-list --left-right ${local}...${remote})
         LEFT_AHEAD=$(echo "$DELTAS" | grep -c '^<')
         RIGHT_AHEAD=$(echo "$DELTAS" | grep -c '^>')
-        #if [ $LEFT_AHEAD -gt 0 ]
-        #then WARN_LEFT="$ahead_color"
-        #else WARN_LEFT="$reset_color"
-        #fi
-        #if [ $RIGHT_AHEAD -gt 0 ]
-        #then WARN_RIGHT="$ahead_color"
-        #else WARN_RIGHT="$reset_color"
-        #fi
         if [ "$local" = "$current_branch" ]
         then preBranch="* "
         else preBranch=". "
