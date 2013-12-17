@@ -156,6 +156,107 @@ git_branch_status() {
 	# git branch -v can partially do this already.  It shows e.g. [behind 12] after the commit hash but before the message.  Unfortunately it has no color and does not stand out very well.
 	# Or perhaps better: https://gist.github.com/jehiah/1288596 (from http://stackoverflow.com/questions/7773939/show-git-ahead-and-behind-info-for-all-branches-including-remotes )
 	:
+
+    # hosted at   https://gist.github.com/Mark-Booth/5058384
+    # forked from https://gist.github.com/lth2h/4177524 @ ae184f1 by mark.booth
+    # forked from https://gist.github.com/jehiah/1288596 @ e357c1e by lth2h
+    # ideas from https://github.com/kortina/bakpak/blob/master/bin/git-branches-vs-origin-master
+
+    # this prints out some branch status
+    # (similar to the '... ahead' info you get from git status)
+
+    # example:
+    # $ git branch-status -a
+    # dns_check (ahead 1) | (behind 112) origin/master
+    # master (ahead 2) | (behind 0) origin/master
+    # $ git branch-status
+    # master (ahead 2) | (behind 0) origin/master
+
+    usage="$(basename "$0") [-hav] -- summarise status of branch(es)
+
+where:
+    -h  show this help text
+    -a  show all branches, not just the current one
+    -m  shows branch(es) with respect to origin/master
+    -v  verbose, show output even if counts are zero"
+
+    while getopts 'hamv' option; do
+      case "$option" in
+        h) echo "$usage"
+           exit
+           ;;
+        a) filter=refs/heads
+           ;;
+        m) originmaster=true
+           ;;
+        v) verbose=true
+           ;;
+        ?) printf "illegal option: '%s'\n" "$OPTARG" >&2
+           echo "$usage" >&2
+           exit 1
+           ;;
+      esac
+    done
+    shift $((OPTIND - 1))
+
+    if [ -z $filter ] ; then
+        filter=$(git symbolic-ref -q HEAD)
+    fi
+
+    COLBOLDRED=`tput setaf 1 ; tput bold`
+    COLRESET=`tput sgr0`
+
+    git for-each-ref --format="%(refname:short) %(upstream:short)" $filter | \
+    while read local remote
+    do
+        if [ $originmaster ] ; then
+            remote=origin/master
+        fi
+        #[ -z "$remote" ] && continue
+        if [ -z "$remote" ]
+        then
+            # If no upstream has been set, we could guess a remote branch with the same name
+            remote="origin/$local"
+            if ! gb --list -r "$remote" | grep . >/dev/null
+            then continue
+            fi
+        fi
+        DELTAS=$(git rev-list --left-right ${local}...${remote})
+        LEFT_AHEAD=$(echo "$DELTAS" | grep -c '^<')
+        RIGHT_AHEAD=$(echo "$DELTAS" | grep -c '^>')
+        #if [ $LEFT_AHEAD -gt 0 ]
+        #then WARN_LEFT="$COLBOLDRED"
+        #else WARN_LEFT="$COLRESET"
+        #fi
+        #if [ $RIGHT_AHEAD -gt 0 ]
+        #then WARN_RIGHT="$COLBOLDRED"
+        #else WARN_RIGHT="$COLRESET"
+        #fi
+        if [ $verbose ] || [ $LEFT_AHEAD -gt 0 ] || [ $RIGHT_AHEAD -gt 0 ] ; then
+            #echo "$local $WARN_LEFT(ahead $LEFT_AHEAD)$COLRESET | $WARN_RIGHT(behind $RIGHT_AHEAD)$COLRESET $remote"
+            echo "$local (ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD) $remote"
+        fi
+    done
+}
+gbs() {
+  git_branch_status -a "$@" | columnise | highlight -bold "(ahead *[1-9][0-9]*)" green | highlight -bold "(behind *[1-9][0-9]*)" red | highlight -bold -reverse "^`git_get_branch_name` " green
 }
 
-alias gbs='git_branch_status'
+git_get_branch_name() {
+	git rev-parse --abbrev-ref HEAD
+}
+
+git_find_branch_start() {
+	if [ -n "$1" ]
+	then current_branch="$1"
+	else current_branch=`git_get_branch_name`
+	fi
+	# This is not guaranteed, but the information is likely still in the cache if the branch was created in the last 90 days.
+	# In fact it completely fails if you have pulled the branch from a remote repository.  It shows the HEAD at the time that you pulled!
+	#git reflog show $current_branch | tail -n 1
+	
+	#other_branch=master
+	other_branch=v3-alpha-stable
+	git merge-base "$other_branch" "$current_branch"
+}
+
