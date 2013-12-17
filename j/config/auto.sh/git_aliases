@@ -206,9 +206,6 @@ where:
     current_branch=`git_get_branch_name`
     ahead_color=`tput setaf 1 ; tput bold`
     reset_color=`tput sgr0`
-    current_branch_color=`git config --get-color color.branch.current`
-    local_branch_color=`git config --get-color color.branch.local`
-    remote_branch_color=`git config --get-color color.branch.remote`
 
     git for-each-ref --format="%(refname:short) %(upstream:short)" $filter | \
     while read local remote
@@ -237,20 +234,30 @@ where:
         #else WARN_RIGHT="$reset_color"
         #fi
         if [ "$local" = "$current_branch" ]
-        then preBranch="$current_branch_color* "
-        else preBranch="$local_branch_color "
+        then preBranch="* "
+        else preBranch=". "
         fi
         if [ $verbose ] || [ $LEFT_AHEAD -gt 0 ] || [ $RIGHT_AHEAD -gt 0 ] || [ "$local" = "$current_branch" ] ; then
             #echo "$local $WARN_LEFT(ahead $LEFT_AHEAD)$reset_color | $WARN_RIGHT(behind $RIGHT_AHEAD)$reset_color $remote"
-            echo "$preBranch$local$reset_color (ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD) $remote_branch_color$remote$reset_color"
+            echo "$preBranch$local (ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD) $remote"
         fi
     done
 }
 gbs() {
+  reset_color=`tput sgr0`
+  current_branch_color=`git config --get-color color.branch.current`
+  local_branch_color=`git config --get-color color.branch.local`
+  remote_branch_color=`git config --get-color color.branch.remote`
   git_branch_status -a "$@" |
   #column -s ' ' -t |
   columnise |
-  highlight -bold "(ahead *[1-9][0-9]*)" green | highlight -bold "(behind *[1-9][0-9]*)" red
+  highlight -bold "(ahead *[1-9][0-9]*)" green |
+  highlight -bold "(behind *[1-9][0-9]*)" red |
+  sed "
+    s+^[*] *\([^ ]*\)+$current_branch_color\0$reset_color+
+    s+^[.] *\([^ ]*\)+  $local_branch_color\1$reset_color+
+    s+[^ ]*$+$remote_branch_color\0$reset_color+
+  "
 }
 
 git_get_branch_name() {
