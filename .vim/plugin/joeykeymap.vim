@@ -423,11 +423,14 @@ nnoremap <Leader>e :execute getline(".")<CR>
 "nmap <Leader>* <F3><CR><CR><CR>
 "nmap <Leader># <F3><CR><CR><CR>
 " Replaces :emenu <Tab>
-nmap <F4> <F3><CR><CR><CR>
+"nmap <F4> <F3><CR><CR><CR>
+nmap <F4> :call RunGrep('grep')<CR><CR><CR><CR>
 " DONE: Keep only one of the above, the one I find myself using.  :)
 " Unfortunately <C-8> sends <C-H> and is undistinguishable.
 " And <C-S-P> is equivalent to <C-P> which I am alread using for :cprev<CR>
 " NOTE: The last <CR> is not always needed.  The |hit-enter| prompt is only displayed when the "Grep in files:" prompt has exceeded |cmdheight| (always true for me, with my huge exclude list).  So an alternative workaround might be for grep.vim to temporarily set ch very high, then reset it afterwards.
 
 " Avoiding the final <CR> would be desirable because it currently hides any "Error...not found" message that might appear.  And perhaps in some cases it isn't even required (if the command-line is not longer than the screen).
+
+nmap <F3> :call RunGrep('grep')<CR><C-U>\<\><Left><Left>
 
