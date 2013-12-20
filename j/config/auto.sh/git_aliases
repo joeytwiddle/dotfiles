@@ -239,8 +239,9 @@ gbs() {
   local behind_color=`tput setaf 1 ; tput bold`
   # You can use the configured/default colors, but I quite like remote blank!  (The default red confuses behind_color.)
   local current_branch_color=`git config --get-color color.branch.current green`
-  local local_branch_color=`git config --get-color color.branch.local white`
-  local remote_branch_color=`git config --get-color color.branch.remote red`
+  # I don't think anyone really wants color.  If you do, uncomment these:
+  #local local_branch_color=`git config --get-color color.branch.local white`
+  #local remote_branch_color=`git config --get-color color.branch.remote red`
 
   git_branch_status -a "$@" |
   column -s ' ' -t | sed 's+ \( *\)+\1+g' |
