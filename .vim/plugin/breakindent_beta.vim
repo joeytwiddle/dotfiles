@@ -31,11 +31,11 @@
 " You will need to move onto a wrapped line each time to trigger an update.
 "
 "   :let g:breakindent_char               " Check its current value
-"   :let g:breakindent_char = ' '         " Try making the indent char empty
+"   :let g:breakindent_char = '<'         " Try setting the char used to indent
 "   :let g:breakindent_symbol             " Check its current value
 "   :let g:breakindent_symbol = ' | '     " Try a flat continuation symbol
 "   :let g:breakindent_match_gap = 1      " Enable first-word matching
-"   :let g:breakindent_gapchar = '\'      " Only updates when indent changes
+"   :let g:breakindent_gapchar = '\'      " The symbol used below the word
 "   :let g:breakindent_symbol = ' '       " After gapchars just put a space
 "
 " Alternative: The real breakindent patch is being kept up-to-date at: https://retracile.net/wiki/VimBreakIndent   (Look for the "Original Format" link at the bottom of the page)
@@ -56,7 +56,7 @@
 
 " This character will be used to display the indent.  I like it blank ' '.
 if !exists("g:breakindent_char")
-  let g:breakindent_char = '\'
+  let g:breakindent_char = ' '
 endif
 
 " This string appears after the indent but before the wrapped text, as a marker/indicator of wrapping.  Set it empty '' to match the indentation of the first line.
@@ -99,9 +99,10 @@ function! s:UpdateBreakIndent()
 
   let line = getline(".")
   let indentString = substitute(line, "[^ 	].*", "", "")
-  let numtabs = len(substitute(indentString, "[^	]*", "", "g"))
+  let numTabs = len(substitute(indentString, "[^	]*", "", "g"))
+  let numSpaces = len(indentString) - numTabs
   let tabwidth = &tabstop
-  let screenIndent = len(indentString) - numtabs + tabwidth*numtabs
+  let screenIndent = numSpaces + tabwidth*numTabs
   let screenLineLength = len(line) - len(indentString) + screenIndent
   " BUG TODO: We compare screenLineLength to winwidth(".") later, but this fails to account for the signs columns (and perhaps similarly fails for fold columns).
 
@@ -113,7 +114,7 @@ function! s:UpdateBreakIndent()
 
   if g:breakindent_update_rarely && screenLineLength < winwidth(".")
     return
-    " BUG: If showbreak is particularly high on entry, then the current line might be wrapped now, even if it won't be with the new showbreak.
+    " BUG: If showbreak is particularly high on entry, then the current line might be wrapped now, even if it wouldn't be with a recalculated showbreak!
   endif
 
   if g:breakindent_never_shrink && !g:breakindent_match_gap
