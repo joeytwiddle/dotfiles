@@ -161,7 +161,7 @@ git_branch_status() {
     # $ git branch-status
     # master (ahead 2) | (behind 0) origin/master
 
-    local usage option filter current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
+    local usage option filter originmaster verbose current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
 
     usage="$(basename "$0") [-hav] -- summarise status of branch(es)
 
