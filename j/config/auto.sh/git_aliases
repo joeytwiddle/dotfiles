@@ -233,7 +233,13 @@ where:
             # If no upstream has been set, we could guess a remote branch with the same name
             remote="origin/$local"
             if ! gb --list -r "$remote" | grep . >/dev/null
-            then continue
+            then
+                # No remote branch exists
+                # But if this is the current branch, we would still like to display it.
+                if [ "$local" = "$current_branch" ]
+                then remote=""
+                else continue
+                fi
             fi
         fi
         DELTAS=$(git rev-list --left-right ${local}...${remote})
