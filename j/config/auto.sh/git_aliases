@@ -1,8 +1,19 @@
 # TODO: Turn these into shellscripts so they are available from vim's command line.
 #       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)
 
-# I tried declaring functions as `'name'()` instead of just `name()` to avoid existing aliases (e.g. those in oh-my-zsh's git plugin) from causing trouble by expanding the name.  An alternative is to use `function name()` but that may be less compatible with older shells.  OK well `'name'()` is incompatible with bash already!  Now trying unalias...
-# TODO: I should really do this *everywhere* I declare functions in jsh?!
+# I had problems declaring functions whose name matched pre-existing aliases.  In my case this was when I was loading oh-my-zsh's git plugin before this script was sourced.
+# Details: The function name was getting expanded into the alias during the declaration, either causing the declaration to fail syntactically, or to successfully silently declare the function using a different name!
+# The behaviour I desired was to override his aliases with my own functions, but keep any of his aliases which did not conflict.
+# The most sensible way to avoid expansion is to declare functions explicitly using `function name()` but some older shells do not recognize the `function` syntax, and I would like to support them.
+# Another way to avoid expansion is to declare functions using `'name'()` instead of just `name()`.  This worked for zsh but not for bash.
+# So finally I had to specifically unalias any function names which I *know* may be alaised elsewhere.
+# This is all rather irrelevant now because I am no longer loading oh-my-zsh's git aliases.
+unalias gs 2>/dev/null
+unalias gd 2>/dev/null
+unalias gitlog 2>/dev/null
+unalias gac 2>/dev/null
+unalias gitwhatsup 2>/dev/null
+# Should I be doing this *everywhere* I declare a shell function in jsh, just in case an alias exists?!  No ... I just shouldn't load aliases I don't want!  :P
 
 #alias gs='git status'
 #alias gs='gitstatus'
@@ -13,13 +24,11 @@
 #	else git status "$@"
 #	fi
 #}
-unalias gs 2>/dev/null
 gs() {
-	# Show color if not piping.  Skip to next section on 'n'.  Leave output on screen (so user can copy paste).
+	# Show color if not piping.  Skip to next section on 'n'.  Leave output on screen with -X (so user can copy paste).
 	# Using more instead of less because on short output, less fills the rest of the screen with '~'s (or ''s) we don't need.  Those lines are actually caused by the search.  git's default 'pager' will do the same iff the +/ is added.
 	# More has slightly different searching behaviour than less: it will not skip to the start of a section which is already visible on the screen.
-	# -X tells less to leave its output on the screen
-	# This now now rather equivalent to the default, except for the default search.
+	# This now rather equivalent to the default, except for the default search.
 	if [ -t 1 ]
 	then
 		git -c color.status=always status "$@" |
@@ -33,7 +42,6 @@ gs() {
 }
 
 #alias gd='git diff'
-unalias gd 2>/dev/null
 gd() {
 	# Show color if not piping.  Skip to next file on 'n'.
 	if [ -t 1 ]
@@ -61,7 +69,6 @@ alias gm='git merge FETCH_HEAD'
 #   gl | less +"/^commit.*" -r
 # Oh, fixed it.  Since this make paging commits very fast, now adding --stat
 #alias gl='git -c color.ui=always log -U2 -p -m --stat | less -R "+/^commit.*"'
-unalias gitlog 2>/dev/null
 gitlog() {
 	# Show color if not piping.  Skip to next file or commit on 'n'.
 	if [ -t 1 ]
@@ -69,29 +76,45 @@ gitlog() {
 	else git log "$@"
 	fi
 }
-alias gl='gitlog -U2 -p -m --stat'
-# It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
+# The regexp search allows us to quickly skip to the next diff or commit header by pressing `n`.  If you do not wish to jump through the diffs, you have two options:
+#   1. Edit the search so it won't hit diff lines.  For example: `/<Left><Left><Left>z<Enter>`.  This will work for the rest of the session.
+#   2. Count the number of files in this commit (as shown by --stat), add one, and jump that many times with e.g. `15n`.  This will work just once, so you can use `n` to skip diffs later.
+
+# "Git Log Pure" - the basis for "Git Log Grey" but without colours
+alias glp='gitlog -U2 -p -m --stat'
+# Here --stat show a quick summary of changed files, before actually showing the diffs.  I rather enjoy this when using 'gl' as it lets me decide from the top of each commit whether there are any files I am interested in, and if not I can happily skip straight to the next commit.  In other situations, e.g. when I am planning to read all the details, --stat is just chaff.
+# "Git Log Grey" - Like 'gl' except we present my favourite colors
+alias glg='glp --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an %ae%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
+# "Git Log" aliases to "Git Log Grey"
+alias gl='glg'
+
+# "Git Log Long" - One per line, with graph
+#alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'   # Does not show committer's name or age of commit
+#alias gll='git lol'
+# Using the same colors as "Git Log Clear" except commits are not bold:
+#alias gll='git log --graph --pretty=format:"%C(yellow)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
+alias gll='glc --graph'
+# "Git Log Long Minus merges"
+alias gllm='gll --no-merges'
+
+# "Git Log Clear" - Single lines, no graph.
+# If you want to use this with --graph then it should have a %n at the end.  Actually I am not sure what that was for.
+alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
+
+# "Git Log Word-diffed" - It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
 alias glw='gl --word-diff'
-# Just file stats, no diffs.  "Git log stats/summary", "Git log files" (shorter)
-alias gls='gitlog --stat'
-# If you want to use this with --graph then it should have a %n at the end.
-alias glf='git log --stat --pretty=oneline --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
+# "Git Log Stats/Summary" - Just file stats, no diffs.
+alias gls='gl --stat'
+# "Git Log Files" - Compressed version of "Git Log Stats"
+alias glf='glc --stat'
 # With glf, we can walk commmits with /^[^ ]+
 # Just commit info, one per line
-#alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'
-# Argh.  git lol in my .gitconfig is better because is shows the name of the committer.
-#alias gll='git lol'
-alias gll='git log --graph --pretty=format:"%C(yellow)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
-# Git Log Summary (use glf?)
-# Git Log Grey.  Like 'gl' except we present colors the same as in gll and glf
-alias glg='gl --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an %ae%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
 
 alias gb='git branch'
 alias gco='git checkout'
 alias gi='git commit --interactive'
 
 # Git auto commit OR Git-add-commit
-unalias gac 2>/dev/null
 gac() {
 	git add "$@"
 	echo -n "Commit message: "
@@ -100,7 +123,6 @@ gac() {
 }
 
 # May rename "gitsummary"
-unalias gitwhatsup 2>/dev/null
 gitwhatsup() {
 	echo
 	# Absolute path:
@@ -161,24 +183,27 @@ git_branch_status() {
     # $ git branch-status
     # master (ahead 2) | (behind 0) origin/master
 
-    local usage option filter originmaster verbose current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
+    local usage option filter OPTARG compareto verbose current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
 
     usage="$(basename "$0") [-hav] -- summarise status of branch(es)
 
 where:
-    -h  show this help text
-    -a  show all branches, not just the current one
-    -m  shows branch(es) with respect to origin/master
-    -v  verbose, show output even if counts are zero"
+    -h           show this help text
+    -a           show all branches, not just the current one
+    -m           shows branch(es) with respect to origin/master
+    -t <branch>  shows branch(es) with respect to given branch
+    -v           verbose, show output even if counts are zero"
 
-    while getopts 'hamv' option; do
+    while getopts 'hamt:v' option; do
       case "$option" in
         h) echo "$usage"
            exit
            ;;
         a) filter=refs/heads
            ;;
-        m) originmaster=true
+        m) compareto=origin/master
+           ;;
+        t) compareto="$OPTARG"
            ;;
         v) verbose=true
            ;;
@@ -199,8 +224,8 @@ where:
     git for-each-ref --format="%(refname:short) %(upstream:short)" $filter | \
     while read local remote
     do
-        if [ $originmaster ] ; then
-            remote=origin/master
+        if [ -n "$compareto" ] ; then
+            remote="$compareto"
         fi
         #[ -z "$remote" ] && continue
         if [ -z "$remote" ]
@@ -266,17 +291,41 @@ git_get_branch_name() {
 	git rev-parse --abbrev-ref HEAD
 }
 
-git_find_branch_start() {
+git_find_branch_start_commit() {
+	local other_branch current_branch
+
+	# It is more likely we want to compare the current branch against an alternative, than to compare an alternative against master.  So we accept the alternative first.
 	if [ -n "$1" ]
-	then current_branch="$1"
+	then other_branch="$1"
+	else
+		#other_branch=master
+		#other_branch=origin/master
+		#other_branch=v3-alpha-stable
+		other_branch=v3-master
+	fi
+
+	# But user may specify the "current" branch second if they wish
+	if [ -n "$2" ]
+	then current_branch="$2"
 	else current_branch=`git_get_branch_name`
 	fi
+	# Although the order doesn't really matter when passing 2 arguments, since merge-base is symmetric!
+
 	# This is not guaranteed, but the information is likely still in the cache if the branch was created in the last 90 days.
 	# In fact it completely fails if you have pulled the branch from a remote repository.  It shows the HEAD at the time that you pulled!
 	#git reflog show $current_branch | tail -n 1
-	
-	#other_branch=master
-	other_branch=v3-alpha-stable
+
 	git merge-base "$other_branch" "$current_branch"
+}
+
+git_find_branch_start() {
+	local commitId=`git_find_branch_start_commit`
+
+	if [ -n "$commitId" ]
+	then
+		echo "$current_branch and $other_branch share common commit:"
+		#git log --pretty=oneline -1 "$commitId"
+		glc -1 "$commitId"
+	fi
 }
 
