@@ -141,6 +141,10 @@ function! Joeysyntax()
 		hi naffComment ctermfg=239   " pretty dark grey
 	endif
 	hi link notNaffComment Comment
+	"" For concealing, we can add to naffComment:
+	" conceal cchar=#
+	"" and then:
+	" :setlocal conceallevel=2
 
 	" OH DUDE YOU JUST WROTE THIS ABOVE!
 	" My new rule is that '// stuff' means human comment, '//stuff' means commented code.
