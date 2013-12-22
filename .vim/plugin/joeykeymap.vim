@@ -388,10 +388,13 @@ nnoremap <C-Z> :CloseBuffer<Enter>
 
 " We cannot use <Ctrl-S> for save because many terminals will just swallow
 " that as the magic "pause" key.  But shift-S = cc, so let's use that.
-nnoremap S :w<Enter>
+"nnoremap S :w<Enter>
+" Putting a custom mapping on S was a bad idea.  Because if muscle-memory tries to use it on a Vim without my keybinds, I end up clearing part of the current line and entering insert mode, which is probably terrifying for whoever is watching me edit.  Let's retrain the muscles to use Z instead:
+nnoremap <silent> S :echohl WarningMsg <Bar> echo "NOT SAVED!  Press Z to save." <Bar> echohl<Enter>
+nnoremap Z :w<Enter>
 " Not a good idea to map 'S' in Insert mode...
 "inoremap S <Esc>:w<Enter>i
-" I may regret this one day, but similarly I cannot map Ctrl-q
+" Similarly I cannot map Ctrl-q
 "nnoremap Q :qa<Enter>
 " OK this is safer, my MBE settings will require it be hit twice.  And also it can be used to close a window.
 nnoremap Q :q<Enter>
