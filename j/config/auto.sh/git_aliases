@@ -235,14 +235,19 @@ where:
             if ! gb --list -r "$remote" | grep . >/dev/null
             then
                 # No remote branch exists
-                # But if this is the current branch, we would still like to display it.
-                if [ "$local" = "$current_branch" ]
+                # But if this is the current branch, or we are in verbose mode, we might still like to display it anyway.
+                # However ahead/behind counts are meaningless without a remote.
+                if [ "$local" = "$current_branch" ] || [ -n "$verbose" ]
                 then remote=""
                 else continue
                 fi
             fi
         fi
-        DELTAS=$(git rev-list --left-right ${local}...${remote})
+        # If we do not have a remote to compare to, display no counts, rather than relative to current branch, which is quite arbitrary (but can be achieved using $compareto if desired).
+        if [ -n "$remote" ]
+        then DELTAS=$(git rev-list --left-right ${local}...${remote})
+        else DELTAS=""
+        fi
         LEFT_AHEAD=$(echo "$DELTAS" | grep -c '^<')
         RIGHT_AHEAD=$(echo "$DELTAS" | grep -c '^>')
         if [ "$local" = "$current_branch" ]
