@@ -2,8 +2,12 @@
 " This tends to slow down redrawing, but is very useful.
 " Based on https://groups.google.com/d/msg/vim_use/IJU-Vk-QLJE/xz4hjPjCRBUJ
 " XXX: this will only work with lines containing text (i.e. not '~')
+hi ColorColumn guibg=#203838
 function! s:DimInactiveWindows()
   for i in range(1, tabpagewinnr(tabpagenr(), '$'))
+    if bufname(winbufnr(i)) == '-MiniBufExplorer-'
+      continue
+    end
     let l:range = ""
     if i != winnr()
       if &wrap
