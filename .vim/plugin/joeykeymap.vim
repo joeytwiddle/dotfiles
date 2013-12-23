@@ -389,11 +389,16 @@ nnoremap <C-Z> :CloseBuffer<Enter>
 " We cannot use <Ctrl-S> for save because many terminals will just swallow
 " that as the magic "pause" key.  But shift-S = cc, so let's use that.
 "nnoremap S :w<Enter>
-" Putting a custom mapping on S was a bad idea.  Because if muscle-memory tries to use it on a Vim without my keybinds, I end up clearing part of the current line and entering insert mode, which is probably terrifying for whoever is watching me edit.  Let's retrain the muscles to use Z instead:
-nnoremap <silent> S :echohl WarningMsg <Bar> echo "NOT SAVED!  Press Z to save." <Bar> echohl<Enter>
-nnoremap Z :w<Enter>
 " Not a good idea to map 'S' in Insert mode...
 "inoremap S <Esc>:w<Enter>i
+" Putting a custom mapping on S was a bad idea.  Because if muscle-memory tries to use it on a Vim without my keybinds, I end up clearing part of the current line and entering insert mode, which is probably terrifying for whoever is watching me edit.  Let's retrain the muscles to use Z instead:
+nnoremap <silent> S :echohl ErrorMsg <Bar> echo "NOT SAVED!  Press Z to save." <Bar> echohl<Enter>
+nnoremap Z :w<Enter>
+" Oh damnit Z was a little better, but not much.  Although Z does nothing on default Vim, ZZ is save-and-quit!  :S
+" We could instead go for something safer and easier to reach that I never use, e.g. L or H.  (Currently I have l seek forwards and L seek back, but I hardly ever use them.)
+" Finally we could go for Ctrl-s which is safe given that I know Ctrl-q.  The difficulty here it ensuring it is executed when vim is started by other programs, e.g. git merge or visudo.
+" OK I have now added this in my .vimrc: :silent !stty -ixon
+nnoremap <C-s> :w<Enter>
 " Similarly I cannot map Ctrl-q
 "nnoremap Q :qa<Enter>
 " OK this is safer, my MBE settings will require it be hit twice.  And also it can be used to close a window.
