@@ -36,7 +36,10 @@ endif
 " TODO: In future make this use 'colorcolumn' which *can* highlight characters outside the text.
 
 "highlight WRSFlash ctermbg=yellow guibg=#888800
-highlight WRSFlash ctermbg=green guibg=#008800
+"highlight WRSFlash ctermbg=green guibg=#008800
+highlight WRSFlash ctermbg=black guibg=#000000
+highlight clear ColorColumn
+highlight link ColorColumn WRSFlash
 
 function! s:InitEvents()
   augroup WindowsRememberSizes
@@ -126,24 +129,32 @@ endfunction
 
 function! s:StartFlash()
   " I really wanted to highlight the whole window (I mean the blank characters after the end of each line of text) but the only way I have found to do this is to change `:hi Normal` which unfortunately applies to the whole Vim; I cannot get it to apply just to the current window.
-  :2match WRSFlash /.*/
-  augroup WRSFlash
-    autocmd!
-    autocmd CursorHold <buffer> call s:ClearFlash()
+  ":2match WRSFlash /.*/
+  " Oooh there is a way ... colorcolumn!
+  " If a line wraps into 3 lines, we will need to multiply the width by 3
+  "let l:width = winwidth(0) * 30
+  " Unfortunately this quickly reaches the max of 256
+  let l:width = 256
+  let l:range = join(range(1, l:width), ',')
+  call setwinvar(0, '&colorcolumn', l:range)
+  " BUG TODO: colorcolumn isn't working at all when opening a help window with :h
+  autocmd!
+    "autocmd CursorHold <buffer> call s:ClearFlash()
     " This was triggering too often, so the flash was very often not appearing!
     "autocmd CursorMoved <buffer> call s:ClearFlash()
     autocmd WinLeave <buffer> call s:ClearFlash()
-    autocmd InsertEnter <buffer> call s:ClearFlash()
-    autocmd InsertLeave <buffer> call s:ClearFlash()
+    "autocmd InsertEnter <buffer> call s:ClearFlash()
+    "autocmd InsertLeave <buffer> call s:ClearFlash()
     " BUG TODO: For some reason none of these are being triggered after opening a help window with :h, although the flash itself is triggered.
   augroup END
 endfunction
 
 function! s:ClearFlash()
-  :2match none
   augroup WRSFlash
     autocmd!
   augroup END
+  ":2match none
+  call setwinvar(0, '&colorcolumn', '')
 endfunction
 
 call s:InitEvents()
