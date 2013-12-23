@@ -31,9 +31,9 @@
 
 " Flash the text of the newly focused window whenever we change window.  This is rather ugly but can serve as an aid for anyone confused as to where the focus has now moved!
 if !exists("g:wrs_flash_focused_window")
-  let g:wrs_flash_focused_window = 1
+  let g:wrs_flash_focused_window = 0
 endif
-" TODO: In future make this use 'colorcolumn' which *can* highlight characters outside the text.
+" DONE: In future make this use 'colorcolumn' which *can* highlight characters outside the text.
 
 "highlight WRSFlash ctermbg=yellow guibg=#888800
 highlight WRSFlash ctermbg=green guibg=#008800
