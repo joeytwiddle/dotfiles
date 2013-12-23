@@ -19,10 +19,15 @@ autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | e
 autocmd BufReadPost * setlocal iskeyword-=.
 
 
+
 " Allows us to use Ctrl-s and Ctrl-q as keybinds
 silent !stty -ixon
-" Restore default behaviour when leaving Vim.  (This might suck if the user usually has it disabled!)
+" Restore default behaviour when leaving Vim.
 autocmd VimLeave * silent !stty ixon
+" Restoring the "default" might suck if the user usually has it disabled!  We could check whether he has it enabled or not by looking at the exit code of:
+"   stty -a | grep -q '\( \|^\)ixon\>'
+" TODO: What if the user doesn't have an stty executable (Windows)?  What will this do on Macs or MacVim?  We may need to try harder to fail silently in the general case.  Or is silent enough already?
+
 
 
 " >>> Options for plugins {{{
