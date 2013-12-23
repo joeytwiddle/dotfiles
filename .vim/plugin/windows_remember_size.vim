@@ -36,8 +36,7 @@ endif
 " TODO: In future make this use 'colorcolumn' which *can* highlight characters outside the text.
 
 "highlight WRSFlash ctermbg=yellow guibg=#888800
-"highlight WRSFlash ctermbg=green guibg=#008800
-highlight WRSFlash ctermbg=black guibg=#000000
+highlight WRSFlash ctermbg=green guibg=#008800
 highlight clear ColorColumn
 highlight link ColorColumn WRSFlash
 
@@ -139,12 +138,12 @@ function! s:StartFlash()
   call setwinvar(0, '&colorcolumn', l:range)
   " BUG TODO: colorcolumn isn't working at all when opening a help window with :h
   autocmd!
-    "autocmd CursorHold <buffer> call s:ClearFlash()
+    autocmd CursorHold <buffer> call s:ClearFlash()
     " This was triggering too often, so the flash was very often not appearing!
     "autocmd CursorMoved <buffer> call s:ClearFlash()
     autocmd WinLeave <buffer> call s:ClearFlash()
-    "autocmd InsertEnter <buffer> call s:ClearFlash()
-    "autocmd InsertLeave <buffer> call s:ClearFlash()
+    autocmd InsertEnter <buffer> call s:ClearFlash()
+    autocmd InsertLeave <buffer> call s:ClearFlash()
     " BUG TODO: For some reason none of these are being triggered after opening a help window with :h, although the flash itself is triggered.
   augroup END
 endfunction
