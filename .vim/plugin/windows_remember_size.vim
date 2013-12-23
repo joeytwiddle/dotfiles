@@ -29,11 +29,20 @@
 
 "let g:wrsDebug = 1
 
+" Flash the text of the newly focused window whenever we change window.  This is rather ugly but can serve as an aid for anyone confused as to where the focus has now moved!
+if !exists("g:wrs_flash_focused_window")
+  let g:wrs_flash_focused_window = 1
+endif
+" TODO: In future make this use 'colorcolumn' which *can* highlight characters outside the text.
+
+"highlight WRSFlash ctermbg=yellow guibg=#888800
+highlight WRSFlash ctermbg=green guibg=#008800
+
 function! s:InitEvents()
   augroup WindowsRememberSizes
     autocmd!
-    autocmd WinLeave * call <SID>Leaving()
-    autocmd WinEnter * call <SID>Entering()
+    autocmd WinLeave * call s:Leaving()
+    autocmd WinEnter * call s:Entering()
   augroup END
 endfunction
 
@@ -72,6 +81,10 @@ function! s:Leaving()
 
   let s:heightOfLastWindowWeLeft = winheight(0)
 
+  if g:wrs_flash_focused_window
+    call s:ClearFlash()
+  endif
+
 endfunction
 
 function! s:Entering()
@@ -105,6 +118,32 @@ function! s:Entering()
     exec "vert resize ".w:widthWhenFocused
   endif
 
+  if g:wrs_flash_focused_window
+    call s:StartFlash()
+  endif
+
+endfunction
+
+function! s:StartFlash()
+  " I really wanted to highlight the whole window (I mean the blank characters after the end of each line of text) but the only way I have found to do this is to change `:hi Normal` which unfortunately applies to the whole Vim; I cannot get it to apply just to the current window.
+  :2match WRSFlash /.*/
+  augroup WRSFlash
+    autocmd!
+    autocmd CursorHold <buffer> call s:ClearFlash()
+    " This was triggering too often, so the flash was very often not appearing!
+    "autocmd CursorMoved <buffer> call s:ClearFlash()
+    autocmd WinLeave <buffer> call s:ClearFlash()
+    autocmd InsertEnter <buffer> call s:ClearFlash()
+    autocmd InsertLeave <buffer> call s:ClearFlash()
+    " BUG TODO: For some reason none of these are being triggered after opening a help window with :h, although the flash itself is triggered.
+  augroup END
+endfunction
+
+function! s:ClearFlash()
+  :2match none
+  augroup WRSFlash
+    autocmd!
+  augroup END
 endfunction
 
 call s:InitEvents()
@@ -113,7 +152,7 @@ call s:InitEvents()
 
 let s:weAreAboutToSplit = 0
 
-function s:WeAreAboutToSplit()
+function! s:WeAreAboutToSplit()
   let s:weAreAboutToSplit = 1
 endfunction
 
