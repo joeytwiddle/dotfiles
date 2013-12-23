@@ -19,6 +19,11 @@ autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | e
 autocmd BufReadPost * setlocal iskeyword-=.
 
 
+" Allows us to use Ctrl-s and Ctrl-q as keybinds
+silent !stty -ixon
+" Restore default behaviour when leaving Vim.  (This might suck if the user usually has it disabled!)
+autocmd VimLeave * silent !stty ixon
+
 
 " >>> Options for plugins {{{
 
