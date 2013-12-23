@@ -13,6 +13,9 @@ endif
 if !exists('g:hiline_min_lines')
   let g:hiline_min_lines = 2
 endif
+if !exists('g:hiline_also_highlight_column')
+  let g:hiline_also_highlight_column = 0
+endif
 
 " CONSIDER: If syntax is window/buffer-local, we might want to use a
 " window/buffer-scoped variable here when not using cursorline.
@@ -25,6 +28,9 @@ function! HighlightLine()
   let s:highlightOn = 1
   if g:hiline_use_cursorline
     set cul
+    if g:hiline_also_highlight_column
+      set cursorcolumn
+    endif
   else
     let l:line = "FAIL"
     " let l:line = GetRegAfter('""yy')
@@ -68,6 +74,9 @@ function! UnHighlightLine()
   let s:highlightOn = 0
   if g:hiline_use_cursorline
     silent! set nocul
+    if g:hiline_also_highlight_column
+      silent! set nocursorcolumn
+    endif
   else
     silent! syntax clear HLCurrentLine
   endif
