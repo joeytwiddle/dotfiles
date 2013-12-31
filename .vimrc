@@ -131,6 +131,7 @@ autocmd VimLeave * silent !stty ixon
 	" For Piktochart:
 	let g:Grep_Default_Filelist .= " --exclude-dir=tmp"     " Assets compiled by Ruby
 	let g:Grep_Default_Filelist .= " --exclude-dir=pikto"   " Code for old version
+	let g:Grep_Default_Filelist .= " --exclude-dir=public/assets"   " Precompiled assets (e.g. images)
 
 	let g:ConqueTerm_Color = 1
 	" let g:ConqueTerm_CloseOnEnd = 1
@@ -174,7 +175,7 @@ autocmd VimLeave * silent !stty ixon
 	"nmap <C-a> q:AsyncFinder<Enter>
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
-	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp']"
+	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets']"
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
 
