@@ -228,6 +228,7 @@ where:
             remote="$compareto"
         fi
         #[ -z "$remote" ] && continue
+        # This is an assumption I made for our project - that if a branch does not have an upstream set, then we should assume the upstream is a branch on 'origin' with the same name.
         if [ -z "$remote" ]
         then
             # If no upstream has been set, we could guess a remote branch with the same name
@@ -278,7 +279,7 @@ gbs() {
   # You can use the configured/default colors, but I quite like remote blank!  (The default red confuses behind_color.)
   local current_branch_color=`git config --get-color color.branch.current green`
   # I don't think anyone really wants color.  If you do, uncomment these:
-  #local local_branch_color=`git config --get-color color.branch.local white`
+  local local_branch_color=`git config --get-color color.branch.local white`
   #local remote_branch_color=`git config --get-color color.branch.remote red`
 
   if [ "$1" = . ]
