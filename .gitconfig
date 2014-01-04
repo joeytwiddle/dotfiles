@@ -151,6 +151,16 @@
 	# You can use this to apply a stash pop to a dirty tree (to workaround the error "Cannot apply to a dirty working tree, please stage your changes").
 	stash-pop-force = !git stash show -p | git apply && git stash drop
 
+	# From here but renamed: http://stackoverflow.com/questions/4577874/git-automatically-fast-forward-all-tracking-branches-on-pull#18817899
+	merge-all-using-checkout = !"for b in $(git for-each-ref refs/heads --format='%(refname)') ; do git checkout ${b#refs/heads/} ; git pull --ff-only ; done"
+
+	# My version which updates local branches to their remotes without changing the working tree (does not use checkout).
+	# WARNING: Does not lookup what each branch is tracking!  Instead it just assumes branch "$local" tracks "remote/$local"
+	# To do it properly, we could get hold of the upstream names like this: git for-each-ref refs/heads --format="%(refname:short) -> %(upstream:short)"
+	# Also beware, if applied to the current branch, working files will be out-of-date.  (In my case, git still claimed an empty diff, only noticing the differences after a reset!)
+	merge-all = !"for local_branch in $(git for-each-ref refs/heads --format=\"%(refname:short)\") ; do remote_branch=\"origin/$local_branch\"; local_commit=$(git rev-parse --verify \"$local_branch\"); remote_commit=$(git rev-parse --verify \"$remote_branch\"); common_ancestor=$(git merge-base $local_branch $remote_branch); if [ ! \"$common_ancestor\" = \"$local_commit\" ]; then echo \"Could not be fast-forwarded: $local_branch\" >&2; else git update-ref refs/heads/$local_branch $remote_commit $local_commit; fi done"
+
+
 
 
 ### The following options are rather more serious, because they affect how git modifies files.
