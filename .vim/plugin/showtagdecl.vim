@@ -3,7 +3,7 @@
 "
 " Thanks clipon and osse
 
-nnoremap <silent><Space> <space>:call <SID>ShowTagDecl()<CR>
+nnoremap <silent> <Space> :call <SID>ShowTagDecl()<CR><Space>
 
 function! s:ShowTagDecl()
   redir => output
