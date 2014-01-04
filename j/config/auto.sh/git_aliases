@@ -185,6 +185,10 @@ git_branch_status() {
 
     local usage option filter OPTARG compareto verbose current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
 
+    local gbs_show_if_merged local_branch_commit_hash common_commit_between_branch_and_current
+
+    gbs_show_if_merged=yes
+
     usage="$(basename "$0") [-hav] -- summarise status of branch(es)
 
 where:
@@ -253,11 +257,21 @@ where:
         RIGHT_AHEAD=$(echo "$DELTAS" | grep -c '^>')
         if [ "$local" = "$current_branch" ]
         then preBranch="* "
-        else preBranch=". "
+        else
+            preBranch=". "
+            if [ -n "$gbs_show_if_merged" ]
+            then
+                local_branch_commit_hash=`git rev-parse "$local"`
+                common_commit_between_branch_and_current=`git merge-base "$local" "$current_branch"`
+                if [ "$common_commit_between_branch_and_current" = "$local_branch_commit_hash" ]
+                then preBranch="~ "
+                else preBranch="x "
+                fi
+            fi
         fi
         if [ $verbose ] || [ $LEFT_AHEAD -gt 0 ] || [ $RIGHT_AHEAD -gt 0 ] || [ "$local" = "$current_branch" ] ; then
             #echo "$local $WARN_LEFT(ahead $LEFT_AHEAD)$reset_color | $WARN_RIGHT(behind $RIGHT_AHEAD)$reset_color $remote"
-            echo "$preBranch$local (ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD) $remote"
+            echo "$preBranch$local $if_merged(ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD) $remote"
         fi
     done
 }
@@ -281,6 +295,7 @@ gbs() {
   # I don't think anyone really wants color.  If you do, uncomment these:
   local local_branch_color=`git config --get-color color.branch.local white`
   #local remote_branch_color=`git config --get-color color.branch.remote red`
+  local merged_branch_color=`git config --get-color color.branch.already_merged green`
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
@@ -294,7 +309,8 @@ gbs() {
     s+(ahead *[1-9][0-9]*)+$ahead_color\0$reset_color+
     s+(behind *[1-9][0-9]*)+$behind_color\0$reset_color+
     s+^[*] *\([^ ]*\)+* $current_branch_color\1$reset_color+
-    s+^[.] *\([^ ]*\)+  $local_branch_color\1$reset_color+
+    s+^[.x] *\([^ ]*\)+  $local_branch_color\1$reset_color+
+    s+^[~] *\([^ ]*\)+  $merged_branch_color\1$reset_color+
     s+[^ ]*$+$remote_branch_color\0$reset_color+
   "
 }
