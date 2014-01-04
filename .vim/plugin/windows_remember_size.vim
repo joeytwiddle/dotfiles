@@ -37,6 +37,7 @@ endif
 
 "highlight WRSFlash ctermbg=yellow guibg=#888800
 highlight WRSFlash ctermbg=green guibg=#008800
+" Rather conflicts which dim_inactive_windows, which uses ColorColumn for the opposite!
 highlight clear ColorColumn
 highlight link ColorColumn WRSFlash
 
