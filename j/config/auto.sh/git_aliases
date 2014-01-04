@@ -87,9 +87,12 @@ gitlog() {
 alias glp='gitlog -U2 -p -m --stat'
 # Here --stat show a quick summary of changed files, before actually showing the diffs.  I rather enjoy this when using 'gl' as it lets me decide from the top of each commit whether there are any files I am interested in, and if not I can happily skip straight to the next commit.  In other situations, e.g. when I am planning to read all the details, --stat is just chaff.
 # "Git Log Grey" - Like 'gl' except we present my favourite colors
+# This is quite close to: git log --decorate -U2 -p -m --stat
+# Curiously the alias shows fewer +++s and ---s on the stat output.
 alias glg='glp --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an %ae%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
 # "Git Log" aliases to "Git Log Grey"
 alias gl='glg'
+# Warning: glg and glc duplicate my color settings.  (Which are also set in my ~/.gitconfig.)  Part of the reason I passed everything through glg/glc was to display decorations (commit labels like HEAD and origin/master).  I have since learned this can be achieved by passing --decorate, so we may be able to reduce some duplication that way.
 
 # "Git Log Long" - One per line, with graph
 #alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'   # Does not show committer's name or age of commit
@@ -100,8 +103,8 @@ alias gll='glc --graph'
 # "Git Log Long Minus merges"
 alias gllm='gll --no-merges'
 
-# "Git Log Clear" - Single lines, no graph.
-# If you want to use this with --graph then it should have a %n at the end.  Actually I am not sure what that was for.
+# "Git Log Clear" - Single lines, no graph.  Shows more info than: git log --pretty=oneline
+# If you want to use this with --stat then it should have a %n at the end.  But this will make --graph (gll) show blank lines.
 alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
 
 # "Git Log Word-diffed" - It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
