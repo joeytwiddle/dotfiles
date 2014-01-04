@@ -140,19 +140,21 @@ inoremap <C-J> <Esc><C-E>a
 "" Since the first two do not always trigger a CursorHold or Moved event, they fail to trigger the highlight_line_after_jump script.  The following attempt to force it fails because on occasions where the event is triggered, the highlight script sees it twice, and unhighlights the line!
 " noremap <C-K> <C-Y>:silent! call HL_Cursor_Moved()<Enter>
 " noremap <C-J> <C-E>:silent! call HL_Cursor_Moved()<Enter>
-"" We now have a similar issue with sexy_scroller.  Let's try triggering by moving and moving back.
+"" Simiarly, these also fail to trigger CursorHold/Moved events needed by sexy_scroller.  Let's try triggering them by moving and moving back.
 noremap <C-K> <C-Y><BS><Space>
-noremap <C-J> <C-E><BS><Space>
-"" OK that fires sexy_scroller, but yuck why did we ever want it to fire hiline?!
+"noremap <C-J> <C-E><BS><Space>
+noremap <C-J> <C-E><Space><BS>
+"" OK that fires sexy_scroller, but why did we ever want it to fire hiline anyway?!
 "" Also it exhibits a BUG in sexy_scroller, namely that it will cause horizontal scrolling when moving near a long line whilst `:set nowrap` wrapping is off!
+"" There are disadvantages to trying to trigger CursorMoved/Hold this way.  <BS><Space> can fail if we are at the top of the file, or create issues if we are at the start of a line (e.g. temporarily moves a line back, undoing the requested scroll, in a short window when scrolloff is set).  Similarly <Space><BS> can fail on the last char of a line or the last line of a file.  A better solution might be to explicitly call hooks exposed by those specific plugins that we want to trigger.  Alternatively we could call a function to examine the situation and emit whichever of <BS><Space> or <Space><BS> is most appropriate.
 
-"" Split windows vertically with Ctrl-W Shift-S
-"" The default is c-W v
+"" Split windows "horizontally" (create a new one below) with Ctrl-W s (no need to define - this is a default!)
 "nnoremap <C-W>s :split<Enter>
+"" Split windows "vertically" (create a new one to the right) with Ctrl-W Shift-S (the default is Ctrl-W v)
 nnoremap <C-W>S :vsplit<Enter>
 
 " Resize windows with Ctrl-NumPadPlus/Minus/Divide/Times:
-"" We defer to the implementation in windows_remember_size.vim
+"" We now defer to the implementation in windows_remember_size.vim
 "" This was happening automatically before - perhaps their run order changed?
 "nnoremap Om :resize -2<Enter>
 "nnoremap Ok :resize +2<Enter>
@@ -398,6 +400,7 @@ nnoremap Z :w<Enter>
 " We could instead go for something safer and easier to reach that I never use, e.g. L or H.  (Currently I have l seek forwards and L seek back, but I hardly ever use them.)
 " Finally we could go for Ctrl-s which is safe given that I know Ctrl-q.  The difficulty here it ensuring it is executed when vim is started by other programs, e.g. git merge or visudo.
 " OK I have now added this in my .vimrc: :silent !stty -ixon
+" Perhaps that should be moved to here, since this depends on that, and that is only used for this.
 nnoremap <C-s> :w<Enter>
 " Similarly I cannot map Ctrl-q
 "nnoremap Q :qa<Enter>
@@ -427,7 +430,7 @@ nnoremap <Leader>e :execute getline(".")<CR>
 "nmap <Leader>8 <F3><CR><CR><CR>
 "nmap <Leader>* <F3><CR><CR><CR>
 "nmap <Leader># <F3><CR><CR><CR>
-" Replaces :emenu <Tab>
+" Replaces :emenu<Space><Tab>
 "nmap <F4> <F3><CR><CR><CR>
 nnoremap <F4> :call RunGrep('grep')<CR><CR><CR><CR>
 " DONE: Keep only one of the above, the one I find myself using.  :)
