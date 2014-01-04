@@ -307,7 +307,7 @@ gbs() {
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
-  else git_branch_status -a "$@"
+  else git_branch_status -a -v "$@"
   fi |
   column -s ' ' -t | sed 's+ \( *\)+\1+g' |
   #columnise |
