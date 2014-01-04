@@ -229,6 +229,8 @@ Mod1 f :ToggleDecor
 Mod4 f :ToggleDecor
 # Mod1 t :ToggleTab
 # Mod4 t :ToggleTab
+## Temporarily force a window to the top layer
+Mod4 t :ToggleCmd {SetLayer Top} {SetLayer Normal}
 
 Mod1 F9 :ExecCommand xsnapshot
 Mod4 F9 :ExecCommand xsnapshot
