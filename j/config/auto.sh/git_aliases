@@ -128,8 +128,8 @@ alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset)
 
 # "Git Log Word-diffed" - It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
 alias glw='gl --word-diff=color'
-# "Git Log Stats/Summary" - Just file stats, no diffs.
-alias gls='gl --stat'
+# "Git Log Stats/Summary" - Just file stats, no diffs.  BUG: Not grey, because glg uses glp which does -p (diffs)!
+alias gls='gitlog --stat'
 # "Git Log Files" - Compressed version of "Git Log Stats"
 alias glf='glc --stat'
 # With glf, we can walk commmits with /^[^ ]+
