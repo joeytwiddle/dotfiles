@@ -21,11 +21,11 @@
 	remote = red     # default = red
 [color "diff"]
 	# Commit messages and author will be pure white; I cannot find a place to configure them.
-	# The commit id will be:
+	# The commit id (also applies to any --decorate decorations which follow it)
 	commit = yellow bold reverse
 	meta = cyan bold
 	frag = magenta
-	# Believe it or not, 'white' is a little bit darker than ffffff.  Put 'white' here to get a very light grey :-p
+	# Believe it or not, in my xterm 'white' is a little bit darker than ffffff.  Put 'white' here to get a very light grey :-p
 	func = white
 	plain = white
 	old = red bold
