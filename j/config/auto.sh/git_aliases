@@ -50,7 +50,7 @@ gd() {
 	fi
 }
 # Git Diff Words
-alias gdw='git diff --word-diff'
+alias gdw='git diff --word-diff=color'
 # Git Diff Files
 alias gdf='git diff --stat'
 # Git Diff Staged / Cached (see which one I use most ... I used gdc!)
@@ -126,7 +126,7 @@ alias gllm='gll --no-merges'
 alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
 
 # "Git Log Word-diffed" - It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
-alias glw='gl --word-diff'
+alias glw='gl --word-diff=color'
 # "Git Log Stats/Summary" - Just file stats, no diffs.
 alias gls='gl --stat'
 # "Git Log Files" - Compressed version of "Git Log Stats"
