@@ -115,16 +115,13 @@
 
 	# whatisnotpushed: Preview what will be sent when you push (or if indeed a push is needed).
 	# As an alternative, you can read the "ahead" count shown on the second line of git status, or shown when switching between branches with git checkout.
-	# Comparing against the origin does not work when we are on a branch, since origin = origin/master.
-	#whatisnotpushed = log origin..HEAD --oneline
-	# So use @{u} = upstream instead
-	#whatisnotpushed = log @{u}..HEAD --oneline
-	#whatisnotpushed = log HEAD@{u}..HEAD --oneline
-	# or perhaps just compare against FETCH_HEAD?  That is prone to failure if we switch branch.
-	whatisnotpushed = log FETCH_HEAD..HEAD --oneline
-	# I suspect @{u} is better than FETCH_HEAD because it will still apply if we switch branch.  However both suffer from the problem that we might not be pushing *to* the upstream.  Upstream is where we are configured to pull from, not where we push to!  So our upstream might be master, or another branch, when we are actually pushing to the current branch (on the origin).  There is no @{d} or @{p}
+	whatisnotpushed = log @{upstream}_HEAD..HEAD --oneline
+	# One problem is that we might not be pushing *to* the upstream.  Upstream is where we are configured to pull from, not where we push to!  So our upstream might be master, or another branch, when we are actually pushing to the current branch (on the origin).  There is no @{d} or @{p}
+	# Another problem is that the upstream might not be set.  I often use origin/branch_name without excplicitly setting/tracking it.
 
 	# Shortcut:
+	#winp   = log @{u}..HEAD --oneline
+	# This will work if an upstream is not set, but only if 1. We were on the current branch when we last fetched, and 2. We have not pushed since the last fetch (FETCH_HEAD does not update when we push, only when we fetch or pull).
 	winp   = log FETCH_HEAD..HEAD --oneline
 
 	# Files that will be pushed:
