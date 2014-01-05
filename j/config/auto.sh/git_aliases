@@ -75,7 +75,11 @@ alias gm='git merge FETCH_HEAD'
 gitlog() {
 	# Show color if not piping.  Skip to next file or commit on 'n'.
 	if [ -t 1 ]
-	then git -c color.ui=always log "$@" | less -R +'/^(commit|diff).*' -X
+	then
+		git -c color.ui=always log "$@" |
+		#less -R +'/^(commit|diff).*' -X
+		# Needed when using --graph and -p
+		less -R +'/((^|\*[ |]*)commit .*|(^|\| )diff --git.*)'
 	else git log "$@"
 	fi
 }
@@ -84,14 +88,23 @@ gitlog() {
 #   2. Count the number of files in this commit (as shown by --stat), add one, and jump that many times with e.g. `15n`.  This will work just once, so you can use `n` to skip diffs later.
 
 # "Git Log Pure" - the basis for "Git Log Grey" but without colours
-alias glp='gitlog -U2 -p -m --stat'
+# I am not sure how useful -m is.  It shows us the diff of the merge *and* the individual commits from the merged branch, so we see some things twice.  We may want to remove it, or add --no-merges and/or --first-parent, so we can see the individual commits from merged branches, without the merge commits themselves (which would be duplicate information!).  The disadvantage is that by hiding merges, we don't see the correct moment at which the commit entered our local branch.  Perhaps we want to view the merges but not the commits from merged branches!  That is exactly the behaviour of --first-parent; then we should keep -m.  But then we can't see the log messages for those commits.
+# So some sensible choices are: -m --first-parent to see the changes at merge time, or neither to see the log messages of individual commits.
+# Probably the second is more desirable for gll, the first more desirable for glf or gld (gl).  Especially the first is useful because it shows us the fixed conflict files during a merge.  (So we can check that a merge has not snuck in unwanted code during the conflict resolution.)
+# We could also try out --cc or -c options.
+# Nah they didn't see helpful.  It's either -m --first-parent or neither.
+# I think I originally added -m because I *thought* git log was not showing commit diffs from merged branches.  In fact it does, but it shows them individually, and leaves the merge commit itself empty.
+# I am now finding this a little more informative than glg: git log -p --graph --decorate
+alias glp='gitlog -m --first-parent -p -U2 --stat'
 # Here --stat show a quick summary of changed files, before actually showing the diffs.  I rather enjoy this when using 'gl' as it lets me decide from the top of each commit whether there are any files I am interested in, and if not I can happily skip straight to the next commit.  In other situations, e.g. when I am planning to read all the details, --stat is just chaff.
 # "Git Log Grey" - Like 'gl' except we present my favourite colors
 # This is quite close to: git log --decorate -U2 -p -m --stat
 # Curiously the alias shows fewer +++s and ---s on the stat output.
 alias glg='glp --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an %ae%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
 # "Git Log" aliases to "Git Log Grey"
-alias gl='glg'
+#alias gl='glg'
+# Now trying this out; use glg for old style.
+alias gl='gitlog -p --graph --decorate'
 # Warning: glg and glc duplicate my color settings.  (Which are also set in my ~/.gitconfig.)  Part of the reason I passed everything through glg/glc was to display decorations (commit labels like HEAD and origin/master).  I have since learned this can be achieved by passing --decorate, so we may be able to reduce some duplication that way.
 
 # "Git Log Long" - One per line, with graph
@@ -104,7 +117,7 @@ alias gll='glc --graph'
 alias gllm='gll --no-merges'
 
 # "Git Log Clear" - Single lines, no graph.  Shows more info than: git log --pretty=oneline
-# If you want to use this with --stat then it should have a %n at the end.  But this will make --graph (gll) show blank lines.
+# If you want to use this with --stat and --graph then it should have a %n at the end.  But this will make --graph show blank lines even when run without --stat.  Since glf does not use --graph, we don't really need this.
 alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
 
 # "Git Log Word-diffed" - It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
