@@ -178,10 +178,39 @@ gitwhatsup() {
 }
 alias gwu=gitwhatsup
 
+# Guesses the name of the upstream branch, given the local branch name (or no arguments, which assumes current branch)
+git_guess_upstream_branch() {
+	local local_branch remote_branch remote_commit
+	# No problem if this arg is empty, it will work fine for the current branch anyway
+	local_branch="$1"
+	# First guess
+	remote_branch="$local_branch@{upstream}"
+	# Check if it exists
+	# We cannot use --symbolic or --abbrev-ref here; it will return what was given even if no upstream exists.
+	# In fact we must specify --revs-only to prevent that from occurring!
+	# We hide the error if the remote branch is not found.
+	remote_commit=$(git rev-parse --revs-only "$remote_branch" 2>/dev/null)
+	if [ -z "$remote_commit" ]
+	then
+		# If no upstream was set, guess a branch on "origin" with the same name.  TODO: if "origin" does not exist, can we make a better guess?
+		# Before we can do that, we may need a name for the local branch, if none was provided
+		if [ -z "$local_branch" ]
+		then local_branch=$(git_get_current_branch)
+		fi
+		remote_branch="origin/$local_branch"
+		# Check if it exists
+		if ! git branch --list -r "$remote_branch" | grep . >/dev/null
+		then remote_branch=""
+		fi
+	fi
+	echo "$remote_branch"
+}
+
 # Git What Is Not Pushed
-alias gwinp='gll FETCH_HEAD..HEAD'
+#alias gwinp='gll @{upstream}..HEAD'
+alias gwinp='gll $(git_guess_upstream_branch)..HEAD'
 # Git What Is Not Pushed Details
-alias gwinpd='gl FETCH_HEAD..HEAD'
+alias gwinpd='gl $(git_guess_upstream_branch)..HEAD'
 # Git To Push
 alias gtp='gwinp'
 # Git To Push Files
@@ -247,7 +276,7 @@ where:
         filter=$(git symbolic-ref -q HEAD)
     fi
 
-    current_branch=`git_get_branch_name`
+    current_branch=`git_get_current_branch`
 
     git for-each-ref --format="%(refname:short) %(upstream:short)" $filter | \
     while read local remote
@@ -341,8 +370,9 @@ gbs() {
   "
 }
 
-git_get_branch_name() {
-	git rev-parse --abbrev-ref HEAD
+git_get_current_branch() {
+	#git rev-parse --abbrev-ref HEAD
+	git symbolic-ref --short HEAD
 }
 
 git_find_branch_start_commit() {
@@ -354,6 +384,7 @@ git_find_branch_start_commit() {
 	else
 		#other_branch=master
 		#other_branch=origin/master
+		# TODO: This is a hack for my current project.  It should be set as an option, not hard-coded in here.  E.g. GIT_MERGE_BASE_DEFAULT_OTHER_BRANCH_NAME
 		#other_branch=v3-alpha-stable
 		other_branch=v3-master
 	fi
@@ -361,7 +392,7 @@ git_find_branch_start_commit() {
 	# But user may specify the "current" branch second if they wish
 	if [ -n "$2" ]
 	then current_branch="$2"
-	else current_branch=`git_get_branch_name`
+	else current_branch=`git_get_current_branch`
 	fi
 	# Although the order doesn't really matter when passing 2 arguments, since merge-base is symmetric!
 
