@@ -223,10 +223,10 @@ alias gtpd='gd FETCH_HEAD..HEAD'
 
 git_branch_status() {
     # Original: https://gist.github.com/Mark-Booth/5058384
-    # This version by Joey.
+    # This version by Joeytwiddle
 
-    # Displays your git branches with a summary of how many commits ahead or behind the local is from its remote branch.
-    # Also displays (through color/labels) which branches are ancestors of (have already been merged into) the current branch.
+    # Displays branches with a summary of how many commits ahead or behind the local is from its remote branch.
+    # Also displays which branches are ancestors of (have already been merged into) the current branch.
     # If no upstream is set for a branch, it will guess a branch with the same name on origin.
     # Use the 'gbs' alias wrapper below for colors and column alignment.
 
@@ -323,6 +323,7 @@ where:
                 then preBranch="~ "
                 else preBranch="x "
                 fi
+                # I considered using "+" and "-" instead, but these are harder to visually distinguish from "*" and each other.
             fi
         fi
         if [ $verbose ] || [ $LEFT_AHEAD -gt 0 ] || [ $RIGHT_AHEAD -gt 0 ] || [ "$local" = "$current_branch" ] ; then
@@ -351,7 +352,7 @@ gbs() {
   # I don't think anyone really wants color.  If you do, uncomment these:
   local local_branch_color=`git config --get-color color.branch.local white`
   #local remote_branch_color=`git config --get-color color.branch.remote red`
-  local merged_branch_color=`git config --get-color color.branch.ancestor green`
+  local ancestor_branch_color=`git config --get-color color.branch.ancestor green`
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
@@ -366,7 +367,7 @@ gbs() {
     s+(behind *[1-9][0-9]*)+$behind_color\0$reset_color+
     s+^[*] *\([^ ]*\)+* $current_branch_color\1$reset_color+
     s+^[.x] *\([^ ]*\)+  $local_branch_color\1$reset_color+
-    s+^[~] *\([^ ]*\)+  $merged_branch_color\1$reset_color+
+    s+^[~] *\([^ ]*\)+  $ancestor_branch_color\1$reset_color+
     s+[^ ]*$+$remote_branch_color\0$reset_color+
   "
 }
