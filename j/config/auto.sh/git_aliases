@@ -95,17 +95,22 @@ gitlog() {
 # Nah they didn't see helpful.  It's either -m --first-parent or neither.
 # I think I originally added -m because I *thought* git log was not showing commit diffs from merged branches.  In fact it does, but it shows them individually, and leaves the merge commit itself empty.
 # I am now finding this a little more informative than glg: git log -p --graph --decorate
-alias glp='gitlog -m --first-parent -p -U2 --stat'
+# I rarely want to use glp directly; I prefer glg because it customizes the color of the commit message.
+alias glp='gitlog -p -U2 --stat'
 # Here --stat show a quick summary of changed files, before actually showing the diffs.  I rather enjoy this when using 'gl' as it lets me decide from the top of each commit whether there are any files I am interested in, and if not I can happily skip straight to the next commit.  In other situations, e.g. when I am planning to read all the details, --stat is just chaff.
 # "Git Log Grey" - Like 'gl' except we present my favourite colors
 # This is quite close to: git log --decorate -U2 -p -m --stat
 # Curiously the alias shows fewer +++s and ---s on the stat output.
+# One "advantage" of our custom formate over --decorate is that --decorate shows different colors for different decorations.  Whilst this is nice and informative, it looks a little ugly when it combines with the reverse highlighting from our less search.
 alias glg='glp --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an %ae%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
 # "Git Log" aliases to "Git Log Grey"
 #alias gl='glg'
-# Now trying this out; use glg for old style.
-alias gl='gitlog -p --graph --decorate'
+# Now trying this out; use glm for old-ish style (merges merged) or use glg to see individual commits without the graph.
+# We should probably swap glg and gl, since gl has a graph and glg does not!
+alias gl='glg --graph'
 # Warning: glg and glc duplicate my color settings.  (Which are also set in my ~/.gitconfig.)  Part of the reason I passed everything through glg/glc was to display decorations (commit labels like HEAD and origin/master).  I have since learned this can be achieved by passing --decorate, so we may be able to reduce some duplication that way.
+# "Git Log with Merges-combined/merged)" - shows diffs in the merge, does not show individual commits from merged branches
+alias glm='glg -m --first-parent'
 
 # "Git Log Long" - One per line, with graph
 #alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'   # Does not show committer's name or age of commit
