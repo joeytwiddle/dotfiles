@@ -19,6 +19,7 @@
 	current = green bold reverse   # default = green
 	local = yellow   # default = white
 	remote = red     # default = red
+	ancestor = green # Non-standard, created by Joey for git_branch_status (gbs) in git_aliases
 [color "diff"]
 	# Commit messages and author will be pure white; I cannot find a place to configure them.
 	# The commit id (also applies to any --decorate decorations which follow it)
