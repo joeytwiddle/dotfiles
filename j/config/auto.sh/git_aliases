@@ -102,7 +102,7 @@ alias glp='gitlog -p -U2 --stat'
 # This is quite close to: git log --decorate -U2 -p -m --stat
 # Curiously the alias shows fewer +++s and ---s on the stat output.
 # One "advantage" of our custom formate over --decorate is that --decorate shows different colors for different decorations.  Whilst this is nice and informative, it looks a little ugly when it combines with the reverse highlighting from our less search.
-alias glg='glp --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an %ae%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
+alias glg='glp --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an <%ae>%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
 # "Git Log" aliases to "Git Log Grey"
 #alias gl='glg'
 # Now trying this out; use glm for old-ish style (merges merged) or use glg to see individual commits without the graph.
