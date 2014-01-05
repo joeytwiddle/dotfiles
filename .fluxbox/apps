@@ -47,7 +47,7 @@
 [end]
 [group]  (workspace=[current])
  [app] (title=Manual: .*)
-  [Sticky]	{yes}
+  [Sticky]	{no}
 [end]
 [group]  (workspace=[current])
  [app] (title=\[Vim\].*)
