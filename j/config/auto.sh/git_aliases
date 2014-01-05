@@ -117,6 +117,7 @@ alias glm='glg -m --first-parent'
 #alias gll='git lol'
 # Using the same colors as "Git Log Clear" except commits are not bold:
 #alias gll='git log --graph --pretty=format:"%C(yellow)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
+# Problem: When used with --graph, glc should end in %n.  But we don't want the %n when --graph is not used (e.g. in glf below)!  I don't personally want the %n, but --graph always draws a |\n straight after the formatted text, so it looks messy without it.
 alias gll='glc --graph'
 # "Git Log Long Minus merges"
 alias gllm='gll --no-merges'
