@@ -74,6 +74,8 @@ disk device sda2 0 0 11 0 1 2 0
 disk device sda3 0 0 11 0 1 3 0
 disk device sda4 0 0 11 0 1 4 0
 disk device sda5 0 0 11 0 1 5 0
+disk device sdb 0 0 11 0 1 -1 0
+disk device sdb1 0 0 11 0 1 1 0
 disk device sr0 0 0 14 0 1 -1 0
 disk text_format \a$r\f read\n\a$w\f write
 inet monitor inet0 http 80 443 ssh@hwi 22 0 1 0 0
@@ -96,8 +98,8 @@ net enables eth2 1 1 0
 net chart_config eth2 50 200000 0 0 0 0 : 0 0 0 0 500 : 0 1 0 0 400
 net enables eth3 1 1 0
 net chart_config eth3 40 500000 1 0 0 0 : 0 1 0 0 500 : 0 0 0 0 500
-net enables ifb0 0 1 0
-net chart_config ifb0 40 10000 0 1 0 0 : 0 0 0 0 500 : 0 0 0 0 500
+net enables ifb0 1 1 0
+net chart_config ifb0 50 20000 0 1 0 0 : 0 1 0 0 500 : 0 1 0 0 500
 net enables lo 0 1 0
 net enables nr0 1 1 0
 net enables nr1 1 1 0
@@ -115,7 +117,7 @@ net enables rose8 1 1 0
 net enables rose9 1 1 0
 net enables sit0 1 1 0
 net enables usb0 1 1 0
-net chart_config usb0 40 1000 0 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
+net chart_config usb0 50 1000 0 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
 net enables wlan0 1 1 0
 net chart_config wlan0 50 10000 4 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
 net timer_enabled 1
@@ -123,19 +125,19 @@ net timer_seconds 1
 net timer_iface none
 net timer_on 
 net timer_off 
-net text_format \a$r\f in / $id ($i)\n\a$t\f out / $od ($o)\b\c\f$L
-net reset_mday 25
+net text_format \a$r\f in / $id ($i)\n\n\n\a$t\f out / $od ($o)\b\c\f$L
+net reset_mday 22
 net net_stats_window_height 515
-meminfo mem_meter 1 1 1
+meminfo mem_meter 1 1 0
 meminfo swap_meter 1 1
 meminfo swap_chart 1 1
 meminfo chart_config 35 30 0 0 0 0 : 0 0 0 0 500 : 0 1 0 0 500
-meminfo mem_launch 
+meminfo mem_launch xterm -geometry 120x20 -e top c    
 meminfo mem_tooltip 
-meminfo mem_data_format Mem:  $t  -  $f free
+meminfo mem_data_format Mem:  $f / $t free
 meminfo swap_launch 
 meminfo swap_tooltip 
-meminfo swap_data_format Swap: $t  -  $f free
+meminfo swap_data_format Swap: $f / $t free
 meminfo text_format \a$i\f read\n\a$o\f write
 fs "debian" "/" 0 0 0 1 0
 fs "home" "/home" 0 0 0 1 0
