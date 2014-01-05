@@ -69,9 +69,9 @@
 	# Adds actual diffs to the standard log
 	lg = log -p -m
 	# Summaries (without/with branches?)
-	#lol = log --graph --decorate --pretty=oneline --abbrev-commit
+	#lol = log --graph --decorate --oneline --abbrev-commit
 	lol = log --graph --pretty=format:'%C(yellow)%h%C(magenta bold)%d%C(reset) %s %C(cyan)- %an (%ar)%Creset'
-	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	lola = log --graph --decorate --oneline --abbrev-commit --all
 	prettylog = log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"
 	ls = ls-files
 	# Show files ignored by git:
@@ -116,16 +116,16 @@
 	# whatisnotpushed: Preview what will be sent when you push (or if indeed a push is needed).
 	# As an alternative, you can read the "ahead" count shown on the second line of git status, or shown when switching between branches with git checkout.
 	# Comparing against the origin does not work when we are on a branch, since origin = origin/master.
-	#whatisnotpushed = log origin..HEAD --pretty=oneline
+	#whatisnotpushed = log origin..HEAD --oneline
 	# So use @{u} = upstream instead
-	#whatisnotpushed = log @{u}..HEAD --pretty=oneline
-	#whatisnotpushed = log HEAD@{u}..HEAD --pretty=oneline
+	#whatisnotpushed = log @{u}..HEAD --oneline
+	#whatisnotpushed = log HEAD@{u}..HEAD --oneline
 	# or perhaps just compare against FETCH_HEAD?  That is prone to failure if we switch branch.
-	whatisnotpushed = log FETCH_HEAD..HEAD --pretty=oneline
+	whatisnotpushed = log FETCH_HEAD..HEAD --oneline
 	# I suspect @{u} is better than FETCH_HEAD because it will still apply if we switch branch.  However both suffer from the problem that we might not be pushing *to* the upstream.  Upstream is where we are configured to pull from, not where we push to!  So our upstream might be master, or another branch, when we are actually pushing to the current branch (on the origin).  There is no @{d} or @{p}
 
 	# Shortcut:
-	winp   = log FETCH_HEAD..HEAD --pretty=oneline
+	winp   = log FETCH_HEAD..HEAD --oneline
 
 	# Files that will be pushed:
 	topush = diff-index --color --stat FETCH_HEAD
