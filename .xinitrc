@@ -127,6 +127,7 @@ fvwm2
 twm
 fvwm
 openbox
+quartz-wm
 "
 
 # If you want second desktops to run a different manager on other desktops created (e.g. :2 or
