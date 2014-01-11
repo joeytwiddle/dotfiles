@@ -251,11 +251,9 @@ git_branch_status() {
     # From initial tracing, it appeared that the final gbs call only iterates once during the while getopts.
     # Since we need both -v and -a to show more than one line here, we saw only one line.
 
-    local usage option filter OPTARG compareto verbose current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
+    local usage option filter OPTARG compareto showancestors verbose current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
 
-    local gbs_show_if_merged local_branch_commit_hash common_commit_between_branch_and_current
-
-    gbs_show_if_merged=yes
+    local local_branch_commit_hash common_commit_between_branch_and_current
 
     usage="$(basename "$0") [-hav] -- summarise status of branch(es)
 
@@ -264,9 +262,10 @@ where:
     -a           show all branches, not just the current one
     -m           shows branch(es) with respect to origin/master
     -t <branch>  shows branch(es) with respect to given branch
+    -p           indicates branches which have been merged into current
     -v           verbose, show output even if counts are zero"
 
-    while getopts 'hamt:v' option; do
+    while getopts 'hamt:pv' option; do
       case "$option" in
         h) echo "$usage"
            exit
@@ -276,6 +275,8 @@ where:
         m) compareto=origin/master
            ;;
         t) compareto="$OPTARG"
+           ;;
+        p) showancestors=true
            ;;
         v) verbose=true
            ;;
@@ -329,7 +330,7 @@ where:
         then preBranch="* "
         else
             preBranch=". "
-            if [ -n "$gbs_show_if_merged" ]
+            if [ -n "$showancestors" ]
             then
                 local_branch_commit_hash=`git rev-parse --verify "$local"`
                 common_commit_between_branch_and_current=`git merge-base "$local" "$current_branch"`
@@ -370,7 +371,7 @@ gbs() {
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
-  else git_branch_status -a -v "$@"
+  else git_branch_status -a -v -p "$@"
   fi |
   column -s ' ' -t | sed 's+ \( *\)+\1+g' |
   #columnise |
