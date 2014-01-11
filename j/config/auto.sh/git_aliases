@@ -32,7 +32,9 @@ gs() {
 	if [ -t 1 ]
 	then
 		git -c color.status=always status "$@" |
-		more
+		#more
+		# On Mac, more cannot handle color.  Unless it is given -R.  But Linux more does not recognise that argument!  :P
+		less -R
 		# The problem with doing this search with more is that more skips the first "branch" line, even though it is a match.  And it does not even allow paging up to find it!
 		#more +'/^# [^ ].*'
 		#less -R +'/^# [^ ].*' -E -X --tilde
@@ -225,8 +227,9 @@ git_branch_status() {
     # Original: https://gist.github.com/Mark-Booth/5058384
     # This version by Joeytwiddle
 
-    # Displays branches with a summary of how many commits ahead or behind the local is from its remote branch.
-    # Also displays which branches are ancestors of (have already been merged into) the current branch.
+    # Displays your git branches with a summary of how many commits ahead or behind the local is from its remote branch.
+    # Also displays (through color/labels) which branches are ancestors of (have already been merged into) the current branch.
+
     # If no upstream is set for a branch, it will guess a branch with the same name on origin.
     # Use the 'gbs' alias wrapper below for colors and column alignment.
 
@@ -236,6 +239,12 @@ git_branch_status() {
     # master (ahead 2) | (behind 0) origin/master
     # $ git branch-status
     # master (ahead 2) | (behind 0) origin/master
+
+    # BUG TODO: Running gbs after git_branch_status -a -v gives only 1-line output.  Steps to reproduce:
+    # Use Mac.  Start jsh in bash (with GNU coreutils etc.).  See gbs works fine.  Now do git_branch_status -a -v, also works fine.
+    # Now see gbs only displays one line!
+    # From initial tracing, it appeared that the final gbs call only iterates once during the while getopts.
+    # Since we need both -v and -a to show more than one line here, we saw only one line.
 
     local usage option filter OPTARG compareto verbose current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
 
@@ -352,7 +361,11 @@ gbs() {
   # I don't think anyone really wants color.  If you do, uncomment these:
   local local_branch_color=`git config --get-color color.branch.local white`
   #local remote_branch_color=`git config --get-color color.branch.remote red`
+<<<<<<< HEAD
   local ancestor_branch_color=`git config --get-color color.branch.ancestor green`
+=======
+  local merged_branch_color=`git config --get-color color.branch.ancestor cyan`
+>>>>>>> origin/master
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
