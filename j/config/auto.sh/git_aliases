@@ -335,8 +335,8 @@ where:
                 local_branch_commit_hash=`git rev-parse --verify "$local"`
                 common_commit_between_branch_and_current=`git merge-base "$local" "$current_branch"`
                 if [ "$common_commit_between_branch_and_current" = "$local_branch_commit_hash" ]
-                then preBranch="~ "
-                else preBranch="x "
+                then preBranch="| "
+                else preBranch="/ "
                 fi
                 # I considered using "+" and "-" instead, but these are harder to visually distinguish from "*" and each other.
             fi
@@ -359,15 +359,11 @@ gbs() {
   # git branch -v can partially do this already.  It shows e.g. [behind 12] after the commit hash but before the message.  Unfortunately it has no color and does not stand out very well.
   # Or perhaps better: https://gist.github.com/jehiah/1288596 (from http://stackoverflow.com/questions/7773939/show-git-ahead-and-behind-info-for-all-branches-including-remotes )
 
-  local reset_color=`tput sgr0`
-  local ahead_color=`tput setaf 2 ; tput bold`    # green
-  local behind_color=`tput setaf 1 ; tput bold`   # red
-  # You can use the configured/default colors, but I quite like remote blank!  (The default red confuses behind_color.)
-  local current_branch_color=`git config --get-color color.branch.current green`
-  local local_branch_color=`git config --get-color color.branch.local white`
-  # The default remote branch color is red, but that conflicts with behind_color, so I have set it to 'white' here.
-  local remote_branch_color=`git config --get-color color.branch.remote white`
-  local ancestor_branch_color=`git config --get-color color.branch.ancestor cyan`
+  local show_color
+  local color_setting=`git config --get color.ui`
+  if [ "$color_setting" = 'true' ] || [ "$color_setting" = 'auto' ] && [ -t 1 ]
+  then show_color=true
+  fi
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
@@ -375,16 +371,28 @@ gbs() {
   fi |
   column -s ' ' -t | sed 's+ \( *\)+\1+g' |
   #columnise |
-  #highlight -bold "(ahead *[1-9][0-9]*)" green |
-  #highlight -bold "(behind *[1-9][0-9]*)" red |
-  sed "
-    s+\()  *\)\([^ ]*\)$+\1$remote_branch_color\2$reset_color+
-    s+(ahead *[1-9][0-9]*)+$ahead_color\0$reset_color+
-    s+(behind *[1-9][0-9]*)+$behind_color\0$reset_color+
-    s+^[*] *\([^ ]*\)+* $current_branch_color\1$reset_color+
-    s+^[.x] *\([^ ]*\)+  $local_branch_color\1$reset_color+
-    s+^[~] *\([^ ]*\)+  $ancestor_branch_color\1$reset_color+
-  "
+  if [ -n "$show_color" ]
+  then
+    # We should probably only do this jazz if $() = 'true' or = 'auto' && [ -t 1 ]
+    local reset_color=`tput sgr0`
+    local ahead_color=`tput setaf 2 ; tput bold`    # green
+    local behind_color=`tput setaf 1 ; tput bold`   # red
+    # You can use the configured/default colors, but I quite like remote blank!  (The default red confuses behind_color.)
+    local current_branch_color=`git config --get-color color.branch.current green`
+    local local_branch_color=`git config --get-color color.branch.local white`
+    # The default remote branch color is red, but that conflicts with behind_color, so I have set it to 'white' here.
+    local remote_branch_color=`git config --get-color color.branch.remote white`
+    local ancestor_branch_color=`git config --get-color color.branch.ancestor cyan`
+    sed "
+      s+\()  *\)\([^ ]*\)$+\1$remote_branch_color\2$reset_color+
+      s+(ahead *[1-9][0-9]*)+$ahead_color\0$reset_color+
+      s+(behind *[1-9][0-9]*)+$behind_color\0$reset_color+
+      s+^[*] *\([^ ]*\)+* $current_branch_color\1$reset_color+
+      s+^[./x-] *\([^ ]*\)+  $local_branch_color\1$reset_color+
+      s+^[\\+|] *\([^ ]*\)+  $ancestor_branch_color\1$reset_color+
+    "
+  else cat
+  fi
 }
 
 git_get_current_branch() {
