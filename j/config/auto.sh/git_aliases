@@ -103,12 +103,13 @@ alias glp='gitlog -p -U2 --stat'
 # "Git Log Grey" - Like 'gl' except we present my favourite colors
 # This is quite close to: git log --decorate -U2 -p -m --stat
 # Curiously the alias shows fewer +++s and ---s on the stat output.
-# One "advantage" of our custom formate over --decorate is that --decorate shows different colors for different decorations.  Whilst this is nice and informative, it looks a little ugly when it combines with the reverse highlighting from our less search.
+# One "advantage" of our custom format over --decorate is that --decorate shows different colors for different decorations.  Whilst this is nice and informative, it looks a little ugly when it combines with the reverse highlighting from our less search.
 alias glg='glp --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an <%ae>%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
 # "Git Log" aliases to "Git Log Grey"
 #alias gl='glg'
 # Now trying this out; use glm for old-ish style (merges merged) or use glg to see individual commits without the graph.
 # We should probably swap glg and gl, since gl has a graph and glg does not!
+# Interestingly this can show some commits in a different order from glg alone, in the presence of merges.
 alias gl='glg --graph'
 # Warning: glg and glc duplicate my color settings.  (Which are also set in my ~/.gitconfig.)  Part of the reason I passed everything through glg/glc was to display decorations (commit labels like HEAD and origin/master).  I have since learned this can be achieved by passing --decorate, so we may be able to reduce some duplication that way.
 # "Git Log with Merges-combined/merged)" - shows diffs in the merge, does not show individual commits from merged branches
@@ -361,11 +362,7 @@ gbs() {
   # I don't think anyone really wants color.  If you do, uncomment these:
   local local_branch_color=`git config --get-color color.branch.local white`
   #local remote_branch_color=`git config --get-color color.branch.remote red`
-<<<<<<< HEAD
   local ancestor_branch_color=`git config --get-color color.branch.ancestor green`
-=======
-  local merged_branch_color=`git config --get-color color.branch.ancestor cyan`
->>>>>>> origin/master
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
@@ -400,7 +397,6 @@ git_find_branch_start_commit() {
 		#other_branch=master
 		#other_branch=origin/master
 		# TODO: This is a hack for my current project.  It should be set as an option, not hard-coded in here.  E.g. GIT_MERGE_BASE_DEFAULT_OTHER_BRANCH_NAME
-		#other_branch=v3-alpha-stable
 		other_branch=v3-master
 	fi
 
