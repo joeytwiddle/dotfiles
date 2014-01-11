@@ -84,6 +84,7 @@ gitlog() {
 		less -R +'/((^|\*[ |]*)commit .*|(^|\| )diff --git.*)'
 	else git log "$@"
 	fi
+	# BUG TODO: The --git may show as --combined when using gl -c, so change it for just -- after the pending merge.
 }
 # The regexp search allows us to quickly skip to the next diff or commit header by pressing `n`.  If you do not wish to jump through the diffs, you have two options:
 #   1. Edit the search so it won't hit diff lines.  For example: `/<Left><Left><Left>z<Enter>`.  This will work for the rest of the session.
@@ -114,6 +115,9 @@ alias gl='glg --graph'
 # Warning: glg and glc duplicate my color settings.  (Which are also set in my ~/.gitconfig.)  Part of the reason I passed everything through glg/glc was to display decorations (commit labels like HEAD and origin/master).  I have since learned this can be achieved by passing --decorate, so we may be able to reduce some duplication that way.
 # "Git Log with Merges-combined/merged)" - shows diffs in the merge, does not show individual commits from merged branches
 alias glm='glg -m --first-parent'
+# It seems to me that -c should be combined with --first-parent, to avoid seeing the same diffs twice (the final actual merge, as well as the commits on the branch)
+# When -c is used, -m does nothing (at least in the example I tested)
+# I did tests comparing `glg -c` against `glg -m`, and `glg -c --first-parent` against `glg -m --first-parent`.  Whilst -c did show the full diff of manual merges, it also excluded a lot of stuff!  Notably, merges with no conflicts.  (From the manual: "it lists only files which were modified from all parents").  So I don't see any way to see the true patched of manual merges (-c) without also excluding stuff.  Therefore, use -c only when you think you need it!  :P
 
 # "Git Log Long" - One per line, with graph
 #alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'   # Does not show committer's name or age of commit
@@ -355,14 +359,14 @@ gbs() {
   # Or perhaps better: https://gist.github.com/jehiah/1288596 (from http://stackoverflow.com/questions/7773939/show-git-ahead-and-behind-info-for-all-branches-including-remotes )
 
   local reset_color=`tput sgr0`
-  local ahead_color=`tput setaf 2 ; tput bold`
-  local behind_color=`tput setaf 1 ; tput bold`
+  local ahead_color=`tput setaf 2 ; tput bold`    # green
+  local behind_color=`tput setaf 1 ; tput bold`   # red
   # You can use the configured/default colors, but I quite like remote blank!  (The default red confuses behind_color.)
   local current_branch_color=`git config --get-color color.branch.current green`
-  # I don't think anyone really wants color.  If you do, uncomment these:
   local local_branch_color=`git config --get-color color.branch.local white`
-  #local remote_branch_color=`git config --get-color color.branch.remote red`
-  local ancestor_branch_color=`git config --get-color color.branch.ancestor green`
+  # The default remote branch color is red, but that conflicts with behind_color, so I have set it to 'white' here.
+  local remote_branch_color=`git config --get-color color.branch.remote white`
+  local ancestor_branch_color=`git config --get-color color.branch.ancestor cyan`
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
@@ -373,12 +377,12 @@ gbs() {
   #highlight -bold "(ahead *[1-9][0-9]*)" green |
   #highlight -bold "(behind *[1-9][0-9]*)" red |
   sed "
+    s+\()  *\)\([^ ]*\)$+\1$remote_branch_color\2$reset_color+
     s+(ahead *[1-9][0-9]*)+$ahead_color\0$reset_color+
     s+(behind *[1-9][0-9]*)+$behind_color\0$reset_color+
     s+^[*] *\([^ ]*\)+* $current_branch_color\1$reset_color+
     s+^[.x] *\([^ ]*\)+  $local_branch_color\1$reset_color+
     s+^[~] *\([^ ]*\)+  $ancestor_branch_color\1$reset_color+
-    s+[^ ]*$+$remote_branch_color\0$reset_color+
   "
 }
 
@@ -419,7 +423,8 @@ git_find_branch_start() {
 
 	if [ -n "$commitId" ]
 	then
-		echo "$current_branch and $other_branch share common commit:"
+		# These vars have disappeared inside the refactored function :P
+		#echo "$current_branch and $other_branch share common commit:"
 		#git log --pretty=oneline -1 "$commitId"
 		glc -1 "$commitId"
 	fi
