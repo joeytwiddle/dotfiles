@@ -11,7 +11,9 @@
 ## On Ubuntu, vt100 was not working, but * did:
 #xterm.*.font: -*-terminus-bold-r-*-*-16-*-*-*-*-*-*-*
 #xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
-xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
+#xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
+# For XQuartz (Mac):
+xterm.*.font: -*-lucidatypewriter-*-*-*-*-11-*-*-*-*-*-*-*
 xterm*background: #000000
 xterm*foreground: #ffffff
 xterm*cursorColor: #ffdd44
@@ -22,8 +24,12 @@ xterm*fastScroll: true
 # XTerm*faceName: Liberation Mono
 #xterm.*.faceSize2: 11
 ## Set the 'small' font:
-xterm.*.font3: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
-xterm.*.font4: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
+#xterm.*.font3: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
+#xterm.*.font4: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
+# For XQuartz (Mac):
+xterm.*.font3: -*-lucidatypewriter-*-*-*-*-10-*-*-*-*-*-*-*
+xterm.*.font4: -*-lucidatypewriter-*-*-*-*-14-*-*-*-*-*-*-*
+xterm.*.font5: -*-lucidatypewriter-*-*-*-*-16-*-*-*-*-*-*-*
 #xterm.vt100.font3
 
 ## For coloured man-pages:
