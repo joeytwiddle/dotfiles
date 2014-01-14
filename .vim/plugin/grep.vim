@@ -185,37 +185,37 @@ let loaded_grep = 1
 " Location of the grep utility
 if !exists("Grep_Path")
     "let Grep_Path = 'd:\unix_tools\grep.exe'
-    let Grep_Path = '/bin/grep'
+    let Grep_Path = 'grep'
 endif
 
 " Location of the fgrep utility
 if !exists("Fgrep_Path")
     "let Fgrep_Path = 'd:\unix_tools\fgrep.exe'
-    let Fgrep_Path = '/bin/fgrep'
+    let Fgrep_Path = 'fgrep'
 endif
 
 " Location of the egrep utility
 if !exists("Egrep_Path")
     "let Egrep_Path = 'd:\unix_tools\egrep.exe'
-    let Egrep_Path = '/bin/egrep'
+    let Egrep_Path = 'egrep'
 endif
 
 " Location of the agrep utility
 if !exists("Agrep_Path")
     "let Agrep_Path = 'd:\unix_tools\agrep.exe'
-    let Agrep_Path = '/usr/local/bin/agrep'
+    let Agrep_Path = 'agrep'
 endif
 
 " Location of the find utility
 if !exists("Grep_Find_Path")
     "let Grep_Find_Path = 'd:\unix_tools\find.exe'
-    let Grep_Find_Path = '/usr/bin/find'
+    let Grep_Find_Path = 'find'
 endif
 
 " Location of the xargs utility
 if !exists("Grep_Xargs_Path")
     "let Grep_Xargs_Path = 'd:\unix_tools\xargs.exe'
-    let Grep_Xargs_Path = '/usr/bin/xargs'
+    let Grep_Xargs_Path = 'xargs'
 endif
 
 " Open the Grep output window.  Set this variable to zero, to not open
@@ -380,6 +380,7 @@ function! s:RunGrepCmd(cmd, pattern)
         " But with statusline it does not survive :colder :cnewer
         let &l:statusline = 'Search results for ' . a:pattern . ''
         " This gets overwritten.  Find out who is doing that with verbose.
+        " The answer on my machine was: Vim's ftplugin/qf.vim sets it.
         " If no luck changing it, try changing w:quickfix_title instead.
         " http://superuser.com/questions/356912/how-do-i-change-the-quickix-title-status-bar-in-vim
         "let w:quickfix_title = '[Search results for ' . a:pattern . ']'
@@ -390,7 +391,14 @@ function! s:RunGrepCmd(cmd, pattern)
         " This would work by mapping w:quickfix_title through a dictionary, so that when cnewer/colder are used again later, we can follow the mapping and set the statusline again!
         " It should also perform cleanup of old entries during very long sessions with heavy use of quickfix titles.
         "
+        " In fact the value that gets set for w:quickfix_title changes as we use :colder and :cnewer, so we could use its current value to map to our desired statusline or quickfix_title
+        "
         " Finally, this script should only use the magic function if it can see it is available.
+
+        " DONE:
+        if exists('*g:SetQuickfixTitle')
+            call g:SetQuickfixTitle(&l:statusline)
+        endif
     endif
 
     " Jump to the first error (mainly because it forces the focus back to

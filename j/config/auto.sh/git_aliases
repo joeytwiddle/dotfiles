@@ -84,6 +84,7 @@ gitlog() {
 		less -R +'/((^|\*[ |]*)commit .*|(^|\| )diff --git.*)'
 	else git log "$@"
 	fi
+	# BUG TODO: The --git may show as --combined when using gl -c, so change it for just -- after the pending merge.
 }
 # The regexp search allows us to quickly skip to the next diff or commit header by pressing `n`.  If you do not wish to jump through the diffs, you have two options:
 #   1. Edit the search so it won't hit diff lines.  For example: `/<Left><Left><Left>z<Enter>`.  This will work for the rest of the session.
@@ -103,16 +104,20 @@ alias glp='gitlog -p -U2 --stat'
 # "Git Log Grey" - Like 'gl' except we present my favourite colors
 # This is quite close to: git log --decorate -U2 -p -m --stat
 # Curiously the alias shows fewer +++s and ---s on the stat output.
-# One "advantage" of our custom formate over --decorate is that --decorate shows different colors for different decorations.  Whilst this is nice and informative, it looks a little ugly when it combines with the reverse highlighting from our less search.
+# One "advantage" of our custom format over --decorate is that --decorate shows different colors for different decorations.  Whilst this is nice and informative, it looks a little ugly when it combines with the reverse highlighting from our less search.
 alias glg='glp --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an <%ae>%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
 # "Git Log" aliases to "Git Log Grey"
 #alias gl='glg'
 # Now trying this out; use glm for old-ish style (merges merged) or use glg to see individual commits without the graph.
 # We should probably swap glg and gl, since gl has a graph and glg does not!
+# Interestingly this can show some commits in a different order from glg alone, in the presence of merges.
 alias gl='glg --graph'
 # Warning: glg and glc duplicate my color settings.  (Which are also set in my ~/.gitconfig.)  Part of the reason I passed everything through glg/glc was to display decorations (commit labels like HEAD and origin/master).  I have since learned this can be achieved by passing --decorate, so we may be able to reduce some duplication that way.
 # "Git Log with Merges-combined/merged)" - shows diffs in the merge, does not show individual commits from merged branches
 alias glm='glg -m --first-parent'
+# It seems to me that -c should be combined with --first-parent, to avoid seeing the same diffs twice (the final actual merge, as well as the commits on the branch)
+# When -c is used, -m does nothing (at least in the example I tested)
+# I did tests comparing `glg -c` against `glg -m`, and `glg -c --first-parent` against `glg -m --first-parent`.  Whilst -c did show the full diff of manual merges, it also excluded a lot of stuff!  Notably, merges with no conflicts.  (From the manual: "it lists only files which were modified from all parents").  So I don't see any way to see the true patched of manual merges (-c) without also excluding stuff.  Therefore, use -c only when you think you need it!  :P
 
 # "Git Log Long" - One per line, with graph
 #alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'   # Does not show committer's name or age of commit
@@ -225,16 +230,11 @@ alias gtpd='gd FETCH_HEAD..HEAD'
 
 git_branch_status() {
     # Original: https://gist.github.com/Mark-Booth/5058384
-    # This version by Joey.
-
-    # BUG TODO: Running gbs after git_branch_status -a -v gives only 1-line output.  Steps to reproduce:
-    # Use Mac.  Start jsh in bash (with GNU coreutils etc.).  See gbs works fine.  Now do git_branch_status -a -v, also works fine.
-    # Now see gbs only displays one line!
-    # From initial tracing, it appeared that the final gbs call only iterates once during the while getopts.
-    # Since we need both -v and -a to show more than one line here, we saw only one line.
+    # This version by Joeytwiddle
 
     # Displays your git branches with a summary of how many commits ahead or behind the local is from its remote branch.
     # Also displays (through color/labels) which branches are ancestors of (have already been merged into) the current branch.
+
     # If no upstream is set for a branch, it will guess a branch with the same name on origin.
     # Use the 'gbs' alias wrapper below for colors and column alignment.
 
@@ -245,11 +245,15 @@ git_branch_status() {
     # $ git branch-status
     # master (ahead 2) | (behind 0) origin/master
 
-    local usage option filter OPTARG compareto verbose current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
+    # BUG TODO: Running gbs after git_branch_status -a -v gives only 1-line output.  Steps to reproduce:
+    # Use Mac.  Start jsh in bash (with GNU coreutils etc.).  See gbs works fine.  Now do git_branch_status -a -v, also works fine.
+    # Now see gbs only displays one line!
+    # From initial tracing, it appeared that the final gbs call only iterates once during the while getopts.
+    # Since we need both -v and -a to show more than one line here, we saw only one line.
 
-    local gbs_show_if_merged local_branch_commit_hash common_commit_between_branch_and_current
+    local usage option filter OPTARG compareto showancestors verbose current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
 
-    gbs_show_if_merged=yes
+    local local_branch_commit_hash common_commit_between_branch_and_current
 
     usage="$(basename "$0") [-hav] -- summarise status of branch(es)
 
@@ -258,9 +262,10 @@ where:
     -a           show all branches, not just the current one
     -m           shows branch(es) with respect to origin/master
     -t <branch>  shows branch(es) with respect to given branch
+    -p           indicates branches which have been merged into current
     -v           verbose, show output even if counts are zero"
 
-    while getopts 'hamt:v' option; do
+    while getopts 'hamt:pv' option; do
       case "$option" in
         h) echo "$usage"
            exit
@@ -270,6 +275,8 @@ where:
         m) compareto=origin/master
            ;;
         t) compareto="$OPTARG"
+           ;;
+        p) showancestors=true
            ;;
         v) verbose=true
            ;;
@@ -323,14 +330,15 @@ where:
         then preBranch="* "
         else
             preBranch=". "
-            if [ -n "$gbs_show_if_merged" ]
+            if [ -n "$showancestors" ]
             then
                 local_branch_commit_hash=`git rev-parse --verify "$local"`
                 common_commit_between_branch_and_current=`git merge-base "$local" "$current_branch"`
                 if [ "$common_commit_between_branch_and_current" = "$local_branch_commit_hash" ]
-                then preBranch="~ "
-                else preBranch="x "
+                then preBranch="| "
+                else preBranch="/ "
                 fi
+                # I considered using "+" and "-" instead, but these are harder to visually distinguish from "*" and each other.
             fi
         fi
         if [ $verbose ] || [ $LEFT_AHEAD -gt 0 ] || [ $RIGHT_AHEAD -gt 0 ] || [ "$local" = "$current_branch" ] ; then
@@ -351,32 +359,40 @@ gbs() {
   # git branch -v can partially do this already.  It shows e.g. [behind 12] after the commit hash but before the message.  Unfortunately it has no color and does not stand out very well.
   # Or perhaps better: https://gist.github.com/jehiah/1288596 (from http://stackoverflow.com/questions/7773939/show-git-ahead-and-behind-info-for-all-branches-including-remotes )
 
-  local reset_color=`tput sgr0`
-  local ahead_color=`tput setaf 2 ; tput bold`
-  local behind_color=`tput setaf 1 ; tput bold`
-  # You can use the configured/default colors, but I quite like remote blank!  (The default red confuses behind_color.)
-  local current_branch_color=`git config --get-color color.branch.current green`
-  # I don't think anyone really wants color.  If you do, uncomment these:
-  local local_branch_color=`git config --get-color color.branch.local white`
-  #local remote_branch_color=`git config --get-color color.branch.remote red`
-  local merged_branch_color=`git config --get-color color.branch.ancestor cyan`
+  local show_color
+  local color_setting=`git config --get color.ui`
+  if [ "$color_setting" = 'true' ] || [ "$color_setting" = 'auto' ] && [ -t 1 ]
+  then show_color=true
+  fi
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
-  else git_branch_status -a -v "$@"
+  else git_branch_status -a -v -p "$@"
   fi |
   column -s ' ' -t | sed 's+ \( *\)+\1+g' |
   #columnise |
-  #highlight -bold "(ahead *[1-9][0-9]*)" green |
-  #highlight -bold "(behind *[1-9][0-9]*)" red |
-  sed "
-    s+(ahead *[1-9][0-9]*)+$ahead_color\0$reset_color+
-    s+(behind *[1-9][0-9]*)+$behind_color\0$reset_color+
-    s+^[*] *\([^ ]*\)+* $current_branch_color\1$reset_color+
-    s+^[.x] *\([^ ]*\)+  $local_branch_color\1$reset_color+
-    s+^[~] *\([^ ]*\)+  $merged_branch_color\1$reset_color+
-    s+[^ ]*$+$remote_branch_color\0$reset_color+
-  "
+  if [ -n "$show_color" ]
+  then
+    # We should probably only do this jazz if $() = 'true' or = 'auto' && [ -t 1 ]
+    local reset_color=`tput sgr0`
+    local ahead_color=`tput setaf 2 ; tput bold`    # green
+    local behind_color=`tput setaf 1 ; tput bold`   # red
+    # You can use the configured/default colors, but I quite like remote blank!  (The default red confuses behind_color.)
+    local current_branch_color=`git config --get-color color.branch.current green`
+    local local_branch_color=`git config --get-color color.branch.local white`
+    # The default remote branch color is red, but that conflicts with behind_color, so I have set it to 'white' here.
+    local remote_branch_color=`git config --get-color color.branch.remote white`
+    local ancestor_branch_color=`git config --get-color color.branch.ancestor cyan`
+    sed "
+      s+\()  *\)\([^ ]*\)$+\1$remote_branch_color\2$reset_color+
+      s+(ahead *[1-9][0-9]*)+$ahead_color\0$reset_color+
+      s+(behind *[1-9][0-9]*)+$behind_color\0$reset_color+
+      s+^[*] *\([^ ]*\)+* $current_branch_color\1$reset_color+
+      s+^[./x-] *\([^ ]*\)+  $local_branch_color\1$reset_color+
+      s+^[\\+|] *\([^ ]*\)+  $ancestor_branch_color\1$reset_color+
+    "
+  else cat
+  fi
 }
 
 git_get_current_branch() {
@@ -394,7 +410,6 @@ git_find_branch_start_commit() {
 		#other_branch=master
 		#other_branch=origin/master
 		# TODO: This is a hack for my current project.  It should be set as an option, not hard-coded in here.  E.g. GIT_MERGE_BASE_DEFAULT_OTHER_BRANCH_NAME
-		#other_branch=v3-alpha-stable
 		other_branch=v3-master
 	fi
 
@@ -417,7 +432,8 @@ git_find_branch_start() {
 
 	if [ -n "$commitId" ]
 	then
-		echo "$current_branch and $other_branch share common commit:"
+		# These vars have disappeared inside the refactored function :P
+		#echo "$current_branch and $other_branch share common commit:"
 		#git log --pretty=oneline -1 "$commitId"
 		glc -1 "$commitId"
 	fi

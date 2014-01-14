@@ -29,8 +29,12 @@ nmap [6;5~ <C-PageDown>
 nmap [5;5~ <C-PageUp>
 
 "" But in the QuickFixList, we want Ctrl-PageUp/PageDown to cycle "cope tabs", not buffers.
-autocmd BufReadPost quickfix nnoremap <buffer> <C-PageDown> :cnewer<CR>
-autocmd BufReadPost quickfix nnoremap <buffer> <C-PageUp> :colder<CR>
+"autocmd BufReadPost quickfix nnoremap <buffer> <C-PageDown> :cnewer<CR>
+"autocmd BufReadPost quickfix nnoremap <buffer> <C-PageUp> :colder<CR>
+" You had better only use these versions if you also load quickfix_title_control.vim!
+autocmd BufReadPost quickfix nnoremap <buffer> <C-PageDown> :cnewer<CR>:call g:RestoreQuickfixTitle()<CR>
+autocmd BufReadPost quickfix nnoremap <buffer> <C-PageUp> :colder<CR>:call g:RestoreQuickfixTitle()<CR>
+" TODO: If we push quickfix_title_control.vim into autoload, it may be easier to check if the function exists in advance, allowing us to decide which of the above keybinds to set.
 
 "" Sometimes I want to re-arrange the order of the buffers in my list.  After
 "" years of nothing, I now at least found a way to push buffers to the end, by
@@ -332,6 +336,8 @@ nnoremap <Leader>w :set invwrap<Enter>
 "" Select buffer by any part of filename and Tab completion or arrows, or by number
 "nnoremap <C-E> :ls<CR>:b<space>
 nnoremap <C-E> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
+"" An interesting alternative, assuming you have MBE as your first window:
+"nnoremap <C-E> 1<C-W><C-W>/
 "" Select file by filename with completion
 " nnoremap <C-E> :ls<CR>:e<space>
 "" Select by name with completion or file without (joeys_buffer_switcher.vim)

@@ -1,4 +1,14 @@
 sudo ln -s $PWD /usr/share/fonts/truetype/
 
-# On some systems the folder may be called truetype1
+# On some systems the target folder may be called truetype1.
 # You may also need to run ./rebuild_font_cache.sh but I did not need this on Ubuntu 12.4
+
+# Curiously, if you install QuartX on Mac OSX, it will immediately provide:
+
+    -*-lucidatypewriter-*-*-*-*-*-80-*-*-m-*-*-*
+
+for you, but not:
+
+    -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
+
+

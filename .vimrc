@@ -62,6 +62,11 @@ autocmd VimLeave * silent !stty ixon
 		" Changing window width with Tlist_Inc_Winwidth doesn't seem to work properly
 		" under compiz, it messes the window up, requiring a Ctrl-L to fix it.
 
+		" Macs come with the original ctags, not exuberant-ctags, so we need to 'brew install ctags'
+		if executable('/usr/local/bin/ctags')
+			let g:Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
+		endif
+
 		"" Taglist needs to know about any custom tag types declared in ~/.ctags
 		"
 		" The second part of the varname is the Vim &filetype associated with the file.
@@ -124,6 +129,7 @@ autocmd VimLeave * silent !stty ixon
 	let g:Grep_Default_Filelist .= " --exclude-dir=CVS --exclude-dir=.git --exclude-dir=bin --exclude-dir=build --exclude-dir=node_modules"
 	" General exclude files:
 	let g:Grep_Default_Filelist .= " --exclude=tags --exclude=\'.*.sw?\' --exclude=\\*.min.js --exclude=\\*.min.css --exclude=\'*.log\'"
+	let g:Grep_Default_Filelist .= " --exclude=.tags --exclude=.tags_sorted_by_file"   " Tags files built by CTags plugin for Sublime Text
 	" For Haxe:
 	let g:Grep_Default_Filelist .= " --exclude-dir=_build"
 	" For ~/.vim/sessions:
@@ -131,7 +137,11 @@ autocmd VimLeave * silent !stty ixon
 	" For Piktochart:
 	let g:Grep_Default_Filelist .= " --exclude-dir=tmp"     " Assets compiled by Ruby
 	let g:Grep_Default_Filelist .= " --exclude-dir=pikto"   " Code for old version
-	let g:Grep_Default_Filelist .= " --exclude-dir=public/assets"   " Precompiled assets (e.g. images)
+	" This was not working on my Mac - using (BSD grep) 2.5.1-FreeBSD
+	"let g:Grep_Default_Filelist .= " --exclude-dir=public/assets"   " Precompiled assets (e.g. images)
+	" However this works fine there!
+	let g:Grep_Default_Filelist .= " --exclude-dir=./public/assets"   " Precompiled assets (e.g. images)
+	" Of course 'public' or 'assets' on its own should work fine, but we don't want that!
 
 	let g:ConqueTerm_Color = 1
 	" let g:ConqueTerm_CloseOnEnd = 1
@@ -328,6 +338,13 @@ autocmd VimLeave * silent !stty ixon
 			"" I know you have come back here to switch away from Lucida Console.  Don't!
 			"" Now I have stopped using lightdm, all my fonts are appearing differently.  Lucida looks how I want it in GVim yay!
 			:set guifont=Lucida\ Console\ 8
+		endif
+		" TODO for Mac:
+		if $_system_name == 'OSX'
+			" Popular, aspect like DejaVu Sans Mono / Liberation / Ubuntu Mono
+			":set guifont=Monaco:h12
+			" But I prefer the shorter one!
+			:set guifont=Menlo\ Regular:h11
 		endif
 		" Hide the menu and toolbar which I never use.
 		:set guioptions-=m
@@ -575,6 +592,8 @@ autocmd VimLeave * silent !stty ixon
 	" Issues: Weird things happen when building up a String like "text "+var+" text".  I sometimes end up with  " " at the end of the line!
 
 	"call add(vamAddons,"github:mhinz/vim-startify")       " Session manager and MRU, on start page or on demand
+
+	"call add(vamAddons, "github:koron/nyancat-vim")       " You might need this, but you probably won't
 
 	" == My Plugins from the Cloud ==
 	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
