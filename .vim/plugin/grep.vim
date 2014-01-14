@@ -185,37 +185,37 @@ let loaded_grep = 1
 " Location of the grep utility
 if !exists("Grep_Path")
     "let Grep_Path = 'd:\unix_tools\grep.exe'
-    let Grep_Path = '/bin/grep'
+    let Grep_Path = 'grep'
 endif
 
 " Location of the fgrep utility
 if !exists("Fgrep_Path")
     "let Fgrep_Path = 'd:\unix_tools\fgrep.exe'
-    let Fgrep_Path = '/bin/fgrep'
+    let Fgrep_Path = 'fgrep'
 endif
 
 " Location of the egrep utility
 if !exists("Egrep_Path")
     "let Egrep_Path = 'd:\unix_tools\egrep.exe'
-    let Egrep_Path = '/bin/egrep'
+    let Egrep_Path = 'egrep'
 endif
 
 " Location of the agrep utility
 if !exists("Agrep_Path")
     "let Agrep_Path = 'd:\unix_tools\agrep.exe'
-    let Agrep_Path = '/usr/local/bin/agrep'
+    let Agrep_Path = 'agrep'
 endif
 
 " Location of the find utility
 if !exists("Grep_Find_Path")
     "let Grep_Find_Path = 'd:\unix_tools\find.exe'
-    let Grep_Find_Path = '/usr/bin/find'
+    let Grep_Find_Path = 'find'
 endif
 
 " Location of the xargs utility
 if !exists("Grep_Xargs_Path")
     "let Grep_Xargs_Path = 'd:\unix_tools\xargs.exe'
-    let Grep_Xargs_Path = '/usr/bin/xargs'
+    let Grep_Xargs_Path = 'xargs'
 endif
 
 " Open the Grep output window.  Set this variable to zero, to not open
