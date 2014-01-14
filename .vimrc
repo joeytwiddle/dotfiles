@@ -593,6 +593,8 @@ autocmd VimLeave * silent !stty ixon
 
 	"call add(vamAddons,"github:mhinz/vim-startify")       " Session manager and MRU, on start page or on demand
 
+	"call add(vamAddons, "github:koron/nyancat-vim")       " You might need this, but you probably won't
+
 	" == My Plugins from the Cloud ==
 	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
 	call add(vamAddons,"github:joeytwiddle/taglist.vim") " Joey's taglist.vim with vague indentation mode and other madness

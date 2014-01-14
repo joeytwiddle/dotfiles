@@ -380,6 +380,7 @@ function! s:RunGrepCmd(cmd, pattern)
         " But with statusline it does not survive :colder :cnewer
         let &l:statusline = 'Search results for ' . a:pattern . ''
         " This gets overwritten.  Find out who is doing that with verbose.
+        " The answer on my machine was: Vim's ftplugin/qf.vim sets it.
         " If no luck changing it, try changing w:quickfix_title instead.
         " http://superuser.com/questions/356912/how-do-i-change-the-quickix-title-status-bar-in-vim
         "let w:quickfix_title = '[Search results for ' . a:pattern . ']'
@@ -390,7 +391,14 @@ function! s:RunGrepCmd(cmd, pattern)
         " This would work by mapping w:quickfix_title through a dictionary, so that when cnewer/colder are used again later, we can follow the mapping and set the statusline again!
         " It should also perform cleanup of old entries during very long sessions with heavy use of quickfix titles.
         "
+        " In fact the value that gets set for w:quickfix_title changes as we use :colder and :cnewer, so we could use its current value to map to our desired statusline or quickfix_title
+        "
         " Finally, this script should only use the magic function if it can see it is available.
+
+        " DONE:
+        if exists('*g:SetQuickfixTitle')
+            call g:SetQuickfixTitle(&l:statusline)
+        endif
     endif
 
     " Jump to the first error (mainly because it forces the focus back to
