@@ -18,7 +18,7 @@
 [color "branch"]
 	current = green bold reverse   # default = green
 	local = yellow   # default = white
-	remote = red     # default = red
+	remote = white   # default = red
 	ancestor = green # Non-standard, created by Joey for git_branch_status (gbs) in git_aliases
 [color "diff"]
 	# Commit messages and author will be pure white; I cannot find a place to configure them.
@@ -26,7 +26,7 @@
 	commit = yellow bold reverse
 	meta = cyan bold
 	frag = magenta
-	# Believe it or not, in my xterm 'white' is a little bit darker than ffffff.  Put 'white' here to get a very light grey :-p
+	# Actually white produces ^[[37m, which is slightly off-white.  Remove these for normal color.
 	func = white
 	plain = white
 	old = red bold
@@ -38,8 +38,8 @@
 	untracked = cyan
 
 # Highlight whitespace in diffs
-[color]
-	ui = true
+#[color]
+#	ui = true    # already set above
 [color "diff"]
 	# Unfortunately this only shows for *added* lines, not for *removed* lines.  At time of writing, git had no way of doing that.  http://stackoverflow.com/questions/5257553/coloring-white-space-in-git-diffs-output
 	whitespace = blue reverse

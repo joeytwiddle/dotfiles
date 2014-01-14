@@ -10,7 +10,7 @@
 "     This line is indented and also very
 "     \ long so it was displayed wrapped.
 "
-" Warning: Because it changes showbreak, it will cause lines to visibly shift left or right, and possibly up or down, when a new indent is applied.  To reduce how often this happens, you can enable breakindent_update_rarely, breakindent_match_gap or breakindent_never_shrink.
+" Warning: Because it changes showbreak, it will cause lines to visibly shift left or right, and possibly up or down, when a new indent is applied.  To reduce how often this happens, you can enable breakindent_update_rarely or breakindent_never_shrink.
 "
 " BreakIndent Beta is a weak approximation of the 'breakindent' patch, which requires recompilation of Vim's source-code.  Unlike the patch, this script *cannot* present a different indent for each line.  Instead it updates the showbreak option to fit the indent of the *current* cursor line.  Unfortunately this means that showbreak can change often, and other lines on the display may not appear at the ideal indent.
 "
@@ -37,6 +37,7 @@
 "   :let g:breakindent_match_gap = 1      " Enable first-word matching
 "   :let g:breakindent_gapchar = '\'      " The symbol used below the word
 "   :let g:breakindent_symbol = ' '       " After gapchars just put a space
+"   :let g:breakindent_use_first_word = 1   " Use the first word as the symbol
 "
 " Alternative: The real breakindent patch is being kept up-to-date at: https://retracile.net/wiki/VimBreakIndent   (Look for the "Original Format" link at the bottom of the page)
 
@@ -64,7 +65,7 @@ if !exists("g:breakindent_symbol")
   let g:breakindent_symbol = '\\ '
 endif
 
-" This option adds a gap that updates according to the length of the first word in the current line.  This can help to neatly align text following an initial comment symbol such as # or " or //.  It automatically enables breakindent_update_rarely and disables breakindent_never_shrink.
+" This option adds a gap that updates according to the length of the first word in the current line.  This can help to neatly align text following an initial comment symbol such as # or " or //.
 if !exists("g:breakindent_match_gap")
   let g:breakindent_match_gap = 0
 endif
@@ -72,6 +73,11 @@ endif
 " Character used to build the gap symbol.
 if !exists("g:breakindent_gapchar")
   let g:breakindent_gapchar = ':'
+endif
+
+" Instead of matching the *length* of the first word, this actually copies the first word to use as the breakindent symbol (and appends a space).  This can look neat for comments, but can also be misleading: only the colour indicates that the breakindentsymbol is NOT part of the text!  For non-comment wrapped lines it just looks stupid/confusing.  A future improvement could allow a regexp to be provided for which the word would be copied, otherwise only its length would be used.
+if !exists("g:breakindent_use_first_word")
+  let g:breakindent_use_first_word = 0
 endif
 
 " This will only update the showbreak setting when we are focused on a line which is being wrapped.
@@ -117,7 +123,7 @@ function! s:UpdateBreakIndent()
     " BUG: If showbreak is particularly high on entry, then the current line might be wrapped now, even if it wouldn't be with a recalculated showbreak!
   endif
 
-  if g:breakindent_never_shrink && !g:breakindent_match_gap
+  if g:breakindent_never_shrink
     if showIndent > g:breakindent_max_so_far
       let g:breakindent_max_so_far = showIndent
     endif
@@ -129,7 +135,7 @@ function! s:UpdateBreakIndent()
 
   let bis = g:breakindent_symbol
 
-  if g:breakindent_match_gap
+  if g:breakindent_match_gap || g:breakindent_use_first_word
     " It seems pointless to try to learn a new gap count from a line which is not itself long enough to wrap.
     if screenLineLength <= winwidth(".")
       " Because we don't remember the last bis we set, we avoid updating the indent at all.
@@ -137,11 +143,15 @@ function! s:UpdateBreakIndent()
     endif
     let lineAfterIndent = substitute(line, "^[ 	]*", "", "")
     let firstWord = substitute(lineAfterIndent, "[ 	].*", "", "")
-    let gapWidth = len(firstWord)
-    " Sanity check - never use more than a quarter of what is left for the gap!
-    let maxWidth = (winwidth(".") - showIndent) / 4
-    let gapWidth = min([gapWidth,maxWidth])
-    let bis = repeat(strpart(g:breakindent_gapchar,0,1), gapWidth) . g:breakindent_symbol
+    if g:breakindent_use_first_word
+      let bis = firstWord . ' '
+    else
+      let gapWidth = len(firstWord)
+      " Sanity check - never use more than a quarter of what is left for the gap!
+      let maxWidth = (winwidth(".") - showIndent) / 4
+      let gapWidth = min([gapWidth,maxWidth])
+      let bis = repeat(strpart(g:breakindent_gapchar,0,1), gapWidth) . g:breakindent_symbol
+    endif
   endif
 
   " It's a global, so forget about setlocal :P

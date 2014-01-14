@@ -3,7 +3,8 @@
 "
 " Thanks clipon and osse
 
-nnoremap <silent> <Space> :call <SID>ShowTagDecl()<CR><Space>
+" I considered putting <Space> at the end of the RHS, but this causes e.g. 5<Space> to break.
+nnoremap <silent> <Space> <Space>:call <SID>ShowTagDecl()<CR>
 
 function! s:ShowTagDecl()
   redir => output
