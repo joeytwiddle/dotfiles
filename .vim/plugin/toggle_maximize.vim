@@ -218,7 +218,7 @@ augroup ToggleMaximizeCheck
   autocmd WinEnter * call s:CheckWinEnter()
 augroup END
 
-function s:CheckWinLeave()
+function! s:CheckWinLeave()
   if g:ToggleMaximize_RestoreWhenSwitchingWindow
     if g:isToggledVertically
       let s:wasToggledVertically = 1
@@ -238,7 +238,7 @@ function s:CheckWinLeave()
   endif
 endfunction
 
-function s:CheckWinEnter()
+function! s:CheckWinEnter()
   return
   if s:wasToggledVertically
     call s:ToggleMaximizeVertically()
