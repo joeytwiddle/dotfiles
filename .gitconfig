@@ -241,3 +241,5 @@
 	#pretty = %C(yellow bold reverse)%h%C(reset)%C(magenta bold)%d%C(black bold) %s %C(cyan)- %an (%ar)%Creset
 	# Unfortunately, setting these will apply to all logs, so we can't ever see a normal log!
 
+[push]
+	default = simple
