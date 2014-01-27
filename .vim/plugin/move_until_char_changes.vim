@@ -20,6 +20,9 @@ nnoremap <silent> <C-S-Down> :call <SID>FindNextChange("j")<Enter>
 " Attempt to work in Visual mode; failed:
 "vnoremap <silent> <C-S-Up> :<C-U>call <SID>FindNextChange("k")<Enter>
 "vnoremap <silent> <C-S-Down> :<C-U>call <SID>FindNextChange("j")<Enter>
+" On Mac OSX, Mission Control hijacks these keys, so we create a couple more:
+nnoremap <silent> g<S-Up> :call <SID>FindNextChange("k")<Enter>
+nnoremap <silent> g<S-Down> :call <SID>FindNextChange("j")<Enter>
 
 function! s:FindNextChange(moveKey)
   let startCol = wincol()
