@@ -34,10 +34,11 @@ gs() {
 		git -c color.status=always status "$@" |
 		#more
 		# On Mac, more cannot handle color.  Unless it is given -R.  But Linux more does not recognise that argument!  :P
-		less -R
+		#less -R
+		# But can we use the more-like options for less below on Mac?
 		# The problem with doing this search with more is that more skips the first "branch" line, even though it is a match.  And it does not even allow paging up to find it!
 		#more +'/^# [^ ].*'
-		#less -R +'/^# [^ ].*' -E -X --tilde
+		less -R +'/^# [^ ].*' -E -X --tilde
 		#pager -R +'/^# [^ ].*' -E -X --tilde
 	else git status "$@"
 	fi
@@ -143,6 +144,12 @@ alias glf='glc --stat'
 # Just commit info, one per line
 
 alias gb='git branch'
+
+# Git View Branches (tree-like)
+alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
+# For remotes too, add: --all
+# Could also be Git View Tree or Git Tree View, although I might want to save those for gitv!  :P
+
 alias gco='git checkout'
 alias gi='git commit --interactive'
 
