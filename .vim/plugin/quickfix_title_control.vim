@@ -5,6 +5,9 @@
 " Use case: When walking through my previous :grep searches with :colder and
 " :cnewer, the titles look ugly.  I would like to display what the list really
 " represents, in human language.
+"
+" Solution: I actually use an ancient plugin called grep.vim.  I added a line
+" to this which calls g:SetQuickfixTitle() when it creates a new search.
 
 let s:mappedTitles = {}
 

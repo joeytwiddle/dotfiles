@@ -242,4 +242,7 @@
 	# Unfortunately, setting these will apply to all logs, so we can't ever see a normal log!
 
 [push]
-	default = simple
+	# Well this is not available in git 1.7.10.4
+	#default = simple
+	default = current
+
