@@ -406,8 +406,10 @@ gbs() {
 }
 
 git_get_current_branch() {
-	#git rev-parse --abbrev-ref HEAD
+	# symbolic-ref fails during an incomplete rebase with `fatal: ref HEAD is not a symbolic ref`
 	git symbolic-ref --short HEAD
+	# rev-parse does not fail, but responds with "HEAD" instead of the branch name.
+	#git rev-parse --abbrev-ref HEAD
 }
 
 git_find_branch_start_commit() {
