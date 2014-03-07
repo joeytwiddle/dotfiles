@@ -156,7 +156,7 @@
 	# From here but renamed: http://stackoverflow.com/questions/4577874/git-automatically-fast-forward-all-tracking-branches-on-pull#18817899
 	merge-all-using-checkout = !"for b in $(git for-each-ref refs/heads --format='%(refname)') ; do git checkout ${b#refs/heads/} ; git pull --ff-only ; done"
 
-	# My version which updates local branches to their remotes without changing the working tree (does not use checkout).
+	# My version which updates local branches to their remotes without changing the working tree (does not use checkout; is much faster).
 	# WARNING: Does not lookup what each branch is tracking!  Instead it just assumes branch "$local" tracks "remote/$local"
 	# To do it properly, we could get hold of the upstream names like this: git for-each-ref refs/heads --format="%(refname:short) -> %(upstream:short)"
 	# Also beware, if applied to the current branch, working files will be behind and not updated.  (In my case, git still claimed an empty diff, only noticing the differences after a reset!  Git 1.7.10.4)
@@ -242,4 +242,7 @@
 	# Unfortunately, setting these will apply to all logs, so we can't ever see a normal log!
 
 [push]
-	default = simple
+	# Well this is not available in git 1.7.10.4
+	#default = simple
+	default = current
+

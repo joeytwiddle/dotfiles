@@ -34,7 +34,10 @@ gs() {
 		git -c color.status=always status "$@" |
 		#more
 		# On Mac, more cannot handle color.  Unless it is given -R.  But Linux more does not recognise that argument!  :P
-		less -R
+		# I think the disadvantage with less might be when the output is lesser than the screen height, then more will just display those few lines and quit, but less will occupy the entire screen.  Also, does less destroy scrollback, while more preserves it?
+		less -R -E -X
+		# But can we use the more-like options for less below on Mac?
+                # Hmmm that's not quite as neat: on short output, the bottom part of the screen is filled with empty lines.
 		# The problem with doing this search with more is that more skips the first "branch" line, even though it is a match.  And it does not even allow paging up to find it!
 		#more +'/^# [^ ].*'
 		#less -R +'/^# [^ ].*' -E -X --tilde
@@ -81,7 +84,7 @@ gitlog() {
 		git -c color.ui=always log "$@" |
 		#less -R +'/^(commit|diff).*' -X
 		# Needed when using --graph and -p
-		less -R +'/((^|\*[ |]*)commit .*|(^|\| )diff --git.*)'
+		less -R +'/((^|\*[ |]*)commit .*|(^|\| +)diff --git.*)'
 	else git log "$@"
 	fi
 	# BUG TODO: The --git may show as --combined when using gl -c, so change it for just -- after the pending merge.
@@ -99,6 +102,7 @@ gitlog() {
 # I think I originally added -m because I *thought* git log was not showing commit diffs from merged branches.  In fact it does, but it shows them individually, and leaves the merge commit itself empty.
 # I am now finding this a little more informative than glg: git log -p --graph --decorate
 # I rarely want to use glp directly; I prefer glg because it customizes the color of the commit message.
+# OK so I recently had to track down some code which had been deleted/lost during a merge.  I was using git log <filename>.  The *only* way which worked was -c; -cc or neither would not display this line!  So -c all the way... at least for that case!  If -c causes duplicate information to be displayed, perhaps we should use it at the same time as not showing branches.
 alias glp='gitlog -p -U2 --stat'
 # Here --stat show a quick summary of changed files, before actually showing the diffs.  I rather enjoy this when using 'gl' as it lets me decide from the top of each commit whether there are any files I am interested in, and if not I can happily skip straight to the next commit.  In other situations, e.g. when I am planning to read all the details, --stat is just chaff.
 # "Git Log Grey" - Like 'gl' except we present my favourite colors
@@ -143,6 +147,12 @@ alias glf='glc --stat'
 # Just commit info, one per line
 
 alias gb='git branch'
+
+# Git View Branches (tree-like)
+alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
+# For remotes too, add: --all
+# Could also be Git View Tree or Git Tree View, although I might want to save those for gitv!  :P
+
 alias gco='git checkout'
 alias gi='git commit --interactive'
 
@@ -396,8 +406,10 @@ gbs() {
 }
 
 git_get_current_branch() {
-	#git rev-parse --abbrev-ref HEAD
+	# symbolic-ref fails during an incomplete rebase with `fatal: ref HEAD is not a symbolic ref`
 	git symbolic-ref --short HEAD
+	# rev-parse does not fail, but responds with "HEAD" instead of the branch name.
+	#git rev-parse --abbrev-ref HEAD
 }
 
 git_find_branch_start_commit() {

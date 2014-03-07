@@ -1,13 +1,18 @@
 " Do final initialisation of Vim.
 " Opens all the IDE-like widgets I like to use in Vim.
 
+if exists('s:JoeysFinalSetup_Ran_Already')
+	echo "JoeysFinalSetup refusing to run a second time."
+	finish
+endif
+
 " We don't want to run until all the plugins have loaded.  So we wait for a CursorHold event.
 augroup JFSOnceOnly
 	au!
 	au CursorHold * call <SID>JoeysFinalSetup()
 augroup END
 
-function s:JoeysFinalSetup()
+function! s:JoeysFinalSetup()
 	augroup JFSOnceOnly
 		au!
 	augroup END
