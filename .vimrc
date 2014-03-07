@@ -130,7 +130,7 @@ autocmd VimLeave * silent !stty ixon
 	let g:Grep_Default_Filelist .= " --exclude-dir=sessions"
 	" For Piktochart:
 	let g:Grep_Default_Filelist .= " --exclude-dir=tmp"     " Assets compiled by Ruby
-	let g:Grep_Default_Filelist .= " --exclude-dir=pikto"   " Code for old version
+	"let g:Grep_Default_Filelist .= " --exclude-dir=pikto"   " Code for old version
 	let g:Grep_Default_Filelist .= " --exclude-dir=public/assets"   " Precompiled assets (e.g. images)
 
 	let g:ConqueTerm_Color = 1
