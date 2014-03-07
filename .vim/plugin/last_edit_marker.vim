@@ -4,6 +4,8 @@
 " files to do some research.  This saves us from hitting Ctrl-O repeatedly!
 
 nmap <C-y> g'Z
+" I tend to forget that there is a ' in g'Z so I just hit gZ.  Let's make that work!  I don't think I'm overwriting any default.
+nmap gZ g'Z
 
 augroup LastEditMarker
   autocmd!
