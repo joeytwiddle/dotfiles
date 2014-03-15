@@ -288,6 +288,12 @@ if !exists("Grep_Skip_Files")
     let Grep_Skip_Files = '*~ *,v s.*'
 endif
 
+let Grep_Using_CodeSearch = ( match(Grep_Path, '^csearch$\|/csearch$') >= 0 ? 1 : 0 )
+
+if !exists("Grep_Allow_Empty_FileList")
+    let Grep_Allow_Empty_FileList = Grep_Using_CodeSearch
+endif
+
 " --------------------- Do not edit after this line ------------------------
 
 " Map a key to invoke grep on a word under cursor.
@@ -333,7 +339,8 @@ function! s:RunGrepCmd(cmd, pattern)
     "" DOES NOT WORK!  so disabled
     " call s:AvoidPressEnterMessage()
 
-    " echo "command: " . a:cmd
+    "echo "Running: " . a:cmd
+    "sleep 2
     " silent did not help either
     silent let cmd_output = system(a:cmd)
     " echo "output: " . cmd_output
@@ -607,9 +614,10 @@ function! s:RunGrepBuffer(...)
 
     " Add /dev/null to the list of filenames, so that grep print the
     " filename and linenumber when grepping in a single file
-    let filenames = filenames . " " . g:Grep_Null_Device
-    let cmd = g:Grep_Path . " " . grep_opt . " -n -- "
-    let cmd = cmd . pattern . " " . filenames
+    if !g:Grep_Using_CodeSearch
+        let filenames = " -- " . filenames . " " . g:Grep_Null_Device
+    endif
+    let cmd = g:Grep_Path . " " . grep_opt . " -n " . pattern . " " . filenames
 
     call s:RunGrepCmd(cmd, pattern)
 endfunction
@@ -635,7 +643,7 @@ function! s:RunGrepArgs(...)
     endwhile
 
     " No arguments
-    if filenames == ""
+    if filenames == "" && !g:Grep_Allow_Empty_FileList
         echohl WarningMsg | 
         \ echomsg "Error: No filenames specified in the argument list " |
         \ echohl None
@@ -659,9 +667,10 @@ function! s:RunGrepArgs(...)
 
     " Add /dev/null to the list of filenames, so that grep print the
     " filename and linenumber when grepping in a single file
-    let filenames = filenames . " " . g:Grep_Null_Device
-    let cmd = g:Grep_Path . " " . grep_opt . " -n -- "
-    let cmd = cmd . pattern . " " . filenames
+    if !g:Grep_Using_CodeSearch
+        let filenames = " -- " . filenames . " " . g:Grep_Null_Device
+    endif
+    let cmd = g:Grep_Path . " " . grep_opt . " -n " . pattern . " " . filenames
 
     call s:RunGrepCmd(cmd, pattern)
 endfunction
@@ -718,7 +727,7 @@ function! RunGrep(grep_cmd, ...)
     let pattern = g:Grep_Shell_Quote_Char . pattern . g:Grep_Shell_Quote_Char
 
     let filenames = input("Grep in files: ", g:Grep_Default_Filelist, "file")
-    if filenames == ""
+    if filenames == "" && !g:Grep_Allow_Empty_FileList
         return
     endif
     let g:Grep_Default_Filelist = filenames
@@ -727,19 +736,19 @@ function! RunGrep(grep_cmd, ...)
 
     " Add /dev/null to the list of filenames, so that grep print the
     " filename and linenumber when grepping in a single file
+    if !g:Grep_Using_CodeSearch
+        let filenames = " -- " . filenames . " " . g:Grep_Null_Device
+    endif
+    let cmd = grep_path . " " . grep_opt . " -n " . grep_expr_option . " " . pattern . " " . filenames
     let filenames = filenames . " " . g:Grep_Null_Device
-    let cmd = grep_path . " " . grep_opt . " -n "
-    let cmd = cmd . grep_expr_option . " "
-    let cmd = cmd . pattern
     "" Joey:
     " let cmd = cmd . "\\<" . pattern . "\\>"
-    let cmd = cmd . " " . filenames
     "" Joey:
     " let cmd = cmd . " 2>/dev/null"
     " let cmd = cmd . " | " . g:Grep_Path . " -v '^\\\(grep: .*: Is a directory\|Binary file .*matches\\\)$'"
     let cmd = cmd . " 2>&1"
-    let cmd = cmd . " | " . g:Grep_Path . " -v '^Binary file .*matches$'"
-    let cmd = cmd . " | " . g:Grep_Path . " -v '^grep: .*: Is a directory$'"
+    let cmd = cmd . " | grep -v '^Binary file .*matches$'"
+    let cmd = cmd . " | grep -v '^grep: .*: Is a directory$'"
 
     call s:RunGrepCmd(cmd, pattern)
 endfunction
