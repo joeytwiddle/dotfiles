@@ -31,24 +31,19 @@
 	plain = white
 	old = red bold
 	new = green bold
+	# A known "bug" is that 'whitespace' only shows for *added* lines, not for *removed* lines.  All it ever did was show me ^M for DOS files.  But the default colour is red on white; I find this one less disruptive.
+	whitespace = blue reverse
 [color "status"]
 	branch = green bold reverse
 	added = yellow
 	changed = green
 	untracked = cyan
 
-# Highlight whitespace in diffs
-#[color]
-#	ui = true    # already set above
-[color "diff"]
-	# Unfortunately this only shows for *added* lines, not for *removed* lines.  At time of writing, git had no way of doing that.  http://stackoverflow.com/questions/5257553/coloring-white-space-in-git-diffs-output
-	whitespace = blue reverse
 
 
-
-# May not be for everyone!  Actually does some stuff!
-# TODO: Look up what the hell this does and document it!
 [core]
+	# May not be for everyone!  Actually changes your files as you commit them!
+	# TODO: Look up what the hell this does and document it!
 	#whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 	excludesfile = /home/joey/.gitignore.global
 	# Wrap lines when reading diffs
@@ -59,6 +54,7 @@
 
 # Aliases
 [alias]
+	# I never actually use these, since I have shell aliases to avoid typing 'git' so often!
 	st = status
 	ci = commit
 	br = branch
@@ -155,6 +151,11 @@
 
 	# From here but renamed: http://stackoverflow.com/questions/4577874/git-automatically-fast-forward-all-tracking-branches-on-pull#18817899
 	merge-all-using-checkout = !"for b in $(git for-each-ref refs/heads --format='%(refname)') ; do git checkout ${b#refs/heads/} ; git pull --ff-only ; done"
+
+	# A merge with uncommitted changes will happen fine if it does not affect the uncommitted files, but otherwise it will fail, and request that you stash your changes first.
+	# This shortcut just does what I would usually do by hand
+	merge-with-stashing = !git stash && git merge "$1" && git stash pop
+	merge-with-stash = merge-with-stashing
 
 	# My version which updates local branches to their remotes without changing the working tree (does not use checkout).
 	# WARNING: Does not lookup or merge from what each branch is tracking!  Instead it just assumes branch "$local" tracks "remote/$local"
