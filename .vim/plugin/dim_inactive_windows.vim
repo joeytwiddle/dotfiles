@@ -4,10 +4,19 @@
 " Now shared here: http://stackoverflow.com/questions/8415828/vim-dim-inactive-split-panes
 " XXX: this will only work with lines containing text (i.e. not '~')
 
+" NOTE: One disadvantage of this plugin is that the background highlight set
+" on inactive windows may override useful backgrounds.  For example, I use a
+" background colour in taglist to indicate the current tag, and a background
+" highlight in the QuickFix window to indicate the current 'error' line.
+" Those highlights disappear when dim_inactive_windows dims those windows (at
+" least on MacVim they do).
+
 highlight InactiveWindows ctermbg=black guibg=#203838
 
 function! s:DimInactiveWindows()
 
+  " I want this because I use a different plugin in non-GUI mode to flash
+  " the active window when focus changes.  Might be better as an option.
   if has('gui_running') != 1
     return
   endif

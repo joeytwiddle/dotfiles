@@ -155,9 +155,9 @@
 	# A merge with uncommitted changes will happen fine if it does not affect the uncommitted files, but otherwise it will fail, and request that you stash your changes first.
 	# This shortcut just does what I would usually do by hand
 	merge-with-stashing = !git stash && git merge "$1" && git stash pop
-	merge-with-stash = merge-with-stashing
+	merge-with-stash = !git merge-with-stashing "$@"
 
-	# My version which updates local branches to their remotes without changing the working tree (does not use checkout).
+	# My version which updates local branches to their remotes without changing the working tree (does not use checkout; is much faster).
 	# WARNING: Does not lookup or merge from what each branch is tracking!  Instead it just assumes branch "$local" tracks "remote/$local"
 	# To do it properly, we could get hold of the upstream names like this: git for-each-ref refs/heads --format="%(refname:short) -> %(upstream:short)"
 	# Also beware, if applied to the current branch, working files will be behind and not updated.  (In my case, git still claimed an empty diff, only noticing the differences after a reset or attempted branch switch!  Git 1.7.10.4)

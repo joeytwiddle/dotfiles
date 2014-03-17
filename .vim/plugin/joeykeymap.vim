@@ -174,8 +174,10 @@ nnoremap <C-W>S :vsplit<Enter>
 " :map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd
 " BUG: vim still thinks the file is out of sync with the buffer, so if you
 " quit without writing the file, vim complains, which is not how :e behaved.
-:map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
+":map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
 " Unfortunately the ! in :w! doesn't work
+" This is not needed any more.  Recent versions of Vim support undo through
+" file read.
 
 "" Close the current window on Ctrl-W (like browser tabs).
 "" This overrides a lot of C-w defaults.  Really I want to wait and see if
@@ -420,6 +422,11 @@ nnoremap <C-s> :w<Enter>
 nnoremap Q :q<Enter>
 " NOTE: If you really do want to use C-s and C-q then do this before loading vim:
 "   stty -ixon
+" Save for MacVim on normal Mac save key.
+" Not needed because MacVim sets this by default!
+"if $_system_name == 'OSX'
+"	nmap <d-s> <C-s>
+"endif
 
 " If there is more than one matching tag, let the user choose.
 nnoremap <C-]> g<C-]>

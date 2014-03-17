@@ -112,7 +112,8 @@ function! Joeyhighlight()
 
 	" Code
 	highlight Boolean ctermfg=LightBlue guifg=LightBlue
-	highlight Constant ctermfg=DarkYellow guifg=DarkYellow
+	"highlight Constant ctermfg=DarkYellow guifg=DarkYellow
+	highlight Constant ctermfg=Magenta guifg=Magenta   " experiment
 
 	" C
 	highlight cType ctermfg=Cyan guifg=Cyan
