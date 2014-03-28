@@ -290,9 +290,7 @@ endif
 
 let Grep_Using_CodeSearch = ( match(Grep_Path, '^csearch$\|/csearch$') >= 0 ? 1 : 0 )
 
-if !exists("Grep_Allow_Empty_FileList")
-    let Grep_Allow_Empty_FileList = Grep_Using_CodeSearch
-endif
+let Grep_Allow_Empty_FileList = Grep_Using_CodeSearch
 
 " --------------------- Do not edit after this line ------------------------
 
