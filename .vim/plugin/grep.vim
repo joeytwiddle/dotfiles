@@ -712,12 +712,14 @@ function! RunGrep(grep_cmd, ...)
     let str = expand("<cword>")
     "" <cfile> grabs a little more than <cword> but not as much as <cWORD>:
     " let str = expand("<cfile>")
+    let wordboundary_pre  = g:Grep_Using_CodeSearch ? '\b' : '\<'
+    let wordboundary_post = g:Grep_Using_CodeSearch ? '\b' : '\>'
     " We add \<...\> wrappers only when appropriate:
     if match(str,"^[0-9a-zA-Z_]") >= 0
-       let str = "\\<" . str
+       let str = wordboundary_pre . str
     endif
     if match(str,"[0-9a-zA-Z_]$") >= 0
-       let str = str . "\\>"
+       let str = str . wordboundary_post
     endif
     let pattern = input("Grep for pattern: ", str)
 
