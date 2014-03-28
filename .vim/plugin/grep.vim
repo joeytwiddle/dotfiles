@@ -615,7 +615,8 @@ function! s:RunGrepBuffer(...)
     " Add /dev/null to the list of filenames, so that grep print the
     " filename and linenumber when grepping in a single file
     if !g:Grep_Using_CodeSearch
-        let filenames = " -- " . filenames . " " . g:Grep_Null_Device
+        let pattern = "-- " . pattern
+        let filenames = filenames . " " . g:Grep_Null_Device
     endif
     let cmd = g:Grep_Path . " " . grep_opt . " -n " . pattern . " " . filenames
 
@@ -668,7 +669,8 @@ function! s:RunGrepArgs(...)
     " Add /dev/null to the list of filenames, so that grep print the
     " filename and linenumber when grepping in a single file
     if !g:Grep_Using_CodeSearch
-        let filenames = " -- " . filenames . " " . g:Grep_Null_Device
+        let pattern = "-- " . pattern
+        let filenames = filenames . " " . g:Grep_Null_Device
     endif
     let cmd = g:Grep_Path . " " . grep_opt . " -n " . pattern . " " . filenames
 
@@ -737,7 +739,8 @@ function! RunGrep(grep_cmd, ...)
     " Add /dev/null to the list of filenames, so that grep print the
     " filename and linenumber when grepping in a single file
     if !g:Grep_Using_CodeSearch
-        let filenames = " -- " . filenames . " " . g:Grep_Null_Device
+        let pattern = grep_expr_option . " " . pattern
+        let filenames = filenames . " " . g:Grep_Null_Device
     endif
     let cmd = grep_path . " " . grep_opt . " -n " . grep_expr_option . " " . pattern . " " . filenames
     let filenames = filenames . " " . g:Grep_Null_Device
