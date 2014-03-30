@@ -154,8 +154,8 @@
 
 	# A merge with uncommitted changes will happen fine if it does not affect the uncommitted files, but otherwise it will fail, and request that you stash your changes first.
 	# This shortcut just does what I would usually do by hand
+	merge-with-stash = !git merge-with-stashing
 	merge-with-stashing = !git stash && git merge "$1" && git stash pop
-	merge-with-stash = !git merge-with-stashing "$@"
 
 	# My version which updates local branches to their remotes without changing the working tree (does not use checkout; is much faster).
 	# WARNING: Does not lookup or merge from what each branch is tracking!  Instead it just assumes branch "$local" tracks "remote/$local"
