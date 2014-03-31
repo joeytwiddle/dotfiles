@@ -271,7 +271,7 @@ map Y y$
 "" Command-line keymaps.
 cnoremap <C-A> <Home>
 cnoremap <C-E> <End>
-"" In keeping with my shell shortcut keys
+"" In keeping with my shell shortcut keys (loaded by jsh)
 "" Word jump
 cnoremap <C-D> <C-Left>
 cnoremap <C-F> <C-Right>
@@ -280,18 +280,24 @@ cnoremap <C-F> <C-Right>
 "" So here is a near approximation:
 cnoremap <C-R> <Left><Left><Left>
 cnoremap <C-T> <Right><Right><Right>
-"" Word swallow Ctrl-X Ctrl-V
+"" Word swallow on Ctrl-X Ctrl-V
 cnoremap <C-X> <C-W>
-"" This doesn't do what we want, also we want to leave Ctrl-V since it does
-"" something special in Vim (insert literal char).
+"" This doesn't do what we want, and anyway we want to leave Ctrl-V alone since it does something special in Vim (insert literal char).
 " cnoremap <C-V> <C-Right><C-W>
 "" Lazy move.  Ctrl-Space just walks over the current char.
 "" I must say C-@ instead of C-Space!
 cnoremap <C-@> <Right>
-" Same for normal mode:
+" Same for insert mode:
 inoremap <C-@> <Right>
 "" Can't map C-Backspace; BS emits C-H with or without Ctrl.
 " cnoremap <C-BS> <Left>
+
+"" Now we have muted <C-R> but <C-R> can be useful, so let's make a workaround:
+cnoremap <C-\><C-R> <C-R>
+"" Example usage (actually just me trying to remember how <C-R> works):
+"" To insert the <cword> (word under cursor) on the cmdline, we can now do: <C-\><C-R><C-W> (which would originally have been <C-R><C-W>)
+"" And of course, <C-R>q will paste/insert the q register.
+"" For all the other <C-R> tricks, see: :help c_CTRL-R_CTRL-F
 
 "" Now the same for Insert-mode?  Well a select few perhaps...
 inoremap <C-X> <Esc>dbxi
@@ -436,23 +442,28 @@ nnoremap <Leader>e :execute getline(".")<CR>
 " I would quite like a version that could work on multiple lines (from a visual selection).
 
 " If my F3 mapping to grep.vim is working fine, let's skip through all the prompts.
-"nmap <C-F3> <F3><CR><CR><CR>
-" The terminal version of <C-F3> is:
-"nmap [1;5R <F3><CR><CR><CR>
-" Or associate it with existing search buttons * or #
-"nmap <Leader>8 <F3><CR><CR><CR>
-"nmap <Leader>* <F3><CR><CR><CR>
-"nmap <Leader># <F3><CR><CR><CR>
 " Replaces :emenu<Space><Tab>
 "nmap <F4> <F3><CR><CR><CR>
 nnoremap <F4> :call RunGrep('grep')<CR><CR><CR><CR>
-" DONE: Keep only one of the above, the one I find myself using.  :)
-" Unfortunately <C-8> sends <C-H> and is undistinguishable.
-" And <C-S-P> is equivalent to <C-P> which I am alread using for :cprev<CR>
 " NOTE: The last <CR> is not always needed.  The |hit-enter| prompt is only displayed when the "Grep in files:" prompt has exceeded |cmdheight| (always true for me, with my huge exclude list).  So an alternative workaround might be for grep.vim to temporarily set ch very high, then reset it afterwards.
-
 " Avoiding the final <CR> would be desirable because it currently hides any "Error...not found" message that might appear.  And perhaps in some cases it isn't even required (if the command-line is not longer than the screen).
 
-" Now <F4> is doing a search for the word under the cursor, <F3> can start empty, waiting for a typed word.  But for the user's convenience, we start them off with the whole-word symbols.
+" Now <F4> is doing a search for the word under the cursor.  <F3> could start empty, waiting for a typed word.  But for the user's convenience, we start them off with the whole-word symbols.
 nnoremap <F3> :call RunGrep('grep')<CR><C-U>\<\><Left><Left>
+
+if exists("g:Grep_Using_CodeSearch") && g:Grep_Using_CodeSearch || exists("g:Grep_Path") && match(g:Grep_Path, '^csearch$\|/csearch$') >= 0
+	" If using csearch, \< and \> are replaced with \b
+	nnoremap <F3> :call RunGrep('grep')<CR><C-U>\b\b<Left><Left>
+	" And F4 needs one fewer <CR> (because the file/options line is short/empty):
+	nnoremap <F4> :call RunGrep('grep')<CR><CR><CR>
+	let g:Grep_Default_Filelist = ''
+endif
+
+" Vim's <C-w>W is the opposite of <C-W>w, so why not the same for <C-w>X?
+"nnoremap <C-w>X <C-w>W<C-w>x<C-w>w
+
+" However I would quite like both those commands to "follow" the moved window, so:
+nnoremap <C-w>x <C-w>x<C-w>w
+nnoremap <C-w>X <C-w>W<C-w>x
+" Note that these will not do as expected if a <count> is given.
 

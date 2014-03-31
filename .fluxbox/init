@@ -81,8 +81,8 @@ session.screen0.tabs.intitlebar:	true
 session.screen0.tabs.maxOver:	false
 session.screen0.tabs.usePixmap:	true
 session.screen0.tab.width:	200
-session.screen0.titlebar.left:	Stick 
-session.screen0.titlebar.right:	Minimize Maximize Close 
+session.screen0.titlebar.left:	Close 
+session.screen0.titlebar.right:	Stick Minimize Maximize 
 session.screen0.toolbar.alpha:	189
 session.screen0.toolbar.autoHide:	true
 session.screen0.toolbar.height:	0

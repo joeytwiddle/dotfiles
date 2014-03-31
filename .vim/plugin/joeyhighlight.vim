@@ -85,6 +85,9 @@ function! Joeyhighlight()
 	"" Unfortunately the following set white in 8-color xterm mode, so they require a check before using.
 	" highlight Comment ctermfg=8 cterm=bold gui=none guifg=#a0a0a0   " bold grey, nice with Lucida in xterm, light non-bold in GUI.  =8 is a little lighter than darkgrey in 256-color-term mode
 	" highlight Comment ctermfg=244 cterm=bold gui=none guifg=#a0a0a0   " bold grey, nice with Lucida in xterm, light non-bold in GUI.  =244 or 245 is an exact match to low-color xterm :P
+	"if &t_Co >= 256
+		"hi Comment ctermfg=60   " pretty dark blue
+	"endif
 	" highlight friendlyComment cterm=none ctermfg=cyan gui=none guifg=#80a0ff   " boring mid blue (just greyish)
 	highlight friendlyComment ctermfg=darkblue cterm=bold gui=none guifg=#7777ff gui=bold
 	hi link vimCommentTitle friendlyComment
@@ -350,6 +353,23 @@ function! Joeyhighlight()
 	" Actually that is not true...  They are highlighted as 'Normal' at startup, but then as 'None' after script has used :echohl and followed the advice in the help for :echohl !
 	" Who knows what else is highlighted as None though...
 	hi link None EchoMsg
+
+	" I used to think I should take advantage of the GUI's wide colour range.
+	" But these days I begin to prefer continuity between xterm and GUI.
+	" Unfortunately I note that the GUI's Lucida Console 10 is not quite as heavy weight as xterm's lucidatypewriter-100, making me want to bold everything.
+	" Lucida Console 8 and lucidatypewriter-80 are more similar in weight, but the former loses a little intensity to anti-aliasing.
+	let highlight_gui_like_xterm = 1
+	if highlight_gui_like_xterm
+		hi Comment guifg=#777777 gui=bold
+		hi String guifg=#00ff00
+		hi Statement guifg=yellow gui=bold
+		hi Identifier guifg=cyan gui=bold
+		hi Special guifg=magenta gui=bold
+		hi Search guibg=blue guifg=green gui=bold
+		hi HLCurrentWord guifg=red gui=bold
+		"hi Number guifg=cyan
+		hi Normal guifg=#f7f7f7
+	endif
 
 endfun
 

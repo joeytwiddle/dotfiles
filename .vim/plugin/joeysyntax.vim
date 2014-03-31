@@ -5,6 +5,12 @@ endif
 
 function! Joeysyntax()
 
+	" Detect whether our terminal can support 256 colors, and if so set it.
+	" This worked for Ubuntu 12.04.  (Some HOWTOs suggest setting TERM=xterm-256 but that is not needed here.)
+	if $TERM == "xterm" && $XTERM_VERSION == "XTerm(278)"
+		set t_Co=256
+	endif
+
 	" For slow computers:
 	" :syn sync maxlines=50
 	" :syn sync minlines=10
@@ -42,8 +48,9 @@ function! Joeysyntax()
 	:syntax keyword jDiff @@>>
 
 	" for Mason
-	:syntax region jComment start="/\*"  end="\*/"
-  " TODO: Isn't this a bit heavy?
+	":syntax region jComment start="/\*"  end="\*/"
+	" This is a bit heavy, and it fires on things like "/path/*".
+	" It should be enabled on a per-filetype/extension basis (NOT for all files) and if possible it should avoid matching inside strings.
 
 	" for sh, but bad for #defines!
 	" :syntax region jShComment start="[#]*## " end='$'
