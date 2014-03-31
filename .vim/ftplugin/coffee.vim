@@ -42,12 +42,14 @@ endif
 "
 " TODO: Option to compile to temp/nullfolder to check success and show diff,
 " but avoid polluting the coffee source folder with js files.
-" folder.
 
 " TODO: Refactor this so it can be used on other filetypes.
-" e.g. for GorillaScript:   :call g:Process_And_Diff('gorillascript %','%<.js')
+"   e.g. for GorillaScript: :call g:Process_And_Diff('gorillascript %','%<.js')
+"               or for SWS: :call g:Process_And_Diff('sws curl','%<')
 " or for a complex project: :call g:Process_And_Diff('make','main.js')
 " Note that expand() does not work on '%<.js'!
+" We would probably want to set it to trigger on a filetype, e.g.:
+"   autocmd BufWritePost,FileWritePost *.sws :call g:Process_And_Diff('sws curl %', '%<')
 
 augroup CoffeeAutoCompile_AuGroup
 

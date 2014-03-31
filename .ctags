@@ -134,5 +134,7 @@
 --regex-Scala=/^\s*import\s*([a-zA-Z0-9_{}., \t=>]+$)/\1/i,include/
 --regex-Scala=/^\s*package\s*([a-zA-Z0-9_.]+$)/\1/p,package/
 
---regex-html=/^\s*<template name=.([^"']*)./\1/t,template/
+--langmap=html:+.erb
+--regex-html=/^\s*<template name=["']([^"']*)./\1/t,template/
+--regex-html=/^\<id=["']([^"']*)./\1/i,id/
 

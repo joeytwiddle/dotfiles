@@ -10,13 +10,22 @@
 " autocmd BufWritePost,FileWritePost *.* :!ctags -a %
 "" Only if a writeable tags file exists here:
 " autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | exec "!ctags -a %" | endif
-autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | echo "Updating tags..." | endif | silent exec '!ctags -a "%"' | endif
+autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | echo "Updating tags..." | endif | silent exec '!ctags -a "%:p"' | endif
+"" ISSUE: When we used "%" above, it would generate tag entries for filename, ./filename and /full/path/to/filename, depending on the path we used when we opened the file.  Now using "%:p" to reduce this, but there still may be confusion when generating tags for a symlinked folder.
+"" Recommendation: When *manually* running ctags, use the realpath.  E.g.: ctags "`realpath .`"/*.cpp
 "" We could, iff &ch>1, do it non-silent, or use: echo "Updating tags..." |
-"" TODO: Update ../tags or ../../tags or ../../../tags if it exists.  Could
-"" cache it in b:my_nearest_tagsfile.
+"" TODO: Update ../tags or ../../tags or ../../../tags if it exists.  Could cache it in b:my_nearest_tagsfile.
 
 "" Vim 7.3 started making `w` jump over '.'s in a variety of languages, which I do not want.
 autocmd BufReadPost * setlocal iskeyword-=.
+" However I have come to accept that I do need '-' to be part of a word when dealing with CSS classes.
+autocmd BufReadPost *.{css,html,js,erb} setlocal iskeyword+=-
+
+" At some point undo started working through file-reads.  Given that, I am happier to load changed files automatically.  (Especially useful when peforming git checkout!)
+if v:version >= 703
+	set autoread
+endif
+" Also mildly related, Vim now has persistent_undo feature, which can be enabled by setting 'undofile'
 
 
 
@@ -106,7 +115,7 @@ autocmd VimLeave * silent !stty ixon
 		let tlist_help_settings = 'help;s:section;h:heading;m:marker'
 		let tlist_scala_settings = 'scala;p:package;i:include;c:class;o:object;t:trait;r:cclass;a:aclass;m:method;T:type' " V:value;v:variable;
 		let tlist_man_settings = 'man;s:section'
-		let tlist_html_settings = 'html;t:template;a:anchor;f:javascript function'
+		let tlist_html_settings = 'html;t:template;a:anchor;f:javascript function;i:id'
 		let tlist_opa_settings = 'opa;m:module;t:type;d:database;g:global;f:function'
 
 	" }}}
@@ -185,7 +194,7 @@ autocmd VimLeave * silent !stty ixon
 	"nmap <C-a> q:AsyncFinder<Enter>
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
-	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets']"
+	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','pikto','./public/assets']"
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
 
