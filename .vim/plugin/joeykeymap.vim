@@ -442,12 +442,10 @@ nnoremap <Leader>e :execute getline(".")<CR>
 " I would quite like a version that could work on multiple lines (from a visual selection).
 
 " If my F3 mapping to grep.vim is working fine, let's skip through all the prompts.
-" We need one <CR> for the RunGrep, one for the search prompt, one for the file/options prompt, and the last one to close the Hit-Enter prompt that appears because my file/options string is usually longer than one line.
 " Replaces :emenu<Space><Tab>
 "nmap <F4> <F3><CR><CR><CR>
 nnoremap <F4> :call RunGrep('grep')<CR><CR><CR><CR>
 " NOTE: The last <CR> is not always needed.  The |hit-enter| prompt is only displayed when the "Grep in files:" prompt has exceeded |cmdheight| (always true for me, with my huge exclude list).  So an alternative workaround might be for grep.vim to temporarily set ch very high, then reset it afterwards.
-
 " Avoiding the final <CR> would be desirable because it currently hides any "Error...not found" message that might appear.  And perhaps in some cases it isn't even required (if the command-line is not longer than the screen).
 
 " Now <F4> is doing a search for the word under the cursor.  <F3> could start empty, waiting for a typed word.  But for the user's convenience, we start them off with the whole-word symbols.
