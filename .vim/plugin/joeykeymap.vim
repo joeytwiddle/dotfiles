@@ -443,19 +443,9 @@ nnoremap <Leader>e :execute getline(".")<CR>
 
 " If my F3 mapping to grep.vim is working fine, let's skip through all the prompts.
 " We need one <CR> for the RunGrep, one for the search prompt, one for the file/options prompt, and the last one to close the Hit-Enter prompt that appears because my file/options string is usually longer than one line.
-"nmap <C-F3> <F3><CR><CR><CR>
-" The terminal version of <C-F3> is:
-"nmap [1;5R <F3><CR><CR><CR>
-" Or associate it with existing search buttons * or #
-"nmap <Leader>8 <F3><CR><CR><CR>
-"nmap <Leader>* <F3><CR><CR><CR>
-"nmap <Leader># <F3><CR><CR><CR>
 " Replaces :emenu<Space><Tab>
 "nmap <F4> <F3><CR><CR><CR>
 nnoremap <F4> :call RunGrep('grep')<CR><CR><CR><CR>
-" DONE: Keep only one of the above, the one I find myself using.  :)
-" Unfortunately <C-8> sends <C-H> and is undistinguishable.
-" And <C-S-P> is equivalent to <C-P> which I am alread using for :cprev<CR>
 " NOTE: The last <CR> is not always needed.  The |hit-enter| prompt is only displayed when the "Grep in files:" prompt has exceeded |cmdheight| (always true for me, with my huge exclude list).  So an alternative workaround might be for grep.vim to temporarily set ch very high, then reset it afterwards.
 
 " Avoiding the final <CR> would be desirable because it currently hides any "Error...not found" message that might appear.  And perhaps in some cases it isn't even required (if the command-line is not longer than the screen).
