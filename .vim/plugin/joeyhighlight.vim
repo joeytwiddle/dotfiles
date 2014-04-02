@@ -305,7 +305,7 @@ function! Joeyhighlight()
 	"hi MyTagListTitle ctermfg=lightblue ctermbg=none
 	"hi MyTagListTitle ctermfg=yellow ctermbg=none
 	hi MyTagListTitle ctermfg=none ctermbg=none
-	hi MyTagListTagName ctermbg=green ctermfg=white guibg=#00cc00 guifg=white
+	hi MyTagListTagName cterm=bold ctermbg=green ctermfg=white guibg=#00cc00 guifg=white
 	" hi MyTagListFileName ctermbg=black ctermfg=white
 	hi MyTagListFileName ctermbg=black ctermfg=cyan guibg=black guifg=cyan
 
