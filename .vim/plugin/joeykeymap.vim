@@ -464,8 +464,10 @@ nnoremap <F4> :call RunGrep('grep')<CR><CR><CR><CR>
 " If using csearch, \< and \> are replaced with \b
 if exists("g:Grep_Using_CodeSearch") && g:Grep_Using_CodeSearch || exists("g:Grep_Path") && match(g:Grep_Path, '^csearch$\|/csearch$') >= 0
 	nnoremap <F3> :call RunGrep('grep')<CR><C-U>\b\b<Left><Left>
+	nnoremap <F4> :call RunGrep('grep')<CR><CR><CR>
 else
 	nnoremap <F3> :call RunGrep('grep')<CR><C-U>\<\><Left><Left>
+	nnoremap <F4> :call RunGrep('grep')<CR><CR><CR><CR>
 endif
 
 " Vim's <C-w>W is the opposite of <C-W>w, so why not the same for <C-w>X?
