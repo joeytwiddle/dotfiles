@@ -5,16 +5,21 @@
 
 "" Update ctags tags file whenever we save a buffer.
 "" To get started,  :!touch tags  then  :w
-"" I need this for Ctrl-] to work when I have e.g. added new *mapping* tag to
-"" e.g. RepeatLast.vim
+"" Needed for Ctrl-] to work after adding new code.
+augroup AutoUpdateCTags
+autocmd!
+"" The super-simple version:
 " autocmd BufWritePost,FileWritePost *.* :!ctags -a %
 "" Only if a writeable tags file exists here:
 " autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | exec "!ctags -a %" | endif
-autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | echo "Updating tags..." | endif | silent exec '!ctags -a "%:p"' | endif
+"autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | echo "Updating tags..." | endif | silent exec '!ctags -a "%:p"' | endif
+"autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | echo "Updating tags..." | endif | silent exec '!ctags -a "%:p" 2>/dev/null' | endif
+autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | echo "Updating tags..." | endif | silent exec '!ctags -a "%:p" 2> >(grep -v "^ctags: Warning: ignoring null tag")' | endif
 "" ISSUE: When we used "%" above, it would generate tag entries for filename, ./filename and /full/path/to/filename, depending on the path we used when we opened the file.  Now using "%:p" to reduce this, but there still may be confusion when generating tags for a symlinked folder.
 "" Recommendation: When *manually* running ctags, use the realpath.  E.g.: ctags "`realpath .`"/*.cpp
-"" We could, iff &ch>1, do it non-silent, or use: echo "Updating tags..." |
+"" TODO: No, I would prefer to calculate the relativepath if possible (e.g. strip any leading ./)
 "" TODO: Update ../tags or ../../tags or ../../../tags if it exists.  Could cache it in b:my_nearest_tagsfile.
+augroup END
 
 "" Vim 7.3 started making `w` jump over '.'s in a variety of languages, which I do not want.
 autocmd BufReadPost * setlocal iskeyword-=.
