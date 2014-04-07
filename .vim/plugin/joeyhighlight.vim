@@ -58,7 +58,8 @@ function! Joeyhighlight()
 	"highlight Search ctermbg=Blue ctermfg=Yellow term=bold guibg=#005500 guifg=#ffbb66 gui=bold
 	"highlight Search ctermbg=blue ctermfg=white term=bold guibg=#005500 guifg=#66ff88 gui=bold
 	"highlight Search ctermbg=blue ctermfg=white term=bold guibg=#005500 guifg=#bbffbb gui=bold
-	highlight Search ctermbg=blue ctermfg=green term=bold guibg=#005544 guifg=#aaffaa gui=bold
+	"highlight Search ctermbg=blue ctermfg=green term=bold guibg=#005544 guifg=#aaffaa gui=bold
+	highlight Search ctermbg=blue ctermfg=green term=bold guifg=#005544 guibg=#aaffaa gui=bold,reverse
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White guifg=DarkMagenta guibg=White
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#553355
 	"" This actually gives us a dirty grey instead of white (in xterm):
@@ -305,7 +306,8 @@ function! Joeyhighlight()
 	"hi MyTagListTitle ctermfg=lightblue ctermbg=none
 	"hi MyTagListTitle ctermfg=yellow ctermbg=none
 	hi MyTagListTitle ctermfg=none ctermbg=none
-	hi MyTagListTagName cterm=bold ctermbg=green ctermfg=white guibg=#00cc00 guifg=white
+	"hi MyTagListTagName cterm=bold ctermbg=green ctermfg=white guibg=#00cc00 guifg=white
+	hi MyTagListTagName cterm=bold ctermbg=green ctermfg=white gui=bold,reverse guibg=white guifg=#00cc00
 	" hi MyTagListFileName ctermbg=black ctermfg=white
 	hi MyTagListFileName ctermbg=black ctermfg=cyan guibg=black guifg=cyan
 
@@ -365,7 +367,7 @@ function! Joeyhighlight()
 		hi Statement guifg=yellow gui=bold
 		hi Identifier guifg=cyan gui=bold
 		hi Special guifg=magenta gui=bold
-		hi Search guibg=blue guifg=green gui=bold
+		hi Search guifg=blue guibg=green gui=bold,reverse
 		hi HLCurrentWord guifg=red gui=bold
 		"hi Number guifg=cyan
 		hi Normal guifg=#f7f7f7
