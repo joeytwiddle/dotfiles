@@ -155,6 +155,10 @@ alias gb='git branch'
 gbd() {
 	local reset_color=`tput sgr0`
 	local current_branch_color=`git config --get-color color.branch.current green`
+	# Optional
+	local subject_color=`tput setaf 0 ; tput bold`
+	local author_color=`tput setaf 6`
+
 	local target=refs/heads
 	local branch_color=`git config --get-color color.branch.local white`
 	if [ "$1" = -r ]
@@ -162,7 +166,13 @@ gbd() {
 		target=refs/remotes/origin
 		#branch_color=`git config --get-color color.branch.remote red`
 	fi
-	git for-each-ref --sort=committerdate $target --format="%(committerdate:iso8601) ${branch_color}%(refname:short)${reset_color} %(subject) - %(authorname)"
+
+	git for-each-ref --sort=committerdate $target --format="%(committerdate:iso8601) ${branch_color}%(refname:short)${reset_color} ${subject_color}%(subject)${reset_color} ${author_color}- %(authorname)${reset_color}" |
+
+	if which dropcols >/dev/null
+	then dropcols 3
+	else cat
+	fi
 }
 
 # Git View Branches (tree-like)
