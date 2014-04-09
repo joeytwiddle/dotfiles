@@ -161,16 +161,22 @@ gbd() {
 
 	local target=refs/heads
 	local branch_color=`git config --get-color color.branch.local white`
+	#local commit_color=`git config --get-color color.diff.commit yellow`
 	if [ "$1" = -r ]
 	then
 		target=refs/remotes/origin
 		#branch_color=`git config --get-color color.branch.remote red`
 	fi
 
-	git for-each-ref --sort=committerdate $target --format="%(committerdate:iso8601) ${branch_color}%(refname:short)${reset_color} ${subject_color}%(subject)${reset_color} ${author_color}- %(authorname)${reset_color}" |
+	# %(committerdate:iso8601) 
+	git for-each-ref --sort=committerdate $target --format="${branch_color}%(refname:short)${reset_color} ${subject_color}%(subject)${reset_color} ${author_color}- %(authorname) (%(committerdate:relative))${reset_color}" |
 
-	if which dropcols >/dev/null
-	then dropcols 3
+	# | if which dropcols >/dev/null
+	#then dropcols 3
+	#else cat
+	#fi
+	if which columnise-clever >/dev/null
+	then columnise-clever -ignore '[^ ]* *[^ ]*'
 	else cat
 	fi
 }
