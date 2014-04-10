@@ -31,15 +31,18 @@ function! s:FindNextChangeVisual(moveKey) range
   call s:FindNextChange(a:moveKey, 1, a:firstline, a:lastline)
 endfunction
 function! s:FindNextChange(moveKey, in_visual_mode, first_line, last_line)
-  " TODO BUG: startCol is always 1 when in_visual_mode and without g:move_once_at_start
-  "           But somehow if we do move_once_at_start then it goes where it should be.
+  let startCol = wincol()
   let startRow = line(".")
   let unwatedChar = s:GetCharUnderCursor()
   if g:move_once_at_start
     exec "normal "a:moveKey
   endif
   let startColChars = getpos(".")[2]
-  let startCol = wincol()
+  " TODO BUG: startCol is always 1 when in_visual_mode and without g:move_once_at_start
+  "           But somehow if we do move_once_at_start then it goes where it should be.
+  if a:in_visual_mode
+    let startCol = wincol()
+  endif
   let nextCharUnderCursor = s:GetCharUnderCursor()
   if nextCharUnderCursor != unwatedChar
     let unwatedChar = nextCharUnderCursor
