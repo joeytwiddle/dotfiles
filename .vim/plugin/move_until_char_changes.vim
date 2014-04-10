@@ -59,7 +59,7 @@ function! s:FindNextChange(moveKey, in_visual_mode, first_line, last_line)
     if g:move_skip_empty_lines && newCharUnderCursor == ""
       " Do nothing, continue to next line
     elseif g:move_stay_in_column && newCol != startCol
-      " Likewise
+      " Likewise, keep moving until we are back in our start column
     else
       if newCharUnderCursor != unwatedChar
         " We have found what we were looking for!
