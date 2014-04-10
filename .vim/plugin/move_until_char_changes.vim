@@ -15,21 +15,31 @@ let g:move_skip_empty_lines = 1   " Never stop on an empty line (if also unifyin
 let g:move_unify_whitespace = 1   " Tab, space and empty-line are all considered the same.
 let g:move_once_at_start    = 1   " Don't stop on the very next line just because it has a different char from the current!
 
-nnoremap <silent> <C-S-Up> :call <SID>FindNextChange("k")<Enter>
-nnoremap <silent> <C-S-Down> :call <SID>FindNextChange("j")<Enter>
+nnoremap <silent> <C-S-Up>   :call <SID>FindNextChangeNormal("k")<Enter>
+nnoremap <silent> <C-S-Down> :call <SID>FindNextChangeNormal("j")<Enter>
 " Attempt to work in Visual mode; failed:
-"vnoremap <silent> <C-S-Up> :<C-U>call <SID>FindNextChange("k")<Enter>
-"vnoremap <silent> <C-S-Down> :<C-U>call <SID>FindNextChange("j")<Enter>
+vnoremap <silent> <C-S-Up>   :call <SID>FindNextChangeVisual("k")<Enter>
+vnoremap <silent> <C-S-Down> :call <SID>FindNextChangeVisual("j")<Enter>
 " On Mac OSX, Mission Control hijacks these keys, so we create a couple more:
-nnoremap <silent> g<S-Up> :call <SID>FindNextChange("k")<Enter>
-nnoremap <silent> g<S-Down> :call <SID>FindNextChange("j")<Enter>
+nnoremap <silent> g<S-Up>    :call <SID>FindNextChangeNormal("k")<Enter>
+nnoremap <silent> g<S-Down>  :call <SID>FindNextChangeNormal("j")<Enter>
 
-function! s:FindNextChange(moveKey)
-  let startCol = wincol()
+function! s:FindNextChangeNormal(moveKey) range
+  call s:FindNextChange(a:moveKey, 0, 0, 0)
+endfunction
+function! s:FindNextChangeVisual(moveKey) range
+  call s:FindNextChange(a:moveKey, 1, a:firstline, a:lastline)
+endfunction
+function! s:FindNextChange(moveKey, in_visual_mode, first_line, last_line)
+  " TODO BUG: startCol is always 1 when in_visual_mode and without g:move_once_at_start
+  "           But somehow if we do move_once_at_start then it goes where it should be.
+  let startRow = line(".")
   let unwatedChar = s:GetCharUnderCursor()
   if g:move_once_at_start
     exec "normal "a:moveKey
   endif
+  let startColChars = getpos(".")[2]
+  let startCol = wincol()
   let nextCharUnderCursor = s:GetCharUnderCursor()
   if nextCharUnderCursor != unwatedChar
     let unwatedChar = nextCharUnderCursor
@@ -65,6 +75,15 @@ function! s:FindNextChange(moveKey)
     endif
     let lastRow = newRow
   endwhile
+  if a:in_visual_mode
+    " Restore visual mode, up to the destination.
+    " We don't know if we were in v or V mode (lost during the keymapping) so we just assume v.
+    let finalRow = line(".")
+    let finalColChars = getpos(".")[2]
+    call setpos(".", [0, startRow, startColChars])
+    normal v
+    call setpos(".", [0, finalRow, finalColChars])
+  endif
 endfunction
 
 function! s:GetCharUnderCursor()
