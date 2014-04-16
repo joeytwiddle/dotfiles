@@ -25,13 +25,13 @@ function! s:ReplaceInThisBuffer(...)
       let l:replacement = a:1
    endif
    let l:replacement = input("ReplaceInThisBuffer " . l:search . " with: ",l:replacement)
-   execute "%s/\\<" . l:search . "\\>/" . l:replacement . "/gc"
+   execute "%s/\\<" . l:search . "\\>/" . l:replacement . "/g"
 endfunction
 
-nnoremap \R :call <SID>ReplaceInAllBuffers()<CR>
+nnoremap <silent> \R :call <SID>ReplaceInAllBuffers()<CR>
 " command! ReplaceInAllBuffers call ReplaceInAllBuffers(<f-args>)
 command! -nargs=* ReplaceInAllBuffers call ReplaceInAllBuffers(<q-args>)
 
-nnoremap \r :call <SID>ReplaceInThisBuffer()<CR>
+nnoremap <silent> \r *#:call <SID>ReplaceInThisBuffer()<CR>
 command! -nargs=* ReplaceInThisBuffer call ReplaceInThisBuffer(<q-args>)
 
