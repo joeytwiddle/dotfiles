@@ -45,6 +45,8 @@ endfunction
 
 """"""""""""""""""""""""""""""" Jrefactor """""""""""""""""""""""""""""""
 
+" PLEASE NOTE that Jrefactor is now deprecated in favour of \r and \R in replace.vim
+
 command! -nargs=1 Jrefactor call Jrefactor(<f-args>)
 
 if has("menu")
