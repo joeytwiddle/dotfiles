@@ -176,6 +176,7 @@ nnoremap <C-W>S :vsplit<Enter>
 " quit without writing the file, vim complains, which is not how :e behaved.
 ":map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
 " Unfortunately the ! in :w! doesn't work
+" But `:checktime | w` may be a solution for that.
 " This is not needed any more.  Recent versions of Vim support undo through
 " file read.
 
@@ -457,6 +458,9 @@ if exists("g:Grep_Using_CodeSearch") && g:Grep_Using_CodeSearch || exists("g:Gre
 	" And F4 needs one fewer <CR> (because the file/options line is short/empty):
 	nnoremap <F4> :call RunGrep('grep')<CR><CR><CR>
 	let g:Grep_Default_Filelist = ''
+else
+	nnoremap <F3> :call RunGrep('grep')<CR><C-U>\<\><Left><Left>
+	nnoremap <F4> :call RunGrep('grep')<CR><CR><CR><CR>
 endif
 
 " Vim's <C-w>W is the opposite of <C-W>w, so why not the same for <C-w>X?
@@ -466,4 +470,22 @@ endif
 nnoremap <C-w>x <C-w>x<C-w>w
 nnoremap <C-w>X <C-w>W<C-w>x
 " Note that these will not do as expected if a <count> is given.
+
+" Comment or uncomment visual selection on leader / or leader shift-/
+" By default, comment is //
+vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
+vnoremap <buffer> <Leader>? :s+^\(\s*\)//+\1+<Enter>:set nohlsearch<CR>
+" But override for other filetypes:
+autocmd BufReadPost *.vim vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\1"+<Enter>:set nohlsearch<CR>
+autocmd BufReadPost *.vim vnoremap <buffer> <Leader>? :s+^\(\s*\)"+\1+<Enter>:set nohlsearch<CR>
+autocmd BufReadPost *.{sh,coffee,conf} vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\1#+<Enter>:set nohlsearch<CR>
+autocmd BufReadPost *.{sh,coffee,conf} vnoremap <buffer> <Leader>? :s+^\(\s*\)#+\1+<Enter>:set nohlsearch<CR>
+autocmd BufReadPost *.css vnoremap <buffer> <Leader>/ :s+^\(\s*\)\(.*\)+\1/* \2 */+<Enter>:set nohlsearch<CR>
+autocmd BufReadPost *.css vnoremap <buffer> <Leader>? :s+^\(\s*\)/[*]\(.*\)[*]/+\1\2+<Enter>:set nohlsearch<CR>
+" TODO: If we don't want to clobber the search pattern, we could store and retore the value of the @/ variable before and after.
+" In this case we should use a function to generate the above.  That same function could setup F5 and F6 how I currently do in ~/.vim/ftplugin/*.vim
+" e.g. :call ThisBufferUsesCommentSymbol("/*", "*/")
+"   or :call ThisBufferUsesCommentSymbol("#")
+"   or :call RegisterCommentSymbol('coffee', '#')
+" We could also inspect &comments, but which one should we choose to use?  :-P
 

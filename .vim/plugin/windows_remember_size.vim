@@ -22,7 +22,9 @@
 " New feature: Set a default height for newly split windows, as percentage of
 " the size of the original window.  Without it Vim usually splits 50-50.
 "
-"let g:wrs_default_height_pct = 90
+if !exists("g:wrs_default_height_pct")
+  let g:wrs_default_height_pct = 90
+endif
 "
 " We "detect" when a split is about to occur by mapping <Ctrl-W>s and :h
 " below.  You may want to add more mappings for other splitting actions.

@@ -171,6 +171,8 @@
 	# This is just a reminder for me, since I forgot where this option lives.  I will probably remove it in future.
 	add-partial = add --patch
 
+	branch-by-date = for-each-ref --sort=committerdate refs/remotes --format="%(authordate:short)%09%(objectname:short)%09%1B[0;33m%(refname:short)%1B[m%09"
+
 
 
 

@@ -110,12 +110,15 @@ alias glp='gitlog -p -U2 --stat'
 # Curiously the alias shows fewer +++s and ---s on the stat output.
 # One "advantage" of our custom format over --decorate is that --decorate shows different colors for different decorations.  Whilst this is nice and informative, it looks a little ugly when it combines with the reverse highlighting from our less search.
 alias glg='glp --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an <%ae>%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
+# Custom_format_bugs: Note that %b is missing (it should come after %s%n, it may show 'Conflicts' list or other useful notes).  But adding it conditionally is a hassle.
 # "Git Log" aliases to "Git Log Grey"
 #alias gl='glg'
 # Now trying this out; use glm for old-ish style (merges merged) or use glg to see individual commits without the graph.
 # We should probably swap glg and gl, since gl has a graph and glg does not!
 # Interestingly this can show some commits in a different order from glg alone, in the presence of merges.
 alias gl='glg --graph'
+# glx is like gl but without my custom format colours and without my Custom_format_bugs.
+alias glx='glp --graph'
 # Warning: glg and glc duplicate my color settings.  (Which are also set in my ~/.gitconfig.)  Part of the reason I passed everything through glg/glc was to display decorations (commit labels like HEAD and origin/master).  I have since learned this can be achieved by passing --decorate, so we may be able to reduce some duplication that way.
 # "Git Log with Merges-combined/merged)" - shows diffs in the merge, does not show individual commits from merged branches
 alias glm='glg -m --first-parent'
@@ -147,6 +150,36 @@ alias glf='glc --stat'
 # Just commit info, one per line
 
 alias gb='git branch'
+
+# Git Branch by Date
+gbd() {
+	local reset_color=`tput sgr0`
+	local current_branch_color=`git config --get-color color.branch.current green`
+	# Optional
+	local subject_color=`tput setaf 0 ; tput bold`
+	local author_color=`tput setaf 6`
+
+	local target=refs/heads
+	local branch_color=`git config --get-color color.branch.local white`
+	#local commit_color=`git config --get-color color.diff.commit yellow`
+	if [ "$1" = -r ]
+	then
+		target=refs/remotes/origin
+		#branch_color=`git config --get-color color.branch.remote red`
+	fi
+
+	# %(committerdate:iso8601) 
+	git for-each-ref --sort=committerdate $target --format="${branch_color}%(refname:short)${reset_color} ${subject_color}%(subject)${reset_color} ${author_color}- %(authorname) (%(committerdate:relative))${reset_color}" |
+
+	# | if which dropcols >/dev/null
+	#then dropcols 3
+	#else cat
+	#fi
+	if which columnise-clever >/dev/null
+	then columnise-clever -ignore '[^ ]* *[^ ]*'
+	else cat
+	fi
+}
 
 # Git View Branches (tree-like)
 alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
