@@ -38,7 +38,7 @@ autocmd BufReadPost *.{css,html,js,erb} setlocal iskeyword+=-
 
 " At some point undo started working through file-reads.  Given that, I am happier to load changed files automatically.  (Especially useful when peforming git checkout!)
 if v:version >= 703
-	set autoread
+	setglobal autoread
 endif
 " Also mildly related, Vim now has persistent_undo feature, which can be enabled by setting 'undofile'
 
@@ -363,6 +363,13 @@ autocmd VimLeave * silent !stty ixon
 			"" Now I have stopped using lightdm, all my fonts are appearing differently.  Lucida looks how I want it in GVim yay!
 			:set guifont=Lucida\ Console\ 8
 		endif
+		"" If I want to go smaller than Lucida 8...
+		"" Droid Sans Mono can go very small; it is rather fuzzy, but it is even smaller than Clean!
+		" :set guifont=Droid\ Sans\ Mono\ 6
+		"" If I screen fonts are available, there is "Schumacher Clean", which is the same height as Lucida Console 8, but narrower:
+		" :set guifont=Clean\ 8
+		"" Also with screen fonts, you have the option of using LucidaTypewriter, like Console but with sharp edges.
+		" :set guifont=LucidaTypewriter\ Medium\ 8
 		" TODO for Mac:
 		if $_system_name == 'OSX'
 			" Popular, aspect like DejaVu Sans Mono / Liberation / Ubuntu Mono
@@ -614,6 +621,10 @@ autocmd VimLeave * silent !stty ixon
 	let g:delimitMate_expand_space = 1
 	" Issues: When adding a comment in Vim, DLM thinks I am adding a String.  When adding a " at the start of a line, DLM should not pair it.
 	" Issues: Weird things happen when building up a String like "text "+var+" text".  I sometimes end up with  " " at the end of the line!
+
+	"call add(vamAddons,"github:felixr/vim-multiedit")      " Edit multiple selections live (mark words with ,w then edit all with ,i or ,a)
+	"call add(vamAddons,"github:hlissner/vim-multiedit")    " Edit multiple selections v2 (mark words with \mm then edit all with \M or \C) - but this was not doing live updates for me
+	"call add(vamAddons,"github:vim-scripts/vim-multiedit") " A fork of hlissner's
 
 	"call add(vamAddons,"github:mhinz/vim-startify")       " Session manager and MRU, on start page or on demand
 
