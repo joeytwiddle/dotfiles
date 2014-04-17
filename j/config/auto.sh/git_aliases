@@ -169,7 +169,7 @@ gbd() {
 	fi
 
 	# %(committerdate:iso8601) 
-	git for-each-ref --sort=committerdate $target --format="${branch_color}%(refname:short)${reset_color} ${subject_color}%(subject)${reset_color} ${author_color}- %(authorname) (%(committerdate:relative))${reset_color}" |
+	git for-each-ref --sort=committerdate $target --format="${branch_color}%(refname:short)${reset_color} ${author_color}%(committerdate:relative) (%(authorname)) -${reset_color} ${subject_color}%(subject)${reset_color}" |
 
 	# | if which dropcols >/dev/null
 	#then dropcols 3
@@ -382,6 +382,7 @@ where:
                 else preBranch="/ "
                 fi
                 # I considered using "+" and "-" instead, but these are harder to visually distinguish from "*" and each other.
+                # Another alternative I tried was "~" and "x", but again the "*" is easily lost there.
             fi
         fi
         if [ $verbose ] || [ $LEFT_AHEAD -gt 0 ] || [ $RIGHT_AHEAD -gt 0 ] || [ "$local" = "$current_branch" ] ; then
