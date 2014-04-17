@@ -290,6 +290,7 @@ endif
 
 let Grep_Using_CodeSearch = ( match(Grep_Path, '^csearch$\|/csearch$') >= 0 ? 1 : 0 )
 
+" TODO: If we really never use this with csearch, then this var could be renamed to Grep_Use_Empty_FileList and we should skip even asking for the files!
 let Grep_Allow_Empty_FileList = Grep_Using_CodeSearch
 
 " --------------------- Do not edit after this line ------------------------

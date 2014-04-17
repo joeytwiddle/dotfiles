@@ -7,9 +7,9 @@ function! Joeysyntax()
 
 	" Detect whether our terminal can support 256 colors, and if so set it.
 	" This worked for Ubuntu 12.04.  (Some HOWTOs suggest setting TERM=xterm-256 but that is not needed here.)
-	if $TERM == "xterm" && $XTERM_VERSION == "XTerm(278)"
-		set t_Co=256
-	endif
+	"if $TERM == "xterm" && $XTERM_VERSION == "XTerm(278)"
+		"set t_Co=256
+	"endif
 
 	" For slow computers:
 	" :syn sync maxlines=50

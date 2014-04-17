@@ -11,7 +11,8 @@
 " Those highlights disappear when dim_inactive_windows dims those windows (at
 " least on MacVim they do).
 
-highlight InactiveWindows ctermbg=black guibg=#203838
+"highlight InactiveWindows ctermbg=black guibg=#203838
+highlight InactiveWindows ctermbg=black guibg=#445555 guifg=#999999
 
 function! s:DimInactiveWindows()
 
@@ -24,15 +25,25 @@ function! s:DimInactiveWindows()
   hi clear ColorColumn
   hi link ColorColumn InactiveWindows
 
+  let current_win_number = winnr()
+
   for i in range(1, tabpagewinnr(tabpagenr(), '$'))
+    let dim = 1
+    if i == current_win_number
+      let dim = 0
+    endif
     if bufname(winbufnr(i)) == '-MiniBufExplorer-'
-      continue
-    end
+      let dim = 0
+    endif
+    if getwinvar(i, '&diff')
+      let dim = 0
+    endif
+
     let l:range = ""
-    if i != winnr()
+    if dim
       if &wrap
         " HACK: when wrapping lines is enabled, we use the maximum number
-        " of columns getting highlighted. This might get calculated by
+        " of columns getting highlighted. This could be calculated by
         " looking for the longest visible line and using a multiple of
         " winwidth().
         let l:width=256 " max
