@@ -482,6 +482,8 @@ autocmd BufReadPost *.{sh,coffee,conf} vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\
 autocmd BufReadPost *.{sh,coffee,conf} vnoremap <buffer> <Leader>? :s+^\(\s*\)#+\1+<Enter>:set nohlsearch<CR>
 autocmd BufReadPost *.css vnoremap <buffer> <Leader>/ :s+^\(\s*\)\(.*\)+\1/* \2 */+<Enter>:set nohlsearch<CR>
 autocmd BufReadPost *.css vnoremap <buffer> <Leader>? :s+^\(\s*\)/[*]\(.*\)[*]/+\1\2+<Enter>:set nohlsearch<CR>
+autocmd BufReadPost *.{html,erb} vnoremap <buffer> <Leader>/ :s+^\(\s*\)\(.*\)+\1<!-- \2 -->+<Enter>:set nohlsearch<CR>
+autocmd BufReadPost *.{html,erb} vnoremap <buffer> <Leader>? :s+^\(\s*\)<!-- \(.*\) -->$+\1\2+<Enter>:set nohlsearch<CR>
 " TODO: If we don't want to clobber the search pattern, we could store and retore the value of the @/ variable before and after.
 " In this case we should use a function to generate the above.  That same function could setup F5 and F6 how I currently do in ~/.vim/ftplugin/*.vim
 " e.g. :call ThisBufferUsesCommentSymbol("/*", "*/")
