@@ -1,3 +1,7 @@
+" TODO: We should disable these autocommands when the (last?) conqueterm is closed.  Otherwise they continue to use CPU.
+" In the meantime, you can run this command in Vim after you have closed conqueterm:
+" :augroup UpdateConque <Bar> au! <Bar> augroup END
+
 function! UpdateConque()
   let s:startWin = winnr()
   let s:updatetimePrev = &updatetime
