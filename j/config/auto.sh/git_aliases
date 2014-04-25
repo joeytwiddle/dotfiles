@@ -167,7 +167,7 @@ git_branch_by_date() {
 	fi
 
 	# %(committerdate:iso8601) 
-	git for-each-ref --sort=committerdate $target --format="%(refname:short) ${author_color}%(committerdate:relative) (%(authorname)) -${reset_color} ${subject_color}%(subject)${reset_color}"
+	git for-each-ref --sort=-committerdate $target --format="%(refname:short) ${author_color}%(committerdate:relative) (%(authorname)) -${reset_color} ${subject_color}%(subject)${reset_color}"
 }
 
 gbd() {
@@ -176,15 +176,18 @@ gbd() {
 	local branch_color=`git config --get-color color.branch.local white`
 
 	local showancestors=omgyesplease
-	local count=40
+	local count=$((LINES-2))
 	if [ "$1" = "-n" ]
 	then count="$2"; shift; shift
+	fi
+	if [ "$1" = "." ]
+	then showancestors=""; shift
 	fi
 
 	current_branch=`git_get_current_branch`
 
 	git_branch_by_date "$@" |
-	tail -n "${count}" |
+	head -n "${count}" |
 	while read refname rest
 	do
 
@@ -214,7 +217,8 @@ gbd() {
 	then columnise-clever -ignore '[^ ]* *[^ ]* *[^ ]*'
 	else cat
 	fi |
-	replace_ancestor_markers_with_colors
+	replace_ancestor_markers_with_colors |
+	less -R -E -X -S
 }
 
 # Git View Branches (tree-like)
