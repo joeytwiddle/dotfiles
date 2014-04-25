@@ -152,15 +152,13 @@ alias glf='glc --stat'
 alias gb='git branch'
 
 # Git Branch by Date
-gbd() {
+git_branch_by_date() {
 	local reset_color=`tput sgr0`
-	local current_branch_color=`git config --get-color color.branch.current green`
 	# Optional
 	local subject_color=`tput setaf 0 ; tput bold`
 	local author_color=`tput setaf 6`
 
 	local target=refs/heads
-	local branch_color=`git config --get-color color.branch.local white`
 	#local commit_color=`git config --get-color color.diff.commit yellow`
 	if [ "$1" = -r ]
 	then
@@ -169,16 +167,54 @@ gbd() {
 	fi
 
 	# %(committerdate:iso8601) 
-	git for-each-ref --sort=committerdate $target --format="${branch_color}%(refname:short)${reset_color} ${author_color}%(committerdate:relative) (%(authorname)) -${reset_color} ${subject_color}%(subject)${reset_color}" |
+	git for-each-ref --sort=committerdate $target --format="%(refname:short) ${author_color}%(committerdate:relative) (%(authorname)) -${reset_color} ${subject_color}%(subject)${reset_color}"
+}
 
-	# | if which dropcols >/dev/null
-	#then dropcols 3
-	#else cat
-	#fi
-	if which columnise-clever >/dev/null
-	then columnise-clever -ignore '[^ ]* *[^ ]*'
-	else cat
+gbd() {
+	local reset_color=`tput sgr0`
+	local current_branch_color=`git config --get-color color.branch.current green`
+	local branch_color=`git config --get-color color.branch.local white`
+
+	local showancestors=omgyesplease
+	local count=40
+	if [ "$1" = "-n" ]
+	then count="$2"; shift; shift
 	fi
+
+	current_branch=`git_get_current_branch`
+
+	git_branch_by_date "$@" |
+	tail -n "${count}" |
+	while read refname rest
+	do
+
+        local local="${refname}"
+        ## NOTE: This code is cloned from gbs.  Can we refactor it out?
+        if [ "$local" = "$current_branch" ]
+        then preBranch="* "
+        else
+            preBranch=". "
+            if [ -n "$showancestors" ]
+            then
+                local_branch_commit_hash=`git rev-parse --verify "$local"`
+                common_commit_between_branch_and_current=`git merge-base "$local" "$current_branch"`
+                if [ "$common_commit_between_branch_and_current" = "$local_branch_commit_hash" ]
+                then preBranch="| "
+                else preBranch="/ "
+                fi
+                # I considered using "+" and "-" instead, but these are harder to visually distinguish from "*" and each other.
+                # Another alternative I tried was "~" and "x", but again the "*" is easily lost there.
+            fi
+        fi
+
+		echo "${preBranch}${refname} ${rest}"
+	done |
+
+	if which columnise-clever >/dev/null
+	then columnise-clever -ignore '[^ ]* *[^ ]* *[^ ]*'
+	else cat
+	fi |
+	replace_ancestor_markers_with_colors
 }
 
 # Git View Branches (tree-like)
@@ -369,6 +405,7 @@ where:
         fi
         LEFT_AHEAD=$(echo "$DELTAS" | grep -c '^<')
         RIGHT_AHEAD=$(echo "$DELTAS" | grep -c '^>')
+
         if [ "$local" = "$current_branch" ]
         then preBranch="* "
         else
@@ -385,6 +422,7 @@ where:
                 # Another alternative I tried was "~" and "x", but again the "*" is easily lost there.
             fi
         fi
+
         if [ $verbose ] || [ $LEFT_AHEAD -gt 0 ] || [ $RIGHT_AHEAD -gt 0 ] || [ "$local" = "$current_branch" ] ; then
             #echo "$local $WARN_LEFT(ahead $LEFT_AHEAD)$reset_color | $WARN_RIGHT(behind $RIGHT_AHEAD)$reset_color $remote"
             echo "$preBranch$local $if_merged(ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD) $remote"
@@ -422,21 +460,27 @@ gbs() {
     local ahead_color=`tput setaf 2 ; tput bold`    # green
     local behind_color=`tput setaf 1 ; tput bold`   # red
     # You can use the configured/default colors, but I quite like remote blank!  (The default red confuses behind_color.)
-    local current_branch_color=`git config --get-color color.branch.current green`
-    local local_branch_color=`git config --get-color color.branch.local white`
     # The default remote branch color is red, but that conflicts with behind_color, so I have set it to 'white' here.
     local remote_branch_color=`git config --get-color color.branch.remote white`
-    local ancestor_branch_color=`git config --get-color color.branch.ancestor cyan`
     sed "
       s+\()  *\)\([^ ]*\)$+\1$remote_branch_color\2$reset_color+
       s+(ahead *[1-9][0-9]*)+$ahead_color\0$reset_color+
       s+(behind *[1-9][0-9]*)+$behind_color\0$reset_color+
-      s+^[*] *\([^ ]*\)+* $current_branch_color\1$reset_color+
-      s+^[./x-] *\([^ ]*\)+  $local_branch_color\1$reset_color+
-      s+^[\\+|] *\([^ ]*\)+  $ancestor_branch_color\1$reset_color+
-    "
+    " |
+    replace_ancestor_markers_with_colors
   else cat
   fi
+}
+
+replace_ancestor_markers_with_colors() {
+	local current_branch_color=`git config --get-color color.branch.current green`
+	local local_branch_color=`git config --get-color color.branch.local white`
+	local ancestor_branch_color=`git config --get-color color.branch.ancestor cyan`
+	sed "
+		s+^[*] *\([^ ]*\)+* $current_branch_color\1$reset_color+
+		s+^[./x-] *\([^ ]*\)+  $local_branch_color\1$reset_color+
+		s+^[\\+|] *\([^ ]*\)+  $ancestor_branch_color\1$reset_color+
+	"
 }
 
 git_get_current_branch() {
@@ -485,3 +529,4 @@ git_find_branch_start() {
 	fi
 }
 
+# vim: ft=sh
