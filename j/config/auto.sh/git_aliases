@@ -378,7 +378,12 @@ where:
 
     current_branch=`git_get_current_branch`
 
-    git for-each-ref --format="%(refname:short) %(upstream:short)" $filter | \
+    # Default behaviour is to sort by name
+    #sorting=
+    # But I find it quite useful to sort by date (most recent last)
+    sorting="--sort=committerdate"
+
+    git for-each-ref $sorting --format="%(refname:short) %(upstream:short)" $filter | \
     while read local remote
     do
         if [ -n "$compareto" ] ; then
