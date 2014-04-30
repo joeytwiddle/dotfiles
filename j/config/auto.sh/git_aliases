@@ -188,7 +188,7 @@ gbd() {
 	then count="$2"; shift; shift
 	fi
 
-	local need_pager=0
+	local need_pager=
 	if [ $count -gt $((LINES-2)) ]
 	then need_pager=1
 	fi
@@ -231,7 +231,7 @@ gbd() {
 	then
 		# -R=show_colors -X=no_clear -S=chop_long_lines +G=jump_to_end
 		less -R -X -S +G
-		#more -R
+		#more -R   (since more=less on Mac; fails on Linux)
 	else
 		# -E=quit_at_end (in other words this just chops long lines)
 		less -R -E -X -S +G
