@@ -175,14 +175,22 @@ gbd() {
 	local current_branch_color=`git config --get-color color.branch.current green`
 	local branch_color=`git config --get-color color.branch.local white`
 
+	# TODO: Parse args in no particular order, and show help, like gbs does
+
 	# We show two pages of history by default, or all of history if showancestors is unset
-	local showancestors=omgyesplease
-	local count=$((LINES*2))
-	if [ "$1" = "." ]
-	then showancestors=""; shift; count=9999999
+	local count='9999999'
+	local count=$((LINES-2))
+	local showancestors=''
+	if [ "$1" = "-M" ]
+	then showancestors="yes" ; shift
 	fi
 	if [ "$1" = "-n" ]
 	then count="$2"; shift; shift
+	fi
+
+	local need_pager=0
+	if [ $count -gt $((LINES-2)) ]
+	then need_pager=1
 	fi
 
 	current_branch=`git_get_current_branch`
@@ -219,7 +227,16 @@ gbd() {
 	else cat
 	fi |
 	replace_ancestor_markers_with_colors |
-	less -R -X -S +G
+	if [ -n "$need_pager" ]
+	then
+		# -R=show_colors -X=no_clear -S=chop_long_lines +G=jump_to_end
+		less -R -X -S +G
+		#more -R
+	else
+		# -E=quit_at_end (in other words this just chops long lines)
+		less -R -E -X -S +G
+		#cat
+	fi
 }
 
 # Git View Branches (tree-like)
@@ -339,17 +356,17 @@ git_branch_status() {
 
     local local_branch_commit_hash common_commit_between_branch_and_current
 
-    usage="$(basename "$0") [-hav] -- summarise status of branch(es)
+    usage="$(basename "$0") [-hamtMv] -- summarise status of branch(es)
 
 where:
     -h           show this help text
     -a           show all branches, not just the current one
     -m           shows branch(es) with respect to origin/master
     -t <branch>  shows branch(es) with respect to given branch
-    -p           indicates branches which have been merged into current
+    -M           indicates branches which have been merged into current
     -v           verbose, show output even if counts are zero"
 
-    while getopts 'hamt:pv' option; do
+    while getopts 'hamt:pMv' option; do
       case "$option" in
         h) echo "$usage"
            exit
@@ -360,7 +377,7 @@ where:
            ;;
         t) compareto="$OPTARG"
            ;;
-        p) showancestors=true
+        M) showancestors=true
            ;;
         v) verbose=true
            ;;
@@ -379,9 +396,9 @@ where:
     current_branch=`git_get_current_branch`
 
     # Default behaviour is to sort by name
-    #sorting=
+    sorting=
     # But I find it quite useful to sort by date (most recent last)
-    sorting="--sort=committerdate"
+    #sorting="--sort=committerdate"
 
     git for-each-ref $sorting --format="%(refname:short) %(upstream:short)" $filter | \
     while read local remote
@@ -459,7 +476,7 @@ gbs() {
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
-  else git_branch_status -a -v -p "$@"
+  else git_branch_status -a -v "$@"
   fi |
   column -s ' ' -t | sed 's+ \( *\)+\1+g' |
   #columnise |
