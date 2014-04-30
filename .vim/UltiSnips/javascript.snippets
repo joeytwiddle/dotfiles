@@ -6,7 +6,7 @@ function ${1:function_name}(${2:argument}) {
 endsnippet
 
 snippet fn "anonymous function (fn)" w
-function(${1}) {
+function(${1}){
 	${VISUAL}$0
 }
 endsnippet
@@ -53,5 +53,13 @@ endsnippet
 snippet ife "if (err)" !
 if (${1:err}) return ${2:callback}($1);
 $0
+endsnippet
+
+snippet try "try-catch" !
+try {
+	$0
+} catch (err) {
+	
+}
 endsnippet
 
