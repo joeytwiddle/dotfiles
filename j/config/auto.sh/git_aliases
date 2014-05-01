@@ -5,11 +5,11 @@
 #   gs ga gc gd gb gco and gm are simple aliases for git status, add, commit,
 #   diff, branch, checkout and merge.  Use them to save yourself keystrokes.
 #
-#   gdc shows the diff of what is staged (what you are about to commit).
+#   gdc shows the "cached" diff of what is staged (what you are about to commit).
 #
-#   gll shows a log overview, with one commit per line.
+#   gll shows a log *overview*, with one commit per line.
 #
-#   gl is my favourite detailed log display, showing diffs, stats and commit
+#   gl is my favourite *detailed* log display, showing diffs, stats and commit
 #   messages.  Keys n and N jump forwards/backwords through diffs.
 #
 #   Both gl and gll show the graph.
@@ -36,7 +36,7 @@
 # Some of the functions (gbs, gbd) do not work on Mac OSX / FreeBSD because I
 # don't know how to get BSD sed to do search-replace.  However if you have
 # installed the GNU coreutils package (e.g. via Homebrew) and GNU sed is on
-# your path, then they should work fine.
+# the *front* of your path, then they should work fine.
 
 # TODO: Turn the aliases into shellscripts so they are available from vim's command line?
 #       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)
