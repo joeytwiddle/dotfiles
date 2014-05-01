@@ -1,4 +1,44 @@
-# TODO: Turn these into shellscripts so they are available from vim's command line.
+# What is useful in this file?
+#
+# Shortcuts:
+#
+#   gs ga gc gd gb gco and gm are simple aliases for git status, add, commit,
+#   diff, branch, checkout and merge.  Use them to save yourself keystrokes.
+#
+#   gdc shows the diff of what is staged (what you are about to commit).
+#
+#   gll shows a log overview, with one commit per line.
+#
+#   gl is my favourite detailed log display, showing diffs, stats and commit
+#   messages.  Keys n and N jump forwards/backwords through diffs.
+#
+#   Both gl and gll show the graph.
+#
+# Useful tools:
+#
+#   gbs [-M] [.] is "git branch status", a nice way to see which branches are
+#   up-to-date with the remote (which need a push, pull or merge).
+#
+#   gbd [-M] [-r] is "git branch by date", a nice way to see which branches
+#   were recently updated.  -r shows remote branches.
+#
+#   The -M argument to the above commands is slower, but will display whether
+#   or not each branch has been merged into the current branch.
+#
+#   They will only align neatly into columns if you have jsh's columnise-clever
+#   installed.  Fixing that is something I should TODO!
+#
+# I hope these shortcuts and tools will be of use to you.
+#
+# The other aliases and functions in this file I rarely use (except those which
+# are called by the aliases of course).
+#
+# Some of the functions (gbs, gbd) do not work on Mac OSX / FreeBSD because I
+# don't know how to get BSD sed to do search-replace.  However if you have
+# installed the GNU coreutils package (e.g. via Homebrew) and GNU sed is on
+# your path, then they should work fine.
+
+# TODO: Turn the aliases into shellscripts so they are available from vim's command line?
 #       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)
 
 # I had problems declaring functions whose name matched pre-existing aliases.  In my case this was when I was loading oh-my-zsh's git plugin before this script was sourced.
@@ -68,7 +108,7 @@ alias gc='git commit -v'
 alias gf='git fetch'
 alias gp='git preview'
 alias gw='git whatsnew'
-alias gm='git merge FETCH_HEAD'
+alias gm='git merge'
 
 #alias gl='git log'
 #alias gl='git log -U2 -p -m'
@@ -170,6 +210,7 @@ git_branch_by_date() {
 	git for-each-ref --sort=committerdate $target --format="%(refname:short) ${author_color}%(committerdate:relative) (%(authorname)) -${reset_color} ${subject_color}%(subject)${reset_color}"
 }
 
+# Git Branch by Date wrapper
 gbd() {
 	local reset_color=`tput sgr0`
 	local current_branch_color=`git config --get-color color.branch.current green`
