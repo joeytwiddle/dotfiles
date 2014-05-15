@@ -489,3 +489,20 @@ autocmd BufReadPost *.css vnoremap <buffer> <Leader>? :s+^\(\s*\)/[*]\(.*\)[*]/+
 "   or :call RegisterCommentSymbol('coffee', '#')
 " We could also inspect &comments, but which one should we choose to use?  :-P
 
+" Copy and paste keys on <Ctrl-C> and <Ctrl-V> like all the other editors
+" Ctrl-C in Visual mode acts like copy
+vnoremap <C-c> "+y
+" This version restores visual mode afterwards (retains the selection) which is consistent with other editors, but not especially desirable.
+"vnoremap <C-c> "+ygv
+" Ctrl-V in Normal and Insert mode acts like paste
+nnoremap <C-v> "+p
+"inoremap <C-v> <C-r>+
+" This version creates its own undo entry (rather than combining with the last) but it doesn't leave the cursor in the right place.
+inoremap <C-v> <Esc>"+pa
+" Ctrl-V in Visual mode pastes over the selection
+vnoremap <C-v> "+P
+" Normal behaviour of <C-v> now available on <Leader><C-v>
+nnoremap <Leader><C-v> <C-v>
+inoremap <Leader><C-v> <C-v>
+vnoremap <Leader><C-v> <C-v>
+
