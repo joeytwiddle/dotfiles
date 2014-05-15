@@ -42,6 +42,18 @@ if v:version >= 703
 endif
 " Also mildly related, Vim now has persistent_undo feature, which can be enabled by setting 'undofile'
 
+" This makes it possible to leave Insert mode more quickly when pressing Escape.
+" Although it may mess with other plugins that use timeoutlen.
+" A better solution might be to get more familiar with my Esc shortcut on £ (Shift-3), although that isn't an option on US keyboards.
+if ! has('gui_running')
+    set ttimeoutlen=10
+    augroup FastEscape
+        autocmd!
+        au InsertEnter * set timeoutlen=0
+        au InsertLeave * set timeoutlen=1000
+    augroup END
+endif
+
 
 
 " Allows us to use Ctrl-s and Ctrl-q as keybinds
@@ -368,7 +380,7 @@ autocmd VimLeave * silent !stty ixon
 		" :set guifont=Droid\ Sans\ Mono\ 6
 		"" If I screen fonts are available, there is "Schumacher Clean", which is the same height as Lucida Console 8, but narrower:
 		" :set guifont=Clean\ 8
-		"" Also with screen fonts, you have the option of using LucidaTypewriter, like Console but with sharp edges.
+		"" Also with screen fonts, you have the option of using LucidaTypewriter, like Console but with sharp edges.  The only problem is that at size 8 its bold is weak: the chars are very slightly wider but no thicker.  At size 10 it is quite passable.
 		" :set guifont=LucidaTypewriter\ Medium\ 8
 		" TODO for Mac:
 		if $_system_name == 'OSX'
@@ -568,7 +580,7 @@ autocmd VimLeave * silent !stty ixon
 	" call add(vamAddons,'github:derekwyatt/vim-scala')      " Scala syntax and more
 	" call add(vamAddons,'/stuff/joey/projects/scala/scala-dist-vim') " Older but does not load this way!
 	call add(vamAddons,'github:mbbill/undotree')           " Allows you to view undos.  I need a newer Vim for this!
-	call add(vamAddons,'github:majutsushi/tagbar')         " Nests tags in some languages.  Don't actually try using this with custom .ctags settings.  It will explode until you have configured it correctly.
+	"call add(vamAddons,'github:majutsushi/tagbar')         " Nests tags in some languages.  Don't actually try using this with custom .ctags settings.  It will explode until you have configured it correctly.
 	" call add(vamAddons,"VOoM")                           " Another outliner
 	" call add(vamAddons,'github:xolox/vim-easytags')      " Runs ctags automatic for you, to update them
 	"call add(vamAddons,'github:ervandew/supertab')         " Seems a lot like another_tabcompletion.vim but the list appears backwards! =/
@@ -629,6 +641,18 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:mhinz/vim-startify")       " Session manager and MRU, on start page or on demand
 
 	"call add(vamAddons, "github:koron/nyancat-vim")       " You might need this, but you probably won't
+
+	" https://github.com/bling/vim-airline
+	call add(vamAddons, "github:bling/vim-airline")        " Cool statusline
+	let g:airline_section_b = "[%{airline#util#wrap(airline#extensions#branch#get_head(),0)}]"
+	"let g:airline_section_x = "(%{airline#util#wrap(airline#parts#filetype(),0)})"
+	let g:airline_section_z = "%3P (%c%{g:airline_symbols.linenr}%#__accent_bold#%l%#__restore__#) \#%02B"
+	let g:airline_left_sep  = "▶"
+	let g:airline_right_sep = "◀"
+	"let g:airline_left_sep  = "╱"
+	"let g:airline_right_sep = "╲"
+	"let g:airline_powerline_fonts = 1
+	"set noshowmode
 
 	" == My Plugins from the Cloud ==
 	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
