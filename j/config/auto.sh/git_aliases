@@ -14,7 +14,7 @@
 #
 #   Both gl and gll show the graph.
 #
-# Useful tools:
+# Useful tools (the really good stuff!):
 #
 #   gbs [-M] [.] is "git branch status", a nice way to see which branches are
 #   up-to-date with the remote (which need a push, pull or merge).
@@ -23,15 +23,15 @@
 #   were recently updated.  -r shows remote branches.
 #
 #   The -M argument to the above commands is slower, but will display whether
-#   or not each branch has been merged into the current branch.
+#   or not each branch has been merged into the current branch.  Cool!
 #
 #   They will only align neatly into columns if you have jsh's columnise-clever
-#   installed.  Fixing that is something I should TODO!
+#   installed.  Making that work independently is something I should TODO!
 #
 # I hope these shortcuts and tools will be of use to you.
 #
 # The other aliases and functions in this file I rarely use (except those which
-# are called by the aliases of course).
+# are required by the aliases of course).
 #
 # Some of the functions (gbs, gbd) do not work on Mac OSX / FreeBSD because I
 # don't know how to get BSD sed to do search-replace.  However if you have
@@ -174,7 +174,20 @@ alias glm='glg -m --first-parent'
 # Problem: When used with --graph, glc should end in %n.  But we don't want the %n when --graph is not used (e.g. in glf below)!  I don't personally want the %n, but --graph always draws a |\n straight after the formatted text, so it looks messy without it.
 alias gll='glc --graph'
 # "Git Log Long Minus merges"
-alias gllm='gll --no-merges'
+# This lists the merge commits themselves, but does not list any of the commits that were brought in by the merge.  This is useful if you have merged things into the current branch, but you are only interested in the commits that were actually made on the current branch.
+# When using this, it can be nice to clearly distinguish merges from raw commits.  If your merge commit messages are pure, you can search /Merge.* or cleaner /Merge.* into [^ ]*
+# gllm | highlight -bold -reverse "Merge.* into [^ ]*" magenta | more
+if which highlight >/dev/null
+then
+	# Breaks because glc is not loaded yet?
+	#gllm() {
+		#gll -m --first-parent "$@" |highlight -bold "Merge.*" blue | less -REX
+	#}
+	alias gllm='gll -m --first-parent | highlight -bold "Merge.*" blue | less -REX'
+else alias gllm='gll -m --first-parent'
+fi
+# This shows the commits from merged branches (/), but not the merge commits themselves (\).  It takes less space than gll.
+alias gllmm='gll --no-merges'
 
 # "Git Log Clear" - Single lines, no graph.  Shows more info than: git log --pretty=oneline
 # If you want to use this with --stat and --graph then it should have a %n at the end.  But this will make --graph show blank lines even when run without --stat.  Since glf does not use --graph, we don't really need this.
@@ -206,7 +219,7 @@ git_branch_by_date() {
 		#branch_color=`git config --get-color color.branch.remote red`
 	fi
 
-	# %(committerdate:iso8601) 
+	# %(committerdate:iso8601)
 	git for-each-ref --sort=committerdate $target --format="%(refname:short) ${author_color}%(committerdate:relative) (%(authorname)) -${reset_color} ${subject_color}%(subject)${reset_color}"
 }
 
@@ -356,7 +369,7 @@ git_guess_upstream_branch() {
 	echo "$remote_branch"
 }
 
-# Git What Is Not Pushed
+# Git What Is Not Pushed (doesn't always work - I use gbs more often)
 #alias gwinp='gll @{upstream}..HEAD'
 alias gwinp='gll $(git_guess_upstream_branch)..HEAD'
 # Git What Is Not Pushed Details
@@ -387,7 +400,8 @@ git_branch_status() {
     # $ git branch-status
     # master (ahead 2) | (behind 0) origin/master
 
-    # BUG TODO: Running gbs after git_branch_status -a -v gives only 1-line output.  Steps to reproduce:
+    # Surely this was a non-local variable leaking out of git_branch_status and has already been fixed.
+    # BUG (fixed?): Running gbs after git_branch_status -a -v gives only 1-line output.  Steps to reproduce:
     # Use Mac.  Start jsh in bash (with GNU coreutils etc.).  See gbs works fine.  Now do git_branch_status -a -v, also works fine.
     # Now see gbs only displays one line!
     # From initial tracing, it appeared that the final gbs call only iterates once during the while getopts.
@@ -397,6 +411,8 @@ git_branch_status() {
 
     local local_branch_commit_hash common_commit_between_branch_and_current
 
+    local sorting=
+
     usage="$(basename "$0") [-hamtMv] -- summarise status of branch(es)
 
 where:
@@ -404,10 +420,11 @@ where:
     -a           show all branches, not just the current one
     -m           shows branch(es) with respect to origin/master
     -t <branch>  shows branch(es) with respect to given branch
+    -d           sort by date (default is to sort by name)
     -M           indicates branches which have been merged into current
     -v           verbose, show output even if counts are zero"
 
-    while getopts 'hamt:pMv' option; do
+    while getopts 'hamt:pdMv' option; do
       case "$option" in
         h) echo "$usage"
            exit
@@ -417,6 +434,8 @@ where:
         m) compareto=origin/master
            ;;
         t) compareto="$OPTARG"
+           ;;
+        d) sorting="--sort=committerdate"
            ;;
         M) showancestors=true
            ;;
@@ -435,11 +454,6 @@ where:
     fi
 
     current_branch=`git_get_current_branch`
-
-    # Default behaviour is to sort by name
-    sorting=
-    # But I find it quite useful to sort by date (most recent last)
-    #sorting="--sort=committerdate"
 
     git for-each-ref $sorting --format="%(refname:short) %(upstream:short)" $filter | \
     while read local remote
