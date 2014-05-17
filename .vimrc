@@ -219,6 +219,7 @@ autocmd VimLeave * silent !stty ixon
 	"nmap <C-a> :AsyncFinder<Enter>
 	" I usually have RepeatLast enabled.  If so, this works much better:
 	"nmap <C-a> q:AsyncFinder<Enter>
+	" Or the following is smart enough to decide for us.  BUG: The `normal q` part fails on an empty buffer with error: "E749: empty buffer"
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
 	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','pikto','./public/assets']"
@@ -642,17 +643,33 @@ autocmd VimLeave * silent !stty ixon
 
 	"call add(vamAddons, "github:koron/nyancat-vim")       " You might need this, but you probably won't
 
+	"call add(vamAddons, "github:scrooloose/syntastic")    " Checks syntax as you are working.  Needs syntax checker for revelant language to be installed separately: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
+
 	" https://github.com/bling/vim-airline
 	call add(vamAddons, "github:bling/vim-airline")        " Cool statusline
 	let g:airline_section_b = "[%{airline#util#wrap(airline#extensions#branch#get_head(),0)}]"
 	"let g:airline_section_x = "(%{airline#util#wrap(airline#parts#filetype(),0)})"
 	let g:airline_section_z = "%3P (%c%{g:airline_symbols.linenr}%#__accent_bold#%l%#__restore__#) \#%02B"
-	let g:airline_left_sep  = "▶"
-	let g:airline_right_sep = "◀"
+	let g:airline_left_sep  = "⡿⠋"
+	"let g:airline_right_sep = "⠙⢿"
+	"let g:airline_left_sep  = "⣷⣄"
+	let g:airline_right_sep = "⣠⣾"
+	"let g:airline_left_sep  = "║"
+	"let g:airline_left_sep  = "𝄛"
+	"let g:airline_left_sep  = "◆"
+	"let g:airline_left_sep  = "╳"
+	"let g:airline_left_sep  = "▶"
+	"let g:airline_right_sep = "◀"
 	"let g:airline_left_sep  = "╱"
 	"let g:airline_right_sep = "╲"
+	"let g:airline_left_sep  = "◤"
+	"let g:airline_right_sep = "◥"
+	"let g:airline_left_sep  = ""
+	"let g:airline_right_sep = ""
 	"let g:airline_powerline_fonts = 1
 	"set noshowmode
+	"let g:airline#extensions#tabline#enabled = 1    # alernative to MBE - uses vim's built-in 'tabline'
+	" TODO: Airline whitespace option slows down Vim on large files, between every keystroke!  We should ensure it is never automatically enabled when we open a large file.
 
 	" == My Plugins from the Cloud ==
 	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
