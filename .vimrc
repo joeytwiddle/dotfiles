@@ -669,6 +669,10 @@ autocmd VimLeave * silent !stty ixon
 	"let g:airline_powerline_fonts = 1
 	"set noshowmode
 	"let g:airline#extensions#tabline#enabled = 1    # alernative to MBE - uses vim's built-in 'tabline'
+	let s:joeys_airline_theme_file = $HOME . "/.vim/autoload/airline/themes/joeys.vim"
+	if filereadable(s:joeys_airline_theme_file)
+		let g:airline_theme="joeys"
+	endif
 	" TODO: Airline whitespace option slows down Vim on large files, between every keystroke!  We should ensure it is never automatically enabled when we open a large file.
 
 	" == My Plugins from the Cloud ==
