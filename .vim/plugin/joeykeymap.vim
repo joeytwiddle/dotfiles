@@ -185,9 +185,6 @@ nnoremap <C-W>S :vsplit<Enter>
 "" the use presses anything else.  It is pretty dangerous at the moment!
 " nnoremap <C-w> :bdel<Enter>
 
-"" For GVim
-inoremap <S-Insert> <Esc>"*pa
-
 " nmap <C-X> :vnew \| vimshell bash<CR>
 
 "" Quick access to ConqueTerm
@@ -488,6 +485,11 @@ autocmd BufReadPost *.css vnoremap <buffer> <Leader>? :s+^\(\s*\)/[*]\(.*\)[*]/+
 "   or :call ThisBufferUsesCommentSymbol("#")
 "   or :call RegisterCommentSymbol('coffee', '#')
 " We could also inspect &comments, but which one should we choose to use?  :-P
+
+" Make Shift-Insert in GVim work like it does in X-Term
+"autocmd GUIEnter * inoremap <S-Insert> <Esc>"*pa
+autocmd GUIEnter * inoremap <S-Insert> <C-R>*
+autocmd GUIEnter * cnoremap <S-Insert> <C-R>*
 
 " Copy and paste keys on <Ctrl-C> and <Ctrl-V> like all the other editors
 " Ctrl-C in Visual mode acts like copy
