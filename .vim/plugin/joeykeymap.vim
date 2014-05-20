@@ -185,9 +185,6 @@ nnoremap <C-W>S :vsplit<Enter>
 "" the use presses anything else.  It is pretty dangerous at the moment!
 " nnoremap <C-w> :bdel<Enter>
 
-"" For GVim
-inoremap <S-Insert> <Esc>"*pa
-
 " nmap <C-X> :vnew \| vimshell bash<CR>
 
 "" Quick access to ConqueTerm
@@ -490,4 +487,26 @@ autocmd BufReadPost *.{html,erb} vnoremap <buffer> <Leader>? :s+^\(\s*\)<!-- \(.
 "   or :call ThisBufferUsesCommentSymbol("#")
 "   or :call RegisterCommentSymbol('coffee', '#')
 " We could also inspect &comments, but which one should we choose to use?  :-P
+
+" Make Shift-Insert in GVim work like it does in X-Term
+"autocmd GUIEnter * inoremap <S-Insert> <Esc>"*pa
+autocmd GUIEnter * inoremap <S-Insert> <C-R>*
+autocmd GUIEnter * cnoremap <S-Insert> <C-R>*
+
+" Copy and paste keys on <Ctrl-C> and <Ctrl-V> like all the other editors
+" Ctrl-C in Visual mode acts like copy
+vnoremap <C-c> "+y
+" This version restores visual mode afterwards (retains the selection) which is consistent with other editors, but not especially desirable.
+"vnoremap <C-c> "+ygv
+" Ctrl-V in Normal and Insert mode acts like paste
+nnoremap <C-v> "+p
+"inoremap <C-v> <C-r>+
+" This version creates its own undo entry (rather than combining with the last) but it doesn't leave the cursor in the right place.
+inoremap <C-v> <Esc>"+pa
+" Ctrl-V in Visual mode pastes over the selection
+vnoremap <C-v> "+P
+" Normal behaviour of <C-v> now available on <Leader><C-v>
+nnoremap <Leader><C-v> <C-v>
+inoremap <Leader><C-v> <C-v>
+vnoremap <Leader><C-v> <C-v>
 
