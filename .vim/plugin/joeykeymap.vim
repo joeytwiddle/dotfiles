@@ -514,3 +514,9 @@ nnoremap <Leader><C-v> <C-v>
 inoremap <Leader><C-v> <C-v>
 vnoremap <Leader><C-v> <C-v>
 
+" Faster access to EasyMotion, assuming g:EasyMotion_leader_key == "<Leader><Leader>"
+nmap <Leader>j <Leader><Leader>f
+nmap <Leader>J <Leader><Leader>F
+nmap <C-d> <Leader><Leader>F
+nmap <C-g> <Leader><Leader>f
+
