@@ -15,6 +15,7 @@ inoremap <buffer> {<CR> {<CR><CR>}<Up><Esc>cc
 
 " Grabs the highlighted expression and logs it
 vnoremap <Leader>log yoconsole.log("<C-R>":", <C-R>");<Esc>
+nmap <Leader>log viW<Leader>log
 
 
 
