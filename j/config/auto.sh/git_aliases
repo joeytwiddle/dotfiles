@@ -179,7 +179,7 @@ alias gll='glc --graph'
 # gllm | highlight -bold -reverse "Merge.* into [^ ]*" magenta | more
 if which highlight >/dev/null
 then
-	# Breaks because glc is not loaded yet?
+	# Better because it allows arguments to be passed.  Breaks because glc is not loaded yet?
 	#gllm() {
 		#gll -m --first-parent "$@" |highlight -bold "Merge.*" blue | less -REX
 	#}
@@ -188,6 +188,8 @@ else alias gllm='gll -m --first-parent'
 fi
 # This shows the commits from merged branches (/), but not the merge commits themselves (\).  It takes less space than gll.
 alias gllmm='gll --no-merges'
+# Git Log Long No Graph
+alias gllng='glc'
 
 # "Git Log Clear" - Single lines, no graph.  Shows more info than: git log --pretty=oneline
 # If you want to use this with --stat and --graph then it should have a %n at the end.  But this will make --graph show blank lines even when run without --stat.  Since glf does not use --graph, we don't really need this.
