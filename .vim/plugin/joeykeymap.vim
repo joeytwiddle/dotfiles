@@ -439,26 +439,32 @@ nnoremap <Leader>k :setlocal iskeyword=65-127<Enter>
 nnoremap <Leader>e :execute getline(".")<CR>
 " I would quite like a version that could work on multiple lines (from a visual selection).
 
-" If my F3 mapping to grep.vim is working fine, let's skip through all the prompts.
-" Replaces :emenu<Space><Tab>
-"nmap <F4> <F3><CR><CR><CR>
-nnoremap <F4> :call RunGrep('grep')<CR><CR><CR><CR>
-" NOTE: The last <CR> is not always needed.  The |hit-enter| prompt is only displayed when the "Grep in files:" prompt has exceeded |cmdheight| (always true for me, with my huge exclude list).  So an alternative workaround might be for grep.vim to temporarily set ch very high, then reset it afterwards.
-" Avoiding the final <CR> would be desirable because it currently hides any "Error...not found" message that might appear.  And perhaps in some cases it isn't even required (if the command-line is not longer than the screen).
+function! s:SetupKeysForGrep()
+	" Now that <F4> is doing a search for the word under the cursor.  <F3> could start empty, waiting for a typed word.  But for the user's convenience, we start them off with the whole-word symbols.
+	nnoremap <F3> :Grep<CR><C-U>\<\><Left><Left>
+	" If my F3 mapping to grep.vim is working fine, let's skip through all the prompts.
+	" Replaces :emenu<Space><Tab>
+	"nmap <F4> <F3><CR><CR><CR>
+	nnoremap <F4> :Grep<CR><CR><CR><CR>
+	" NOTE: The last <CR> is not always needed.  The |hit-enter| prompt is only displayed when the "Grep in files:" prompt has exceeded |cmdheight| (always true for me, with my huge exclude list).  So an alternative workaround might be for grep.vim to temporarily set ch very high, then reset it afterwards.
+	" Avoiding the final <CR> would be desirable because it currently hides any "Error...not found" message that might appear.  And perhaps in some cases it isn't even required (if the command-line is not longer than the screen).
+endfunction
 
-" Now <F4> is doing a search for the word under the cursor.  <F3> could start empty, waiting for a typed word.  But for the user's convenience, we start them off with the whole-word symbols.
-nnoremap <F3> :call RunGrep('grep')<CR><C-U>\<\><Left><Left>
+function! s:SetupKeysForCSearch()
+	" If using csearch, \< and \> are replaced with \b
+	nnoremap <F3> :Grep<CR><C-U>\b\b<Left><Left>
+	" And F4 needs one fewer <CR> (because the file/options line is short/empty):
+	nnoremap <F4> :Grep<CR><CR>
+endfunction
 
 if exists("g:Grep_Using_CodeSearch") && g:Grep_Using_CodeSearch || exists("g:Grep_Path") && match(g:Grep_Path, '^csearch$\|/csearch$') >= 0
-	" If using csearch, \< and \> are replaced with \b
-	nnoremap <F3> :call RunGrep('grep')<CR><C-U>\b\b<Left><Left>
-	" And F4 needs one fewer <CR> (because the file/options line is short/empty):
-	nnoremap <F4> :call RunGrep('grep')<CR><CR><CR>
-	let g:Grep_Default_Filelist = ''
+	call s:SetupKeysForCSearch()
 else
-	nnoremap <F3> :call RunGrep('grep')<CR><C-U>\<\><Left><Left>
-	nnoremap <F4> :call RunGrep('grep')<CR><CR><CR><CR>
+	call s:SetupKeysForGrep()
 endif
+
+command! UseGrep    exec "SwitchToGrep"    | call s:SetupKeysForGrep()
+command! UseCSearch exec "SwitchToCSearch" | call s:SetupKeysForCSearch()
 
 " Vim's <C-w>W is the opposite of <C-W>w, so why not the same for <C-w>X?
 "nnoremap <C-w>X <C-w>W<C-w>x<C-w>w
