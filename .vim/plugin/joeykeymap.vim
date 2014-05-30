@@ -431,6 +431,9 @@ nnoremap <C-]> g<C-]>
 " Occasionally there are multiple results but all pointing to the same place; it still asks the user to choose.  :S
 " (I think this is when the file is open, then we get one tag from the 'tags' file, and one from Vim itself, or perhaps from TList.)
 " TODO: Would be nice if tags fail, to try gd or gD instead.
+"       Or indeed, do a language-sensitive fallback search.
+"       E.g. for Javascript, we could search in current file for "function <cword>"
+"                            or failing that, try the same search with Grep.
 
 " Been having a nightmare with iskeyword.  Here is a fast way to reset it.
 nnoremap <Leader>k :setlocal iskeyword=65-127<Enter>
