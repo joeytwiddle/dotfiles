@@ -652,7 +652,7 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons, "github:bling/vim-airline")        " Cool statusline
 	let g:airline_section_b = "[%{airline#util#wrap(airline#extensions#branch#get_head(),0)}]"
 	"let g:airline_section_x = "(%{airline#util#wrap(airline#parts#filetype(),0)})"
-	let g:airline_section_z = "%3P (%c%{g:airline_symbols.linenr}%#__accent_bold#%l%#__restore__#) \#%02B"
+	let g:airline_section_z = "%{GetSearchStatus()}%3P (%02c%{g:airline_symbols.linenr}%#__accent_bold#%l%#__restore__#) \#%02B"
 	let g:airline_left_sep  = "⡿⠋"
 	"let g:airline_right_sep = "⠙⢿"
 	"let g:airline_left_sep  = "⣷⣄"

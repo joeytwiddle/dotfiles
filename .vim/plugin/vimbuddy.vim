@@ -10,6 +10,9 @@
 "
 :set shm=atT
 :set statusline=%<%f\ %m%h%r%=\ [%2n]\ %P\ (%l,%c)%V\ \#%02B%<
+if exists('*GetSearchStatus')
+    let &statusline = substitute(&statusline, '= ', '= %{GetSearchStatus()}', '')
+endif
 " Shows time:
 " :set rulerformat=%55(%{strftime('%a\ %b\ %e\ %I:%M\ %p')}\ %5l,%-6(%c%V%)\ %P%)
 " Previous:
