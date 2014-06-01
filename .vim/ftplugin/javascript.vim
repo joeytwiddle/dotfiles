@@ -15,7 +15,9 @@ inoremap <buffer> {<CR> {<CR><CR>}<Up><Esc>cc
 
 " Grabs the highlighted expression and logs it
 vnoremap <Leader>log yoconsole.log("<C-R>":", <C-R>");<Esc>
-nmap <Leader>log viW<Leader>log
+" viW is *sometimes* preferable, e.g. to catch 'obj.prop[i]' but more often than not it grabs too much, e.g. it catches 'obj.prop[i]);'
+nmap <Leader>log viw<Leader>log
+nmap <Leader>Log viW<Leader>log
 
 
 
