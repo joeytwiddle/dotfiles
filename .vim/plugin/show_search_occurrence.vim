@@ -11,8 +11,8 @@ endif
 
 function! GetSearchStatus()
 	let this_line = getline('.')
-	" TODO: To trigger only when at the start of a match (rather than anywhere on a matching line), discard the part of the line before the cursor, and require match()==0
-	if match(this_line, @/) >= 0
+	let current_column = col('.')
+	if match(this_line, @/, current_column-1) == current_column-1
 		let this_lnum = line('.')
 		let count_matches = 0
 		let this_index = -1
