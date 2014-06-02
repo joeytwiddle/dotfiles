@@ -354,6 +354,7 @@ git_guess_upstream_branch() {
 	# We cannot use --symbolic or --abbrev-ref here; it will return what was given even if no upstream exists.
 	# In fact we must specify --revs-only to prevent that from occurring!
 	# We hide the error if the remote branch is not found.
+	# BUG: On git 1.8.5.2 on MacOSX, we are getting remote_commit='a_long_hash_id'  I was hoping it would be empty, so we could at least guess a symbolic remote branch.
 	remote_commit=$(git rev-parse --revs-only "$remote_branch" 2>/dev/null)
 	if [ -z "$remote_commit" ]
 	then
@@ -384,6 +385,10 @@ alias gtpf='git topush'
 alias gtpl='gwinpd'
 # Git To Push Details / Diff (a direct diff, without listing each commit)
 alias gtpd='gd FETCH_HEAD..HEAD'
+
+# Git Merge Origin
+#alias gmo='verbosely git merge $(git_guess_upstream_branch)'
+alias gmo='verbosely git merge origin/$(git_get_current_branch)'
 
 git_branch_status() {
     # Original: https://gist.github.com/Mark-Booth/5058384

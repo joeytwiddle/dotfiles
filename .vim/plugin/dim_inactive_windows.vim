@@ -41,15 +41,11 @@ function! s:DimInactiveWindows()
 
     let l:range = ""
     if dim
-      if &wrap
-        " HACK: when wrapping lines is enabled, we use the maximum number
-        " of columns getting highlighted. This could be calculated by
-        " looking for the longest visible line and using a multiple of
-        " winwidth().
-        let l:width=256 " max
-      else
-        let l:width=winwidth(i)
-      endif
+      " We used to use winwidth(i) by default, only the max (256) if &wrap was set.
+      " But in fact even without &wrap, the buffer may be scrolled to the right.
+      " In that case, we could start the range higher and end it higher.
+      " But simpler just to fill all the columns we can, starting from 1, and ignore those larger.
+      let l:width = 256
       let l:range = join(range(1, l:width), ',')
     endif
     call setwinvar(i, '&colorcolumn', l:range)
