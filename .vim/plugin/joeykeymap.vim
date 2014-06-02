@@ -32,8 +32,8 @@ nmap [5;5~ <C-PageUp>
 "autocmd BufReadPost quickfix nnoremap <buffer> <C-PageDown> :cnewer<CR>
 "autocmd BufReadPost quickfix nnoremap <buffer> <C-PageUp> :colder<CR>
 " You had better only use these versions if you also load quickfix_title_control.vim!
-autocmd BufReadPost quickfix nnoremap <buffer> <C-PageDown> :cnewer<CR>:call g:RestoreQuickfixTitle()<CR>
-autocmd BufReadPost quickfix nnoremap <buffer> <C-PageUp> :colder<CR>:call g:RestoreQuickfixTitle()<CR>
+autocmd BufReadPost quickfix nnoremap <buffer> <silent> <C-PageDown> :cnewer<CR>:call g:RestoreQuickfixTitle()<CR>
+autocmd BufReadPost quickfix nnoremap <buffer> <silent> <C-PageUp> :colder<CR>:call g:RestoreQuickfixTitle()<CR>
 " TODO: If we push quickfix_title_control.vim into autoload, it may be easier to check if the function exists in advance, allowing us to decide which of the above keybinds to set.
 
 "" Sometimes I want to re-arrange the order of the buffers in my list.  After
@@ -431,6 +431,9 @@ nnoremap <C-]> g<C-]>
 " Occasionally there are multiple results but all pointing to the same place; it still asks the user to choose.  :S
 " (I think this is when the file is open, then we get one tag from the 'tags' file, and one from Vim itself, or perhaps from TList.)
 " TODO: Would be nice if tags fail, to try gd or gD instead.
+"       Or indeed, do a language-sensitive fallback search.
+"       E.g. for Javascript, we could search in current file for "function <cword>"
+"                            or failing that, try the same search with Grep.
 
 " Been having a nightmare with iskeyword.  Here is a fast way to reset it.
 nnoremap <Leader>k :setlocal iskeyword=65-127<Enter>
@@ -439,26 +442,32 @@ nnoremap <Leader>k :setlocal iskeyword=65-127<Enter>
 nnoremap <Leader>e :execute getline(".")<CR>
 " I would quite like a version that could work on multiple lines (from a visual selection).
 
-" If my F3 mapping to grep.vim is working fine, let's skip through all the prompts.
-" Replaces :emenu<Space><Tab>
-"nmap <F4> <F3><CR><CR><CR>
-nnoremap <F4> :call RunGrep('grep')<CR><CR><CR><CR>
-" NOTE: The last <CR> is not always needed.  The |hit-enter| prompt is only displayed when the "Grep in files:" prompt has exceeded |cmdheight| (always true for me, with my huge exclude list).  So an alternative workaround might be for grep.vim to temporarily set ch very high, then reset it afterwards.
-" Avoiding the final <CR> would be desirable because it currently hides any "Error...not found" message that might appear.  And perhaps in some cases it isn't even required (if the command-line is not longer than the screen).
+function! s:SetupKeysForGrep()
+	" Now that <F4> is doing a search for the word under the cursor.  <F3> could start empty, waiting for a typed word.  But for the user's convenience, we start them off with the whole-word symbols.
+	nnoremap <F3> :Grep<CR><C-U>\<\><Left><Left>
+	" If my F3 mapping to grep.vim is working fine, let's skip through all the prompts.
+	" Replaces :emenu<Space><Tab>
+	"nmap <F4> <F3><CR><CR><CR>
+	nnoremap <F4> :Grep<CR><CR><CR><CR>
+	" NOTE: The last <CR> is not always needed.  The |hit-enter| prompt is only displayed when the "Grep in files:" prompt has exceeded |cmdheight| (always true for me, with my huge exclude list).  So an alternative workaround might be for grep.vim to temporarily set ch very high, then reset it afterwards.
+	" Avoiding the final <CR> would be desirable because it currently hides any "Error...not found" message that might appear.  And perhaps in some cases it isn't even required (if the command-line is not longer than the screen).
+endfunction
 
-" Now <F4> is doing a search for the word under the cursor.  <F3> could start empty, waiting for a typed word.  But for the user's convenience, we start them off with the whole-word symbols.
-nnoremap <F3> :call RunGrep('grep')<CR><C-U>\<\><Left><Left>
+function! s:SetupKeysForCSearch()
+	" If using csearch, \< and \> are replaced with \b
+	nnoremap <F3> :Grep<CR><C-U>\b\b<Left><Left>
+	" And F4 needs one fewer <CR> (because the file/options line is short/empty):
+	nnoremap <F4> :Grep<CR><CR>
+endfunction
 
 if exists("g:Grep_Using_CodeSearch") && g:Grep_Using_CodeSearch || exists("g:Grep_Path") && match(g:Grep_Path, '^csearch$\|/csearch$') >= 0
-	" If using csearch, \< and \> are replaced with \b
-	nnoremap <F3> :call RunGrep('grep')<CR><C-U>\b\b<Left><Left>
-	" And F4 needs one fewer <CR> (because the file/options line is short/empty):
-	nnoremap <F4> :call RunGrep('grep')<CR><CR><CR>
-	let g:Grep_Default_Filelist = ''
+	call s:SetupKeysForCSearch()
 else
-	nnoremap <F3> :call RunGrep('grep')<CR><C-U>\<\><Left><Left>
-	nnoremap <F4> :call RunGrep('grep')<CR><CR><CR><CR>
+	call s:SetupKeysForGrep()
 endif
+
+command! UseGrep    exec "SwitchToGrep"    | call s:SetupKeysForGrep()
+command! UseCSearch exec "SwitchToCSearch" | call s:SetupKeysForCSearch()
 
 " Vim's <C-w>W is the opposite of <C-W>w, so why not the same for <C-w>X?
 "nnoremap <C-w>X <C-w>W<C-w>x<C-w>w
@@ -507,4 +516,10 @@ vnoremap <C-v> "+P
 nnoremap <Leader><C-v> <C-v>
 inoremap <Leader><C-v> <C-v>
 vnoremap <Leader><C-v> <C-v>
+
+" Faster access to EasyMotion, assuming g:EasyMotion_leader_key == "<Leader><Leader>"
+nmap <Leader>j <Leader><Leader>f
+nmap <Leader>J <Leader><Leader>F
+nmap <C-d> <Leader><Leader>F
+nmap <C-g> <Leader><Leader>f
 
