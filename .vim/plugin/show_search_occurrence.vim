@@ -12,6 +12,9 @@ if !exists('g:ShowSearchOccurrences_MaxLines')
 endif
 
 function! GetSearchStatus()
+	if match(mode(),'[nv]') == -1
+		return ""
+	endif
 	let this_line = getline('.')
 	let current_column = col('.')
 	if match(this_line, @/, current_column-1) == current_column-1
