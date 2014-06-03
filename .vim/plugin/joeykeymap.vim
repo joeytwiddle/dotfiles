@@ -520,8 +520,15 @@ inoremap <Leader><C-v> <C-v>
 vnoremap <Leader><C-v> <C-v>
 
 " Faster access to EasyMotion, assuming g:EasyMotion_leader_key == "<Leader><Leader>"
-nmap <Leader>j <Leader><Leader>f
-nmap <Leader>J <Leader><Leader>F
+"nmap <Leader>j <Leader><Leader>f
+"nmap <Leader>J <Leader><Leader>F
 nmap <C-d> <Leader><Leader>F
 nmap <C-g> <Leader><Leader>f
+omap <C-d> <Leader><Leader>F
+omap <C-g> <Leader><Leader>f
+vmap <C-d> <Leader><Leader>F
+vmap <C-g> <Leader><Leader>f
+
+" In Insert mode, Shift-Enter keeps us on the current line, but pushes an empty line below
+inoremap <S-Enter> <Esc>O
 

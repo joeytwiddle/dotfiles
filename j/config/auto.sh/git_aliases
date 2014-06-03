@@ -386,9 +386,11 @@ alias gtpl='gwinpd'
 # Git To Push Details / Diff (a direct diff, without listing each commit)
 alias gtpd='gd FETCH_HEAD..HEAD'
 
-# Git Merge Origin
+# Git Merge Origin (this branch)
 #alias gmo='verbosely git merge $(git_guess_upstream_branch)'
 alias gmo='verbosely git merge origin/$(git_get_current_branch)'
+# Git Push Origin (this branch)
+alias gmo='verbosely git push origin $(git_get_current_branch)'
 
 git_branch_status() {
     # Original: https://gist.github.com/Mark-Booth/5058384
