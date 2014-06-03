@@ -527,3 +527,6 @@ omap <C-g> <Leader><Leader>f
 vmap <C-d> <Leader><Leader>F
 vmap <C-g> <Leader><Leader>f
 
+" In Insert mode, Shift-Enter keeps us on the current line, but pushes an empty line below
+inoremap <S-Enter> <Esc>O
+
