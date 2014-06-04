@@ -136,18 +136,19 @@ nnoremap <Down> gj
 
 " Scroll the page up and down with Ctrl+K/J
 " Only moves the cursor when it's near the edge
-"" We can prepend a number to the scroll request if desired, e.g. 5<C-K>
+"" We could prepend a number to the scroll request if desired, e.g. 5<C-K>
+"" But not any more.  Now we are auto-prepending 2, manually prepending 5 would result in moving 52 lines!
 "noremap <C-K> <C-Y>
 "noremap <C-J> <C-E>
-inoremap <C-K> <Esc><C-Y>a
-inoremap <C-J> <Esc><C-E>a
+inoremap <C-K> <Esc>2<C-Y>a
+inoremap <C-J> <Esc>2<C-E>a
 "" Since the first two do not always trigger a CursorHold or Moved event, they fail to trigger the highlight_line_after_jump script.  The following attempt to force it fails because on occasions where the event is triggered, the highlight script sees it twice, and unhighlights the line!
 " noremap <C-K> <C-Y>:silent! call HL_Cursor_Moved()<Enter>
 " noremap <C-J> <C-E>:silent! call HL_Cursor_Moved()<Enter>
 "" Simiarly, these also fail to trigger CursorHold/Moved events needed by sexy_scroller.  Let's try triggering them by moving and moving back.
-noremap <C-K> <C-Y><BS><Space>
+noremap <C-K> 2<C-Y><BS><Space>
 "noremap <C-J> <C-E><BS><Space>
-noremap <C-J> <C-E><Space><BS>
+noremap <C-J> 2<C-E><Space><BS>
 "" OK that fires sexy_scroller, but why did we ever want it to fire hiline anyway?!
 "" Also it exhibits a BUG in sexy_scroller, namely that it will cause horizontal scrolling when moving near a long line whilst `:set nowrap` wrapping is off!
 "" There are disadvantages to trying to trigger CursorMoved/Hold this way.  <BS><Space> can fail if we are at the top of the file, or create issues if we are at the start of a line (e.g. temporarily moves a line back, undoing the requested scroll, in a short window when scrolloff is set).  Similarly <Space><BS> can fail on the last char of a line or the last line of a file.  A better solution might be to explicitly call hooks exposed by those specific plugins that we want to trigger.  Alternatively we could call a function to examine the situation and emit whichever of <BS><Space> or <Space><BS> is most appropriate.
@@ -283,10 +284,12 @@ cnoremap <C-X> <C-W>
 "" This doesn't do what we want, and anyway we want to leave Ctrl-V alone since it does something special in Vim (insert literal char).
 " cnoremap <C-V> <C-Right><C-W>
 "" Lazy move.  Ctrl-Space just walks over the current char.
-"" I must say C-@ instead of C-Space!
+"" I must say C-@ instead of C-Space for this to work on the terminal.
 cnoremap <C-@> <Right>
-" Same for insert mode:
 inoremap <C-@> <Right>
+"" But in GUI mode we need to define the mapping properly.
+autocmd GUIEnter * cnoremap <c-Space> <Right>
+autocmd GUIEnter * inoremap <c-Space> <Right>
 "" Can't map C-Backspace; BS emits C-H with or without Ctrl.
 " cnoremap <C-BS> <Left>
 
@@ -325,7 +328,8 @@ nmap M g'
 
 
 " When it's time to clear the search, avoid /skldjsdklfj<Enter> and just \/
-nmap <silent> <Leader>/ :nohlsearch<CR>
+nnoremap <silent> <Leader>/ :nohlsearch<CR>
+"nnoremap <silent> <Leader>/ :nohlsearch<CR>:let @/='skj84ksdEKD93Od23423lfs'<CR>
 
 
 
@@ -505,17 +509,19 @@ autocmd GUIEnter * cnoremap <S-Insert> <C-R>*
 vnoremap <C-c> "+y
 " This version restores visual mode afterwards (retains the selection) which is consistent with other editors, but not especially desirable.
 "vnoremap <C-c> "+ygv
-" Ctrl-V in Normal and Insert mode acts like paste
-nnoremap <C-v> "+p
-"inoremap <C-v> <C-r>+
-" This version creates its own undo entry (rather than combining with the last) but it doesn't leave the cursor in the right place.
-inoremap <C-v> <Esc>"+pa
-" Ctrl-V in Visual mode pastes over the selection
-vnoremap <C-v> "+P
+"" Ctrl-V in Normal and Insert mode acts like paste
+"nnoremap <C-v> "+p
+""inoremap <C-v> <C-r>+
+"" This version creates its own undo entry (rather than combining with the last) but it doesn't leave the cursor in the right place.
+"inoremap <C-v> <Esc>"+pa
+"" Ctrl-V in Visual mode pastes over the selection
+"vnoremap <C-v> "+P
 " Normal behaviour of <C-v> now available on <Leader><C-v>
-nnoremap <Leader><C-v> <C-v>
-inoremap <Leader><C-v> <C-v>
-vnoremap <Leader><C-v> <C-v>
+" But for some reason these don't work!  Likewise \<C-v> didn't work either.
+" The \ is always inserted without waiting for a second char.
+"nnoremap <Leader><C-v> <C-v>
+"inoremap <Leader><C-v> <C-v>
+"vnoremap <Leader><C-v> <C-v>
 
 " Faster access to EasyMotion, assuming g:EasyMotion_leader_key == "<Leader><Leader>"
 "nmap <Leader>j <Leader><Leader>f
@@ -529,4 +535,5 @@ vmap <C-g> <Leader><Leader>f
 
 " In Insert mode, Shift-Enter keeps us on the current line, but pushes an empty line below
 inoremap <S-Enter> <Esc>O
+" In Xterm, both <S-Enter> and <C-Enter> reach Vim as <Enter>, so we cannot use this.
 
