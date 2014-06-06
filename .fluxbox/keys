@@ -267,6 +267,15 @@ Mod4 Shift Right   :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorksp
 Mod4 Shift Up      :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace 3
 Mod4 Shift Down    :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace 3
 
+# Swap all windows between two workspaces
+Control Mod4 Shift Left :ExecCommand move_windows_between_desktops swapdesktops left
+Control Mod4 Shift Right :ExecCommand move_windows_between_desktops swapdesktops right
+Control Mod4 Shift Up :ExecCommand move_windows_between_desktops swapdesktops up
+Control Mod4 Shift Down :ExecCommand move_windows_between_desktops swapdesktops down
+# I wanted to bind these to Control Mod1 Shift but for some strange reason that:
+#   1. didn't work, and
+#   2. over an un-tabbed xterm, changed the size of the xterm!
+
 # Mod1 F1 :Workspace 1
 # Mod1 F2 :Workspace 2
 # Mod1 F3 :Workspace 3
