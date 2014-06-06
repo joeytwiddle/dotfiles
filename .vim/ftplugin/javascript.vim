@@ -14,10 +14,10 @@ iab \f function) {<CR>}<Up><End><Left><Left><Left>
 inoremap <buffer> {<CR> {<CR><CR>}<Up><Esc>cc
 
 " Grabs the highlighted expression and logs it
-vnoremap <Leader>log yoconsole.log("<C-R>":", <C-R>");<Esc>
+vnoremap <buffer> <Leader>log yoconsole.log("<C-R>":", <C-R>");<Esc>
 " viW is *sometimes* preferable, e.g. to catch 'obj.prop[i]' but more often than not it grabs too much, e.g. it catches 'obj.prop[i]);'
-nmap <Leader>log viw<Leader>log
-nmap <Leader>Log viW<Leader>log
+nmap <buffer> <Leader>log viw<Leader>log
+nmap <buffer> <Leader>Log viW<Leader>log
 
 
 
