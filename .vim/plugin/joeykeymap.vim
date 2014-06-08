@@ -377,7 +377,10 @@ nnoremap <Leader>S :SessionList<Enter>
 nmap <Leader>i <Leader>f<C-w><Right><Leader>t
 
 " Toggle relative line numbers in the margin
-nmap <Leader>l :set invrelativenumber<Enter>
+"nmap <Leader>l :set invrelativenumber<Enter>
+
+" Been having a nightmare with iskeyword.  Here is a fast way to reset it.
+"nnoremap <Leader>k :setlocal iskeyword=65-127<Enter>
 
 " Toggle the paste option (annoying that this doesn't show the current state)
 nmap <Leader>p :set invpaste<Enter>
@@ -438,9 +441,6 @@ nnoremap <C-]> g<C-]>
 "       Or indeed, do a language-sensitive fallback search.
 "       E.g. for Javascript, we could search in current file for "function <cword>"
 "                            or failing that, try the same search with Grep.
-
-" Been having a nightmare with iskeyword.  Here is a fast way to reset it.
-nnoremap <Leader>k :setlocal iskeyword=65-127<Enter>
 
 " Execute the line under the cursor in ex
 nnoremap <Leader>e :execute getline(".")<CR>
