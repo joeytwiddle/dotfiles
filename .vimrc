@@ -178,6 +178,8 @@ autocmd VimLeave * silent !stty ixon
 	" However this works fine there!
 	let g:Grep_Default_Filelist .= " --exclude-dir=./public/assets"   " Precompiled assets (e.g. images)
 	" Of course 'public' or 'assets' on its own should work fine, but we don't want that!
+	" For UL:
+	let g:Grep_Default_Filelist .= " --exclude-dir=deploy_TMP"
 
 	let g:ConqueTerm_Color = 1
 	" let g:ConqueTerm_CloseOnEnd = 1
@@ -222,7 +224,7 @@ autocmd VimLeave * silent !stty ixon
 	" Or the following is smart enough to decide for us.  BUG: The `normal q` part fails on an empty buffer with error: "E749: empty buffer"
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
-	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets']"
+	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets','deploy_TMP']"
 	",'pikto'
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
@@ -624,6 +626,7 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
 	"let g:vim_markdown_folding_disabled=1
 	call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
+	"call add(vamAddons,"github:dahu/bisectly")            " Wow!  A useful and light-hearted way to track down a bug to a specific plugin
 
 	"call add(vamAddons,"github:Raimondi/delimitMate")     " Mirrors (s and 's for you, but doesn't mind if you type over them.  I still had occasional issues with this (e.g. adding "s inside "s, deleting back over an end ").  But the worst issue was that things became unrepeatable with '.'.  (ysiw' repeats but inserting code with 's does not.)
 	let g:delimitMate_matchpairs = "(:),[:]"
@@ -681,6 +684,7 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"github:joeytwiddle/taglist.vim") " Joey's taglist.vim with vague indentation mode and other madness
 	call add(vamAddons,"github:joeytwiddle/zoom.vim")    " Change font size easily
 	"call add(vamAddons,"github:joeytwiddle/vim-seek")    " Two char search (I added multi-line support).  But I never use it; prefer EasyMotion.
+
 	" == My Plugins from the Cloud (all be me!) ==
 	call add(vamAddons,"github:joeytwiddle/sexy_scroller.vim")   " Smooth animation when scrolling
 	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
