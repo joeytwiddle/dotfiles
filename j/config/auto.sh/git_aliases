@@ -322,7 +322,7 @@ post_git_checkout() {
 alias gi='git commit --interactive'
 # -p "patch"? allows us to choose which hunks to add or commit
 alias gap='git add -p'
-alias gip='git commit -p'
+alias gcp='git commit -p'
 
 # Git auto commit OR Git-add-commit
 gac() {
