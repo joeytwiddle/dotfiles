@@ -322,7 +322,7 @@ set wildmode=longest:full,full
 
 
 " Make a global mark 'Q' with 'mQ' and jump back to it with 'MQ'.
-nmap M g'
+"nmap M g'
 " M usually does to-middle-line-of-window
 
 
@@ -536,4 +536,10 @@ vmap <C-g> <Leader><Leader>f
 " In Insert mode, Shift-Enter keeps us on the current line, but pushes an empty line below
 inoremap <S-Enter> <Esc>O
 " In Xterm, both <S-Enter> and <C-Enter> reach Vim as <Enter>, so we cannot use this.
+
+" Find line easily from Home / Middle / Last keys
+nmap <silent> H H:set relativenumber<CR>
+nmap <silent> M M:set relativenumber<CR>
+nmap <silent> L L:set relativenumber<CR>
+autocmd CursorHold * set norelativenumber
 
