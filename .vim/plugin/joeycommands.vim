@@ -106,3 +106,28 @@ endif
 "" that already exists on Ctrl-O.
 " inoremap <C-o> <Esc>:call JExecVimCommand()<CR>
 
+
+
+" Runs the given Ex command and pipes the output to the given shell command.
+" For example: :PipeToShell syn | grep 'Declaration'
+function! s:PassVimCommandOutputToShellCommand(line)
+	let vim_cmd = substitute(a:line, '\s*|.*', '', '')
+	let shell_cmd = substitute(a:line, '^[^|]*|\s*', '', '')
+	" TODO: We could redir to a local variable, to avoid clobbering the 'l' register.
+	redir @l
+	silent exe vim_cmd
+	redir END
+	" To pipe to a shell, the only way I thought of was to put the data into a fresh buffer, and then do :w !...
+	new
+	normal "lP
+	exe 'w !'.shell_cmd
+	" Undo the paste so bwipeout can drop the buffer without complaint
+	normal u
+	exe "bwipeout"
+endfunction
+
+" Still deciding on which name to use
+command! -nargs=+ CmdOut call s:PassVimCommandOutputToShellCommand(<q-args>)
+command! -nargs=+ PipeCmd call s:PassVimCommandOutputToShellCommand(<q-args>)
+command! -nargs=+ PipeToShell call s:PassVimCommandOutputToShellCommand(<q-args>)
+
