@@ -1,0 +1,113 @@
+# Config
+
+The common pattern for ensuring config variables are initialised is:
+
+    if !exists("g:MyPlugin_OptionFoo")
+        let g:MyPlugin_OptionFoo = ...default value here...
+    endif
+
+This allows users to override your defaults in their `.vimrc`.  And it ensures the variable exists when your script wants to read it.
+
+Alternatively, to save creating config vars that are not read too often, you can use `get()` when you want to read them.  So instead of writing:
+
+    g:MyPlugin_OptionFoo
+
+you can write:
+
+    get(g:, "MyPlugin_OptionFoo", ...default value here...)
+
+which will provide the default value if the variable has not been set.
+
+However I somewhat prefer setting up a global variable, so that the user can find it and change it more easily at runtime, using completion on the commandline.
+
+
+# Localise functions and variables to your script
+
+Call your functions `s:MyFunc` instead of just `MyFunc` so that they stay local to the script.  This avoids conflicting with any other scripts which defined functions in the global scope.
+
+You can call a script-local function easily from within an autocommand, but from a mapping you must use `<SID>`:
+
+    autocmd CursorHold * call s:ResetCmdHeight()
+    nnoremap <C-L> :call <SID>ResetCmdHeight()<CR>
+
+For variables which you do not want the user to edit, make them script-local too.  For example your on/off toggle could be `s:enabled`.
+
+But if you really want to use global variables (so the user can change them) or window-local variables, it is a good idea to namespace them, to avoid conflict with other scripts.  For example:
+
+    g:MyPlugin_Enabled
+    w:MyPlugin_Enabled
+
+
+# Use `function!` to make your script re-loadable
+
+Some scripts begin with:
+
+    if exists('g:MyPlugin_IsLoaded')
+        finish
+    endif
+    let g:MyPlugin_IsLoaded = 1
+
+I do not recommend this because while you are developing your script, or someone else is trying to extend it, you will not be able to reload it; instead you will need to keep restarting Vim!
+
+The pattern I prefer is to overwrite old functions, so you can easily reload the script when you change it:
+
+    function! s:MyFunc()
+        ...
+    endfunction
+
+
+# Make autocmds clearable and reloadable
+
+When declaring an autocmd, use the following pattern:
+
+    augroup MyPlugin
+        " This clears all existing mappings in the group MyPlugin
+        autocmd!
+        " Put your autocmd definitions here ...
+        autocmd CursorHold * call s:ResetCmdHeight()
+    augroup END
+
+Now if your script is sourced for a second time, the `autocmd!` will wipe out your previous autocmds before creating the new ones.  This will prevent any calls to old unwanted functions.
+
+
+# Use `normal!` with a pling
+
+You should almost always use
+
+    normal! <cmd>
+
+instead of
+
+    normal <cmd>
+
+so that you bypass any user-defined keymaps, and execute `<cmd>` using standard vim commands.
+
+
+# Mappings
+
+Similarly with mappings, `nnoremap` is better than `nmap`, unless you actually want your mapping to run custom mappings defined by the user (or other scripts).
+
+If your script creates default keybindings, you should provide an option to disable this behaviour, or redefine the key.
+
+    if !exists("g:MyPlugin_KeyForFooFeature")
+        let g:MyPlugin_KeyForFooFeature = '<C-b>'
+    endif
+    " ...
+    if g:MyPlugin_KeyForFooFeature != ""
+        exec "nnoremap <silent> ".g:MyPlugin_KeyForFooFeature." :call s:RunFooFeature()<CR>"
+    endif
+
+You can also use `maparg()` to check if a user-defined mapping exists, before you overwrite it.
+
+
+# Localise mappings to the relevant filetype(s)
+
+If your mappings apply to certain types of file, then it makes more sense to create them local to buffers of only that filetype, rather than have them apply to *all* the buffers.
+
+    au BufEnter *.{py,PY}   nnoremap <buffer> ...your mapping for python buffers only...
+
+
+# Write lots of functions
+
+As well as making things re-usable, functions names can be more meaningful names than direct commands, and so make your script easier to understand when reading.
+
