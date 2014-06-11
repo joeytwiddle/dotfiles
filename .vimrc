@@ -628,11 +628,26 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
 	"call add(vamAddons,"github:dahu/bisectly")            " Wow!  A useful and light-hearted way to track down a bug to a specific plugin
 	call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
-	map <Leader>l <Plug>(easymotion-lineforward)
-	map <Leader>j <Plug>(easymotion-j)
-	map <Leader>k <Plug>(easymotion-k)
-	map <Leader>h <Plug>(easymotion-linebackward)
+	"call add(vamAddons,"github:joeytwiddle/vim-easymotion")  " Let's use the latest EasyMotion
+	"map <Leader><Leader>l <Plug>(easymotion-lineforward)
+	"map <Leader><Leader>j <Plug>(easymotion-j)
+	"map <Leader><Leader>k <Plug>(easymotion-k)
+	"map <Leader><Leader>h <Plug>(easymotion-linebackward)
 	let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
+	map f <Plug>(easymotion-flash-f)
+	map F <Plug>(easymotion-flash-F)
+	map t <Plug>(easymotion-flash-t)
+	map T <Plug>(easymotion-flash-T)
+	map ; <Plug>(easymotion-next)
+	map , <Plug>(easymotion-prev)
+	"map w <Plug>(easymotion-flash-w)
+	"map W <Plug>(easymotion-flash-W)
+	"map b <Plug>(easymotion-flash-b)
+	"map B <Plug>(easymotion-flash-B)
+	"map e <Plug>(easymotion-flash-e)
+	"map E <Plug>(easymotion-flash-E)
+	"map n <Plug>(easymotion-flash-n)
+	"map N <Plug>(easymotion-flash-N)
 
 	"call add(vamAddons,"github:Raimondi/delimitMate")     " Mirrors (s and 's for you, but doesn't mind if you type over them.  I still had occasional issues with this (e.g. adding "s inside "s, deleting back over an end ").  But the worst issue was that things became unrepeatable with '.'.  (ysiw' repeats but inserting code with 's does not.)
 	let g:delimitMate_matchpairs = "(:),[:]"
