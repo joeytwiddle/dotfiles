@@ -1,6 +1,6 @@
 # Config
 
-The common pattern for ensuring config variables are initialised is:
+A common pattern I see to ensure config variables are initialised is:
 
     if !exists("g:MyPlugin_OptionFoo")
         let g:MyPlugin_OptionFoo = ...default value here...
@@ -19,6 +19,10 @@ you can write:
 which will provide the default value if the variable has not been set.
 
 However I somewhat prefer setting up a global variable, so that the user can find it and change it more easily at runtime, using completion on the commandline.
+
+Using the `get()` function we can in fact do the original initialization in one line:
+
+    let g:MyPlugin_OptionFoo = get(g:, "MyPlugin_OptionFoo", ...default value here...)
 
 
 # Localise functions and variables to your script
