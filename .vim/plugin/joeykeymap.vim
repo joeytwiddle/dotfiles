@@ -526,12 +526,26 @@ vnoremap <C-c> "+y
 " Faster access to EasyMotion, assuming g:EasyMotion_leader_key == "<Leader><Leader>"
 "nmap <Leader>j <Leader><Leader>f
 "nmap <Leader>J <Leader><Leader>F
-nmap <C-d> <Leader><Leader>F
-nmap <C-g> <Leader><Leader>f
-omap <C-d> <Leader><Leader>F
-omap <C-g> <Leader><Leader>f
-vmap <C-d> <Leader><Leader>F
-vmap <C-g> <Leader><Leader>f
+"nmap <C-d> <Leader><Leader>F
+"nmap <C-g> <Leader><Leader>f
+"omap <C-d> <Leader><Leader>F
+"omap <C-g> <Leader><Leader>f
+"vmap <C-d> <Leader><Leader>F
+"vmap <C-g> <Leader><Leader>f
+" Doh.  map == [nov]map !
+" I actually find <C-d> easier to hit than <C-g>
+" <C-d> is 1-char seek
+map <C-d> <Plug>(easymotion-bd-f)
+" <C-g> is 0-char jump
+" Often requires 2 strokes, in which case why not use <C-d> and the first stroke will be the char already there!
+" Might be more efficient if the <C-d> char is very common (more common than words?!)
+map <C-g> <Plug>(easymotion-bd-w)
+"map <C-g> <Plug>(easymotion-jumptoanywhere)
+" /-like seek (type phrase, hit Enter, select target char)
+"map  <C-g> <Plug>(easymotion-sn)
+"omap <C-g> <Plug>(easymotion-tn)
+map <Leader><Leader>^ <Plug>(easymotion-sol-bd-jk)
+map <Leader><Leader>$ <Plug>(easymotion-eol-bd-jk)
 
 " In Insert mode, Shift-Enter keeps us on the current line, but pushes an empty line below
 inoremap <S-Enter> <Esc>O
