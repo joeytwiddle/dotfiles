@@ -5,10 +5,9 @@
 " See also: http://www.vim.org/scripts/script.php?script_id=1682#IndexedSearch
 " See also: http://www.vim.org/scripts/script.php?script_id=2634#SearchPosition
 
-" If the current file contains more lines than this, do not display the summary (it may be too slow!).
-" TODO: Buffer's total size may be more relevant than line count.
-if !exists('g:ShowSearchOccurrences_MaxLines')
-	let g:ShowSearchOccurrences_MaxLines = 10000
+" If the current file is larger than the max (in bytes), then do not display the summary.  This can prevent sluggishness when working on large files.
+if !exists('g:ShowSearchOccurrences_MaxBufferSize')
+	let g:ShowSearchOccurrences_MaxBufferSize = 2000000
 endif
 
 function! GetSearchStatus()
@@ -18,13 +17,14 @@ function! GetSearchStatus()
 	let this_line = getline('.')
 	let current_column = col('.')
 	if match(this_line, @/, current_column-1) == current_column-1
+		let buffer_size = line2byte(line("$")+1)-1
+		if buffer_size > g:ShowSearchOccurrences_MaxBufferSize
+			return ""
+		endif
 		let this_lnum = line('.')
 		let count_matches = 0
 		let this_index = -1
 		let line_count = line("$")
-		if line_count > g:ShowSearchOccurrences_MaxLines
-			return ""
-		endif
 		let lnum = 1
 		while lnum <= line_count
 			let line = getline(lnum)
