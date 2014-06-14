@@ -351,7 +351,9 @@ nnoremap <C-E> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
 "" Select file by filename with completion
 " nnoremap <C-E> :ls<CR>:e<space>
 "" Select by name with completion or file without (joeys_buffer_switcher.vim)
-nnoremap <Leader>e :JoeysBufferSwitch<Enter>
+"nnoremap <Leader>e :JoeysBufferSwitch<Enter>
+"" I use <C-E> above for switching buffer now, but this is still useful for switching window!
+nnoremap <Leader>W :JoeysBufferSwitch<Enter>
 "" Select buffer from list (bufexplorer.vim)
 nnoremap <C-B> :BufExplorer<Enter>
 "" Select from persistent list of most-recently-used files (mru.vim)
@@ -541,19 +543,45 @@ map <C-d> <Plug>(easymotion-bd-f)
 " Might be more efficient if the <C-d> char is very common (more common than words?!)
 map <C-g> <Plug>(easymotion-bd-w)
 "map <C-g> <Plug>(easymotion-jumptoanywhere)
-" /-like seek (type phrase, hit Enter, select target char)
+" Alternative layout: <C-d> is 0-char jump, <C-g> is /-like phrase jump.  For 1-char jump, use f and then flash hinting.
+"map <C-d> <Plug>(easymotion-bd-w)
 "map  <C-g> <Plug>(easymotion-sn)
 "omap <C-g> <Plug>(easymotion-tn)
 map <Leader><Leader>^ <Plug>(easymotion-sol-bd-jk)
 map <Leader><Leader>$ <Plug>(easymotion-eol-bd-jk)
 
+" PLEASE NOTE: I have setup other EasyMotion keys in my .vimrc
+
+" These might be useful, but unfortunately they are a bit slow:
+"map w <Plug>(easymotion-flash-w)
+"map b <Plug>(easymotion-flash-b)
+"map W <Plug>(easymotion-flash-W)
+"map B <Plug>(easymotion-flash-B)
+"map e <Plug>(easymotion-flash-e)
+"map ge <Plug>(easymotion-flash-ge)
+"map E <Plug>(easymotion-flash-E)
+"map gE <Plug>(easymotion-flash-gE)
+
+" I rarely use these, but they are here for testing:
+map  <Leader><Leader>/ <Plug>(easymotion-sn)
+omap <Leader><Leader>/ <Plug>(easymotion-tn)
+map  <Leader><Leader><Leader>/ <Plug>(easymotion-flash-tn)
+omap <Leader><Leader><Leader>/ <Plug>(easymotion-flash-sn)
+map <Leader><Leader><Leader>W <Plug>(easymotion-flash-bd-W)
+
 " In Insert mode, Shift-Enter keeps us on the current line, but pushes an empty line below
 inoremap <S-Enter> <Esc>O
 " In Xterm, both <S-Enter> and <C-Enter> reach Vim as <Enter>, so we cannot use this.
 
-" Find line easily from Home / Middle / Last keys
+" Find line easily from High/Middle/Low keys (a far better mnemonic than Home/Middle/Last in the docs)
 nmap <silent> H H:set relativenumber<CR>
 nmap <silent> M M:set relativenumber<CR>
 nmap <silent> L L:set relativenumber<CR>
 autocmd CursorHold * set norelativenumber
+
+" When writing a :! shell command, the shortcut %<Tab> can be used to insert the current filename.  But the same does not work when writing a standard Ex : command!
+" This naughty workaround should make it work for both, BUT it will always append to the end of the line, regardless where on the line the cursor was.
+"cnoremap %<Tab> <Home>!<End>%<C-l><Home><Del><End>
+" This one is better; it should insert at the cursor.
+cnoremap %<Tab> <C-r>%
 
