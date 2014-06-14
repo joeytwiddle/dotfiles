@@ -60,6 +60,14 @@ highlight javaScriptNumber cterm=none ctermfg=cyan gui=none guifg=LightCyan
 syn match javaScriptAssignVar /[A-Za-z_$][A-Za-z_$0-9]*\(\[.*\]\|\)[ 	]*\(=\([^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 highlight javaScriptAssignVar ctermfg=white cterm=bold guifg=white gui=bold
 
+"syn match javaScriptAssignProperty /[A-Za-z_$][A-Za-z_$0-9]*\s*:/ contains=javaScriptColon
+"" To match Coffeescript's dark blue properties (although I think that was a bug):
+"highlight javaScriptAssignProperty ctermfg=darkblue cterm=bold guifg=#6666ff gui=bold
+"" To make property declarations look like variable assignments:
+""hi link javaScriptAssignProperty javaScriptAssignVar
+"syn match javaScriptColon /:/
+"highlight javaScriptColon ctermfg=white guifg=white
+
 
 "" Stolen from basic.vim!
 
