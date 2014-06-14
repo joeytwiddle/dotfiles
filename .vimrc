@@ -578,6 +578,7 @@ autocmd VimLeave * silent !stty ixon
 	"" Note that this is NOT Debian's vim-addon-manager package!  Nor is it pathogen.
 	"" I build the list, rather than declare it, so lines can be easily added/removed.
 	let vamAddons = []
+
 	" call add(vamAddons,"vim-haxe")                       " Haxe syntax
 	" call add(vamAddons,'github:jdonaldson/vim-haxe')     " Haxe syntax
 	call add(vamAddons,'github:jdonaldson/vaxe')           " Haxe syntax (preferred)
@@ -627,8 +628,9 @@ autocmd VimLeave * silent !stty ixon
 	"let g:vim_markdown_folding_disabled=1
 	call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
 	"call add(vamAddons,"github:dahu/bisectly")            " Wow!  A useful and light-hearted way to track down a bug to a specific plugin
-	call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
-	"call add(vamAddons,"github:joeytwiddle/vim-easymotion")  " Let's use the latest EasyMotion
+
+	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
+	call add(vamAddons,"github:joeytwiddle/vim-easymotion") " My dev copy
 	"map <Leader><Leader>l <Plug>(easymotion-lineforward)
 	"map <Leader><Leader>j <Plug>(easymotion-j)
 	"map <Leader><Leader>k <Plug>(easymotion-k)
@@ -638,16 +640,29 @@ autocmd VimLeave * silent !stty ixon
 	map F <Plug>(easymotion-flash-F)
 	map t <Plug>(easymotion-flash-t)
 	map T <Plug>(easymotion-flash-T)
-	map ; <Plug>(easymotion-next)
-	map , <Plug>(easymotion-prev)
-	"map w <Plug>(easymotion-flash-w)
-	"map W <Plug>(easymotion-flash-W)
-	"map b <Plug>(easymotion-flash-b)
-	"map B <Plug>(easymotion-flash-B)
-	"map e <Plug>(easymotion-flash-e)
-	"map E <Plug>(easymotion-flash-E)
-	"map n <Plug>(easymotion-flash-n)
-	"map N <Plug>(easymotion-flash-N)
+	map ; <Plug>(easymotion-next-in-dir)
+	map , <Plug>(easymotion-prev-in-dir)
+	"map ; <Plug>(easymotion-flash-next-in-dir)
+	"map , <Plug>(easymotion-flash-prev-in-dir)
+	"map n <Plug>(easymotion-n)
+	"map N <Plug>(easymotion-N)
+	map n <Plug>(easymotion-flash-n)
+	map N <Plug>(easymotion-flash-N)
+	" I am happy using Vim's default / but EM has one too.  (It only searches the screen though, and there is no equivalent ?)
+	"map  / <Plug>(easymotion-flash-sn)
+	"omap / <Plug>(easymotion-flash-tn)
+	" When I must type two chars, I want it to be clear which is the first one I must type!
+	" This is useful when using (easymotion-jumptoanywhere)
+	highlight EasyMotionTarget        cterm=bold ctermbg=0 ctermfg=green  gui=bold guifg=green
+	highlight EasyMotionTarget2First  cterm=bold ctermbg=0 ctermfg=yellow gui=bold guifg=yellow
+	highlight EasyMotionTarget2Second cterm=bold ctermbg=0 ctermfg=blue   gui=bold guifg=blue
+	let g:EasyMotion_keys = 'asdfghjklqwertyuiopzxcvbnm;'
+	"let g:EasyMotion_keys = 'asdfghjkl;'
+	"let g:EasyMotion_do_shade = 1             " Without this I confuse yellow/green syntax with yellow/green targets
+	"let g:EasyMotion_do_shade_for_flash = 0   " But it's too slow and disruptive when we are just flashing
+	let g:EasyMotion_move_highlight = 0
+	let g:EasyMotion_landing_highlight = g:EasyMotion_move_highlight
+	let g:EasyMotion_flash_time_ms = 500
 
 	"call add(vamAddons,"github:Raimondi/delimitMate")     " Mirrors (s and 's for you, but doesn't mind if you type over them.  I still had occasional issues with this (e.g. adding "s inside "s, deleting back over an end ").  But the worst issue was that things became unrepeatable with '.'.  (ysiw' repeats but inserting code with 's does not.)
 	let g:delimitMate_matchpairs = "(:),[:]"
@@ -663,6 +678,16 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:felixr/vim-multiedit")      " Edit multiple selections live (mark words with ,w then edit all with ,i or ,a)
 	"call add(vamAddons,"github:hlissner/vim-multiedit")    " Edit multiple selections v2 (mark words with \mm then edit all with \M or \C) - but this was not doing live updates for me
 	"call add(vamAddons,"github:vim-scripts/vim-multiedit") " A fork of hlissner's
+
+	""call add(vamAddons,"github:terryma/vim-multiple-cursors") " Looks promising
+	"call add(vamAddons,"github:joeytwiddle/vim-multiple-cursors") " My version attempts to avoid losing keystrokes
+	"let g:multi_cursor_start_key='<F2>'
+	"nnoremap \\r :exec 'MultipleCursorsFind \<'.expand("<cword>").'\>'v
+	" Note: multiple-cursors appears to conflict with many of my plugins.  But it appears to work if I do the following:
+	"   1. move my .vim/ folder away (May not be needed.)
+	"   2. do not load all of the plugins below (airline.vim grep.vim taglist.vim zoom.vim and sexyscroller.vim)
+	"   3. also remove everything in this file above the line let vamAddons = []
+	" It would be nice to further track down which of those plugins are actually conflicting.
 
 	"call add(vamAddons,"github:mhinz/vim-startify")       " Session manager and MRU, on start page or on demand
 
