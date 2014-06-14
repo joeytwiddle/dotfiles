@@ -57,7 +57,7 @@ highlight javaScriptNumber cterm=none ctermfg=cyan gui=none guifg=LightCyan
 " Like coffeeScript, highlight only the *last* property in an assignment
 " Added optional \[.*\] to catch e.g. myList[i-1] = ""; but it can catch too much sometimes!
 " silent syn clear javaScriptAssignVar
-syn match javaScriptAssignVar /[A-Za-z_][A-Za-z_0-9]*\(\[.*\]\|\)[ 	]*\(=\([^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
+syn match javaScriptAssignVar /[A-Za-z_$][A-Za-z_$0-9]*\(\[.*\]\|\)[ 	]*\(=\([^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 highlight javaScriptAssignVar ctermfg=white cterm=bold guifg=white gui=bold
 
 
