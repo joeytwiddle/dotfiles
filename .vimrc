@@ -118,7 +118,8 @@ autocmd VimLeave * silent !stty ixon
 		"
 		" v:variable
 		" p:property;a:assigned
-		let tlist_javascript_settings = 'javascript;c:class;f:function;e:export;r:route'
+		" m:method       <-- It catches these itself, but they often show up as functions anyway.
+		let tlist_javascript_settings = 'javascript;c:class;M:classmethod;f:function;e:export;r:route'
 		" v:variable
 		" p:property;a:assigned
 		let tlist_coffee_settings = 'coffee;c:class;f:function;e:export'
