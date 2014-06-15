@@ -33,7 +33,7 @@
 --regex-javascript=/^(COMMENT: It used to be:)/\1/X,XXX/
 --regex-javascript=/^(COMMENT: \s*(\<[a-zA-Z_$][0-9a-zA-Z_$.]*\>)*\s*=\s*\<function\>)/\1/f,function/
 --regex-javascript=/^(COMMENT: Express routes: (only if var app is used))/\1/X,XXX/
---regex-javascript=/^\s*\app\.(get|put|post|delete)\(\s*["']([^"']+)["']/\2 (\1)/r,route/
+--regex-javascript=/^\s*app\.(get|put|post|delete)\(\s*["']([^"']+)["']/\2 (\1)/r,route/
 
 --langdef=opa
 --langmap=opa:+.opa
