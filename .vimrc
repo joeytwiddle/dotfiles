@@ -661,8 +661,8 @@ autocmd VimLeave * silent !stty ixon
 	"let g:EasyMotion_keys = 'asdfghjkl;'
 	"let g:EasyMotion_do_shade = 1             " Without this I confuse yellow/green syntax with yellow/green targets
 	"let g:EasyMotion_do_shade_for_flash = 0   " But it's too slow and disruptive when we are just flashing
-	let g:EasyMotion_move_highlight = 0
-	let g:EasyMotion_landing_highlight = g:EasyMotion_move_highlight
+	"let g:EasyMotion_move_highlight = 0
+	"let g:EasyMotion_landing_highlight = g:EasyMotion_move_highlight
 	let g:EasyMotion_flash_time_ms = 500
 
 	"call add(vamAddons,"github:Raimondi/delimitMate")     " Mirrors (s and 's for you, but doesn't mind if you type over them.  I still had occasional issues with this (e.g. adding "s inside "s, deleting back over an end ").  But the worst issue was that things became unrepeatable with '.'.  (ysiw' repeats but inserting code with 's does not.)
