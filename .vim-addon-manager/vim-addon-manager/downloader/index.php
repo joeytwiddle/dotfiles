@@ -105,8 +105,8 @@ let g:vim_addon_manager = {}
   let g:vim_addon_manager.auto_install = 1
   let g:vim_addon_manager.log_to_buf = 1
 
-  \" activation is disabled manually enabling VAM-kr
-  exec 'set runtimepath+='.filter([\$HOME.'/.vim', \$HOME.'/vimfiles'],'isdirectory(v:val)')[0].'/vim-addons/vim-addon-manager-known-repositories'
+  \" activation is disabled manually enabling vim-pi
+  exec 'set runtimepath+='.filter([\$HOME.'/.vim', \$HOME.'/vimfiles'],'isdirectory(v:val)')[0].'/vim-addons/vim-pi'
   " : "")."
 
 ".vimrc_win_hack()."
@@ -182,8 +182,8 @@ $cmd = '
   mkdir -p .vim/vim-addons
   export PATH=/var/run/current-system/sw/bin
   git clone --depth 1 git://github.com/MarcWeber/vim-addon-manager.git .vim/vim-addons/vim-addon-manager
-  ( cd  vim-addon-manager; git chekout HEAD~20; )
-  # git clone --depth 1 git://github.com/MarcWeber/vim-addon-manager-known-repositories.git .vim/vim-addons/vim-addon-manager-known-repositories
+  # ( cd  vim-addon-manager; git chekout HEAD~20; )
+  # git clone --depth 1 https://bitbucket.org/vimcommunity/vim-pi .vim/vim-addons/vim-pi
 
   export HOME=$dir
 
@@ -229,7 +229,7 @@ if (isset($_POST['names'])){
   $errors = array();
   $name_cache = name_cache();
   foreach($names as &$n){
-    if (preg_match('/^(VAM|vim-addon-manager|VAM-kr|vim-addon-manager-known-repositories)$/', $n)){
+    if (preg_match('/^((?i)VAM|vim-addon-manager|VAM-kr|vim-addon-manager-known-repositories|vim-pi)$/', $n)){
       $errors[] = $n.' will be included automatically, retry';
     }
     $n = preg_replace('/[[\]\'"]/', '', $n);

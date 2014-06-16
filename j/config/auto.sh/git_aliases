@@ -315,8 +315,14 @@ POST_GIT_CHECKOUT=post_git_checkout
 post_git_checkout() {
 	if which cindex >/dev/null
 	then
-		echo "Updating cindex" >&2
-		cindex 2>/dev/null
+		local git_root_folder=$(git rev-parse --show-toplevel)
+		# If any of the indexed folders are equal to or below this project's folder
+		if [ -n "$git_root_folder" ] && cindex -list | grep -q "^$git_root_folder\($\|/\)"
+		then
+			echo -n "Updating cindex..." >&2
+			cindex 2>/dev/null
+			echo >&2
+		fi
 	fi
 }
 alias gi='git commit --interactive'
