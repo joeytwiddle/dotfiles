@@ -732,19 +732,21 @@ autocmd VimLeave * silent !stty ixon
 	endif
 	" TODO: Airline whitespace option slows down Vim on large files, between every keystroke!  We should ensure it is never automatically enabled when we open a large file.
 
-	" == My Plugins from the Cloud (modified versions of other plugins) ==
-	call add(vamAddons,"github:joeytwiddle/grep.vim")    " My version
+	" >>> My Plugins from the Cloud (modified versions of other plugins) {{{
+	call add(vamAddons,"github:joeytwiddle/grep.vim")    " With support for csearch and SetQuickfixTitle.
 	call add(vamAddons,"github:joeytwiddle/taglist.vim") " Joey's taglist.vim with vague indentation mode and other madness
 	call add(vamAddons,"github:joeytwiddle/zoom.vim")    " Change font size easily
 	"call add(vamAddons,"github:joeytwiddle/vim-seek")    " Two char search (I added multi-line support).  But I never use it; prefer EasyMotion.
-
-	" == My Plugins from the Cloud (all be me!) ==
-	call add(vamAddons,"github:joeytwiddle/sexy_scroller.vim")   " Smooth animation when scrolling
-	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
 	let g:seek_multi_line = 1
 	let g:SeekKey = 'l'
 	let g:SeekBackKey = 'L'
 	let g:seek_subst_disable = 1
+	" }}}
+
+	" >>> My Plugins from the Cloud (all by me!) {{{
+	call add(vamAddons,"github:joeytwiddle/sexy_scroller.vim")   " Smooth animation when scrolling
+	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
+	" }}}
 
 	if filereadable($HOME."/.vimrc.local")
 		source $HOME/.vimrc.local
