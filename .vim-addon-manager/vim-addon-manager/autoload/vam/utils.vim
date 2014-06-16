@@ -156,7 +156,7 @@ fun! s:StripIfNeeded(opts, targetDir)
 endfun
 
 fun! vam#utils#GuessFixDir(type)
-  if a:type  =~# '\v^%(after\/)?%(syntax|indent|%(ft)?plugin)$'
+  if stridx(a:type, '/') != -1 || a:type  =~# '\v^%(syntax|indent|%(ft)?plugin)$'
     return a:type
   elseif a:type is# 'color scheme'
     return 'colors'
@@ -192,7 +192,10 @@ fun! vam#utils#Unpack(archive, targetDir, ...)
         \ }
 
 
-  let fixDir = a:targetDir.'/'.vam#utils#GuessFixDir(get(opts, 'script-type', 'plugin'))
+  let fixDir = a:targetDir.'/'.
+        \ ( has_key(opts,'target_dir')
+        \   ? opts.target_dir
+        \   : vam#utils#GuessFixDir(get(opts, 'script-type', 'plugin')))
 
   " 7z renames .tbz, .tbz2, .tar.bz2 to .tar, but it preserves names stored by 
   " gzip (if any): if you do

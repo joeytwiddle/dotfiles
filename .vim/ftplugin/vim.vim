@@ -9,3 +9,7 @@ setlocal comments="sO:\" -,mO:\"  ,:\"\",:\""
 nnoremap <buffer> <F5> ^i"<Esc>j^
 " Uncomment
 nnoremap <buffer> <F6> ^1xj^
+
+vnoremap <buffer> <Leader>log yoecho "<C-R>": ".<C-R>"<Esc>
+nmap <buffer> <Leader>log viw<Leader>log
+nmap <buffer> <Leader>Log viW<Leader>log

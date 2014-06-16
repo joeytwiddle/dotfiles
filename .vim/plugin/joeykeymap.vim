@@ -136,18 +136,19 @@ nnoremap <Down> gj
 
 " Scroll the page up and down with Ctrl+K/J
 " Only moves the cursor when it's near the edge
-"" We can prepend a number to the scroll request if desired, e.g. 5<C-K>
+"" We could prepend a number to the scroll request if desired, e.g. 5<C-K>
+"" But not any more.  Now we are auto-prepending 2, manually prepending 5 would result in moving 52 lines!
 "noremap <C-K> <C-Y>
 "noremap <C-J> <C-E>
-inoremap <C-K> <Esc><C-Y>a
-inoremap <C-J> <Esc><C-E>a
+inoremap <C-K> <Esc>2<C-Y>a
+inoremap <C-J> <Esc>2<C-E>a
 "" Since the first two do not always trigger a CursorHold or Moved event, they fail to trigger the highlight_line_after_jump script.  The following attempt to force it fails because on occasions where the event is triggered, the highlight script sees it twice, and unhighlights the line!
 " noremap <C-K> <C-Y>:silent! call HL_Cursor_Moved()<Enter>
 " noremap <C-J> <C-E>:silent! call HL_Cursor_Moved()<Enter>
 "" Simiarly, these also fail to trigger CursorHold/Moved events needed by sexy_scroller.  Let's try triggering them by moving and moving back.
-noremap <C-K> <C-Y><BS><Space>
+noremap <C-K> 2<C-Y><BS><Space>
 "noremap <C-J> <C-E><BS><Space>
-noremap <C-J> <C-E><Space><BS>
+noremap <C-J> 2<C-E><Space><BS>
 "" OK that fires sexy_scroller, but why did we ever want it to fire hiline anyway?!
 "" Also it exhibits a BUG in sexy_scroller, namely that it will cause horizontal scrolling when moving near a long line whilst `:set nowrap` wrapping is off!
 "" There are disadvantages to trying to trigger CursorMoved/Hold this way.  <BS><Space> can fail if we are at the top of the file, or create issues if we are at the start of a line (e.g. temporarily moves a line back, undoing the requested scroll, in a short window when scrolloff is set).  Similarly <Space><BS> can fail on the last char of a line or the last line of a file.  A better solution might be to explicitly call hooks exposed by those specific plugins that we want to trigger.  Alternatively we could call a function to examine the situation and emit whichever of <BS><Space> or <Space><BS> is most appropriate.
@@ -283,10 +284,12 @@ cnoremap <C-X> <C-W>
 "" This doesn't do what we want, and anyway we want to leave Ctrl-V alone since it does something special in Vim (insert literal char).
 " cnoremap <C-V> <C-Right><C-W>
 "" Lazy move.  Ctrl-Space just walks over the current char.
-"" I must say C-@ instead of C-Space!
+"" I must say C-@ instead of C-Space for this to work on the terminal.
 cnoremap <C-@> <Right>
-" Same for insert mode:
 inoremap <C-@> <Right>
+"" But in GUI mode we need to define the mapping properly.
+autocmd GUIEnter * cnoremap <c-Space> <Right>
+autocmd GUIEnter * inoremap <c-Space> <Right>
 "" Can't map C-Backspace; BS emits C-H with or without Ctrl.
 " cnoremap <C-BS> <Left>
 
@@ -319,13 +322,14 @@ set wildmode=longest:full,full
 
 
 " Make a global mark 'Q' with 'mQ' and jump back to it with 'MQ'.
-nmap M g'
+"nmap M g'
 " M usually does to-middle-line-of-window
 
 
 
 " When it's time to clear the search, avoid /skldjsdklfj<Enter> and just \/
-nmap <silent> <Leader>/ :nohlsearch<CR>
+nnoremap <silent> <Leader>/ :nohlsearch<CR>
+"nnoremap <silent> <Leader>/ :nohlsearch<CR>:let @/='skj84ksdEKD93Od23423lfs'<CR>
 
 
 
@@ -347,7 +351,9 @@ nnoremap <C-E> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
 "" Select file by filename with completion
 " nnoremap <C-E> :ls<CR>:e<space>
 "" Select by name with completion or file without (joeys_buffer_switcher.vim)
-nnoremap <Leader>e :JoeysBufferSwitch<Enter>
+"nnoremap <Leader>e :JoeysBufferSwitch<Enter>
+"" I use <C-E> above for switching buffer now, but this is still useful for switching window!
+nnoremap <Leader>W :JoeysBufferSwitch<Enter>
 "" Select buffer from list (bufexplorer.vim)
 nnoremap <C-B> :BufExplorer<Enter>
 "" Select from persistent list of most-recently-used files (mru.vim)
@@ -373,7 +379,10 @@ nnoremap <Leader>S :SessionList<Enter>
 nmap <Leader>i <Leader>f<C-w><Right><Leader>t
 
 " Toggle relative line numbers in the margin
-nmap <Leader>l :set invrelativenumber<Enter>
+"nmap <Leader>l :set invrelativenumber<Enter>
+
+" Been having a nightmare with iskeyword.  Here is a fast way to reset it.
+"nnoremap <Leader>k :setlocal iskeyword=65-127<Enter>
 
 " Toggle the paste option (annoying that this doesn't show the current state)
 nmap <Leader>p :set invpaste<Enter>
@@ -434,9 +443,6 @@ nnoremap <C-]> g<C-]>
 "       Or indeed, do a language-sensitive fallback search.
 "       E.g. for Javascript, we could search in current file for "function <cword>"
 "                            or failing that, try the same search with Grep.
-
-" Been having a nightmare with iskeyword.  Here is a fast way to reset it.
-nnoremap <Leader>k :setlocal iskeyword=65-127<Enter>
 
 " Execute the line under the cursor in ex
 nnoremap <Leader>e :execute getline(".")<CR>
@@ -507,28 +513,77 @@ autocmd GUIEnter * cnoremap <S-Insert> <C-R>*
 vnoremap <C-c> "+y
 " This version restores visual mode afterwards (retains the selection) which is consistent with other editors, but not especially desirable.
 "vnoremap <C-c> "+ygv
-" Ctrl-V in Normal and Insert mode acts like paste
-nnoremap <C-v> "+p
-"inoremap <C-v> <C-r>+
-" This version creates its own undo entry (rather than combining with the last) but it doesn't leave the cursor in the right place.
-inoremap <C-v> <Esc>"+pa
-" Ctrl-V in Visual mode pastes over the selection
-vnoremap <C-v> "+P
+"" Ctrl-V in Normal and Insert mode acts like paste
+"nnoremap <C-v> "+p
+""inoremap <C-v> <C-r>+
+"" This version creates its own undo entry (rather than combining with the last) but it doesn't leave the cursor in the right place.
+"inoremap <C-v> <Esc>"+pa
+"" Ctrl-V in Visual mode pastes over the selection
+"vnoremap <C-v> "+P
 " Normal behaviour of <C-v> now available on <Leader><C-v>
-nnoremap <Leader><C-v> <C-v>
-inoremap <Leader><C-v> <C-v>
-vnoremap <Leader><C-v> <C-v>
+" But for some reason these don't work!  Likewise \<C-v> didn't work either.
+" The \ is always inserted without waiting for a second char.
+"nnoremap <Leader><C-v> <C-v>
+"inoremap <Leader><C-v> <C-v>
+"vnoremap <Leader><C-v> <C-v>
 
 " Faster access to EasyMotion, assuming g:EasyMotion_leader_key == "<Leader><Leader>"
 "nmap <Leader>j <Leader><Leader>f
 "nmap <Leader>J <Leader><Leader>F
-nmap <C-d> <Leader><Leader>F
-nmap <C-g> <Leader><Leader>f
-omap <C-d> <Leader><Leader>F
-omap <C-g> <Leader><Leader>f
-vmap <C-d> <Leader><Leader>F
-vmap <C-g> <Leader><Leader>f
+"nmap <C-d> <Leader><Leader>F
+"nmap <C-g> <Leader><Leader>f
+"omap <C-d> <Leader><Leader>F
+"omap <C-g> <Leader><Leader>f
+"vmap <C-d> <Leader><Leader>F
+"vmap <C-g> <Leader><Leader>f
+" Doh.  map == [nov]map !
+" I actually find <C-d> easier to hit than <C-g>
+" <C-d> is 1-char seek
+map <C-d> <Plug>(easymotion-bd-f)
+" <C-g> is 0-char jump
+" Often requires 2 strokes, in which case why not use <C-d> and the first stroke will be the char already there!
+" Might be more efficient if the <C-d> char is very common (more common than words?!)
+map <C-g> <Plug>(easymotion-bd-w)
+"map <C-g> <Plug>(easymotion-jumptoanywhere)
+" Alternative layout: <C-d> is 0-char jump, <C-g> is /-like phrase jump.  For 1-char jump, use f and then flash hinting.
+"map <C-d> <Plug>(easymotion-bd-w)
+"map  <C-g> <Plug>(easymotion-sn)
+"omap <C-g> <Plug>(easymotion-tn)
+map <Leader><Leader>^ <Plug>(easymotion-sol-bd-jk)
+map <Leader><Leader>$ <Plug>(easymotion-eol-bd-jk)
+
+" PLEASE NOTE: I have setup other EasyMotion keys in my .vimrc
+
+" These might be useful, but unfortunately they are a bit slow:
+"map w <Plug>(easymotion-flash-w)
+"map b <Plug>(easymotion-flash-b)
+"map W <Plug>(easymotion-flash-W)
+"map B <Plug>(easymotion-flash-B)
+"map e <Plug>(easymotion-flash-e)
+"map ge <Plug>(easymotion-flash-ge)
+"map E <Plug>(easymotion-flash-E)
+"map gE <Plug>(easymotion-flash-gE)
+
+" I rarely use these, but they are here for testing:
+map  <Leader><Leader>/ <Plug>(easymotion-sn)
+omap <Leader><Leader>/ <Plug>(easymotion-tn)
+map  <Leader><Leader><Leader>/ <Plug>(easymotion-flash-tn)
+omap <Leader><Leader><Leader>/ <Plug>(easymotion-flash-sn)
+map <Leader><Leader><Leader>W <Plug>(easymotion-flash-bd-W)
 
 " In Insert mode, Shift-Enter keeps us on the current line, but pushes an empty line below
 inoremap <S-Enter> <Esc>O
+" In Xterm, both <S-Enter> and <C-Enter> reach Vim as <Enter>, so we cannot use this.
+
+" Find line easily from High/Middle/Low keys (a far better mnemonic than Home/Middle/Last in the docs)
+nmap <silent> H H:set relativenumber<CR>
+nmap <silent> M M:set relativenumber<CR>
+nmap <silent> L L:set relativenumber<CR>
+autocmd CursorHold * set norelativenumber
+
+" When writing a :! shell command, the shortcut %<Tab> can be used to insert the current filename.  But the same does not work when writing a standard Ex : command!
+" This naughty workaround should make it work for both, BUT it will always append to the end of the line, regardless where on the line the cursor was.
+"cnoremap %<Tab> <Home>!<End>%<C-l><Home><Del><End>
+" This one is better; it should insert at the cursor.
+cnoremap %<Tab> <C-r>%
 

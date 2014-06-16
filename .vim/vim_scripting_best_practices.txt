@@ -1,0 +1,163 @@
+# Use the help like crazy
+
+Vim's inline help can tell you about all the commands, keystrokes, options and standard functions available in Vim.
+
+If you aren't already using completion to find help tags, then try this:
+
+    :h func<C-d>    " Shows a list of matching tags
+
+    :h func<Tab>    " Lets you Tab through the tags to select the one you want
+
+Some characters at the start or end of the tag help to differentiate the type of object being documented:
+
+    n                   The n key in normal mode
+    CTRL_D              The <Ctrl-D> key in normal mode
+    c_CTRL_D            The <Ctrl-D> key in command mode
+    :%                  The % command in ex mode / command mode / Vimscript
+    'ch'                The ch option (short for cmdheight)
+    strlen(             The strlen function
+    b:                  The b variable prefix
+
+If you want to find out what a key does, but it is not a normal key, you can use `<C-v>` to help insert it.  For example, if you are curious what the `<C-f>` key does, type the following:
+
+    :h <C-v><C-f>
+
+When reading the help, you can use `<C-]>` to follow a tag and `<C-o>` to go back.
+
+
+# Config
+
+A common pattern I see to ensure config variables are initialised is:
+
+    if !exists("g:MyPlugin_OptionFoo")
+        let g:MyPlugin_OptionFoo = ...default value here...
+    endif
+
+This allows users to override your defaults in their `.vimrc`.  And it ensures the variable exists when your script wants to read it.
+
+Alternatively, to save creating config vars that are not read too often, you can use `get()` when you want to read them.  So instead of writing:
+
+    g:MyPlugin_OptionFoo
+
+you can write:
+
+    get(g:, "MyPlugin_OptionFoo", ...default value here...)
+
+which will provide the default value if the variable has not been set.
+
+However I somewhat prefer setting up a global variable, so that the user can find it and change it more easily at runtime, using completion on the commandline.
+
+Using the `get()` function we can in fact do the original initialization in one line:
+
+    let g:MyPlugin_OptionFoo = get(g:, "MyPlugin_OptionFoo", ...default value here...)
+
+
+# Localise functions and variables to your script
+
+Call your functions `s:MyFunc` instead of just `MyFunc` so that they stay local to the script.  This avoids conflicting with any other scripts which defined functions in the global scope.
+
+You can call a script-local function easily from within an autocommand, but from a mapping you must use `<SID>`:
+
+    autocmd CursorHold * call s:ResetCmdHeight()
+    nnoremap <C-L> :call <SID>ResetCmdHeight()<CR>
+
+For variables which you do not want the user to edit, make them script-local too.  For example your on/off toggle could be `s:enabled`.
+
+But if you really want to use global variables (so the user can change them) or window-local variables, it is a good idea to namespace them, to avoid conflict with other scripts.  For example:
+
+    g:MyPlugin_Enabled
+    w:MyPlugin_Enabled
+
+
+# Use `function!` to make your script re-loadable
+
+Some scripts begin with:
+
+    if exists('g:MyPlugin_IsLoaded')
+        finish
+    endif
+    let g:MyPlugin_IsLoaded = 1
+
+I do not recommend this because while you are developing your script, or someone else is trying to extend it, you will not be able to reload it; instead you will need to keep restarting Vim!
+
+The pattern I prefer is to overwrite old functions, so you can easily reload the script when you change it:
+
+    function! s:MyFunc()
+        ...
+    endfunction
+
+
+# Make autocmds clearable and reloadable
+
+When declaring an autocmd, use the following pattern:
+
+    augroup MyPlugin
+        " This clears all existing mappings in the group MyPlugin
+        autocmd!
+        " Put your autocmd definitions here ...
+        autocmd CursorHold * call s:ResetCmdHeight()
+    augroup END
+
+Now if your script is sourced for a second time, the `autocmd!` will wipe out your previous autocmds before creating the new ones.  This will prevent any calls to old unwanted functions.
+
+
+# Use `normal!` with a pling
+
+You should almost always use
+
+    normal! <cmd>
+
+instead of
+
+    normal <cmd>
+
+so that you bypass any user-defined keymaps, and execute `<cmd>` using standard vim commands.
+
+
+# Mappings
+
+Similarly with mappings, `nnoremap` is better than `nmap`, unless you actually want your mapping to run custom mappings defined by the user (or other scripts).
+
+If your script creates default keybindings, you should provide an option to disable this behaviour, or redefine the key.
+
+    if !exists("g:MyPlugin_KeyForFooFeature")
+        let g:MyPlugin_KeyForFooFeature = '<C-b>'
+    endif
+    " ...
+    if g:MyPlugin_KeyForFooFeature != ""
+        exec "nnoremap <silent> ".g:MyPlugin_KeyForFooFeature." :call s:RunFooFeature()<CR>"
+    endif
+
+You can also use `maparg()` to check if a user-defined mapping exists, before you overwrite it.
+
+It is quite popular to create default mappings on `<Leader>k` where `k` is a key of your choice.  This avoids changing Vim's default keys in normal mode.
+
+
+# Localise mappings to the relevant filetype(s)
+
+If your mappings apply to certain types of file, then it makes more sense to create them local to buffers of only that filetype, rather than have them apply to *all* the buffers.
+
+    au BufEnter *.{py,PY}   nnoremap <buffer> ...your mapping for python buffers only...
+
+
+# Write lots of functions
+
+As well as making things re-usable, functions names can be more meaningful names than direct commands, and so make your script easier to understand when reading.
+
+
+# Make your script lazy-load by moving it into the autoload folder
+
+If your script is not something that will be used in *every* Vim session, you can reduce Vim's startup time, by putting all the functions in a file called `autoload/myplugin.vim`.  You must rename functions in that file like so:
+
+    function! myplugin#MyFunction()
+        ...
+    endfunction
+
+You will also need to rename *calls* to those functions.  When Vim sees an attempt to `:call plugin_name#Func_Name` it will automatically load the file `autoload/plugin_name.vim` if it has not already done so, and then call the function.
+
+If you still want to map keybinds or setup autocmds for every session, these should be kept in the normal `plugin/` folder.  Your mapping could autoload your script and call your function:
+
+    nmap <silent> <C-F> :call myplugin#MyFunction()<Enter>
+
+Users will be grateful that your script does not greatly impact Vim's startup time.  It will only do the extra work of loading your plugin when it is needed.
+

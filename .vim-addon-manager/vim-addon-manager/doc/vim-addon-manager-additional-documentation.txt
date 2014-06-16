@@ -63,6 +63,9 @@ UpdateActivatedAddons                                 *:UpdateActivatedAddons*
         Like |:UpdateAdons| with a list of all activated plugins in place of 
         its arguments.
 
+ListActivatedAddons                                     *:ListActivatedAddons*
+        List all currently activated addons.
+
 UninstallNotLoadedAddons {name} ...                *:UninstallNotLoadedAddons*
         Unistall addons with given names. See
         |vam#install#UninstallAddons()| for more details.
@@ -71,7 +74,7 @@ AddonsInfo {id/name/any-regex} ...                               *:AddonsInfo*
         Shows addon information. Accepts both VAM script names and www.vim.org 
         script numbers. If neither succeeds the any-regex is used and compared
         against any field of the repository dictionaries. Thus you can use it
-        to find addons by github url etc. Its best to use the directhory part
+        to find addons by github url etc. Its best to use the directory part
         of the url only. because github urls can be written using git:// or
         https:// and with or without trailing ".git" in some cases.
 
@@ -265,7 +268,7 @@ known_repos_activation_policy
         won't get asked.
 known                                                              *VAM-known*
         String, specifies the name of plugin which provides list of
-        repositories. Default is vim-addon-manager-known-repositories.
+        repositories. Default is vim-pi.
 change_to_unix_ff                                      *VAM-change_to_unix_ff*
         Remove CR symbols before LF symbols in any vim files (changes dos and
         mixed dos/unix line endings to unix line endings). Is on by default if
@@ -378,9 +381,8 @@ source_missing_files                                *VAM-source_missing_files*
         for instance
 
 
-The following options are used by vim-addon-manager-known-repositories, not by
-VAM itself. So if you set |vim-addon-manager-known| to another value they may
-have no effect.
+The following options are used by vim-pi, not by VAM itself. So if you set 
+|vim-addon-manager-known| to another value they may have no effect.
                                                         *VAM-drop_SCM_sources*
 drop_git_sources                                        *VAM-drop_git_sources*
 drop_hg_sources                                         *VAM-drop_hg_sources*
@@ -397,15 +399,15 @@ scm_merge_strategy                                    *VAM-scm_merge_strategy*
         www.vim.org, `never' means that SCM sources will be never used.
 MergeSources                                                *VAM-MergeSources*
         Function reference, defines a function that will be used to merge
-        user, |VAM-kr| and SCM sources.
+        user, |vim-pi| and SCM sources.
         Overrides |VAM-scm_merge_strategy| and |VAM-drop_SCM_sources|. Will be 
         called with five arguments: user sources (most of time it is an empty 
-        dictionary), non-SCM sources defined in |VAM-kr|, SCM sources also 
+        dictionary), non-SCM sources defined in |vim-pi|, SCM sources also 
         defined there, patch function name and snr_to_name dictionary. Patch 
         function is a function that being given sources dictionary (like one 
         of first three arguments) and snr_to_name dictionary patches first 
         adding missing information (like missing dependencies). Last 
-        dictionary is a map of vim.org script numbers to VAM-kr names.
+        dictionary is a map of www.vim.org script numbers to |vim-pi| names.
 
         If MergeSources function is a dictionary function, it will be provided 
         an empty dictionary as |self| dictionary.
@@ -427,6 +429,9 @@ Follow these steps:
 ==============================================================================
 7. Addon-info file                                            *VAM-addon-info*
                                             *addon-info.json* *addon-info.txt*
+
+Some documentation will be moved to vim-wiki:
+http://vim-wiki.mawercer.de/wiki/topic/addon-info.json.html
 
 Example:  >
   {
@@ -466,8 +471,6 @@ repository                                             *addon-info-repository*
         script-type
                  One of `plugin', `syntax', `color scheme', or `indent'. The 
                  .vim file will be moved into the specific subdirectory.
-                 Also accepts `after/syntax' which is a hack that makes VAM 
-                 move source into after/syntax directory.
         archive_name
                  If `type' key contains an empty string, then archive which
                  location is described by the `url' key will be saved in file
@@ -476,14 +479,18 @@ repository                                             *addon-info-repository*
                  installed no other archive tools are required):
                  Extension     How it is handled ~
                  .vim          This extension designates that plugin is
-                               a single file. So, if exists key `script-type'
-                               and it is equal to `syntax' or `indent', then
-                               this file is put under {plugname}/syntax or
-                               under {plugname}/indent, otherwise it is put
-                               under directory described by
-                               {plugname}/{target_dir} (where {target_dir} is
-                               a value of `target_dir' key if it is present
-                               and `plugin' otherwise).
+                               a single file. Depending on `script-type' and 
+                               `target_dir' keys this file will be put 
+                               under:
+                               1. {root}/{target_dir} if `target_dir' key 
+                                  exists.
+                               2. {root}/syntax, {root}/indent, 
+                                  {root}/ftplugin if `script-type' is equal to 
+                                  "syntax", "indent" or "ftplugin" 
+                                  respectively.
+                               3. {root}/colors if `script-type' is equal to 
+                                  "color scheme".
+                               4. {root}/plugin otherwise.
                 .tar.gz, .tgz  This extension designates that plugin is
                                contained inside tar archive compressed by
                                gzip. In this case, archive is uncompressed by
@@ -668,7 +675,7 @@ What features are missing?
 
 Run (assuming you installed it in ~/.vim/vim-addons) >
     cd ~/.vim/vim-addons
-    hg clone http://vimpluginloader.hg.sourceforge.net:8000/hgroot/vimpluginloader/dev-tools
+    hg clone http://hg.code.sf.net/p/vimpluginloader/dev-tools
     cd dev-tools
     ./test.zsh -a vim-addon-manager
 . If test fails test.zsh prints out a list of failed tests and exits with 
@@ -807,14 +814,14 @@ SetupVAM because it works on any unix like system - and its files are that
 small so its debatable whether its worth sharing.
 
 The overlay is accessible via mercurial, url:
-http://vimpluginloader.hg.sourceforge.net:8000/hgroot/vimpluginloader/pluginloader-overlay
-or https://bitbucket.org/ZyX_I/pluginloader-overlay (mirror).
+http://hg.code.sf.net/p/vimpluginloader/pluginloader-overlay or 
+https://bitbucket.org/ZyX_I/pluginloader-overlay (mirror).
 
 In order to use this overlay paludis users can add the pluginloader.conf file
 to /etc/paludis/repositories/ with the following contents: >
     location = /var/paludis/repositories/pluginloader
     format = e
-    sync = hg+http://vimpluginloader.hg.sourceforge.net:8000/hgroot/vimpluginloader/pluginloader-overlay
+    sync = hg+http://hg.code.sf.net/p/vimpluginloader/pluginloader-overlay
 
     master_repository = gentoo
     names_cache = ${location}/.cache/names
@@ -835,7 +842,7 @@ For portage+layman users:
           <repo quality="experimental" status="unofficial">
             <name>pluginloader-overlay</name>
             <description>Overlay that contains some additional vim plugins</description>
-            <source type="mercurial">http://vimpluginloader.hg.sourceforge.net:8000/hgroot/vimpluginloader/pluginloader-overlay</source>
+            <source type="mercurial">http://hg.code.sf.net/p/vimpluginloader/pluginloader-overlay</source>
           </repo>
         </repositories>
 2. Add the following line to /etc/layman/layman.cfg just after the line that
@@ -927,13 +934,13 @@ Using a $SHELL setting other than /bin/sh may not work on *nix like systems
   " slow performance. This could be optimized some more - I do no longer
   " care about such old Vim versions. Think about upgrading.
   for f in split(glob(vam_install_path.'/vim-addon-manager*/**/*.vim', 1),"\n")
-    if f =~ 'plugin/vim-addon-manager-known-repositories.vim' | continue | endif
+    if f =~ '/db/' | continue | endif
     exec 'source '.fnameescape(f)
   endfor
 <
 
 [4]: VAM depends on git. Why does it?
-  VAM-kr is checked out by git which contains the default merge function.
+  |vim-pi| is checked out by git which contains the default merge function.
   As advanced user you can define your own sources and define your own merge
   function trivially - that somehow defeats the idea of having one working
   maitained pool of sources though.
@@ -968,7 +975,7 @@ Using a $SHELL setting other than /bin/sh may not work on *nix like systems
   git repositories only. I think the general idea is great. However we have to
   take care to keep patches which were written for git/hg in sync.
 
-  If you want this feature tell me. I'll add the sources to |VAM-kr| then.
+  If you want this feature tell me. I'll add the sources to |vim-pi| then.
 
 [5]
 - full update must be done by
@@ -1051,8 +1058,34 @@ Its not a bug. You can get remaining versions by git fetch --depth=9999999
 or such. This speeds up installation very much and should be still be
 sufficient to prepare patches.
 
+
+What about parallel installation, fetching, activation, ... ~
+Possible problems:
+
+- activation order could be important, the plugin manager eventually does not
+  know (yet)
+
+- Vim itself does not allow parallel processing, thus this make VAM depend on
+  external tools such as parallel, python or the like. It has been a design
+  choice to keep things simple (VimL only).
+
+- While loading plugins at runtime works mostly it does not work always, thus
+  installing a plugin and activating it later might change behaviour. And that
+  has been a design choice that you can trust (as much as possible) that the
+  result of a VAM installation behaves the same. (no version locking yet, I
+  know - if you need it create a github bug)
+
+- parallel updating can be implemented trivially, eg using shell scripting:
+
+  for git in ~/.vim/vim-addons/*/*.git; do
+    cd $(dirname $git); git pull &
+  done
+
 ==============================================================================
 14. VAM vs ...                                               *VAM-comparison*
+
+Up to date information will be found on this wiki:
+See http://vim-wiki.mawercer.de/wiki/topic/vim%20plugin%20managment.html
 
 ------------------------------------------------------------------------------
 14.1. VAM vs pathogen                                        *VAM-vs-pathogen*

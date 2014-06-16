@@ -23,9 +23,10 @@ function! s:JoeysFinalSetup()
 	" On very long files, :Joeyfolding takes a long time to run.
 	" Furthermore, on *reasonably* long files, it seems to lag up/down cursor movement.  (Although that may be related to RepeatLast triggering CursorHold early.)
 	" Either way, we don't want to run this automatically on large files.  (If indeed we want to run it at all.)
-	if line("$") < 7000
-		:Joeyfolding
-	endif
+	" Disabled now because the "{" ... "}" syntax rules were causing havoc with EasyMotion flashing feature.
+	"if line("$") < 7000
+		":Joeyfolding
+	"endif
 	" BUG: I fear this only enables folding on the initial buffer, not all of them.
 	" For that we would need:
 	" au BufEnter * :Joeyfolding

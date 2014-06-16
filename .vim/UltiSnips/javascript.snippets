@@ -12,14 +12,14 @@ function(${1}){
 endsnippet
 
 snippet for "for (...) {...}" !
-for (var ${1:i} = 0; $1 < ${2:array}.length; $1++) {
+for (var ${1:i}=0; $1<${2:array}.length; $1++) {
 	var ${3:item} = $2[$1];
 	$0
 }
 endsnippet
 
 snippet forr "for (...) {...} [reverse]"
-for (var ${1:i} = ${2:array}.length; $1--;) {
+for (var ${1:i}=${2:array}.length; $1--;) {
 	var ${3:item} = $2[$1];
 	$0
 }
@@ -27,7 +27,8 @@ endsnippet
 
 snippet forin "for (... in ...) {...}" !
 for (var ${1:x} in ${2:obj}) {
-	$0$2[$1]
+	var ${3:prop} = $2[$1];
+	$0
 }
 endsnippet
 

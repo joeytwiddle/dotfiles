@@ -3,7 +3,7 @@ let g:airline#themes#joeys#palette = {}
 " Normal Mode
 let s:N1 = [ '#00005f' , '#00dfff' , "white", "cyan" ]
 let s:N2 = [ '#ffffff' , '#005fff' , "black", "white" ]
-let s:N3 = [ '#ffffff' , '#000080' , "blue", "white", "none" ]
+let s:N3 = [ '#ffffff' , '#0038c0' , "blue", "white", "none" ]
 "let s:N3 = [ '#000080' , '#ffffff' , 7, 4, "bold,reverse" ]   " Reverse is more readable in xterm, but if we do this, we must also do it for I2, V2, IA2, ... !
 let g:airline#themes#joeys#palette.normal = airline#themes#generate_color_map(s:N1, s:N2, s:N3)
 let g:airline#themes#joeys#palette.normal_modified = {
