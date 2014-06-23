@@ -5,23 +5,24 @@
 " Actually we don't actually require .length
 :%s/for (\(var\s\|\)\s*\([a-zA-Z_$][a-zA-Z0-9_$]*\)\s*=\s*0\s*;\s*\([a-zA-Z_$][a-zA-Z0-9_$]*\)\s*<\s*\([a-zA-Z_$][a-zA-Z0-9_$.]*\)\s*;\s*[a-zA-Z_$]++\s*)\s*{/for \2 in [0...\4]/g
 
+" Remove all var declarations
 :%s/^var //
 :%s/\([ 	]\)var /\1/
 " In loops (although loops need to be dealt with!)
 :%s/(var /(/
 
-" Comments
+" Change // comments into # comments
 :%s/\/\/\/\//##/
 :%s/\/\//#/
 :%s/\/\*/###/
 :%s/\*\//###/
 
-" Semicolons
+" Remove semicolons
 :%s/;\([ 	]*#\|[ 	]*$\)/\1/
 
-" Anonymous functions
+" Convert anonymous functions into ->
 :%s/\<function[ 	]*(\(.*\))[ 	]*{/(\1) ->/
-" Named functions
+" Conver named functions into ->
 :%s/\<function[ 	]*\([A-Z"a-z_0-9]*\)(\(.*\))[ 	]*{/\1 = (\2) ->/
 
 " Kill {s and }s around functions, ifs and loops.  Have to trust indentation!
@@ -30,7 +31,19 @@
 :%s/ }$//
 :%s/[^ 	]*} *//
 
+" TODO: We should probably check for one-liners and convert them into "if ... then" or "while ... then" CS one-liners.
+" Drop ()s from if statements
+:%s/\<if\>\s*(\(.*\))\s*$/if \1/g
+" Drop ()s from while statements
+:%s/\<while\>\s*(\(.*\))\s*$/while \1/g
+
+" Triple-equals is double-equals in CS.  There is no double-equals, so they will be broken (fixed).
 :%s/\<===\>/==/g
+
+" Change this. to @
+:%s/\<this\./@/g
+" Change this to @ (may uglify comments!)
+":%s/\<this\>/@/g
 
 "" TODOS:
 
@@ -46,4 +59,12 @@
 
 " Heredocs /*...*/ inside the ()s of ifs or fors make CS complain when they
 " become ###...###.
+
+" DO NOT destroy return statements (unless we are sure they were the last
+" statement of a function) because they might be breaking out of the middle of
+" a function.
+
+" BUGS:
+" `var x;` gets broken, as mentioned above
+" `o = {}` becomes `o = `
 

@@ -1,3 +1,16 @@
+# Other guides
+
+I can highly recommend the top one!
+
+- http://stevelosh.com/blog/2011/09/writing-vim-plugins/ - Nice summary of good practice.  Like this document but better.
+- http://www.ibm.com/developerworks/library/l-vim-script-1/ - A set of longer lessons
+- http://vim-wiki.mawercer.de/wiki/topic/debugging-viml.html - Various tips on this site
+
+This is more for users than developers, but it's a great resource:
+
+- http://vim.wikia.com/
+
+
 # Use the help like crazy
 
 Vim's inline help can tell you about all the commands, keystrokes, options and standard functions available in Vim.
@@ -10,15 +23,16 @@ If you aren't already using completion to find help tags, then try this:
 
 Some characters at the start or end of the tag help to differentiate the type of object being documented:
 
-    n                   The n key in normal mode
-    CTRL_D              The <Ctrl-D> key in normal mode
-    c_CTRL_D            The <Ctrl-D> key in command mode
-    :%                  The % command in ex mode / command mode / Vimscript
-    'ch'                The ch option (short for cmdheight)
-    strlen(             The strlen function
-    b:                  The b variable prefix
+    n                   The n key in Normal mode
+    CTRL-D              The <Ctrl-D> key in Normal mode
+    c_CTRL-D            The <Ctrl-D> key in Command mode
+    i_CTRL-D            The <Ctrl-D> key in Insert mode
+    :%                  The ex command % (usable in vim scripts with no ':')
+    'ch'                The option 'ch' (short for cmdheight)
+    strlen(             The function 'strlen'
+    b:                  The variable prefix 'b:'
 
-If you want to find out what a key does, but it is not a normal key, you can use `<C-v>` to help insert it.  For example, if you are curious what the `<C-f>` key does, type the following:
+To find help on keys which you cannot type (special keys), use `<C-v>` to help insert it.  For example, if you are curious what the `<C-f>` key does, type the following:
 
     :h <C-v><C-f>
 
