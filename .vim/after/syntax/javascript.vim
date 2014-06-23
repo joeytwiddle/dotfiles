@@ -90,3 +90,7 @@ highlight OperatorDivide ctermfg=red guifg=red
 "highlight ComparatorPositive ctermfg=green guifg=green
 "highlight ComparatorNegative ctermfg=red guifg=red
 
+"" Make JS colors a bit more like CS colors
+syntax keyword javascriptThis this
+highlight link javascriptThis Type
+
