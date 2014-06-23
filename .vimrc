@@ -45,6 +45,7 @@ endif
 " This makes it possible to leave Insert mode more quickly when pressing Escape.
 " Although it may mess with other plugins that use timeoutlen.
 " A better solution might be to get more familiar with my Esc shortcut on £ (Shift-3), although that isn't an option on US keyboards.
+" Another keybind that some people like to use for <Esc> is <Ctrl-[>.  In fact that works by default!
 if ! has('gui_running')
     set ttimeoutlen=10
     augroup FastEscape
@@ -71,7 +72,8 @@ autocmd VimLeave * silent !stty ixon
 	let g:miniBufExplorerMoreThanOne = 0
 	" let g:miniBufExplMaxHeight = 6
 	" let g:miniBufExplMapWindowNavVim = 1
-	let g:miniBufExplMapWindowNavArrows = 1  " or use version in joeykeymap.vim
+	" Disabled because they use noremap which breaks navigation_enhancer.vim
+	"let g:miniBufExplMapWindowNavArrows = 1  " Use versions in joeykeymap.vim instead.
 	let g:miniBufExplUseSingleClick = 1
 	" let g:miniBufExplShowUnlistedBuffers = 0
 	" let g:miniBufExplShowOtherBuffers = 1
@@ -456,11 +458,11 @@ autocmd VimLeave * silent !stty ixon
 	au BufRead,BufNewFile {/usr/share/X11/xkb/*} set ft=c
 	au BufRead,BufNewFile {*.md}                 set ft=markdown
 
-	"" I need to update some of my highlights for 256 color mode, so I'm not
-	"" using it at the moment.
-	" if $TERM != "linux" && $TERM != "screen"
-		" set t_Co=256
-	" end
+	"" I need to update some of my highlights for 256 color mode, so I'm not using it at the moment.
+	"" Re-enabled for dim_inactive_windows
+	if $TERM != "linux" && $TERM != "screen"
+		set t_Co=256
+	end
 
 	"" Recognise Node stack-traces:
 	"" Basic:
@@ -684,9 +686,12 @@ autocmd VimLeave * silent !stty ixon
 
 	"call add(vamAddons,"github:felixr/vim-multiedit")      " Edit multiple selections live (mark words with ,w then edit all with ,i or ,a)
 	"call add(vamAddons,"github:hlissner/vim-multiedit")    " Edit multiple selections v2 (mark words with \mm then edit all with \M or \C) - but this was not doing live updates for me
-	"call add(vamAddons,"github:vim-scripts/vim-multiedit") " A fork of hlissner's
+	"call add(vamAddons,"github:vim-scripts/vim-multiedit") " Older clone of hlissner's
+	call add(vamAddons,"github:osyo-manga/vim-over")       " Specifically just for previewing search/replace - works well.
 
-	""call add(vamAddons,"github:terryma/vim-multiple-cursors") " Looks promising
+	""call add(vamAddons,"github:terryma/vim-multiple-cursors")    " Looks promising
+	""call add(vamAddons,"github:kris89/vim-multiple-cursors")     " More recently maintained
+	""call add(vamAddons,"github:jrhorn424/vim-multiple-cursors")  " Even more recently maintained!
 	"call add(vamAddons,"github:joeytwiddle/vim-multiple-cursors") " My version attempts to avoid losing keystrokes
 	"let g:multi_cursor_start_key='<F2>'
 	"nnoremap \\r :exec 'MultipleCursorsFind \<'.expand("<cword>").'\>'v
@@ -703,7 +708,7 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons, "github:scrooloose/syntastic")    " Checks syntax as you are working.  Needs syntax checker for revelant language to be installed separately: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
 
 	" https://github.com/bling/vim-airline
-	call add(vamAddons, "github:bling/vim-airline")        " Cool statusline
+	"call add(vamAddons, "github:bling/vim-airline")        " Cool statusline
 	let g:airline_section_b = "[%{airline#util#wrap(airline#extensions#branch#get_head(),0)}]"
 	"let g:airline_section_x = "(%{airline#util#wrap(airline#parts#filetype(),0)})"
 	let g:airline_section_z = "%{GetSearchStatus()}%3P (%02c%{g:airline_symbols.linenr}%#__accent_bold#%l%#__restore__#) \#%02B"
