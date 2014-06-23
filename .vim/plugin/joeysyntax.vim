@@ -7,6 +7,7 @@ function! Joeysyntax()
 
 	" Detect whether our terminal can support 256 colors, and if so set it.
 	" This worked for Ubuntu 12.04.  (Some HOWTOs suggest setting TERM=xterm-256 but that is not needed here.)
+	" But anyway see my .vimrc which may do better by using a blacklist, and runs before all plugins!
 	"if $TERM == "xterm" && $XTERM_VERSION == "XTerm(278)"
 		"set t_Co=256
 	"endif
