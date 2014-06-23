@@ -10,7 +10,7 @@ function! s:ReplaceInAllBuffers(...)
       let l:replacement = a:1
    endif
    let l:replacement = input("ReplaceInAllBuffers " . l:search . " with: ",l:replacement)
-   :exe 'bufdo! %s/' . l:search . '/' . l:replacement . '/gec'
+   exec 'bufdo! %s/' . l:search . '/' . l:replacement . '/gec'
    " Flag 'e' continues if no changes were made in one of the buffers, or if an error occurred.
    "" There is also windo and argdo
    " :unlet! s:word
@@ -25,13 +25,13 @@ function! s:ReplaceInThisBuffer(...)
       let l:replacement = a:1
    endif
    let l:replacement = input("ReplaceInThisBuffer " . l:search . " with: ",l:replacement)
-   execute "%s/\\<" . l:search . "\\>/" . l:replacement . "/gc"
+   exec "%s/\\<" . l:search . "\\>/" . l:replacement . "/gc"
 endfunction
 
 nnoremap <silent> \R :call <SID>ReplaceInAllBuffers()<CR>
 " command! ReplaceInAllBuffers call ReplaceInAllBuffers(<f-args>)
 command! -nargs=* ReplaceInAllBuffers call ReplaceInAllBuffers(<q-args>)
 
-nnoremap <silent> \r *#:call <SID>ReplaceInThisBuffer()<CR>
+nnoremap <silent> \r :call <SID>ReplaceInThisBuffer()<CR>
 command! -nargs=* ReplaceInThisBuffer call ReplaceInThisBuffer(<q-args>)
 
