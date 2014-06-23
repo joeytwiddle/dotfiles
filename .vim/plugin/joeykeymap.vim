@@ -70,6 +70,7 @@ map :htab :tabnew<Enter>:h
 
 
 "" Moving between windows with Ctrl-ArrowKeys
+"" Note that we use nmap instead of nnoremap, so that navigation_enhancer will be invoked if it is loaded.
 nmap <C-Up> <C-W>k
 nmap <C-Down> <C-W>j
 nmap <C-Left> <C-W>h
