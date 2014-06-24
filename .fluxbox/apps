@@ -60,6 +60,7 @@
  [app] (title=chrome://devtools/devtools.html)
  [app] (title=Developer Tools.*)
  [app] (title=Error Console)
+ [app] (title=chrome-devtools://.*)
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
