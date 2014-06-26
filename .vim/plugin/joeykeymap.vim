@@ -526,6 +526,9 @@ vnoremap <C-c> "+y
 "inoremap <Leader><C-v> <C-v>
 "vnoremap <Leader><C-v> <C-v>
 
+" Select All from Insert mode using <Ctrl-A> (overrides default "Insert previously inserted text").  Finishes in Visual mode.
+inoremap <C-a> <Esc>ggvG$
+
 " Faster access to EasyMotion, assuming g:EasyMotion_leader_key == "<Leader><Leader>"
 "nmap <Leader>j <Leader><Leader>f
 "nmap <Leader>J <Leader><Leader>F
