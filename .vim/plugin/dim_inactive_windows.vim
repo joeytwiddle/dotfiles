@@ -14,11 +14,17 @@
 "highlight InactiveWindows ctermbg=black guibg=#203838
 highlight InactiveWindows ctermbg=black guibg=#445555 guifg=#999999
 
+if &t_Co >= 256
+  hi InactiveWindows ctermbg=238
+endif
+
 function! s:DimInactiveWindows()
 
-  " I want this because I use a different plugin in non-GUI mode to flash
-  " the active window when focus changes.  Might be better as an option.
-  if has('gui_running') != 1
+  " For 8-color terminals there is no color I like to use as a dimmed
+  " background, so I disable DimInactiveWindows and rely on
+  " blinking_statusline.vim to show me where focus has moved to.
+  " This might be better as an option.
+  if has('gui_running') != 1 && &t_Co < 60
     return
   endif
 
