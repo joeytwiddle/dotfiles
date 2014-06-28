@@ -313,12 +313,12 @@ unalias gco 2>/dev/null   # REMOVEME
 #alias gco='git checkout'
 gco() {
 	git checkout "$@"
-	if [ -n "$POST_GIT_CHECKOUT" ]
+	if [ "$?" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
 	then "$POST_GIT_CHECKOUT" "$@"
 	fi
 }
-POST_GIT_CHECKOUT=post_git_checkout
-post_git_checkout() {
+POST_GIT_CHECKOUT=update_cindex
+update_cindex() {
 	if which cindex >/dev/null
 	then
 		local git_root_folder=$(git rev-parse --show-toplevel)
