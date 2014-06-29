@@ -451,6 +451,8 @@ nnoremap <C-]> g<C-]>
 " Execute the line under the cursor in ex
 nnoremap <Leader>e :execute getline(".")<CR>
 " I would quite like a version that could work on multiple lines (from a visual selection).
+" Execute line from clipboard in ex.  But which clipboard?  Let's display them and let the user choose.
+nnoremap <Leader>E :registers " + *<CR>:execute @
 
 function! s:SetupKeysForGrep()
 	" Now that <F4> is doing a search for the word under the cursor.  <F3> could start empty, waiting for a typed word.  But for the user's convenience, we start them off with the whole-word symbols.
@@ -535,6 +537,8 @@ vnoremap <C-c> "+y
 
 " Select All from Insert mode using <Ctrl-A> (overrides default "Insert previously inserted text").  Finishes in Visual mode.
 inoremap <C-a> <Esc>ggvG$
+" Same when in Visual mode:
+vnoremap <C-a> <Esc>ggvG$
 
 " Faster access to EasyMotion, assuming g:EasyMotion_leader_key == "<Leader><Leader>"
 "nmap <Leader>j <Leader><Leader>f
