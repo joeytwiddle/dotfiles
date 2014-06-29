@@ -1,6 +1,7 @@
 --regex-c=/^(COMMENT: C, Java, Javascript, Asm have defaults, so need no langdef, but we can extend them)/\1/X,XXX/
 
---regex-vim=/^(COMMENT: ex-ctags already has this as 'map': \s*(map|[nvxsoilc]*map)\s+([^\s]*).*)/\2/m,mapping/
+--regex-vim=/^(COMMENT: ex-ctags already provides a 'map' tag/\2/X,XXX/
+--regex-vim=/^(DISABLED: \s*(([nvxsoilc]*|)(nore|)map)\s+(<(buffer|silent|special|script|expr|unique)>\s+)*([^ 	]*).*)/\6 (\1)/m,mapping/
 --regex-vim=/^(COMMENT: python functions)/\1/X,XXX/
 --regex-vim=/^\s*def\s+([a-zA-Z0-9_$]+)/\1/f,function/
 
