@@ -1,6 +1,8 @@
 " Allows scripts to set a custom title for each quickfix list.
 " Scripts should call g:SetQuickfixTitle(...)
-" The title will be restored when :colder and :cnewer are used
+" The title can be restored when returning to the quickfix with :colder or :cnewer
+"
+" See below for how to setup :colder and :cnewer to make the restore happen.
 "
 " Use case: When walking through my previous :grep searches with :colder and
 " :cnewer, the titles look ugly.  I would like to display what the list really
@@ -34,8 +36,10 @@ endfunction
 "   :autocmd BufReadPost quickfix :call g:RestoreQuickfixTitle()
 "
 " But these trigger too soon!  All of them saw the storedTitle from the previous list, not the one being moved to!
+"
+" So one workaround would be to stop using the storedTitle and instead use a hash of the buffer contents to map to the desired titles.
 
-" A WORKING solution is to use key mappings to execute :colder and :cnewer *and* trigger the restore:
+" A WORKING solution for now is to use key mappings to execute :colder and :cnewer *and* trigger the restore:
 "
 "   :autocmd BufReadPost quickfix nnoremap <buffer> <C-PageDown> :cnewer<CR>:call g:RestoreQuickfixTitle()<CR>
 "   :autocmd BufReadPost quickfix nnoremap <buffer> <C-PageUp> :colder<CR>:call g:RestoreQuickfixTitle()<CR>
