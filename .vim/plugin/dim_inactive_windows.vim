@@ -12,13 +12,12 @@
 " least on MacVim they do).
 
 "highlight InactiveWindowsDefault ctermbg=black guibg=#203838
-highlight InactiveWindowsDefault ctermbg=black guibg=#334444
 "highlight InactiveWindowsDefault ctermbg=black guibg=#445555 guifg=#999999
-highlight link InactiveWindows InactiveWindowsDefault
-
+highlight InactiveWindowsDefault ctermbg=black guibg=#334444
 if &t_Co >= 256
-  hi InactiveWindows ctermbg=238
+  highlight InactiveWindowsDefault ctermbg=238
 endif
+highlight link InactiveWindows InactiveWindowsDefault
 
 function! s:DimInactiveWindows()
 
