@@ -546,7 +546,7 @@ autocmd VimLeave * silent !stty ixon
 
 
 
-" >>> Custom Plugin Loader (a fix for me) {{{
+" >>> Custom Plugin Loader (ignore scripts in CVS folders) {{{
 
 	" Plugins
 	" CVS leaves old versions in ~/.vim/plugins/CVS/Base/*.vim
@@ -736,6 +736,17 @@ autocmd VimLeave * silent !stty ixon
 		let g:airline_theme="joeys"
 	endif
 	" TODO: Airline whitespace option slows down Vim on large files, between every keystroke!  We should ensure it is never automatically enabled when we open a large file.
+
+	"call add(vamAddons, "github:Shougo/vimproc.vim")       " Used by unite for async; requires `make` after install!
+	call add(vamAddons, "github:Shougo/unite.vim")         " Buffer and file explorer, all in one plugin
+	let g:unite_source_history_yank_enable = 1
+	nnoremap <silent> <Leader>uu :Unite<CR>A*
+	nnoremap <silent> <Leader>ub :Unite buffer<CR>A
+	nnoremap <silent> <Leader>uf :Unite file<CR>A
+	nnoremap <silent> <Leader>uj :<C-u>Unite -buffer-name=jumps jump change file_point buffer_tab file/new<CR>
+	" We cannot do these until after it has loaded!
+	"call unite#filters#matcher_default#use(['matcher_fuzzy'])
+	"call unite#custom#profile('default', 'context', { 'winheight': 50, })
 
 	" >>> My Plugins from the Cloud (modified versions of other plugins) {{{
 	call add(vamAddons,"github:joeytwiddle/grep.vim")    " With support for csearch and SetQuickfixTitle.
