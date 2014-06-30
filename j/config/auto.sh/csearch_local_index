@@ -1,0 +1,4 @@
+# I want CSearch to use a separate index for each project I work on.
+# Otherwise, if they all use the same index, any search I perform will display results from all my different projects!
+
+export CSEARCHINDEX=./.csearchindex

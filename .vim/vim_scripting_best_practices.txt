@@ -154,9 +154,16 @@ If your mappings apply to certain types of file, then it makes more sense to cre
     au BufEnter *.{py,PY}   nnoremap <buffer> ...your mapping for python buffers only...
 
 
-# Write lots of functions
+# Should I use `noautocmd`?
 
-As well as making things re-usable, functions names can be more meaningful names than direct commands, and so make your script easier to understand when reading.
+As with `normal!` and `noremap` you can avoid other scripts from executing their event listeners by performing activities with `noautocmd` prepended.
+
+    noautocmd wincmd p   " Switch to previous window, but don't fire any
+                         " WinLeave or WinEnter events.
+
+However this should be used with caution.  On more than one occasion I have found scripts which use `noautocmd` confuse other plugins by not calling them!  This is because they change Vim's state without the chance for the script to respond to the change.  (Cases in point: sexyscroller and dim_inactive_windows)
+
+Therefore my recommendation is to only use `autocmd` when you must (you want to avoid running your own event handlers) or when you have detected performance issues due to too many event handlers being invoked in other scripts.
 
 
 # Make your script lazy-load by moving it into the autoload folder
@@ -174,4 +181,10 @@ If you still want to map keybinds or setup autocmds for every session, these sho
     nmap <silent> <C-F> :call myplugin#MyFunction()<Enter>
 
 Users will be grateful that your script does not greatly impact Vim's startup time.  It will only do the extra work of loading your plugin when it is needed.
+
+
+# Write lots of functions (general coding advice)
+
+As well as making things re-usable, functions can offer meaningful names which direct commands may not, and so make your script easier to understand when reading.
+
 

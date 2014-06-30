@@ -329,8 +329,9 @@ set wildmode=longest:full,full
 
 
 " When it's time to clear the search, avoid /skldjsdklfj<Enter> and just \/
-nnoremap <silent> <Leader>/ :nohlsearch<CR>
-"nnoremap <silent> <Leader>/ :nohlsearch<CR>:let @/='skj84ksdEKD93Od23423lfs'<CR>
+" Also added :match to hide highlights from highlight_word_under_cursor.vim
+nnoremap <silent> <Leader>/ :nohlsearch<CR>:match<CR>
+"nnoremap <silent> <Leader>/ :nohlsearch<CR>:match<CR>:let @/='skj84ksdEKD93Od23423lfs'<CR>
 
 
 
@@ -340,7 +341,9 @@ cmap w!! w !sudo tee % >/dev/null
 
 
 " Quick toggles for most frequently used functions
-nnoremap <Leader>t :Tlist<Enter>
+"nnoremap <Leader>t :Tlist<Enter>
+" Because Tlist does not fire autocmds, it causes a bug where dim_inactive_windows dims the current window on startup.  We workaround this by switching window, and switching back again
+nnoremap <Leader>t :Tlist<Enter><C-w>w<C-w>p
 nnoremap <Leader>w :set invwrap<Enter>
 
 " Quick buffer switching (beyond Ctrl-PageUp/Down)
@@ -448,6 +451,8 @@ nnoremap <C-]> g<C-]>
 " Execute the line under the cursor in ex
 nnoremap <Leader>e :execute getline(".")<CR>
 " I would quite like a version that could work on multiple lines (from a visual selection).
+" Execute line from clipboard in ex.  But which clipboard?  Let's display them and let the user choose.
+nnoremap <Leader>E :registers " + *<CR>:execute @
 
 function! s:SetupKeysForGrep()
 	" Now that <F4> is doing a search for the word under the cursor.  <F3> could start empty, waiting for a typed word.  But for the user's convenience, we start them off with the whole-word symbols.
@@ -455,7 +460,9 @@ function! s:SetupKeysForGrep()
 	" If my F3 mapping to grep.vim is working fine, let's skip through all the prompts.
 	" Replaces :emenu<Space><Tab>
 	"nmap <F4> <F3><CR><CR><CR>
-	nnoremap <F4> :Grep<CR><CR><CR><CR>
+	"nnoremap <F4> :Grep<CR><CR><CR><CR>
+	"nnoremap <F4> :Grep<CR><Home>\<<End>\><CR><CR><CR>   " untested
+	nnoremap <F4> :Grep \<<cword>\><CR><CR>
 	" NOTE: The last <CR> is not always needed.  The |hit-enter| prompt is only displayed when the "Grep in files:" prompt has exceeded |cmdheight| (always true for me, with my huge exclude list).  So an alternative workaround might be for grep.vim to temporarily set ch very high, then reset it afterwards.
 	" Avoiding the final <CR> would be desirable because it currently hides any "Error...not found" message that might appear.  And perhaps in some cases it isn't even required (if the command-line is not longer than the screen).
 endfunction
@@ -464,7 +471,9 @@ function! s:SetupKeysForCSearch()
 	" If using csearch, \< and \> are replaced with \b
 	nnoremap <F3> :Grep<CR><C-U>\b\b<Left><Left>
 	" And F4 needs one fewer <CR> (because the file/options line is short/empty):
-	nnoremap <F4> :Grep<CR><CR>
+	"nnoremap <F4> :Grep<CR><CR>
+	"nnoremap <F4> :Grep<CR><Home>\b<End>\b<CR>   " untested
+	nnoremap <F4> :Grep \b<cword>\b<CR>
 endfunction
 
 if exists("g:Grep_Using_CodeSearch") && g:Grep_Using_CodeSearch || exists("g:Grep_Path") && match(g:Grep_Path, '^csearch$\|/csearch$') >= 0
@@ -527,6 +536,11 @@ vnoremap <C-c> "+y
 "nnoremap <Leader><C-v> <C-v>
 "inoremap <Leader><C-v> <C-v>
 "vnoremap <Leader><C-v> <C-v>
+
+" Select All from Insert mode using <Ctrl-A> (overrides default "Insert previously inserted text").  Finishes in Visual mode.
+inoremap <C-a> <Esc>ggvG$
+" Same when in Visual mode:
+vnoremap <C-a> <Esc>ggvG$
 
 " Faster access to EasyMotion, assuming g:EasyMotion_leader_key == "<Leader><Leader>"
 "nmap <Leader>j <Leader><Leader>f

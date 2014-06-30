@@ -307,7 +307,10 @@ function! Joeyhighlight()
 	"hi MyTagListTitle ctermfg=yellow ctermbg=none
 	hi MyTagListTitle ctermfg=none ctermbg=none
 	"hi MyTagListTagName cterm=bold ctermbg=green ctermfg=white guibg=#00cc00 guifg=white
-	hi MyTagListTagName cterm=bold ctermbg=green ctermfg=white gui=bold,reverse guibg=white guifg=#00cc00
+	"hi MyTagListTagName cterm=bold ctermbg=green ctermfg=white gui=bold,reverse guibg=white guifg=#00cc00
+	hi MyTagListTagName cterm=bold,reverse ctermbg=white ctermfg=green gui=bold,reverse guibg=white guifg=#00cc00
+	" I think there was some reason why I shouldn't use reverse in cterm, but I forgot why!
+	" I want it so that we get a strong highlight when using dim_inactive_windows.vim
 	" hi MyTagListFileName ctermbg=black ctermfg=white
 	hi MyTagListFileName ctermbg=black ctermfg=cyan guibg=black guifg=cyan
 

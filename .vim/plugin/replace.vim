@@ -1,37 +1,28 @@
-" TODO: Escape word and replace's '/'s, (and '\'s, etc.?)
-" TODO: Check the unique word replace is not already present in target
-" TODO: Confirm action beforehand if /c not enabled.  Allows user to check <cword> worked suitably.
+" Simple tool for renaming a word (e.g. a variable or function name)
 
-" Search for word under cursor and replace with prompted input in all open buffers
-function! s:ReplaceInAllBuffers(...)
-   let l:search = "\\<" . expand('<cword>') . "\\>"
-   let l:replacement = ""
-   if exists("a:1")
-      let l:replacement = a:1
+" TODO: Escape search word for regexp, for special chars like '^', '$', '[', ']', '\'
+" TODO: Check the replacement word is unique (not already present in the buffer)
+
+" Search for word under cursor and replace with prompted input in this buffer, or in all open buffers
+function! s:Replace(in_all_buffers, ...)
+   let word = expand("<cword>")
+   let search = "\\<" . word . "\\>"
+   if exists("a:2")
+      let replacement = a:2
+   else
+      let replacement = input("ReplaceInAllBuffers " . search . " with: ", word)
    endif
-   let l:replacement = input("ReplaceInAllBuffers " . l:search . " with: ",l:replacement)
-   exec 'bufdo! %s/' . l:search . '/' . l:replacement . '/gec'
-   " Flag 'e' continues if no changes were made in one of the buffers, or if an error occurred.
-   "" There is also windo and argdo
-   " :unlet! s:word
+   if a:in_all_buffers
+      exec 'bufdo! %s/' . search . '/' . replacement . '/gec'
+      " Flag 'e' continues if no changes were made in one of the buffers, or if an error occurred.
+   else
+      exec "%s/" . search . "/" . replacement . "/gc"
+   endif
 endfun
 
-" Search for word under cursor and replace with prompted input in this buffer
-function! s:ReplaceInThisBuffer(...)
-   let word = expand("<cword>")
-   let l:search = "\\<" . expand('<cword>') . "\\>"
-   let l:replacement = ""
-   if exists("a:1")
-      let l:replacement = a:1
-   endif
-   let l:replacement = input("ReplaceInThisBuffer " . l:search . " with: ",l:replacement)
-   exec "%s/\\<" . l:search . "\\>/" . l:replacement . "/gc"
-endfunction
+nnoremap <silent> \r :call <SID>Replace(0)<CR>
+command! -nargs=* ReplaceInThisBuffer call <SID>Replace(0,<q-args>)
 
-nnoremap <silent> \R :call <SID>ReplaceInAllBuffers()<CR>
-" command! ReplaceInAllBuffers call ReplaceInAllBuffers(<f-args>)
-command! -nargs=* ReplaceInAllBuffers call ReplaceInAllBuffers(<q-args>)
-
-nnoremap <silent> \r :call <SID>ReplaceInThisBuffer()<CR>
-command! -nargs=* ReplaceInThisBuffer call ReplaceInThisBuffer(<q-args>)
+nnoremap <silent> \R :call <SID>Replace(1)<CR>
+command! -nargs=* ReplaceInAllBuffers call <SID>Replace(1,<q-args>)
 
