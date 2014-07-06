@@ -77,6 +77,8 @@
 	ld = log -p --word-diff=plain -m
 	# -p shows diffs.  -m shows diffs for merges
 
+	credit = blame
+
 	# Joey's:
 	# Just a list of the files that have changed on the origin (I hope)
 	# You need to do a 'fetch' beforehand but not a 'merge'
