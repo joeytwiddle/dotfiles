@@ -111,55 +111,55 @@ function! s:FoldByPath()
 endfunction
 
 " Underline the last line of results for each file.
-"function! g:SeparateFilesVisually()
-"	if !hlexists("QuickListLastLineOfFile")
-"		highlight QuickListLastLineOfFile term=underline cterm=underline gui=underline
-"	endif
-"	call clearmatches()
-"	let filename = ""
-"	for l in range(1,line("$"))
-"		let new_filename = substitute( getline(l), '|.*', '', '')
-"		if new_filename != filename
-"			let filename = new_filename
-"			let previous_line = l - 1
-"			if previous_line >= 1
-"				" Underline whole line
-"				"let m = matchadd("QuickListLastLineOfFile", '\%'.previous_line.'l.*')
-"				" Underline just the filename/path
-"				let m = matchadd("QuickListLastLineOfFile", '^\%'.previous_line.'l[^|]*')
-"			endif
-"		endif
-"	endfor
-"endfunction
-
-" Shade the background of each block of results alternately.  Aka "zebra stripes".
 function! g:SeparateFilesVisually()
-	if !hlexists("QuickFix_Even_Rows")
-		highlight QuickFix_Even_Rows ctermbg=black guibg=#444444
-		if &t_Co >= 256
-			highlight QuickFix_Even_Rows ctermbg=234
-		endif
-	endif
-	if !hlexists("QuickFix_Odd_Rows")
-		highlight QuickFix_Odd_Rows ctermbg=none guibg=#555555
-		if &t_Co >= 256
-			highlight QuickFix_Odd_Rows ctermbg=236
-		endif
+	if !hlexists("QuickListLastLineOfFile")
+		highlight QuickListLastLineOfFile term=underline cterm=underline gui=underline
 	endif
 	call clearmatches()
-	let top_line_of_this_file = 1
-	let even = 0
 	let filename = ""
-	for current_line in range(1,line("$"))
-		let new_filename = substitute( getline(current_line), '|.*', '', '')
+	for l in range(1,line("$"))
+		let new_filename = substitute( getline(l), '|.*', '', '')
 		if new_filename != filename
 			let filename = new_filename
-			" Underline all lines for the previous file
-			let hl_class = even ? "QuickFix_Even_Rows" : "QuickFix_Odd_Rows"
-			let m = matchadd(hl_class, '\%>'.(top_line_of_this_file-1).'l\%<'.current_line.'l.*')
-			let even = 1 - even
-			let top_line_of_this_file = current_line
+			let previous_line = l - 1
+			if previous_line >= 1
+				" Underline whole line
+				"let m = matchadd("QuickListLastLineOfFile", '\%'.previous_line.'l.*')
+				" Underline just the filename/path
+				let m = matchadd("QuickListLastLineOfFile", '^\%'.previous_line.'l[^|]*')
+			endif
 		endif
 	endfor
 endfunction
+
+" Shade the background of each block of results alternately.  Aka "zebra stripes".
+"function! g:SeparateFilesVisually()
+"	if !hlexists("QuickFix_Even_Rows")
+"		highlight QuickFix_Even_Rows ctermbg=black guibg=#444444
+"		if &t_Co >= 256
+"			highlight QuickFix_Even_Rows ctermbg=234
+"		endif
+"	endif
+"	if !hlexists("QuickFix_Odd_Rows")
+"		highlight QuickFix_Odd_Rows ctermbg=none guibg=#555555
+"		if &t_Co >= 256
+"			highlight QuickFix_Odd_Rows ctermbg=236
+"		endif
+"	endif
+"	call clearmatches()
+"	let top_line_of_this_file = 1
+"	let even = 0
+"	let filename = ""
+"	for current_line in range(1,line("$"))
+"		let new_filename = substitute( getline(current_line), '|.*', '', '')
+"		if new_filename != filename
+"			let filename = new_filename
+"			" Underline all lines for the previous file
+"			let hl_class = even ? "QuickFix_Even_Rows" : "QuickFix_Odd_Rows"
+"			let m = matchadd(hl_class, '\%>'.(top_line_of_this_file-1).'l\%<'.current_line.'l.*')
+"			let even = 1 - even
+"			let top_line_of_this_file = current_line
+"		endif
+"	endfor
+"endfunction
 
