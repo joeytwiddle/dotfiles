@@ -36,7 +36,7 @@ function! s:FoldByFiles()
 		setlocal foldlevel=0
 	endif
 
-	if g:FoldByPath_UnderlineLast | call g:UnderlineFoldEnds() | endif
+	if g:FoldByPath_UnderlineLast | call g:UnderlineFileChanges() | endif
 
 endfunction
 
@@ -67,7 +67,7 @@ function! s:FoldByFolder()
 		setlocal foldlevel=0
 	endif
 
-	if g:FoldByPath_UnderlineLast | call g:UnderlineFoldEnds() | endif
+	if g:FoldByPath_UnderlineLast | call g:UnderlineFileChanges() | endif
 
 endfunction
 
@@ -106,29 +106,28 @@ function! s:FoldByPath()
 		setlocal foldlevel=0
 	endif
 
-	if g:FoldByPath_UnderlineLast | call g:UnderlineFoldEnds() | endif
+	if g:FoldByPath_UnderlineLast | call g:UnderlineFileChanges() | endif
 
 endfunction
 
-" When folds are opened, it can be difficult to see where the listing of matches for one file ends and the next begins.
-" This will underline the filename on the last line of each fold, so we have a visual indication that they are separate.
-" BUGS: Because it works based on folds, it will:
-"       - Not underline the transition between two files if they were not folded
-"       - When folding by folder, will underline folder transitions, not file transitions!
-function! g:UnderlineFoldEnds()
-	if !hlexists("LastLineOfFold")
-		highlight LastLineOfFold term=underline cterm=underline gui=underline
+" CONSIDER: An alternative "modern UI" method could be to highlight the background of each block alternately.  (White/light-grey)
+function! g:UnderlineFileChanges()
+	if !hlexists("QuickListLastLineOfFile")
+		highlight QuickListLastLineOfFile term=underline cterm=underline gui=underline
 	endif
 	call clearmatches()
-	let fold_end_line = -1
+	let filename = ""
 	for l in range(1,line("$"))
-		let new_fold_end_line = foldclosedend(l)
-		if new_fold_end_line != -1 && new_fold_end_line != fold_end_line
-			let fold_end_line = new_fold_end_line
-			" Underline whole line
-			"let m = matchadd("LastLineOfFold", '\%'.fold_end_line.'l.*')
-			" Underline just the filename/path
-			let m = matchadd("LastLineOfFold", '^\%'.fold_end_line.'l[^|]*')
+		let new_filename = substitute( getline(l), '|.*', '', '')
+		if new_filename != filename
+			let filename = new_filename
+			let previous_line = l - 1
+			if previous_line >= 1
+				" Underline whole line
+				"let m = matchadd("QuickListLastLineOfFile", '\%'.previous_line.'l.*')
+				" Underline just the filename/path
+				let m = matchadd("QuickListLastLineOfFile", '^\%'.previous_line.'l[^|]*')
+			endif
 		endif
 	endfor
 endfunction
