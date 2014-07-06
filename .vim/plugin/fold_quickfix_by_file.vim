@@ -3,6 +3,8 @@
 " DONE: Determine the previous line which *did not* start with '||', before doing the comparison.  Hence wrapped '||' lines get folded with the previous, and do not cause a break in the folding.
 " Note that '||' lines appear when the line length exceeds the compile-time macro CMDBUFSIZE, which looks to be 1024 here.
 
+let g:FoldByPath_UnderlineLast = get(g:, "FoldByPath_UnderlineLast", 1)
+
 command! FoldByFiles :call s:FoldByFiles()
 command! FoldByFolder :call s:FoldByFolder()
 command! FoldByPath :call s:FoldByPath()
@@ -34,6 +36,8 @@ function! s:FoldByFiles()
 		setlocal foldlevel=0
 	endif
 
+	if g:FoldByPath_UnderlineLast | call g:UnderlineFoldEnds() | endif
+
 endfunction
 
 function! s:FoldByFolder()
@@ -62,6 +66,8 @@ function! s:FoldByFolder()
 	else
 		setlocal foldlevel=0
 	endif
+
+	if g:FoldByPath_UnderlineLast | call g:UnderlineFoldEnds() | endif
 
 endfunction
 
@@ -100,5 +106,30 @@ function! s:FoldByPath()
 		setlocal foldlevel=0
 	endif
 
+	if g:FoldByPath_UnderlineLast | call g:UnderlineFoldEnds() | endif
+
+endfunction
+
+" When folds are opened, it can be difficult to see where the listing of matches for one file ends and the next begins.
+" This will underline the filename on the last line of each fold, so we have a visual indication that they are separate.
+" BUGS: Because it works based on folds, it will:
+"       - Not underline the transition between two files if they were not folded
+"       - When folding by folder, will underline folder transitions, not file transitions!
+function! g:UnderlineFoldEnds()
+	if !hlexists("LastLineOfFold")
+		highlight LastLineOfFold term=underline cterm=underline gui=underline
+	endif
+	call clearmatches()
+	let fold_end_line = -1
+	for l in range(1,line("$"))
+		let new_fold_end_line = foldclosedend(l)
+		if new_fold_end_line != -1 && new_fold_end_line != fold_end_line
+			let fold_end_line = new_fold_end_line
+			" Underline whole line
+			"let m = matchadd("LastLineOfFold", '\%'.fold_end_line.'l.*')
+			" Underline just the filename/path
+			let m = matchadd("LastLineOfFold", '^\%'.fold_end_line.'l[^|]*')
+		endif
+	endfor
 endfunction
 
