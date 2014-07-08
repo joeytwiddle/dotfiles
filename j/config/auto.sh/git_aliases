@@ -318,6 +318,12 @@ gco() {
 	fi
 }
 POST_GIT_CHECKOUT=update_cindex
+if ! which ionice >/dev/null
+then
+	ionice() {
+		"$@"
+	}
+fi
 update_cindex() {
 	if which cindex >/dev/null
 	then
@@ -325,9 +331,8 @@ update_cindex() {
 		# If any of the indexed folders are equal to or below this project's folder
 		if [ -n "$git_root_folder" ] && cindex -list | grep -q "^$git_root_folder\($\|/\)"
 		then
-			echo -n "Updating cindex..." >&2
-			cindex 2>/dev/null
-			echo >&2
+			echo -n "Updating cindex (in the background)"
+			nice ionice cindex 2>/dev/null &
 		fi
 	fi
 }
@@ -424,6 +429,13 @@ alias gtpd='gd FETCH_HEAD..HEAD'
 alias gmo='verbosely git merge origin/$(git_get_current_branch)'
 # Git Push Origin (this branch)
 alias gpo='verbosely git push origin $(git_get_current_branch)'
+if ! which verbosely >/dev/null
+then
+	verbosely() {
+		echo "[EXEC] % $*" >&2
+		"$@"
+	}
+fi
 
 git_branch_status() {
     # Original: https://gist.github.com/Mark-Booth/5058384
