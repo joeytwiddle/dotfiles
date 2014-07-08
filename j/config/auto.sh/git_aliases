@@ -226,7 +226,8 @@ git_branch_by_date() {
 	#local commit_color=`git config --get-color color.diff.commit yellow`
 	if [ "$1" = -r ]
 	then
-		target=refs/remotes/origin
+		#target=refs/remotes/origin
+		target=refs/remotes
 		#branch_color=`git config --get-color color.branch.remote red`
 	fi
 
