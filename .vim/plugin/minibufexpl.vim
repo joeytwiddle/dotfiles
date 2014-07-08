@@ -1160,7 +1160,7 @@ function! <SID>ResizeWindow()
     if g:miniBufExplTabWrap == 0
       let l:length = strlen(getline('.'))
       let l:height = 0
-      if (l:width == 0)
+      if (l:width == 0) || !&l:wrap
         let l:height = winheight('.')
       else
         " -1*showbreak because there is no indent on first line!

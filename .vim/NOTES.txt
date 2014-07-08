@@ -77,6 +77,16 @@ Also:
 
   @/         is the search register
 
+Read input from a command.
+
+  :r!date     inserts a new line
+  :.!date     clobbers the current line
+
+Uppercase the word under the cursor:
+
+   viwU
+   vi(U      or everything inside the parentheses
+
 
 
 Yank matching:
@@ -125,6 +135,8 @@ Hex / binary editor:
   :%!xxd
   :%!xxd -r
 
+  (Note that vim should be run in -b binary mode.)
+
 
 
 == Vim Scripting ==
@@ -168,6 +180,12 @@ To copy the line under the cursor (into register k) then execute it as an ex com
 or:
 
   yyq:p<Enter>
+
+
+
+== More Tips ==
+
+http://rayninfo.co.uk/vimtips.html
 
 
 

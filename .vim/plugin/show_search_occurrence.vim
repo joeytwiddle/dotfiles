@@ -25,6 +25,8 @@ function! GetSearchStatus()
 	" Only display when the cursor is sitting on the first character of a match
 	let this_line = getline('.')
 	let current_column = col('.')
+	" Check if we are on one of the search results
+	" TODO BUG: This only works if we are on the first character.  So it is not much use for e.g. /search/e-3
 	if match(this_line, @/, current_column-1) == current_column-1
 		let buffer_size = line2byte(line("$")+1)-1
 		if buffer_size > g:ShowSearchOccurrences_MaxBufferSize
