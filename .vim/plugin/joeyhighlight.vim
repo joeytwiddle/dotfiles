@@ -59,7 +59,9 @@ function! Joeyhighlight()
 	"highlight Search ctermbg=blue ctermfg=white term=bold guibg=#005500 guifg=#66ff88 gui=bold
 	"highlight Search ctermbg=blue ctermfg=white term=bold guibg=#005500 guifg=#bbffbb gui=bold
 	"highlight Search ctermbg=blue ctermfg=green term=bold guibg=#005544 guifg=#aaffaa gui=bold
-	highlight Search ctermbg=blue ctermfg=green term=bold guifg=#005544 guibg=#aaffaa gui=bold,reverse
+	" In 256-color xterm, darkblue background looks the same as in 8-bit.  Just blue looks a bit lighter.
+	" Now using reverse in GUI so that selected line shows up even if dim_inactive_windows.vim sets both colors of unfocused quickfix window.
+	highlight Search ctermbg=darkblue ctermfg=green term=bold guifg=#005544 guibg=#aaffaa gui=bold,reverse
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White guifg=DarkMagenta guibg=White
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#553355
 	"" This actually gives us a dirty grey instead of white (in xterm):
