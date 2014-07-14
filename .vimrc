@@ -505,6 +505,9 @@ autocmd VimLeave * silent !stty ixon
 		let &t_SI = "\<Esc>]12;#44ff77\x7"  " Insert Mode = Aqua
 	endif
 
+	" When opening a file (e.g. from the quicklist), if the file exists in a window already, jump to that window.
+	set switchbuf+=useopen
+	" You can get quickfix actions on various keys using https://github.com/mileszs/ack.vim#keyboard-shortcuts or https://github.com/yssl/QFEnter
 
 " }}}
 
@@ -740,13 +743,42 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons, "github:Shougo/vimproc.vim")       " Used by unite for async; requires `make` after install!
 	call add(vamAddons, "github:Shougo/unite.vim")         " Buffer and file explorer, all in one plugin
 	let g:unite_source_history_yank_enable = 1
+	nnoremap <silent> <Leader>u* :Unite source<CR>A*
 	nnoremap <silent> <Leader>uu :Unite<CR>A*
 	nnoremap <silent> <Leader>ub :Unite buffer<CR>A
-	nnoremap <silent> <Leader>uf :Unite file<CR>A
-	nnoremap <silent> <Leader>uj :<C-u>Unite -buffer-name=jumps jump change file_point buffer_tab file/new<CR>
+	nnoremap <silent> <Leader>uf :Unite file_point file file/new<CR>A
+	nnoremap <silent> <Leader>ua :Unite file_point file_rec file/new<CR>A
+	"nnoremap <silent> <Leader>ua :Unite find<CR>A   " Requires vimproc
+	nnoremap <silent> <Leader>ug :Unite file_rec/git<CR>A
+	nnoremap <silent> <Leader>ud :Unite directory directory/new<CR>A
+	nnoremap <silent> <Leader>uj :<C-u>Unite -buffer-name=jumps change jump<CR>A
+	nnoremap <silent> <Leader>uc :Unite command<CR>A
+	nnoremap <silent> <Leader>ul :Unite line<CR>A
+	nnoremap <silent> <Leader>up :Unite process<CR>A
+	nnoremap <silent> <Leader>ur :Unite runtimepath<CR>A
+	nnoremap <silent> <Leader>us :Unite runtimepath<CR>A
+	nnoremap <silent> <Leader>uh :Unite history/yank register<CR>A
+	nnoremap <silent> <Leader>uy :Unite history/yank<CR>A
+	nnoremap <silent> <Leader>ue :Unite launcher<CR>A
+	nnoremap <silent> <Leader>uH :Unite output:highlight<CR>A
+	nnoremap <silent> <Leader>uS :Unite output:syntax<CR>A
+	nnoremap <silent> <Leader>uM :Unite output:mapping<CR>A
+	nnoremap <silent> <Leader>uA :Unite output:autocmd<CR>A
+	"nnoremap <silent> <Leader>uF :Unite output:function<CR>A   " more colorful than function but does not offer 'call' action
+	nnoremap <silent> <Leader>uF :Unite function<CR>A
 	" We cannot do these until after it has loaded!
 	"call unite#filters#matcher_default#use(['matcher_fuzzy'])
 	"call unite#custom#profile('default', 'context', { 'winheight': 50, })
+	" These are the settings the guy who had the bug used (and the two above):
+	"let g:unite_enable_ignore_case         = 1
+	"let g:unite_enable_smart_case          = 1
+	"let g:unite_enable_start_insert        = 1
+	"let g:unite_source_history_yank_enable = 1
+	"let g:unite_winheight                  = 10
+	"let g:unite_split_rule                 = 'botright'
+	"let g:unite_cursor_line_highlight      = 'Statusline'
+	"let g:unite_prompt                     = '➤ '
+	"let g:unite_data_directory             = $HOME.'/tmp/unite'
 
 	" >>> My Plugins from the Cloud (modified versions of other plugins) {{{
 	call add(vamAddons,"github:joeytwiddle/grep.vim")    " With support for csearch and SetQuickfixTitle.
