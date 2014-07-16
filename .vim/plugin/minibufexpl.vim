@@ -879,12 +879,33 @@ function! <SID>StartExplorer(sticky, delBufNum)
     let bufnameRE = escape(bufname, '~')
     call <SID>DEBUG('Moving to buffer using RE: '.bufnameRE,9)
     call search('| '.bufnameRE.'[*+-]* |')
-    call <SID>DEBUG('Cursor is now at '.line('.').",".virtcol('.'),9)
-    " Putting the cursor in the middle is more symmetrical, although it's only really noticeable if you also setglobal sidescrolloff=999999
-    call cursor(line('.'), virtcol('.')+len(bufname)/2)
-    " Sometimes the window does not scroll horizontally to make the cursor visible, although it is in the right place.  (This can be seen when setting nowrap on the MBE.)
-    " This is a fix that forces the scroll to happen:
+    "call <SID>DEBUG('Cursor is now at '.line('.').",".virtcol('.'),9)
+    " When we set nowrap on the MBE, then we need the window to scroll horizontally to show the current tab.
+    " After switching buffer, the cursor will now be on column 0, because we have cleared and rewritten the entire MBE just to move the '*' marker!
+    " Sometimes the window would not scroll horizontally to where the cursor was placed, even its final position.
+    " Doing "lh" below is a fix that forces Vim to make the cursor position visible.
+    " Put the cursor in the middle of the word.
+    "call cursor(line('.'), virtcol('.')-len(bufname)/2)
+    " But to ensure the whole name/title is visible, we should jump to the last char.
+    " (This is not needed for most tabs, but for some reason it is needed for a few tabs just off the right of the first page.  After that, it starts showing the current tab in the very middle!)
+    "call cursor(line('.'), virtcol('.')+5+len(bufname)-&sidescrolloff)
+    "normal! "lh"
+    " Always place the current tab in the center.  This is not ideal, but it is at least consistent.
+    let sidescroll_before = &sidescroll
+    let &sidescroll = 1
+    let middle_column = virtcol('.') + 3 + len(bufname)/2
+    let left_column  = middle_column - winwidth('.')/2 + &sidescrolloff
+    let right_column = middle_column + winwidth('.')/2 - &sidescrolloff
+    if right_column > len(getline('.')) - 1
+      let right_column = len(getline('.')) - 1
+    endif
+    call cursor(line('.'), right_column)
+    normal! "hl"
+    call cursor(line('.'), left_column)
     normal! "lh"
+    call cursor(line('.'), middle_column)
+    normal! "lh"
+    let &sidescroll = sidescroll_before
   else
     call <SID>DEBUG('No current buffer to search for',9)
   endif
@@ -1166,10 +1187,12 @@ function! <SID>ResizeWindow()
   " Horizontal Resize
   if g:miniBufExplVSplit == 0
 
-    if g:miniBufExplTabWrap == 0
+    if !&l:wrap
+      let l:height = 1
+    elseif g:miniBufExplTabWrap == 0
       let l:length = strlen(getline('.'))
       let l:height = 0
-      if (l:width == 0) || !&l:wrap
+      if (l:width == 0)
         let l:height = winheight('.')
       else
         " -1*showbreak because there is no indent on first line!
