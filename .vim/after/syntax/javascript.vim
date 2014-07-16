@@ -61,6 +61,7 @@ highlight javaScriptNumber cterm=none ctermfg=cyan gui=none guifg=LightCyan
 "syn match javaScriptAssignVar /[A-Za-z_$][A-Za-z_$0-9]*\(\[.*\]\|\)[ 	]*\(=\([^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 " But we only really want the [...] itself
 syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)[ 	]*\(=\([^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
+" BUG: The =[^=] check ensures that we match 'a=b' and not 'a==b', but it also selects and highlights the char after the '=', i.e. 'b'!
 highlight javaScriptAssignVar ctermfg=white cterm=bold guifg=white gui=bold
 
 "syn match javaScriptAssignProperty /[A-Za-z_$][A-Za-z_$0-9]*\s*:/ contains=javaScriptColon
