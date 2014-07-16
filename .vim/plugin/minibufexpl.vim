@@ -872,16 +872,17 @@ function! <SID>StartExplorer(sticky, delBufNum)
 
   " Move cursor to the entry for the current buffer
   if (s:userFocusedBuffer != -1)
-    " BUG: Obviously using search() can land in the wrong place if there are multiple buffers with the same name.
+    " Initially, search() would sometimes land in the wrong place if there were multiple buffers with the same name.  However this was fixed by making the focused '*' marker non-optional in the regexp.
     " Original format: call search('\['.s:userFocusedBuffer.':'.expand('#'.s:userFocusedBuffer.':t').'\]')
     " To search for buffer using regexp, we need to escape AT LEAST '~'
     let bufname = expand('#'.s:userFocusedBuffer.':t')
     let bufnameRE = escape(bufname, '~')
     call <SID>DEBUG('Moving to buffer using RE: '.bufnameRE,9)
-    call search('| '.bufnameRE.'[*+-]* |')
+    call search('| '.bufnameRE.'[*][+-]* |')
     "call <SID>DEBUG('Cursor is now at '.line('.').",".virtcol('.'),9)
     " When we set nowrap on the MBE, then we need the window to scroll horizontally to show the current tab.
-    " After switching buffer, the cursor will now be on column 0, because we have cleared and rewritten the entire MBE just to move the '*' marker!
+    " NOTE: After BufEnter, the cursor will first be on column 0, because we have cleared and rewritten the entire MBE just to move the '*' marker!
+    "       However after CursorHold, it may be in position already.
     " Sometimes the window would not scroll horizontally to where the cursor was placed, even its final position.
     " Doing "lh" below is a fix that forces Vim to make the cursor position visible.
     " Put the cursor in the middle of the word.
