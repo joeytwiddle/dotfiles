@@ -334,10 +334,10 @@ endif
 " }}}
 " MBE <Script> internal map {{{
 " 
-noremap <unique> <script> <Plug>MiniBufExplorer  :call <SID>StartExplorer(1, -1)<CR>:<BS>
-noremap <unique> <script> <Plug>CMiniBufExplorer :call <SID>StopExplorer(1)<CR>:<BS>
-noremap <unique> <script> <Plug>UMiniBufExplorer :call <SID>AutoUpdate(-1)<CR>:<BS>
-noremap <unique> <script> <Plug>TMiniBufExplorer :call <SID>ToggleExplorer()<CR>:<BS>
+noremap <script> <Plug>MiniBufExplorer  :call <SID>StartExplorer(1, -1)<CR>:<BS>
+noremap <script> <Plug>CMiniBufExplorer :call <SID>StopExplorer(1)<CR>:<BS>
+noremap <script> <Plug>UMiniBufExplorer :call <SID>AutoUpdate(-1)<CR>:<BS>
+noremap <script> <Plug>TMiniBufExplorer :call <SID>ToggleExplorer()<CR>:<BS>
 
 " }}}
 " MBE commands {{{
@@ -872,10 +872,19 @@ function! <SID>StartExplorer(sticky, delBufNum)
 
   " Move cursor to the entry for the current buffer
   if (s:userFocusedBuffer != -1)
+    " BUG: Obviously using search() can land in the wrong place if there are multiple buffers with the same name.
     " Original format: call search('\['.s:userFocusedBuffer.':'.expand('#'.s:userFocusedBuffer.':t').'\]')
-    "" To search for buffer using regexp, we need to escape AT LEAST '~'
-    let bufnameRE = escape(expand('#'.s:userFocusedBuffer.':t'), '~')
+    " To search for buffer using regexp, we need to escape AT LEAST '~'
+    let bufname = expand('#'.s:userFocusedBuffer.':t')
+    let bufnameRE = escape(bufname, '~')
+    call <SID>DEBUG('Moving to buffer using RE: '.bufnameRE,9)
     call search('| '.bufnameRE.'[*+-]* |')
+    call <SID>DEBUG('Cursor is now at '.line('.').",".virtcol('.'),9)
+    " Putting the cursor in the middle is more symmetrical, although it's only really noticeable if you also setglobal sidescrolloff=999999
+    call cursor(line('.'), virtcol('.')+len(bufname)/2)
+    " Sometimes the window does not scroll horizontally to make the cursor visible, although it is in the right place.  (This can be seen when setting nowrap on the MBE.)
+    " This is a fix that forces the scroll to happen:
+    normal! "lh"
   else
     call <SID>DEBUG('No current buffer to search for',9)
   endif
@@ -1403,6 +1412,8 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
   let l:line = l:line . l:gap . "[X]"
 
   if (g:miniBufExplBufList != l:line)
+    call <SID>DEBUG('List has changed: '.g:miniBufExplBufList,9)
+    call <SID>DEBUG('        New list: '.l:line,9)
     if (a:updateBufList)
       let g:miniBufExplBufList = l:line
       " let g:miniBufExplBufNumbers = l:bufferNumbers
@@ -1582,7 +1593,6 @@ function! <SID>AutoUpdate(delBufNum)
             """ arg update=0
             call <SID>DEBUG('About to call StartExplorer (Update MBE)', 9) 
             call <SID>StartExplorer(0, a:delBufNum)
-            call <SID>DEBUG('List had changed: '.g:miniBufExplBufList,9)
           else
             " call <SID>DEBUG('Skipping update because list is unchanged', 9) 
             call <SID>DEBUG('Skipping update, list unchanged: '.g:miniBufExplBufList,9)
