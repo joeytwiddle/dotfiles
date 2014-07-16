@@ -131,3 +131,14 @@ command! -nargs=+ CmdOut call s:PassVimCommandOutputToShellCommand(<q-args>)
 command! -nargs=+ PipeCmd call s:PassVimCommandOutputToShellCommand(<q-args>)
 command! -nargs=+ PipeToShell call s:PassVimCommandOutputToShellCommand(<q-args>)
 
+" Runs the given Ex command and pastes the output
+function! s:PasteCommandOutput(line)
+	let vim_cmd = a:line
+	" TODO: We could redir to a local variable, to avoid clobbering the 'l' register.
+	redir @l
+	silent exe vim_cmd
+	redir END
+	normal "lp
+endfunction
+
+command! -nargs=+ PasteCmd call s:PasteCommandOutput(<q-args>)
