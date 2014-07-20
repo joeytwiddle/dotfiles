@@ -328,9 +328,10 @@ set wildmode=longest:full,full
 
 
 
-" When it's time to clear the search, avoid /skldjsdklfj<Enter> and just \/
+" When it's time to clear the search, avoid /skldjsdklfj<Enter> and just \/ or Ctrl-L
 " Also added :match to hide highlights from highlight_word_under_cursor.vim
 nnoremap <silent> <Leader>/ :nohlsearch<CR>:match<CR>
+nnoremap <silent> <C-L>     :nohlsearch<CR>:match<CR>
 "nnoremap <silent> <Leader>/ :nohlsearch<CR>:match<CR>:let @/='skj84ksdEKD93Od23423lfs'<CR>
 
 
@@ -462,7 +463,7 @@ function! s:SetupKeysForGrep()
 	"nmap <F4> <F3><CR><CR><CR>
 	"nnoremap <F4> :Grep<CR><CR><CR><CR>
 	"nnoremap <F4> :Grep<CR><Home>\<<End>\><CR><CR><CR>   " untested
-	nnoremap <F4> :Grep \<<cword>\><CR><CR>
+	nnoremap <F4> :Grep \<<cword>\><CR><CR><CR>
 	" NOTE: The last <CR> is not always needed.  The |hit-enter| prompt is only displayed when the "Grep in files:" prompt has exceeded |cmdheight| (always true for me, with my huge exclude list).  So an alternative workaround might be for grep.vim to temporarily set ch very high, then reset it afterwards.
 	" Avoiding the final <CR> would be desirable because it currently hides any "Error...not found" message that might appear.  And perhaps in some cases it isn't even required (if the command-line is not longer than the screen).
 
