@@ -12,7 +12,9 @@
 "   \wi   - yanks word under cursor, or visual selection, then pastes the two
 "           yanked blocks back in the swapped locations
 "
-" Note: Clobbers the 'X' mark, and the 'c' and 'w' registers.
+" Note: Clobbers the 'X' and 'Y' marks, and the 'c' and 'w' registers.
+"
+" If you prefer the mnemonic "(sw)ap (wi)th" then :%s/\<ch\>/sw/
 "
 " We replace each word with a placeholder char '_' so that the cursor will not
 " be pushed back if we yank a block at the end of a line.  (Vim's cursor
@@ -24,12 +26,20 @@
 " will shift the marker.  A function could solve this by comparing the columns
 " and doing the replacement in reverse order if need be.
 "
-" If you prefer the mnemonic "(sw)ap (wi)th" then :%s/\<ch\>/sw/
+" BUG: If you use it for multiple lines, empty lines are introduced, because
+" the placeholder char created its own line when we cut a block.  If it was
+" created by a multi-line cut, it should be removed with `dd` instead of `x`.
+"
+" BUG: We now use the Y mark to move back to the second block at the end,
+" which feels more natural for the user, but it doesn't work when the second
+" block comes later in the same line as the first block, because the mark does
+" not shift when earlier characters are pasted.  (In multi-line cases, Vim's
+" mark does shift with the lines, so there is no issue.)
 
-" In normal mode, yank the word under the cursor (diw - change if preferred)
+" In normal mode, yank the word under the cursor (ciw - change if preferred)
 nnoremap \ch "cciw_<Esc>mX
-nnoremap \wi "wciw_<Esc>"cgPx`X"wgPx
+nnoremap \wi "wciw_<Esc>mY"cgPx`X"wgPx`Y
 
-" In visual mode, just yank the selection (d)
+" In visual mode, just yank the selection (c)
 vnoremap \ch "cc_<Esc>mX
-vnoremap \wi "wc_<Esc>"cgPx`X"wgPx
+vnoremap \wi "wc_<Esc>mY"cgPx`X"wgPx`Y
