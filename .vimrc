@@ -635,6 +635,9 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
 	"call add(vamAddons,"github:dahu/bisectly")            " Wow!  A useful and light-hearted way to track down a bug to a specific plugin
 
+	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
+	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g,"
+
 	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
 	call add(vamAddons,"github:joeytwiddle/vim-easymotion") " My dev copy
 	"map <Leader><Leader>l <Plug>(easymotion-lineforward)
@@ -644,16 +647,34 @@ autocmd VimLeave * silent !stty ixon
 	let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 	" These work fine with map but I only really want them in normal and visual modes
 	" Although we could apply them in operator-pending mode.  The problem is when the user does `dt;` or `ct;` then there is a flash pause before the chars are deleted, which does not feel/look responsive to the user.  Ideally we would remove the chars before flashing (perhaps easier for `d` than for `c`.)
-	nmap f <Plug>(easymotion-flash-f)
-	nmap F <Plug>(easymotion-flash-F)
-	nmap t <Plug>(easymotion-flash-t)
-	nmap T <Plug>(easymotion-flash-T)
-	vmap f <Plug>(easymotion-flash-f)
-	vmap F <Plug>(easymotion-flash-F)
-	vmap t <Plug>(easymotion-flash-t)
-	vmap T <Plug>(easymotion-flash-T)
-	map ; <Plug>(easymotion-next-in-dir)
-	map , <Plug>(easymotion-prev-in-dir)
+
+	let force_remap_of_semicolon_and_comma = 1
+
+	if !force_remap_of_semicolon_and_comma
+		nmap f <Plug>(easymotion-flash-f)
+		nmap F <Plug>(easymotion-flash-F)
+		nmap t <Plug>(easymotion-flash-t)
+		nmap T <Plug>(easymotion-flash-T)
+		vmap f <Plug>(easymotion-flash-f)
+		vmap F <Plug>(easymotion-flash-F)
+		vmap t <Plug>(easymotion-flash-t)
+		vmap T <Plug>(easymotion-flash-T)
+		map ; <Plug>(easymotion-next-in-dir)
+		map , <Plug>(easymotion-prev-in-dir)
+	else
+		" Repmo remaps `;` and `,`.  That is a feature.
+		" But when I use `f` and friends, I want to remap it back to easymotion!
+		nmap <silent> <Plug>(remap-semicolon-and-comma) :map ; <Plug>(easymotion-next-in-dir)<CR>:map , <Plug>(easymotion-prev-in-dir)<CR>
+		nmap <silent> f <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-f)
+		nmap <silent> F <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-F)
+		nmap <silent> t <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-t)
+		nmap <silent> T <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-T)
+		vmap <silent> f <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-f)
+		vmap <silent> F <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-F)
+		vmap <silent> t <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-t)
+		vmap <silent> T <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-T)
+	endif
+
 	"map ; <Plug>(easymotion-flash-next-in-dir)
 	"map , <Plug>(easymotion-flash-prev-in-dir)
 	"map n <Plug>(easymotion-n)
