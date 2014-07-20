@@ -150,13 +150,19 @@ Alternatively, if you want to turn this heavy logging on/off at runtime:
 
     function! ToggleVerbose()
         if !&verbose
-            set verbosefile=~/.log/vim/verbose.log
+            set verbosefile=~/vim.log
             set verbose=15
         else
             set verbose=0
             set verbosefile=
         endif
     endfunction
+
+Unfortunately the writing of the logfile is buffered, so you don't get a very realtime view if you try to watch it with `tail -f`.  But with the following mapping, you can force the logfile to update by hitting `<Ctrl-L>`:
+
+    :nmap <C-L> :set verbosefile=<CR>:set verbosefile=~/vim.log<CR>
+
+We could also try to force a write on CursorMoved/CursorHold/... autocommands.
 
 That's logging.  If you want a step by step debugger:
 
