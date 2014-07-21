@@ -505,6 +505,9 @@ autocmd VimLeave * silent !stty ixon
 		let &t_SI = "\<Esc>]12;#44ff77\x7"  " Insert Mode = Aqua
 	endif
 
+	" When opening a file (e.g. from the quicklist), if the file exists in a window already, jump to that window.
+	set switchbuf+=useopen
+	" You can get quickfix actions on various keys using https://github.com/mileszs/ack.vim#keyboard-shortcuts or https://github.com/yssl/QFEnter
 
 " }}}
 
@@ -632,6 +635,9 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
 	"call add(vamAddons,"github:dahu/bisectly")            " Wow!  A useful and light-hearted way to track down a bug to a specific plugin
 
+	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
+	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g,"
+
 	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
 	call add(vamAddons,"github:joeytwiddle/vim-easymotion") " My dev copy
 	"map <Leader><Leader>l <Plug>(easymotion-lineforward)
@@ -641,16 +647,34 @@ autocmd VimLeave * silent !stty ixon
 	let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 	" These work fine with map but I only really want them in normal and visual modes
 	" Although we could apply them in operator-pending mode.  The problem is when the user does `dt;` or `ct;` then there is a flash pause before the chars are deleted, which does not feel/look responsive to the user.  Ideally we would remove the chars before flashing (perhaps easier for `d` than for `c`.)
-	nmap f <Plug>(easymotion-flash-f)
-	nmap F <Plug>(easymotion-flash-F)
-	nmap t <Plug>(easymotion-flash-t)
-	nmap T <Plug>(easymotion-flash-T)
-	vmap f <Plug>(easymotion-flash-f)
-	vmap F <Plug>(easymotion-flash-F)
-	vmap t <Plug>(easymotion-flash-t)
-	vmap T <Plug>(easymotion-flash-T)
-	map ; <Plug>(easymotion-next-in-dir)
-	map , <Plug>(easymotion-prev-in-dir)
+
+	let force_remap_of_semicolon_and_comma = 1
+
+	if !force_remap_of_semicolon_and_comma
+		nmap f <Plug>(easymotion-flash-f)
+		nmap F <Plug>(easymotion-flash-F)
+		nmap t <Plug>(easymotion-flash-t)
+		nmap T <Plug>(easymotion-flash-T)
+		vmap f <Plug>(easymotion-flash-f)
+		vmap F <Plug>(easymotion-flash-F)
+		vmap t <Plug>(easymotion-flash-t)
+		vmap T <Plug>(easymotion-flash-T)
+		map ; <Plug>(easymotion-next-in-dir)
+		map , <Plug>(easymotion-prev-in-dir)
+	else
+		" Repmo remaps `;` and `,`.  That is a feature.
+		" But when I use `f` and friends, I want to remap it back to easymotion!
+		nmap <silent> <Plug>(remap-semicolon-and-comma) :map ; <Plug>(easymotion-next-in-dir)<CR>:map , <Plug>(easymotion-prev-in-dir)<CR>
+		nmap <silent> f <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-f)
+		nmap <silent> F <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-F)
+		nmap <silent> t <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-t)
+		nmap <silent> T <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-T)
+		vmap <silent> f <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-f)
+		vmap <silent> F <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-F)
+		vmap <silent> t <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-t)
+		vmap <silent> T <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-T)
+	endif
+
 	"map ; <Plug>(easymotion-flash-next-in-dir)
 	"map , <Plug>(easymotion-flash-prev-in-dir)
 	"map n <Plug>(easymotion-n)
@@ -740,13 +764,42 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons, "github:Shougo/vimproc.vim")       " Used by unite for async; requires `make` after install!
 	call add(vamAddons, "github:Shougo/unite.vim")         " Buffer and file explorer, all in one plugin
 	let g:unite_source_history_yank_enable = 1
+	nnoremap <silent> <Leader>u* :Unite source<CR>A*
 	nnoremap <silent> <Leader>uu :Unite<CR>A*
 	nnoremap <silent> <Leader>ub :Unite buffer<CR>A
-	nnoremap <silent> <Leader>uf :Unite file<CR>A
-	nnoremap <silent> <Leader>uj :<C-u>Unite -buffer-name=jumps jump change file_point buffer_tab file/new<CR>
+	nnoremap <silent> <Leader>uf :Unite file_point file file/new<CR>A
+	nnoremap <silent> <Leader>ua :Unite file_point file_rec file/new<CR>A
+	"nnoremap <silent> <Leader>ua :Unite find<CR>A   " Requires vimproc
+	nnoremap <silent> <Leader>ug :Unite file_rec/git<CR>A
+	nnoremap <silent> <Leader>ud :Unite directory directory/new<CR>A
+	nnoremap <silent> <Leader>uj :<C-u>Unite -buffer-name=jumps change jump<CR>A
+	nnoremap <silent> <Leader>uc :Unite command<CR>A
+	nnoremap <silent> <Leader>ul :Unite line<CR>A
+	nnoremap <silent> <Leader>up :Unite process<CR>A
+	nnoremap <silent> <Leader>ur :Unite runtimepath<CR>A
+	nnoremap <silent> <Leader>us :Unite runtimepath<CR>A
+	nnoremap <silent> <Leader>uh :Unite history/yank register<CR>A
+	nnoremap <silent> <Leader>uy :Unite history/yank<CR>A
+	nnoremap <silent> <Leader>ue :Unite launcher<CR>A
+	nnoremap <silent> <Leader>uH :Unite output:highlight<CR>A
+	nnoremap <silent> <Leader>uS :Unite output:syntax<CR>A
+	nnoremap <silent> <Leader>uM :Unite output:mapping<CR>A
+	nnoremap <silent> <Leader>uA :Unite output:autocmd<CR>A
+	"nnoremap <silent> <Leader>uF :Unite output:function<CR>A   " more colorful than function but does not offer 'call' action
+	nnoremap <silent> <Leader>uF :Unite function<CR>A
 	" We cannot do these until after it has loaded!
 	"call unite#filters#matcher_default#use(['matcher_fuzzy'])
 	"call unite#custom#profile('default', 'context', { 'winheight': 50, })
+	" These are the settings the guy who had the bug used (and the two above):
+	"let g:unite_enable_ignore_case         = 1
+	"let g:unite_enable_smart_case          = 1
+	"let g:unite_enable_start_insert        = 1
+	"let g:unite_source_history_yank_enable = 1
+	"let g:unite_winheight                  = 10
+	"let g:unite_split_rule                 = 'botright'
+	"let g:unite_cursor_line_highlight      = 'Statusline'
+	"let g:unite_prompt                     = '➤ '
+	"let g:unite_data_directory             = $HOME.'/tmp/unite'
 
 	" >>> My Plugins from the Cloud (modified versions of other plugins) {{{
 	call add(vamAddons,"github:joeytwiddle/grep.vim")    " With support for csearch and SetQuickfixTitle.

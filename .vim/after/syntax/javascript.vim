@@ -60,7 +60,14 @@ highlight javaScriptNumber cterm=none ctermfg=cyan gui=none guifg=LightCyan
 " This version caught the var/property before the [...]
 "syn match javaScriptAssignVar /[A-Za-z_$][A-Za-z_$0-9]*\(\[.*\]\|\)[ 	]*\(=\([^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 " But we only really want the [...] itself
-syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)[ 	]*\(=\([^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
+"syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)[ 	]*\(=\([^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
+" The =[^=] check ensures that we match 'a=b' but never 'a==b'.  Unfortunately it also selects and highlights the char after the '=', i.e. 'b'!
+" In the following version we fix that using me=e-1 which works for 'a=b' but is not so helpful when '$' end-of-line is matched.
+"syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)[ 	]*\(=\|++\|--\|+=\|-=\|\*=\|\/=\)\([^=]\|$\)/me=e-1 contains=javaScriptAssignment,javaScriptAssignmentOther
+" A better alternative to syn-pattern-offset is to use \@= which means "match preceding atom with 0 width"
+"syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)[ 	]*\(=\([^=]\@=\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
+" Another alternative is to use \ze which means "set match end here"
+syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)[ 	]*\(=\(\ze[^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 highlight javaScriptAssignVar ctermfg=white cterm=bold guifg=white gui=bold
 
 "syn match javaScriptAssignProperty /[A-Za-z_$][A-Za-z_$0-9]*\s*:/ contains=javaScriptColon

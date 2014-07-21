@@ -55,3 +55,37 @@ endfunction
 
 call s:CheckNotCoffee()
 
+" If the user has no custom mapping for gF, let gF find required JS files
+" Adapted from my jade.vim magic gF
+" Should be refactored so that various filetypes can configure it for their needs.
+if maparg("gF", 'n') == ''
+  nnoremap <buffer> gF :call <SID>LoadNodeModule()<CR>
+endif
+function! s:SeekFile(folders, extensions, fname)
+  for folder in a:folders
+    for ext in a:extensions
+      let fname = folder . "/" . a:fname . ext
+      if filereadable(fname)
+        return fname
+      endif
+    endfor
+  endfor
+endfunction
+function! s:LoadNodeModule()
+  let cfile = expand("<cfile>")
+  let fname = cfile
+  if !filereadable(fname)
+    let fname = s:SeekFile([expand("%:h"), '.', './node_modules'], ['', '.js'], fname)
+  endif
+  if filereadable(fname)
+    let fname = simplify(fname)
+    "exec "edit ".fname
+    call feedkeys(":edit ".fname."\n")
+    " Using feedkeys prevents this function from being blamed if any errors/warnings occur!
+  else
+    " Both of these show "error in function" :P
+    normal! gF
+    "echoerr "Can't find file ".cfile." in path"
+  endif
+endfunction
+

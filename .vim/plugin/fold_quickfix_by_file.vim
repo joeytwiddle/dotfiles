@@ -133,6 +133,7 @@ function! g:SeparateFilesVisually()
 endfunction
 
 " Shade the background of each block of results alternately.  Aka "zebra stripes".
+" Not currently available in 8-color xterm (although we could go for black, blue background stripes).
 "function! g:SeparateFilesVisually()
 "	if !hlexists("QuickFix_Even_Rows")
 "		highlight QuickFix_Even_Rows ctermbg=black guibg=#444444
