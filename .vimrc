@@ -801,6 +801,20 @@ autocmd VimLeave * silent !stty ixon
 	"let g:unite_prompt                     = '➤ '
 	"let g:unite_data_directory             = $HOME.'/tmp/unite'
 
+	call add(vamAddons,"github:ap/vim-css-color")        " Colour backgrounds of color codes in CSS files
+
+	" Some colorschemes:
+	"call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
+	"call add(vamAddons,"github:shawncplus/skittles_berry") " Cute and colorful
+	" Originally for Text Mate, monokai/molokai is the default theme for Sublime Text
+	call add(vamAddons,"github:sickill/vim-monokai")     " Forces t_Co=256, appears more faithful to Sublime
+	"call add(vamAddons,"github:tomasr/molokai")          " Supports 256 colors when available, less faithful to Sublime
+	"let g:molokai_original = 0                           " Makes some changes, but does not help much.
+	call add(vamAddons,"github:29decibel/codeschool-vim-theme") " Clear, clean pastels
+	"call add(vamAddons,"github:Lokaltog/vim-distinguished") " Understated, a bit more earthy/dirty compared to codeschool
+	"call add(vamAddons,"github:flazz/vim-colorschemes")  " A large collection, includes codeschool
+	"call add(vamAddons,"github:rodnaph/vim-color-schemes") " A collection, includes leo
+
 	" >>> My Plugins from the Cloud (modified versions of other plugins) {{{
 	call add(vamAddons,"github:joeytwiddle/grep.vim")    " With support for csearch and SetQuickfixTitle.
 	call add(vamAddons,"github:joeytwiddle/taglist.vim") " Joey's taglist.vim with vague indentation mode and other madness
