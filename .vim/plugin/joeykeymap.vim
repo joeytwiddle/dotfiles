@@ -330,8 +330,8 @@ set wildmode=longest:full,full
 
 " When it's time to clear the search, avoid /skldjsdklfj<Enter> and just \/ or Ctrl-L
 " Also added :match to hide highlights from highlight_word_under_cursor.vim
-nnoremap <silent> <Leader>/ :nohlsearch<CR>:match<CR>
-nnoremap <silent> <C-L>     :nohlsearch<CR>:match<CR>
+nnoremap <silent> <Leader>/      :nohlsearch<CR>:match<CR>
+nmap     <silent> <C-L>     <C-L>:nohlsearch<CR>:match<CR>
 "nnoremap <silent> <Leader>/ :nohlsearch<CR>:match<CR>:let @/='skj84ksdEKD93Od23423lfs'<CR>
 
 
