@@ -40,7 +40,9 @@ fi
 
 ## Log our output by calling self back
 ## There is a better way than this probably on BashFAQ :P
-logFile="$HOME/.xinitrc-$DISPLAY.log"
+## Unfortunately on Mac, DISPLAY=/tmp/launch-3gARvi/org.macosforge.xquartz:0.log, which is not very suitable for use in a filename.
+#logFile="$HOME/.xinitrc-$DISPLAY.log"
+logFile="$HOME/.xinitrc.log"
 if [ "$1" = -fg ]
 then shift
 else
