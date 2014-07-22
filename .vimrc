@@ -633,10 +633,13 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
 	"let g:vim_markdown_folding_disabled=1
 	call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
+	" This will start a new browser window for realtime markdown preview: https://github.com/vim-scripts/instant-markdown.vim
 	"call add(vamAddons,"github:dahu/bisectly")            " Wow!  A useful and light-hearted way to track down a bug to a specific plugin
 
 	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
 	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g,"
+	let g:repmo_key = ";"
+	let g:repmo_revkey = ","
 
 	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
 	call add(vamAddons,"github:joeytwiddle/vim-easymotion") " My dev copy
@@ -651,6 +654,8 @@ autocmd VimLeave * silent !stty ixon
 	let force_remap_of_semicolon_and_comma = 1
 
 	if !force_remap_of_semicolon_and_comma
+		map ; <Plug>(easymotion-next-in-dir)
+		map , <Plug>(easymotion-prev-in-dir)
 		nmap f <Plug>(easymotion-flash-f)
 		nmap F <Plug>(easymotion-flash-F)
 		nmap t <Plug>(easymotion-flash-t)
@@ -659,11 +664,9 @@ autocmd VimLeave * silent !stty ixon
 		vmap F <Plug>(easymotion-flash-F)
 		vmap t <Plug>(easymotion-flash-t)
 		vmap T <Plug>(easymotion-flash-T)
-		map ; <Plug>(easymotion-next-in-dir)
-		map , <Plug>(easymotion-prev-in-dir)
 	else
 		" Repmo remaps `;` and `,`.  That is a feature.
-		" But when I use `f` and friends, I want to remap it back to easymotion!
+		" But when I use `f` and friends, I want to remap them back to easymotion!
 		nmap <silent> <Plug>(remap-semicolon-and-comma) :map ; <Plug>(easymotion-next-in-dir)<CR>:map , <Plug>(easymotion-prev-in-dir)<CR>
 		nmap <silent> f <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-f)
 		nmap <silent> F <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-F)
@@ -681,7 +684,7 @@ autocmd VimLeave * silent !stty ixon
 	"map N <Plug>(easymotion-N)
 	map n <Plug>(easymotion-flash-n)
 	map N <Plug>(easymotion-flash-N)
-	" I am happy using Vim's default / but EM has one too.  (It only searches the screen though, and there is no equivalent ?)
+	" I am happy using Vim's default / but EasyMotion has one too.  (It only searches the screen though, and there is no equivalent ?)
 	"map  / <Plug>(easymotion-flash-sn)
 	"omap / <Plug>(easymotion-flash-tn)
 	" When I must type two chars, I want it to be clear which is the first one I must type!
@@ -800,6 +803,22 @@ autocmd VimLeave * silent !stty ixon
 	"let g:unite_cursor_line_highlight      = 'Statusline'
 	"let g:unite_prompt                     = '➤ '
 	"let g:unite_data_directory             = $HOME.'/tmp/unite'
+
+	call add(vamAddons,"github:ap/vim-css-color")        " Colour backgrounds of color codes in CSS files
+
+	" Some colorschemes:
+	"call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
+	"call add(vamAddons,"github:shawncplus/skittles_berry") " Cute and colorful
+	" Originally for Text Mate, monokai/molokai is the default theme for Sublime Text
+	call add(vamAddons,"github:sickill/vim-monokai")     " Forces t_Co=256, appears more faithful to Sublime
+	"call add(vamAddons,"github:tomasr/molokai")          " Supports 256 colors when available, less faithful to Sublime
+	"let g:molokai_original = 0                           " Makes some changes, but does not help much.
+	call add(vamAddons,"github:29decibel/codeschool-vim-theme") " Clear, clean pastels
+	"call add(vamAddons,"github:Lokaltog/vim-distinguished") " Understated, a bit more earthy/dirty compared to codeschool
+	"call add(vamAddons,"github:flazz/vim-colorschemes")  " A large collection, includes codeschool
+	"call add(vamAddons,"github:rodnaph/vim-color-schemes") " A collection, includes leo
+	                                                        " leo is based on primary colors; it is a bit strong.  version 1 .0 here: http://www.vim.org/scripts/script.php?script_id=2156
+	" Multi-target (editors) color scheme generator: https://github.com/daylerees/colour-schemes
 
 	" >>> My Plugins from the Cloud (modified versions of other plugins) {{{
 	call add(vamAddons,"github:joeytwiddle/grep.vim")    " With support for csearch and SetQuickfixTitle.
