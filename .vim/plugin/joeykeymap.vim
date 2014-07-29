@@ -604,3 +604,14 @@ autocmd CursorHold * set norelativenumber
 " This one is better; it should insert at the cursor.
 cnoremap %<Tab> <C-r>%
 
+" <Tab> doesn't do anything in normal mode.  I can think of something to do with it!
+"nmap <Tab> <C-w><Down>
+"nmap <S-Tab> <C-w><Up>
+" Ooops.  <Tab> and <C-I> are indistinguishable.  And I use <C-I>.  How sad!
+" We might be able to apply them only in GUI mode, but that would probably just make me sad out of GUI mode.
+" Let's do this like unimpaired does
+nmap ]w <C-w><Down>
+nmap [w <C-w><Up>
+nmap ]W <C-w><Right>
+nmap [W <C-w><Left>
+" Wow that is so much better than <Ctrl-Down> or <Ctrl-W><Down>!
