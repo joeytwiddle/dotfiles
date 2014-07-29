@@ -110,10 +110,13 @@ function! s:FoldByPath()
 
 endfunction
 
+" Disadvantage:
+" Both of the additional highlights below use matchadd() and as such will override the Search highlight used to indicate the most recently selected quickfix line.  At least if we highlight only the filename, the rest of the line will show the Search highlight.
+
 " Underline the last line of results for each file.
 function! g:SeparateFilesVisually()
-	if !hlexists("QuickListLastLineOfFile")
-		highlight QuickListLastLineOfFile term=underline cterm=underline gui=underline
+	if !hlexists("QuickFixLastLineOfFile")
+		highlight QuickFixLastLineOfFile term=underline cterm=underline gui=underline
 	endif
 	call clearmatches()
 	let filename = ""
@@ -124,9 +127,9 @@ function! g:SeparateFilesVisually()
 			let previous_line = l - 1
 			if previous_line >= 1
 				" Underline whole line
-				"let m = matchadd("QuickListLastLineOfFile", '\%'.previous_line.'l.*')
+				"let m = matchadd("QuickFixLastLineOfFile", '\%'.previous_line.'l.*')
 				" Underline just the filename/path
-				let m = matchadd("QuickListLastLineOfFile", '^\%'.previous_line.'l[^|]*')
+				let m = matchadd("QuickFixLastLineOfFile", '^\%'.previous_line.'l[^|]*')
 			endif
 		endif
 	endfor
