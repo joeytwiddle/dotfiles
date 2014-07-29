@@ -35,6 +35,8 @@
 " block comes later in the same line as the first block, because the mark does
 " not shift when earlier characters are pasted.  (In multi-line cases, Vim's
 " mark does shift with the lines, so there is no issue.)
+"
+" Not the same, but related: http://github.com/vim-scripts/flipwords.vim
 
 " In normal mode, yank the word under the cursor (ciw - change if preferred)
 nnoremap \ch "cciw_<Esc>mX
