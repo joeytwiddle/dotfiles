@@ -326,7 +326,7 @@ then
 	}
 fi
 update_cindex() {
-	if which cindex >/dev/null
+	if which cindex >/dev/null && ( [ -z "$CSEARCHINDEX" ] && [ -f "$HOME"/.csearchindex ] || [ -n "$CSEARCHINDEX" ] && [ -f "$CSEARCHINDEX" ] )
 	then
 		local git_root_folder=$(git rev-parse --show-toplevel)
 		# If any of the indexed folders are equal to or below this project's folder
@@ -338,11 +338,11 @@ update_cindex() {
 	fi
 }
 alias gi='git commit --interactive'
-# -p "patch"? allows us to choose which hunks to add or commit
+# -p "patch" allows us to choose which hunks to add or commit
 alias gap='git add -p'
 alias gcp='git commit -p'
 
-# Git auto commit OR Git-add-commit
+# Git Auto Commit, or Git Add Commit, or Git Add and Commit
 gac() {
 	git add "$@"
 	echo -n "Commit message: "
