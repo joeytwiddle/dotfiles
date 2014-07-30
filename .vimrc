@@ -807,7 +807,7 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"github:ap/vim-css-color")        " Colour backgrounds of color codes in CSS files
 
 	" Some colorschemes:
-	"call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
+	call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
 	"call add(vamAddons,"github:shawncplus/skittles_berry") " Cute and colorful
 	" Originally for Text Mate, monokai/molokai is the default theme for Sublime Text
 	call add(vamAddons,"github:sickill/vim-monokai")     " Forces t_Co=256, appears more faithful to Sublime
