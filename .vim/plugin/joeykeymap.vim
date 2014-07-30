@@ -531,7 +531,6 @@ autocmd BufReadPost *.{html,erb}       vnoremap <buffer> <D-?>     :s+^\(\s*\)<!
 "   or :call ThisBufferUsesCommentSymbol("#")
 "   or :call RegisterCommentSymbol('coffee', '#')
 " We could also inspect &comments, but which one should we choose to use?  :-P
-" Also note that <F5>/<F6> could be defined by the same function.
 
 " Make Shift-Insert in GVim work like it does in X-Term
 "autocmd GUIEnter * inoremap <S-Insert> <Esc>"*pa
