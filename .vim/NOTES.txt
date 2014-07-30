@@ -164,9 +164,23 @@ Unfortunately the writing of the logfile is buffered, so you don't get a very re
 
 We could also try to force a write on CursorMoved/CursorHold/... autocommands.
 
+I found the flat format of the logfile a little hard to follow, so I indented each function call like this (using jsh):
+
+    cat /tmp/vim.log | indent_on_regexp "^calling function " "^function.*return" | more
+
 That's logging.  If you want a step by step debugger:
 
-  vim -D ...
+    vim -D ...
+
+But wait.  What about:
+
+    :breakadd
+
+I need to experiment with that, so I can document it.
+
+See Tim Pope's 'scriptease' for some friendly wrappers for verbose.
+
+
 
 Stop leaving Insert mode to paste from clipboard:
 

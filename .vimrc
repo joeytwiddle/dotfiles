@@ -573,7 +573,7 @@ autocmd VimLeave * silent !stty ixon
 
 " >>> Addons (the neat way) {{{
 
-	"" TODO: All these plugins reduce vim's startup time.
+	"" TODO: All these plugins increase vim's startup time.
 	"" This is not just about Vim processing the scripts, a significant cost is the traversal of all the filesystem folders for the following plugins.  (To demonstrate this, try opening vim twice in a row - only the first time is slow!)
 	"" Tactics:
 	"" - Separate into essential and optional plugins.  On very slow machines, only load the former.
@@ -635,12 +635,14 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
 	" This will start a new browser window for realtime markdown preview: https://github.com/vim-scripts/instant-markdown.vim
 	"call add(vamAddons,"github:dahu/bisectly")            " Wow!  A useful and light-hearted way to track down a bug to a specific plugin
+	call add(vamAddons,"unimpaired")                      " Various next/previous keybinds on ]<key> and [<key>
 
 	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
 	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g,"
 	let g:repmo_key = ";"
 	let g:repmo_revkey = ","
 
+	" Here is a minimal alternative to EasyMotion: https://github.com/vim-scripts/PreciseJump
 	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
 	call add(vamAddons,"github:joeytwiddle/vim-easymotion") " My dev copy
 	"map <Leader><Leader>l <Plug>(easymotion-lineforward)
@@ -807,7 +809,7 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"github:ap/vim-css-color")        " Colour backgrounds of color codes in CSS files
 
 	" Some colorschemes:
-	"call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
+	call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
 	"call add(vamAddons,"github:shawncplus/skittles_berry") " Cute and colorful
 	" Originally for Text Mate, monokai/molokai is the default theme for Sublime Text
 	call add(vamAddons,"github:sickill/vim-monokai")     " Forces t_Co=256, appears more faithful to Sublime

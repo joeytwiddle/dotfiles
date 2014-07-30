@@ -188,3 +188,8 @@ Users will be grateful that your script does not greatly impact Vim's startup ti
 As well as making things re-usable, functions can offer meaningful names which direct commands may not, and so make your script easier to understand when reading.
 
 
+# Sharing your plugins
+
+Mac users could use Keycaster when recording a session to show viewers what keys you are pressing.
+
+
