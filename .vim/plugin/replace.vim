@@ -10,7 +10,7 @@ function! s:Replace(in_all_buffers, ...)
    if exists("a:2")
       let replacement = a:2
    else
-      let replacement = input("ReplaceInAllBuffers " . search . " with: ", word)
+      let replacement = input("Replace " . search . " with: ", word)
    endif
    if a:in_all_buffers
       exec 'bufdo! %s/' . search . '/' . replacement . '/gec'
