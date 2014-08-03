@@ -221,6 +221,11 @@ Mod1 i :Minimize
 Mod4 i :Minimize
 Mod1 z :MaximizeWindow
 Mod4 z :MaximizeWindow
+## Strangely my Chromium ignores this (it captures the keypress)
+# Mod1 Enter :Fullscreen
+# Mod1 Enter :MacroCmd {ToggleDecor} {MaximizeWindow}
+## But it works fine on a different keybinding
+Mod1 Shift z :Fullscreen
 Mod1 v :MaximizeVertical
 Mod4 v :MaximizeVertical
 Mod1 h :MaximizeHorizontal
