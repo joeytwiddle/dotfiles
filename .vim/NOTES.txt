@@ -141,8 +141,25 @@ Hex / binary editor:
 
 == Vim Scripting ==
 
-When debugging vim scripts, :scriptnames can be useful to show what has loaded.
-But this can show even more information:
+=== Debugging ===
+
+Some bugs are caused by incompatible settings or plugins.  To start a vanilla Vim without them:
+
+    vim -N -u NONE -U NONE --noplugin
+
+The `-N` option (nocompatible) means things like `<Up>` will work in command mode.
+
+You may then need to `:source /path/to/script` the scripts you want to debug in isolation.
+
+When debugging vim scripts, `:scriptnames` can be useful to show what has loaded.
+
+To discover when a mapping or autocmd or option was last set, use `:verbose`:
+
+    verbose map [key]
+    verbose autocmd [group] [event]
+    verbose set [{option}?]
+
+Logging can give you lots of information:
 
   vim -V9testlog
 
