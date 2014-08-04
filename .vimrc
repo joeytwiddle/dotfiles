@@ -636,6 +636,7 @@ autocmd VimLeave * silent !stty ixon
 	" This will start a new browser window for realtime markdown preview: https://github.com/vim-scripts/instant-markdown.vim
 	"call add(vamAddons,"github:dahu/bisectly")            " Wow!  A useful and light-hearted way to track down a bug to a specific plugin
 	call add(vamAddons,"unimpaired")                      " Various next/previous keybinds on ]<key> and [<key>
+	"call add(vamAddons,"github:LFDM/vim-hopper")          " Could be an interesting way to get around - goes modal; requires submode
 
 	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
 	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g,"
