@@ -140,3 +140,16 @@ function! s:PasteCommandOutput(line)
 	redir END
 	normal "lp
 endfunction
+
+" Runs the given Ex command and copies/yanks the output into the unnamed register
+command! -nargs=+ CopyCmd call s:CopyCommandOutput(<q-args>)
+
+function! s:CopyCommandOutput(line)
+	let vim_cmd = a:line
+	redir @"
+		silent exe vim_cmd
+	redir END
+endfunction
+
+" I don't find this particularly useful for CSS files, but it is a nice example of advanced :g usage!
+command! SortCSS :g#\({\n\)\@<=#.,/}/sort

@@ -436,13 +436,14 @@ autocmd VimLeave * silent !stty ixon
 	" I find groups of windows clearer/easier to navigate when they squash up.
 	set winminheight=0
 
-	set formatoptions+=n            " Better indent numbered lists in comments
-	set formatoptions+=l            " Don't wrap lines that were already long
-	" +j only joined formatoptions in version 7.3.541.  On yas I have vim-gtk=2:7.3.429-2ubuntu2.1
-	" On both my machines, vim reports version as 703.
-	"if v:version >= 703 && has('patch_FILL_THIS_IN_FROM_:h_has-patch')
-		"set formatoptions+=j            " Remove comment leaders when joining
-	"end
+	" formatoptions is local to buffer, and some builtin scripts (e.g. vim.vim) override any options we set here, so we set them on BufReadPost instead.
+	" +j only joined formatoptions in version 7.3.541.  v:version is not fine-grained enough to detect it.  We avoid potential errors in earlier versions of Vim by wrapping in try-catch.
+	" Although +=nl worked, for some reason -=ct did not, so I split them up into separate lines.
+	au BufReadPost * set formatoptions+=n   " Better indent numbered lists in comments
+	au BufReadPost * set formatoptions+=l   " Don't wrap lines that were already long
+	au BufReadPost * set formatoptions-=c   " Don't auto-wrap comments
+	au BufReadPost * set formatoptions-=t   " Don't auto-wrap in general
+	au BufReadPost * try | set formatoptions+=j | catch e | endtry
 
 	" To show the margin column
 	"if v:version >= 703
@@ -637,6 +638,9 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:dahu/bisectly")            " Wow!  A useful and light-hearted way to track down a bug to a specific plugin
 	call add(vamAddons,"unimpaired")                      " Various next/previous keybinds on ]<key> and [<key>
 	"call add(vamAddons,"github:LFDM/vim-hopper")          " Could be an interesting way to get around - goes modal; requires submode
+	call add(vamAddons,"github:tristen/vim-sparkup")      " Expand Zen/Jade snippets into HTML
+	let g:sparkupExecuteMapping = '<C-]>'
+	let g:sparkupMappingInsertModeOnly = 1
 
 	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
 	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g,"
@@ -695,6 +699,8 @@ autocmd VimLeave * silent !stty ixon
 	highlight EasyMotionTarget        cterm=bold ctermbg=0 ctermfg=green  gui=bold guifg=green
 	highlight EasyMotionTarget2First  cterm=bold ctermbg=0 ctermfg=yellow gui=bold guifg=yellow
 	highlight EasyMotionTarget2Second cterm=bold ctermbg=0 ctermfg=blue   gui=bold guifg=blue
+	" The default green move highlight made it hard to see where my cursor was.  Something darker contrasts better.
+	highlight EasyMotionMoveHL  ctermbg=darkblue guibg=darkblue
 	let g:EasyMotion_keys = 'asdfghjklqwertyuiopzxcvbnm;'
 	"let g:EasyMotion_keys = 'asdfghjkl;'
 	"let g:EasyMotion_do_shade = 1             " Without this I confuse yellow/green syntax with yellow/green targets
@@ -722,7 +728,8 @@ autocmd VimLeave * silent !stty ixon
 	""call add(vamAddons,"github:terryma/vim-multiple-cursors")    " Looks promising
 	""call add(vamAddons,"github:kris89/vim-multiple-cursors")     " More recently maintained
 	""call add(vamAddons,"github:jrhorn424/vim-multiple-cursors")  " Even more recently maintained!
-	"call add(vamAddons,"github:joeytwiddle/vim-multiple-cursors") " My version attempts to avoid losing keystrokes
+	""call add(vamAddons,"github:joeytwiddle/vim-multiple-cursors") " My version attempts to avoid losing keystrokes
+	"call add(vamAddons,"github:eapache/vim-multiple-cursors")    " Doing some nice work on it
 	"let g:multi_cursor_start_key='<F2>'
 	"nnoremap \\r :exec 'MultipleCursorsFind \<'.expand("<cword>").'\>'v
 	" Note: multiple-cursors appears to conflict with many of my plugins.  But it appears to work if I do the following:

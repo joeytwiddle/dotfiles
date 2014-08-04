@@ -70,7 +70,7 @@ map :htab :tabnew<Enter>:h
 
 
 "" Moving between windows with Ctrl-ArrowKeys
-"" Note that we use nmap instead of nnoremap, so that navigation_enhancer will be invoked if it is loaded.
+"" Note that we use nmap instead of nnoremap, so that navigation_enhancer can enhance the defaults.
 nmap <C-Up> <C-W>k
 nmap <C-Down> <C-W>j
 nmap <C-Left> <C-W>h
@@ -117,7 +117,17 @@ nmap [1;5C <C-W>l
 " nmap OD h
 " nmap OC l
 
-" We allow remapping on the above so navigation_enhancer can intecept them.
+" <Tab> doesn't do anything in normal mode.  I can think of something to do with it!
+"nmap <Tab> <C-w><Down>
+"nmap <S-Tab> <C-w><Up>
+" Ooops.  <Tab> and <C-I> are indistinguishable.  And I use <C-I>.  How sad!
+" We might be able to apply them only in GUI mode, but that would probably just make me sad out of GUI mode.
+" Let's do this like unimpaired does
+nmap ]w <C-w><Down>
+nmap [w <C-w><Up>
+nmap ]W <C-w><Right>
+nmap [W <C-w><Left>
+" Wow that is so much better than <Ctrl-Down> or <Ctrl-W><Down>!  Although only a minor improvement over <Ctrl-W>j.
 
 
 
@@ -147,10 +157,13 @@ inoremap <C-J> <Esc>2<C-E>a
 " noremap <C-K> <C-Y>:silent! call HL_Cursor_Moved()<Enter>
 " noremap <C-J> <C-E>:silent! call HL_Cursor_Moved()<Enter>
 "" Simiarly, these also fail to trigger CursorHold/Moved events needed by sexy_scroller.  Let's try triggering them by moving and moving back.
-noremap <C-K> 2<C-Y><BS><Space>
-"noremap <C-J> <C-E><BS><Space>
-noremap <C-J> 2<C-E><Space><BS>
-"" OK that fires sexy_scroller, but why did we ever want it to fire hiline anyway?!
+"noremap <C-K> 2<C-Y><BS><Space>
+"noremap <C-J> 2<C-E><Space><BS>
+"noremap <C-K> 2<C-Y><Down><Up>
+"noremap <C-J> 2<C-E><Up><Down>
+noremap <C-K> 2<C-Y>:call g:SexyScroller_ScrollToCursor()<CR>
+noremap <C-J> 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
+"" OK that fires sexy_scroller, but why did we ever want it to fire hiline anyway?!  Perhaps when we were doing 10<C-K>
 "" Also it exhibits a BUG in sexy_scroller, namely that it will cause horizontal scrolling when moving near a long line whilst `:set nowrap` wrapping is off!
 "" There are disadvantages to trying to trigger CursorMoved/Hold this way.  <BS><Space> can fail if we are at the top of the file, or create issues if we are at the start of a line (e.g. temporarily moves a line back, undoing the requested scroll, in a short window when scrolloff is set).  Similarly <Space><BS> can fail on the last char of a line or the last line of a file.  A better solution might be to explicitly call hooks exposed by those specific plugins that we want to trigger.  Alternatively we could call a function to examine the situation and emit whichever of <BS><Space> or <Space><BS> is most appropriate.
 
@@ -295,7 +308,9 @@ autocmd GUIEnter * inoremap <c-Space> <Right>
 " cnoremap <C-BS> <Left>
 
 "" Now we have muted <C-R> but <C-R> can be useful, so let's make a workaround:
-cnoremap <C-\><C-R> <C-R>
+"cnoremap <C-\><C-R> <C-R>
+"" But we cannot receive <C-\> on the terminal, so instead use \:
+cnoremap \<C-R> <C-R>
 "" Example usage (actually just me trying to remember how <C-R> works):
 "" To insert the <cword> (word under cursor) on the cmdline, we can now do: <C-\><C-R><C-W> (which would originally have been <C-R><C-W>)
 "" And of course, <C-R>q will paste/insert the q register.
@@ -617,14 +632,39 @@ autocmd CursorHold * set norelativenumber
 " This one is better; it should insert at the cursor.
 cnoremap %<Tab> <C-r>%
 
-" <Tab> doesn't do anything in normal mode.  I can think of something to do with it!
-"nmap <Tab> <C-w><Down>
-"nmap <S-Tab> <C-w><Up>
-" Ooops.  <Tab> and <C-I> are indistinguishable.  And I use <C-I>.  How sad!
-" We might be able to apply them only in GUI mode, but that would probably just make me sad out of GUI mode.
-" Let's do this like unimpaired does
-nmap ]w <C-w><Down>
-nmap [w <C-w><Up>
-nmap ]W <C-w><Right>
-nmap [W <C-w><Left>
-" Wow that is so much better than <Ctrl-Down> or <Ctrl-W><Down>!
+" When editing a Vim file, make K lookup Vim's inline :help rather than calling 'man'.
+autocmd BufReadPost *.vim setlocal keywordprg=:help
+
+" I'm not sure if this is useful.  It turned out to be no use for the original use-case (I was deleting parts of lines, so they were entering the small delete register, and not the numbered registers).
+function! s:CycleYanks()
+	let unnamed = @"
+	let @" = @1   " Also writes to @0
+	let @1 = @2
+	let @2 = @3
+	let @3 = @4
+	let @4 = @5
+	let @5 = @6
+	let @6 = @7
+	let @7 = @8
+	let @8 = @9
+	let @9 = unnamed
+	echo strpart( "Unnamed register is now: " . substitute( substitute(@", '\n', '\\n', 'g'), '\t', '->', 'g' ), 0, &columns - 15 )
+endfunction
+nnoremap \cy :call <SID>CycleYanks()<CR>
+
+" Search help files.  Don't use this.  Use :helpgrep
+" I want the quickfix to open results in the newly created :help or :new window, but I cannot get that to happen!
+" One guy attacked this with http://www.vim.org/scripts/script.php?script_id=4778#QFEnter
+"command! -n=1 -complete=help SearchHelp help | ...
+"command! -n=1 -complete=help SearchHelp new | ...
+command! -n=1 -complete=help SearchHelp 99wincmd j | wincmd s | execute "grep! -i <args> $VIMRUNTIME/doc/ -r" | botright copen
+" I want to pretend there is a builting command :searchhelp which I will probably seek using :sea<Tab>
+nnoremap :sea<Tab> :SearchHelp<Space>
+nnoremap :sea<Space> :SearchHelp<Space>
+nmap :sea<Up> :SearchHelp<Space><Up>
+
+" Always open the quickfix window after :grep
+"autocmd QuickFixCmdPost *grep* cwindow
+" Like :grep but skips skip the annoying "Press ENTER or type command to continue" message, and also opens the quickfix window.
+command! -bar -nargs=1 Sgrep silent execute "grep <args>" | redraw! | cw
+
