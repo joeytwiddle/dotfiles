@@ -161,8 +161,9 @@ inoremap <C-J> <Esc>2<C-E>a
 "noremap <C-J> 2<C-E><Space><BS>
 "noremap <C-K> 2<C-Y><Down><Up>
 "noremap <C-J> 2<C-E><Up><Down>
-noremap <C-K> 2<C-Y>:call g:SexyScroller_ScrollToCursor()<CR>
-noremap <C-J> 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
+" I have also swapped the direction.  My fingers aren't sure which is correct.
+noremap <C-K> 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
+noremap <C-J> 2<C-Y>:call g:SexyScroller_ScrollToCursor()<CR>
 "" OK that fires sexy_scroller, but why did we ever want it to fire hiline anyway?!  Perhaps when we were doing 10<C-K>
 "" Also it exhibits a BUG in sexy_scroller, namely that it will cause horizontal scrolling when moving near a long line whilst `:set nowrap` wrapping is off!
 "" There are disadvantages to trying to trigger CursorMoved/Hold this way.  <BS><Space> can fail if we are at the top of the file, or create issues if we are at the start of a line (e.g. temporarily moves a line back, undoing the requested scroll, in a short window when scrolloff is set).  Similarly <Space><BS> can fail on the last char of a line or the last line of a file.  A better solution might be to explicitly call hooks exposed by those specific plugins that we want to trigger.  Alternatively we could call a function to examine the situation and emit whichever of <BS><Space> or <Space><BS> is most appropriate.
@@ -519,6 +520,8 @@ vnoremap <D-/>     :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
 vnoremap <Leader>? :s+^\(\s*\)//+\1+<Enter>:set nohlsearch<CR>
 vnoremap <D-?>     :s+^\(\s*\)//+\1+<Enter>:set nohlsearch<CR>
 " But override for other filetypes:
+" TODO: It is better if we put these into ftplugin, and create good rules for detecting filetype.
+"       For example the vim comment mappings do not get loaded when we open ~/.vimrc because it does not match the pattern *.vim!
 autocmd BufReadPost *.vim              vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\1"+<Enter>:set nohlsearch<CR>
 autocmd BufReadPost *.vim              vnoremap <buffer> <D-/>     :s+^\(\s*\)+\1"+<Enter>:set nohlsearch<CR>
 autocmd BufReadPost *.vim              vnoremap <buffer> <Leader>? :s+^\(\s*\)"+\1+<Enter>:set nohlsearch<CR>
