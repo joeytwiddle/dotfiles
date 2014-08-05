@@ -16,7 +16,8 @@ endfunction
 
 " map clear <C-H>
 " map! <C-H> :call JrandomHighlight()<CR>
-map <C-H> :call JrandomHighlight(expand("<cword>"))<CR>
+nmap <C-H> :call JrandomHighlight(expand("<cword>"))<CR>
+command! JrandomHighlight call JrandomHighlight(expand("<cword>"))
 
 if has("menu")
 	amenu &Joey's\ Tools.&Colour\ current\ word\ <C-H> :call JrandomHighlight(expand("<cword>"))<CR>
