@@ -1,6 +1,6 @@
 " joeys_buffer_switcher: Ctrl-E then type/autocomplete the buffer you want to
 " switch to.  If the buffer you wanted is not open, allows autocompletion to a
-" filename to open.
+" filename to open.  If the buffer is open in a window, jumps to that window.
 
 " CONSIDER: If the user enters a number, open that numbered buffer?
 " CONSIDER: Allow <file> completion if no matching <buffer> is open.  (Ideally
@@ -27,12 +27,8 @@ command! JoeysBufferSwitch call JoeysBufferSwitch()
 function! JoeysBufferSwitch()
 
   try
-    let searchStr = input("Type part of buffer then <Tab> or <Enter>: ", '', "buffer")
-    "echo "Got: ".searchStr
-    " BUG: Sometimes instead of presenting 5 alternatives, it completes to a
-    " full file path and we don't see the other options!
-    " (This may have been a file that was opened through the buffer switcher
-    " previously.)
+    " We previously used "buffer" as the completion target, but now we have our own
+    let searchStr = input("Type part of buffer then <Tab> or <Enter>: ", '', "customlist,CompleteBuffersAndFiles")
   catch
     echo "Error!"
     return
@@ -146,6 +142,34 @@ function! JoeysBufferSwitch()
 
 endfunction
 
+
+function! CompleteBuffersAndFiles(ArgLead, CmdLine, CursorPos)
+  let fileglob = a:ArgLead . "*"
+  " This seems to list a bunch of help files (which I don't want) and recently used files (which could be useful).
+  " We could split the glob ourself into dir and file and then use globpath().
+  let files = glob(fileglob, 1, 1)
+  " When selecting a folder, append the dir separator, so the user doesn't have to type it to start completing its children.
+  for i in range(len(files))
+    if isdirectory(files[i])
+      let files[i] = files[i] . '/'
+    endif
+  endfor
+
+  let bufglob = a:ArgLead
+  let buffers = []
+  let bufCount = bufnr('$')
+  let i=0
+  while i <= bufCount
+    let bufName = bufname(i)
+    if match(bufName, bufglob) >= 0
+      call add(buffers, bufName)
+    endif
+    let i = i + 1
+  endwhile
+
+  call extend(files, buffers)
+  return files
+endfunction
 
 
 " An alternative from VimTips Wiki.
