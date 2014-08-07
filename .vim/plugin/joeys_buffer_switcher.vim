@@ -75,9 +75,9 @@ function! JoeysBufferSwitch()
   while i <= winCount
     let winName = bufname(winbufnr(i))
     " Exact match causes single response
-    if winName == searchExpr
-      foundWindows = []
-      call add(foundWindows, i)
+    " We use resolve and expand so that /home/joey/.vimrc will match ~/.vimrc
+    if resolve(expand(winName)) == resolve(expand(searchStr))
+      let foundWindows = [i]
       break
     " Otherwise we collect partial matches
     elseif match(winName, searchExpr) >= 0
