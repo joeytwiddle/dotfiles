@@ -27,11 +27,19 @@ syntax match javaScriptAssignmentOther /\(++\|--\|+=\|-=\|*=\|\/=\|&=\||=\)/
 highlight link javaScriptAssignment Statement
 highlight link javaScriptAssignmentOther javaScriptAssignment
 
-" syntax match javaScriptStructure /\(,\|(\|)\)/
-syntax match javaScriptStructure /\(,\|;\)/
-" highlight javaScriptStructure ctermfg=cyan guifg=cyan gui=bold
-" highlight link javaScriptStructure Function
-highlight link javaScriptStructure Normal
+"syntax match javaScriptStructure /\(,\|;\)/
+"highlight link javaScriptStructure Normal
+" An experiment, de-emphasise semi-colons and commas
+syntax match javaScriptSemicolon /;/
+syntax match javaScriptComma /,/
+hi javaScriptSemicolon ctermfg=white guifg=#999999
+"hi javaScriptComma     ctermfg=white guifg=#99ffff
+"hi link javaScriptComma javaScriptSemicolon
+hi link javaScriptComma Structure
+if &t_Co >= 256
+  hi javaScriptSemicolon ctermfg=238
+  "hi javaScriptComma     ctermfg=123
+endif
 
 highlight javascriptParens ctermfg=cyan gui=bold guifg=cyan
 " highlight javascriptParens ctermfg=cyan gui=bold guifg=#44aaff
