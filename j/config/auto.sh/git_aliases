@@ -416,14 +416,28 @@ git_guess_upstream_branch() {
 alias gwinp='gll $(git_guess_upstream_branch)..HEAD'
 # Git What Is Not Pushed Details
 alias gwinpd='gl $(git_guess_upstream_branch)..HEAD'
+# Git What Is Not Pushed Files
+alias gwinpf='glf $(git_guess_upstream_branch)..HEAD'
 # Git To Push
 alias gtp='gwinp'
-# Git To Push Files
-alias gtpf='git topush'
 # Git To Push Log
 alias gtpl='gwinpd'
+# Git To Push Files (often works poorly since it compares against FETCH_HEAD)
+alias gtpf='git topush'
 # Git To Push Details / Diff (a direct diff, without listing each commit)
 alias gtpd='gd FETCH_HEAD..HEAD'
+
+# Git Log in Vim
+glv() {
+	local count=50
+	if [ "$1" = -n ]
+	then
+		count="$2"
+		shift
+		shift
+	fi
+	git log -p -n "$count" "$@" | vim -c 'setlocal nomodified nomodifiable foldmethod=syntax' -
+}
 
 # Git Merge Origin (this branch)
 #alias gmo='verbosely git merge $(git_guess_upstream_branch)'
@@ -549,6 +563,8 @@ where:
             preBranch=". "
             if [ -n "$showancestors" ]
             then
+                # We can actually get a list of merged branches from: git branch --merged $current_branch
+                # http://devblog.springest.com/a-script-to-remove-old-git-branches/
                 local_branch_commit_hash=`git rev-parse --verify "$local"`
                 common_commit_between_branch_and_current=`git merge-base "$local" "$current_branch"`
                 if [ "$common_commit_between_branch_and_current" = "$local_branch_commit_hash" ]
