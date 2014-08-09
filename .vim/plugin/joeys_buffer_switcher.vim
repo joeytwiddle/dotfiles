@@ -97,7 +97,7 @@ function! JoeysBufferSwitch()
   while i <= bufCount
     let bufName = bufname(i)
     " TODO: Some buffers need to be ignored e.g. if they are closed (no longer visible)
-    if bufName != ""
+    if bufexists(i) && buflisted(i) && bufName != ""
       if match(bufName, searchExpr) >= 0
         call add(foundBuffers, i)
       endif
@@ -109,6 +109,8 @@ function! JoeysBufferSwitch()
         "break
         " Opening by name seems safer:
         exec ":b ".bufName
+        " But that occasionally fails with: E93: More than one match for ...
+        "exec ":".i."b"
         return
       endif
     endif
@@ -161,16 +163,29 @@ function! CompleteBuffersAndFiles(ArgLead, CmdLine, CursorPos)
   let i=0
   while i <= bufCount
     let bufName = bufname(i)
-    if match(bufName, bufglob) >= 0
+    if bufexists(i) && buflisted(i) && match(bufName, bufglob) >= 0
       call add(buffers, bufName)
     endif
     let i = i + 1
   endwhile
 
   call extend(files, buffers)
+
+  let files = s:ListWithoutDuplicates(files)
   return files
 endfunction
 
+function! s:ListWithoutDuplicates(list)
+  let seen = {}
+  let newlist = []
+  for i in range(len(a:list))
+    if !get(seen,a:list[i])
+      call add(newlist, a:list[i])
+      let seen[a:list[i]] = 1
+    endif
+  endfor
+  return newlist
+endfunction
 
 " An alternative from VimTips Wiki.
 
