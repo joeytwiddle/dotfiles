@@ -58,6 +58,7 @@ call s:CheckNotCoffee()
 " If the user has no custom mapping for gF, let gF find required JS files
 " Adapted from my jade.vim magic gF
 " Should be refactored so that various filetypes can configure it for their needs.
+" NOTE: Vim already supports special seeking behaviour for gf.  See :h gf
 if maparg("gF", 'n') == ''
   nnoremap <buffer> gF :call <SID>LoadNodeModule()<CR>
 endif
