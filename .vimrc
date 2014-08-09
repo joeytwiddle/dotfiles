@@ -649,7 +649,7 @@ autocmd VimLeave * silent !stty ixon
 	let g:sparkupMappingInsertModeOnly = 1
 
 	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
-	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g,"
+	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g, <C-w>j|<C-w>k"
 	let g:repmo_key = ";"
 	let g:repmo_revkey = ","
 
