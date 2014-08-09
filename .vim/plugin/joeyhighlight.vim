@@ -389,6 +389,7 @@ function! Joeyhighlight()
 
 endfun
 
-"" No longer needed.  Rely on autocmd above.
-" :Joeyhighlight
+" I had disabled this, to rely on autocmd above.
+" But in some cases it didn't fire, e.g. when using `vim -` to read from stdin.
+:Joeyhighlight
 
