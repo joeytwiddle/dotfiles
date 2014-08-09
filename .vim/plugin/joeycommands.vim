@@ -112,7 +112,7 @@ endif
 " Runs the given Ex command and pipes the output to the given shell command.
 " For example: :PipeToShell syn | grep 'Declaration'
 " I considered other names: CmdOut, PipeToShell
-command! -nargs=+ PipeCmd call s:PassVimCommandOutputToShellCommand(<q-args>)
+command! -nargs=+ -complete=command PipeCmd call s:PassVimCommandOutputToShellCommand(<q-args>)
 
 function! s:PassVimCommandOutputToShellCommand(line)
 	let vim_cmd = substitute(a:line, '\s*|.*', '', '')
@@ -131,7 +131,7 @@ function! s:PassVimCommandOutputToShellCommand(line)
 endfunction
 
 " Runs the given Ex command and pastes the output
-command! -nargs=+ PasteCmd call s:PasteCommandOutput(<q-args>)
+command! -nargs=+ -complete=command PasteCmd call s:PasteCommandOutput(<q-args>)
 
 function! s:PasteCommandOutput(line)
 	let vim_cmd = a:line
@@ -143,7 +143,7 @@ function! s:PasteCommandOutput(line)
 endfunction
 
 " Runs the given Ex command and copies/yanks the output into the unnamed register
-command! -nargs=+ CopyCmd call s:CopyCommandOutput(<q-args>)
+command! -nargs=+ -complete=command CopyCmd call s:CopyCommandOutput(<q-args>)
 
 function! s:CopyCommandOutput(line)
 	let vim_cmd = a:line
