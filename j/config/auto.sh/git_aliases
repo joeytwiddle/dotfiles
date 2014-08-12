@@ -436,7 +436,7 @@ glv() {
 		shift
 		shift
 	fi
-	git log -p -n "$count" "$@" | vim -c 'setlocal nomodified nomodifiable foldmethod=syntax' -
+	git log -p -n "$count" "$@" | vim -c 'setlocal nomodified nomodifiable foldmethod=syntax fdc=2' -
 }
 
 # Git Merge Origin (this branch)
