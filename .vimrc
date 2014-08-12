@@ -394,7 +394,9 @@ autocmd VimLeave * silent !stty ixon
 			" Popular, aspect like DejaVu Sans Mono / Liberation / Ubuntu Mono
 			":set guifont=Monaco:h12
 			" But I prefer the shorter one!
-			:set guifont=Menlo\ Regular:h11
+			":set guifont=Menlo\ Regular:h11
+			" But even more I prefer to install Lucida Console and then use that:
+			:set guifont=Lucida\ Console:h11
 		endif
 		" Hide the menu and toolbar which I never use.
 		:set guioptions-=m
