@@ -27,11 +27,17 @@ syntax match javaScriptAssignmentOther /\(++\|--\|+=\|-=\|*=\|\/=\|&=\||=\)/
 highlight link javaScriptAssignment Statement
 highlight link javaScriptAssignmentOther javaScriptAssignment
 
-" syntax match javaScriptStructure /\(,\|(\|)\)/
-syntax match javaScriptStructure /\(,\|;\)/
-" highlight javaScriptStructure ctermfg=cyan guifg=cyan gui=bold
-" highlight link javaScriptStructure Function
-highlight link javaScriptStructure Normal
+"syntax match javaScriptStructure /\(,\|;\)/
+"highlight link javaScriptStructure Normal
+" An experiment, de-emphasise semi-colons and commas
+syntax match javaScriptSemicolon /;/
+syntax match javaScriptComma /,/
+hi javaScriptSemicolon ctermfg=white guifg=#999999
+"hi javaScriptComma     ctermfg=cyan  guifg=#99ffff
+if &t_Co >= 256
+  hi javaScriptSemicolon ctermfg=248
+  "hi javaScriptComma     ctermfg=123
+endif
 
 highlight javascriptParens ctermfg=cyan gui=bold guifg=cyan
 " highlight javascriptParens ctermfg=cyan gui=bold guifg=#44aaff
@@ -46,6 +52,8 @@ syntax match javaScriptDot /\./
 " highlight link javaScriptDot Statement
 highlight javaScriptDot ctermfg=lightblue guifg=lightblue gui=bold
 highlight javaScriptDot cterm=bold ctermfg=white guifg=white gui=bold
+"syn match javaScriptColon /:/
+"highlight javaScriptColon ctermfg=white guifg=white
 
 "" Just use javaScriptStructure above
 " syntax match javaScriptComma /,/
@@ -70,13 +78,11 @@ highlight javaScriptNumber cterm=none ctermfg=cyan gui=none guifg=LightCyan
 syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)[ 	]*\(=\(\ze[^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 highlight javaScriptAssignVar ctermfg=white cterm=bold guifg=white gui=bold
 
-"syn match javaScriptAssignProperty /[A-Za-z_$][A-Za-z_$0-9]*\s*:/ contains=javaScriptColon
-"" To match Coffeescript's dark blue properties (although I think that was a bug):
-"highlight javaScriptAssignProperty ctermfg=darkblue cterm=bold guifg=#6666ff gui=bold
-"" To make property declarations look like variable assignments:
-""hi link javaScriptAssignProperty javaScriptAssignVar
-"syn match javaScriptColon /:/
-"highlight javaScriptColon ctermfg=white guifg=white
+" To match coffeeAssign's dark blue property names:
+"syn match javaScriptPropertyName /[A-Za-z_$][A-Za-z_$0-9]*\ze\s*:/ contains=javaScriptColon
+"highlight javaScriptPropertyName ctermfg=darkblue cterm=bold guifg=#6666ff gui=bold
+" To make property declarations look like variable assignments:
+"hi link javaScriptPropertyName javaScriptAssignVar
 
 
 "" Stolen from basic.vim!

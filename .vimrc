@@ -34,7 +34,7 @@ augroup END
 "" Vim 7.3 started making `w` jump over '.'s in a variety of languages, which I do not want.
 autocmd BufReadPost * setlocal iskeyword-=.
 " However I have come to accept that I do need '-' to be part of a word when dealing with CSS classes.
-autocmd BufReadPost *.{css,html,js,erb} setlocal iskeyword+=-
+autocmd BufReadPost *.{css,html,js,erb,jade,blade} setlocal iskeyword+=-
 
 " At some point undo started working through file-reads.  Given that, I am happier to load changed files automatically.  (Especially useful when peforming git checkout!)
 if v:version >= 703
@@ -443,7 +443,14 @@ autocmd VimLeave * silent !stty ixon
 	au BufReadPost * set formatoptions+=l   " Don't wrap lines that were already long
 	au BufReadPost * set formatoptions-=c   " Don't auto-wrap comments
 	au BufReadPost * set formatoptions-=t   " Don't auto-wrap in general
-	au BufReadPost * try | set formatoptions+=j | catch e | endtry
+	" BUG: This was breaking joeyhighlight!
+	"au BufReadPost * try | set formatoptions+=j | catch e | endtry
+	" Workaround: Try it now; if it works then setup the autocmd
+	try
+		set formatoptions+=j
+		au BufReadPost * set formatoptions+=j
+	catch e
+	endtry
 
 	" To show the margin column
 	"if v:version >= 703
