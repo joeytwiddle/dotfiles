@@ -62,6 +62,8 @@ command! MoveBufferToEnd call s:MoveCurrentBufferToEndOfList()
 " map <C-]> :tabnext<Enter>
 " map <C-[> :N<Enter>
 " map <C-]> :n<Enter>
+nmap [T :tabprev<CR>
+nmap ]T :tabnext<CR>
 
 "" I'm sure there must be a better way to do this.
 "" I'm trying to make a new command, but really just catching the keys!
@@ -117,21 +119,26 @@ nmap [1;5C <C-W>l
 " nmap OD h
 " nmap OC l
 
+
+
+" Quick move between windows.
 " <Tab> doesn't do anything in normal mode.  I can think of something to do with it!
 "nmap <Tab> <C-w><Down>
 "nmap <S-Tab> <C-w><Up>
 " Ooops.  <Tab> and <C-I> are indistinguishable.  And I use <C-I>.  How sad!
 " We might be able to apply them only in GUI mode, but that would probably just make me sad out of GUI mode.
 " Let's do this like unimpaired does
-nmap ]w <C-w><Down>
-nmap [w <C-w><Up>
+"nmap ]w <C-w><Down>
+"nmap [w <C-w><Up>
+nmap ]w <C-w>w
+nmap [w <C-w>W
 nmap ]W <C-w><Right>
 nmap [W <C-w><Left>
 " Wow that is so much better than <Ctrl-Down> or <Ctrl-W><Down>!  Although only a minor improvement over <Ctrl-W>j.
 
 
 
-"" Step through quickfix list (errors/search results) with Ctrl+N/P
+"" Step through quickfix list (errors/search results) with Ctrl+N/P (or ]c [c with unimpaired)
 :nnoremap <C-n> :cnext<Enter>
 :nnoremap <C-p> :cprev<Enter>
 "" =/- get overriden by fold keymaps :P
@@ -334,7 +341,9 @@ cnoremap <C-L> <C-D>
 
 " This is how my zsh does completion, and it rocks (unless for some reason you
 " always want the first match of multiples, then you must always Tab twice).
-set wildmode=longest:full,full
+"set wildmode=longest:full,full
+" On the first <Tab> in a row, show a list of possible matches.  This is useful except when there are so many possibilities that it requires "Hit <Space> for more".
+set wildmode=longest:full:list,full
 " I use the default wildchar=<Tab>
 
 
@@ -366,15 +375,14 @@ nnoremap <Leader>w :set invwrap<Enter>
 " Quick buffer switching (beyond Ctrl-PageUp/Down)
 "" Select buffer by any part of filename and Tab completion or arrows, or by number
 "nnoremap <C-E> :ls<CR>:b<space>
-nnoremap <C-E> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
+nnoremap <Leader>W :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
+nnoremap <C-E> :JoeysBufferSwitch<Enter>
 "" An interesting alternative, assuming you have MBE as your first window:
 "nnoremap <C-E> 1<C-W><C-W>/
 "" Select file by filename with completion
 " nnoremap <C-E> :ls<CR>:e<space>
 "" Select by name with completion or file without (joeys_buffer_switcher.vim)
 "nnoremap <Leader>e :JoeysBufferSwitch<Enter>
-"" I use <C-E> above for switching buffer now, but this is still useful for switching window!
-nnoremap <Leader>W :JoeysBufferSwitch<Enter>
 "" Select buffer from list (bufexplorer.vim)
 nnoremap <C-B> :BufExplorer<Enter>
 "" Select from persistent list of most-recently-used files (mru.vim)
