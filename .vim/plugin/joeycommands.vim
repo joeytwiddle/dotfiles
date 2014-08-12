@@ -16,7 +16,8 @@ endfunction
 
 " map clear <C-H>
 " map! <C-H> :call JrandomHighlight()<CR>
-map <C-H> :call JrandomHighlight(expand("<cword>"))<CR>
+nmap <C-H> :call JrandomHighlight(expand("<cword>"))<CR>
+command! JrandomHighlight call JrandomHighlight(expand("<cword>"))
 
 if has("menu")
 	amenu &Joey's\ Tools.&Colour\ current\ word\ <C-H> :call JrandomHighlight(expand("<cword>"))<CR>
@@ -44,6 +45,8 @@ function! JrandomHighlight(pat)
 endfunction
 
 """"""""""""""""""""""""""""""" Jrefactor """""""""""""""""""""""""""""""
+
+" PLEASE NOTE that Jrefactor is now deprecated in favour of \r and \R in replace.vim
 
 command! -nargs=1 Jrefactor call Jrefactor(<f-args>)
 
@@ -104,3 +107,50 @@ endif
 "" that already exists on Ctrl-O.
 " inoremap <C-o> <Esc>:call JExecVimCommand()<CR>
 
+
+
+" Runs the given Ex command and pipes the output to the given shell command.
+" For example: :PipeToShell syn | grep 'Declaration'
+" I considered other names: CmdOut, PipeToShell
+command! -nargs=+ -complete=command PipeCmd call s:PassVimCommandOutputToShellCommand(<q-args>)
+
+function! s:PassVimCommandOutputToShellCommand(line)
+	let vim_cmd = substitute(a:line, '\s*|.*', '', '')
+	let shell_cmd = substitute(a:line, '^[^|]*|\s*', '', '')
+	" TODO: We could redir to a local variable, to avoid clobbering the 'l' register.
+	redir @l
+		silent exe vim_cmd
+	redir END
+	" To pipe to a shell, the only way I thought of was to put the data into a fresh buffer, and then do :w !...
+	new
+	normal "lP
+	exe 'w !'.shell_cmd
+	" Undo the paste so bwipeout can drop the buffer without complaint
+	normal u
+	exe "bwipeout"
+endfunction
+
+" Runs the given Ex command and pastes the output
+command! -nargs=+ -complete=command PasteCmd call s:PasteCommandOutput(<q-args>)
+
+function! s:PasteCommandOutput(line)
+	let vim_cmd = a:line
+	" TODO: We could redir to a local variable, to avoid clobbering the 'l' register.
+	redir @l
+		silent exe vim_cmd
+	redir END
+	normal "lp
+endfunction
+
+" Runs the given Ex command and copies/yanks the output into the unnamed register
+command! -nargs=+ -complete=command CopyCmd call s:CopyCommandOutput(<q-args>)
+
+function! s:CopyCommandOutput(line)
+	let vim_cmd = a:line
+	redir @"
+		silent exe vim_cmd
+	redir END
+endfunction
+
+" I don't find this particularly useful for CSS files, but it is a nice example of advanced :g usage!
+command! SortCSS :g#\({\n\)\@<=#.,/}/sort

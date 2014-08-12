@@ -1,0 +1,28 @@
+
+snippet fun "function (fun) =>" !
+function ${1:function_name}(${2:argument}) =>
+	${VISUAL}$0
+endsnippet
+
+snippet fn "anonymous function (fn) ->" w!
+(${1}) ->
+	${VISUAL}$0
+endsnippet
+
+snippet for "for i in array" !
+for ${1:item} in ${2:array}
+	$0
+endsnippet
+
+snippet fori "for i in 0...array.length" !
+for ${1:i} in 0...${2:array}.length
+	var ${3:item} = $2[$1]
+	$0
+endsnippet
+
+snippet forr "for i in array.length-1..0" !
+for ${1:i} in ${2:array}.length-1..0
+	var ${3:item} = $2[$1]
+	$0
+endsnippet
+

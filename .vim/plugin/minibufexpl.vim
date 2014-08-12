@@ -334,10 +334,10 @@ endif
 " }}}
 " MBE <Script> internal map {{{
 " 
-noremap <unique> <script> <Plug>MiniBufExplorer  :call <SID>StartExplorer(1, -1)<CR>:<BS>
-noremap <unique> <script> <Plug>CMiniBufExplorer :call <SID>StopExplorer(1)<CR>:<BS>
-noremap <unique> <script> <Plug>UMiniBufExplorer :call <SID>AutoUpdate(-1)<CR>:<BS>
-noremap <unique> <script> <Plug>TMiniBufExplorer :call <SID>ToggleExplorer()<CR>:<BS>
+noremap <script> <Plug>MiniBufExplorer  :call <SID>StartExplorer(1, -1)<CR>:<BS>
+noremap <script> <Plug>CMiniBufExplorer :call <SID>StopExplorer(1)<CR>:<BS>
+noremap <script> <Plug>UMiniBufExplorer :call <SID>AutoUpdate(-1)<CR>:<BS>
+noremap <script> <Plug>TMiniBufExplorer :call <SID>ToggleExplorer()<CR>:<BS>
 
 " }}}
 " MBE commands {{{
@@ -872,10 +872,41 @@ function! <SID>StartExplorer(sticky, delBufNum)
 
   " Move cursor to the entry for the current buffer
   if (s:userFocusedBuffer != -1)
+    " Initially, search() would sometimes land in the wrong place if there were multiple buffers with the same name.  However this was fixed by making the focused '*' marker non-optional in the regexp.
     " Original format: call search('\['.s:userFocusedBuffer.':'.expand('#'.s:userFocusedBuffer.':t').'\]')
-    "" To search for buffer using regexp, we need to escape AT LEAST '~'
-    let bufnameRE = escape(expand('#'.s:userFocusedBuffer.':t'), '~')
-    call search('| '.bufnameRE.'[*+-]* |')
+    " To search for buffer using regexp, we need to escape AT LEAST '~'
+    let bufname = expand('#'.s:userFocusedBuffer.':t')
+    let bufnameRE = escape(bufname, '~')
+    call <SID>DEBUG('Moving to buffer using RE: '.bufnameRE,9)
+    call search('| '.bufnameRE.'[*][+-]* |')
+    "call <SID>DEBUG('Cursor is now at '.line('.').",".virtcol('.'),9)
+    " When we set nowrap on the MBE, then we need the window to scroll horizontally to show the current tab.
+    " NOTE: After BufEnter, the cursor will first be on column 0, because we have cleared and rewritten the entire MBE just to move the '*' marker!
+    "       However after CursorHold, it may be in position already.
+    " Sometimes the window would not scroll horizontally to where the cursor was placed, even its final position.
+    " Doing "lh" below is a fix that forces Vim to make the cursor position visible.
+    " Put the cursor in the middle of the word.
+    "call cursor(line('.'), virtcol('.')-len(bufname)/2)
+    " But to ensure the whole name/title is visible, we should jump to the last char.
+    " (This is not needed for most tabs, but for some reason it is needed for a few tabs just off the right of the first page.  After that, it starts showing the current tab in the very middle!)
+    "call cursor(line('.'), virtcol('.')+5+len(bufname)-&sidescrolloff)
+    "normal! "lh"
+    " Always place the current tab in the center.  This is not ideal, but it is at least consistent.
+    let sidescroll_before = &sidescroll
+    let &sidescroll = 1
+    let middle_column = virtcol('.') + 3 + len(bufname)/2
+    let left_column  = middle_column - winwidth('.')/2 + &sidescrolloff
+    let right_column = middle_column + winwidth('.')/2 - &sidescrolloff
+    if right_column > len(getline('.')) - 1
+      let right_column = len(getline('.')) - 1
+    endif
+    call cursor(line('.'), right_column)
+    normal! "hl"
+    call cursor(line('.'), left_column)
+    normal! "lh"
+    call cursor(line('.'), middle_column)
+    normal! "lh"
+    let &sidescroll = sidescroll_before
   else
     call <SID>DEBUG('No current buffer to search for',9)
   endif
@@ -1157,7 +1188,9 @@ function! <SID>ResizeWindow()
   " Horizontal Resize
   if g:miniBufExplVSplit == 0
 
-    if g:miniBufExplTabWrap == 0
+    if !&l:wrap
+      let l:height = 1
+    elseif g:miniBufExplTabWrap == 0
       let l:length = strlen(getline('.'))
       let l:height = 0
       if (l:width == 0)
@@ -1403,6 +1436,8 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
   let l:line = l:line . l:gap . "[X]"
 
   if (g:miniBufExplBufList != l:line)
+    call <SID>DEBUG('List has changed: '.g:miniBufExplBufList,9)
+    call <SID>DEBUG('        New list: '.l:line,9)
     if (a:updateBufList)
       let g:miniBufExplBufList = l:line
       " let g:miniBufExplBufNumbers = l:bufferNumbers
@@ -1582,7 +1617,6 @@ function! <SID>AutoUpdate(delBufNum)
             """ arg update=0
             call <SID>DEBUG('About to call StartExplorer (Update MBE)', 9) 
             call <SID>StartExplorer(0, a:delBufNum)
-            call <SID>DEBUG('List had changed: '.g:miniBufExplBufList,9)
           else
             " call <SID>DEBUG('Skipping update because list is unchanged', 9) 
             call <SID>DEBUG('Skipping update, list unchanged: '.g:miniBufExplBufList,9)

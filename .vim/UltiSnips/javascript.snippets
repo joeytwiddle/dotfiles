@@ -6,8 +6,8 @@ function ${1:function_name}(${2:argument}) {
 endsnippet
 
 snippet fn "anonymous function (fn)" w
-function(${1}) {
-	$0
+function(${1}){
+	${VISUAL}$0
 }
 endsnippet
 
@@ -19,7 +19,7 @@ for (var ${1:i}=0; $1<${2:array}.length; $1++) {
 endsnippet
 
 snippet forr "for (...) {...} [reverse]"
-for (var ${1:i}=${2:array}.length; $1--; ) {
+for (var ${1:i}=${2:array}.length; $1--;) {
 	var ${3:item} = $2[$1];
 	$0
 }
@@ -27,7 +27,8 @@ endsnippet
 
 snippet forin "for (... in ...) {...}" !
 for (var ${1:x} in ${2:obj}) {
-	${0:$2[$1]}
+	var ${3:prop} = $2[$1];
+	$0
 }
 endsnippet
 
@@ -53,5 +54,13 @@ endsnippet
 snippet ife "if (err)" !
 if (${1:err}) return ${2:callback}($1);
 $0
+endsnippet
+
+snippet try "try-catch" !
+try {
+	$0
+} catch (err) {
+	
+}
 endsnippet
 

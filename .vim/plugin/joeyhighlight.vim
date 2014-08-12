@@ -58,7 +58,15 @@ function! Joeyhighlight()
 	"highlight Search ctermbg=Blue ctermfg=Yellow term=bold guibg=#005500 guifg=#ffbb66 gui=bold
 	"highlight Search ctermbg=blue ctermfg=white term=bold guibg=#005500 guifg=#66ff88 gui=bold
 	"highlight Search ctermbg=blue ctermfg=white term=bold guibg=#005500 guifg=#bbffbb gui=bold
-	highlight Search ctermbg=blue ctermfg=green term=bold guibg=#005544 guifg=#aaffaa gui=bold
+	"highlight Search ctermbg=blue ctermfg=green term=bold guibg=#005544 guifg=#aaffaa gui=bold
+	" In 256-color xterm, darkblue background looks the same as in 8-bit.  Just blue looks a bit lighter.
+	" Now using reverse in GUI so that selected line shows up even if dim_inactive_windows.vim sets both colors of unfocused quickfix window.
+	highlight Search term=bold cterm=bold ctermbg=darkblue ctermfg=green guifg=#005544 guibg=#aaffaa gui=bold,reverse
+	" But using reverse in cterm sucks if we also want bold text, because the bold makes the background blue lighter.
+	" An alternative: white on green
+	"highlight Search term=reverse cterm=bold,reverse ctermfg=darkgreen ctermbg=white guifg=#005544 guibg=#aaffaa gui=bold,reverse
+	"highlight Search term=reverse ctermfg=darkblue ctermbg=green cterm=reverse guifg=#005544 guibg=#aaffaa gui=bold,reverse
+	" It also seems that reverse cancels bold in the GUI.
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White guifg=DarkMagenta guibg=White
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#553355
 	"" This actually gives us a dirty grey instead of white (in xterm):
@@ -277,7 +285,11 @@ function! Joeyhighlight()
 
 	" hi MatchParen term=reverse ctermbg=red guibg=red
 	" hi MatchParen term=reverse cterm=reverse ctermbg=black ctermfg=magenta guibg=black guifg=magenta
-	hi MatchParen term=reverse cterm=none ctermbg=magenta ctermfg=grey guibg=#880088 guifg=#eeeeee
+	" hi MatchParen term=reverse cterm=none ctermbg=magenta ctermfg=grey guibg=#880088 guifg=#eeeeee
+	"" My terminal cursor flashes once (briefly disappears) when moving (possibly due to plugins and/or CursorHold events).
+	"" This leads me to seeing two magenta boxes, which confuses me about where my cursor is.
+	"" To reduce confusion, I would rather show no box, so let's highlight only the foreground, not the background:
+	hi MatchParen term=reverse cterm=none ctermfg=magenta guibg=#880088 guifg=#eeeeee
 
 	" hi link Comma Function  ## cyan
 	" hi link Comma Keyword   ## yellow
@@ -305,7 +317,11 @@ function! Joeyhighlight()
 	"hi MyTagListTitle ctermfg=lightblue ctermbg=none
 	"hi MyTagListTitle ctermfg=yellow ctermbg=none
 	hi MyTagListTitle ctermfg=none ctermbg=none
-	hi MyTagListTagName ctermbg=green ctermfg=white guibg=#00cc00 guifg=white
+	"hi MyTagListTagName cterm=bold ctermbg=green ctermfg=white guibg=#00cc00 guifg=white
+	"hi MyTagListTagName cterm=bold ctermbg=green ctermfg=white gui=bold,reverse guibg=white guifg=#00cc00
+	hi MyTagListTagName cterm=bold,reverse ctermbg=white ctermfg=green gui=bold,reverse guibg=white guifg=#00cc00
+	" I think there was some reason why I shouldn't use reverse in cterm, but I forgot why!
+	" I want it so that we get a strong highlight when using dim_inactive_windows.vim
 	" hi MyTagListFileName ctermbg=black ctermfg=white
 	hi MyTagListFileName ctermbg=black ctermfg=cyan guibg=black guifg=cyan
 
@@ -365,7 +381,7 @@ function! Joeyhighlight()
 		hi Statement guifg=yellow gui=bold
 		hi Identifier guifg=cyan gui=bold
 		hi Special guifg=magenta gui=bold
-		hi Search guibg=blue guifg=green gui=bold
+		hi Search guifg=blue guibg=green gui=bold,reverse
 		hi HLCurrentWord guifg=red gui=bold
 		"hi Number guifg=cyan
 		hi Normal guifg=#f7f7f7

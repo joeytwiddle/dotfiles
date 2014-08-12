@@ -119,7 +119,8 @@ function! s:GetSessionSummary(name)
 			let firstArg = remove(words,0)
 			if firstArg == 'cd'
 				let path = join(words)
-			elseif firstArg == 'args'
+			elseif firstArg == 'args' && 0
+				" I have disabled this block because filenames are still listed in 'args' even after their buffers have been closed.  I hope we can get the list of open buffers from badd alone.
 				" Any word ending with '\' should have a space and the next word appended to it.
 				" We may need to repeat this if there were originally two spaces.
 				while 1

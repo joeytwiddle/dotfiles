@@ -27,7 +27,7 @@ highlight! coffeeParens cterm=bold ctermfg=cyan gui=bold guifg=#00b0b0
 " highlight! coffeeAssign cterm=bold ctermfg=green gui=bold guifg=green
 " highlight! coffeeAssign cterm=bold ctermfg=white gui=bold guifg=white
 "" These days I only see coffeeAssign highlight properties in an object literal
-highlight! coffeeAssign ctermfg=darkblue cterm=bold gui=bold guifg=white
+highlight! coffeeAssign ctermfg=darkblue cterm=bold gui=bold guifg=#6666ff
 
 " highlight! coffeeComment ctermfg=darkgrey cterm=bold gui=bold guifg=darkgrey
 hi link coffeeComment Comment

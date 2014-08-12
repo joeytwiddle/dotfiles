@@ -77,6 +77,16 @@ Also:
 
   @/         is the search register
 
+Read input from a command.
+
+  :r!date     inserts a new line
+  :.!date     clobbers the current line
+
+Uppercase the word under the cursor:
+
+   viwU
+   vi(U      or everything inside the parentheses
+
 
 
 Yank matching:
@@ -125,12 +135,31 @@ Hex / binary editor:
   :%!xxd
   :%!xxd -r
 
+  (Note that vim should be run in -b binary mode.)
+
 
 
 == Vim Scripting ==
 
-When debugging vim scripts, :scriptnames can be useful to show what has loaded.
-But this can show even more information:
+=== Debugging ===
+
+Some bugs are caused by incompatible settings or plugins.  To start a vanilla Vim without them:
+
+    vim -N -u NONE -U NONE --noplugin
+
+The `-N` option (nocompatible) means things like `<Up>` will work in command mode.
+
+You may then need to `:source /path/to/script` the scripts you want to debug in isolation.
+
+When debugging vim scripts, `:scriptnames` can be useful to show what has loaded.
+
+To discover when a mapping or autocmd or option was last set, use `:verbose`:
+
+    verbose map [key]
+    verbose autocmd [group] [event]
+    verbose set [{option}?]
+
+Logging can give you lots of information:
 
   vim -V9testlog
 
@@ -138,7 +167,7 @@ Alternatively, if you want to turn this heavy logging on/off at runtime:
 
     function! ToggleVerbose()
         if !&verbose
-            set verbosefile=~/.log/vim/verbose.log
+            set verbosefile=~/vim.log
             set verbose=15
         else
             set verbose=0
@@ -146,9 +175,29 @@ Alternatively, if you want to turn this heavy logging on/off at runtime:
         endif
     endfunction
 
+Unfortunately the writing of the logfile is buffered, so you don't get a very realtime view if you try to watch it with `tail -f`.  But with the following mapping, you can force the logfile to update by hitting `<Ctrl-L>`:
+
+    :nmap <C-L> :set verbosefile=<CR>:set verbosefile=~/vim.log<CR>
+
+We could also try to force a write on CursorMoved/CursorHold/... autocommands.
+
+I found the flat format of the logfile a little hard to follow, so I indented each function call like this (using jsh):
+
+    cat /tmp/vim.log | indent_on_regexp "^calling function " "^function.*return" | more
+
 That's logging.  If you want a step by step debugger:
 
-  vim -D ...
+    vim -D ...
+
+But wait.  What about:
+
+    :breakadd
+
+I need to experiment with that, so I can document it.
+
+See Tim Pope's 'scriptease' for some friendly wrappers for verbose.
+
+
 
 Stop leaving Insert mode to paste from clipboard:
 
@@ -168,6 +217,12 @@ To copy the line under the cursor (into register k) then execute it as an ex com
 or:
 
   yyq:p<Enter>
+
+
+
+== More Tips ==
+
+http://rayninfo.co.uk/vimtips.html
 
 
 

@@ -268,7 +268,9 @@ nnoremap  <silent> <C-V> :call <SID>ToggleMaximizeVertically()<Enter>
 if "$_system_name" == 'OSX' && "$TERM" == 'xterm'
   " In XQuartz on Mac, Backspace sends <C-H> so we shouldn't remap it!
   " We may be able to retain this keybind in future if we can pass <BS> differently.
-  " An alternative check might be to examine &t_kb (what is this on Linux?)
+  " An alternative check might be to examine t_kb.
+  " On Linux terminal t_kb=^?  In GVim it does not exist.
+  " What is it on Mac?
 else
   nnoremap  <silent> <C-H> :call <SID>ToggleMaximizeHorizontally()<Enter>
 endif
@@ -277,8 +279,10 @@ endif
 "inoremap <silent> <C-V> <Esc>:call <SID>ToggleMaximizeVertically()<Enter>a
 "inoremap <silent> <C-H> <Esc>:call <SID>ToggleMaximizeHorizontally()<Enter>a
 " Oh dear, I finally found the value of blockwise visual mode, but now I can't
-" access it!  0<C-V> still invokes our mapping.  One workaround is simply to
+" access it!  Even 0<C-V> still invokes our mapping.  One workaround is simply to
 " `nunmap <C-V>`!
+" Let's expose some alternative keybinds so <C-V> it can be reached again:
+nnoremap <Leader><C-V> <C-V>
 
 "" Does not work:
 "nnoremap <silent> <C-Enter> :call <SID>ToggleMaximize()<Enter>

@@ -13,6 +13,12 @@ iab \f function) {<CR>}<Up><End><Left><Left><Left>
 " but still...
 inoremap <buffer> {<CR> {<CR><CR>}<Up><Esc>cc
 
+" Grabs the highlighted expression and logs it
+vnoremap <buffer> <Leader>log yoconsole.log("<C-R>":", <C-R>");<Esc>
+" viW is *sometimes* preferable, e.g. to catch 'obj.prop[i]' but more often than not it grabs too much, e.g. it catches 'obj.prop[i]);'
+nmap <buffer> <Leader>log viw<Leader>log
+nmap <buffer> <Leader>Log viW<Leader>log
+
 
 
 " CheckNotCoffee - If the user opens a Javascript file which was generated
@@ -48,4 +54,39 @@ function! s:CheckNotCoffee()
 endfunction
 
 call s:CheckNotCoffee()
+
+" If the user has no custom mapping for gF, let gF find required JS files
+" Adapted from my jade.vim magic gF
+" Should be refactored so that various filetypes can configure it for their needs.
+" NOTE: Vim already supports special seeking behaviour for gf.  See :h gf
+if maparg("gF", 'n') == ''
+  nnoremap <buffer> gF :call <SID>LoadNodeModule()<CR>
+endif
+function! s:SeekFile(folders, extensions, fname)
+  for folder in a:folders
+    for ext in a:extensions
+      let fname = folder . "/" . a:fname . ext
+      if filereadable(fname)
+        return fname
+      endif
+    endfor
+  endfor
+endfunction
+function! s:LoadNodeModule()
+  let cfile = expand("<cfile>")
+  let fname = cfile
+  if !filereadable(fname)
+    let fname = s:SeekFile([expand("%:h"), '.', './node_modules'], ['', '.js'], fname)
+  endif
+  if filereadable(fname)
+    let fname = simplify(fname)
+    "exec "edit ".fname
+    call feedkeys(":edit ".fname."\n")
+    " Using feedkeys prevents this function from being blamed if any errors/warnings occur!
+  else
+    " Both of these show "error in function" :P
+    normal! gF
+    "echoerr "Can't find file ".cfile." in path"
+  endif
+endfunction
 

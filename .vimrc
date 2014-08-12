@@ -5,27 +5,55 @@
 
 "" Update ctags tags file whenever we save a buffer.
 "" To get started,  :!touch tags  then  :w
-"" I need this for Ctrl-] to work when I have e.g. added new *mapping* tag to
-"" e.g. RepeatLast.vim
+"" Needed for Ctrl-] to work after adding new code.
+"" The super-simple version:
 " autocmd BufWritePost,FileWritePost *.* :!ctags -a %
-"" Only if a writeable tags file exists here:
-" autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | exec "!ctags -a %" | endif
-autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | echo "Updating tags..." | endif | silent exec '!ctags -a "%:p"' | endif
-"" ISSUE: When we used "%" above, it would generate tag entries for filename, ./filename and /full/path/to/filename, depending on the path we used when we opened the file.  Now using "%:p" to reduce this, but there still may be confusion when generating tags for a symlinked folder.
-"" Recommendation: When *manually* running ctags, use the realpath.  E.g.: ctags "`realpath .`"/*.cpp
-"" We could, iff &ch>1, do it non-silent, or use: echo "Updating tags..." |
+" autocmd BufWritePost,FileWritePost *.* if filewritable("tags")==1 | if &ch>1 | echo "Updating tags..." | endif | silent exec '!ctags -a "%:p" 2> >(grep -v "^ctags: Warning: ignoring null tag")' | endif
+function! AutoUpdateCTags()
+	if filewritable("tags")==1
+		if &ch>1
+			echo "Updating tags..."
+		endif
+		" We want to normalize the filename, but absolute path (%:p) is too long
+		" If the file was opened with a leading './' we remove it.
+		" We can also remove the current working directory from the path, if we want to.
+		" When manually running ctags, you should be sure to create filenames with the same path, or we will see duplicates in the tag file.
+		let filename = expand('%')
+		let filename = substitute(filename, '^./',     '', '')
+		"let filename = substitute(filename, getcwd().'/', '', '')
+		silent exec '!ctags -a ' . shellescape(filename) . ' 2> >(grep -v "^ctags: Warning: ignoring null tag")'
+	endif
+endfunction
+augroup AutoUpdateCTags
+	autocmd!
+	autocmd BufWritePost,FileWritePost *.* call AutoUpdateCTags()
+augroup END
 "" TODO: Update ../tags or ../../tags or ../../../tags if it exists.  Could cache it in b:my_nearest_tagsfile.
+""       In that case, the path normalization above should be done relative to the folder containing that tags file, not cwd.
 
 "" Vim 7.3 started making `w` jump over '.'s in a variety of languages, which I do not want.
 autocmd BufReadPost * setlocal iskeyword-=.
 " However I have come to accept that I do need '-' to be part of a word when dealing with CSS classes.
-autocmd BufReadPost *.{css,html,js,erb} setlocal iskeyword+=-
+autocmd BufReadPost *.{css,html,js,erb,jade,blade} setlocal iskeyword+=-
 
 " At some point undo started working through file-reads.  Given that, I am happier to load changed files automatically.  (Especially useful when peforming git checkout!)
 if v:version >= 703
-	set autoread
+	setglobal autoread
 endif
 " Also mildly related, Vim now has persistent_undo feature, which can be enabled by setting 'undofile'
+
+" This makes it possible to leave Insert mode more quickly when pressing Escape.
+" Although it may mess with other plugins that use timeoutlen.
+" A better solution might be to get more familiar with my Esc shortcut on £ (Shift-3), although that isn't an option on US keyboards.
+" Another keybind that some people like to use for <Esc> is <Ctrl-[>.  In fact that works by default!
+if ! has('gui_running')
+    set ttimeoutlen=10
+    augroup FastEscape
+        autocmd!
+        au InsertEnter * set timeoutlen=0
+        au InsertLeave * set timeoutlen=1000
+    augroup END
+endif
 
 
 
@@ -44,7 +72,8 @@ autocmd VimLeave * silent !stty ixon
 	let g:miniBufExplorerMoreThanOne = 0
 	" let g:miniBufExplMaxHeight = 6
 	" let g:miniBufExplMapWindowNavVim = 1
-	let g:miniBufExplMapWindowNavArrows = 1  " or use version in joeykeymap.vim
+	" Disabled because they use noremap which breaks navigation_enhancer.vim
+	"let g:miniBufExplMapWindowNavArrows = 1  " Use versions in joeykeymap.vim instead.
 	let g:miniBufExplUseSingleClick = 1
 	" let g:miniBufExplShowUnlistedBuffers = 0
 	" let g:miniBufExplShowOtherBuffers = 1
@@ -91,7 +120,8 @@ autocmd VimLeave * silent !stty ixon
 		"
 		" v:variable
 		" p:property;a:assigned
-		let tlist_javascript_settings = 'javascript;c:class;f:function;e:export;r:route'
+		" m:method       <-- It catches these itself, but they often show up as functions anyway.
+		let tlist_javascript_settings = 'javascript;c:class;M:classmethod;f:function;e:export;r:route'
 		" v:variable
 		" p:property;a:assigned
 		let tlist_coffee_settings = 'coffee;c:class;f:function;e:export'
@@ -151,6 +181,8 @@ autocmd VimLeave * silent !stty ixon
 	" However this works fine there!
 	let g:Grep_Default_Filelist .= " --exclude-dir=./public/assets"   " Precompiled assets (e.g. images)
 	" Of course 'public' or 'assets' on its own should work fine, but we don't want that!
+	" For UL:
+	let g:Grep_Default_Filelist .= " --exclude-dir=deploy_TMP"
 
 	let g:ConqueTerm_Color = 1
 	" let g:ConqueTerm_CloseOnEnd = 1
@@ -192,9 +224,11 @@ autocmd VimLeave * silent !stty ixon
 	"nmap <C-a> :AsyncFinder<Enter>
 	" I usually have RepeatLast enabled.  If so, this works much better:
 	"nmap <C-a> q:AsyncFinder<Enter>
+	" Or the following is smart enough to decide for us.  BUG: The `normal q` part fails on an empty buffer with error: "E749: empty buffer"
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
-	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','pikto','./public/assets']"
+	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets','deploy_TMP']"
+	",'pikto'
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
 
@@ -348,6 +382,13 @@ autocmd VimLeave * silent !stty ixon
 			"" Now I have stopped using lightdm, all my fonts are appearing differently.  Lucida looks how I want it in GVim yay!
 			:set guifont=Lucida\ Console\ 8
 		endif
+		"" If I want to go smaller than Lucida 8...
+		"" Droid Sans Mono can go very small; it is rather fuzzy, but it is even smaller than Clean!
+		" :set guifont=Droid\ Sans\ Mono\ 6
+		"" If I screen fonts are available, there is "Schumacher Clean", which is the same height as Lucida Console 8, but narrower:
+		" :set guifont=Clean\ 8
+		"" Also with screen fonts, you have the option of using LucidaTypewriter, like Console but with sharp edges.  The only problem is that at size 8 its bold is weak: the chars are very slightly wider but no thicker.  At size 10 it is quite passable.
+		" :set guifont=LucidaTypewriter\ Medium\ 8
 		" TODO for Mac:
 		if $_system_name == 'OSX'
 			" Popular, aspect like DejaVu Sans Mono / Liberation / Ubuntu Mono
@@ -395,13 +436,21 @@ autocmd VimLeave * silent !stty ixon
 	" I find groups of windows clearer/easier to navigate when they squash up.
 	set winminheight=0
 
-	set formatoptions+=n            " Better indent numbered lists in comments
-	set formatoptions+=l            " Don't wrap lines that were already long
-	" +j only joined formatoptions in version 7.3.541.  On yas I have vim-gtk=2:7.3.429-2ubuntu2.1
-	" On both my machines, vim reports version as 703.
-	"if v:version >= 703 && has('patch_FILL_THIS_IN_FROM_:h_has-patch')
-		"set formatoptions+=j            " Remove comment leaders when joining
-	"end
+	" formatoptions is local to buffer, and some builtin scripts (e.g. vim.vim) override any options we set here, so we set them on BufReadPost instead.
+	" +j only joined formatoptions in version 7.3.541.  v:version is not fine-grained enough to detect it.  We avoid potential errors in earlier versions of Vim by wrapping in try-catch.
+	" Although +=nl worked, for some reason -=ct did not, so I split them up into separate lines.
+	au BufReadPost * set formatoptions+=n   " Better indent numbered lists in comments
+	au BufReadPost * set formatoptions+=l   " Don't wrap lines that were already long
+	au BufReadPost * set formatoptions-=c   " Don't auto-wrap comments
+	au BufReadPost * set formatoptions-=t   " Don't auto-wrap in general
+	" BUG: This was breaking joeyhighlight!
+	"au BufReadPost * try | set formatoptions+=j | catch e | endtry
+	" Workaround: Try it now; if it works then setup the autocmd
+	try
+		set formatoptions+=j
+		au BufReadPost * set formatoptions+=j
+	catch e
+	endtry
 
 	" To show the margin column
 	"if v:version >= 703
@@ -417,11 +466,11 @@ autocmd VimLeave * silent !stty ixon
 	au BufRead,BufNewFile {/usr/share/X11/xkb/*} set ft=c
 	au BufRead,BufNewFile {*.md}                 set ft=markdown
 
-	"" I need to update some of my highlights for 256 color mode, so I'm not
-	"" using it at the moment.
-	" if $TERM != "linux" && $TERM != "screen"
-		" set t_Co=256
-	" end
+	"" I need to update some of my highlights for 256 color mode, so I'm not using it at the moment.
+	"" Re-enabled for dim_inactive_windows
+	if $TERM != "linux" && $TERM != "screen"
+		set t_Co=256
+	end
 
 	"" Recognise Node stack-traces:
 	"" Basic:
@@ -464,6 +513,9 @@ autocmd VimLeave * silent !stty ixon
 		let &t_SI = "\<Esc>]12;#44ff77\x7"  " Insert Mode = Aqua
 	endif
 
+	" When opening a file (e.g. from the quicklist), if the file exists in a window already, jump to that window.
+	set switchbuf+=useopen
+	" You can get quickfix actions on various keys using https://github.com/mileszs/ack.vim#keyboard-shortcuts or https://github.com/yssl/QFEnter
 
 " }}}
 
@@ -505,7 +557,7 @@ autocmd VimLeave * silent !stty ixon
 
 
 
-" >>> Custom Plugin Loader (a fix for me) {{{
+" >>> Custom Plugin Loader (ignore scripts in CVS folders) {{{
 
 	" Plugins
 	" CVS leaves old versions in ~/.vim/plugins/CVS/Base/*.vim
@@ -529,7 +581,7 @@ autocmd VimLeave * silent !stty ixon
 
 " >>> Addons (the neat way) {{{
 
-	"" TODO: All these plugins reduce vim's startup time.
+	"" TODO: All these plugins increase vim's startup time.
 	"" This is not just about Vim processing the scripts, a significant cost is the traversal of all the filesystem folders for the following plugins.  (To demonstrate this, try opening vim twice in a row - only the first time is slow!)
 	"" Tactics:
 	"" - Separate into essential and optional plugins.  On very slow machines, only load the former.
@@ -540,13 +592,14 @@ autocmd VimLeave * silent !stty ixon
 	"" Note that this is NOT Debian's vim-addon-manager package!  Nor is it pathogen.
 	"" I build the list, rather than declare it, so lines can be easily added/removed.
 	let vamAddons = []
+
 	" call add(vamAddons,"vim-haxe")                       " Haxe syntax
 	" call add(vamAddons,'github:jdonaldson/vim-haxe')     " Haxe syntax
 	call add(vamAddons,'github:jdonaldson/vaxe')           " Haxe syntax (preferred)
 	" call add(vamAddons,'github:derekwyatt/vim-scala')      " Scala syntax and more
 	" call add(vamAddons,'/stuff/joey/projects/scala/scala-dist-vim') " Older but does not load this way!
 	call add(vamAddons,'github:mbbill/undotree')           " Allows you to view undos.  I need a newer Vim for this!
-	call add(vamAddons,'github:majutsushi/tagbar')         " Nests tags in some languages.  Don't actually try using this with custom .ctags settings.  It will explode until you have configured it correctly.
+	"call add(vamAddons,'github:majutsushi/tagbar')         " Nests tags in some languages.  Don't actually try using this with custom .ctags settings.  It will explode until you have configured it correctly.
 	" call add(vamAddons,"VOoM")                           " Another outliner
 	" call add(vamAddons,'github:xolox/vim-easytags')      " Runs ctags automatic for you, to update them
 	"call add(vamAddons,'github:ervandew/supertab')         " Seems a lot like another_tabcompletion.vim but the list appears backwards! =/
@@ -588,6 +641,79 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
 	"let g:vim_markdown_folding_disabled=1
 	call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
+	" This will start a new browser window for realtime markdown preview: https://github.com/vim-scripts/instant-markdown.vim
+	"call add(vamAddons,"github:dahu/bisectly")            " Wow!  A useful and light-hearted way to track down a bug to a specific plugin
+	call add(vamAddons,"unimpaired")                      " Various next/previous keybinds on ]<key> and [<key>
+	call add(vamAddons,"github:tristen/vim-sparkup")      " Expand Zen/Jade snippets into HTML
+	let g:sparkupExecuteMapping = '<C-]>'
+	let g:sparkupMappingInsertModeOnly = 1
+
+	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
+	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g,"
+	let g:repmo_key = ";"
+	let g:repmo_revkey = ","
+
+	" Here is a minimal alternative to EasyMotion: https://github.com/vim-scripts/PreciseJump
+	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
+	call add(vamAddons,"github:joeytwiddle/vim-easymotion") " My dev copy
+	"map <Leader><Leader>l <Plug>(easymotion-lineforward)
+	"map <Leader><Leader>j <Plug>(easymotion-j)
+	"map <Leader><Leader>k <Plug>(easymotion-k)
+	"map <Leader><Leader>h <Plug>(easymotion-linebackward)
+	let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
+	" These work fine with map but I only really want them in normal and visual modes
+	" Although we could apply them in operator-pending mode.  The problem is when the user does `dt;` or `ct;` then there is a flash pause before the chars are deleted, which does not feel/look responsive to the user.  Ideally we would remove the chars before flashing (perhaps easier for `d` than for `c`.)
+
+	let force_remap_of_semicolon_and_comma = 1
+
+	if !force_remap_of_semicolon_and_comma
+		map ; <Plug>(easymotion-next-in-dir)
+		map , <Plug>(easymotion-prev-in-dir)
+		nmap f <Plug>(easymotion-flash-f)
+		nmap F <Plug>(easymotion-flash-F)
+		nmap t <Plug>(easymotion-flash-t)
+		nmap T <Plug>(easymotion-flash-T)
+		vmap f <Plug>(easymotion-flash-f)
+		vmap F <Plug>(easymotion-flash-F)
+		vmap t <Plug>(easymotion-flash-t)
+		vmap T <Plug>(easymotion-flash-T)
+	else
+		" Repmo remaps `;` and `,`.  That is a feature.
+		" But when I use `f` and friends, I want to remap them back to easymotion!
+		nmap <silent> <Plug>(remap-semicolon-and-comma) :map ; <Plug>(easymotion-next-in-dir)<CR>:map , <Plug>(easymotion-prev-in-dir)<CR>
+		nmap <silent> f <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-f)
+		nmap <silent> F <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-F)
+		nmap <silent> t <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-t)
+		nmap <silent> T <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-T)
+		vmap <silent> f <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-f)
+		vmap <silent> F <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-F)
+		vmap <silent> t <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-t)
+		vmap <silent> T <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-T)
+	endif
+
+	"map ; <Plug>(easymotion-flash-next-in-dir)
+	"map , <Plug>(easymotion-flash-prev-in-dir)
+	"map n <Plug>(easymotion-n)
+	"map N <Plug>(easymotion-N)
+	map n <Plug>(easymotion-flash-n)
+	map N <Plug>(easymotion-flash-N)
+	" I am happy using Vim's default / but EasyMotion has one too.  (It only searches the screen though, and there is no equivalent ?)
+	"map  / <Plug>(easymotion-flash-sn)
+	"omap / <Plug>(easymotion-flash-tn)
+	" When I must type two chars, I want it to be clear which is the first one I must type!
+	" This is useful when using (easymotion-jumptoanywhere)
+	highlight EasyMotionTarget        cterm=bold ctermbg=0 ctermfg=green  gui=bold guifg=green
+	highlight EasyMotionTarget2First  cterm=bold ctermbg=0 ctermfg=yellow gui=bold guifg=yellow
+	highlight EasyMotionTarget2Second cterm=bold ctermbg=0 ctermfg=blue   gui=bold guifg=blue
+	" The default green move highlight made it hard to see where my cursor was.  Something darker contrasts better.
+	highlight EasyMotionMoveHL  ctermbg=darkblue guibg=darkblue
+	let g:EasyMotion_keys = 'asdfghjklqwertyuiopzxcvbnm;'
+	"let g:EasyMotion_keys = 'asdfghjkl;'
+	"let g:EasyMotion_do_shade = 1             " Without this I confuse yellow/green syntax with yellow/green targets
+	"let g:EasyMotion_do_shade_for_flash = 0   " But it's too slow and disruptive when we are just flashing
+	"let g:EasyMotion_move_highlight = 0
+	"let g:EasyMotion_landing_highlight = g:EasyMotion_move_highlight
+	let g:EasyMotion_flash_time_ms = 500
 
 	"call add(vamAddons,"github:Raimondi/delimitMate")     " Mirrors (s and 's for you, but doesn't mind if you type over them.  I still had occasional issues with this (e.g. adding "s inside "s, deleting back over an end ").  But the worst issue was that things became unrepeatable with '.'.  (ysiw' repeats but inserting code with 's does not.)
 	let g:delimitMate_matchpairs = "(:),[:]"
@@ -600,20 +726,131 @@ autocmd VimLeave * silent !stty ixon
 	" Issues: When adding a comment in Vim, DLM thinks I am adding a String.  When adding a " at the start of a line, DLM should not pair it.
 	" Issues: Weird things happen when building up a String like "text "+var+" text".  I sometimes end up with  " " at the end of the line!
 
+	"call add(vamAddons,"github:felixr/vim-multiedit")      " Edit multiple selections live (mark words with ,w then edit all with ,i or ,a)
+	"call add(vamAddons,"github:hlissner/vim-multiedit")    " Edit multiple selections v2 (mark words with \mm then edit all with \M or \C) - but this was not doing live updates for me
+	"call add(vamAddons,"github:vim-scripts/vim-multiedit") " Older clone of hlissner's
+	call add(vamAddons,"github:osyo-manga/vim-over")       " Specifically just for previewing search/replace - works well.
+
+	""call add(vamAddons,"github:terryma/vim-multiple-cursors")    " Looks promising
+	""call add(vamAddons,"github:kris89/vim-multiple-cursors")     " More recently maintained
+	""call add(vamAddons,"github:jrhorn424/vim-multiple-cursors")  " Even more recently maintained!
+	""call add(vamAddons,"github:joeytwiddle/vim-multiple-cursors") " My version attempts to avoid losing keystrokes
+	"call add(vamAddons,"github:eapache/vim-multiple-cursors")    " Doing some nice work on it
+	"let g:multi_cursor_start_key='<F2>'
+	"nnoremap \\r :exec 'MultipleCursorsFind \<'.expand("<cword>").'\>'v
+	" Note: multiple-cursors appears to conflict with many of my plugins.  But it appears to work if I do the following:
+	"   1. move my .vim/ folder away (May not be needed.)
+	"   2. do not load all of the plugins below (airline.vim grep.vim taglist.vim zoom.vim and sexyscroller.vim)
+	"   3. also remove everything in this file above the line let vamAddons = []
+	" It would be nice to further track down which of those plugins are actually conflicting.
+
 	"call add(vamAddons,"github:mhinz/vim-startify")       " Session manager and MRU, on start page or on demand
 
 	"call add(vamAddons, "github:koron/nyancat-vim")       " You might need this, but you probably won't
 
-	" == My Plugins from the Cloud ==
-	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
+	"call add(vamAddons, "github:scrooloose/syntastic")    " Checks syntax as you are working.  Needs syntax checker for revelant language to be installed separately: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
+
+	" https://github.com/bling/vim-airline
+	"call add(vamAddons, "github:bling/vim-airline")        " Cool statusline
+	let g:airline_section_b = "[%{airline#util#wrap(airline#extensions#branch#get_head(),0)}]"
+	"let g:airline_section_x = "(%{airline#util#wrap(airline#parts#filetype(),0)})"
+	let g:airline_section_z = "%{GetSearchStatus()}%3P (%02c%{g:airline_symbols.linenr}%#__accent_bold#%l%#__restore__#) \#%02B"
+	let g:airline_left_sep  = "⡿⠋"
+	"let g:airline_right_sep = "⠙⢿"
+	"let g:airline_left_sep  = "⣷⣄"
+	let g:airline_right_sep = "⣠⣾"
+	"let g:airline_left_sep  = "║"
+	"let g:airline_left_sep  = "𝄛"
+	"let g:airline_left_sep  = "◆"
+	"let g:airline_left_sep  = "╳"
+	"let g:airline_left_sep  = "▶"
+	"let g:airline_right_sep = "◀"
+	"let g:airline_left_sep  = "╱"
+	"let g:airline_right_sep = "╲"
+	"let g:airline_left_sep  = "◤"
+	"let g:airline_right_sep = "◥"
+	"let g:airline_left_sep  = ""
+	"let g:airline_right_sep = ""
+	"let g:airline_powerline_fonts = 1
+	"set noshowmode
+	"let g:airline#extensions#tabline#enabled = 1    # alernative to MBE - uses vim's built-in 'tabline'
+	let s:joeys_airline_theme_file = $HOME . "/.vim/autoload/airline/themes/joeys.vim"
+	if filereadable(s:joeys_airline_theme_file)
+		let g:airline_theme="joeys"
+	endif
+	" TODO: Airline whitespace option slows down Vim on large files, between every keystroke!  We should ensure it is never automatically enabled when we open a large file.
+
+	"call add(vamAddons, "github:Shougo/vimproc.vim")       " Used by unite for async; requires `make` after install!
+	call add(vamAddons, "github:Shougo/unite.vim")         " Buffer and file explorer, all in one plugin
+	let g:unite_source_history_yank_enable = 1
+	nnoremap <silent> <Leader>u* :Unite source<CR>A*
+	nnoremap <silent> <Leader>uu :Unite<CR>A*
+	nnoremap <silent> <Leader>ub :Unite buffer<CR>A
+	nnoremap <silent> <Leader>uf :Unite file_point file file/new<CR>A
+	nnoremap <silent> <Leader>ua :Unite file_point file_rec file/new<CR>A
+	"nnoremap <silent> <Leader>ua :Unite find<CR>A   " Requires vimproc
+	nnoremap <silent> <Leader>ug :Unite file_rec/git<CR>A
+	nnoremap <silent> <Leader>ud :Unite directory directory/new<CR>A
+	nnoremap <silent> <Leader>uj :<C-u>Unite -buffer-name=jumps change jump<CR>A
+	nnoremap <silent> <Leader>uc :Unite command<CR>A
+	nnoremap <silent> <Leader>ul :Unite line<CR>A
+	nnoremap <silent> <Leader>up :Unite process<CR>A
+	nnoremap <silent> <Leader>ur :Unite runtimepath<CR>A
+	nnoremap <silent> <Leader>us :Unite runtimepath<CR>A
+	nnoremap <silent> <Leader>uh :Unite history/yank register<CR>A
+	nnoremap <silent> <Leader>uy :Unite history/yank<CR>A
+	nnoremap <silent> <Leader>ue :Unite launcher<CR>A
+	nnoremap <silent> <Leader>uH :Unite output:highlight<CR>A
+	nnoremap <silent> <Leader>uS :Unite output:syntax<CR>A
+	nnoremap <silent> <Leader>uM :Unite output:mapping<CR>A
+	nnoremap <silent> <Leader>uA :Unite output:autocmd<CR>A
+	"nnoremap <silent> <Leader>uF :Unite output:function<CR>A   " more colorful than function but does not offer 'call' action
+	nnoremap <silent> <Leader>uF :Unite function<CR>A
+	" We cannot do these until after it has loaded!
+	"call unite#filters#matcher_default#use(['matcher_fuzzy'])
+	"call unite#custom#profile('default', 'context', { 'winheight': 50, })
+	" These are the settings the guy who had the bug used (and the two above):
+	"let g:unite_enable_ignore_case         = 1
+	"let g:unite_enable_smart_case          = 1
+	"let g:unite_enable_start_insert        = 1
+	"let g:unite_source_history_yank_enable = 1
+	"let g:unite_winheight                  = 10
+	"let g:unite_split_rule                 = 'botright'
+	"let g:unite_cursor_line_highlight      = 'Statusline'
+	"let g:unite_prompt                     = '➤ '
+	"let g:unite_data_directory             = $HOME.'/tmp/unite'
+
+	call add(vamAddons,"github:ap/vim-css-color")        " Colour backgrounds of color codes in CSS files
+
+	" Some colorschemes:
+	call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
+	"call add(vamAddons,"github:shawncplus/skittles_berry") " Cute and colorful
+	" Originally for Text Mate, monokai/molokai is the default theme for Sublime Text
+	call add(vamAddons,"github:sickill/vim-monokai")     " Forces t_Co=256, appears more faithful to Sublime
+	"call add(vamAddons,"github:tomasr/molokai")          " Supports 256 colors when available, less faithful to Sublime
+	"let g:molokai_original = 0                           " Makes some changes, but does not help much.
+	call add(vamAddons,"github:29decibel/codeschool-vim-theme") " Clear, clean pastels
+	"call add(vamAddons,"github:Lokaltog/vim-distinguished") " Understated, a bit more earthy/dirty compared to codeschool
+	"call add(vamAddons,"github:flazz/vim-colorschemes")  " A large collection, includes codeschool
+	"call add(vamAddons,"github:rodnaph/vim-color-schemes") " A collection, includes leo
+	                                                        " leo is based on primary colors; it is a bit strong.  version 1 .0 here: http://www.vim.org/scripts/script.php?script_id=2156
+	" Multi-target (editors) color scheme generator: https://github.com/daylerees/colour-schemes
+
+	" >>> My Plugins from the Cloud (modified versions of other plugins) {{{
+	call add(vamAddons,"github:joeytwiddle/grep.vim")    " With support for csearch and SetQuickfixTitle.
 	call add(vamAddons,"github:joeytwiddle/taglist.vim") " Joey's taglist.vim with vague indentation mode and other madness
 	call add(vamAddons,"github:joeytwiddle/zoom.vim")    " Change font size easily
-	call add(vamAddons,"github:joeytwiddle/sexy_scroller.vim")   " Smooth animation when scrolling
-	call add(vamAddons,"github:joeytwiddle/vim-seek")    " Adding multi-line support
+	"call add(vamAddons,"github:joeytwiddle/vim-seek")    " Two char search (I added multi-line support).  But I never use it; prefer EasyMotion.
 	let g:seek_multi_line = 1
 	let g:SeekKey = 'l'
 	let g:SeekBackKey = 'L'
 	let g:seek_subst_disable = 1
+	" }}}
+
+	" >>> My Plugins from the Cloud (all by me!) {{{
+	call add(vamAddons,"github:joeytwiddle/sexy_scroller.vim")   " Smooth animation when scrolling
+	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
+	" }}}
 
 	if filereadable($HOME."/.vimrc.local")
 		source $HOME/.vimrc.local

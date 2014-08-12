@@ -8,8 +8,24 @@
 
 " OFF!
 "
-:set shm=atT
-:set statusline=%<%f\ %m%h%r%=\ [%2n]\ %P\ (%l,%c)%V\ \#%B%<
+
+" This is Joey's statusline and should be moved to his .vimrc
+set shm=atT
+set statusline=%<%f\ %#Error#%m%##%h%r%=\ %P\ (%0l/%-0L,%c~%v)\ \#%02B\ \|%0n\|%<
+" We highlight the modified flag to make it stand out.
+" I don't really want %m to show [-] when nomodifiable, but since it does, I highlight %h%r ("[Help][RO]") also, so that is clear why there is something highlighted.
+" OK fixed, now we show [+] and [-] in different places, so only [+] gets highlighted.
+"function! ModifiedStatus()
+"    return &modified ? "[+]" : ""
+"endfunction
+"let &statusline = substitute(&statusline, '%m', '%{ModifiedStatus()}', '')
+" %y for filetype
+let &statusline = substitute(&statusline, '%m', '%{ \&modified ? "[+]" : "" }', '')
+let &statusline = substitute(&statusline, '%h', '%{ \&modifiable ? "" : "[-]" }%h', '')
+if exists('*GetSearchStatus')
+    let &statusline = substitute(&statusline, '= ', '= %{GetSearchStatus()}', '')
+endif
+
 " Shows time:
 " :set rulerformat=%55(%{strftime('%a\ %b\ %e\ %I:%M\ %p')}\ %5l,%-6(%c%V%)\ %P%)
 " Previous:

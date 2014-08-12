@@ -3,8 +3,20 @@
 "
 " Thanks clipon and osse
 
+" TODO: If there are matches in multiple files, it might be nice to display the count (and filenames).
+"       Unfortunately `tselect` does not seem to offer us any line numbers.
+" TODO: We may need to trim the end of the output line if it is larger than screen_width*&ch, to avoid "Press Enter" messages.
+
 " I considered putting <Space> at the end of the RHS, but this causes e.g. 5<Space> to break.
 nnoremap <silent> <Space> <Space>:call <SID>ShowTagDecl()<CR>
+" BUG: 999<Space> will force sexyscroller to break out early
+
+" I put this feature on CursorHold now, to fix the error above.
+" However we may find it annoying (it might hide output from other more important plugins which also echo on CursorHold).
+"augroup ShowTagDecl
+"  autocmd!
+"  autocmd CursorHold * call s:ShowTagDecl()
+"augroup END
 
 function! s:ShowTagDecl()
   redir => output
