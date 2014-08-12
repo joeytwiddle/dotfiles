@@ -13,6 +13,8 @@
 "   and user hitting Escape.  FIXEDFORNOW: no BufExplorer fallback
 " Also, BufExplorer sometimes requires two presses of Ctrl-O to get out of it.
 
+let g:JBS_Show_Buffer_List_First = get(g:, "JBS_Show_Buffer_List_First", 1)
+
 command! JoeysBufferSwitch call JoeysBufferSwitch()
 " Disabled because I am using this for something else now:
 "nnoremap <Leader>e :JoeysBufferSwitch<Enter>
@@ -25,6 +27,10 @@ command! JoeysBufferSwitch call JoeysBufferSwitch()
 " nnoremap <Leader>f :Explore .<Enter>
 
 function! JoeysBufferSwitch()
+
+  if g:JBS_Show_Buffer_List_First
+    execute "ls"
+  endif
 
   try
     " We previously used "buffer" as the completion target, but now we have our own
@@ -85,7 +91,7 @@ function! JoeysBufferSwitch()
   " exactly one partial match in the open window list, we jump to the win when
   " we should really bring up the specific buffer.
   if len(foundWindows) == 1
-    echo "Switching to window ".foundWindows[0]
+    "echo "Switching to window ".foundWindows[0]
     exec foundWindows[0]."wincmd w"
     return
   endif
@@ -133,6 +139,8 @@ function! JoeysBufferSwitch()
     return
   endif
 
+  " It seems (unlike in bash) after input, despite the user having pressed Enter, the cursor is at the end of their String, not on a new line.
+  echo
   echo "".len(foundWindows)." matching windows"
   for wn in foundWindows
     echo "  <".wn."> ".bufname(winbufnr(wn))
@@ -157,13 +165,13 @@ function! CompleteBuffersAndFiles(ArgLead, CmdLine, CursorPos)
     endif
   endfor
 
-  let bufglob = a:ArgLead
+  let bufSearchExpr = '\V' . a:ArgLead
   let buffers = []
   let bufCount = bufnr('$')
   let i=0
   while i <= bufCount
     let bufName = bufname(i)
-    if bufexists(i) && buflisted(i) && match(bufName, bufglob) >= 0
+    if bufexists(i) && buflisted(i) && match(bufName, bufSearchExpr) >= 0
       call add(buffers, bufName)
     endif
     let i = i + 1
