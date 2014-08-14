@@ -5,16 +5,26 @@
 #   gs ga gd gc gb gco and gm are simple aliases for git status, add, diff,
 #   commit, branch, checkout and merge.  Use them to save yourself keystrokes.
 #
-# Useful tools (the really good stuff!):
+#   gll shows a log *overview*, with one commit per line, with graph layout.
 #
-#   gwinp "git what is not pushed" lists local commits not yet pushed.
+#   gl is my favourite *detailed* log display, showing diffs, stats and commit
+#      messages and graph.  Keys n and N jump forwards/backwards through diffs.
+#
+#   gmo does git merge origin/<current_branch>
+#
+#   gpo does git push origin <current_branch>
+#
+# Powerful tools:
+#
+#   gwinp "git what is not pushed" lists commits on local branch not yet pushed
 #
 #   gbs [-M] [.] is "git branch status", a nice way to see which branches are
-#   up-to-date with the remote (which need a push and which need a pull).
-#   Use `gbs .` to show status for the current branch only (faster).
+#       up-to-date with the remote (which need a push and which need a pull).
+#
+#       Use `gbs .` to show the status of the current branch only (faster).
 #
 #   gbd [-M] [-r] is "git branch by date", a nice way to see which branches
-#   were recently updated.  -r shows remote branches.
+#       were recently updated.  -r lists remote branches.
 #
 #   The -M argument to gbs and gbd is slower, but will display whether or not
 #   each branch has been merged into the current branch.  Cool!
@@ -22,26 +32,18 @@
 #   They will only align neatly into columns if you have jsh's columnise-clever
 #   installed.  Making that work independently is something I should TODO!
 #
-# And more shortcuts:
-#
-#   gll shows a log *overview*, with one commit per line.
-#
-#   gl is my favourite *detailed* log display, showing diffs, stats and commit
-#   messages.  Keys n and N jump forwards/backwards through diffs.
-#
-#   Both gl and gll show the graph.
+# Some more shortcuts:
 #
 #   gap and gcp let you select which chunks of code to stage or commit next
 #
 #   gdc shows the "cached" diff of what is staged (what you are about to commit).
 #
-#   gmo does git merge origin/<current_branch>
-#   gpo does git push origin/<current_branch>
+#   gdv and glv open diffs and logs in Vim, folded, for interactive browsing.
 #
 # I hope these shortcuts and tools will be of use to you.
 #
-# The other aliases and functions in this file I rarely use (except those which
-# are required by the aliases of course).
+# I rarely use the other aliases and functions in this file (except of course
+# indirectly those which are dependencies of the ones I do use!).
 #
 # Some of the functions (gbs, gbd) do not work on Mac OSX / FreeBSD because I
 # don't know how to get BSD sed to do search-replace.  However if you have
@@ -51,7 +53,7 @@
 # If you think this file has too many comments in it, try: :hi Comment guifg=#222222
 
 # TODO: Turn the aliases into shellscripts so they are available from vim's command line?
-#       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)
+#       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)  jsh modules...
 
 # If you happen to be using oh-my-zsh's git plugin, redefining its aliases will throw warnings, so we undefine them first.
 unalias gs 2>/dev/null
