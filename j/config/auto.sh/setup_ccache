@@ -1,1 +1,8 @@
 export PATH="/usr/lib/ccache:$PATH"
+
+# This causes tools like npm to use ccache's binary
+if which ccache >/dev/null
+then
+	export CC="ccache gcc"
+	export CXX="ccache g++"
+fi
