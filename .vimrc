@@ -644,9 +644,10 @@ autocmd VimLeave * silent !stty ixon
 	" This will start a new browser window for realtime markdown preview: https://github.com/vim-scripts/instant-markdown.vim
 	"call add(vamAddons,"github:dahu/bisectly")            " Wow!  A useful and light-hearted way to track down a bug to a specific plugin
 	call add(vamAddons,"unimpaired")                      " Various next/previous keybinds on ]<key> and [<key>
-	call add(vamAddons,"github:tristen/vim-sparkup")      " Expand Zen/Jade snippets into HTML
+	call add(vamAddons,"github:tristen/vim-sparkup")      " Expand Zen/Jade-like snippets into HTML
 	let g:sparkupExecuteMapping = '<C-]>'
 	let g:sparkupMappingInsertModeOnly = 1
+	call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
 
 	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
 	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g, <C-w>j|<C-w>k"
@@ -695,8 +696,8 @@ autocmd VimLeave * silent !stty ixon
 	"map , <Plug>(easymotion-flash-prev-in-dir)
 	"map n <Plug>(easymotion-n)
 	"map N <Plug>(easymotion-N)
-	map n <Plug>(easymotion-flash-n)
-	map N <Plug>(easymotion-flash-N)
+	"map n <Plug>(easymotion-flash-n)
+	"map N <Plug>(easymotion-flash-N)
 	" I am happy using Vim's default / but EasyMotion has one too.  (It only searches the screen though, and there is no equivalent ?)
 	"map  / <Plug>(easymotion-flash-sn)
 	"omap / <Plug>(easymotion-flash-tn)
