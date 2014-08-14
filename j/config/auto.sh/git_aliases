@@ -2,35 +2,41 @@
 #
 # Shortcuts:
 #
-#   gs ga gc gd gb gco and gm are simple aliases for git status, add, commit,
-#   diff, branch, checkout and merge.  Use them to save yourself keystrokes.
+#   gs ga gd gc gb gco and gm are simple aliases for git status, add, diff,
+#   commit, branch, checkout and merge.  Use them to save yourself keystrokes.
 #
 # Useful tools (the really good stuff!):
 #
+#   gwinp "git what is not pushed" lists local commits not yet pushed.
+#
 #   gbs [-M] [.] is "git branch status", a nice way to see which branches are
-#   up-to-date with the remote (which need a push, pull or merge).
+#   up-to-date with the remote (which need a push and which need a pull).
+#   Use `gbs .` to show status for the current branch only (faster).
 #
 #   gbd [-M] [-r] is "git branch by date", a nice way to see which branches
 #   were recently updated.  -r shows remote branches.
 #
-#   The -M argument to the above commands is slower, but will display whether
-#   or not each branch has been merged into the current branch.  Cool!
+#   The -M argument to gbs and gbd is slower, but will display whether or not
+#   each branch has been merged into the current branch.  Cool!
 #
 #   They will only align neatly into columns if you have jsh's columnise-clever
 #   installed.  Making that work independently is something I should TODO!
 #
 # And more shortcuts:
 #
-#   gdc shows the "cached" diff of what is staged (what you are about to commit).
-#
 #   gll shows a log *overview*, with one commit per line.
 #
 #   gl is my favourite *detailed* log display, showing diffs, stats and commit
-#   messages.  Keys n and N jump forwards/backwords through diffs.
+#   messages.  Keys n and N jump forwards/backwards through diffs.
 #
 #   Both gl and gll show the graph.
 #
-#   gcp lets you select which chunks of code to commit next
+#   gap and gcp let you select which chunks of code to stage or commit next
+#
+#   gdc shows the "cached" diff of what is staged (what you are about to commit).
+#
+#   gmo does git merge origin/<current_branch>
+#   gpo does git push origin/<current_branch>
 #
 # I hope these shortcuts and tools will be of use to you.
 #
@@ -47,31 +53,16 @@
 # TODO: Turn the aliases into shellscripts so they are available from vim's command line?
 #       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)
 
-# I had problems declaring functions whose name matched pre-existing aliases.  In my case this was when I was loading oh-my-zsh's git plugin before this script was sourced.
-# Details: The function name was getting expanded into the alias during the declaration, either causing the declaration to fail syntactically, or to successfully silently declare the function using a different name!
-# The behaviour I desired was to override his aliases with my own functions, but keep any of his aliases which did not conflict.
-# The most sensible way to avoid expansion is to declare functions explicitly using `function name()` but some older shells do not recognize the `function` syntax, and I would like to support them.
-# Another way to avoid expansion is to declare functions using `'name'()` instead of just `name()`.  This worked for zsh but not for bash.
-# So finally I had to specifically unalias any function names which I *know* may be alaised elsewhere.
-# This is all rather irrelevant now because I am no longer loading oh-my-zsh's git aliases.
+# If you happen to be using oh-my-zsh's git plugin, redefining its aliases will throw warnings, so we undefine them first.
 unalias gs 2>/dev/null
 unalias gd 2>/dev/null
 unalias gitlog 2>/dev/null
 unalias gac 2>/dev/null
 unalias gitwhatsup 2>/dev/null
-# Should I be doing this *everywhere* I declare a shell function in jsh, just in case an alias exists?!  No ... I just shouldn't load aliases I don't want!  :P
-# By the way, if you want to do the same for a function, this works for bash and zsh:
+# By the way, if you want to undefine a function instead of an alias, this works for bash and zsh:
 #   unset -f fn_name
 
 #alias gs='git status'
-#alias gs='gitstatus'
-#alias gs='if [ -t 1 ]; then gitstatus | more; else git status; fi'
-#function gs() {
-#	if [ -t 1 ]
-#	then gitstatus "$@" | more
-#	else git status "$@"
-#	fi
-#}
 gs() {
 	# Show color if not piping.  Skip to next section on 'n'.  Leave output on screen with -X (so user can copy paste).
 	# Using more instead of less because on short output, less fills the rest of the screen with '~'s (or ''s) we don't need.  Those lines are actually caused by the search.  git's default 'pager' will do the same iff the +/ is added.
@@ -427,6 +418,20 @@ alias gtpf='git topush'
 # Git To Push Details / Diff (a direct diff, without listing each commit)
 alias gtpd='gd FETCH_HEAD..HEAD'
 
+vim_for_git_logs() {
+	# Our mappings use z<CR> to scroll so the cursor is at the top of the window after n/N search
+	# I tried setting scrolljump=-99 and got a screen jump when going of the bottom, but only half when going off the top.
+	vim +'setlocal nomodified nomodifiable filetype=git foldmethod=syntax foldcolumn=2' \
+	    +'/^\(commit\|diff --git\) .*' \
+	    +'normal gg' \
+	    +'highlight clear Search' \
+	    +'set scrolloff=0' \
+	    +'nmap n nz<CR>' \
+	    +'nmap N Nz<CR>' \
+	    "$@"
+	    #+'set nohlsearch' \
+}
+
 # Git Log in Vim
 glv() {
 	local count=50
@@ -436,7 +441,12 @@ glv() {
 		shift
 		shift
 	fi
-	git log -p -n "$count" "$@" | vim -c 'setlocal nomodified nomodifiable foldmethod=syntax fdc=2' -
+	git log -p -n "$count" "$@" | vim_for_git_logs -
+}
+
+# Git Diff in Vim
+gdv() {
+	git diff | vim_for_git_logs -
 }
 
 # Git Merge Origin (this branch)
@@ -496,7 +506,7 @@ where:
     while getopts 'hamt:pdMv' option; do
       case "$option" in
         h) echo "$usage"
-           exit
+           return # exit
            ;;
         a) filter=refs/heads
            ;;
@@ -512,7 +522,7 @@ where:
            ;;
         ?) printf "illegal option: '%s'\n" "$OPTARG" >&2
            echo "$usage" >&2
-           exit 1
+           return # exit 1
            ;;
       esac
     done
