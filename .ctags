@@ -37,6 +37,9 @@
 --regex-javascript=/^DISABLED: \s*(\<[a-zA-Z_$][0-9a-zA-Z_$.]*\>)*\s*=\s*\<function\>/\1/f,function/
 --regex-javascript=/^(COMMENT: Express routes: (only if var app is used))/\1/X,XXX/
 --regex-javascript=/^\s*app\.(get|put|post|delete)\(\s*["']([^"']+)["']/\2 (\1)/r,route/
+--regex-javascript=/^(COMMENT: Meteor routes:)/\1/X,XXX/
+--regex-javascript=/^\s*this\.route\(\s*["']([^"']*)["']/\1/r,route/
+--regex-javascript=/^\s*Meteor.publish\(\s*["']([^"']*)["']/\1/u,publication/
 
 --langdef=opa
 --langmap=opa:+.opa
@@ -150,6 +153,6 @@
 --regex-Scala=/^\s*package\s*([a-zA-Z0-9_.]+$)/\1/p,package/
 
 --langmap=html:+.erb
---regex-html=/^\s*<template name=["']([^"']*)./\1/t,template/
+--regex-html=/^\s*<template\s+name=["']([^"']*)./\1/t,template/
 --regex-html=/^\<id=["']([^"']*)./\1/i,id/
 
