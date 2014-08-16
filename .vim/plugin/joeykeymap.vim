@@ -355,7 +355,7 @@ set wildmode=longest:full:list,full
 
 " When it's time to clear the search, avoid /skldjsdklfj<Enter> and just \/ or Ctrl-L
 " Also added :match to hide highlights from highlight_word_under_cursor.vim
-nnoremap <silent> <Leader>/      :nohlsearch<CR>:match<CR>
+"nnoremap <silent> <Leader>/      :nohlsearch<CR>:match<CR>
 nmap     <silent> <C-L>     <C-L>:nohlsearch<CR>:match<CR>
 "nnoremap <silent> <Leader>/ :nohlsearch<CR>:match<CR>:let @/='skj84ksdEKD93Od23423lfs'<CR>
 
@@ -521,7 +521,11 @@ nnoremap <C-w>x <C-w>x<C-w>w
 nnoremap <C-w>X <C-w>W<C-w>x
 " Note that these will not do as expected if a <count> is given.
 
-" Comment or uncomment visual selection on leader / or leader shift-/
+" Comment or uncomment on leader / or leader shift-/
+nmap <Leader>/ v<Leader>/
+nmap <D-/>     v<Leader>/
+nmap <Leader>? v<Leader>?
+nmap <D-?>     v<Leader>?
 " By default, comment is //
 vnoremap <Leader>/ :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
 vnoremap <D-/>     :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
