@@ -180,6 +180,8 @@ autocmd VimLeave * silent !stty ixon
 	"let g:Grep_Default_Filelist .= " --exclude-dir=public/assets"   " Precompiled assets (e.g. images)
 	" However this works fine there!
 	let g:Grep_Default_Filelist .= " --exclude-dir=./public/assets"   " Precompiled assets (e.g. images)
+	" This may need similar adjustment to the above:
+	let g:Grep_Default_Filelist .= " --exclude-dir=.meteor/local"   " Installed packages
 	" Of course 'public' or 'assets' on its own should work fine, but we don't want that!
 	" For UL:
 	let g:Grep_Default_Filelist .= " --exclude-dir=deploy_TMP"
@@ -227,7 +229,7 @@ autocmd VimLeave * silent !stty ixon
 	" Or the following is smart enough to decide for us.  BUG: The `normal q` part fails on an empty buffer with error: "E749: empty buffer"
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
-	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets','deploy_TMP']"
+	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets','.meteor/local','deploy_TMP']"
 	",'pikto'
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
@@ -269,7 +271,7 @@ autocmd VimLeave * silent !stty ixon
 
 	let g:NoSwapSuck_CheckSwapfileOnLoad = 0
 
-	let g:wrs_default_height_pct = 90
+	let g:wrs_default_height_pct = 99
 
 " }}}
 
@@ -649,8 +651,12 @@ autocmd VimLeave * silent !stty ixon
 	let g:sparkupMappingInsertModeOnly = 1
 	call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
 
+	" For Meteor development
+	call add(vamAddons,"github:mustache/vim-mustache-handlebars")
+	let g:mustache_abbreviations = 1
+
 	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
-	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g, <C-w>j|<C-w>k"
+	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g, <C-w>j|<C-w>k <C-w>w|<C-w>W"
 	let g:repmo_key = ";"
 	let g:repmo_revkey = ","
 
@@ -820,6 +826,9 @@ autocmd VimLeave * silent !stty ixon
 	"let g:unite_cursor_line_highlight      = 'Statusline'
 	"let g:unite_prompt                     = '➤ '
 	"let g:unite_data_directory             = $HOME.'/tmp/unite'
+	" WIP:
+	"au BufEnter unite imap <buffer> <Tab>   <Plug>(unite_loop_cursor_down)
+	"au BufEnter unite imap <buffer> <S-Tab> <Plug>(unite_loop_cursor_up)
 
 	call add(vamAddons,"github:ap/vim-css-color")        " Colour backgrounds of color codes in CSS files
 
