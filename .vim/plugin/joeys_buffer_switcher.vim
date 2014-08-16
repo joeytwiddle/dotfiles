@@ -29,7 +29,10 @@ command! JoeysBufferSwitch call JoeysBufferSwitch()
 function! JoeysBufferSwitch()
 
   if g:JBS_Show_Buffer_List_First
+    let more_was = &more
+    let &more = 0
     execute "ls"
+    let &more = more_was
   endif
 
   try
@@ -139,16 +142,20 @@ function! JoeysBufferSwitch()
     return
   endif
 
-  " It seems (unlike in bash) after input, despite the user having pressed Enter, the cursor is at the end of their String, not on a new line.
-  echo
-  echo "".len(foundWindows)." matching windows"
+  " The echoed text was appearing immediately after the text the user input; it refused to appear on the line below, even if we called an empty echo first.  But redraw solved that.
+  redraw
+  let more_was = &more
+  let &more = 0
+  endif
+  echo len(foundWindows).' windows match "'.searchStr.'"'
   for wn in foundWindows
     echo "  <".wn."> ".bufname(winbufnr(wn))
   endfor
-  echo "".len(foundBuffers)." matching buffers"
+  echo len(foundBuffers).' buffers match "'.searchStr.'"'
   for bn in foundBuffers
     echo "  (".bn.") ".bufname(bn)
   endfor
+  let &more = more_was
 
 endfunction
 
