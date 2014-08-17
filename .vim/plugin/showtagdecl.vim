@@ -29,10 +29,14 @@ function! s:ShowTagDecl()
     if match(line,'^        ') != -1
       redraw
       let prototype = substitute(line,'^ *','','')
-      "echo fname.": ".prototype
+      "let message = fname.": ".prototype
+      let message = prototype."   [".fname."]"
+      if len(message) >= &columns - 12
+        let message = strpart(message, 0, &columns - 12)
+      endif
       let oldRuler = &ruler
       let &ruler = 0
-      echo prototype."   [".fname."]"
+      echo message
       let &ruler = oldRuler
       return 0
     else
