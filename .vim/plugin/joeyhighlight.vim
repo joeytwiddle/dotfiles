@@ -108,6 +108,10 @@ function! Joeyhighlight()
 
 	" Used for tabs (listchars)
 	highlight SpecialKey ctermfg=darkblue cterm=none guifg=#2222aa gui=bold
+	if &t_Co >= 250
+		" Slightly darker
+		highlight SpecialKey ctermfg=19
+	endif
 	" Used to broken line indentation (showbreak)
 	highlight link NonText SpecialKey
 	" highlight NonText cterm=none gui=none
@@ -289,7 +293,8 @@ function! Joeyhighlight()
 	"" My terminal cursor flashes once (briefly disappears) when moving (possibly due to plugins and/or CursorHold events).
 	"" This leads me to seeing two magenta boxes, which confuses me about where my cursor is.
 	"" To reduce confusion, I would rather show no box, so let's highlight only the foreground, not the background:
-	hi MatchParen term=reverse cterm=none ctermfg=magenta guibg=#880088 guifg=#eeeeee
+	" hi MatchParen term=reverse cterm=none ctermbg=none ctermfg=magenta guibg=none guifg=#ff00ff
+	hi MatchParen term=reverse cterm=none ctermbg=darkblue ctermfg=magenta guibg=darkblue guifg=#ff00ff
 
 	" hi link Comma Function  ## cyan
 	" hi link Comma Keyword   ## yellow
