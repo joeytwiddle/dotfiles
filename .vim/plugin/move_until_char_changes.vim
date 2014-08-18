@@ -1,12 +1,12 @@
-" Keep moving in given direction until we reach a new character under the
-" cursor.  (Like Ctrl-Arrow in Excel.)  Bound to Ctrl-Shift-Up/Down for Vim.
+" Keep moving in given direction until we reach a different character.
+" Like Ctrl-Arrow in Excel, but bound to Ctrl-Shift-Up/Down here.
 "
 " I find this most useful for:
 "
 "   - Jumping to the top or bottom of an indented block based on column
 "     (especially the tops of blocks in Coffeescript/Python).
 "
-"   - Getting to the next file in grep output.
+"   - Getting to the next file in cope list (assuming different name).
 "
 "   - Generally getting past or out of large blocks of repetitive lines.
 
@@ -15,14 +15,21 @@ let g:move_skip_empty_lines = 1   " Never stop on an empty line (if also unifyin
 let g:move_unify_whitespace = 1   " Tab, space and empty-line are all considered the same.
 let g:move_once_at_start    = 1   " Don't stop on the very next line just because it has a different char from the current!
 
+" For Windows users:
 nnoremap <silent> <C-S-Up>   :call <SID>FindNextChangeNormal("k")<Enter>
 nnoremap <silent> <C-S-Down> :call <SID>FindNextChangeNormal("j")<Enter>
-" Attempt to work in Visual mode; failed:
 vnoremap <silent> <C-S-Up>   :call <SID>FindNextChangeVisual("k")<Enter>
 vnoremap <silent> <C-S-Down> :call <SID>FindNextChangeVisual("j")<Enter>
-" On Mac OSX, Mission Control hijacks these keys, so we create a couple more:
+" For Mac OSX users (Mission Control hijacks the keys above):
 nnoremap <silent> g<S-Up>    :call <SID>FindNextChangeNormal("k")<Enter>
 nnoremap <silent> g<S-Down>  :call <SID>FindNextChangeNormal("j")<Enter>
+vnoremap <silent> g<S-Up>    :call <SID>FindNextChangeVisual("k")<Enter>
+vnoremap <silent> g<S-Down>  :call <SID>FindNextChangeVisual("j")<Enter>
+" For Vim gurus (middle-row zen; move without moving):
+nnoremap <silent> gK         :call <SID>FindNextChangeNormal("k")<Enter>
+nnoremap <silent> gJ         :call <SID>FindNextChangeNormal("j")<Enter>
+vnoremap <silent> gK         :call <SID>FindNextChangeVisual("k")<Enter>
+vnoremap <silent> gJ         :call <SID>FindNextChangeVisual("j")<Enter>
 
 function! s:FindNextChangeNormal(moveKey) range
   call s:FindNextChange(a:moveKey, 0, 0, 0)
