@@ -68,6 +68,7 @@
 [group]  (workspace=[current])
  [app] (name=Navigator)
  [app] (name=google-chrome)
+ [app] (name=Google-chrome)
  [app] (name=x-www-browser)
  [app] (name=chromium-browser)
  [app] (name=chromium-browser.real)

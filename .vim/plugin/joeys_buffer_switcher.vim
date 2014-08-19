@@ -13,6 +13,8 @@
 "   and user hitting Escape.  FIXEDFORNOW: no BufExplorer fallback
 " Also, BufExplorer sometimes requires two presses of Ctrl-O to get out of it.
 
+let g:JBS_Show_Buffer_List_First = get(g:, "JBS_Show_Buffer_List_First", 1)
+
 command! JoeysBufferSwitch call JoeysBufferSwitch()
 " Disabled because I am using this for something else now:
 "nnoremap <Leader>e :JoeysBufferSwitch<Enter>
@@ -25,6 +27,13 @@ command! JoeysBufferSwitch call JoeysBufferSwitch()
 " nnoremap <Leader>f :Explore .<Enter>
 
 function! JoeysBufferSwitch()
+
+  if g:JBS_Show_Buffer_List_First
+    let more_was = &more
+    let &more = 0
+    execute "ls"
+    let &more = more_was
+  endif
 
   try
     " We previously used "buffer" as the completion target, but now we have our own
@@ -53,19 +62,23 @@ function! JoeysBufferSwitch()
 
   let searchExpr = '\V' . searchStr
 
-  "" TODO: If we can find a visible window displaying that buffer, switch to
-  "" the window instead of loading the buffer in the current window.
+  " DONE: If we can find a visible window displaying that buffer, switch to
+  " the window instead of loading the buffer in the current window.
 
   " TODO: Is there an exact matching buffer by string?  Done later...  But
   " shouldn't we try it first?  Exact buffer should really override partial
   " window match.  (e.g. foo.c.old is visible but we want to switch to foo.c)
 
-  " TODO: We get some weird buffers/windows when looping these lists, e.g.
+  " DONE: We get some weird buffers/windows when looping these lists, e.g.
   " previously closed buffers, duplicates, etc.  We probably want to filter
   " out some of them according to their properties.
 
+  " DONE: Exact matching should be a special var in each case.  We cannot rely
+  " on len==1 to be sure that is what wss found.
+
   " Search windows for partial match. Hopefully there is only 1 (unambiguous).
   let foundWindows = []
+  let foundExactWindow = -1
   let winCount = winnr('$')
   let i = 1
   while i <= winCount
@@ -73,7 +86,7 @@ function! JoeysBufferSwitch()
     " Exact match causes single response
     " We use resolve and expand so that /home/joey/.vimrc will match ~/.vimrc
     if resolve(expand(winName)) == resolve(expand(searchStr))
-      let foundWindows = [i]
+      let foundExactWindow = i
       break
     " Otherwise we collect partial matches
     elseif match(winName, searchExpr) >= 0
@@ -81,40 +94,51 @@ function! JoeysBufferSwitch()
     endif
     let i += 1
   endwhile
-  " BUG: If the user entered an exact buffer match, but this *happened* to hit
-  " exactly one partial match in the open window list, we jump to the win when
-  " we should really bring up the specific buffer.
-  if len(foundWindows) == 1
-    echo "Switching to window ".foundWindows[0]
-    exec foundWindows[0]."wincmd w"
-    return
-  endif
 
   " Search buffers for partial or exact match.
   let foundBuffers = []
+  let foundExactBuffer = -1
   let bufCount = bufnr('$')
   let i=0
   while i <= bufCount
     let bufName = bufname(i)
     " TODO: Some buffers need to be ignored e.g. if they are closed (no longer visible)
-    if bufName != ""
-      if match(bufName, searchExpr) >= 0
-        call add(foundBuffers, i)
-      endif
+    if bufexists(i) && buflisted(i) && bufName != ""
       " Special case: exact match means we return it as the only match!
       if bufName == searchStr
         "echo "Found exact match: ".i.": ".bufName
         " Does not work: sometimes it's a closed buffer, so :<i>b fails!
-        "let foundBuffers = [i]
-        "break
+        let foundExactBuffer = i
+        break
         " Opening by name seems safer:
-        exec ":b ".bufName
-        return
+        "exec ":b ".bufName
+        " But that occasionally fails with: E93: More than one match for ...
+        "exec ":".i."b"
+        "return
+      elseif match(bufName, searchExpr) >= 0
+        call add(foundBuffers, i)
       endif
     endif
     let i += 1
   endwhile
-  if len(foundBuffers) == 1
+
+  if foundExactWindow >= 0
+    "echo "Switching to window ".foundExactWindow
+    exec foundExactWindow."wincmd w"
+    return
+  endif
+  if foundExactBuffer >= 0
+    "echo "Loading buffer ".foundExactBuffer
+    exec foundExactBuffer."b"
+    return
+  endif
+
+  if len(foundWindows) == 1 && len(foundBuffers) <= 1
+    "echo "Switching to window ".foundWindows[0]
+    exec foundWindows[0]."wincmd w"
+    return
+  endif
+  if len(foundBuffers) == 1 && len(foundWindows) == 0
     "echo "Loading buffer ".foundBuffers[0]
     exec foundBuffers[0]."b"
     return
@@ -131,14 +155,20 @@ function! JoeysBufferSwitch()
     return
   endif
 
-  echo "".len(foundWindows)." matching windows"
+  " The echoed text was appearing immediately after the text the user input; it refused to appear on the line below, even if we called an empty echo first.  But redraw solved that.
+  redraw
+  let more_was = &more
+  let &more = 0
+  endif
+  echo len(foundWindows).' windows match "'.searchStr.'"'
   for wn in foundWindows
     echo "  <".wn."> ".bufname(winbufnr(wn))
   endfor
-  echo "".len(foundBuffers)." matching buffers"
+  echo len(foundBuffers).' buffers match "'.searchStr.'"'
   for bn in foundBuffers
     echo "  (".bn.") ".bufname(bn)
   endfor
+  let &more = more_was
 
 endfunction
 
@@ -155,22 +185,35 @@ function! CompleteBuffersAndFiles(ArgLead, CmdLine, CursorPos)
     endif
   endfor
 
-  let bufglob = a:ArgLead
+  let bufSearchExpr = '\V' . a:ArgLead
   let buffers = []
   let bufCount = bufnr('$')
   let i=0
   while i <= bufCount
     let bufName = bufname(i)
-    if match(bufName, bufglob) >= 0
+    if bufexists(i) && buflisted(i) && match(bufName, bufSearchExpr) >= 0
       call add(buffers, bufName)
     endif
     let i = i + 1
   endwhile
 
   call extend(files, buffers)
+
+  let files = s:ListWithoutDuplicates(files)
   return files
 endfunction
 
+function! s:ListWithoutDuplicates(list)
+  let seen = {}
+  let newlist = []
+  for i in range(len(a:list))
+    if !get(seen,a:list[i])
+      call add(newlist, a:list[i])
+      let seen[a:list[i]] = 1
+    endif
+  endfor
+  return newlist
+endfunction
 
 " An alternative from VimTips Wiki.
 

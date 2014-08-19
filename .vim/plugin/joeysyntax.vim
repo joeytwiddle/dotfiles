@@ -77,6 +77,7 @@ function! Joeysyntax()
 	"" BUG: Doesn't always work.  Works better now.  Wish I could say containedin=*  Err, they don't seem to be working at all, only "TODO" gets highlighted, and i suspect that's a script somewhere else doing it ^^
 	" :highlight! link jTodo Todo
 	" NOTE: these DO work, if you call :Joeysyntax after vim has started.
+	"       But not always.  Sometimes only if the text is outside a Comment (e.g. in Python).
 	:syntax keyword jTodo TODO Todo ToDo todo BUG BUGS WARN CONSIDER Consider NOTE TEST TESTING TOTEST Testing containedin=Comment,jShComment,jComment,shComment,ucComment,vimComment
 	" Well they don't appear to work in all languages.
 	" See also the shTodo rule I overrode in ~/.vim/after/syntax/sh.vim

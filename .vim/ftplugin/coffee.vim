@@ -29,12 +29,10 @@ let &comments=":##,".&comments
 "" Joey's coffee -> js autocompile on write
 "" Now with ShowJSChanges
 
-if !exists("g:coffeeAutoCompileAll")
-  let g:coffeeAutoCompileAll = 1
-endif
-if !exists("g:coffeeShowJSChanges")
-  let g:coffeeShowJSChanges = 0
-endif
+let g:coffeeAutoCompileAll = get(g:, "coffeeAutoCompileAll", 1)
+let g:coffeeShowJSChanges = get(g:, "coffeeShowJSChanges", 0)
+" Allows you to keep js and coffee files separate; including when you don't really need to generate js files but want to see diffs.
+let g:coffeeCompileIntoFolder = get(g:, "coffeeCompileIntoFolder", "")
 
 " DONE: If coffeeShowJSChanges is used in a split window which is not the
 " last, when pedit and pclose are used it shrinks grrrr.  Remember and restore
@@ -94,8 +92,15 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
     return
   endif
 
+  let targetFolder = expand("%:h")
+  let jsFile = expand("%<").".js"
+
+  if g:coffeeCompileIntoFolder != ""
+    let targetFolder = g:coffeeCompileIntoFolder
+    let jsFile = g:coffeeCompileIntoFolder . "/" . expand("%:t:r").".js"
+  endif
+
   if g:coffeeShowJSChanges != 0
-    let jsFile = expand("%<").".js"
     " If this is our first compile, the js file may not exist
     if !filereadable(jsFile)
       " Make an empty file, so we will get a diff anyway.
@@ -106,7 +111,7 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
 
   " call s:MsgUser("Compiling...")
   " silent! exec '!coffee -c "%" > /tmp/coffee.log 2> /tmp/coffee.err'
-  silent! exec '!coffee -c "%" > /tmp/coffee.log 2> /tmp/coffee.err'
+  silent! exec '!coffee -o "' . targetFolder . '" -c "%" > /tmp/coffee.log 2> /tmp/coffee.err'
   let lines = readfile("/tmp/coffee.err")
   if len(lines) == 0
 

@@ -62,6 +62,8 @@ command! MoveBufferToEnd call s:MoveCurrentBufferToEndOfList()
 " map <C-]> :tabnext<Enter>
 " map <C-[> :N<Enter>
 " map <C-]> :n<Enter>
+nmap [T :tabprev<CR>
+nmap ]T :tabnext<CR>
 
 "" I'm sure there must be a better way to do this.
 "" I'm trying to make a new command, but really just catching the keys!
@@ -117,21 +119,26 @@ nmap [1;5C <C-W>l
 " nmap OD h
 " nmap OC l
 
+
+
+" Quick move between windows.
 " <Tab> doesn't do anything in normal mode.  I can think of something to do with it!
 "nmap <Tab> <C-w><Down>
 "nmap <S-Tab> <C-w><Up>
 " Ooops.  <Tab> and <C-I> are indistinguishable.  And I use <C-I>.  How sad!
 " We might be able to apply them only in GUI mode, but that would probably just make me sad out of GUI mode.
 " Let's do this like unimpaired does
-nmap ]w <C-w><Down>
-nmap [w <C-w><Up>
+"nmap ]w <C-w><Down>
+"nmap [w <C-w><Up>
+nmap ]w <C-w>w
+nmap [w <C-w>W
 nmap ]W <C-w><Right>
 nmap [W <C-w><Left>
 " Wow that is so much better than <Ctrl-Down> or <Ctrl-W><Down>!  Although only a minor improvement over <Ctrl-W>j.
 
 
 
-"" Step through quickfix list (errors/search results) with Ctrl+N/P
+"" Step through quickfix list (errors/search results) with Ctrl+N/P (or ]c [c with unimpaired)
 :nnoremap <C-n> :cnext<Enter>
 :nnoremap <C-p> :cprev<Enter>
 "" =/- get overriden by fold keymaps :P
@@ -156,14 +163,15 @@ inoremap <C-J> <Esc>2<C-E>a
 "" Since the first two do not always trigger a CursorHold or Moved event, they fail to trigger the highlight_line_after_jump script.  The following attempt to force it fails because on occasions where the event is triggered, the highlight script sees it twice, and unhighlights the line!
 " noremap <C-K> <C-Y>:silent! call HL_Cursor_Moved()<Enter>
 " noremap <C-J> <C-E>:silent! call HL_Cursor_Moved()<Enter>
-"" Simiarly, these also fail to trigger CursorHold/Moved events needed by sexy_scroller.  Let's try triggering them by moving and moving back.
+"" Similarly, these also fail to trigger CursorHold/Moved events needed by sexy_scroller.  Let's try triggering them by moving and moving back.
 "noremap <C-K> 2<C-Y><BS><Space>
 "noremap <C-J> 2<C-E><Space><BS>
 "noremap <C-K> 2<C-Y><Down><Up>
 "noremap <C-J> 2<C-E><Up><Down>
-" I have also swapped the direction.  My fingers aren't sure which is correct.
-noremap <C-K> 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
-noremap <C-J> 2<C-Y>:call g:SexyScroller_ScrollToCursor()<CR>
+" Mac mouse scrolling direction has ruined me.  I am not sure which key should do which direction, and I find myself expecting different results at different times.  The conceptual conflict is this: are we pushing the text up and down on the screen (Mac), or are we pulling our window frame up and down over the text (Windows)?
+" In the end, I am leaving the final decision to 9gag: j should move our view downwards through the text.
+noremap <C-K> 2<C-Y>:call g:SexyScroller_ScrollToCursor()<CR>
+noremap <C-J> 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
 "" OK that fires sexy_scroller, but why did we ever want it to fire hiline anyway?!  Perhaps when we were doing 10<C-K>
 "" Also it exhibits a BUG in sexy_scroller, namely that it will cause horizontal scrolling when moving near a long line whilst `:set nowrap` wrapping is off!
 "" There are disadvantages to trying to trigger CursorMoved/Hold this way.  <BS><Space> can fail if we are at the top of the file, or create issues if we are at the start of a line (e.g. temporarily moves a line back, undoing the requested scroll, in a short window when scrolloff is set).  Similarly <Space><BS> can fail on the last char of a line or the last line of a file.  A better solution might be to explicitly call hooks exposed by those specific plugins that we want to trigger.  Alternatively we could call a function to examine the situation and emit whichever of <BS><Space> or <Space><BS> is most appropriate.
@@ -318,7 +326,9 @@ cnoremap \<C-R> <C-R>
 "" For all the other <C-R> tricks, see: :help c_CTRL-R_CTRL-F
 
 "" Now the same for Insert-mode?  Well a select few perhaps...
-inoremap <C-X> <Esc>dbxi
+"inoremap <C-X> <Esc>dbxi
+"" This works better at the end of a line.  It inserts a char them removes it later.
+inoremap <C-X> _<Esc>dbs
 "" Except we won't do <C-V> because that has a useful meaning already
 inoremap <C-D> <Esc>bi
 "" And <C-F> already means toggle fullscreen.
@@ -334,7 +344,9 @@ cnoremap <C-L> <C-D>
 
 " This is how my zsh does completion, and it rocks (unless for some reason you
 " always want the first match of multiples, then you must always Tab twice).
-set wildmode=longest:full,full
+"set wildmode=longest:full,full
+" On the first <Tab> in a row, show a list of possible matches.  This is useful except when there are so many possibilities that it requires "Hit <Space> for more".
+set wildmode=longest:full:list,full
 " I use the default wildchar=<Tab>
 
 
@@ -346,7 +358,7 @@ set wildmode=longest:full,full
 
 " When it's time to clear the search, avoid /skldjsdklfj<Enter> and just \/ or Ctrl-L
 " Also added :match to hide highlights from highlight_word_under_cursor.vim
-nnoremap <silent> <Leader>/      :nohlsearch<CR>:match<CR>
+"nnoremap <silent> <Leader>/      :nohlsearch<CR>:match<CR>
 nmap     <silent> <C-L>     <C-L>:nohlsearch<CR>:match<CR>
 "nnoremap <silent> <Leader>/ :nohlsearch<CR>:match<CR>:let @/='skj84ksdEKD93Od23423lfs'<CR>
 
@@ -366,15 +378,14 @@ nnoremap <Leader>w :set invwrap<Enter>
 " Quick buffer switching (beyond Ctrl-PageUp/Down)
 "" Select buffer by any part of filename and Tab completion or arrows, or by number
 "nnoremap <C-E> :ls<CR>:b<space>
-nnoremap <C-E> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
+nnoremap <Leader>W :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
+nnoremap <C-E> :JoeysBufferSwitch<Enter>
 "" An interesting alternative, assuming you have MBE as your first window:
 "nnoremap <C-E> 1<C-W><C-W>/
 "" Select file by filename with completion
 " nnoremap <C-E> :ls<CR>:e<space>
 "" Select by name with completion or file without (joeys_buffer_switcher.vim)
 "nnoremap <Leader>e :JoeysBufferSwitch<Enter>
-"" I use <C-E> above for switching buffer now, but this is still useful for switching window!
-nnoremap <Leader>W :JoeysBufferSwitch<Enter>
 "" Select buffer from list (bufexplorer.vim)
 nnoremap <C-B> :BufExplorer<Enter>
 "" Select from persistent list of most-recently-used files (mru.vim)
@@ -513,7 +524,11 @@ nnoremap <C-w>x <C-w>x<C-w>w
 nnoremap <C-w>X <C-w>W<C-w>x
 " Note that these will not do as expected if a <count> is given.
 
-" Comment or uncomment visual selection on leader / or leader shift-/
+" Comment or uncomment on leader / or leader shift-/
+nmap <Leader>/ v<Leader>/
+nmap <D-/>     v<Leader>/
+nmap <Leader>? v<Leader>?
+nmap <D-?>     v<Leader>?
 " By default, comment is //
 vnoremap <Leader>/ :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
 vnoremap <D-/>     :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
