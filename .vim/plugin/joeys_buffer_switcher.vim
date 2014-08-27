@@ -159,7 +159,6 @@ function! JoeysBufferSwitch()
   redraw
   let more_was = &more
   let &more = 0
-  endif
   echo len(foundWindows).' windows match "'.searchStr.'"'
   for wn in foundWindows
     echo "  <".wn."> ".bufname(winbufnr(wn))
