@@ -245,6 +245,7 @@ Control F9 :ExecCommand xsnapshot -window
 Mod1 t :ExecCommand xtermbg -bg '#330000' -geometry 132x28 -e top -n 100
 
 ## Changing workspace
+## These settings make sense if you have three columns of desktops
 Control Mod1 Left :PrevWorkspace
 Control Mod1 Right :NextWorkspace
 Control Mod1 Up :PrevWorkspace 3
@@ -253,7 +254,11 @@ Shift Mod1 Left :TakeToPrevWorkspace
 Shift Mod1 Right :TakeToNextWorkspace
 Shift Mod1 Up :TakeToPrevWorkspace 3
 Shift Mod1 Down :TakeToNextWorkspace 3
-## This makes sense if you have three columns of desktops
+## I cannot seem to override Ctrl-Alt-H/J/K/L's default behaviour.
+Control Mod1 H     :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
+Control Mod1 L     :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
+Control Mod1 K     :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace       3
+Control Mod1 J     :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace       3
 
 #Mod1 1 :Workspace 1
 #Mod1 2 :Workspace 2
@@ -271,6 +276,10 @@ Mod4 Shift Left    :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorksp
 Mod4 Shift Right   :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace
 Mod4 Shift Up      :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace 3
 Mod4 Shift Down    :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace 3
+Control Mod4 H     :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
+Control Mod4 L     :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
+Control Mod4 K     :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace       3
+Control Mod4 J     :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace       3
 
 # Swap all windows between two workspaces
 Control Mod4 Shift Left :ExecCommand move_windows_between_desktops swapdesktops left
@@ -339,6 +348,7 @@ Control Mod4 KP_Right :ForEach {MoveRight +1} {{groups}}
 Control Mod4 KP_Left :ForEach {MoveRight -1} {{groups}}
 Control Mod4 KP_Up :ForEach {MoveUp +1} {{groups}}
 Control Mod4 KP_Down :ForEach {MoveUp -1} {{groups}}
+## I notice Ctrl-Alt-H/J/K/L are moving 1 pixel.  I guess these must be defaults.
 
 ## Resizing windows
 # Mod1 KP_5 :VerticalDecrement
