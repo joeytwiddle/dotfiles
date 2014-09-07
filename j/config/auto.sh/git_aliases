@@ -29,7 +29,7 @@
 #   The -M argument to gbs and gbd is slower, but will display whether or not
 #   each branch has been merged into the current branch.  Cool!
 #
-#   They will only align neatly into columns if you have jsh's columnise-clever
+#   gbd will only align neatly into columns if you have jsh's columnise-clever
 #   installed.  Making that work independently is something I should TODO!
 #
 # Some more shortcuts:
@@ -488,13 +488,14 @@ git_branch_status() {
     # From initial tracing, it appeared that the final gbs call only iterates once during the while getopts.
     # Since we need both -v and -a to show more than one line here, we saw only one line.
 
-    local usage option filter OPTARG compareto showancestors verbose current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
+    local usage option filter OPTARG compareto showancestors verbose branch_name_regexp
 
-    local local_branch_commit_hash common_commit_between_branch_and_current
+    local current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
+    local local_branch_commit_hash common_commit_between_branch_and_current abstatus
 
     local sorting=
 
-    usage="$(basename "$0") [-hamtMv] -- summarise status of branch(es)
+    usage="$(basename "$0") [-hamtMv] [<branch_name_regexp>] -- summarise status of branch(es)
 
 where:
     -h           show this help text
@@ -530,13 +531,19 @@ where:
     done
     shift $((OPTIND - 1))
 
+    branch_name_regexp="$1"
+    if [ -n "$branch_name_regexp" ]
+    then filter=refs/heads
+    fi
+
     if [ -z $filter ] ; then
         filter=$(git symbolic-ref -q HEAD)
     fi
 
     current_branch=`git_get_current_branch`
 
-    git for-each-ref $sorting --format="%(refname:short) %(upstream:short)" $filter | \
+    git for-each-ref $sorting --format="%(refname:short) %(upstream:short)" $filter |
+    grep -e "$branch_name_regexp" |
     while read local remote
     do
         if [ -n "$compareto" ] ; then
@@ -589,8 +596,11 @@ where:
         fi
 
         if [ $verbose ] || [ $LEFT_AHEAD -gt 0 ] || [ $RIGHT_AHEAD -gt 0 ] || [ "$local" = "$current_branch" ] ; then
-            #echo "$local $WARN_LEFT(ahead $LEFT_AHEAD)$reset_color | $WARN_RIGHT(behind $RIGHT_AHEAD)$reset_color $remote"
-            echo "$preBranch$local $if_merged(ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD) $remote"
+            if [ -z "$remote" ]
+            then abstatus="(none)"
+            else abstatus="(ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD)"
+            fi
+            echo "$preBranch$local $if_merged$abstatus $remote"
         fi
     done
 }
@@ -624,8 +634,7 @@ gbs() {
     local reset_color=`tput sgr0`
     local ahead_color=`tput setaf 2 ; tput bold`    # green
     local behind_color=`tput setaf 1 ; tput bold`   # red
-    # You can use the configured/default colors, but I quite like remote blank!  (The default red confuses behind_color.)
-    # The default remote branch color is red, but that conflicts with behind_color, so I have set it to 'white' here.
+    # Git's default remote branch color is red, but that conflicts with behind_color, so I have set it to 'white' here.
     local remote_branch_color=`git config --get-color color.branch.remote white`
     sed "
       s+\()  *\)\([^ ]*\)$+\1$remote_branch_color\2$reset_color+
