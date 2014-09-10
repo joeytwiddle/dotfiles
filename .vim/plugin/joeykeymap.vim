@@ -48,6 +48,10 @@ nnoremap <silent> <C-A-PageDown> :call <SID>MoveCurrentBufferToEndOfList()<Enter
 function! s:MoveCurrentBufferToEndOfList()
 	let fname = expand("%")
 	" This bwipeout may not succeed if the file has unwritten changes.
+	"bwipeout
+	" bwipeout will close the current window
+	"CloseBuffer
+	split
 	bwipeout
 	" TODO: Do we need to escape spaces in filenames with spaces?
 	exec "edit ".fname
