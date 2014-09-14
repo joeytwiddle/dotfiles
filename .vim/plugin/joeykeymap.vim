@@ -34,9 +34,15 @@ nmap [5;5~ <C-PageUp>
 " You had better only use these versions if you also load quickfix_title_control.vim!
 autocmd BufReadPost quickfix nnoremap <buffer> <silent> <C-PageDown> :cnewer<CR>:call g:RestoreQuickfixTitle()<CR>
 autocmd BufReadPost quickfix nnoremap <buffer> <silent> <C-PageUp> :colder<CR>:call g:RestoreQuickfixTitle()<CR>
-nnoremap [gc :colder<CR>
-nnoremap ]gc :cnewer<CR>
 " TODO: If we push quickfix_title_control.vim into autoload, it may be easier to check if the function exists in advance, allowing us to decide which of the above keybinds to set.
+"nnoremap [gc :colder<CR>
+"nnoremap ]gc :cnewer<CR>
+" Make use of above keybinds to restore the title
+nmap [gc :cope<CR><C-PageUp><C-w>p
+nmap ]gc :cope<CR><C-PageDown><C-w>p
+nmap [C :cope<CR><C-PageUp><C-w>p
+nmap ]C :cope<CR><C-PageDown><C-w>p
+" The return to previous window does not make much sense if we were already in the quickfix window!
 
 "" Sometimes I want to re-arrange the order of the buffers in my list.  After
 "" years of nothing, I now at least found a way to push buffers to the end, by
