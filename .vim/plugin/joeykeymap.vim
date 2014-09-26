@@ -425,8 +425,8 @@ nmap <Leader>i <Leader>f<C-w><Right><Leader>t
 " Toggle the paste option (annoying that this doesn't show the current state)
 nmap <Leader>p :set invpaste<Enter>
 
-" Disable diff settings
-nmap <Leader>d :set nodiff fdc=0<CR>
+" Toggle (and display) diff settings
+nmap <Leader>d :set fdc=0 invdiff diff?<CR>
 
 " Fold everything in the buffer except lines which match the current search pattern (or at second level, the line on either side)
 nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
