@@ -89,8 +89,12 @@ OnWindow Mod4 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
 ### ==NEW== Fixed versions!
 Mod1 Tab :NextWindow {groups} (Workspace=[current])
 Mod1 grave :PrevWindow {groups} (Workspace=[current])
-Mod4 Tab :NextWindow {groups}
-Mod4 grave :PrevWindow {groups}
+#Mod4 Tab :NextWindow {groups}
+#Mod4 grave :PrevWindow {groups}
+# Experiment: Always change workspace when using Super-Tab.
+# Disadvantage: If you start on Workspace 2, refuses to cycle windows on Workspace 1, which you might want to do if the first window focused is not the one you wanted.
+Mod4 Tab :NextWindow {groups} (Workspace!=[current])
+Mod4 grave :PrevWindow {groups} (Workspace!=[current])
 
 ## Move between windows using a Window List Menu
 # Control Tab :ClientMenu (Workspace=[current])
@@ -441,5 +445,5 @@ Mod4 KP_8 :ExecCommand put_current_xwindow top
 Mod4 KP_9 :ExecCommand put_current_xwindow ne
 
 ## Basic tiling - really sucks with kicker panels or gkrellm running.
-Control Mod1 a :ArrangeWindows
+Control Mod1 a :ToggleCmd {ArrangeWindows (Stuck=no)} {ArrangeWindowsHorizontal (Stuck=no)} {ArrangeWindowsVertical (Stuck=no)}
 
