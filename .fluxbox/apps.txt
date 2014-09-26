@@ -1,4 +1,4 @@
-## vim: comments=:##
+## vim: comments=\:##
 
 http://fluxbox-wiki.org/index.php?title=Editing_the_apps_file
 
