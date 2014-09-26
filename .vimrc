@@ -685,9 +685,10 @@ autocmd VimLeave * silent !stty ixon
 		vmap t <Plug>(easymotion-flash-t)
 		vmap T <Plug>(easymotion-flash-T)
 	else
-		" Repmo remaps `;` and `,`.  That is a feature.
-		" But when I use `f` and friends, I want to remap them back to easymotion!
-		nmap <silent> <Plug>(remap-semicolon-and-comma) :map ; <Plug>(easymotion-next-in-dir)<CR>:map , <Plug>(easymotion-prev-in-dir)<CR>
+		" Repmo remaps `;` and `,` to itself, and I like it doing that.
+		" But when I use `f` and friends, I want to remap ';' and ',' back to the "original" easymotion repeat mappings.
+		nnoremap <silent> <Plug>(remap-semicolon-and-comma) :map ; <Plug>(easymotion-next-in-dir)<CR>:map , <Plug>(easymotion-prev-in-dir)<CR>
+		vnoremap <silent> <Plug>(remap-semicolon-and-comma) <Esc>:map ; <Plug>(easymotion-next-in-dir)<CR>:map , <Plug>(easymotion-prev-in-dir)<CR>gv
 		nmap <silent> f <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-f)
 		nmap <silent> F <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-F)
 		nmap <silent> t <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-t)
