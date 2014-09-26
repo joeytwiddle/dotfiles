@@ -539,7 +539,7 @@ nnoremap <C-w>X <C-w>W<C-w>x
 " Comment or uncomment on leader / or leader shift-/
 nmap <Leader>/ v<Leader>/
 nmap <D-/>     v<Leader>/
-nmap <Leader>? v<Leader>?
+"nmap <Leader>? v<Leader>?
 nmap <D-?>     v<Leader>?
 " By default, comment is //
 vnoremap <Leader>/ :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
