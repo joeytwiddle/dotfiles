@@ -702,3 +702,11 @@ nmap :sea<Up> :SearchHelp<Space><Up>
 " Like :grep but skips skip the annoying "Press ENTER or type command to continue" message, and also opens the quickfix window.
 command! -bar -nargs=1 Sgrep silent execute "grep <args>" | redraw! | cw
 
+" Experiment
+" I never normally use _ - and +.  I tend to use <Enter> to go down and k to go up.
+" ^ and $ are very useful but hard to reach
+" Sometimes when moving up or down a line, I want to land on the last column, not the first.
+nnoremap _ <Up>^
+nnoremap - <Up>$
+nnoremap + <Down>$
+
