@@ -529,7 +529,7 @@ autocmd VimLeave * silent !stty ixon
 	" Fix broken Backspace under gentoo:
 	" :imap  <Left><Del>
 
-	" I never need to use this key, and my Escape key is a bit tempramental.
+	" I never need to use this key, and my Escape key (on pod) is a bit tempramental.
 	map £ <Esc>
 	imap £ <Esc>
 
@@ -656,6 +656,8 @@ autocmd VimLeave * silent !stty ixon
 
 	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
 	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g, <C-w>w|<C-w>W"
+	" Experimenting:
+	let g:repmo_mapmotions .= " <C-w>+|<C-w>- <C-w>>|<C-w><"
 	" Works but interferes with navigation_enhancer.vim: <C-w>j|<C-w>k 
 	let g:repmo_key = ";"
 	let g:repmo_revkey = ","
