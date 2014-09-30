@@ -713,4 +713,18 @@ nnoremap + <Down>$
 " OTOH, these may be more useful:
 "nnoremap _ <C-w>-
 "nnoremap + <C-w>+
+" The following are not remapped so we get repmo on them:
+nmap [- <C-w>-
+nmap ]- <C-w>-
+nmap [+ <C-w>+
+nmap ]+ <C-w>+
+nmap [< <C-w><
+nmap ]< <C-w><
+nmap [> <C-w>>
+nmap ]> <C-w>>
+" They are not actually pairs!
+
+" This may help to cleanup window sizes are resizing the Vim window.
+nmap ]= :exec "resize ".(&lines-20)<CR>:exec "vert resize ".(&columns-31)<CR>
+nmap [= :exec "resize ".(&lines-10)<CR>:exec "vert resize ".(&columns-31)<CR>
 
