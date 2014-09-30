@@ -710,3 +710,7 @@ nnoremap _ <Up>^
 nnoremap - <Up>$
 nnoremap + <Down>$
 
+" OTOH, these may be more useful:
+"nnoremap _ <C-w>-
+"nnoremap + <C-w>+
+
