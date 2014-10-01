@@ -656,6 +656,9 @@ autocmd CursorHold * set norelativenumber
 " This one is better; it should insert at the cursor.
 cnoremap %<Tab> <C-r>%
 
+" MacVim maps Backspace in visual mode to `"-d` which differs from the behaviour I am accustomed to (a lazy way to move back a character).
+xunmap <BS>
+
 " When editing a Vim file, make K lookup Vim's inline :help rather than calling 'man'.
 autocmd BufReadPost *.vim setlocal keywordprg=:help
 
