@@ -3,45 +3,47 @@
 " Transform the classic for loop:
 " :%s/for (\(var\s\|\)\s*\([a-zA-Z_$][a-zA-Z0-9_$]*\)\s*=\s*0\s*;\s*\([a-zA-Z_$][a-zA-Z0-9_$]*\)\s*<\s*\([a-zA-Z_$][a-zA-Z0-9_$.]*\)\.length\s*;\s*[a-zA-Z_$]++\s*)\s*{/for \2 in [0...\4.length]/g
 " Actually we don't actually require .length
-:%s/for (\(var\s\|\)\s*\([a-zA-Z_$][a-zA-Z0-9_$]*\)\s*=\s*0\s*;\s*\([a-zA-Z_$][a-zA-Z0-9_$]*\)\s*<\s*\([a-zA-Z_$][a-zA-Z0-9_$.]*\)\s*;\s*[a-zA-Z_$]++\s*)\s*{/for \2 in [0...\4]/g
+silent! %s/for (\(var\s\|\)\s*\([a-zA-Z_$][a-zA-Z0-9_$]*\)\s*=\s*0\s*;\s*\([a-zA-Z_$][a-zA-Z0-9_$]*\)\s*<\s*\([a-zA-Z_$][a-zA-Z0-9_$.]*\)\s*;\s*[a-zA-Z_$]++\s*)\s*{/for \2 in [0...\4]/g
 
 " Remove all var declarations
-:%s/^var //
-:%s/\(\s\)var /\1/
-" In loops (although loops need to be dealt with!)
-:%s/(var /(/
+silent! %s/^var //
+silent! %s/\(\s\)var /\1/
+" In loops (probably already cleared above)
+silent! %s/(var /(/
 
+" Change //// comments into ## comments (I used to use //// sometimes)
+silent! %s/\/\/\/\//##/
 " Change // comments into # comments
-:%s/\/\/\/\//##/
-:%s/\/\//#/
-:%s/\/\*/###/
-:%s/\*\//###/
+silent! %s/\/\//#/
+" Change /* ... */ comment blocks into ### ... ###
+silent! %s/\/\*/###/
+silent! %s/\*\//###/
 
 " Remove semicolons
-:%s/;\(\s*#\|\s*$\)/\1/
+silent! %s/;\(\s*#\|\s*$\)/\1/
 
 " Convert anonymous functions into ->
-:%s/\<function\s*(\(.*\))\s*{/(\1) ->/
+silent! %s/\<function\s*(\(.*\))\s*{/(\1) ->/
 " Conver named functions into ->
-:%s/\<function\s*\([A-Z"a-z_0-9]*\)(\(.*\))\s*{/\1 = (\2) ->/
+silent! %s/\<function\s*\([A-Z"a-z_0-9]*\)(\(.*\))\s*{/\1 = (\2) ->/
 
 " Kill {s and }s around functions, ifs and loops.  Have to trust indentation!
-:%s/ {$//
+silent! %s/ {$//
 " :%s/^\s*}$//
-:%s/ }$//
-:%s/[^ 	]*} *//
+silent! %s/ }$//
+silent! %s/[^ 	]*} *//
 
 " TODO: We should probably check for one-liners and convert them into "if ... then" or "while ... then" CS one-liners.
 " Drop ()s from if statements
-:%s/\<if\>\s*(\(.*\))\s*$/if \1/g
+silent! %s/\<if\>\s*(\(.*\))\s*$/if \1/g
 " Drop ()s from while statements
-:%s/\<while\>\s*(\(.*\))\s*$/while \1/g
+silent! %s/\<while\>\s*(\(.*\))\s*$/while \1/g
 
 " Triple-equals is double-equals in CS.  There is no double-equals, so they will be broken (fixed).
-:%s/\<===\>/==/g
+silent! %s/\<===\>/==/g
 
 " Change this. to @
-:%s/\<this\./@/g
+silent! %s/\<this\./@/g
 " Change this to @ (may uglify comments!)
 ":%s/\<this\>/@/g
 
