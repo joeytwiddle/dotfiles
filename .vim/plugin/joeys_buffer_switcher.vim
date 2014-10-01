@@ -28,11 +28,13 @@ command! JoeysBufferSwitch call JoeysBufferSwitch()
 
 function! JoeysBufferSwitch()
 
+  let more_was = &more
   if g:JBS_Show_Buffer_List_First
-    let more_was = &more
+    " This successfully prevents the "-- More --" pager, but it still demands "Press ENTER to continue" message!
+    " However doing `:set more` and `:set nomore` on the cmdline had a stronger effect, so perhaps that is different from setting `&more`.
+    " DONE: Or perhaps we should re-enable &more only *after* we have asked for searchStr input - that may be what was triggering the "Press ENTER" message.
     let &more = 0
     execute "ls"
-    let &more = more_was
   endif
 
   try
@@ -42,6 +44,8 @@ function! JoeysBufferSwitch()
     echo "Error!"
     return
   endtry
+
+  let &more = more_was
 
   " Quick and dirty:
   "if searchStr != ""
