@@ -88,7 +88,7 @@ function! JoeysBufferSwitch()
   while i <= winCount
     let winName = bufname(winbufnr(i))
     " Exact match causes single response
-    " We use resolve and expand so that /home/joey/.vimrc will match ~/.vimrc
+    " We use resolve and expand so that e.g. /home/joey/.vimrc will match ~/.vimrc
     if resolve(expand(winName)) == resolve(expand(searchStr))
       let foundExactWindow = i
       break
@@ -103,7 +103,7 @@ function! JoeysBufferSwitch()
   let foundBuffers = []
   let foundExactBuffer = -1
   let bufCount = bufnr('$')
-  let i=0
+  let i = 1   " bufname says: Number zero is the alternate buffer for the current window.
   while i <= bufCount
     let bufName = bufname(i)
     " TODO: Some buffers need to be ignored e.g. if they are closed (no longer visible)

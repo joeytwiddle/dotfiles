@@ -330,6 +330,7 @@ update_cindex() {
 		fi
 	fi
 }
+# TODO: There are a number of other occasions when cindex should be run, e.g. after a pull, reset or file save!  Perhaps it would be better if any programs which use csearch should just run cindex every time before they run csearch.  That should still be faster than grep!
 alias gi='git commit --interactive'
 # -p "patch" allows us to choose which hunks to add or commit
 alias gap='git add -p'

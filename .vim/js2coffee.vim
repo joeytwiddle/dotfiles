@@ -7,7 +7,7 @@
 
 " Remove all var declarations
 :%s/^var //
-:%s/\([ 	]\)var /\1/
+:%s/\(\s\)var /\1/
 " In loops (although loops need to be dealt with!)
 :%s/(var /(/
 
@@ -18,16 +18,16 @@
 :%s/\*\//###/
 
 " Remove semicolons
-:%s/;\([ 	]*#\|[ 	]*$\)/\1/
+:%s/;\(\s*#\|\s*$\)/\1/
 
 " Convert anonymous functions into ->
-:%s/\<function[ 	]*(\(.*\))[ 	]*{/(\1) ->/
+:%s/\<function\s*(\(.*\))\s*{/(\1) ->/
 " Conver named functions into ->
-:%s/\<function[ 	]*\([A-Z"a-z_0-9]*\)(\(.*\))[ 	]*{/\1 = (\2) ->/
+:%s/\<function\s*\([A-Z"a-z_0-9]*\)(\(.*\))\s*{/\1 = (\2) ->/
 
 " Kill {s and }s around functions, ifs and loops.  Have to trust indentation!
 :%s/ {$//
-" :%s/^[ 	]*}$//
+" :%s/^\s*}$//
 :%s/ }$//
 :%s/[^ 	]*} *//
 

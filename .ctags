@@ -35,9 +35,10 @@
 --regex-javascript=/^\s*["']?([a-zA-Z_$][0-9a-zA-Z_$]*)["']?\s*:\s*function\>/\1/f,function/
 --regex-javascript=/^(COMMENT: It used to be:)/\1/X,XXX/
 --regex-javascript=/^DISABLED: \s*(\<[a-zA-Z_$][0-9a-zA-Z_$.]*\>)*\s*=\s*\<function\>/\1/f,function/
+--regex-javascript=/^(COMMENT: *** The following should be synced with Coffeescript definitions ***)/\1/X,XXX/
 --regex-javascript=/^(COMMENT: Express routes: (only if var app is used))/\1/X,XXX/
 --regex-javascript=/^\s*app\.(get|put|post|delete)\(\s*["']([^"']+)["']/\2 (\1)/r,route/
---regex-javascript=/^(COMMENT: Meteor routes:)/\1/X,XXX/
+--regex-javascript=/^(COMMENT: Meteor routes (with iron:router):)/\1/X,XXX/
 --regex-javascript=/^\s*this\.route\(\s*["']([^"']*)["']/\1/r,route/
 --regex-javascript=/^\s*Meteor.publish\(\s*["']([^"']*)["']/\1/u,publication/
 
@@ -153,6 +154,9 @@
 --regex-Scala=/^\s*package\s*([a-zA-Z0-9_.]+$)/\1/p,package/
 
 --langmap=html:+.erb
+--regex-html=/^(COMMENT: Meteor)/\1/X,XXX/
 --regex-html=/^\s*<template\s+name=["']([^"']*)./\1/t,template/
+--regex-html=/^(COMMENT: Derby)/\1/X,XXX/
+--regex-html=/^\s*<([A-Za-z0-9\-_$]*):>/\1/t,template/
 --regex-html=/^\<id=["']([^"']*)./\1/i,id/
 
