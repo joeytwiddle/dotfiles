@@ -1254,6 +1254,9 @@ function! <SID>ResizeWindow()
   " does move there if we focus MBE (or was it there but the scroll wasn't?)
   " I don't see how that happens actually, not with cursor()!
 
+  " <Ctrl-w>= will not resize the MBE
+  set winfixheight
+
 endfunction
 
 " }}}

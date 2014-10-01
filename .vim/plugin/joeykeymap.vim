@@ -34,9 +34,15 @@ nmap [5;5~ <C-PageUp>
 " You had better only use these versions if you also load quickfix_title_control.vim!
 autocmd BufReadPost quickfix nnoremap <buffer> <silent> <C-PageDown> :cnewer<CR>:call g:RestoreQuickfixTitle()<CR>
 autocmd BufReadPost quickfix nnoremap <buffer> <silent> <C-PageUp> :colder<CR>:call g:RestoreQuickfixTitle()<CR>
-nnoremap [gc :colder<CR>
-nnoremap ]gc :cnewer<CR>
 " TODO: If we push quickfix_title_control.vim into autoload, it may be easier to check if the function exists in advance, allowing us to decide which of the above keybinds to set.
+"nnoremap [gc :colder<CR>
+"nnoremap ]gc :cnewer<CR>
+" Make use of above keybinds to restore the title
+nmap [gc :cope<CR><C-PageUp><C-w>p
+nmap ]gc :cope<CR><C-PageDown><C-w>p
+nmap [C :cope<CR><C-PageUp><C-w>p
+nmap ]C :cope<CR><C-PageDown><C-w>p
+" The return to previous window does not make much sense if we were already in the quickfix window!
 
 "" Sometimes I want to re-arrange the order of the buffers in my list.  After
 "" years of nothing, I now at least found a way to push buffers to the end, by
@@ -533,7 +539,7 @@ nnoremap <C-w>X <C-w>W<C-w>x
 " Comment or uncomment on leader / or leader shift-/
 nmap <Leader>/ v<Leader>/
 nmap <D-/>     v<Leader>/
-nmap <Leader>? v<Leader>?
+"nmap <Leader>? v<Leader>?
 nmap <D-?>     v<Leader>?
 " By default, comment is //
 vnoremap <Leader>/ :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
@@ -694,4 +700,30 @@ nmap :sea<Up> :SearchHelp<Space><Up>
 "autocmd QuickFixCmdPost *grep* cwindow
 " Like :grep but skips skip the annoying "Press ENTER or type command to continue" message, and also opens the quickfix window.
 command! -bar -nargs=1 Sgrep silent execute "grep <args>" | redraw! | cw
+
+" Experiment
+" I never normally use _ - and +.  I tend to use <Enter> to go down and k to go up.
+" ^ and $ are very useful but hard to reach
+" Sometimes when moving up or down a line, I want to land on the last column, not the first.
+nnoremap _ <Up>^
+nnoremap - <Up>$
+nnoremap + <Down>$
+
+" OTOH, these may be more useful:
+"nnoremap _ <C-w>-
+"nnoremap + <C-w>+
+" The following are not remapped so we get repmo on them:
+nmap [- <C-w>-
+nmap ]- <C-w>-
+nmap [+ <C-w>+
+nmap ]+ <C-w>+
+nmap [< <C-w><
+nmap ]< <C-w><
+nmap [> <C-w>>
+nmap ]> <C-w>>
+" They are not actually pairs!
+
+" This may help to cleanup window sizes are resizing the Vim window.
+nmap ]= :exec "resize ".(&lines-20)<CR>:exec "vert resize ".(&columns-31)<CR>
+nmap [= :exec "resize ".(&lines-10)<CR>:exec "vert resize ".(&columns-31)<CR>
 

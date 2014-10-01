@@ -7,7 +7,7 @@ silent! %s/for (\(var\s\|\)\s*\([a-zA-Z_$][a-zA-Z0-9_$]*\)\s*=\s*0\s*;\s*\([a-zA
 
 " Remove all var declarations
 silent! %s/^var //
-silent! %s/\([ 	]\)var /\1/
+silent! %s/\(\s\)var /\1/
 " In loops (probably already cleared above)
 silent! %s/(var /(/
 
@@ -20,16 +20,16 @@ silent! %s/\/\*/###/
 silent! %s/\*\//###/
 
 " Remove semicolons
-silent! %s/;\([ 	]*#\|[ 	]*$\)/\1/
+silent! %s/;\(\s*#\|\s*$\)/\1/
 
 " Convert anonymous functions into ->
-silent! %s/\<function[ 	]*(\(.*\))[ 	]*{/(\1) ->/
+silent! %s/\<function\s*(\(.*\))\s*{/(\1) ->/
 " Conver named functions into ->
-silent! %s/\<function[ 	]*\([A-Z"a-z_0-9]*\)(\(.*\))[ 	]*{/\1 = (\2) ->/
+silent! %s/\<function\s*\([A-Z"a-z_0-9]*\)(\(.*\))\s*{/\1 = (\2) ->/
 
 " Kill {s and }s around functions, ifs and loops.  Have to trust indentation!
 silent! %s/ {$//
-" :%s/^[ 	]*}$//
+" :%s/^\s*}$//
 silent! %s/ }$//
 silent! %s/[^ 	]*} *//
 

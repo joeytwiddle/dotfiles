@@ -6,9 +6,6 @@
 " Usage:       Insert %{VimBuddy()} into your 'statusline'
 "
 
-" OFF!
-"
-
 " This is Joey's statusline and should be moved to his .vimrc
 set shm=atT
 set statusline=%<%f\ %#Error#%m%##%h%r%=\ %P\ (%0l/%-0L,%c~%v)\ \#%02B\ \|%0n\|%<
@@ -21,7 +18,11 @@ set statusline=%<%f\ %#Error#%m%##%h%r%=\ %P\ (%0l/%-0L,%c~%v)\ \#%02B\ \|%0n\|%
 "let &statusline = substitute(&statusline, '%m', '%{ModifiedStatus()}', '')
 " %y for filetype
 let &statusline = substitute(&statusline, '%m', '%{ \&modified ? "[+]" : "" }', '')
-let &statusline = substitute(&statusline, '%h', '%{ \&modifiable ? "" : "[-]" }%h', '')
+let s:moreflags  = '%{ \&modifiable ? "" : "[-]" }'
+let s:moreflags = s:moreflags . '%#StatusDiffing#%{ \&diff ? "[D]" : "" }%##'
+"highlight StatusDiffing ctermbg=darkyellow ctermfg=black guibg=darkyellow guifg=black
+highlight StatusDiffing ctermbg=magenta ctermfg=black guibg=magenta guifg=black
+let &statusline = substitute(&statusline, '%h', s:moreflags . '%h', '')
 if exists('*GetSearchStatus')
     let &statusline = substitute(&statusline, '= ', '= %{GetSearchStatus()}', '')
 endif

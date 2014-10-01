@@ -28,11 +28,13 @@ command! JoeysBufferSwitch call JoeysBufferSwitch()
 
 function! JoeysBufferSwitch()
 
+  let more_was = &more
   if g:JBS_Show_Buffer_List_First
-    let more_was = &more
+    " This successfully prevents the "-- More --" pager, but it still demands "Press ENTER to continue" message!
+    " However doing `:set more` and `:set nomore` on the cmdline had a stronger effect, so perhaps that is different from setting `&more`.
+    " DONE: Or perhaps we should re-enable &more only *after* we have asked for searchStr input - that may be what was triggering the "Press ENTER" message.
     let &more = 0
     execute "ls"
-    let &more = more_was
   endif
 
   try
@@ -42,6 +44,8 @@ function! JoeysBufferSwitch()
     echo "Error!"
     return
   endtry
+
+  let &more = more_was
 
   " Quick and dirty:
   "if searchStr != ""
@@ -84,7 +88,7 @@ function! JoeysBufferSwitch()
   while i <= winCount
     let winName = bufname(winbufnr(i))
     " Exact match causes single response
-    " We use resolve and expand so that /home/joey/.vimrc will match ~/.vimrc
+    " We use resolve and expand so that e.g. /home/joey/.vimrc will match ~/.vimrc
     if resolve(expand(winName)) == resolve(expand(searchStr))
       let foundExactWindow = i
       break
@@ -99,7 +103,7 @@ function! JoeysBufferSwitch()
   let foundBuffers = []
   let foundExactBuffer = -1
   let bufCount = bufnr('$')
-  let i=0
+  let i = 1   " bufname says: Number zero is the alternate buffer for the current window.
   while i <= bufCount
     let bufName = bufname(i)
     " TODO: Some buffers need to be ignored e.g. if they are closed (no longer visible)
