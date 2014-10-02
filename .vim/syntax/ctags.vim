@@ -1,3 +1,7 @@
+" TODO: I used hs= and he= but perhaps I should have used ms= and me= instead.
+"       That might avoid having to specify contains just because we matched
+"       outside the desired target.
+
 syntax match Statement /^--[^=]*=/hs=e,he=e contains=ctagsOption,Regexp
 syntax match ctagsOption /^--[^=]*=/he=e-1 contained
 syntax match Regexp /\/.*\/.,/hs=s+0,he=e-2 contains=RegexpCore,RegexpReplacement
