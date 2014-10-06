@@ -60,8 +60,23 @@ augroup NoSwapSuck
   " Turn swapfile on when we actually start editing
   autocmd CursorHold * call s:ConsiderCreatingSwapfile()
   "autocmd CursorHoldI * call s:ConsiderCreatingSwapfile()
-  "autocmd InsertEnter * call s:ConsiderCreatingSwapfile()
+
+  " It can be rather disruptive to enable the swapfile when we enter Insert
+  " mode, because if a swapfile is found, editing will be interrupted to
+  " prompt what to do next.
+  "
+  " (There is also be a danger that the user will be typing keys to insert,
+  " and these will get passed to the swapfile recovery prompt.)
+  "
+  " But this is less of an issue since we started using SetSwapfileToCheck on
+  " BufReadPre, so we enable it for now.
+  "
+  " Previously we only checked on InsertLeave, and never on InsertEnter.  The
+  " disadvantage with that was that you might make a significant edit before
+  " discovering the swapfile contains a more recent version of the file.
+  autocmd InsertEnter * call s:ConsiderCreatingSwapfile(1)
   autocmd InsertLeave * call s:ConsiderCreatingSwapfile()
+
   " Since it's a global (yeah great) we have to keep switching it on/off
   " when we switch between buffers/windows.
   autocmd WinLeave * call s:ConsiderClosingSwapfile()
