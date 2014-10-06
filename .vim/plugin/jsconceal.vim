@@ -19,9 +19,6 @@ function! s:JSConcealOn()
   syn clear javascriptIdentifier
   syn match   jsNiceThis       /\<this\(\.\|\>\)/ conceal cchar=@
   syn match   jsNicePrototype  /\.prototype\./  conceal cchar=∷
-  " forAll: ∀
-  " null: ∅⊘
-  " undefined: ∄ ? ⊗ ∤
   if level > 0
     syn keyword jsNiceFunction   function skipwhite conceal cchar=𝒇 "λ𝑓𝐟𝐅𝑭𝗙𝗳
   endif
@@ -30,7 +27,7 @@ function! s:JSConcealOn()
     syn clear javascriptAssignment
     " Regardless of level, /=/ must be defined before the other matches on =, or it will override them.
     " OK now we have refined it from /=/ a bit
-    syn match   jsNiceAssign     /[^=!<>]==\@!/ms=s+1   conceal cchar=↤ "≔←⇐⇦⬅⇤⤙❮«⊛
+    syn match   jsNiceAssign     /[^=!<>]==\@!/ms=s+1   conceal cchar=↤ "≐≔←⇐⇦⬅⇤⤙❮«⊛
   endif
   if level > 2
     syn keyword jsNiceReturn     return conceal cchar=⤺ "⬑↶↲⏎⇦⤆⇐↩⇤⬅↖⬉⇙⬋≪⬎↵↤↢↩↻⇙⇱◅◀
@@ -44,19 +41,30 @@ function! s:JSConcealOn()
     syn match   jsNiceOperator   /\<Infinity\>/ conceal cchar=∞
   endif
   if level > 4
-    syn keyword jsNiceVar        var   conceal cchar=▼ "∃𝒗𝒍𝑳𝐕𝑽𝗩𝐯𝘃☀⚙⚪⚫●♰☪☾⚡☪♥♦♝☛⚹♦▶◀⧨◥▾
+    syn keyword jsNiceVar        var   conceal cchar=▼ "⚫☼✪⚙∃𝒗𝒍𝑳𝐕𝑽𝗩𝐯𝘃☀⚪⚫●♰☪☾⚡☪♥♦♝☛♦⚹▶◀⧨◥▾□
   endif
   if level > 5
+    syn keyword jsNiceFunction   forEach conceal cchar=∀
     syn keyword jsNiceBoolean    true  conceal cchar=✔ "☑⊤
     syn keyword jsNiceBoolean    false conceal cchar=✘ "☒⊥
+    syn keyword jsNiceValue      null  conceal cchar=⊘ "∅⊘
+    syn keyword jsNiceValue      undefined conceal cchar=⊗ "∄ ? ⊗ ∤
+    " floor: ⌊...⌋
+    " ceil: ⌈...⌉
+    " round: ⌈...⌉
   endif
   if level > 8
     syn match   jsNiceLogic      /||/  conceal cchar=⋎  "∨⋁
     syn match   jsNiceLogic      /&&/  conceal cchar=⋏  "∧⋀
-    syn match   jsNiceConsole    /\<\(debugger\|console\.\(log\|warn\|info\|error\)\)\>/ conceal cchar=☢ "⚐⚑☣☠
+    "syn clear javascriptReserved
+    "syn match   jsNiceConsole    /\<debugger\>/ conceal cchar=⌂ "★⚫⚭▀▃▄␣━⎼⌫⊡∎⬅⌦
+    syn match   jsNiceConsole    /\<console\.log\>/ conceal cchar=⚐ "⚐⚑☢☣☠
+    syn match   jsNiceConsole    /\<console\.info\>/ conceal cchar=⚑
+    syn match   jsNiceConsole    /\<console\.warn\>/ conceal cchar=☢
+    syn match   jsNiceConsole    /\<console\.error\>/ conceal cchar=☠
   endif
   if level > 9
-    syn match   jsNiceSemicolon  /;/ conceal cchar=☻ "☺
+    syn match   jsNiceSemicolon  /;/ conceal cchar=☺ "☻
     "syn match   jsNiceComma      /,/ conceal cchar=☺
   endif
   setlocal conceallevel=2
