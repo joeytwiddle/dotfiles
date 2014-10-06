@@ -16,17 +16,21 @@
 " For the moment, disabling on InsertEnter and CursorHoldI.  That means we
 " might not create a swapfile during the first edit.  Gah.
 
-" Couldn't get it working well with recover.vim =(
-"finish
+" Allows plugin to be enabled/disabled from config and also at runtime.
+let g:NoSwapSuck_Enabled = get(g:, 'NoSwapSuck_Enabled', 1)
+
+" When opening a file for the first time, will `:set swapfile` to force Vim to
+" check if there is a swapfile present for that file.
+let g:NoSwapSuck_CheckSwapfileOnLoad = get(g:, 'NoSwapSuck_CheckSwapfileOnLoad', 1)
+
+if !g:NoSwapSuck_Enabled
+  finish
+endif
 
 " Doing this here to prevent the initial message "Setting NO swapfile" from
 " triggering a "Press ENTER to continue" message.  If you remove this, you may
 " want an alternative solution for that.
 set noswapfile
-
-if !exists("g:NoSwapSuck_CheckSwapfileOnLoad")
-  let g:NoSwapSuck_CheckSwapfileOnLoad = 1
-endif
 
 augroup NoSwapSuck
   autocmd!
@@ -36,7 +40,7 @@ augroup NoSwapSuck
   if g:NoSwapSuck_CheckSwapfileOnLoad
     " No, turn it on, then off again, to check for existing swapfile :P
     "autocmd BufReadPre * set swapfile noswapfile
-    autocmd BufReadPre * set swapfile
+    autocmd BufReadPre * call s:SetSwapfileToCheck()
     autocmd BufReadPost * call s:ConsiderClosingSwapfile()
     " OK that would be good, except it interferes with the recover.vim plugin
     " which I am using.  So for me, I prefer to disable swapfile, and have
@@ -68,16 +72,27 @@ augroup NoSwapSuck
 augroup END
 
 function! s:ConsiderClosingSwapfile()
-  if &swapfile && !&modified
-    echo "Setting NO swapfile"
-    setlocal noswapfile
+  if g:NoSwapSuck_Enabled
+    if &swapfile && !&modified
+      echo "Setting NO swapfile"
+      setlocal noswapfile
+    endif
   endif
 endfunction
 
-function! s:ConsiderCreatingSwapfile()
-  if !&swapfile && &modified
-    echo "Setting swapfile"
-    setlocal swapfile
+function! s:ConsiderCreatingSwapfile(...)
+  if g:NoSwapSuck_Enabled
+    let about_to_be_modified = a:0 ? a:1 : 0
+    if !&swapfile && ( &modified || about_to_be_modified )
+      echo "Setting swapfile"
+      setlocal swapfile
+    endif
+  endif
+endfunction
+
+function! s:SetSwapfileToCheck()
+  if g:NoSwapSuck_Enabled
+    set swapfile
   endif
 endfunction
 
