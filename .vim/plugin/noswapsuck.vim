@@ -23,6 +23,13 @@ let g:NoSwapSuck_Enabled = get(g:, 'NoSwapSuck_Enabled', 1)
 " check if there is a swapfile present for that file.
 let g:NoSwapSuck_CheckSwapfileOnLoad = get(g:, 'NoSwapSuck_CheckSwapfileOnLoad', 1)
 
+" Create a swapfile immediately before entering Insert mode.
+" Advantages: If you do a long edit without leaving insert mode, your changes
+" will be safely stored in the swapfile.
+" Disadvantages: If a swapfile is present, you will be interrupted while
+" entering insert mode.
+let g:NoSwapSuck_CreateSwapfileOnInsert = get(g:, 'NoSwapSuck_CreateSwapfileOnInsert', 1)
+
 if !g:NoSwapSuck_Enabled
   finish
 endif
@@ -58,23 +65,29 @@ augroup NoSwapSuck
   endif
 
   " Turn swapfile on when we actually start editing
+  " CursorHold is a catch all; it will check quite often.
   autocmd CursorHold * call s:ConsiderCreatingSwapfile()
   "autocmd CursorHoldI * call s:ConsiderCreatingSwapfile()
 
   " It can be rather disruptive to enable the swapfile when we enter Insert
-  " mode, because if a swapfile is found, editing will be interrupted to
-  " prompt what to do next.
+  " mode, because if an existing swapfile is found, editing will be
+  " interrupted while Vim asks what to do next.
   "
-  " (There is also be a danger that the user will be typing keys to insert,
+  " (There is also a danger that the user will be typing characters to insert,
   " and these will get passed to the swapfile recovery prompt.)
   "
-  " But this is less of an issue since we started using SetSwapfileToCheck on
-  " BufReadPre, so we enable it for now.
+  " But this is less of an issue since we started using CheckSwapfileOnLoad,
+  " so we now enable it by default.
   "
   " Previously we only checked on InsertLeave, and never on InsertEnter.  The
   " disadvantage with that was that you might make a significant edit before
   " discovering the swapfile contains a more recent version of the file.
-  autocmd InsertEnter * call s:ConsiderCreatingSwapfile(1)
+  if g:NoSwapSuck_CreateSwapfileOnInsert
+    autocmd InsertEnter * call s:ConsiderCreatingSwapfile(1)
+  endif
+
+  " We always check when leaving Insert mode.
+  " If the buffer was modified, a swapfile will be created.
   autocmd InsertLeave * call s:ConsiderCreatingSwapfile()
 
   " Since it's a global (yeah great) we have to keep switching it on/off
