@@ -593,6 +593,8 @@ autocmd VimLeave * silent !stty ixon
 	"" I build the list, rather than declare it, so lines can be easily added/removed.
 	let vamAddons = []
 
+	call add(vamAddons, 'github:joeytwiddle/vtreeexplorer') " File (tree) explorer
+
 	" call add(vamAddons,"vim-haxe")                       " Haxe syntax
 	" call add(vamAddons,'github:jdonaldson/vim-haxe')     " Haxe syntax
 	call add(vamAddons,'github:jdonaldson/vaxe')           " Haxe syntax (preferred)
