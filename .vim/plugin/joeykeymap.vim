@@ -731,4 +731,6 @@ nmap ]> <C-w>>
 " This may help to cleanup window sizes are resizing the Vim window.
 nmap ]= :exec "resize ".(&lines-20)<CR>:exec "vert resize ".(&columns-31)<CR>
 nmap [= :exec "resize ".(&lines-10)<CR>:exec "vert resize ".(&columns-31)<CR>
+" The -31 is for when TagList is open with width 30.
+" TODO: But what about when the file browser is open too?!
 

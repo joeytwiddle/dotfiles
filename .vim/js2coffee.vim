@@ -57,7 +57,10 @@ silent! %s/\<this\./@/g
 " Turn "var x;" markers into "x = undefined" markers, before we destroy them.
 " Currently we just get "x" on a line by itself, which might not achieve what
 " we want (or maybe it does).
+
 " Convert ternary "(a?b:c)" into "(if (a) then (b) else (c))"
+echo "Please tell me whether the following statements are ternary conditionals"
+silent %s/\([^?]*\)\s*?\s*\([^:]*\)\s*:\s*/if \1 then \2 else /gc
 
 " Heredocs /*...*/ inside the ()s of ifs or fors make CS complain when they
 " become ###...###.

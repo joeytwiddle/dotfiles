@@ -277,7 +277,8 @@ function! Joeyhighlight()
 	"highlight foldColumn ctermbg=Grey ctermfg=Blue cterm=none gui=bold guifg=Green guibg=#000060
 	highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#000080
 
-	highlight Conceal term=reverse ctermbg=DarkBlue ctermfg=White cterm=bold guibg=Blue guifg=White gui=bold
+	"highlight Conceal term=reverse ctermbg=DarkBlue ctermfg=White cterm=bold guibg=Blue guifg=White gui=bold
+	highlight Conceal ctermfg=cyan cterm=bold guifg=cyan gui=bold
 
 	"" green
 	"hi cursor guibg=#44ff44

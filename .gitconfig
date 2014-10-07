@@ -258,8 +258,12 @@
 	# Mac OSX users may prefer:
 	#helper = osxkeychain
 
-#[merge]
+[merge]
 	## When marking conflict in a file, also shows original (base) lines, after ||||||||
 	#conflictstyle = diff3
+	tool = gvimdiff
+	#tool = kdiff3
 
+[rerere]
+	enabled = true
 

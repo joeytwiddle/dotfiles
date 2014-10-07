@@ -180,9 +180,10 @@ autocmd VimLeave * silent !stty ixon
 	"let g:Grep_Default_Filelist .= " --exclude-dir=public/assets"   " Precompiled assets (e.g. images)
 	" However this works fine there!
 	let g:Grep_Default_Filelist .= " --exclude-dir=./public/assets"   " Precompiled assets (e.g. images)
-	" This may need similar adjustment to the above:
-	let g:Grep_Default_Filelist .= " --exclude-dir=.meteor/local"   " Installed packages
 	" Of course 'public' or 'assets' on its own should work fine, but we don't want that!
+	" This doesn't seem to work even when we add './' as above.
+	" However it is less of an issue because we are excluding 'build' folders above already.
+	"let g:Grep_Default_Filelist .= " --exclude-dir=.meteor/local"   " Installed packages
 	" For UL:
 	let g:Grep_Default_Filelist .= " --exclude-dir=deploy_TMP"
 
@@ -229,7 +230,7 @@ autocmd VimLeave * silent !stty ixon
 	" Or the following is smart enough to decide for us.  BUG: The `normal q` part fails on an empty buffer with error: "E749: empty buffer"
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
-	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets','.meteor/local','deploy_TMP']"
+	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets','*/.meteor/local/*','deploy_TMP']"
 	",'pikto'
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
@@ -592,6 +593,8 @@ autocmd VimLeave * silent !stty ixon
 	"" Note that this is NOT Debian's vim-addon-manager package!  Nor is it pathogen.
 	"" I build the list, rather than declare it, so lines can be easily added/removed.
 	let vamAddons = []
+
+	call add(vamAddons, 'github:joeytwiddle/vtreeexplorer') " File (tree) explorer
 
 	" call add(vamAddons,"vim-haxe")                       " Haxe syntax
 	" call add(vamAddons,'github:jdonaldson/vim-haxe')     " Haxe syntax

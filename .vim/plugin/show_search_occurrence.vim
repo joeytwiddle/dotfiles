@@ -10,6 +10,7 @@
 "
 " Inspired by http://stackoverflow.com/questions/23975604/
 " See also: http://www.vim.org/scripts/script.php?script_id=1682#IndexedSearch
+"           https://github.com/henrik/vim-indexed-search
 " See also: http://www.vim.org/scripts/script.php?script_id=2634#SearchPosition
 
 " If the current file is larger than the threshold (in bytes), then do not
