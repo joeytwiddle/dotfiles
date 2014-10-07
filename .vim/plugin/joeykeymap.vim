@@ -663,7 +663,8 @@ autocmd CursorHold * set norelativenumber
 cnoremap %<Tab> <C-r>%
 
 " MacVim maps Backspace in visual mode to `"-d` which differs from the behaviour I am accustomed to (a lazy way to move back a character).
-xunmap <BS>
+" silent! will prevent it complaining it the mapping does not exist (or was cleared on an earlier load of this script)
+silent! xunmap <BS>
 
 " When editing a Vim file, make K lookup Vim's inline :help rather than calling 'man'.
 autocmd BufReadPost *.vim setlocal keywordprg=:help
@@ -726,4 +727,6 @@ nmap ]> <C-w>>
 " This may help to cleanup window sizes are resizing the Vim window.
 nmap ]= :exec "resize ".(&lines-20)<CR>:exec "vert resize ".(&columns-31)<CR>
 nmap [= :exec "resize ".(&lines-10)<CR>:exec "vert resize ".(&columns-31)<CR>
+" The -31 is for when TagList is open with width 30.
+" TODO: But what about when the file browser is open too?!
 

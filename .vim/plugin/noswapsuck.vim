@@ -16,17 +16,28 @@
 " For the moment, disabling on InsertEnter and CursorHoldI.  That means we
 " might not create a swapfile during the first edit.  Gah.
 
-" Couldn't get it working well with recover.vim =(
-"finish
+" Allows plugin to be enabled/disabled from config and also at runtime.
+let g:NoSwapSuck_Enabled = get(g:, 'NoSwapSuck_Enabled', 1)
+
+" When opening a file for the first time, will `:set swapfile` to force Vim to
+" check if there is a swapfile present for that file.
+let g:NoSwapSuck_CheckSwapfileOnLoad = get(g:, 'NoSwapSuck_CheckSwapfileOnLoad', 1)
+
+" Create a swapfile immediately before entering Insert mode.
+" Advantages: If you do a long edit without leaving insert mode, your changes
+" will be safely stored in the swapfile.
+" Disadvantages: If a swapfile is present, you will be interrupted while
+" entering insert mode.
+let g:NoSwapSuck_CreateSwapfileOnInsert = get(g:, 'NoSwapSuck_CreateSwapfileOnInsert', 1)
+
+if !g:NoSwapSuck_Enabled
+  finish
+endif
 
 " Doing this here to prevent the initial message "Setting NO swapfile" from
 " triggering a "Press ENTER to continue" message.  If you remove this, you may
 " want an alternative solution for that.
 set noswapfile
-
-if !exists("g:NoSwapSuck_CheckSwapfileOnLoad")
-  let g:NoSwapSuck_CheckSwapfileOnLoad = 1
-endif
 
 augroup NoSwapSuck
   autocmd!
@@ -36,7 +47,7 @@ augroup NoSwapSuck
   if g:NoSwapSuck_CheckSwapfileOnLoad
     " No, turn it on, then off again, to check for existing swapfile :P
     "autocmd BufReadPre * set swapfile noswapfile
-    autocmd BufReadPre * set swapfile
+    autocmd BufReadPre * call s:SetSwapfileToCheck()
     autocmd BufReadPost * call s:ConsiderClosingSwapfile()
     " OK that would be good, except it interferes with the recover.vim plugin
     " which I am using.  So for me, I prefer to disable swapfile, and have
@@ -54,10 +65,31 @@ augroup NoSwapSuck
   endif
 
   " Turn swapfile on when we actually start editing
+  " CursorHold is a catch all; it will check quite often.
   autocmd CursorHold * call s:ConsiderCreatingSwapfile()
   "autocmd CursorHoldI * call s:ConsiderCreatingSwapfile()
-  "autocmd InsertEnter * call s:ConsiderCreatingSwapfile()
+
+  " It can be rather disruptive to enable the swapfile when we enter Insert
+  " mode, because if an existing swapfile is found, editing will be
+  " interrupted while Vim asks what to do next.
+  "
+  " (There is also a danger that the user will be typing characters to insert,
+  " and these will get passed to the swapfile recovery prompt.)
+  "
+  " But this is less of an issue since we started using CheckSwapfileOnLoad,
+  " so we now enable it by default.
+  "
+  " Previously we only checked on InsertLeave, and never on InsertEnter.  The
+  " disadvantage with that was that you might make a significant edit before
+  " discovering the swapfile contains a more recent version of the file.
+  if g:NoSwapSuck_CreateSwapfileOnInsert
+    autocmd InsertEnter * call s:ConsiderCreatingSwapfile(1)
+  endif
+
+  " We always check when leaving Insert mode.
+  " If the buffer was modified, a swapfile will be created.
   autocmd InsertLeave * call s:ConsiderCreatingSwapfile()
+
   " Since it's a global (yeah great) we have to keep switching it on/off
   " when we switch between buffers/windows.
   autocmd WinLeave * call s:ConsiderClosingSwapfile()
@@ -68,16 +100,27 @@ augroup NoSwapSuck
 augroup END
 
 function! s:ConsiderClosingSwapfile()
-  if &swapfile && !&modified
-    echo "Setting NO swapfile"
-    setlocal noswapfile
+  if g:NoSwapSuck_Enabled
+    if &swapfile && !&modified
+      echo "Setting NO swapfile"
+      setlocal noswapfile
+    endif
   endif
 endfunction
 
-function! s:ConsiderCreatingSwapfile()
-  if !&swapfile && &modified
-    echo "Setting swapfile"
-    setlocal swapfile
+function! s:ConsiderCreatingSwapfile(...)
+  if g:NoSwapSuck_Enabled
+    let about_to_be_modified = a:0 ? a:1 : 0
+    if !&swapfile && ( &modified || about_to_be_modified )
+      echo "Setting swapfile"
+      setlocal swapfile
+    endif
+  endif
+endfunction
+
+function! s:SetSwapfileToCheck()
+  if g:NoSwapSuck_Enabled
+    set swapfile
   endif
 endfunction
 
