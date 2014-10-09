@@ -665,7 +665,12 @@ autocmd VimLeave * silent !stty ixon
 	let g:repmo_key = ";"
 	let g:repmo_revkey = ","
 
+	" NOTE: For the tern plugin to work, you need to cd into the folder and do `npm install`
+	"       You also need to create a .tern-project file for each project!
 	call add(vamAddons,"github:marijnh/tern_for_vim")     " Static analysis of JS files
+	let g:tern_show_argument_hints = 'yes'
+	let g:tern_show_signature_in_pum = 1
+	" Curiously the documentation pops up in a Scratch window when I use <Tab> to complete a word, even if both of the above are set to off (defaults).
 
 	" Here is a minimal alternative to EasyMotion: https://github.com/vim-scripts/PreciseJump
 	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion

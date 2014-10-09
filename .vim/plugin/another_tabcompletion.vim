@@ -32,6 +32,14 @@ inoremap <silent> <s-tab> <c-r>=InsertTabWrapper ("backward")<cr>
 "imap <silent> <s-tab> <c-p>
 
 
+" I modified UltiSnips so I can use it on <Tab> and <Shift-Tab> but it will fallback to the exist definitions if no snippet is appropriate.
+" Unfortunately it is still quite slow, because it seems to cause 3 screen redraws every time we hit Tab!
+" We can mitigate this on some of the later <Tab> strokes, by skipping UltiSnips whenever the popup menu is open.
+" We need to override UltiSnips mappings after they have loaded, so we wait for VimEnter.
+au VimEnter * imap <expr> <Tab> pumvisible() ? InsertTabWrapper("forward") : "\<C-R>=UltiSnips_ExpandSnippetOrJump()\<CR>"
+au VimEnter * imap <expr> <S-Tab> pumvisible() ? InsertTabWrapper("backward") : "\<C-R>=UltiSnips_JumpBackwards()\<CR>"
+
+
 
 if exists("g:give_me_tab_completion_in_search") && g:give_me_tab_completion_in_search
     " Discussion: https://groups.google.com/forum/#!topic/vim_use/-IPWgth2h_k
