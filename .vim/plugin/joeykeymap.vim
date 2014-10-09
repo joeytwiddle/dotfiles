@@ -727,6 +727,10 @@ nmap ]< <C-w><
 nmap [> <C-w>>
 nmap ]> <C-w>>
 " They are not actually pairs!
+nmap <C-S-Up>    <C-w>+
+nmap <C-S-Down>  <C-w>-
+nmap <C-S-Left>  <C-w><
+nmap <C-S-Right> <C-w>>
 
 " This may help to cleanup window sizes are resizing the Vim window.
 nmap ]= :exec "resize ".(&lines-20)<CR>:exec "vert resize ".(&columns-31)<CR>
