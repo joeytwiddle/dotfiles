@@ -16,10 +16,10 @@ let g:move_unify_whitespace = 1   " Tab, space and empty-line are all considered
 let g:move_once_at_start    = 1   " Don't stop on the very next line just because it has a different char from the current!
 
 " For Windows users:
-nnoremap <silent> <C-S-Up>   :call <SID>FindNextChangeNormal("k")<Enter>
-nnoremap <silent> <C-S-Down> :call <SID>FindNextChangeNormal("j")<Enter>
-vnoremap <silent> <C-S-Up>   :call <SID>FindNextChangeVisual("k")<Enter>
-vnoremap <silent> <C-S-Down> :call <SID>FindNextChangeVisual("j")<Enter>
+"nnoremap <silent> <C-S-Up>   :call <SID>FindNextChangeNormal("k")<Enter>
+"nnoremap <silent> <C-S-Down> :call <SID>FindNextChangeNormal("j")<Enter>
+"vnoremap <silent> <C-S-Up>   :call <SID>FindNextChangeVisual("k")<Enter>
+"vnoremap <silent> <C-S-Down> :call <SID>FindNextChangeVisual("j")<Enter>
 " For Mac OSX users (Mission Control hijacks the keys above):
 nnoremap <silent> g<S-Up>    :call <SID>FindNextChangeNormal("k")<Enter>
 nnoremap <silent> g<S-Down>  :call <SID>FindNextChangeNormal("j")<Enter>
