@@ -7,6 +7,7 @@
 " It comes from an old revision of http://vim.wikia.com/wiki/Smart_mapping_for_tab_completion
 
 function! InsertTabWrapper(direction)
+    set completeopt-=longest
     let col = col('.') - 1
     if !col || getline('.')[col - 1] !~ '\k'
         return "\<tab>"

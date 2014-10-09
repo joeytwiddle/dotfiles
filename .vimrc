@@ -665,6 +665,8 @@ autocmd VimLeave * silent !stty ixon
 	let g:repmo_key = ";"
 	let g:repmo_revkey = ","
 
+	call add(vamAddons,"github:marijnh/tern_for_vim")     " Static analysis of JS files
+
 	" Here is a minimal alternative to EasyMotion: https://github.com/vim-scripts/PreciseJump
 	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
 	call add(vamAddons,"github:joeytwiddle/vim-easymotion") " My dev copy
