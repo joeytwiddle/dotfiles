@@ -701,6 +701,7 @@ autocmd VimLeave * silent !stty ixon
 		nmap <silent> F <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-F)
 		nmap <silent> t <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-t)
 		nmap <silent> T <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-T)
+		" BUG: f and t were not working for me in Visual mode on MacVim.
 		vmap <silent> f <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-f)
 		vmap <silent> F <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-F)
 		vmap <silent> t <Plug>(remap-semicolon-and-comma)<Plug>(easymotion-flash-t)
