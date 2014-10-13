@@ -638,7 +638,8 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:chrisbra/improvedft")     " Another one to try
 	"call add(vamAddons,"github:vim-scripts/SearchComplete") " Tab-completion in the / search interface.  This breaks <Up> and intereferes with :b and and :Grep.
 	"call add(vamAddons,"github:goldfeld/vim-seek")       " Quickly seek new position by 2 chars, on `s`
-	"call add(vamAddons,"github:Raimondi/vim-buffalo")    " Buffer switcher - needs some extra attention to get it working, or maybe I just need the right vim version/patch.
+	"call add(vamAddons,"github:dahu/vimple")             " Get the buffers as a list
+	"call add(vamAddons,"github:Raimondi/vim-buffalo")    " Buffer switcher - requires vimple
 	call add(vamAddons,"surround")                        " Change dict(mykey) to dict[mykey] with cs([ delete with ds( or create with ysiw[
 	" Interesting: source folder's vimrc file for different settings in specific projects
 	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
