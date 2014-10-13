@@ -640,7 +640,8 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:chrisbra/improvedft")     " Another one to try
 	"call add(vamAddons,"github:vim-scripts/SearchComplete") " Tab-completion in the / search interface.  This breaks <Up> and intereferes with :b and and :Grep.
 	"call add(vamAddons,"github:goldfeld/vim-seek")       " Quickly seek new position by 2 chars, on `s`
-	"call add(vamAddons,"github:Raimondi/vim-buffalo")    " Buffer switcher - needs some extra attention to get it working, or maybe I just need the right vim version/patch.
+	"call add(vamAddons,"github:dahu/vimple")             " Get the buffers as a list
+	"call add(vamAddons,"github:Raimondi/vim-buffalo")    " Buffer switcher - requires vimple
 	call add(vamAddons,"surround")                        " Change dict(mykey) to dict[mykey] with cs([ delete with ds( or create with ysiw[
 	" Interesting: source folder's vimrc file for different settings in specific projects
 	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
@@ -667,6 +668,13 @@ autocmd VimLeave * silent !stty ixon
 	" Works but interferes with navigation_enhancer.vim: <C-w>j|<C-w>k 
 	let g:repmo_key = ";"
 	let g:repmo_revkey = ","
+
+	" NOTE: For the tern plugin to work, you need to cd into the folder and do `npm install`
+	"       You also need to create a .tern-project file for each project!
+	call add(vamAddons,"github:marijnh/tern_for_vim")     " Static analysis of JS files
+	let g:tern_show_argument_hints = 'on_hold'
+	let g:tern_show_signature_in_pum = 1
+	" Curiously the documentation pops up in a Scratch window when I use <Tab> to complete a word, even if both of the above are set to off (defaults).
 
 	" Here is a minimal alternative to EasyMotion: https://github.com/vim-scripts/PreciseJump
 	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion

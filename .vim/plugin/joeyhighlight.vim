@@ -302,9 +302,10 @@ function! Joeyhighlight()
 	" hi Comma cterm=bold ctermfg=white gui=bold guifg=white
 	"hi Comma cterm=bold ctermfg=darkgrey gui=bold guifg=#777777
 
-	" Ubuntu made it look naff, so filled out all the colors
-	hi Pmenu ctermbg=magenta ctermfg=white cterm=bold guibg=#bb00bb guifg=white gui=bold
-	hi Pmenusel ctermbg=black ctermfg=white cterm=bold guibg=#660066 guifg=white gui=bold
+	" Ubuntu's Vim made the PMenu look naff, so I filled out all the colors
+	"hi Pmenu ctermbg=magenta ctermfg=white cterm=bold guibg=#bb00bb guifg=white gui=bold
+	hi Pmenu ctermbg=blue ctermfg=white cterm=bold guibg=#0000bb guifg=white gui=bold
+	hi Pmenusel ctermbg=black ctermfg=white cterm=bold guibg=#000066 guifg=white gui=bold
 
 	highlight CursorLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
 	highlight clear CursorColumn

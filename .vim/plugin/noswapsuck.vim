@@ -75,6 +75,8 @@ augroup NoSwapSuck
   "
   " (There is also a danger that the user will be typing characters to insert,
   " and these will get passed to the swapfile recovery prompt.)
+  " (Although it seems the recover prompt does not show when we are in insert
+  " mode, although it does interrupt the user a little!)
   "
   " But this is less of an issue since we started using CheckSwapfileOnLoad,
   " so we now enable it by default.

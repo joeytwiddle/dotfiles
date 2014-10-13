@@ -319,7 +319,7 @@ cnoremap <C-X> <C-W>
 "" This doesn't do what we want, and anyway we want to leave Ctrl-V alone since it does something special in Vim (insert literal char).
 " cnoremap <C-V> <C-Right><C-W>
 "" Lazy move.  Ctrl-Space just walks over the current char.
-"" I must say C-@ instead of C-Space for this to work on the terminal.
+"" We must use C-@ instead of C-Space for this to work on the terminal.
 cnoremap <C-@> <Right>
 inoremap <C-@> <Right>
 "" But in GUI mode we need to define the mapping properly.
@@ -327,6 +327,19 @@ autocmd GUIEnter * cnoremap <c-Space> <Right>
 autocmd GUIEnter * inoremap <c-Space> <Right>
 "" Can't map C-Backspace; BS emits C-H with or without Ctrl.
 " cnoremap <C-BS> <Left>
+
+" No use checking it now - it loads later!
+"if exists('*tern#Complete')
+"inoremap <C-@> <C-X><C-O>
+" For general completion I like menu,preview
+" But for tern I prefer longest,menu,preview
+"set completeopt+=longest
+" DONE: We could switch completeopts depending which completion mode I am about to run.
+inoremap <silent> <C-@> <c-r>=InsertOmniComplete("forward")<cr>
+function! InsertOmniComplete(direction)
+	set completeopt+=longest
+	return "\<c-x>\<c-o>"
+endfunction
 
 "" Now we have muted <C-R> but <C-R> can be useful, so let's make a workaround:
 "cnoremap <C-\><C-R> <C-R>
