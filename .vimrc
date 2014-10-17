@@ -651,6 +651,7 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"unimpaired")                      " Various next/previous keybinds on ]<key> and [<key>
 	call add(vamAddons,"github:tristen/vim-sparkup")      " Expand Zen/Jade-like snippets into HTML
 	let g:sparkupExecuteMapping = '<C-]>'
+	let g:sparkupNextMapping = '<C-]>n'   " The default <C-n> messes with my <Tab> mappings
 	let g:sparkupMappingInsertModeOnly = 1
 	call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
 
