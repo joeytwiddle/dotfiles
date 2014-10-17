@@ -7,9 +7,15 @@
 " It comes from an old revision of http://vim.wikia.com/wiki/Smart_mapping_for_tab_completion
 
 function! InsertTabWrapper(direction)
+    " Often I don't want 'longest'; I want to perform a quick search.
+    " So I remove 'longest' here.  And my mappings for other plugins, such as Tern, may enable it before they act.
+    " (I might feel differently if the number of results is low, or the number of chars in the word-so-far is low.)
     set completeopt-=longest
     let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
+    " \k matches chars in 'iskeyword'
+    "if !col || getline('.')[col - 1] !~ '\k'
+    " Only inserts a normal <Tab> if at the beginning of a line (everything before the cursor is whitespace)
+    if !col || getline('.')[0:col - 1] =~ '^\s*$'
         return "\<tab>"
     elseif "backward" == a:direction
         return "\<c-p>"
@@ -18,7 +24,7 @@ function! InsertTabWrapper(direction)
     endif
 endfunction
 
-" This causes a lot of flicker (3 or 4 screen redraws) in xterm.
+" This causes a lot of flicker (3 or 4 screen redraws) in xterm.  I believe that is because the returned values are re-interpreted.
 inoremap <silent> <tab> <c-r>=InsertTabWrapper ("forward")<cr>
 inoremap <silent> <s-tab> <c-r>=InsertTabWrapper ("backward")<cr>
 
