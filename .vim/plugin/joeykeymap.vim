@@ -324,7 +324,8 @@ cnoremap <C-@> <Right>
 inoremap <C-@> <Right>
 "" But in GUI mode we need to define the mapping properly.
 autocmd GUIEnter * cnoremap <c-Space> <Right>
-autocmd GUIEnter * inoremap <c-Space> <Right>
+"" Disabled for now because we are using it for something else below
+" autocmd GUIEnter * inoremap <c-Space> <Right>
 "" Can't map C-Backspace; BS emits C-H with or without Ctrl.
 " cnoremap <C-BS> <Left>
 
@@ -336,6 +337,10 @@ autocmd GUIEnter * inoremap <c-Space> <Right>
 "set completeopt+=longest
 " DONE: We could switch completeopts depending which completion mode I am about to run.
 inoremap <silent> <C-@> <c-r>=InsertOmniComplete("forward")<cr>
+" For MacVim:
+imap <C-Space> <C-@>
+" Already bound to Spotlight:
+"imap <D-Space> <C-@>
 function! InsertOmniComplete(direction)
 	set completeopt+=longest
 	return "\<c-x>\<c-o>"
