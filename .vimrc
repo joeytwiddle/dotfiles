@@ -875,6 +875,7 @@ autocmd VimLeave * silent !stty ixon
 	" >>> My Plugins from the Cloud (all by me!) {{{
 	call add(vamAddons,"github:joeytwiddle/sexy_scroller.vim")   " Smooth animation when scrolling
 	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
+	call add(vamAddons,"github:joeytwiddle/RepeatLast.vim") " Easily repeat groups of previous actions
 	" }}}
 
 	if filereadable($HOME."/.vimrc.local")
