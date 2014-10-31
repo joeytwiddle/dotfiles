@@ -19,9 +19,9 @@ set statusline=%<%f\ %#Error#%m%##%h%r%=\ %P\ (%0l/%-0L,%c~%v)\ \#%02B\ \|%0n\|%
 " %y for filetype
 let &statusline = substitute(&statusline, '%m', '%{ \&modified ? "[+]" : "" }', '')
 let s:moreflags  = '%{ \&modifiable ? "" : "[-]" }'
-let s:moreflags = s:moreflags . '%#StatusDiffing#%{ \&diff ? "[D]" : "" }%##'
+let s:moreflags = s:moreflags . '%#StatusDiffing#%{ \&diff ? "[d]" : "" }%##'
 "highlight StatusDiffing ctermbg=darkyellow ctermfg=black guibg=darkyellow guifg=black
-highlight StatusDiffing ctermbg=magenta ctermfg=black guibg=magenta guifg=black
+highlight StatusDiffing ctermbg=blue ctermfg=white guibg=blue guifg=white
 let &statusline = substitute(&statusline, '%h', s:moreflags . '%h', '')
 if exists('*GetSearchStatus')
     let &statusline = substitute(&statusline, '= ', '= %{GetSearchStatus()}', '')
