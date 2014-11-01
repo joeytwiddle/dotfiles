@@ -18,6 +18,10 @@
 # Bug when switching desktops:
 # - If you switch right then down rapidly, you will end up being transported down only!  But slowly it works fine.
 
+# Update 2014:
+# - Current-desktop window cycler seems fairly well behaved on Ubuntu 12.04
+# - However multi-desktop window-cycler jumps back to the top of the list whenever it switches desktop.
+
 [begin]
 
  [config]
