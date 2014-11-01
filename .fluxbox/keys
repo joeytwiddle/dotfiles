@@ -191,6 +191,10 @@ Mod1 Right :NextTab
 # Control Tab :PrevTab
 # Control grave :NextTab
 # Control Shift Tab :NextTab
+## Like Mac OSX:
+Mod1 Shift bracketleft :PrevTab
+Mod1 Shift bracketright :NextTab
+## Move current tab around
 Mod4 Left :MoveTabLeft
 Mod4 Right :MoveTabRight
 # Mod4 Shift Left :MoveTabLeft
@@ -225,6 +229,8 @@ Mod1 i :Minimize
 Mod4 i :Minimize
 Mod1 z :MaximizeWindow
 Mod4 z :MaximizeWindow
+## Like Mac OSX "Grow"
+Mod1 Mod4 equal :MaximizeWindow
 ## Strangely my Chromium ignores this (it captures the keypress)
 # Mod1 Enter :Fullscreen
 # Mod1 Enter :MacroCmd {ToggleDecor} {MaximizeWindow}
