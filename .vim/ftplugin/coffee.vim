@@ -31,14 +31,16 @@ let &comments=":##,".&comments
 
 let g:coffeeAutoCompileAll = get(g:, "coffeeAutoCompileAll", 1)
 let g:coffeeShowJSChanges = get(g:, "coffeeShowJSChanges", 0)
-" Allows you to keep js and coffee files separate; including when you don't really need to generate js files but want to see diffs.
+" If set, places compiles js files in the given folder.
+" Useful to keep compiled files out of the source tree, or to compile into a
+" temp dir purely for the Changes feature.
 let g:coffeeCompileIntoFolder = get(g:, "coffeeCompileIntoFolder", "")
 
 " DONE: If coffeeShowJSChanges is used in a split window which is not the
 " last, when pedit and pclose are used it shrinks grrrr.  Remember and restore
 " win height whenever we do pedit/pclose?
 "
-" TODO: Option to compile to temp/nullfolder to check success and show diff,
+" DONE: Option to compile to temp/nullfolder to check success and show diff,
 " but avoid polluting the coffee source folder with js files.
 
 " TODO: Refactor this so it can be used on other filetypes.
