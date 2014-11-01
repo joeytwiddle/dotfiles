@@ -74,7 +74,7 @@
  [app] (name=chromium-browser.real)
  [app] (name=konqueror)
  [app] (name=chrome)
-  [Close]	{yes}
+ [app] (name=X-www-browser)
 [end]
 [group]  (workspace=[current])
  [app] (name=kopete)
