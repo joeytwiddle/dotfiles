@@ -51,8 +51,11 @@ inoremap <silent> <s-tab> <c-r>=InsertTabWrapper ("backward")<cr>
 "au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <expr> <Tab> pumvisible() ? InsertTabWrapper('forward') : UltiSnips_ExpandSnippetOrJump() | endif
 "au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <expr> <S-Tab> pumvisible() ? InsertTabWrapper('backward') : UltiSnips_JumpBackwards() | endif
 " If the menu is already open (e.g. from <Ctrl-Space> on a different plugin like tern) then cycle, don't check getline again!
-au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <expr> <Tab> pumvisible() ? "\<c-n>" : UltiSnips_ExpandSnippetOrJump() | endif
-au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <expr> <S-Tab> pumvisible() ? "\<c-p>" : UltiSnips_JumpBackwards() | endif
+"au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <expr> <Tab> pumvisible() ? "\<c-n>" : UltiSnips_ExpandSnippetOrJump() | endif
+"au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <expr> <S-Tab> pumvisible() ? "\<c-p>" : UltiSnips_JumpBackwards() | endif
+" But UltiSnips does not like being called from <expr>.  It produces the error "Not allowed here".
+au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <Tab> <C-r>=pumvisible() ? "\<c"."-n>" : UltiSnips_ExpandSnippetOrJump()<CR>| endif
+au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <S-Tab> <C-r>=pumvisible() ? "\<c"."-p>" : UltiSnips_JumpBackwards()<CR>| endif
 "au VimEnter * imap <expr> <Tab> InsertTabWrapper('forward')
 "au VimEnter * imap <expr> <S-Tab> InsertTabWrapper('backward')
 "au VimEnter * imap <expr> <Tab> "\<C-R>=InsertTabWrapper('forward')\<CR>"
