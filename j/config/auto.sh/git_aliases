@@ -665,6 +665,16 @@ git_get_current_branch() {
 	#git rev-parse --abbrev-ref HEAD
 }
 
+#git_list_all_tracked_files_with_meta() {
+#	git ls-tree --full-tree -r HEAD
+#	# Add --name-only if you don't want meta; works on bare repo.
+#}
+
+#git_list_all_tracked_files() {
+#	git ls-files
+#	# Does not work on bare repos.
+#}
+
 git_find_branch_start_commit() {
 	local other_branch current_branch
 
