@@ -33,8 +33,10 @@ augroup END
 
 "" Vim 7.3 started making `w` jump over '.'s in a variety of languages, which I do not want.
 autocmd BufReadPost * setlocal iskeyword-=.
-" However I have come to accept that I do need '-' to be part of a word when dealing with CSS classes.
-autocmd BufReadPost *.{css,html,js,erb,jade,blade} setlocal iskeyword+=-
+" However I have come to accept that I do need '-' to be part of a word when dealing with CSS classes and IDs.
+autocmd BufReadPost *.{html,svg,xml,css,scss,less,stylus,js,coffee,erb,jade,blade} setlocal iskeyword+=-
+" Also $ can be part of a valid identifier in JS (in fact almost any unicode character can be!):
+autocmd BufReadPost *.{js,coffee} setlocal iskeyword+=$
 
 " At some point undo started working through file-reads.  Given that, I am happier to load changed files automatically.  (Especially useful when peforming git checkout!)
 if v:version >= 703
@@ -63,7 +65,9 @@ silent !stty -ixon
 autocmd VimLeave * silent !stty ixon
 " Restoring the "default" might suck if the user usually has it disabled!  We could check whether he has it enabled or not by looking at the exit code of:
 "   stty -a | grep -q '\( \|^\)ixon\>'
-" TODO: What if the user doesn't have an stty executable (Windows)?  What will this do on Macs or MacVim?  We may need to try harder to fail silently in the general case.  Or is silent enough already?
+" TODO: What if the user doesn't have an stty executable (Windows)?
+"       We may need to try harder to fail silently in the general case.  Or is silent enough already?
+"       It seems to work fine on Mac terminal and MacVim.
 
 
 
