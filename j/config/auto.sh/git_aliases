@@ -307,9 +307,11 @@ unalias gco 2>/dev/null   # REMOVEME
 #alias gco='git checkout'
 gco() {
 	git checkout "$@"
-	if [ "$?" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
+	local ret_status="$?"
+	if [ "$ret_status" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
 	then "$POST_GIT_CHECKOUT" "$@"
 	fi
+	return "$ret_status"
 }
 POST_GIT_CHECKOUT=update_cindex
 if ! which ionice >/dev/null
