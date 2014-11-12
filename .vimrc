@@ -465,7 +465,6 @@ autocmd VimLeave * silent !stty ixon
 	" Add a few custom filetypes:
 	au BufRead,BufNewFile {*.shlib}              set ft=sh
 	au BufRead,BufNewFile {*.grm}                set ft=grm
-	au BufRead,BufNewFile {*.json}               set ft=javascript
 	au BufRead            {*/xchatlogs/*.log}    set ft=irclog readonly
 	" From web:
 	au BufRead,BufNewFile {/usr/share/X11/xkb/*} set ft=c
@@ -670,6 +669,17 @@ autocmd VimLeave * silent !stty ixon
 	" Works but interferes with navigation_enhancer.vim: <C-w>j|<C-w>k 
 	let g:repmo_key = ";"
 	let g:repmo_revkey = ","
+
+	au BufRead,BufNewFile {*.json}               set ft=javascript
+	"au BufRead,BufNewFile {*.json}               set ft=json
+	" vim-json provides syntax for json, and automatically assigns filetype:
+	"call add(vamAddons,"github:elzr/vim-json")
+	" Dependencies for sourcebeautify:
+	"call add(vamAddons,"github:michalliu/jsruntime.vim")
+	"call add(vamAddons,"github:michalliu/jsoncodecs.vim")
+	" sourcebeautify offers <Leader>sb
+	" But so far it has just been giving me 'undefined'
+	"call add(vamAddons,"github:michalliu/sourcebeautify.vim")
 
 	" NOTE: For the tern plugin to work, you need to cd into the folder and do `npm install`
 	"       You also need to create a .tern-project file for each project!
