@@ -7,9 +7,15 @@
 " It comes from an old revision of http://vim.wikia.com/wiki/Smart_mapping_for_tab_completion
 
 function! InsertTabWrapper(direction)
+    " Often I don't want 'longest'; I want to perform a quick search.
+    " So I remove 'longest' here.  And my mappings for other plugins, such as Tern, may enable it before they act.
+    " (I might feel differently if the number of results is low, or the number of chars in the word-so-far is low.)
     set completeopt-=longest
     let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
+    " \k matches chars in 'iskeyword'
+    "if !col || getline('.')[col - 1] !~ '\k'
+    " Only inserts a normal <Tab> if at the beginning of a line (everything before the cursor is whitespace)
+    if !col || getline('.')[0:col - 1] =~ '^\s*$'
         return "\<tab>"
     elseif "backward" == a:direction
         return "\<c-p>"
@@ -18,7 +24,7 @@ function! InsertTabWrapper(direction)
     endif
 endfunction
 
-" This causes a lot of flicker (3 or 4 screen redraws) in xterm.
+" This causes a lot of flicker (3 or 4 screen redraws) in xterm.  I believe that is because the returned values are re-interpreted.
 inoremap <silent> <tab> <c-r>=InsertTabWrapper ("forward")<cr>
 inoremap <silent> <s-tab> <c-r>=InsertTabWrapper ("backward")<cr>
 
@@ -36,8 +42,8 @@ inoremap <silent> <s-tab> <c-r>=InsertTabWrapper ("backward")<cr>
 " Unfortunately it is still quite slow, because it seems to cause 3 screen redraws every time we hit Tab!
 " We can mitigate this on some of the later <Tab> strokes, by skipping UltiSnips whenever the popup menu is open.
 " We need to override UltiSnips mappings after they have loaded, so we wait for VimEnter.
-au VimEnter * imap <expr> <Tab> pumvisible() ? InsertTabWrapper("forward") : "\<C-R>=UltiSnips_ExpandSnippetOrJump()\<CR>"
-au VimEnter * imap <expr> <S-Tab> pumvisible() ? InsertTabWrapper("backward") : "\<C-R>=UltiSnips_JumpBackwards()\<CR>"
+au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <Tab> <C-r>=pumvisible() ? "\<c"."-n>" : UltiSnips_ExpandSnippetOrJump()<CR>| endif
+au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <S-Tab> <C-r>=pumvisible() ? "\<c"."-p>" : UltiSnips_JumpBackwards()<CR>| endif
 
 
 

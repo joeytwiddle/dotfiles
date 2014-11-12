@@ -33,8 +33,10 @@ augroup END
 
 "" Vim 7.3 started making `w` jump over '.'s in a variety of languages, which I do not want.
 autocmd BufReadPost * setlocal iskeyword-=.
-" However I have come to accept that I do need '-' to be part of a word when dealing with CSS classes.
-autocmd BufReadPost *.{css,html,js,erb,jade,blade} setlocal iskeyword+=-
+" However I have come to accept that I do need '-' to be part of a word when dealing with CSS classes and IDs.
+autocmd BufReadPost *.{html,svg,xml,css,scss,less,stylus,js,coffee,erb,jade,blade} setlocal iskeyword+=-
+" Also $ can be part of a valid identifier in JS (in fact almost any unicode character can be!):
+autocmd BufReadPost *.{js,coffee} setlocal iskeyword+=$
 
 " At some point undo started working through file-reads.  Given that, I am happier to load changed files automatically.  (Especially useful when peforming git checkout!)
 if v:version >= 703
@@ -63,7 +65,9 @@ silent !stty -ixon
 autocmd VimLeave * silent !stty ixon
 " Restoring the "default" might suck if the user usually has it disabled!  We could check whether he has it enabled or not by looking at the exit code of:
 "   stty -a | grep -q '\( \|^\)ixon\>'
-" TODO: What if the user doesn't have an stty executable (Windows)?  What will this do on Macs or MacVim?  We may need to try harder to fail silently in the general case.  Or is silent enough already?
+" TODO: What if the user doesn't have an stty executable (Windows)?
+"       We may need to try harder to fail silently in the general case.  Or is silent enough already?
+"       It seems to work fine on Mac terminal and MacVim.
 
 
 
@@ -463,7 +467,6 @@ autocmd VimLeave * silent !stty ixon
 	" Add a few custom filetypes:
 	au BufRead,BufNewFile {*.shlib}              set ft=sh
 	au BufRead,BufNewFile {*.grm}                set ft=grm
-	au BufRead,BufNewFile {*.json}               set ft=javascript
 	au BufRead            {*/xchatlogs/*.log}    set ft=irclog readonly
 	" From web:
 	au BufRead,BufNewFile {/usr/share/X11/xkb/*} set ft=c
@@ -654,6 +657,7 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:LFDM/vim-hopper")          " Could be an interesting way to get around - goes modal; requires submode
 	call add(vamAddons,"github:tristen/vim-sparkup")      " Expand Zen/Jade-like snippets into HTML
 	let g:sparkupExecuteMapping = '<C-]>'
+	let g:sparkupNextMapping = '<C-]>n'   " The default <C-n> messes with my <Tab> mappings
 	let g:sparkupMappingInsertModeOnly = 1
 	call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
 
@@ -668,6 +672,17 @@ autocmd VimLeave * silent !stty ixon
 	" Works but interferes with navigation_enhancer.vim: <C-w>j|<C-w>k 
 	let g:repmo_key = ";"
 	let g:repmo_revkey = ","
+
+	au BufRead,BufNewFile {*.json}               set ft=javascript
+	"au BufRead,BufNewFile {*.json}               set ft=json
+	" vim-json provides syntax for json, and automatically assigns filetype:
+	"call add(vamAddons,"github:elzr/vim-json")
+	" Dependencies for sourcebeautify:
+	"call add(vamAddons,"github:michalliu/jsruntime.vim")
+	"call add(vamAddons,"github:michalliu/jsoncodecs.vim")
+	" sourcebeautify offers <Leader>sb
+	" But so far it has just been giving me 'undefined'
+	"call add(vamAddons,"github:michalliu/sourcebeautify.vim")
 
 	" NOTE: For the tern plugin to work, you need to cd into the folder and do `npm install`
 	"       You also need to create a .tern-project file for each project!
@@ -878,6 +893,7 @@ autocmd VimLeave * silent !stty ixon
 	" >>> My Plugins from the Cloud (all by me!) {{{
 	call add(vamAddons,"github:joeytwiddle/sexy_scroller.vim")   " Smooth animation when scrolling
 	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
+	call add(vamAddons,"github:joeytwiddle/RepeatLast.vim") " Easily repeat groups of previous actions
 	" }}}
 
 	if filereadable($HOME."/.vimrc.local")
