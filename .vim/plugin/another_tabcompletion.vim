@@ -64,9 +64,9 @@ if exists("g:give_me_tab_completion_in_search") && g:give_me_tab_completion_in_s
     " One alternative is this, although it won't work if you are recording a macro.
     nnoremap / q/20-i
 
-    " <Up> and <Down> can look at related history, but that's not what I want.
+    " <Up> and <Down> can look at related history, and completion will work as it does in Insert mode.
 
-    " Let's just use an external plugin then :)
+    " There is also an external plugin that can do this:
     " https://github.com/vim-scripts/SearchComplete
 endif
 
