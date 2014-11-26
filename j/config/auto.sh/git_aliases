@@ -431,8 +431,11 @@ vim_for_git_logs() {
 	    +'normal gg' \
 	    +'highlight clear Search' \
 	    +'set scrolloff=0' \
+	    # When seeking, scroll destination line to top of screen
 	    +'nmap n nz<CR>' \
 	    +'nmap N Nz<CR>' \
+	    # But when the user performs a custom search, undo the above mappings
+	    +'nmap / :nunmap n<CR>:nunmap N<CR>:nunmap /<CR>/' \
 	    "$@"
 	    #+'set nohlsearch' \
 }
