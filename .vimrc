@@ -655,6 +655,7 @@ autocmd VimLeave * silent !stty ixon
 	let g:sparkupNextMapping = '<C-]>n'   " The default <C-n> messes with my <Tab> mappings
 	let g:sparkupMappingInsertModeOnly = 1
 	call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
+	call add(vamAddons,"github:vim-scripts/Align")
 
 	" For Meteor development
 	call add(vamAddons,"github:mustache/vim-mustache-handlebars")
