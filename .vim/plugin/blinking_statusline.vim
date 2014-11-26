@@ -60,6 +60,14 @@ if exists("g:blinking_statusline") && g:blinking_statusline>0
 		hi link VertSplitLit VertSplitUnlit
 		hi StatusLineLit   ctermfg=green ctermbg=black cterm=reverse,bold guibg=green guifg=black gui=bold
 
+		" For low-colour displays
+		if $TERM == "vt100"
+			hi StatusLineLit term=reverse,bold cterm=reverse,bold
+			hi StatusLineUnLit term=reverse,bold cterm=reverse,bold
+			hi StatusLineNCLit term=reverse,italic,underline cterm=reverse,italic,underline
+			hi StatusLineNCUnLit term=reverse,italic,underline cterm=reverse,italic,underline
+		endif
+
 	augroup END
 	set updatetime=600
 endif

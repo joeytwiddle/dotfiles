@@ -1,29 +1,70 @@
-# TODO: Turn these into shellscripts so they are available from vim's command line.
-#       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)
+# What is useful in this file?
+#
+# Shortcuts:
+#
+#   gs ga gd gc gb gco and gm are simple aliases for git status, add, diff,
+#   commit, branch, checkout and merge.  Use them to save yourself keystrokes.
+#
+#   gll shows a log *overview*, with one commit per line, with graph layout.
+#
+#   gl is my favourite *detailed* log display, showing diffs, stats and commit
+#      messages and graph.  Keys n and N jump forwards/backwards through diffs.
+#
+#   gmo does git merge origin/<current_branch>
+#
+#   gpo does git push origin <current_branch>
+#
+# Powerful tools:
+#
+#   gwinp "git what is not pushed" lists commits on local branch not yet pushed
+#
+#   gbs [-M] [.] is "git branch status", a nice way to see which branches are
+#       up-to-date with the remote (which need a push and which need a pull).
+#
+#       Use `gbs .` to show the status of the current branch only (faster).
+#
+#   gbd [-M] [-r] is "git branch by date", a nice way to see which branches
+#       were recently updated.  -r lists remote branches.
+#
+#   The -M argument to gbs and gbd is slower, but will display whether or not
+#   each branch has been merged into the current branch.  Cool!
+#
+#   gbd will only align neatly into columns if you have jsh's columnise-clever
+#   installed.  Making that work independently is something I should TODO!
+#
+# Some more shortcuts:
+#
+#   gap and gcp let you select which chunks of code to stage or commit next
+#
+#   gdc shows the "cached" diff of what is staged (what you are about to commit).
+#
+#   gdv and glv open diffs and logs in Vim, folded, for interactive browsing.
+#
+# I hope these shortcuts and tools will be of use to you.
+#
+# I rarely use the other aliases and functions in this file (except of course
+# indirectly those which are dependencies of the ones I do use!).
+#
+# Some of the functions (gbs, gbd) do not work on Mac OSX / FreeBSD because I
+# don't know how to get BSD sed to do search-replace.  However if you have
+# installed the GNU coreutils package (e.g. via Homebrew) and GNU sed is on
+# the *front* of your path, then they should work fine.
 
-# I had problems declaring functions whose name matched pre-existing aliases.  In my case this was when I was loading oh-my-zsh's git plugin before this script was sourced.
-# Details: The function name was getting expanded into the alias during the declaration, either causing the declaration to fail syntactically, or to successfully silently declare the function using a different name!
-# The behaviour I desired was to override his aliases with my own functions, but keep any of his aliases which did not conflict.
-# The most sensible way to avoid expansion is to declare functions explicitly using `function name()` but some older shells do not recognize the `function` syntax, and I would like to support them.
-# Another way to avoid expansion is to declare functions using `'name'()` instead of just `name()`.  This worked for zsh but not for bash.
-# So finally I had to specifically unalias any function names which I *know* may be alaised elsewhere.
-# This is all rather irrelevant now because I am no longer loading oh-my-zsh's git aliases.
+# If you think this file has too many comments in it, try: :hi Comment guifg=#222222
+
+# TODO: Turn the aliases into shellscripts so they are available from vim's command line?
+#       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)  jsh modules...
+
+# If you happen to be using oh-my-zsh's git plugin, redefining its aliases will throw warnings, so we undefine them first.
 unalias gs 2>/dev/null
 unalias gd 2>/dev/null
 unalias gitlog 2>/dev/null
 unalias gac 2>/dev/null
 unalias gitwhatsup 2>/dev/null
-# Should I be doing this *everywhere* I declare a shell function in jsh, just in case an alias exists?!  No ... I just shouldn't load aliases I don't want!  :P
+# By the way, if you want to undefine a function instead of an alias, this works for bash and zsh:
+#   unset -f fn_name
 
 #alias gs='git status'
-#alias gs='gitstatus'
-#alias gs='if [ -t 1 ]; then gitstatus | more; else git status; fi'
-#function gs() {
-#	if [ -t 1 ]
-#	then gitstatus "$@" | more
-#	else git status "$@"
-#	fi
-#}
 gs() {
 	# Show color if not piping.  Skip to next section on 'n'.  Leave output on screen with -X (so user can copy paste).
 	# Using more instead of less because on short output, less fills the rest of the screen with '~'s (or ''s) we don't need.  Those lines are actually caused by the search.  git's default 'pager' will do the same iff the +/ is added.
@@ -34,7 +75,10 @@ gs() {
 		git -c color.status=always status "$@" |
 		#more
 		# On Mac, more cannot handle color.  Unless it is given -R.  But Linux more does not recognise that argument!  :P
-		less -R
+		# I think the disadvantage with less might be when the output is lesser than the screen height, then more will just display those few lines and quit, but less will occupy the entire screen.  Also, does less destroy scrollback, while more preserves it?
+		less -R -E -X
+		# But can we use the more-like options for less below on Mac?
+                # Hmmm that's not quite as neat: on short output, the bottom part of the screen is filled with empty lines.
 		# The problem with doing this search with more is that more skips the first "branch" line, even though it is a match.  And it does not even allow paging up to find it!
 		#more +'/^# [^ ].*'
 		#less -R +'/^# [^ ].*' -E -X --tilde
@@ -65,7 +109,7 @@ alias gc='git commit -v'
 alias gf='git fetch'
 alias gp='git preview'
 alias gw='git whatsnew'
-alias gm='git merge FETCH_HEAD'
+alias gm='git merge'
 
 #alias gl='git log'
 #alias gl='git log -U2 -p -m'
@@ -81,7 +125,7 @@ gitlog() {
 		git -c color.ui=always log "$@" |
 		#less -R +'/^(commit|diff).*' -X
 		# Needed when using --graph and -p
-		less -R +'/((^|\*[ |]*)commit .*|(^|\| )diff --git.*)'
+		less -R +'/((^|\*[ |]*)commit .*|(^|\| +)diff --git.*)'
 	else git log "$@"
 	fi
 	# BUG TODO: The --git may show as --combined when using gl -c, so change it for just -- after the pending merge.
@@ -99,6 +143,7 @@ gitlog() {
 # I think I originally added -m because I *thought* git log was not showing commit diffs from merged branches.  In fact it does, but it shows them individually, and leaves the merge commit itself empty.
 # I am now finding this a little more informative than glg: git log -p --graph --decorate
 # I rarely want to use glp directly; I prefer glg because it customizes the color of the commit message.
+# OK so I recently had to track down some code which had been deleted/lost during a merge.  I was using git log <filename>.  The *only* way which worked was -c; -cc or neither would not display this line!  So -c all the way... at least for that case!  If -c causes duplicate information to be displayed, perhaps we should use it at the same time as not showing branches.
 alias glp='gitlog -p -U2 --stat'
 # Here --stat show a quick summary of changed files, before actually showing the diffs.  I rather enjoy this when using 'gl' as it lets me decide from the top of each commit whether there are any files I am interested in, and if not I can happily skip straight to the next commit.  In other situations, e.g. when I am planning to read all the details, --stat is just chaff.
 # "Git Log Grey" - Like 'gl' except we present my favourite colors
@@ -106,12 +151,15 @@ alias glp='gitlog -p -U2 --stat'
 # Curiously the alias shows fewer +++s and ---s on the stat output.
 # One "advantage" of our custom format over --decorate is that --decorate shows different colors for different decorations.  Whilst this is nice and informative, it looks a little ugly when it combines with the reverse highlighting from our less search.
 alias glg='glp --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an <%ae>%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
+# Custom_format_bugs: Note that %b is missing (it should come after %s%n, it may show 'Conflicts' list or other useful notes).  But adding it conditionally is a hassle.
 # "Git Log" aliases to "Git Log Grey"
 #alias gl='glg'
 # Now trying this out; use glm for old-ish style (merges merged) or use glg to see individual commits without the graph.
 # We should probably swap glg and gl, since gl has a graph and glg does not!
 # Interestingly this can show some commits in a different order from glg alone, in the presence of merges.
 alias gl='glg --graph'
+# glx is like gl but without my custom format colours and without my Custom_format_bugs.
+alias glx='glp --graph'
 # Warning: glg and glc duplicate my color settings.  (Which are also set in my ~/.gitconfig.)  Part of the reason I passed everything through glg/glc was to display decorations (commit labels like HEAD and origin/master).  I have since learned this can be achieved by passing --decorate, so we may be able to reduce some duplication that way.
 # "Git Log with Merges-combined/merged)" - shows diffs in the merge, does not show individual commits from merged branches
 alias glm='glg -m --first-parent'
@@ -127,7 +175,23 @@ alias glm='glg -m --first-parent'
 # Problem: When used with --graph, glc should end in %n.  But we don't want the %n when --graph is not used (e.g. in glf below)!  I don't personally want the %n, but --graph always draws a |\n straight after the formatted text, so it looks messy without it.
 alias gll='glc --graph'
 # "Git Log Long Minus merges"
-alias gllm='gll --no-merges'
+# This lists the merge commits themselves, but does not list any of the commits that were brought in by the merge.  This is useful if you have merged things into the current branch, but you are only interested in the commits that were actually made on the current branch.
+# When using this, it can be nice to clearly distinguish merges from raw commits.  If your merge commit messages are pure, you can search /Merge.* or cleaner /Merge.* into [^ ]*
+# gllm | highlight -bold -reverse "Merge.* into [^ ]*" magenta | more
+if which highlight >/dev/null
+then
+	# Better because it allows arguments to be passed.  Breaks because glc is not loaded yet?
+	#gllm() {
+		#gll -m --first-parent "$@" |highlight -bold "Merge.*" blue | less -REX
+	#}
+	alias gllm='gll -m --first-parent | highlight -bold "Merge.*" blue | less -REX'
+else alias gllm='gll -m --first-parent'
+fi
+# This shows the commits from merged branches (/), but not the merge commits themselves (\).  It takes less space than gll.
+alias gllmm='gll --no-merges'
+# Git Log Long No Graph
+alias gllng='glc'
+alias glls='gll --stat'
 
 # "Git Log Clear" - Single lines, no graph.  Shows more info than: git log --pretty=oneline
 # If you want to use this with --stat and --graph then it should have a %n at the end.  But this will make --graph show blank lines even when run without --stat.  Since glf does not use --graph, we don't really need this.
@@ -143,10 +207,138 @@ alias glf='glc --stat'
 # Just commit info, one per line
 
 alias gb='git branch'
-alias gco='git checkout'
-alias gi='git commit --interactive'
 
-# Git auto commit OR Git-add-commit
+# Git Branch by Date
+git_branch_by_date() {
+	local reset_color=`tput sgr0`
+	# Optional
+	local subject_color=`tput setaf 0 ; tput bold`
+	local author_color=`tput setaf 6`
+
+	local target=refs/heads
+	#local commit_color=`git config --get-color color.diff.commit yellow`
+	if [ "$1" = -r ]
+	then
+		#target=refs/remotes/origin
+		target=refs/remotes
+		#branch_color=`git config --get-color color.branch.remote red`
+	fi
+
+	# %(committerdate:iso8601)
+	git for-each-ref --sort=committerdate $target --format="%(refname:short) ${author_color}%(committerdate:relative) (%(authorname)) -${reset_color} ${subject_color}%(subject)${reset_color}"
+}
+
+# Git Branch by Date wrapper
+gbd() {
+	local reset_color=`tput sgr0`
+	local current_branch_color=`git config --get-color color.branch.current green`
+	local branch_color=`git config --get-color color.branch.local white`
+
+	# TODO: Parse args in no particular order, and show help, like gbs does
+
+	# We show two pages of history by default, or all of history if showancestors is unset
+	local count='9999999'
+	local count=$((LINES-2))
+	local showancestors=''
+	if [ "$1" = "-M" ]
+	then showancestors="yes" ; shift
+	fi
+	if [ "$1" = "-n" ]
+	then count="$2"; shift; shift
+	fi
+
+	local need_pager=
+	if [ $count -gt $((LINES-2)) ]
+	then need_pager=1
+	fi
+
+	current_branch=`git_get_current_branch`
+
+	git_branch_by_date "$@" |
+	tail -n "${count}" |
+	while read refname rest
+	do
+
+        local local="${refname}"
+        ## NOTE: This code is cloned from gbs.  Can we refactor it out?
+        if [ "$local" = "$current_branch" ]
+        then preBranch="* "
+        else
+            preBranch=". "
+            if [ -n "$showancestors" ]
+            then
+                local_branch_commit_hash=`git rev-parse --verify "$local"`
+                common_commit_between_branch_and_current=`git merge-base "$local" "$current_branch"`
+                if [ "$common_commit_between_branch_and_current" = "$local_branch_commit_hash" ]
+                then preBranch="| "
+                else preBranch="/ "
+                fi
+                # I considered using "+" and "-" instead, but these are harder to visually distinguish from "*" and each other.
+                # Another alternative I tried was "~" and "x", but again the "*" is easily lost there.
+            fi
+        fi
+
+		echo "${preBranch}${refname} ${rest}"
+	done |
+
+	if which columnise-clever >/dev/null
+	then columnise-clever -ignore '[^ ]* *[^ ]* *[^ ]*'
+	else cat
+	fi |
+	replace_ancestor_markers_with_colors |
+	if [ -n "$need_pager" ]
+	then
+		# -R=show_colors -X=no_clear -S=chop_long_lines +G=jump_to_end
+		less -R -X -S +G
+		#more -R   (since more=less on Mac; fails on Linux)
+	else
+		# -E=quit_at_end (in other words this just chops long lines)
+		less -R -E -X -S +G
+		#cat
+	fi
+}
+
+# Git View Branches (tree-like)
+alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
+# For remotes too, add: --all
+# Could also be Git View Tree or Git Tree View, although I might want to save those for gitv!  :P
+
+unalias gco 2>/dev/null   # REMOVEME
+#alias gco='git checkout'
+gco() {
+	git checkout "$@"
+	local ret_status="$?"
+	if [ "$ret_status" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
+	then "$POST_GIT_CHECKOUT" "$@"
+	fi
+	return "$ret_status"
+}
+POST_GIT_CHECKOUT=update_cindex
+if ! which ionice >/dev/null
+then
+	ionice() {
+		"$@"
+	}
+fi
+update_cindex() {
+	if which cindex >/dev/null && ( [ -z "$CSEARCHINDEX" ] && [ -f "$HOME"/.csearchindex ] || [ -n "$CSEARCHINDEX" ] && [ -f "$CSEARCHINDEX" ] )
+	then
+		local git_root_folder=$(git rev-parse --show-toplevel)
+		# If any of the indexed folders are equal to or below this project's folder
+		if [ -n "$git_root_folder" ] && cindex -list | grep -q "^$git_root_folder\($\|/\)"
+		then
+			echo -n "Updating cindex (in the background)"
+			nice ionice cindex 2>/dev/null &
+		fi
+	fi
+}
+# TODO: There are a number of other occasions when cindex should be run, e.g. after a pull, reset or file save!  Perhaps it would be better if any programs which use csearch should just run cindex every time before they run csearch.  That should still be faster than grep!
+alias gi='git commit --interactive'
+# -p "patch" allows us to choose which hunks to add or commit
+alias gap='git add -p'
+alias gcp='git commit -p'
+
+# Git Auto Commit, or Git Add Commit, or Git Add and Commit
 gac() {
 	git add "$@"
 	echo -n "Commit message: "
@@ -197,6 +389,7 @@ git_guess_upstream_branch() {
 	# We cannot use --symbolic or --abbrev-ref here; it will return what was given even if no upstream exists.
 	# In fact we must specify --revs-only to prevent that from occurring!
 	# We hide the error if the remote branch is not found.
+	# BUG: On git 1.8.5.2 on MacOSX, we are getting remote_commit='a_long_hash_id'  I was hoping it would be empty, so we could at least guess a symbolic remote branch.
 	remote_commit=$(git rev-parse --revs-only "$remote_branch" 2>/dev/null)
 	if [ -z "$remote_commit" ]
 	then
@@ -214,19 +407,68 @@ git_guess_upstream_branch() {
 	echo "$remote_branch"
 }
 
-# Git What Is Not Pushed
+# Git What Is Not Pushed (doesn't always work - I use gbs more often)
 #alias gwinp='gll @{upstream}..HEAD'
 alias gwinp='gll $(git_guess_upstream_branch)..HEAD'
 # Git What Is Not Pushed Details
 alias gwinpd='gl $(git_guess_upstream_branch)..HEAD'
+# Git What Is Not Pushed Files
+alias gwinpf='glf $(git_guess_upstream_branch)..HEAD'
 # Git To Push
 alias gtp='gwinp'
-# Git To Push Files
-alias gtpf='git topush'
 # Git To Push Log
 alias gtpl='gwinpd'
+# Git To Push Files (often works poorly since it compares against FETCH_HEAD)
+alias gtpf='git topush'
 # Git To Push Details / Diff (a direct diff, without listing each commit)
 alias gtpd='gd FETCH_HEAD..HEAD'
+
+vim_for_git_logs() {
+	# Our mappings use z<CR> to scroll so the cursor is at the top of the window after n/N search
+	# I tried setting scrolljump=-99 and got a screen jump when going of the bottom, but only half when going off the top.
+	vim +'setlocal nomodified nomodifiable filetype=git foldmethod=syntax foldcolumn=2' \
+	    +'/^\(commit\|diff --git\) .*' \
+	    +'normal gg' \
+	    +'highlight clear Search' \
+	    +'set scrolloff=0' \
+	    # When seeking, scroll destination line to top of screen
+	    +'nmap n nz<CR>' \
+	    +'nmap N Nz<CR>' \
+	    # But when the user performs a custom search, undo the above mappings
+	    +'nmap / :nunmap n<CR>:nunmap N<CR>:nunmap /<CR>/' \
+	    "$@"
+	    #+'set nohlsearch' \
+}
+
+# Git Log in Vim
+glv() {
+	local count=50
+	if [ "$1" = -n ]
+	then
+		count="$2"
+		shift
+		shift
+	fi
+	git log -p -n "$count" "$@" | vim_for_git_logs -
+}
+
+# Git Diff in Vim
+gdv() {
+	git diff | vim_for_git_logs -
+}
+
+# Git Merge Origin (this branch)
+#alias gmo='verbosely git merge $(git_guess_upstream_branch)'
+alias gmo='verbosely git merge origin/$(git_get_current_branch)'
+# Git Push Origin (this branch)
+alias gpo='verbosely git push origin $(git_get_current_branch)'
+if ! which verbosely >/dev/null
+then
+	verbosely() {
+		echo "[EXEC] % $*" >&2
+		"$@"
+	}
+fi
 
 git_branch_status() {
     # Original: https://gist.github.com/Mark-Booth/5058384
@@ -245,30 +487,35 @@ git_branch_status() {
     # $ git branch-status
     # master (ahead 2) | (behind 0) origin/master
 
-    # BUG TODO: Running gbs after git_branch_status -a -v gives only 1-line output.  Steps to reproduce:
+    # Surely this was a non-local variable leaking out of git_branch_status and has already been fixed.
+    # BUG (fixed?): Running gbs after git_branch_status -a -v gives only 1-line output.  Steps to reproduce:
     # Use Mac.  Start jsh in bash (with GNU coreutils etc.).  See gbs works fine.  Now do git_branch_status -a -v, also works fine.
     # Now see gbs only displays one line!
     # From initial tracing, it appeared that the final gbs call only iterates once during the while getopts.
     # Since we need both -v and -a to show more than one line here, we saw only one line.
 
-    local usage option filter OPTARG compareto showancestors verbose current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
+    local usage option filter OPTARG compareto showancestors verbose branch_name_regexp
 
-    local local_branch_commit_hash common_commit_between_branch_and_current
+    local current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
+    local local_branch_commit_hash common_commit_between_branch_and_current abstatus
 
-    usage="$(basename "$0") [-hav] -- summarise status of branch(es)
+    local sorting=
+
+    usage="$(basename "$0") [-hamtMv] [<branch_name_regexp>] -- summarise status of branch(es)
 
 where:
     -h           show this help text
     -a           show all branches, not just the current one
     -m           shows branch(es) with respect to origin/master
     -t <branch>  shows branch(es) with respect to given branch
-    -p           indicates branches which have been merged into current
+    -d           sort by date (default is to sort by name)
+    -M           indicates branches which have been merged into current
     -v           verbose, show output even if counts are zero"
 
-    while getopts 'hamt:pv' option; do
+    while getopts 'hamt:pdMv' option; do
       case "$option" in
         h) echo "$usage"
-           exit
+           return # exit
            ;;
         a) filter=refs/heads
            ;;
@@ -276,17 +523,24 @@ where:
            ;;
         t) compareto="$OPTARG"
            ;;
-        p) showancestors=true
+        d) sorting="--sort=committerdate"
+           ;;
+        M) showancestors=true
            ;;
         v) verbose=true
            ;;
         ?) printf "illegal option: '%s'\n" "$OPTARG" >&2
            echo "$usage" >&2
-           exit 1
+           return # exit 1
            ;;
       esac
     done
     shift $((OPTIND - 1))
+
+    branch_name_regexp="$1"
+    if [ -n "$branch_name_regexp" ]
+    then filter=refs/heads
+    fi
 
     if [ -z $filter ] ; then
         filter=$(git symbolic-ref -q HEAD)
@@ -294,7 +548,8 @@ where:
 
     current_branch=`git_get_current_branch`
 
-    git for-each-ref --format="%(refname:short) %(upstream:short)" $filter | \
+    git for-each-ref $sorting --format="%(refname:short) %(upstream:short)" $filter |
+    grep -e "$branch_name_regexp" |
     while read local remote
     do
         if [ -n "$compareto" ] ; then
@@ -326,12 +581,15 @@ where:
         fi
         LEFT_AHEAD=$(echo "$DELTAS" | grep -c '^<')
         RIGHT_AHEAD=$(echo "$DELTAS" | grep -c '^>')
+
         if [ "$local" = "$current_branch" ]
         then preBranch="* "
         else
             preBranch=". "
             if [ -n "$showancestors" ]
             then
+                # We can actually get a list of merged branches from: git branch --merged $current_branch
+                # http://devblog.springest.com/a-script-to-remove-old-git-branches/
                 local_branch_commit_hash=`git rev-parse --verify "$local"`
                 common_commit_between_branch_and_current=`git merge-base "$local" "$current_branch"`
                 if [ "$common_commit_between_branch_and_current" = "$local_branch_commit_hash" ]
@@ -339,11 +597,16 @@ where:
                 else preBranch="/ "
                 fi
                 # I considered using "+" and "-" instead, but these are harder to visually distinguish from "*" and each other.
+                # Another alternative I tried was "~" and "x", but again the "*" is easily lost there.
             fi
         fi
+
         if [ $verbose ] || [ $LEFT_AHEAD -gt 0 ] || [ $RIGHT_AHEAD -gt 0 ] || [ "$local" = "$current_branch" ] ; then
-            #echo "$local $WARN_LEFT(ahead $LEFT_AHEAD)$reset_color | $WARN_RIGHT(behind $RIGHT_AHEAD)$reset_color $remote"
-            echo "$preBranch$local $if_merged(ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD) $remote"
+            if [ -z "$remote" ]
+            then abstatus="(none)"
+            else abstatus="(ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD)"
+            fi
+            echo "$preBranch$local $if_merged$abstatus $remote"
         fi
     done
 }
@@ -367,7 +630,7 @@ gbs() {
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
-  else git_branch_status -a -v -p "$@"
+  else git_branch_status -a -v "$@"
   fi |
   column -s ' ' -t | sed 's+ \( *\)+\1+g' |
   #columnise |
@@ -377,28 +640,45 @@ gbs() {
     local reset_color=`tput sgr0`
     local ahead_color=`tput setaf 2 ; tput bold`    # green
     local behind_color=`tput setaf 1 ; tput bold`   # red
-    # You can use the configured/default colors, but I quite like remote blank!  (The default red confuses behind_color.)
-    local current_branch_color=`git config --get-color color.branch.current green`
-    local local_branch_color=`git config --get-color color.branch.local white`
-    # The default remote branch color is red, but that conflicts with behind_color, so I have set it to 'white' here.
+    # Git's default remote branch color is red, but that conflicts with behind_color, so I have set it to 'white' here.
     local remote_branch_color=`git config --get-color color.branch.remote white`
-    local ancestor_branch_color=`git config --get-color color.branch.ancestor cyan`
     sed "
       s+\()  *\)\([^ ]*\)$+\1$remote_branch_color\2$reset_color+
       s+(ahead *[1-9][0-9]*)+$ahead_color\0$reset_color+
       s+(behind *[1-9][0-9]*)+$behind_color\0$reset_color+
-      s+^[*] *\([^ ]*\)+* $current_branch_color\1$reset_color+
-      s+^[./x-] *\([^ ]*\)+  $local_branch_color\1$reset_color+
-      s+^[\\+|] *\([^ ]*\)+  $ancestor_branch_color\1$reset_color+
-    "
+    " |
+    replace_ancestor_markers_with_colors
   else cat
   fi
 }
 
-git_get_current_branch() {
-	#git rev-parse --abbrev-ref HEAD
-	git symbolic-ref --short HEAD
+replace_ancestor_markers_with_colors() {
+	local current_branch_color=`git config --get-color color.branch.current green`
+	local local_branch_color=`git config --get-color color.branch.local white`
+	local ancestor_branch_color=`git config --get-color color.branch.ancestor cyan`
+	sed "
+		s+^[*] *\([^ ]*\)+* $current_branch_color\1$reset_color+
+		s+^[./x-] *\([^ ]*\)+  $local_branch_color\1$reset_color+
+		s+^[\\+|] *\([^ ]*\)+  $ancestor_branch_color\1$reset_color+
+	"
 }
+
+git_get_current_branch() {
+	# symbolic-ref fails during an incomplete rebase with `fatal: ref HEAD is not a symbolic ref`
+	git symbolic-ref --short HEAD
+	# rev-parse does not fail, but responds with "HEAD" instead of the branch name.
+	#git rev-parse --abbrev-ref HEAD
+}
+
+#git_list_all_tracked_files_with_meta() {
+#	git ls-tree --full-tree -r HEAD
+#	# Add --name-only if you don't want meta; works on bare repo.
+#}
+
+#git_list_all_tracked_files() {
+#	git ls-files
+#	# Does not work on bare repos.
+#}
 
 git_find_branch_start_commit() {
 	local other_branch current_branch
@@ -439,3 +719,4 @@ git_find_branch_start() {
 	fi
 }
 
+# vim: ft=sh

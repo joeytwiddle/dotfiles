@@ -59,18 +59,22 @@
  [app] (title=Untitled)
  [app] (title=chrome://devtools/devtools.html)
  [app] (title=Developer Tools.*)
+ [app] (title=chrome-devtools://.*)
  [app] (title=Error Console)
+ [app] (title=Browser Console)
+ [app] (title=Console - .*)
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
  [app] (name=Navigator)
  [app] (name=google-chrome)
+ [app] (name=Google-chrome)
  [app] (name=x-www-browser)
  [app] (name=chromium-browser)
  [app] (name=chromium-browser.real)
  [app] (name=konqueror)
  [app] (name=chrome)
-  [Close]	{yes}
+ [app] (name=X-www-browser)
 [end]
 [group]  (workspace=[current])
  [app] (name=kopete)

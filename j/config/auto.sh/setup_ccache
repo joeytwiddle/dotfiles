@@ -1,1 +1,10 @@
+# This works when compiling from the commandline, or using tools that do not
+# sanitize the PATH
 export PATH="/usr/lib/ccache:$PATH"
+
+# This tells tools like npm/gyp to use ccache's binary
+if which ccache >/dev/null
+then
+	export CC="ccache gcc"
+	export CXX="ccache g++"
+fi

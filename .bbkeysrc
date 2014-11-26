@@ -2,20 +2,25 @@
 
 # NOTES:
 
-# During recent use in Fluxbox, it has been common to experience:
+# Known strange behaviour of the window-cycler (shift-tab-switching) which you should be aware of:
+# - If the mouse happens to be over the list, it keeps jumping back to the top of the list when you pause.
+# - Does not respect fluxbox tab groupings.  (It cycles through tabbed window as if they were separate; acceptable but a little fine-grained.)
+# - Does not cycle through minimised windows.
+# - Focuses the window immediately, but only raises it after a short delay.  (I think Fluxbox may be doing the raising.)
+# - Does not un-raise windows which were temporarily raised during the cycle.
+# - Does not engage if you Ctrl+Alt+Right to change desktop then Alt-Tab but never released Alt!  In this case, Fluxbox cycler engages.
+
+# These are old bugs (from hwi?) which I haven't seen for ages (not on porridge):
 # - Mod1 = Alt key, Mod2 = Win key
 # - bbkeys sometimes segfaults on Win-Tab!
 # - Sometimes after switching desktop, we were left with Fluxbox's window-cycler, not bbkeys.  One time using Win-Tab brought it back.
 
-# Currently the window-cycler (tab-switching):
-# - Does not respect fluxbox tab groupings.
-# - Does not cycle through minimised windows.
-# - Focuses the window immediately, but only raises it after a short delay.  (I think Fluxbox may be doing the raising.)
-# - Does not un-raise windows which were temporarily raised during the cycle.  (See above.)
-# - Does not engage if you Ctrl+Alt+Right to change desktop then Alt-Tab but never released Alt!  In this case, Fluxbox cycler engages.
-
-# Switching desktops:
+# Bug when switching desktops:
 # - If you switch right then down rapidly, you will end up being transported down only!  But slowly it works fine.
+
+# Update 2014:
+# - Current-desktop window cycler seems fairly well behaved on Ubuntu 12.04
+# - However multi-desktop window-cycler jumps back to the top of the list whenever it switches desktop.
 
 [begin]
 

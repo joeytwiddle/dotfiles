@@ -29,25 +29,27 @@ let &comments=":##,".&comments
 "" Joey's coffee -> js autocompile on write
 "" Now with ShowJSChanges
 
-if !exists("g:coffeeAutoCompileAll")
-  let g:coffeeAutoCompileAll = 1
-endif
-if !exists("g:coffeeShowJSChanges")
-  let g:coffeeShowJSChanges = 0
-endif
+let g:coffeeAutoCompileAll = get(g:, "coffeeAutoCompileAll", 1)
+let g:coffeeShowJSChanges = get(g:, "coffeeShowJSChanges", 0)
+" If set, places compiles js files in the given folder.
+" Useful to keep compiled files out of the source tree, or to compile into a
+" temp dir purely for the Changes feature.
+let g:coffeeCompileIntoFolder = get(g:, "coffeeCompileIntoFolder", "")
 
 " DONE: If coffeeShowJSChanges is used in a split window which is not the
 " last, when pedit and pclose are used it shrinks grrrr.  Remember and restore
 " win height whenever we do pedit/pclose?
 "
-" TODO: Option to compile to temp/nullfolder to check success and show diff,
+" DONE: Option to compile to temp/nullfolder to check success and show diff,
 " but avoid polluting the coffee source folder with js files.
-" folder.
 
 " TODO: Refactor this so it can be used on other filetypes.
-" e.g. for GorillaScript:   :call g:Process_And_Diff('gorillascript %','%<.js')
+"   e.g. for GorillaScript: :call g:Process_And_Diff('gorillascript %','%<.js')
+"               or for SWS: :call g:Process_And_Diff('sws curl','%<')
 " or for a complex project: :call g:Process_And_Diff('make','main.js')
 " Note that expand() does not work on '%<.js'!
+" We would probably want to set it to trigger on a filetype, e.g.:
+"   autocmd BufWritePost,FileWritePost *.sws :call g:Process_And_Diff('sws curl %', '%<')
 
 augroup CoffeeAutoCompile_AuGroup
 
@@ -92,8 +94,15 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
     return
   endif
 
+  let targetFolder = expand("%:h")
+  let jsFile = expand("%<").".js"
+
+  if g:coffeeCompileIntoFolder != ""
+    let targetFolder = g:coffeeCompileIntoFolder
+    let jsFile = g:coffeeCompileIntoFolder . "/" . expand("%:t:r").".js"
+  endif
+
   if g:coffeeShowJSChanges != 0
-    let jsFile = expand("%<").".js"
     " If this is our first compile, the js file may not exist
     if !filereadable(jsFile)
       " Make an empty file, so we will get a diff anyway.
@@ -104,7 +113,7 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
 
   " call s:MsgUser("Compiling...")
   " silent! exec '!coffee -c "%" > /tmp/coffee.log 2> /tmp/coffee.err'
-  silent! exec '!coffee -c "%" > /tmp/coffee.log 2> /tmp/coffee.err'
+  silent! exec '!coffee -o "' . targetFolder . '" -c "%" > /tmp/coffee.log 2> /tmp/coffee.err'
   let lines = readfile("/tmp/coffee.err")
   if len(lines) == 0
 

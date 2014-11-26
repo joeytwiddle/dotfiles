@@ -1,14 +1,54 @@
-sudo ln -s $PWD /usr/share/fonts/truetype/
+=== If you want Lucida Console in GUI apps (e.g. GVim) ===
 
-# On some systems the target folder may be called truetype1.
-# You may also need to run ./rebuild_font_cache.sh but I did not need this on Ubuntu 12.4
+You can use the TTF file from this folder.  (Or you might find it in the msttcorefonts package.)
 
-# Curiously, if you install QuartX on Mac OSX, it will immediately provide:
+    sudo ln -s $PWD /usr/share/fonts/truetype/
+
+On some systems the target folder may be called `truetype1`.
+
+You may also need to run ./rebuild_font_cache.sh but I did not need this on Ubuntu 12.4
+
+
+
+=== If you want screen fonts in GUI apps ===
+
+Two of my favourites are Schumacher Clean (aka clean) and lucidatypewriter.
+
+Note that they are screen fonts so they will show with jagged edges!
+
+Also beware: If Firefox is open it might start using screen fonts instead of anti-aliased fonts!  That problem seemed to go away after I restarted Firefox.
+
+On Ubuntu screen fonts are hidden by default.
+
+You can expose *all* screen fonts to GUI apps like this:
+
+    sudo ln -s /etc/fonts/conf.avail/70-force-bitmaps.conf /etc/fonts/conf.d/
+
+Or if you only want to whitelist Clean and LucidaTypewriter, you can use my custom config file:
+
+    sudo cp "$PWD"/70-force-some-bitmaps.conf /etc/fonts/conf.d/
+
+Afterwards you should do this:
+
+    sudo dpkg-reconfigure fontconfig
+
+I have been told the command goes like this on Debian:
+
+    sudo dpkg-reconfigure fontconfig-configure
+
+
+
+=== Mac OSX ===
+
+The closest font I found on Mac was "Menlo".  "Monaco" is not bad but a little tall.  Another alternative is "Andale".
+
+Curiously, if you install XQuartz on Mac OSX, it will immediately provide:
 
     -*-lucidatypewriter-*-*-*-*-*-80-*-*-m-*-*-*
 
 for you, but not:
 
     -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
+
 
 

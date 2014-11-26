@@ -3,9 +3,13 @@
 " DONE: Determine the previous line which *did not* start with '||', before doing the comparison.  Hence wrapped '||' lines get folded with the previous, and do not cause a break in the folding.
 " Note that '||' lines appear when the line length exceeds the compile-time macro CMDBUFSIZE, which looks to be 1024 here.
 
+let g:FoldByPath_SeparateFilesVisually = get(g:, "FoldByPath_SeparateFilesVisually", 1)
+
 command! FoldByFiles :call s:FoldByFiles()
 command! FoldByFolder :call s:FoldByFolder()
 command! FoldByPath :call s:FoldByPath()
+
+command! QFAlign :call s:QFAlign()
 
 function! g:GetLastNonWrappedQFLine(startline)
 	let curline = a:startline
@@ -33,6 +37,8 @@ function! s:FoldByFiles()
 	else
 		setlocal foldlevel=0
 	endif
+
+	if g:FoldByPath_SeparateFilesVisually | call g:SeparateFilesVisually() | endif
 
 endfunction
 
@@ -62,6 +68,8 @@ function! s:FoldByFolder()
 	else
 		setlocal foldlevel=0
 	endif
+
+	if g:FoldByPath_SeparateFilesVisually | call g:SeparateFilesVisually() | endif
 
 endfunction
 
@@ -100,5 +108,83 @@ function! s:FoldByPath()
 		setlocal foldlevel=0
 	endif
 
+	if g:FoldByPath_SeparateFilesVisually | call g:SeparateFilesVisually() | endif
+
 endfunction
 
+" Disadvantage:
+" Both of the additional highlights below use matchadd() and as such will override the Search highlight used to indicate the most recently selected quickfix line.  At least if we highlight only the filename, the rest of the line will show the Search highlight.
+
+" Underline the last line of results for each file.
+function! g:SeparateFilesVisually()
+	if !hlexists("QuickFixLastLineOfFile")
+		highlight QuickFixLastLineOfFile term=underline cterm=underline gui=underline
+	endif
+	call clearmatches()
+	let filename = ""
+	for l in range(1,line("$"))
+		let new_filename = substitute( getline(l), '|.*', '', '')
+		if new_filename != filename
+			let filename = new_filename
+			let previous_line = l - 1
+			if previous_line >= 1
+				" Underline whole line
+				"let m = matchadd("QuickFixLastLineOfFile", '\%'.previous_line.'l.*')
+				" Underline just the filename/path
+				let m = matchadd("QuickFixLastLineOfFile", '^\%'.previous_line.'l[^|]*')
+			endif
+		endif
+	endfor
+endfunction
+
+" Shade the background of each block of results alternately.  Aka "zebra stripes".
+" Not currently available in 8-color xterm (although we could go for black, blue background stripes).
+"function! g:SeparateFilesVisually()
+"	if !hlexists("QuickFix_Even_Rows")
+"		highlight QuickFix_Even_Rows ctermbg=black guibg=#444444
+"		if &t_Co >= 256
+"			highlight QuickFix_Even_Rows ctermbg=234
+"		endif
+"	endif
+"	if !hlexists("QuickFix_Odd_Rows")
+"		highlight QuickFix_Odd_Rows ctermbg=none guibg=#555555
+"		if &t_Co >= 256
+"			highlight QuickFix_Odd_Rows ctermbg=236
+"		endif
+"	endif
+"	call clearmatches()
+"	let top_line_of_this_file = 1
+"	let even = 0
+"	let filename = ""
+"	for current_line in range(1,line("$"))
+"		let new_filename = substitute( getline(current_line), '|.*', '', '')
+"		if new_filename != filename
+"			let filename = new_filename
+"			" Underline all lines for the previous file
+"			let hl_class = even ? "QuickFix_Even_Rows" : "QuickFix_Odd_Rows"
+"			let m = matchadd(hl_class, '\%>'.(top_line_of_this_file-1).'l\%<'.current_line.'l.*')
+"			let even = 1 - even
+"			let top_line_of_this_file = current_line
+"		endif
+"	endfor
+"endfunction
+
+function! s:QFAlign()
+	if &ft != 'qf'
+		echo "Must be run on quickfix window"
+		return
+	endif
+	let line_before = line('.')
+	" Will invariably be 0
+	let modifiable_before = &modifiable
+	set modifiable
+	" Convert all Tabs to 4 spaces
+	silent! %s/\t/    /g
+	silent! %s/|  */|	/
+	let lines = getline(2, line('$'))
+	let lengths = map(lines, 'match(v:val, "|	")')
+	let max = max(lengths)
+	execute "setlocal ts=" . (max + 2)
+	let &modifiable = modifiable_before
+	execute "".line_before
+endfunction

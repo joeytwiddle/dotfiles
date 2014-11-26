@@ -1,5 +1,5 @@
-" Allows you to review changes between saved file and working buffer.
-" Writes buffer to a temp-file, then calls GNU diff, or whatever is set in DAFOD_diffcmd.
+" Allows you to review changes between the file saved on the disk and the working buffer.
+" Or using the new DiffSplitAgainstFileOnDisk command, compares the two versions using a split window.
 
 " Can be useful if Vim says "File changed on disk. (L)oad or (O)k?" you can
 " select OK then do :DiffAgainstFileOnDisk to decide whether to overwrite
@@ -8,7 +8,9 @@
 " Can also be useful if Vim says there is a swapfile: you can (R)ecover it,
 " diff it against the file on disk, and then decide whether to keep it or :e!
 
-"" TOTEST: Accidentally running on unnamed buffer may give it name of tmpfile.  Not really a problem, just inconsistent.
+" It works by writing the current buffer to a temp-file, then it calls GNU diff, or whatever is set in DAFOD_diffcmd.
+
+" TOTEST: Accidentally running on an unnamed buffer may give it name of tmpfile.  Not really a problem, just inconsistent.
 
 command! DiffAgainstFileOnDisk call DiffAgainstFileOnDisk()
 
@@ -28,8 +30,8 @@ function! DiffAgainstFileOnDisk()
   ":vert diffsplit %
   ":!diff % /tmp/working_copy.$USER
   ":!diff % /tmp/working_copy.$USER | diffhighlight | more
-  "exec "!" . g:DAFOD_diffcmd . " /tmp/working_copy.$USER %"
-  exec "!" . g:DAFOD_diffcmd . " /tmp/working_copy.$USER % && echo '---- File and buffer are identical ----'"
+  "exec "!" . g:DAFOD_diffcmd . " % /tmp/working_copy.$USER"
+  exec "!" . g:DAFOD_diffcmd . " % /tmp/working_copy.$USER && echo '---- File and buffer are identical ----'"
   " BUG: Many of my color diff commands don't return the correct exit code anyway!
   " This is annoying because it comes *after* the "Pres ENTER" message :P
   "if !v:shell_error

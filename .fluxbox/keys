@@ -89,8 +89,12 @@ OnWindow Mod4 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
 ### ==NEW== Fixed versions!
 Mod1 Tab :NextWindow {groups} (Workspace=[current])
 Mod1 grave :PrevWindow {groups} (Workspace=[current])
-Mod4 Tab :NextWindow {groups}
-Mod4 grave :PrevWindow {groups}
+#Mod4 Tab :NextWindow {groups}
+#Mod4 grave :PrevWindow {groups}
+# Experiment: Always change workspace when using Super-Tab.
+# Disadvantage: If you start on Workspace 2, refuses to cycle windows on Workspace 1, which you might want to do if the first window focused is not the one you wanted.
+Mod4 Tab :NextWindow {groups} (Workspace!=[current])
+Mod4 grave :PrevWindow {groups} (Workspace!=[current])
 
 ## Move between windows using a Window List Menu
 # Control Tab :ClientMenu (Workspace=[current])
@@ -187,6 +191,10 @@ Mod1 Right :NextTab
 # Control Tab :PrevTab
 # Control grave :NextTab
 # Control Shift Tab :NextTab
+## Like Mac OSX:
+Mod1 Shift bracketleft :PrevTab
+Mod1 Shift bracketright :NextTab
+## Move current tab around
 Mod4 Left :MoveTabLeft
 Mod4 Right :MoveTabRight
 # Mod4 Shift Left :MoveTabLeft
@@ -221,6 +229,13 @@ Mod1 i :Minimize
 Mod4 i :Minimize
 Mod1 z :MaximizeWindow
 Mod4 z :MaximizeWindow
+## Like Mac OSX "Grow"
+Mod1 Mod4 equal :MaximizeWindow
+## Strangely my Chromium ignores this (it captures the keypress)
+# Mod1 Enter :Fullscreen
+# Mod1 Enter :MacroCmd {ToggleDecor} {MaximizeWindow}
+## But it works fine on a different keybinding
+Mod1 Shift z :Fullscreen
 Mod1 v :MaximizeVertical
 Mod4 v :MaximizeVertical
 Mod1 h :MaximizeHorizontal
@@ -240,6 +255,7 @@ Control F9 :ExecCommand xsnapshot -window
 Mod1 t :ExecCommand xtermbg -bg '#330000' -geometry 132x28 -e top -n 100
 
 ## Changing workspace
+## These settings make sense if you have three columns of desktops
 Control Mod1 Left :PrevWorkspace
 Control Mod1 Right :NextWorkspace
 Control Mod1 Up :PrevWorkspace 3
@@ -248,7 +264,11 @@ Shift Mod1 Left :TakeToPrevWorkspace
 Shift Mod1 Right :TakeToNextWorkspace
 Shift Mod1 Up :TakeToPrevWorkspace 3
 Shift Mod1 Down :TakeToNextWorkspace 3
-## This makes sense if you have three columns of desktops
+## I cannot seem to override Ctrl-Alt-H/J/K/L's default behaviour.
+Control Mod1 H     :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
+Control Mod1 L     :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
+Control Mod1 K     :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace       3
+Control Mod1 J     :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace       3
 
 #Mod1 1 :Workspace 1
 #Mod1 2 :Workspace 2
@@ -266,6 +286,19 @@ Mod4 Shift Left    :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorksp
 Mod4 Shift Right   :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace
 Mod4 Shift Up      :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace 3
 Mod4 Shift Down    :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace 3
+Control Mod4 H     :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
+Control Mod4 L     :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
+Control Mod4 K     :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace       3
+Control Mod4 J     :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace       3
+
+# Swap all windows between two workspaces
+Control Mod4 Shift Left :ExecCommand move_windows_between_desktops swapdesktops left
+Control Mod4 Shift Right :ExecCommand move_windows_between_desktops swapdesktops right
+Control Mod4 Shift Up :ExecCommand move_windows_between_desktops swapdesktops up
+Control Mod4 Shift Down :ExecCommand move_windows_between_desktops swapdesktops down
+# I wanted to bind these to Control Mod1 Shift but for some strange reason that:
+#   1. didn't work, and
+#   2. over an un-tabbed xterm, changed the size of the xterm!
 
 # Mod1 F1 :Workspace 1
 # Mod1 F2 :Workspace 2
@@ -325,6 +358,7 @@ Control Mod4 KP_Right :ForEach {MoveRight +1} {{groups}}
 Control Mod4 KP_Left :ForEach {MoveRight -1} {{groups}}
 Control Mod4 KP_Up :ForEach {MoveUp +1} {{groups}}
 Control Mod4 KP_Down :ForEach {MoveUp -1} {{groups}}
+## I notice Ctrl-Alt-H/J/K/L are moving 1 pixel.  I guess these must be defaults.
 
 ## Resizing windows
 # Mod1 KP_5 :VerticalDecrement
@@ -417,5 +451,5 @@ Mod4 KP_8 :ExecCommand put_current_xwindow top
 Mod4 KP_9 :ExecCommand put_current_xwindow ne
 
 ## Basic tiling - really sucks with kicker panels or gkrellm running.
-Control Mod1 a :ArrangeWindows
+Control Mod1 a :ToggleCmd {ArrangeWindows (Stuck=no)} {ArrangeWindowsHorizontal (Stuck=no)} {ArrangeWindowsVertical (Stuck=no)}
 

@@ -1,12 +1,12 @@
-" Keep moving in given direction until we reach a new character under the
-" cursor.  (Like Ctrl-Arrow in Excel.)  Bound to Ctrl-Shift-Up/Down for Vim.
+" Keep moving in given direction until we reach a different character.
+" Like Ctrl-Arrow in Excel, but bound to Ctrl-Shift-Up/Down here.
 "
 " I find this most useful for:
 "
 "   - Jumping to the top or bottom of an indented block based on column
 "     (especially the tops of blocks in Coffeescript/Python).
 "
-"   - Getting to the next file in grep output.
+"   - Getting to the next file in cope list (assuming different name).
 "
 "   - Generally getting past or out of large blocks of repetitive lines.
 
@@ -15,17 +15,40 @@ let g:move_skip_empty_lines = 1   " Never stop on an empty line (if also unifyin
 let g:move_unify_whitespace = 1   " Tab, space and empty-line are all considered the same.
 let g:move_once_at_start    = 1   " Don't stop on the very next line just because it has a different char from the current!
 
-nnoremap <silent> <C-S-Up> :call <SID>FindNextChange("k")<Enter>
-nnoremap <silent> <C-S-Down> :call <SID>FindNextChange("j")<Enter>
-" Attempt to work in Visual mode; failed:
-"vnoremap <silent> <C-S-Up> :<C-U>call <SID>FindNextChange("k")<Enter>
-"vnoremap <silent> <C-S-Down> :<C-U>call <SID>FindNextChange("j")<Enter>
+" For Windows users:
+"nnoremap <silent> <C-S-Up>   :call <SID>FindNextChangeNormal("k")<Enter>
+"nnoremap <silent> <C-S-Down> :call <SID>FindNextChangeNormal("j")<Enter>
+"vnoremap <silent> <C-S-Up>   :call <SID>FindNextChangeVisual("k")<Enter>
+"vnoremap <silent> <C-S-Down> :call <SID>FindNextChangeVisual("j")<Enter>
+" For Mac OSX users (Mission Control hijacks the keys above):
+nnoremap <silent> g<S-Up>    :call <SID>FindNextChangeNormal("k")<Enter>
+nnoremap <silent> g<S-Down>  :call <SID>FindNextChangeNormal("j")<Enter>
+vnoremap <silent> g<S-Up>    :call <SID>FindNextChangeVisual("k")<Enter>
+vnoremap <silent> g<S-Down>  :call <SID>FindNextChangeVisual("j")<Enter>
+" For Vim gurus (middle-row zen; move without moving):
+nnoremap <silent> gK         :call <SID>FindNextChangeNormal("k")<Enter>
+nnoremap <silent> gJ         :call <SID>FindNextChangeNormal("j")<Enter>
+vnoremap <silent> gK         :call <SID>FindNextChangeVisual("k")<Enter>
+vnoremap <silent> gJ         :call <SID>FindNextChangeVisual("j")<Enter>
 
-function! s:FindNextChange(moveKey)
+function! s:FindNextChangeNormal(moveKey) range
+  call s:FindNextChange(a:moveKey, 0, 0, 0)
+endfunction
+function! s:FindNextChangeVisual(moveKey) range
+  call s:FindNextChange(a:moveKey, 1, a:firstline, a:lastline)
+endfunction
+function! s:FindNextChange(moveKey, in_visual_mode, first_line, last_line)
   let startCol = wincol()
+  let startRow = line(".")
   let unwatedChar = s:GetCharUnderCursor()
   if g:move_once_at_start
     exec "normal "a:moveKey
+  endif
+  let startColChars = getpos(".")[2]
+  " TODO BUG: startCol is always 1 when in_visual_mode and without g:move_once_at_start
+  "           But somehow if we do move_once_at_start then it goes where it should be.
+  if a:in_visual_mode
+    let startCol = wincol()
   endif
   let nextCharUnderCursor = s:GetCharUnderCursor()
   if nextCharUnderCursor != unwatedChar
@@ -46,7 +69,7 @@ function! s:FindNextChange(moveKey)
     if g:move_skip_empty_lines && newCharUnderCursor == ""
       " Do nothing, continue to next line
     elseif g:move_stay_in_column && newCol != startCol
-      " Likewise
+      " Likewise, keep moving until we are back in our start column
     else
       if newCharUnderCursor != unwatedChar
         " We have found what we were looking for!
@@ -62,6 +85,15 @@ function! s:FindNextChange(moveKey)
     endif
     let lastRow = newRow
   endwhile
+  if a:in_visual_mode
+    " Restore visual mode, up to the destination.
+    " We don't know if we were in v or V mode (lost during the keymapping) so we just assume v.
+    let finalRow = line(".")
+    let finalColChars = getpos(".")[2]
+    call setpos(".", [0, startRow, startColChars])
+    normal v
+    call setpos(".", [0, finalRow, finalColChars])
+  endif
 endfunction
 
 function! s:GetCharUnderCursor()

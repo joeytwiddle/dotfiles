@@ -9,6 +9,9 @@
 " the text, and that syntax rule does not allow sub-parsing (contains).
 " NOTE: If we want to work independently of updatetime, we could use :sleep
 
+" See also: http://of-vim-and-vigor.blogspot.com/2014/03/welcome-to-search-party.html
+"           https://github.com/dahu/SearchParty
+
 " 20120618 - Switched to using match instead of a syntax rule, since I can't
 "            see a way to do containedin=*.  This stops the temporary rule
 "            from breaking the syntax parser and slowing vim down.

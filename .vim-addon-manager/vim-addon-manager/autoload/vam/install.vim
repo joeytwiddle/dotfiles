@@ -4,7 +4,7 @@ exec vam#DefineAndBind('s:c','g:vim_addon_manager','{}')
 
 let s:c.change_to_unix_ff               = get(s:c, 'change_to_unix_ff', (g:os=~#'unix'))
 let s:c.do_diff                         = get(s:c, 'do_diff',           1)
-let s:c.known                           = get(s:c, 'known', 'vim-addon-manager-known-repositories')
+let s:c.known                           = get(s:c, 'known', 'vim-pi')
 let s:c.MergeSources                    = get(s:c, 'MergeSources', 'vam_known_repositories#MergeSources')
 let s:c.pool_fun                        = get(s:c, 'pool_fun', 'vam#install#Pool')
 let s:c.name_rewriting                  = get(s:c, 'name_rewriting',    {})
@@ -56,63 +56,78 @@ fun! vam#install#CheckPoolItem(key, i)
 endfun
 
 fun! vam#install#RewriteName(name)
-  if a:name[:6]==#'github:'
+  let match = matchlist(a:name, '^\(github\|git\|darcs\|hg\):\(.*\)$')
+  if empty(match)
+    return 0
+  endif
+  if match[1] ==# 'github'
     " github:{Name}      {"type": "git", "url": "git://github.com/{Name}/vim-addon-{Name}}
     " github:{N}/{Repo}  {"type": "git", "url": "git://github.com/{N}/{Repo}"}
-    let rest = a:name[len('github:'):]
-    return {'type' : 'git', 'url' : 'git://github.com/'.(rest =~ '/' ? rest : rest.'/vim-addon-'.rest)}
-  elseif a:name[:3]==#'git:'
-    " git:{URL}          {"type": "git", "url": {URL}}
-    return {'type' : 'git', 'url' : a:name[len('git:'):]}
-  elseif a:name[:2]==#'hg:'
-    return {'type' : 'hg', 'url' : a:name[len('hg:'):]}
+    return {'type' : 'git', 'url' : 'git://github.com/'.(match[2] =~ '/' ? match[2] : match[2].'/vim-addon-'.match[2])}
+  else
+    " hg:{URL}
+    " svn:{URL}
+    " darcs:{URL}
+    " -> {"type" : "hg/svn/darcs", url : URL}
+    return {'type' : match[1], 'url' : match[2]}
   endif
-
 endfun
 
-fun! vam#install#GetRepo(name, opts)
-  if a:name isnot# s:c.known | call vam#install#LoadPool() |endif
+fun! vam#install#CompleteRepoData(repository, opts)
+  if has_key(a:repository, 'type')
+    " looks like repository is already complete ..
+    return a:repository
+  endif
 
-  let repository = get(s:c.plugin_sources, a:name, get(get(a:opts, 'plugin_sources', {}), a:name, 0))
+  " add missing information by
+  " 1) lookup in pool
+  " 2) try turning name into source by s:c.name_rewriting
+  let name = a:repository.name
+  if name isnot# s:c.known | call vam#install#LoadPool() |endif
+
+  let repository = get(s:c.plugin_sources, name, get(get(a:opts, 'plugin_sources', {}), name, 0))
   if repository is 0
     unlet repository
     for key in sort(keys(s:c.name_rewriting))
-      let repository=call(s:c.name_rewriting[key], [a:name], {})
+      let repository=call(s:c.name_rewriting[key], [name], {})
       if type(repository) == type({})
         break
       endif
       unlet repository
     endfor
     if exists('repository')
-      echom 'Name '.a:name.' expanded to :'.string(repository)
+      echom 'Name '.name.' expanded to :'.string(repository)
     else
       " try to find typos and renamings. Tell user about failure
       let maybe_fixes = []
-      let name_ = vam#utils#TypoFix(a:name)
+      let name_ = vam#utils#TypoFix(name)
       for x in keys(s:c.plugin_sources)
         if vam#utils#TypoFix(x) == name_
-          call add(maybe_fixes, a:name.' might be a typo, did you mean: '.x.' ?')
+          call add(maybe_fixes, name.' might be a typo, did you mean: '.x.' ?')
         endif
       endfor
-      " try finding new name (VAM-kr only)
+      " try finding new name (vim-pi only)
       try
-        " using try because pool implementations other then VAM-kr could be
+        " using try because pool implementations other then vim-pi could be
         " used
-        call extend(maybe_fixes, vamkr#SuggestNewName(a:name))
+        call extend(maybe_fixes, vimpi#SuggestNewName(name))
       catch /Vim(call):E117:/
-        " If VAM-kr activation policy is never, then the above will yield 
+        " If vim-pi activation policy is never, then the above will yield 
         " unknown function error
       endtry
-      call vam#Log(join(["No repository location info known for plugin ".a:name."."] + maybe_fixes,"\n"))
+      call vam#Log(join(["No repository location info known for plugin ".name."."] + maybe_fixes,"\n"))
       return 0
     endif
   endif
+  call extend(repository, a:repository)
   return repository
 endfun
 
 " Install let's you install plugins by passing the url of a addon-info file
 " This preprocessor replaces the urls by the plugin-names putting the
 " repository information into the global dict
+"
+" TODO: Does anybody use this? Is it worth keeping?
 fun! vam#install#ReplaceAndFetchUrls(list)
   let l = a:list
   let idx = 0
@@ -136,7 +151,6 @@ fun! vam#install#ReplaceAndFetchUrls(list)
       let l[idx] = info.name
     endif
   endfor
-  return l
 endfun
 
 fun! vam#install#RunHook(hook, info, repository, pluginDir, opts)
@@ -159,12 +173,15 @@ endfun
 
 " opts: same as ActivateAddons
 fun! vam#install#Install(toBeInstalledList, ...)
-  let toBeInstalledList = vam#install#ReplaceAndFetchUrls(a:toBeInstalledList)
+  let toBeInstalledList = a:toBeInstalledList
+  call vam#PreprocessScriptIdentifier(toBeInstalledList)
+  call vam#install#ReplaceAndFetchUrls(map(copy(a:toBeInstalledList),'v:val.name'))
   let opts = a:0 == 0 ? {} : a:1
   let auto_install = get(opts, 'auto_install', s:c.auto_install)
   let installed = []
-  for name in filter(copy(toBeInstalledList), '!vam#IsPluginInstalled(v:val)')
-    let repository = vam#install#GetRepo(name, opts)
+  for to_install in filter(copy(toBeInstalledList), '!vam#IsPluginInstalled(v:val.name)')
+    let repository = vam#install#CompleteRepoData(to_install, opts)
+    let name = repository['name']
     " make sure all sources are known
     if repository is 0
       continue
@@ -595,10 +612,14 @@ fun! vam#install#Checkout(targetDir, repository) abort
 
     call vam#utils#Download(a:repository.url, archiveFile)
 
-    call vam#utils#Unpack(archiveFile, a:targetDir,
-                \                  {'strip-components': get(a:repository,'strip-components',-1),
+    let opts = {'strip-components': get(a:repository,'strip-components',-1),
                 \                   'script-type': tolower(get(a:repository, 'script-type', 'plugin')),
-                \                   'unix_ff': get(a:repository, 'unix_ff', get(s:c, 'change_to_unix_ff')) })
+                \                   'unix_ff': get(a:repository, 'unix_ff', get(s:c, 'change_to_unix_ff')) }
+    if (has_key(a:repository, 'target_dir'))
+      let opts.target_dir = a:repository.target_dir
+    endif
+
+    call vam#utils#Unpack(archiveFile, a:targetDir, opts)
 
     call writefile([get(a:repository, 'version', '?')], a:targetDir.'/version', 'b')
   endif
@@ -781,7 +802,7 @@ fun! vam#install#LoadKnownRepos()
   endif
 endfun
 
-" The default pool of know plugins for VAM: vim-addon-manager-known-repositories
+" The default pool of know plugins for VAM: vim-pi
 fun! vam#install#Pool()
   if vam#install#LoadKnownRepos()
     return vam_known_repositories#Pool()

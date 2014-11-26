@@ -5,6 +5,13 @@ endif
 
 function! Joeysyntax()
 
+	" Detect whether our terminal can support 256 colors, and if so set it.
+	" This worked for Ubuntu 12.04.  (Some HOWTOs suggest setting TERM=xterm-256 but that is not needed here.)
+	" But anyway see my .vimrc which may do better by using a blacklist, and runs before all plugins!
+	"if $TERM == "xterm" && $XTERM_VERSION == "XTerm(278)"
+		"set t_Co=256
+	"endif
+
 	" For slow computers:
 	" :syn sync maxlines=50
 	" :syn sync minlines=10
@@ -42,8 +49,9 @@ function! Joeysyntax()
 	:syntax keyword jDiff @@>>
 
 	" for Mason
-	:syntax region jComment start="/\*"  end="\*/"
-  " TODO: Isn't this a bit heavy?
+	":syntax region jComment start="/\*"  end="\*/"
+	" This is a bit heavy, and it fires on things like "/path/*".
+	" It should be enabled on a per-filetype/extension basis (NOT for all files) and if possible it should avoid matching inside strings.
 
 	" for sh, but bad for #defines!
 	" :syntax region jShComment start="[#]*## " end='$'
@@ -69,6 +77,7 @@ function! Joeysyntax()
 	"" BUG: Doesn't always work.  Works better now.  Wish I could say containedin=*  Err, they don't seem to be working at all, only "TODO" gets highlighted, and i suspect that's a script somewhere else doing it ^^
 	" :highlight! link jTodo Todo
 	" NOTE: these DO work, if you call :Joeysyntax after vim has started.
+	"       But not always.  Sometimes only if the text is outside a Comment (e.g. in Python).
 	:syntax keyword jTodo TODO Todo ToDo todo BUG BUGS WARN CONSIDER Consider NOTE TEST TESTING TOTEST Testing containedin=Comment,jShComment,jComment,shComment,ucComment,vimComment
 	" Well they don't appear to work in all languages.
 	" See also the shTodo rule I overrode in ~/.vim/after/syntax/sh.vim

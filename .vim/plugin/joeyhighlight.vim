@@ -58,7 +58,15 @@ function! Joeyhighlight()
 	"highlight Search ctermbg=Blue ctermfg=Yellow term=bold guibg=#005500 guifg=#ffbb66 gui=bold
 	"highlight Search ctermbg=blue ctermfg=white term=bold guibg=#005500 guifg=#66ff88 gui=bold
 	"highlight Search ctermbg=blue ctermfg=white term=bold guibg=#005500 guifg=#bbffbb gui=bold
-	highlight Search ctermbg=blue ctermfg=green term=bold guibg=#005544 guifg=#aaffaa gui=bold
+	"highlight Search ctermbg=blue ctermfg=green term=bold guibg=#005544 guifg=#aaffaa gui=bold
+	" In 256-color xterm, darkblue background looks the same as in 8-bit.  Just blue looks a bit lighter.
+	" Now using reverse in GUI so that selected line shows up even if dim_inactive_windows.vim sets both colors of unfocused quickfix window.
+	highlight Search term=bold cterm=bold ctermbg=darkblue ctermfg=green guifg=#005544 guibg=#aaffaa gui=bold,reverse
+	" But using reverse in cterm sucks if we also want bold text, because the bold makes the background blue lighter.
+	" An alternative: white on green
+	"highlight Search term=reverse cterm=bold,reverse ctermfg=darkgreen ctermbg=white guifg=#005544 guibg=#aaffaa gui=bold,reverse
+	"highlight Search term=reverse ctermfg=darkblue ctermbg=green cterm=reverse guifg=#005544 guibg=#aaffaa gui=bold,reverse
+	" It also seems that reverse cancels bold in the GUI.
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White guifg=DarkMagenta guibg=White
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#553355
 	"" This actually gives us a dirty grey instead of white (in xterm):
@@ -85,6 +93,9 @@ function! Joeyhighlight()
 	"" Unfortunately the following set white in 8-color xterm mode, so they require a check before using.
 	" highlight Comment ctermfg=8 cterm=bold gui=none guifg=#a0a0a0   " bold grey, nice with Lucida in xterm, light non-bold in GUI.  =8 is a little lighter than darkgrey in 256-color-term mode
 	" highlight Comment ctermfg=244 cterm=bold gui=none guifg=#a0a0a0   " bold grey, nice with Lucida in xterm, light non-bold in GUI.  =244 or 245 is an exact match to low-color xterm :P
+	"if &t_Co >= 256
+		"hi Comment ctermfg=60   " pretty dark blue
+	"endif
 	" highlight friendlyComment cterm=none ctermfg=cyan gui=none guifg=#80a0ff   " boring mid blue (just greyish)
 	highlight friendlyComment ctermfg=darkblue cterm=bold gui=none guifg=#7777ff gui=bold
 	hi link vimCommentTitle friendlyComment
@@ -97,6 +108,10 @@ function! Joeyhighlight()
 
 	" Used for tabs (listchars)
 	highlight SpecialKey ctermfg=darkblue cterm=none guifg=#2222aa gui=bold
+	if &t_Co >= 250
+		" Slightly darker
+		highlight SpecialKey ctermfg=19
+	endif
 	" Used to broken line indentation (showbreak)
 	highlight link NonText SpecialKey
 	" highlight NonText cterm=none gui=none
@@ -112,7 +127,8 @@ function! Joeyhighlight()
 
 	" Code
 	highlight Boolean ctermfg=LightBlue guifg=LightBlue
-	highlight Constant ctermfg=DarkYellow guifg=DarkYellow
+	"highlight Constant ctermfg=DarkYellow guifg=DarkYellow
+	highlight Constant ctermfg=Magenta guifg=Magenta   " experiment
 
 	" C
 	highlight cType ctermfg=Cyan guifg=Cyan
@@ -261,7 +277,8 @@ function! Joeyhighlight()
 	"highlight foldColumn ctermbg=Grey ctermfg=Blue cterm=none gui=bold guifg=Green guibg=#000060
 	highlight FoldColumn ctermbg=DarkBlue ctermfg=White cterm=bold gui=bold guifg=White guibg=#000080
 
-	highlight Conceal term=reverse ctermbg=DarkBlue ctermfg=White cterm=bold guibg=Blue guifg=White gui=bold
+	"highlight Conceal term=reverse ctermbg=DarkBlue ctermfg=White cterm=bold guibg=Blue guifg=White gui=bold
+	highlight Conceal ctermfg=cyan cterm=bold guifg=cyan gui=bold
 
 	"" green
 	"hi cursor guibg=#44ff44
@@ -273,16 +290,22 @@ function! Joeyhighlight()
 
 	" hi MatchParen term=reverse ctermbg=red guibg=red
 	" hi MatchParen term=reverse cterm=reverse ctermbg=black ctermfg=magenta guibg=black guifg=magenta
-	hi MatchParen term=reverse cterm=none ctermbg=magenta ctermfg=grey guibg=#880088 guifg=#eeeeee
+	" hi MatchParen term=reverse cterm=none ctermbg=magenta ctermfg=grey guibg=#880088 guifg=#eeeeee
+	"" My terminal cursor flashes once (briefly disappears) when moving (possibly due to plugins and/or CursorHold events).
+	"" This leads me to seeing two magenta boxes, which confuses me about where my cursor is.
+	"" To reduce confusion, I would rather show no box, so let's highlight only the foreground, not the background:
+	" hi MatchParen term=reverse cterm=none ctermbg=none ctermfg=magenta guibg=none guifg=#ff00ff
+	hi MatchParen term=reverse cterm=none ctermbg=darkblue ctermfg=magenta guibg=darkblue guifg=#ff00ff
 
 	" hi link Comma Function  ## cyan
 	" hi link Comma Keyword   ## yellow
 	" hi Comma cterm=bold ctermfg=white gui=bold guifg=white
 	"hi Comma cterm=bold ctermfg=darkgrey gui=bold guifg=#777777
 
-	" Ubuntu made it look naff, so filled out all the colors
-	hi Pmenu ctermbg=magenta ctermfg=white cterm=bold guibg=#bb00bb guifg=white gui=bold
-	hi Pmenusel ctermbg=black ctermfg=white cterm=bold guibg=#660066 guifg=white gui=bold
+	" Ubuntu's Vim made the PMenu look naff, so I filled out all the colors
+	"hi Pmenu ctermbg=magenta ctermfg=white cterm=bold guibg=#bb00bb guifg=white gui=bold
+	hi Pmenu ctermbg=blue ctermfg=white cterm=bold guibg=#0000bb guifg=white gui=bold
+	hi Pmenusel ctermbg=black ctermfg=white cterm=bold guibg=#000066 guifg=white gui=bold
 
 	highlight CursorLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
 	highlight clear CursorColumn
@@ -301,7 +324,11 @@ function! Joeyhighlight()
 	"hi MyTagListTitle ctermfg=lightblue ctermbg=none
 	"hi MyTagListTitle ctermfg=yellow ctermbg=none
 	hi MyTagListTitle ctermfg=none ctermbg=none
-	hi MyTagListTagName ctermbg=green ctermfg=white guibg=#00cc00 guifg=white
+	"hi MyTagListTagName cterm=bold ctermbg=green ctermfg=white guibg=#00cc00 guifg=white
+	"hi MyTagListTagName cterm=bold ctermbg=green ctermfg=white gui=bold,reverse guibg=white guifg=#00cc00
+	hi MyTagListTagName cterm=bold,reverse ctermbg=white ctermfg=green gui=bold,reverse guibg=white guifg=#00cc00
+	" I think there was some reason why I shouldn't use reverse in cterm, but I forgot why!
+	" I want it so that we get a strong highlight when using dim_inactive_windows.vim
 	" hi MyTagListFileName ctermbg=black ctermfg=white
 	hi MyTagListFileName ctermbg=black ctermfg=cyan guibg=black guifg=cyan
 
@@ -350,8 +377,26 @@ function! Joeyhighlight()
 	" Who knows what else is highlighted as None though...
 	hi link None EchoMsg
 
+	" I used to think I should take advantage of the GUI's wide colour range.
+	" But these days I begin to prefer continuity between xterm and GUI.
+	" Unfortunately I note that the GUI's Lucida Console 10 is not quite as heavy weight as xterm's lucidatypewriter-100, making me want to bold everything.
+	" Lucida Console 8 and lucidatypewriter-80 are more similar in weight, but the former loses a little intensity to anti-aliasing.
+	let highlight_gui_like_xterm = 1
+	if highlight_gui_like_xterm
+		hi Comment guifg=#777777 gui=bold
+		hi String guifg=#00ff00
+		hi Statement guifg=yellow gui=bold
+		hi Identifier guifg=cyan gui=bold
+		hi Special guifg=magenta gui=bold
+		hi Search guifg=blue guibg=green gui=bold,reverse
+		hi HLCurrentWord guifg=red gui=bold
+		"hi Number guifg=cyan
+		hi Normal guifg=#f7f7f7
+	endif
+
 endfun
 
-"" No longer needed.  Rely on autocmd above.
-" :Joeyhighlight
+" I had disabled this, to rely on autocmd above.
+" But in some cases it didn't fire, e.g. when using `vim -` to read from stdin.
+:Joeyhighlight
 

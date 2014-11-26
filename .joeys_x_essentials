@@ -11,7 +11,22 @@ if [ -f "$HOME"/.custom_keyboard_settings ]
 then . "$HOME"/.custom_keyboard_settings
 fi
 
-## Disabled
+# /usr/bin/synclient can be found in the xserver-xorg-input-synaptics package
+
+# If for some reason your OS didn't already enable multi-touch scrolling for you:
+synclient VertTwoFingerScroll=1     # Ubuntu gave me default 1
+synclient HorizTwoFingerScroll=1    # Ubuntu gave me default 0
+
+# "Natural Scrolling" direction for OSX victims.  Applies to mousewheel and touchpad (edge and two-finger scrolling)
+synclient VertScrollDelta=-111
+synclient HorizScrollDelta=-111
+
+# You can even disable scrolling when you drag on the edge of the touchpad if you find it annoying
+synclient VertEdgeScroll=0
+synclient HorizEdgeScroll=0
+
+# Disabled.  This used to work on Debian but now getting issues on Ubuntu 12.04.
+# Although it did give me a nice big I over xterms and a large hand over links, over normal windows and Fluxox desktop it showed me a huge X instead of a nice large arrow.
 if [ -d $HOME/X11_big_cursor ] && false
 then
 	jshinfo "Initialising big cursor."
