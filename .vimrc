@@ -661,6 +661,16 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"github:mustache/vim-mustache-handlebars")
 	let g:mustache_abbreviations = 1
 
+	" From: https://github.com/Slava/vimrc/
+	call add(vamAddons,"github:slava/vim-spacebars")
+	"call add(vamAddons,"github:groenewege/vim-less")
+	call add(vamAddons,"github:elzr/vim-json")
+	"call add(vamAddons,"github:pangloss/vim-javascript")
+	"call add(vamAddons,"github:leafgarland/typescript-vim")
+	" Actually does much more than syntax highlighting but that's overkill for me
+	"call add(vamAddons,"github:kchmck/vim-coffee-script")
+	"call add(vamAddons,"github:hdima/python-syntax")
+
 	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
 	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g, <C-w>w|<C-w>W"
 	" Experimenting:
