@@ -43,7 +43,7 @@ function! ShowCurrentGitBranch()
         " Use cached value
     else
         " Get value and cache it
-        let full_path = expand('%:p:h')
+        let full_path = fnamemodify(resolve(expand('%:p')),':h')
         let b:last_checked_branch_value = GetCurrentGitBranch(full_path)
         let b:last_checked_branch_time = reltime()
     endif
