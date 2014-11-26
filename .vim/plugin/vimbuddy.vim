@@ -39,9 +39,21 @@ function! GetCurrentGitBranch(full_path)
 endfunction
 
 function! ShowCurrentGitBranch()
-    let full_path = expand('%:p:h')
-    let branch_name = GetCurrentGitBranch(full_path)
+    if exists('b:last_checked_branch_time') && s:get_ms_since(b:last_checked_branch_time) < 10000
+        " Use cached value
+    else
+        " Get value and cache it
+        let full_path = expand('%:p:h')
+        let b:last_checked_branch_value = GetCurrentGitBranch(full_path)
+        let b:last_checked_branch_time = reltime()
+    endif
+    let branch_name = b:last_checked_branch_value
     return branch_name == '' ? '' : '['.branch_name.'] '
+endfunction
+
+function! s:get_ms_since(time)   " Terry Ma
+  let cost = split(reltimestr(reltime(a:time)), '\.')
+  return str2nr(cost[0])*1000 + str2nr(cost[1])/1000.0
 endfunction
 
 if exists('*ShowCurrentGitBranch')
