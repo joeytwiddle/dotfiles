@@ -167,6 +167,10 @@ alias glm='glg -m --first-parent'
 # When -c is used, -m does nothing (at least in the example I tested)
 # I did tests comparing `glg -c` against `glg -m`, and `glg -c --first-parent` against `glg -m --first-parent`.  Whilst -c did show the full diff of manual merges, it also excluded a lot of stuff!  Notably, merges with no conflicts.  (From the manual: "it lists only files which were modified from all parents").  So I don't see any way to see the true patched of manual merges (-c) without also excluding stuff.  Therefore, use -c only when you think you need it!  :P
 
+# "Git Log Clear" - Single lines, no graph.  Shows more info than: git log --pretty=oneline
+# If you want to use this with --stat and --graph then it should have a %n at the end.  But this will make --graph show blank lines even when run without --stat.  Since glf does not use --graph, we don't really need this.
+alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
+
 # "Git Log Long" - One per line, with graph
 #alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'   # Does not show committer's name or age of commit
 #alias gll='git lol'
@@ -180,11 +184,11 @@ alias gll='glc --graph'
 # gllm | highlight -bold -reverse "Merge.* into [^ ]*" magenta | more
 if which highlight >/dev/null
 then
-	# Better because it allows arguments to be passed.  Breaks because glc is not loaded yet?
-	#gllm() {
-		#gll -m --first-parent "$@" |highlight -bold "Merge.*" blue | less -REX
-	#}
-	alias gllm='gll -m --first-parent | highlight -bold "Merge.*" blue | less -REX'
+	# Better because it allows arguments to be passed.  Breaks if glc is not aliased until later.
+	gllm() {
+		gll -m --first-parent "$@" |highlight -bold "Merge.*" blue | less -REX
+	}
+	#alias gllm='gll -m --first-parent | highlight -bold "Merge.*" blue | less -REX'
 else alias gllm='gll -m --first-parent'
 fi
 # This shows the commits from merged branches (/), but not the merge commits themselves (\).  It takes less space than gll.
@@ -192,10 +196,6 @@ alias gllmm='gll --no-merges'
 # Git Log Long No Graph
 alias gllng='glc'
 alias glls='gll --stat'
-
-# "Git Log Clear" - Single lines, no graph.  Shows more info than: git log --pretty=oneline
-# If you want to use this with --stat and --graph then it should have a %n at the end.  But this will make --graph show blank lines even when run without --stat.  Since glf does not use --graph, we don't really need this.
-alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
 
 # "Git Log Word-diffed" - It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
 alias glw='gl --word-diff=color'

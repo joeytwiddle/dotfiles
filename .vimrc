@@ -612,8 +612,8 @@ autocmd VimLeave * silent !stty ixon
 	" call add(vamAddons,"VOoM")                           " Another outliner
 	" call add(vamAddons,'github:xolox/vim-easytags')      " Runs ctags automatic for you, to update them
 	"call add(vamAddons,'github:ervandew/supertab')         " Seems a lot like another_tabcompletion.vim but the list appears backwards! =/
-	"call add(vamAddons,'UltiSnips')     " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
-	call add(vamAddons,'github:joeytwiddle/ultisnips')     " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
+	"call add(vamAddons,'UltiSnips')                        " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
+	call add(vamAddons,'github:joeytwiddle/ultisnips')     " Fix that restores my usual Tab-completion.
 	let g:UltiSnipsJumpForwardTrigger="<tab>"
 	let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 	" call add(vamAddons,'github:troydm/easybuffer.vim')
@@ -649,6 +649,7 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"surround")                        " Change dict(mykey) to dict[mykey] with cs([ delete with ds( or create with ysiw[
 	" Interesting: source folder's vimrc file for different settings in specific projects
 	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
+	"call add(vamAddons,"github:tpope/vim-markdown")       " More recent version of the syntax file bundled with Vim.
 	"call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
 	"let g:vim_markdown_folding_disabled=1
 	call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
@@ -661,10 +662,21 @@ autocmd VimLeave * silent !stty ixon
 	let g:sparkupNextMapping = '<C-]>n'   " The default <C-n> messes with my <Tab> mappings
 	let g:sparkupMappingInsertModeOnly = 1
 	call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
+	call add(vamAddons,"github:vim-scripts/Align")
 
 	" For Meteor development
 	call add(vamAddons,"github:mustache/vim-mustache-handlebars")
 	let g:mustache_abbreviations = 1
+
+	" From: https://github.com/Slava/vimrc/
+	call add(vamAddons,"github:slava/vim-spacebars")
+	"call add(vamAddons,"github:groenewege/vim-less")
+	call add(vamAddons,"github:elzr/vim-json")
+	"call add(vamAddons,"github:pangloss/vim-javascript")
+	"call add(vamAddons,"github:leafgarland/typescript-vim")
+	" Actually does much more than syntax highlighting but that's overkill for me
+	"call add(vamAddons,"github:kchmck/vim-coffee-script")
+	"call add(vamAddons,"github:hdima/python-syntax")
 
 	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
 	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g, <C-w>w|<C-w>W"
@@ -688,9 +700,11 @@ autocmd VimLeave * silent !stty ixon
 	" NOTE: For the tern plugin to work, you need to cd into the folder and do `npm install`
 	"       You also need to create a .tern-project file for each project!
 	call add(vamAddons,"github:marijnh/tern_for_vim")     " Static analysis of JS files
+	"let g:tern_show_argument_hints = 'on_hold'
 	let g:tern_show_argument_hints = 'never'              " Disabled because it keeps locking up Vim until tern times out
 	let g:tern_show_signature_in_pum = 1
 	" Curiously the documentation pops up in a Scratch window when I use <Tab> to complete a word, even if both of the above are set to off (defaults).
+	" I also manually installed this: https://github.com/Slava/tern-meteor
 
 	" Here is a minimal alternative to EasyMotion: https://github.com/vim-scripts/PreciseJump
 	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
@@ -776,7 +790,8 @@ autocmd VimLeave * silent !stty ixon
 	""call add(vamAddons,"github:kris89/vim-multiple-cursors")     " More recently maintained
 	""call add(vamAddons,"github:jrhorn424/vim-multiple-cursors")  " Even more recently maintained!
 	""call add(vamAddons,"github:joeytwiddle/vim-multiple-cursors") " My version attempts to avoid losing keystrokes
-	"call add(vamAddons,"github:eapache/vim-multiple-cursors")    " Doing some nice work on it
+	""call add(vamAddons,"github:eapache/multi-char-maps")         " Doing some nice work on it
+	"call add(vamAddons,"github:kristijanhusak/vim-multiple-cursors") " Doing some nice work on it
 	"let g:multi_cursor_start_key='<F2>'
 	"nnoremap \\r :exec 'MultipleCursorsFind \<'.expand("<cword>").'\>'v
 	" Note: multiple-cursors appears to conflict with many of my plugins.  But it appears to work if I do the following:
@@ -860,9 +875,14 @@ autocmd VimLeave * silent !stty ixon
 	"let g:unite_cursor_line_highlight      = 'Statusline'
 	"let g:unite_prompt                     = '➤ '
 	"let g:unite_data_directory             = $HOME.'/tmp/unite'
-	" WIP:
 	"au BufEnter unite imap <buffer> <Tab>   <Plug>(unite_loop_cursor_down)
 	"au BufEnter unite imap <buffer> <S-Tab> <Plug>(unite_loop_cursor_up)
+	" Paste from the yank history (may need unite_source_history_yank_enable)
+	nnoremap <silent> <leader>P :Unite -start-insert history/yank<CR>
+	" Trigger the git menu
+	nnoremap <silent> <leader>g :Unite -silent -start-insert menu:git<CR>
+	" Open all menus with useful stuff
+	nnoremap <silent> <leader>j :Unite -silent -start-insert menu:all menu:git<CR>" WIP:
 
 	call add(vamAddons,"github:ap/vim-css-color")        " Colour backgrounds of color codes in CSS files
 
@@ -875,6 +895,7 @@ autocmd VimLeave * silent !stty ixon
 	"let g:molokai_original = 0                           " Makes some changes, but does not help much.
 	call add(vamAddons,"github:29decibel/codeschool-vim-theme") " Clear, clean pastels
 	"call add(vamAddons,"github:Lokaltog/vim-distinguished") " Understated, a bit more earthy/dirty compared to codeschool
+	"call add(vamAddons,"github:Slava/vim-colors-tomorrow") " Solarized options but with tomorrow theme
 	"call add(vamAddons,"github:flazz/vim-colorschemes")  " A large collection, includes codeschool
 	"call add(vamAddons,"github:rodnaph/vim-color-schemes") " A collection, includes leo
 	                                                        " leo is based on primary colors; it is a bit strong.  version 1 .0 here: http://www.vim.org/scripts/script.php?script_id=2156
