@@ -856,9 +856,14 @@ autocmd VimLeave * silent !stty ixon
 	"let g:unite_cursor_line_highlight      = 'Statusline'
 	"let g:unite_prompt                     = '➤ '
 	"let g:unite_data_directory             = $HOME.'/tmp/unite'
-	" WIP:
 	"au BufEnter unite imap <buffer> <Tab>   <Plug>(unite_loop_cursor_down)
 	"au BufEnter unite imap <buffer> <S-Tab> <Plug>(unite_loop_cursor_up)
+	" Paste from the yank history (may need unite_source_history_yank_enable)
+	nnoremap <silent> <leader>P :Unite -start-insert history/yank<CR>
+	" Trigger the git menu
+	nnoremap <silent> <leader>g :Unite -silent -start-insert menu:git<CR>
+	" Open all menus with useful stuff
+	nnoremap <silent> <leader>j :Unite -silent -start-insert menu:all menu:git<CR>" WIP:
 
 	call add(vamAddons,"github:ap/vim-css-color")        " Colour backgrounds of color codes in CSS files
 
