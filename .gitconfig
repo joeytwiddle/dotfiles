@@ -242,4 +242,7 @@
 	# Unfortunately, setting these will apply to all logs, so we can't ever see a normal log!
 
 [push]
-	default = simple
+	#default = simple     # Throws an error in 1.7.10 (but was suggested by 1.8)
+	#default = matching   # The default in 1.7.10, but a bit heavy!
+	default = current     # Pushes current branch to remote branch of the same name
+
