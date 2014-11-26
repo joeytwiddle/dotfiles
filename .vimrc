@@ -401,7 +401,8 @@ autocmd VimLeave * silent !stty ixon
 			" But I prefer the shorter one!
 			":set guifont=Menlo\ Regular:h11
 			" But even more I prefer to install Lucida Console and then use that:
-			:set guifont=Lucida\ Console:h11
+			":set guifont=Lucida\ Console:h11
+			:set guifont=Envy\ Code\ Squat:h13
 		endif
 		" Hide the menu and toolbar which I never use.
 		:set guioptions-=m
