@@ -606,8 +606,8 @@ autocmd VimLeave * silent !stty ixon
 	" call add(vamAddons,"VOoM")                           " Another outliner
 	" call add(vamAddons,'github:xolox/vim-easytags')      " Runs ctags automatic for you, to update them
 	"call add(vamAddons,'github:ervandew/supertab')         " Seems a lot like another_tabcompletion.vim but the list appears backwards! =/
-	"call add(vamAddons,'UltiSnips')     " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
-	call add(vamAddons,'github:joeytwiddle/ultisnips')     " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
+	"call add(vamAddons,'UltiSnips')                        " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
+	call add(vamAddons,'github:joeytwiddle/ultisnips')     " Fix that restores my usual Tab-completion.
 	let g:UltiSnipsJumpForwardTrigger="<tab>"
 	let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 	" call add(vamAddons,'github:troydm/easybuffer.vim')
@@ -643,6 +643,7 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"surround")                        " Change dict(mykey) to dict[mykey] with cs([ delete with ds( or create with ysiw[
 	" Interesting: source folder's vimrc file for different settings in specific projects
 	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
+	"call add(vamAddons,"github:tpope/vim-markdown")       " More recent version of the syntax file bundled with Vim.
 	"call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
 	"let g:vim_markdown_folding_disabled=1
 	call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
@@ -757,7 +758,8 @@ autocmd VimLeave * silent !stty ixon
 	""call add(vamAddons,"github:kris89/vim-multiple-cursors")     " More recently maintained
 	""call add(vamAddons,"github:jrhorn424/vim-multiple-cursors")  " Even more recently maintained!
 	""call add(vamAddons,"github:joeytwiddle/vim-multiple-cursors") " My version attempts to avoid losing keystrokes
-	"call add(vamAddons,"github:eapache/vim-multiple-cursors")    " Doing some nice work on it
+	""call add(vamAddons,"github:eapache/multi-char-maps")         " Doing some nice work on it
+	"call add(vamAddons,"github:kristijanhusak/vim-multiple-cursors") " Doing some nice work on it
 	"let g:multi_cursor_start_key='<F2>'
 	"nnoremap \\r :exec 'MultipleCursorsFind \<'.expand("<cword>").'\>'v
 	" Note: multiple-cursors appears to conflict with many of my plugins.  But it appears to work if I do the following:
@@ -856,6 +858,7 @@ autocmd VimLeave * silent !stty ixon
 	"let g:molokai_original = 0                           " Makes some changes, but does not help much.
 	call add(vamAddons,"github:29decibel/codeschool-vim-theme") " Clear, clean pastels
 	"call add(vamAddons,"github:Lokaltog/vim-distinguished") " Understated, a bit more earthy/dirty compared to codeschool
+	"call add(vamAddons,"github:Slava/vim-colors-tomorrow") " Solarized options but with tomorrow theme
 	"call add(vamAddons,"github:flazz/vim-colorschemes")  " A large collection, includes codeschool
 	"call add(vamAddons,"github:rodnaph/vim-color-schemes") " A collection, includes leo
 	                                                        " leo is based on primary colors; it is a bit strong.  version 1 .0 here: http://www.vim.org/scripts/script.php?script_id=2156
