@@ -139,6 +139,7 @@ ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
 .ogm 01;35
 .flv 01;35
 .webm 01;35
+.mkv 01;35
 .h264 01;35
 .x264 01;35
 .3gp 01;35

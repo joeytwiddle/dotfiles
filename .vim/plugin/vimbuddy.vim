@@ -22,9 +22,42 @@ let s:moreflags  = '%{ \&modifiable ? "" : "[-]" }'
 let s:moreflags = s:moreflags . '%#StatusDiffing#%{ \&diff ? "[d]" : "" }%##'
 "highlight StatusDiffing ctermbg=darkyellow ctermfg=black guibg=darkyellow guifg=black
 highlight StatusDiffing ctermbg=blue ctermfg=white guibg=blue guifg=white
-let &statusline = substitute(&statusline, '%h', s:moreflags . '%h', '')
+let &statusline = substitute(&statusline, '%h', s:moreflags.'%h', '')
 if exists('*GetSearchStatus')
     let &statusline = substitute(&statusline, '= ', '= %{GetSearchStatus()}', '')
+endif
+
+function! GetCurrentGitBranch(full_path)
+    let result = system('cd '.shellescape(a:full_path).' && git symbolic-ref --short HEAD')
+    if v:shell_error > 0
+        return ''
+    else
+        " Strip trailing newline
+        let result = substitute(result, '\n', '', 'g')
+        return result
+    endif
+endfunction
+
+function! ShowCurrentGitBranch()
+    if exists('b:last_checked_branch_time') && s:get_ms_since(b:last_checked_branch_time) < 10000
+        " Use cached value
+    else
+        " Get value and cache it
+        let full_path = expand('%:p:h')
+        let b:last_checked_branch_value = GetCurrentGitBranch(full_path)
+        let b:last_checked_branch_time = reltime()
+    endif
+    let branch_name = b:last_checked_branch_value
+    return branch_name == '' ? '' : '['.branch_name.'] '
+endfunction
+
+function! s:get_ms_since(time)   " Terry Ma
+  let cost = split(reltimestr(reltime(a:time)), '\.')
+  return str2nr(cost[0])*1000 + str2nr(cost[1])/1000.0
+endfunction
+
+if exists('*ShowCurrentGitBranch')
+    let &statusline = substitute(&statusline, '%f', '%{ShowCurrentGitBranch()}%f', '')
 endif
 
 " Shows time:
