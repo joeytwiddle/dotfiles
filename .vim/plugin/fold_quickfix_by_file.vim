@@ -9,6 +9,8 @@ command! FoldByFiles :call s:FoldByFiles()
 command! FoldByFolder :call s:FoldByFolder()
 command! FoldByPath :call s:FoldByPath()
 
+command! QFAlign :call s:QFAlign()
+
 function! g:GetLastNonWrappedQFLine(startline)
 	let curline = a:startline
 	while curline >= 1
@@ -167,3 +169,22 @@ endfunction
 "	endfor
 "endfunction
 
+function! s:QFAlign()
+	if &ft != 'qf'
+		echo "Must be run on quickfix window"
+		return
+	endif
+	let line_before = line('.')
+	" Will invariably be 0
+	let modifiable_before = &modifiable
+	set modifiable
+	" Convert all Tabs to 4 spaces
+	silent! %s/\t/    /g
+	silent! %s/|  */|	/
+	let lines = getline(2, line('$'))
+	let lengths = map(lines, 'match(v:val, "|	")')
+	let max = max(lengths)
+	execute "setlocal ts=" . (max + 2)
+	let &modifiable = modifiable_before
+	execute "".line_before
+endfunction

@@ -5,6 +5,7 @@
 " It uses Vim's built-in <C-n> completion, but it lets <Tab> work normally at the beginning of a line.
 
 " It comes from an old revision of http://vim.wikia.com/wiki/Smart_mapping_for_tab_completion
+" But a similar function called CleverTab can also be found at :h ins-completion (or :helpgrep CleverTab)
 
 function! InsertTabWrapper(direction)
     " Often I don't want 'longest'; I want to perform a quick search.
@@ -42,8 +43,18 @@ inoremap <silent> <s-tab> <c-r>=InsertTabWrapper ("backward")<cr>
 " Unfortunately it is still quite slow, because it seems to cause 3 screen redraws every time we hit Tab!
 " We can mitigate this on some of the later <Tab> strokes, by skipping UltiSnips whenever the popup menu is open.
 " We need to override UltiSnips mappings after they have loaded, so we wait for VimEnter.
-au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <Tab> <C-r>=pumvisible() ? "\<c"."-n>" : UltiSnips_ExpandSnippetOrJump()<CR>| endif
-au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <S-Tab> <C-r>=pumvisible() ? "\<c"."-p>" : UltiSnips_JumpBackwards()<CR>| endif
+"au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <Tab> <C-r>=pumvisible() ? "\<c"."-n>" : UltiSnips_ExpandSnippetOrJump()<CR>| endif
+"au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <S-Tab> <C-r>=pumvisible() ? "\<c"."-p>" : UltiSnips_JumpBackwards()<CR>| endif
+" Unfortunately the above does not work, because it inserts a literal <C-n> instead of executing that key's action.
+" Expr method:
+"au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <expr> <Tab> pumvisible() ? "\<c-n>" : UltiSnips_ExpandSnippetOrJump() | endif
+"au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <expr> <S-Tab> pumvisible() ? "\<c-p>" : UltiSnips_JumpBackwards() | endif
+" But UltiSnips does not like being called from <expr>.  It produces the error "Not allowed here".
+" However injecting this way works:
+au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <expr> <Tab> pumvisible() ? "\<c-n>" : "\<c-r>=UltiSnips_ExpandSnippetOrJump()<CR>" | endif
+au VimEnter * if exists("*UltiSnips_ExpandSnippetOrJump") | imap <expr> <S-Tab> pumvisible() ? "\<c-p>" : "\<c-r>=UltiSnips_JumpBackwards()<CR>" | endif
+" The one remaining issue is that I had got used to <Tab> paging between blocks in an UltiSnips snippet, even when the completion menu was open.  (In that scenario I used <C-N> and <C-P> to perform ins-completion.)  Now there is no way to page to the next block when the popup menu is open.  A simple way to close the menu (select the current item) now appears to be <Space><Backspace>.
+" Perhaps in future I should change the Ultisnips completion key to something different, e.g. <Ctrl-]> and <Ctrl-[>.  That would avoid all of the above issues!
 
 
 
@@ -53,9 +64,9 @@ if exists("g:give_me_tab_completion_in_search") && g:give_me_tab_completion_in_s
     " One alternative is this, although it won't work if you are recording a macro.
     nnoremap / q/20-i
 
-    " <Up> and <Down> can look at related history, but that's not what I want.
+    " <Up> and <Down> can look at related history, and completion will work as it does in Insert mode.
 
-    " Let's just use an external plugin then :)
+    " There is also an external plugin that can do this:
     " https://github.com/vim-scripts/SearchComplete
 endif
 

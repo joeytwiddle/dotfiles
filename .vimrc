@@ -33,8 +33,10 @@ augroup END
 
 "" Vim 7.3 started making `w` jump over '.'s in a variety of languages, which I do not want.
 autocmd BufReadPost * setlocal iskeyword-=.
-" However I have come to accept that I do need '-' to be part of a word when dealing with CSS classes.
-autocmd BufReadPost *.{css,html,js,erb,jade,blade} setlocal iskeyword+=-
+" However I have come to accept that I do need '-' to be part of a word when dealing with CSS classes and IDs.
+autocmd BufReadPost *.{html,svg,xml,css,scss,less,stylus,js,coffee,erb,jade,blade} setlocal iskeyword+=-
+" Also $ can be part of a valid identifier in JS (in fact almost any unicode character can be!):
+autocmd BufReadPost *.{js,coffee} setlocal iskeyword+=$
 
 " At some point undo started working through file-reads.  Given that, I am happier to load changed files automatically.  (Especially useful when peforming git checkout!)
 if v:version >= 703
@@ -63,7 +65,9 @@ silent !stty -ixon
 autocmd VimLeave * silent !stty ixon
 " Restoring the "default" might suck if the user usually has it disabled!  We could check whether he has it enabled or not by looking at the exit code of:
 "   stty -a | grep -q '\( \|^\)ixon\>'
-" TODO: What if the user doesn't have an stty executable (Windows)?  What will this do on Macs or MacVim?  We may need to try harder to fail silently in the general case.  Or is silent enough already?
+" TODO: What if the user doesn't have an stty executable (Windows)?
+"       We may need to try harder to fail silently in the general case.  Or is silent enough already?
+"       It seems to work fine on Mac terminal and MacVim.
 
 
 
@@ -461,7 +465,6 @@ autocmd VimLeave * silent !stty ixon
 	" Add a few custom filetypes:
 	au BufRead,BufNewFile {*.shlib}              set ft=sh
 	au BufRead,BufNewFile {*.grm}                set ft=grm
-	au BufRead,BufNewFile {*.json}               set ft=javascript
 	au BufRead            {*/xchatlogs/*.log}    set ft=irclog readonly
 	" From web:
 	au BufRead,BufNewFile {/usr/share/X11/xkb/*} set ft=c
@@ -679,11 +682,22 @@ autocmd VimLeave * silent !stty ixon
 	let g:repmo_key = ";"
 	let g:repmo_revkey = ","
 
+	au BufRead,BufNewFile {*.json}               set ft=javascript
+	"au BufRead,BufNewFile {*.json}               set ft=json
+	" vim-json provides syntax for json, and automatically assigns filetype:
+	"call add(vamAddons,"github:elzr/vim-json")
+	" Dependencies for sourcebeautify:
+	"call add(vamAddons,"github:michalliu/jsruntime.vim")
+	"call add(vamAddons,"github:michalliu/jsoncodecs.vim")
+	" sourcebeautify offers <Leader>sb
+	" But so far it has just been giving me 'undefined'
+	"call add(vamAddons,"github:michalliu/sourcebeautify.vim")
+
 	" NOTE: For the tern plugin to work, you need to cd into the folder and do `npm install`
 	"       You also need to create a .tern-project file for each project!
 	call add(vamAddons,"github:marijnh/tern_for_vim")     " Static analysis of JS files
 	"let g:tern_show_argument_hints = 'on_hold'
-	let g:tern_show_argument_hints = 'off'
+	let g:tern_show_argument_hints = 'never'              " Disabled because it keeps locking up Vim until tern times out
 	let g:tern_show_signature_in_pum = 1
 	" Curiously the documentation pops up in a Scratch window when I use <Tab> to complete a word, even if both of the above are set to off (defaults).
 	" I also manually installed this: https://github.com/Slava/tern-meteor

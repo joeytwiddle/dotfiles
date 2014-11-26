@@ -307,9 +307,11 @@ unalias gco 2>/dev/null   # REMOVEME
 #alias gco='git checkout'
 gco() {
 	git checkout "$@"
-	if [ "$?" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
+	local ret_status="$?"
+	if [ "$ret_status" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
 	then "$POST_GIT_CHECKOUT" "$@"
 	fi
+	return "$ret_status"
 }
 POST_GIT_CHECKOUT=update_cindex
 if ! which ionice >/dev/null
@@ -429,8 +431,11 @@ vim_for_git_logs() {
 	    +'normal gg' \
 	    +'highlight clear Search' \
 	    +'set scrolloff=0' \
+	    # When seeking, scroll destination line to top of screen
 	    +'nmap n nz<CR>' \
 	    +'nmap N Nz<CR>' \
+	    # But when the user performs a custom search, undo the above mappings
+	    +'nmap / :nunmap n<CR>:nunmap N<CR>:nunmap /<CR>/' \
 	    "$@"
 	    #+'set nohlsearch' \
 }
