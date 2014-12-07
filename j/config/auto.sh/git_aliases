@@ -23,8 +23,8 @@
 #
 #       Use `gbs .` to show the status of the current branch only (faster).
 #
-#   gbd [-M] [-r] is "git branch by date", a nice way to see which branches
-#       were recently updated.  -r lists remote branches.
+#   gbd [-M] [-r] [-n <num>] is "git branch by date", a nice way to see which
+#       branches were recently updated.  -r lists remote branches.
 #
 #   The -M argument to gbs and gbd is slower, but will display whether or not
 #   each branch has been merged into the current branch.  Cool!
@@ -235,10 +235,14 @@ gbd() {
 	local branch_color=`git config --get-color color.branch.local white`
 
 	# TODO: Parse args in no particular order, and show help, like gbs does
+	# CONSIDER: Decide whether or not to show_color based on terminal type, and arguments
 
-	# We show two pages of history by default, or all of history if showancestors is unset
-	local count='9999999'
+	# For quick results, we show just one page of history by default
 	local count=$((LINES-2))
+	# but if the user is piping (e.g. to grep), then we should search further back (but not too far because a lot of branches can make -M very slow)
+	if [ ! -t 1 ]
+	then count=500
+	fi
 	local showancestors=''
 	if [ "$1" = "-M" ]
 	then showancestors="yes" ; shift
@@ -675,10 +679,10 @@ git_get_current_branch() {
 #	# Add --name-only if you don't want meta; works on bare repo.
 #}
 
-#git_list_all_tracked_files() {
-#	git ls-files
-#	# Does not work on bare repos.
-#}
+git_list_all_tracked_files() {
+	git ls-files
+	# Does not work on bare repos.
+}
 
 git_find_branch_start_commit() {
 	local other_branch current_branch
