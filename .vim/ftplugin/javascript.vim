@@ -2,7 +2,9 @@
 " Recommends syntastic, YouCompleteMe and tern
 
 " This one causes a flash but seems to work :)
-iab \f function) {<CR>}<Up><End><Left><Left><Left>
+"iab \f function) {<CR>}<Up><End><Left><Left><Left>
+" But with the {} mapping below, it seems we don't need this one.
+iab \f function) {<CR><Up><End><Left><Left><Left>
 "iab -> function) {ODODOD
 " These only trigger with a space before and after them.  =/
 "iab ( ()<Left>
@@ -18,6 +20,65 @@ vnoremap <buffer> <Leader>log yoconsole.log("<C-R>":", <C-R>");<Esc>
 " viW is *sometimes* preferable, e.g. to catch 'obj.prop[i]' but more often than not it grabs too much, e.g. it catches 'obj.prop[i]);'
 nmap <buffer> <Leader>log viw<Leader>log
 nmap <buffer> <Leader>Log viW<Leader>log
+
+
+
+" === Indenting ===
+
+" Outstanding issues:
+" - When an if condition spans multiple lines, the body and the closing } are indented an additional (unwanted) level.
+" - Indent is poor on `key : value,` but fine on `key: value,`.  Can also occur as a result of ({...}) when (...) or {...} work fine.
+" - Extra indent after a line with a missing trailing semicolon.  (This can help detect them!)
+" - Comments get re-indented; ideally they would be left alone!
+" - Ambiguous cases like: foo([bar, \n baz]);
+
+" When indenting, closing )s should match up with the first char of the opening ('s line, not the ( itself
+setlocal cinoptions+=m1
+" Without this, the list items inside foo.bar([ \n ... \n ]); will be double indented.
+setlocal cinoptions+=(1s
+" If comments are indenting 3 spaces on the second line, and you don't want that:
+"setlocal cinoptions+=c0
+
+function! GetJoeysJavascriptIndent()
+  let this_line_num = line('.')
+  let cindent = cindent(this_line_num)
+  let this_line = getline('.')
+  " Vim's default indenting of multi-line lists in Javascript is awful, resulting in this:
+  "
+  "     var list = [
+  "         'a',
+  "     'b',
+  "     'c'
+  "         ];
+  "
+  " The following two checks detect and prevent those issues.
+  " Prevent the unwanted outdent on the second line of a multi-line list
+  if this_line_num > 2
+    let last_last_line = getline(this_line_num - 2)
+    if match(last_last_line, '\[\s*$') >= 0
+      let last_line = getline(this_line_num - 1)
+      if match(last_line, ',\s*$') >= 0
+        let cindent_last_line = cindent(this_line_num - 1)
+        if cindent < cindent_last_line
+          return cindent_last_line
+        endif
+      endif
+    endif
+  endif
+  " Prevent the unwanted indent when ending a multi-line list
+  if this_line_num > 1
+    "if match(this_line, '^\s*\]\s*)*\s*[,;]*\s*$') >= 0
+    if match(this_line, '^\s*\]') >= 0
+      let cindent_last_line = cindent(this_line_num - 1)
+      let expected_cindent = cindent_last_line - &sw
+      if cindent > expected_cindent
+        return expected_cindent
+      endif
+    endif
+  endif
+  return cindent
+endfunction
+setlocal indentexpr=GetJoeysJavascriptIndent()
 
 
 
