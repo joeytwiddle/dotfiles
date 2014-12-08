@@ -336,11 +336,34 @@ update_cindex() {
 		fi
 	fi
 }
+
 # TODO: There are a number of other occasions when cindex should be run, e.g. after a pull, reset or file save!  Perhaps it would be better if any programs which use csearch should just run cindex every time before they run csearch.  That should still be faster than grep!
 alias gi='git commit --interactive'
 # -p "patch" allows us to choose which hunks to add or commit
 alias gap='git add -p'
 alias gcp='git commit -p'
+
+# Git What Is Not Pushed (doesn't always work - I use gbs more often)
+#alias gwinp='gll @{upstream}..HEAD'
+alias gwinp='gll $(git_guess_upstream_branch)..HEAD'
+# Git What Is Not Pushed Details
+alias gwinpd='gl $(git_guess_upstream_branch)..HEAD'
+# Git What Is Not Pushed Files
+alias gwinpf='glf $(git_guess_upstream_branch)..HEAD'
+# Git To Push
+alias gtp='gwinp'
+# Git To Push Log
+alias gtpl='gwinpd'
+# Git To Push Files (often works poorly since it compares against FETCH_HEAD)
+alias gtpf='git topush'
+# Git To Push Details / Diff (a direct diff, without listing each commit)
+alias gtpd='gd FETCH_HEAD..HEAD'
+
+# Git Merge Origin (this branch)
+#alias gmo='verbosely git merge $(git_guess_upstream_branch)'
+alias gmo='verbosely git merge origin/$(git_get_current_branch)'
+# Git Push Origin (this branch)
+alias gpo='verbosely git push origin $(git_get_current_branch)'
 
 # Git Auto Commit, or Git Add Commit, or Git Add and Commit
 gac() {
@@ -349,6 +372,14 @@ gac() {
 	read msg
 	git commit -m "$msg"
 }
+
+if ! which verbosely >/dev/null
+then
+	verbosely() {
+		echo "[EXEC] % $*" >&2
+		"$@"
+	}
+fi
 
 # May rename "gitsummary"
 gitwhatsup() {
@@ -411,22 +442,6 @@ git_guess_upstream_branch() {
 	echo "$remote_branch"
 }
 
-# Git What Is Not Pushed (doesn't always work - I use gbs more often)
-#alias gwinp='gll @{upstream}..HEAD'
-alias gwinp='gll $(git_guess_upstream_branch)..HEAD'
-# Git What Is Not Pushed Details
-alias gwinpd='gl $(git_guess_upstream_branch)..HEAD'
-# Git What Is Not Pushed Files
-alias gwinpf='glf $(git_guess_upstream_branch)..HEAD'
-# Git To Push
-alias gtp='gwinp'
-# Git To Push Log
-alias gtpl='gwinpd'
-# Git To Push Files (often works poorly since it compares against FETCH_HEAD)
-alias gtpf='git topush'
-# Git To Push Details / Diff (a direct diff, without listing each commit)
-alias gtpd='gd FETCH_HEAD..HEAD'
-
 vim_for_git_logs() {
 	# Our mappings use z<CR> to scroll so the cursor is at the top of the window after n/N search
 	# I tried setting scrolljump=-99 and got a screen jump when going of the bottom, but only half when going off the top.
@@ -460,19 +475,6 @@ glv() {
 gdv() {
 	git diff | vim_for_git_logs -
 }
-
-# Git Merge Origin (this branch)
-#alias gmo='verbosely git merge $(git_guess_upstream_branch)'
-alias gmo='verbosely git merge origin/$(git_get_current_branch)'
-# Git Push Origin (this branch)
-alias gpo='verbosely git push origin $(git_get_current_branch)'
-if ! which verbosely >/dev/null
-then
-	verbosely() {
-		echo "[EXEC] % $*" >&2
-		"$@"
-	}
-fi
 
 git_branch_status() {
     # Original: https://gist.github.com/Mark-Booth/5058384
