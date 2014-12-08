@@ -211,6 +211,89 @@ alias glf='glc --stat'
 
 alias gb='git branch'
 
+# Git View Branches (tree-like)
+alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
+# For remotes too, add: --all
+# Could also be Git View Tree or Git Tree View, although I might want to save those for gitv!  :P
+
+unalias gco 2>/dev/null   # REMOVEME
+#alias gco='git checkout'
+gco() {
+	git checkout "$@"
+	local ret_status="$?"
+	if [ "$ret_status" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
+	then "$POST_GIT_CHECKOUT" "$@"
+	fi
+	return "$ret_status"
+}
+POST_GIT_CHECKOUT=update_cindex
+if ! which ionice >/dev/null
+then
+	ionice() {
+		"$@"
+	}
+fi
+update_cindex() {
+	if which cindex >/dev/null && ( [ -z "$CSEARCHINDEX" ] && [ -f "$HOME"/.csearchindex ] || [ -n "$CSEARCHINDEX" ] && [ -f "$CSEARCHINDEX" ] )
+	then
+		local git_root_folder=$(git rev-parse --show-toplevel)
+		# If any of the indexed folders are equal to or below this project's folder
+		if [ -n "$git_root_folder" ] && cindex -list | grep -q "^$git_root_folder\($\|/\)"
+		then
+			echo -n "Updating cindex (in the background)"
+			nice ionice cindex 2>/dev/null &
+		fi
+	fi
+}
+
+# TODO: There are a number of other occasions when cindex should be run, e.g. after a pull, reset or file save!  Perhaps it would be better if any programs which use csearch should just run cindex every time before they run csearch.  That should still be faster than grep!
+alias gi='git commit --interactive'
+# -p "patch" allows us to choose which hunks to add or commit
+alias gap='git add -p'
+alias gcp='git commit -p'
+
+# Git What Is Not Pushed (doesn't always work - I use gbs more often)
+#alias gwinp='gll @{upstream}..HEAD'
+alias gwinp='gll $(git_guess_upstream_branch)..HEAD'
+# Git What Is Not Pushed Details
+alias gwinpd='gl $(git_guess_upstream_branch)..HEAD'
+# Git What Is Not Pushed Files
+alias gwinpf='glf $(git_guess_upstream_branch)..HEAD'
+# Git To Push
+alias gtp='gwinp'
+# Git To Push Log
+alias gtpl='gwinpd'
+# Git To Push Files (often works poorly since it compares against FETCH_HEAD)
+alias gtpf='git topush'
+# Git To Push Details / Diff (a direct diff, without listing each commit)
+alias gtpd='gd FETCH_HEAD..HEAD'
+
+# Git Merge Origin (this branch)
+#alias gmo='verbosely git merge $(git_guess_upstream_branch)'
+alias gmo='verbosely git merge origin/$(git_get_current_branch)'
+# Git Push Origin (this branch)
+alias gpo='verbosely git push origin $(git_get_current_branch)'
+
+alias gss='git stash save'
+alias gsp='git stash pop'
+alias gsl='git stash list'
+
+# Git Auto Commit, or Git Add Commit, or Git Add and Commit
+gac() {
+	git add "$@"
+	echo -n "Commit message: "
+	read msg
+	git commit -m "$msg"
+}
+
+if ! which verbosely >/dev/null
+then
+	verbosely() {
+		echo "[EXEC] % $*" >&2
+		"$@"
+	}
+fi
+
 # Git Branch by Date
 git_branch_by_date() {
 	local reset_color=`tput sgr0`
@@ -304,89 +387,6 @@ gbd() {
 		#cat
 	fi
 }
-
-# Git View Branches (tree-like)
-alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
-# For remotes too, add: --all
-# Could also be Git View Tree or Git Tree View, although I might want to save those for gitv!  :P
-
-unalias gco 2>/dev/null   # REMOVEME
-#alias gco='git checkout'
-gco() {
-	git checkout "$@"
-	local ret_status="$?"
-	if [ "$ret_status" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
-	then "$POST_GIT_CHECKOUT" "$@"
-	fi
-	return "$ret_status"
-}
-POST_GIT_CHECKOUT=update_cindex
-if ! which ionice >/dev/null
-then
-	ionice() {
-		"$@"
-	}
-fi
-update_cindex() {
-	if which cindex >/dev/null && ( [ -z "$CSEARCHINDEX" ] && [ -f "$HOME"/.csearchindex ] || [ -n "$CSEARCHINDEX" ] && [ -f "$CSEARCHINDEX" ] )
-	then
-		local git_root_folder=$(git rev-parse --show-toplevel)
-		# If any of the indexed folders are equal to or below this project's folder
-		if [ -n "$git_root_folder" ] && cindex -list | grep -q "^$git_root_folder\($\|/\)"
-		then
-			echo -n "Updating cindex (in the background)"
-			nice ionice cindex 2>/dev/null &
-		fi
-	fi
-}
-
-# TODO: There are a number of other occasions when cindex should be run, e.g. after a pull, reset or file save!  Perhaps it would be better if any programs which use csearch should just run cindex every time before they run csearch.  That should still be faster than grep!
-alias gi='git commit --interactive'
-# -p "patch" allows us to choose which hunks to add or commit
-alias gap='git add -p'
-alias gcp='git commit -p'
-
-# Git What Is Not Pushed (doesn't always work - I use gbs more often)
-#alias gwinp='gll @{upstream}..HEAD'
-alias gwinp='gll $(git_guess_upstream_branch)..HEAD'
-# Git What Is Not Pushed Details
-alias gwinpd='gl $(git_guess_upstream_branch)..HEAD'
-# Git What Is Not Pushed Files
-alias gwinpf='glf $(git_guess_upstream_branch)..HEAD'
-# Git To Push
-alias gtp='gwinp'
-# Git To Push Log
-alias gtpl='gwinpd'
-# Git To Push Files (often works poorly since it compares against FETCH_HEAD)
-alias gtpf='git topush'
-# Git To Push Details / Diff (a direct diff, without listing each commit)
-alias gtpd='gd FETCH_HEAD..HEAD'
-
-# Git Merge Origin (this branch)
-#alias gmo='verbosely git merge $(git_guess_upstream_branch)'
-alias gmo='verbosely git merge origin/$(git_get_current_branch)'
-# Git Push Origin (this branch)
-alias gpo='verbosely git push origin $(git_get_current_branch)'
-
-alias gss='git stash save'
-alias gsp='git stash pop'
-alias gsl='git stash list'
-
-# Git Auto Commit, or Git Add Commit, or Git Add and Commit
-gac() {
-	git add "$@"
-	echo -n "Commit message: "
-	read msg
-	git commit -m "$msg"
-}
-
-if ! which verbosely >/dev/null
-then
-	verbosely() {
-		echo "[EXEC] % $*" >&2
-		"$@"
-	}
-fi
 
 # May rename "gitsummary"
 gitwhatsup() {
