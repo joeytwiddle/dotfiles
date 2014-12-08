@@ -106,10 +106,13 @@ alias gdc='gd --cached'
 alias ga='git add'
 #alias gc='git commit'
 alias gc='git commit -v'
+alias gca='gc --amend'
 alias gf='git fetch'
-alias gp='git preview'
-alias gw='git whatsnew'
-alias gm='git merge'
+alais gp='git pull'
+#alias gm='git merge'
+
+#alias gp='git preview'   # This was defined in my .gitconfig as: git diff --stat HEAD..FETCH_HEAD
+#alias gw='git whatsnew'
 
 #alias gl='git log'
 #alias gl='git log -U2 -p -m'
@@ -364,6 +367,10 @@ alias gtpd='gd FETCH_HEAD..HEAD'
 alias gmo='verbosely git merge origin/$(git_get_current_branch)'
 # Git Push Origin (this branch)
 alias gpo='verbosely git push origin $(git_get_current_branch)'
+
+alias gss='git stash save'
+alias gsp='git stash pop'
+alias gsl='git stash list'
 
 # Git Auto Commit, or Git Add Commit, or Git Add and Commit
 gac() {
