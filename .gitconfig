@@ -86,7 +86,7 @@
 	#newfiles = diff-files --stat
 	# This shows change-counts in local files (and perhaps also what is new on the origin)
 	# (Now using --cached to drop uncommitted changes in local files.)
-	# This can be used to show what files will change when you go git merge FETCH_HEAD
+	# This can be used to show what files will change when you do git merge FETCH_HEAD
 	# BUT note that diff-index shows the *opposite* of what the merge will perform!
 	# I.e. additions are red, removals are green!  :P
 	previewmaster = diff-index --color --stat origin/master --cached

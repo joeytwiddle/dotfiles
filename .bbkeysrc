@@ -102,6 +102,10 @@
   ## Or:
   # [leftWorkspace]              (Mod1-Control-Left)
   # [rightWorkspace]             (Mod1-Control-Right)
+  [upWorkspace]                (Mod1-Control-k)
+  [downWorkspace]              (Mod1-Control-j)
+  [prevWorkspace]              (Mod1-Control-h)
+  [nextWorkspace]              (Mod1-Control-l)
 
   ## For svncviewer which can't see Mod1-Control-Left etc.
   # [upWorkspace]                (Control-Shift-Up)

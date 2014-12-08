@@ -38,7 +38,12 @@ function! GetCurrentGitBranch(full_path)
     endif
 endfunction
 
+let g:ShowCurrentGitBranch = get(g:, 'ShowCurrentGitBranch', 1)
+
 function! ShowCurrentGitBranch()
+    if !g:ShowCurrentGitBranch
+        return ""
+    endif
     if exists('b:last_checked_branch_time') && s:get_ms_since(b:last_checked_branch_time) < 10000
         " Use cached value
     else

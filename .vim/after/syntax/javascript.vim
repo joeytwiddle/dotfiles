@@ -110,3 +110,11 @@ highlight OperatorDivide ctermfg=red guifg=red
 syntax keyword javascriptThis this
 highlight link javascriptThis Type
 
+"" Perform more detailed matching on function headers, so we can highlight more like Sublime Text does :-p
+syn clear javascriptFunction
+syn match javascriptFunctionDeclaration /\<function\>\s*[A-Za-z0-9_$]*\s*([^)]*)/ contains=javascriptFunctionName,javascriptFunctionArgs,javascriptFunction
+"syn region javascriptFunctionDeclaration start=/\<function\>/ end=/{/ contains=javascriptFunctionName,javascriptFunctionArgs
+syn match javascriptFunctionName /\(\<function\>\s\s*\)\@<=[A-Za-z0-9_$]*/ contained containedin=javascriptFunctionDeclaration
+syn keyword javascriptFunction function contained containedin=javascriptFunctionDeclaration
+syn match javascriptFunctionArgs /(\zs[^)]*\ze)/ contained containedin=javascriptFunctionDeclaration
+
