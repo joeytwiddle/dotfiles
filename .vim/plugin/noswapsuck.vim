@@ -1,20 +1,27 @@
-" Creating a swapfile for every FUCKING file we open just sucks major balls.
-" I have a zillion swapfiles on my system, 99% of which are identical to the
-" file, and 0.9% of which are OLD fucking versions of the file.
-" If I am lucky, 1 in 1000 times I am asked to recover a swapfile, it actually
-" contains unwritten text which could have been lost zomg.
-
-" Anyway rant over.
+" Vim swapfiles tend to become more of a hindrance than a feature.  If you set
+" swapfile and hidden, and don't close your vim properly, then there will be a
+" swapfile created for every buffer you had opened.  You may end up with a
+" lots of swapfiles on your system, and be unsure which hold old versions,
+" up-to-date versions, or new versions of the file.
+"
 " This plugin only enables the swapfile when we start modifying a buffer.
-" Like duh.
+" After you save the buffer, the swapfile is removed.
 
-" Disadvantages / BUGs:
-" Because it sets swapfile in the middle of editing, that is the moment when
-" it will prompt you if it finds an old swapfile.
-" To work around this, perhaps we should check for a swapfile the first time
-" we open a file?
-" For the moment, disabling on InsertEnter and CursorHoldI.  That means we
-" might not create a swapfile during the first edit.  Gah.
+" Disadvantages:
+"
+" - By default this script does not remove the swapfile every time the file is written (although that can be enabled with g:NoSwapSuck_CloseSwapfileOnWrite).  But it will consider closing the swapfile when the buffer goes out of view (on the BufWinLeave event).
+" - If your workflow involves an edit-save-edit-save loop, this script will
+"   keep creating and destroying the swapfile.
+"
+"   That behaviour may be undesirable in the following situations:
+"
+"   - your files are very large,
+"   - your drive is very slow (perhaps saving over a network), or
+"   - you are trying to preserve battery.
+"
+" - Because the script sets swapfile in the middle of editing, that is the moment when
+"   it will prompt you if it finds an old swapfile.  Ideally it will prompt
+"   earlier, but that is not always the case.
 
 " Allows plugin to be enabled/disabled from config and also at runtime.
 let g:NoSwapSuck_Enabled = get(g:, 'NoSwapSuck_Enabled', 1)
@@ -24,11 +31,19 @@ let g:NoSwapSuck_Enabled = get(g:, 'NoSwapSuck_Enabled', 1)
 let g:NoSwapSuck_CheckSwapfileOnLoad = get(g:, 'NoSwapSuck_CheckSwapfileOnLoad', 1)
 
 " Create a swapfile immediately before entering Insert mode.
+"
 " Advantages: If you do a long edit without leaving insert mode, your changes
-" will be safely stored in the swapfile.
+" will be safely stored in the swapfile, protected from powerloss / reset.
+"
 " Disadvantages: If a swapfile is present, you will be interrupted while
-" entering insert mode.
+" entering insert mode.  (That is not actually true!  It only tells you after
+" the edit.)
 let g:NoSwapSuck_CreateSwapfileOnInsert = get(g:, 'NoSwapSuck_CreateSwapfileOnInsert', 1)
+
+" Close (and remove) the swapfile every time the file is written
+let g:NoSwapSuck_CloseSwapfileOnWrite = get(g:, 'NoSwapSuck_CloseSwapfileOnWrite', 0)
+
+
 
 if !g:NoSwapSuck_Enabled
   finish
@@ -37,7 +52,7 @@ endif
 " Doing this here to prevent the initial message "Setting NO swapfile" from
 " triggering a "Press ENTER to continue" message.  If you remove this, you may
 " want an alternative solution for that.
-set noswapfile
+setglobal noswapfile
 
 augroup NoSwapSuck
   autocmd!
@@ -57,11 +72,16 @@ augroup NoSwapSuck
     "autocmd BufReadPost * set swapfile | call s:ConsiderClosingSwapfile()
     " Hmmm that didn't work either.  :P  Because recover.vim needs 'swapfile' to
     " work.
+    "
     " Gah this is difficult!  Can't set swapfile on old buffer, or we will write
     " an unwanted swapfile.  Can't set it on new buffer, cos it will popup the
     " message before recover.vim can do its magic!
     " Best solution: munge recover.vim to work without 'swapfile' set.
     " Alternatively, stop using recover.vim?!
+    "
+    " TODO: Perhaps we can handle the what-to-do-with-swap prompt ourself, by
+    " listening for SwapExists, and setting 'r' or perhaps 'e'.  Will this be
+    " enough to invoke recover.vim, or to inform the user what is going on?
   endif
 
   " Turn swapfile on when we actually start editing
@@ -92,18 +112,33 @@ augroup NoSwapSuck
   " If the buffer was modified, a swapfile will be created.
   autocmd InsertLeave * call s:ConsiderCreatingSwapfile()
 
-  " Since it's a global (yeah great) we have to keep switching it on/off
-  " when we switch between buffers/windows.
-  autocmd WinLeave * call s:ConsiderClosingSwapfile()
+  " Since it's a global we have to keep switching it on/off when we switch
+  " between buffers/windows, or we will end up creating swapfiles for buffers
+  " which don't need them.
+  "
+  " Actually it is documented as a local but it seems to act as a global.
+  "
+  " (Or perhaps it is only when we open a new file, the last local value for
+  " &swapfile is re-used...?)
   autocmd WinEnter * call s:ConsiderCreatingSwapfile()
-  autocmd BufLeave * call s:ConsiderClosingSwapfile()
   autocmd BufEnter * call s:ConsiderCreatingSwapfile()
+  autocmd WinLeave * call s:ConsiderClosingSwapfile()
+  autocmd BufLeave * call s:ConsiderClosingSwapfile()
+
+  " If enabling these, exercise a little caution:
+  " % is alleged to be inaccurate, <afile> is better.
+  "autocmd BufWinLeave * call s:ConsiderClosingSwapfile()
+  "autocmd BufWipeout * call s:ConsiderClosingSwapfile()
+
+  if g:NoSwapSuck_CloseSwapfileOnWrite
+    autocmd BufWritePost * call s:ConsiderClosingSwapfile()
+  endif
 
 augroup END
 
 function! s:ConsiderClosingSwapfile()
   if g:NoSwapSuck_Enabled
-    if &swapfile && !&modified
+    if &l:swapfile && !&modified
       echo "Setting NO swapfile"
       setlocal noswapfile
     endif
@@ -113,7 +148,7 @@ endfunction
 function! s:ConsiderCreatingSwapfile(...)
   if g:NoSwapSuck_Enabled
     let about_to_be_modified = a:0 ? a:1 : 0
-    if !&swapfile && ( &modified || about_to_be_modified )
+    if !&l:swapfile && ( &modified || about_to_be_modified )
       echo "Setting swapfile"
       setlocal swapfile
     endif
@@ -122,7 +157,8 @@ endfunction
 
 function! s:SetSwapfileToCheck()
   if g:NoSwapSuck_Enabled
-    set swapfile
+    echo "Checking swapfile for ".bufname('%')
+    setlocal swapfile
   endif
 endfunction
 
