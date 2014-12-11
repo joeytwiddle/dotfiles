@@ -47,6 +47,9 @@ function! s:FindNextChange(moveKey, in_visual_mode, first_line, last_line)
   let startColChars = getpos(".")[2]
   " TODO BUG: startCol is always 1 when in_visual_mode and without g:move_once_at_start
   "           But somehow if we do move_once_at_start then it goes where it should be.
+  " TODO BUG: There are three types of visual mode (char, line, block) but
+  "           this function always returns us to character mode.
+  "           We can find this from mode() or visualmode().
   if a:in_visual_mode
     let startCol = wincol()
   endif
