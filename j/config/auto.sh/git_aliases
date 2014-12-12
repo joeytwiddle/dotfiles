@@ -452,15 +452,17 @@ git_guess_upstream_branch() {
 vim_for_git_logs() {
 	# Our mappings use z<CR> to scroll so the cursor is at the top of the window after n/N search
 	# I tried setting scrolljump=-99 and got a screen jump when going of the bottom, but only half when going off the top.
-	vim +'setlocal nomodified nomodifiable filetype=git foldmethod=syntax foldcolumn=2' \
+	vim_exe=vim
+	#vim_exe=gvim
+	"$vim_exe" +'setlocal nomodified nomodifiable filetype=git foldmethod=syntax foldcolumn=2' \
 	    +'/^\(commit\|diff --git\) .*' \
 	    +'normal gg' \
 	    +'highlight clear Search' \
 	    +'set scrolloff=0' \
-	    # When seeking, scroll destination line to top of screen
+	    +'"When seeking, scroll destination line to top of screen' \
 	    +'nmap n nz<CR>' \
 	    +'nmap N Nz<CR>' \
-	    # But when the user performs a custom search, undo the above mappings
+	    +'"But when the user performs a custom search, undo the above mappings' \
 	    +'nmap / :nunmap n<CR>:nunmap N<CR>:nunmap /<CR>/' \
 	    "$@"
 	    #+'set nohlsearch' \
