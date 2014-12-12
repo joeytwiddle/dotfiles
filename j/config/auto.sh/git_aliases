@@ -468,6 +468,12 @@ vim_for_git_logs() {
 	    #+'set nohlsearch' \
 }
 
+vim_for_git_logs_from_stdin() {
+	#cat > /tmp/vim_for_git_logs.out
+	#vim_for_git_logs "$@" /tmp/vim_for_git_logs.out
+	vim_for_git_logs "$@" -
+}
+
 # Git Log in Vim
 glv() {
 	local count=50
@@ -477,12 +483,12 @@ glv() {
 		shift
 		shift
 	fi
-	git log -p -n "$count" "$@" | vim_for_git_logs -
+	git log -p -n "$count" "$@" | vim_for_git_logs_from_stdin
 }
 
 # Git Diff in Vim
 gdv() {
-	git diff | vim_for_git_logs -
+	git diff | vim_for_git_logs_from_stdin
 }
 
 git_branch_status() {
