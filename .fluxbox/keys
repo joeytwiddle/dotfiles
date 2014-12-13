@@ -114,7 +114,10 @@ OnTitlebar Mouse2 :MacroCmd {Focus} {StartTabbing} {Lower}
 OnTitlebar Mod1 Mouse2 :MacroCmd {Focus} {StartTabbing}
 OnTitlebar Mod4 Mouse2 :MacroCmd {Focus} {StartTabbing}
 
+# I had this for years:
 Control Mod1 r :Reconfigure
+# But for some reason these days, my fingers gravitate towards:
+Shift Mod1 r :Reconfigure
 Control Mod4 r :Restart
 Control Mod1 q :Exit
 Control Shift F2 :CommandDialog
@@ -429,6 +432,8 @@ Mod1 x :ExecCommand /home/joey/j/tools/xterm
 # The problem is my 'xtermbg' script runs my 'xterm' script and that uses 'unj'
 # which is part of jsh.  For faster startup we need to run xterm without
 # involving jsh (or trim down jsh's tools folder!).
+
+Shift Mod1 x :ExecCommand gnome-terminal
 
 # Mod4 x :ExecCommand xtermbg
 Mod4 x :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 xmms -p

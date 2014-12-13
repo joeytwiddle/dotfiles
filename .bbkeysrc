@@ -145,6 +145,7 @@
   [Execute]  (Mod1-X) {xterm}
   # [Execute]  (Mod1-X) {xtermbg}
   # [Execute]  (Mod1-X) {/usr/bin/xterm}
+  [Execute]  (Mod1-Shift-X) {gnome-terminal}
 
   [Execute]  (Mod1-slash) {whatsplaying}
 
