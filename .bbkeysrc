@@ -67,10 +67,10 @@
   [resizeWindowWidth]          (Mod1-Control-Shift-Right)  {5}
   [resizeWindowHeight]         (Mod1-Control-Shift-Up)     {-5}
   [resizeWindowHeight]         (Mod1-Control-Shift-Down)   {5}
-  [moveWindowUp]               (Mod1-Control-K)            {1}
-  [moveWindowDown]             (Mod1-Control-J)            {1}
-  [moveWindowLeft]             (Mod1-Control-H)            {1}
-  [moveWindowRight]            (Mod1-Control-L)            {1}
+  #[moveWindowUp]               (Mod1-Control-K)            {1}
+  #[moveWindowDown]             (Mod1-Control-J)            {1}
+  #[moveWindowLeft]             (Mod1-Control-H)            {1}
+  #[moveWindowRight]            (Mod1-Control-L)            {1}
   #[changeWorkspace]            (Mod1-1)                    {4}
   #[changeWorkspace]            (Mod1-2)                    {5}
   #[changeWorkspace]            (Mod1-3)                    {8}

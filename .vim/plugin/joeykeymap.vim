@@ -759,3 +759,47 @@ nmap [= :exec "resize ".(&lines-10)<CR>:exec "vert resize ".(&columns-31)<CR>
 " TESTING: Search for similarly-named files using AsyncFinder
 nmap <Leader>a :let @n = expand("%:t:r")<CR><C-a><C-r>n.
 
+
+
+" Tools for Visual Mode
+
+" From http://vim.wikia.com/wiki/Creating_new_text_objects
+" vaf will select everything inside the current fold
+vnoremap af :<C-U>silent! normal! [zV]z<CR>
+" Now we can make caf change everything inside the current fold
+omap af :normal Vaf<CR>
+
+" Experimental
+" Visual select in-chunk.  Uses move_until_char_changes plugin, so you must start sitting over a char which is repeated.
+" ISSUE: My gJ may end more than 1 line past the end of the block, because it auto-jumps over blank lines.
+vmap ic gJkE<C-q>
+"vmap ic gJ?[^\s]<CR>E<C-q>
+" A hacky way: drop out of visual mode to enter a script which start by re-entering visual mode, but continues to move up until sitting on a non-empty line.  Finally, jump to the end of the word below the cursor, and enter blockwise visual mode.
+vmap ic gJk<Esc>:exe 'normal! gv'<Bar> while match(getline('.'),'^\s*$')>=0 <Bar> echo 'X' <Bar> exe 'normal! k' <Bar> endwhile<CR>E<C-q>
+
+" Alternatively, from http://stackoverflow.com/questions/18791827/vim-quickly-select-rectangular-blocks-of-text-in-visual-block-mode
+function! ContiguousVBlock()
+  let [lnum, vcol] = [line('.'), virtcol('.')]
+  let [top, bottom] = [lnum, lnum]
+  while matchstr(getline(top-1), '\%'.vcol.'v.') =~# '\S'
+    let top -= 1
+  endwhile
+  while matchstr(getline(bottom+1), '\%'.vcol.'v.') =~# '\S'
+    let bottom += 1
+  endwhile
+
+  let lines = getline(top, bottom)
+  let [left, right] = [vcol, vcol]
+  while len(filter(map(copy(lines), 'matchstr(v:val,"\\%".(left-1)."v.")'),'v:val=~#"\\S"')) == len(lines)
+    let left -= 1
+  endwhile
+  while len(filter(map(copy(lines), 'matchstr(v:val,"\\%".(right+1)."v.")'),'v:val=~#"\\S"')) == len(lines)
+    let right += 1
+  endwhile
+
+  call setpos('.', [0, top, strlen(matchstr(lines[0], '^.*\%'.left.'v.')), 0])
+  execute "normal! \<C-V>"
+  call setpos('.', [0, bottom, strlen(matchstr(lines[-1], '^.*\%'.right.'v.')), 0])
+endfunction
+nnoremap <Leader>vcb :<C-U>call ContiguousVBlock()<CR>
+" Or there is a whole plugin: https://github.com/coderifous/textobj-word-column.vim

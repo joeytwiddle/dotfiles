@@ -176,3 +176,9 @@ nedit*text.cursorForeground: white
 
 nedit*menuBar.fontList: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
 
+## Enable anti-aliased fonts when I am running Fluxbox
+Xft.antialias: true
+Xft.hinting:   true
+Xft.hintstyle: hintfull
+Xft.rgba:      rgb
+

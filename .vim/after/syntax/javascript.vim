@@ -111,10 +111,11 @@ syntax keyword javascriptThis this
 highlight link javascriptThis Type
 
 "" Perform more detailed matching on function headers, so we can highlight more like Sublime Text does :-p
-syn clear javascriptFunction
+silent! syn clear javascriptFunction javascriptFunctionDeclaration javascriptFunctionName javascriptFunctionArgs
 syn match javascriptFunctionDeclaration /\<function\>\s*[A-Za-z0-9_$]*\s*([^)]*)/ contains=javascriptFunctionName,javascriptFunctionArgs,javascriptFunction
 "syn region javascriptFunctionDeclaration start=/\<function\>/ end=/{/ contains=javascriptFunctionName,javascriptFunctionArgs
-syn match javascriptFunctionName /\(\<function\>\s\s*\)\@<=[A-Za-z0-9_$]*/ contained containedin=javascriptFunctionDeclaration
 syn keyword javascriptFunction function contained containedin=javascriptFunctionDeclaration
-syn match javascriptFunctionArgs /(\zs[^)]*\ze)/ contained containedin=javascriptFunctionDeclaration
-
+syn match javascriptFunctionName /\(\<function\>\s*\)\@<=[A-Za-z0-9_$]*/ contained containedin=javascriptFunctionDeclaration
+" Matching this ( didn't work on anonymous functions, although it can work if the javascriptFunctionName match stops one char earlier.  O_o
+"syn match javascriptFunctionArgs /(\zs[^)]*\ze)/ ...
+syn match javascriptFunctionArgs /\zs[^()]*\ze)/ contained containedin=javascriptFunctionDeclaration

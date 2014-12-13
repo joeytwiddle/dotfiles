@@ -790,10 +790,25 @@ function! <SID>StartExplorer(sticky, delBufNum)
 
       "" New:
       syn match MBENormal             ' [^|[\]]* *'
-      syn match MBEChanged            '|* [^|]*-*+ |*'
       syn match MBEVisibleNormal      '|* [^|]*- |*'
-      syn match MBEVisibleChanged     '|* [^|]*\*+ |*'
       syn match MBEVisibleFocused     '|* [^|]*\* |'
+      syn match MBEChanged            '|* [^|]*-*+ |*'
+      syn match MBEVisibleChanged     '|* [^|]*\*+ |*'
+
+      " Note that MBEVisibleChanged really means MBEFocusedChanged
+      " whilst MBEChanged covers changed buffers which are visible or not
+      " visible (just not the focused one).
+      "
+      " You never see Visible and Focused in one rule name, because Focused
+      " implies Visible!
+      "
+      " When designing highlighting colors:
+      " - MBEVisibleNormal does not need to differ much from MBENormal.
+      " - MBEVisibleChanged should not get too close to MBEVisibleFocused.
+      " In both cases the reason is that MBEVisibleFocused should always stand
+      " out clearly from the rest.  The user can look harder to notice other
+      " differences.
+      "
       " BTW I just replaced all |* with |
       " Forcing consumption of the | may help capture filenames containing '-'
       " But now for a better look, I am putting * back on all the less-vital
