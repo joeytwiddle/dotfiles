@@ -1,30 +1,147 @@
 ## TODO: Merge with .my_x_settings
 
+## .Xresources: new, faster, loaded into server's memory on startup (into the RESOURCE_MANAGER property), must use xrdb to reload it
+## .Xdefaults: old, reloaded whenever an X app starts, but ignored if RESOURCE_MANAGER property is set
+
 ## Apply changes and test with:
-##   cat .Xresources | grep -v "^#" | xrdb -merge
+##   cat ~/.Xresources | grep -v "^#" | xrdb -merge
+## If you need to reset, do this before the above:
+##   xrdb -remove
 ## For testing BD/UL: man xrdb ; top -n 3 (hit 'z' for color)
 ## Note: If you are doing that grep from Vim's ! then you must escape the # as \#
 
+# Someone once recommended this:
+#xterm.*.utf8: 1
+#xterm.*.font: -*-terminus-medium-*-*-*-18-*-*-*-*-*-iso10646-*
 #xterm.vt100.font: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
 #xterm.vt100.font: -*-clean-medium-r-*-*-16-*-*-*-*-*-*-*
 #xterm.vt100.font: -*-clean-bold-r-*-*-16-*-*-*-*-*-*-*
 ## On Ubuntu, vt100 was not working, but * did:
 #xterm.*.font: -*-terminus-bold-r-*-*-16-*-*-*-*-*-*-*
 #xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
-xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
+#xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
+#xterm.*.font: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
+xterm.*.font: -*-lucidatypewriter-medium-*-*-*-13-*-*-*-*-*-*-*
 xterm*background: #000000
 xterm*foreground: #ffffff
 xterm*cursorColor: #ffdd44
-xterm*pointerColor: #ffee99
+#xterm*pointerColor: #ffee99
+xterm*pointerColor: #666666
+xterm*pointerColorBackground: #ffffff
 xterm*jumpScroll: false
 xterm*fastScroll: true
 ## This may work:
 # XTerm*faceName: Liberation Mono
 #xterm.*.faceSize2: 11
-## Set the 'small' font:
+## 1=unreadable, 2=tiny, 3=small, 4=medium, 5=large, 7=huge
+xterm.*.font2: -*-lucidatypewriter-medium-*-*-*-9-*-*-*-*-*-*-*
 xterm.*.font3: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
-xterm.*.font4: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
+xterm.*.font4: -*-lucidatypewriter-medium-*-*-*-13-*-*-*-*-*-*-*
+xterm.*.font5: -*-lucidatypewriter-medium-*-*-*-15-*-*-*-*-*-*-*
+xterm.*.font6: -*-lucidatypewriter-medium-*-*-*-17-*-*-*-*-*-*-*
 #xterm.vt100.font3
+
+# http://lukas.zapletalovi.com/2013/07/hidden-gems-of-xterm.html
+# Shows how to reconfigure keybinds, and where to find default settings (just list the files in xterm package).
+
+#XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+# This doesn't let me drag over spaces:
+#XTerm*on2Clicks: regex [[:alnum:]./_-~\+%@]+
+# Select links with double click (procol optional to catch files too):
+#XTerm*on3Clicks: regex ([[:alpha:]]+://)?([[:alnum:]!#+,./=?@_~-]|(%[[:xdigit:]][[:xdigit:]]))+
+# The existing difficulty with double-click (with or without drag) is that I often don't want to cross ':'s except when I am trying to select a hyperlink, then I do.  It would be great if we could cross ':'s only when we can see it's a hyperlink, e.g. '://' or '(known_protocol)://'
+
+# On Ctrl-Shift-O, open the currently highlighted link:
+#*XTerm*translations: #override Ctrl Shift <Key>o: exec-formatted("browse '%t'", PRIMARY)
+# You could also bind this to `Ctrl Shift <Btn1Up>` but you still need to select the link first!
+# It would be really nice to open the word under the cursor.
+# Instead of assuming a link, we could check if the thing is a file, and use xdg-open if so.  But that is unlikely to work, because the terminal doesn't know the shell's CWD (it might even be on a remote machine!).
+# This works despite xterm saying: Warning: Actions not found: exec-formatted
+# But that message is annoying enough to make me disable it.  =/
+
+# Press Ctrl-/ to open scrollback in less in a new xterm window
+#XTerm*printerCommand: xterm -T History -e sh -c 'less -r <&3' 3<&0
+#XTerm*translations: #override Ctrl <Key>slash: print-everything()
+# This works despite xterm saying: Warning: Actions not found: print-everything
+
+# Sidenote: If you want to combine multiple translation statements, you need to do something like:
+#           Although I wonder if we could just skip #override to add additional rules.
+#XTerm*translations: #override \n\
+#  Ctrl <Key>slash: print-everything() \n\
+#  Shift <Btn1Up>: exec-formatted("google-chrome '%t'", PRIMARY)
+
+# Sometimes I want to paste from the CLIPBOARD, not PRIMARY.
+XTerm.*.translations: #override \n\
+   Ctrl       <KeyPress> Insert: insert-selection(CLIPBOARD) \n\
+   Ctrl Shift <KeyPress> Insert: insert-selection(CLIPBOARD)
+
+# To get Cmd-C in Mac OSX:
+#*VT100.translations: #override  Meta <KeyPress> V:  insert-selection(PRIMARY, CUT_BUFFER0) \n
+# Selecting text in xterm, and hitting ⌘+C to copy, should work, if you have turned on "Enable key equivalents under X11" under the "Input" tab, and "Update Pasteboard when CLIPBOARD changes" under the "Pasteboard" tab.
+
+#xterm.VT100.Translations:    #override \n\
+#        Ctrl Shift <KeyPress> Insert:   insert-selection(CLIPBOARD) \n\
+#        <Btn2Up>:                       insert-selection(SELECT, CUT_BUFFER0) \n\
+#        ~Shift<BtnUp>:                  select-end(PRIMARY, CUT_BUFFER0) \n\
+#        Shift<BtnUp>:                   select-end(CLIPBOARD, CUT_BUFFER1)
+
+# Just experimenting:
+#xterm.*.background: rgb:00/00/00
+#xterm.*.foreground: rgb:dd/dd/dd
+# I didn't much like this guy's colour scheme:
+#xterm.*.color0:     rgb:00/00/00
+#xterm.*.color1:     rgb:d3/62/65
+#xterm.*.color2:     rgb:ae/ce/91
+#xterm.*.color3:     rgb:e7/e1/8c
+#xterm.*.color4:     rgb:7a/7a/b0
+#xterm.*.color5:     rgb:96/3c/59
+#xterm.*.color6:     rgb:41/81/79
+#xterm.*.color7:     rgb:be/be/be
+#xterm.*.color8:     rgb:66/66/66
+#xterm.*.color9:     rgb:ef/81/71
+#xterm.*.color10:    rgb:e5/f7/79
+#xterm.*.color11:    rgb:ff/f7/96
+#xterm.*.color12:    rgb:41/86/be
+#xterm.*.color13:    rgb:ef/9e/be
+#xterm.*.color14:    rgb:71/be/be
+#xterm.*.color15:    rgb:ff/ff/ff
+# This is pretty close to the defaults, although light cyan is a bit lighter, and light blue a bit darker
+#xterm.*.color0:     rgb:22/22/22
+#xterm.*.color1:     rgb:cc/00/00
+#xterm.*.color2:     rgb:00/cc/00
+#xterm.*.color3:     rgb:cc/cc/00
+#xterm.*.color4:     rgb:00/00/cc
+#xterm.*.color5:     rgb:cc/00/cc
+#xterm.*.color6:     rgb:00/cc/cc
+#xterm.*.color7:     rgb:dd/dd/dd
+#xterm.*.color8:     rgb:66/66/66
+#xterm.*.color9:     rgb:ff/66/44
+#xterm.*.color10:    rgb:66/ff/44
+#xterm.*.color11:    rgb:ff/ff/66
+#xterm.*.color12:    rgb:66/44/ff
+#xterm.*.color13:    rgb:ff/66/ff
+#xterm.*.color14:    rgb:66/ff/ff
+#xterm.*.color15:    rgb:ff/ff/ff
+# Strangely I couldn't change my foreground color with foreground, 7, 15 or 255!
+# Oh, that's because I fixed them on the commandline with -bg and -fg
+# These are what Vim recommends.  They might be even closer to the defaults:
+#XTerm*color0:			#000000
+#XTerm*color1:			#c00000
+#XTerm*color2:			#008000
+#XTerm*color3:			#808000
+#XTerm*color4:			#0000c0
+#XTerm*color5:			#c000c0
+#XTerm*color6:			#008080
+#XTerm*color7:			#c0c0c0
+#XTerm*color8:			#808080
+#XTerm*color9:			#ff6060
+#XTerm*color10:			#00ff00
+#XTerm*color11:			#ffff00
+#XTerm*color12:			#8080ff
+#XTerm*color13:			#ff40ff
+#XTerm*color14:			#00ffff
+#XTerm*color15:			#ffffff
+#Xterm*cursorColor:		Black
 
 ## For coloured man-pages:
 ## From: http://bugs.gentoo.org/184604
