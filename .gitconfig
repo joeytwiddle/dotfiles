@@ -267,3 +267,9 @@
 [rerere]
 	enabled = true
 
+# What's that you say?  You hate merge bubbles and want to rebase instead of merge?
+#   http://stevenharman.net/git-pull-with-automatic-rebase
+# But I fear you may be in for some explosions.  :-)
+#   git config branch.autosetuprebase always # Force all new branches to automatically use rebase
+#   git config branch.*branch-name*.rebase true # Force existing branches to use rebase.
+
