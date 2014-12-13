@@ -16,9 +16,9 @@ command! DiffAgainstFileOnDisk call DiffAgainstFileOnDisk()
 
 " Select a good default diffing program
 if !exists("g:DAFOD_diffcmd")
-  if executable("jdiffsimple")
+  if executable("jdiffsimple") && !has("gui_running")
     let g:DAFOD_diffcmd = 'jdiffsimple -fine'
-  elseif executable("prettydiff")
+  elseif executable("prettydiff") && !has("gui_running")
     let g:DAFOD_diffcmd = 'prettydiff'
   else
     let g:DAFOD_diffcmd = 'diff'
