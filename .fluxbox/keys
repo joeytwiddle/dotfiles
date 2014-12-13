@@ -236,6 +236,7 @@ Mod1 Mod4 equal :MaximizeWindow
 # Mod1 Enter :MacroCmd {ToggleDecor} {MaximizeWindow}
 ## But it works fine on a different keybinding
 Mod1 Shift z :Fullscreen
+Mod1 Shift f :Fullscreen
 Mod1 v :MaximizeVertical
 Mod4 v :MaximizeVertical
 Mod1 h :MaximizeHorizontal

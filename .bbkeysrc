@@ -122,6 +122,8 @@
   [Iconify]                    (Mod1-I)
   ## This recently started conflicting with the corresponding bind in Fluxbox, failing to toggle back down.
   # [toggleMaximizeFull]         (Mod1-Z)
+  [toggleMaximizeFull]         (Mod1-Mod4-equal)
+
   [toggleMaximizeHorizontal]   (Mod1-H)
   [toggleMaximizeVertical]     (Mod1-V)
   [toggleDecorations]          (Mod1-F)
