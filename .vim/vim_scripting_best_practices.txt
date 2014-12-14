@@ -193,3 +193,8 @@ As well as making things re-usable, functions can offer meaningful names which d
 Mac users could use Keycaster when recording a session to show viewers what keys you are pressing.
 
 
+# Advanced notes
+
+<paradigm> b: is a dictionary
+<paradigm> you can loop over it
+

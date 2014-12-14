@@ -24,36 +24,66 @@ let s:moreflags = s:moreflags . '%#StatusDiffing#%{ \&diff ? "[d]" : "" }%##'
 highlight StatusDiffing ctermbg=blue ctermfg=white guibg=blue guifg=white
 let &statusline = substitute(&statusline, '%h', s:moreflags.'%h', '')
 if exists('*GetSearchStatus')
-    let &statusline = substitute(&statusline, '= ', '= %{GetSearchStatus()}', '')
+  let &statusline = substitute(&statusline, '= ', '= %{GetSearchStatus()}', '')
 endif
 
-function! GetCurrentGitBranch(full_path)
-    let result = system('cd '.shellescape(a:full_path).' && git symbolic-ref --short HEAD')
-    if v:shell_error > 0
-        return ''
-    else
-        " Strip trailing newline
-        let result = substitute(result, '\n', '', 'g')
-        return result
-    endif
-endfunction
+
 
 let g:ShowCurrentGitBranch = get(g:, 'ShowCurrentGitBranch', 1)
+let g:ShowGitStatusForBuffer = get(g:, 'ShowGitStatusForBuffer', 1)
 
-function! ShowCurrentGitBranch()
-    if !g:ShowCurrentGitBranch
-        return ""
-    endif
-    if exists('b:last_checked_branch_time') && s:get_ms_since(b:last_checked_branch_time) < 10000
-        " Use cached value
-    else
-        " Get value and cache it
-        let full_path = fnamemodify(resolve(expand('%:p')),':h')
-        let b:last_checked_branch_value = GetCurrentGitBranch(full_path)
-        let b:last_checked_branch_time = reltime()
-    endif
-    let branch_name = b:last_checked_branch_value
-    return branch_name == '' ? '' : '['.branch_name.'] '
+function! ShowGitStatus()
+  let str = ""
+  if g:ShowCurrentGitBranch
+    let str .= ShowCurrentGitBranch()
+  endif
+  if g:ShowGitStatusForBuffer
+    let str .= ShowGitStatusForBuffer()
+  endif
+  return str
+endfunction
+
+function! ShowCurrentGitBranch(...)
+  let  left_wrapper = a:0 >= 1 ? a:1 : '['
+  let right_wrapper = a:0 >= 2 ? a:2 : '] '
+  if exists('b:last_checked_branch_time') && s:get_ms_since(b:last_checked_branch_time) < 10000
+    " Use cached value
+  else
+    " Get value and cache it
+    let full_path = fnamemodify(resolve(expand('%:p')),':h')
+    let b:last_checked_branch_value = s:CleanSystemCall('cd '.shellescape(full_path).' && git symbolic-ref --short HEAD')
+    let b:last_checked_branch_time = reltime()
+  endif
+  let branch_name = b:last_checked_branch_value
+  return branch_name == '' ? '' : left_wrapper . branch_name . right_wrapper
+endfunction
+
+function! ShowGitStatusForBuffer(...)
+  let  left_wrapper = a:0 >= 1 ? a:1 : '['
+  let right_wrapper = a:0 >= 2 ? a:2 : '] '
+  if exists('b:last_checked_buffers_git_status_time') && s:get_ms_since(b:last_checked_buffers_git_status_time) < 10000
+    " Use cached value
+  else
+    " Get value and cache it
+    let full_file_path = resolve(expand('%:p'))
+    let b:last_checked_buffers_git_status_value = s:CleanSystemCall('git status --porcelain '.shellescape(full_file_path))[0:1]
+    let b:last_checked_buffers_git_status_time = reltime()
+  endif
+  let file_status = b:last_checked_buffers_git_status_value
+  return file_status == '' ? '' : left_wrapper . file_status . right_wrapper
+endfunction
+
+function! s:CleanSystemCall(command)
+  let result = system(a:command)
+  if v:shell_error > 0
+    return ''
+  else
+    " Strip trailing newline
+    let result = substitute(result, '\n$', '', '')
+    " Escape all other newlines
+    let result = substitute(result, '\n', '\\n', 'g')
+    return result
+  endif
 endfunction
 
 function! s:get_ms_since(time)   " Terry Ma
@@ -61,9 +91,11 @@ function! s:get_ms_since(time)   " Terry Ma
   return str2nr(cost[0])*1000 + str2nr(cost[1])/1000.0
 endfunction
 
-if exists('*ShowCurrentGitBranch')
-    let &statusline = substitute(&statusline, '%f', '%{ShowCurrentGitBranch()}%f', '')
+if exists('*ShowGitStatus')
+  "let &statusline = substitute(&statusline, '%f', '%{ShowGitStatus()}%f', '')
+  let &statusline = substitute(&statusline, '%f', '%{ShowCurrentGitBranch()}%f%{ShowGitStatusForBuffer(" [","]")}', '')
 endif
+
 
 " Shows time:
 " :set rulerformat=%55(%{strftime('%a\ %b\ %e\ %I:%M\ %p')}\ %5l,%-6(%c%V%)\ %P%)

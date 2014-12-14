@@ -662,7 +662,12 @@ autocmd VimLeave * silent !stty ixon
 	let g:sparkupNextMapping = '<C-]>n'   " The default <C-n> messes with my <Tab> mappings
 	let g:sparkupMappingInsertModeOnly = 1
 	call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
-	call add(vamAddons,"github:vim-scripts/Align")
+
+	call add(vamAddons,"github:vim-scripts/Align")        " Line up words across lines with :Align <character>
+	call add(vamAddons,"github:vim-scripts/Tabular")      " Line up words across lines with :Tab /<regexp>
+	" To align by spaces, the best I have found so far is:
+	"   :Tab /[^ ][^ ]*
+	" but that creates a gap of two spaces.  This CANNOT be fixed by appending /l0 or /l1 or /l2
 
 	" For Meteor development
 	call add(vamAddons,"github:mustache/vim-mustache-handlebars")

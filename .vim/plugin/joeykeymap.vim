@@ -182,11 +182,29 @@ inoremap <C-J> <Esc>2<C-E>a
 "noremap <C-J> 2<C-E><Up><Down>
 " Mac mouse scrolling direction has ruined me.  I am not sure which key should do which direction, and I find myself expecting different results at different times.  The conceptual conflict is this: are we pushing the text up and down on the screen (Mac), or are we pulling our window frame up and down over the text (Windows)?
 " In the end, I am leaving the final decision to 9gag: j should move our view downwards through the text.
-noremap <C-K> 2<C-Y>:call g:SexyScroller_ScrollToCursor()<CR>
-noremap <C-J> 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
+nnoremap <C-K> 2<C-Y>:call g:SexyScroller_ScrollToCursor()<CR>
+nnoremap <C-J> 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
+vnoremap <C-K> 2<C-Y>:<C-U>call g:SexyScroller_ScrollToCursor()<CR>gv
+vnoremap <C-J> 2<C-E>:<C-U>call g:SexyScroller_ScrollToCursor()<CR>gv
 "" OK that fires sexy_scroller, but why did we ever want it to fire hiline anyway?!  Perhaps when we were doing 10<C-K>
 "" Also it exhibits a BUG in sexy_scroller, namely that it will cause horizontal scrolling when moving near a long line whilst `:set nowrap` wrapping is off!
 "" There are disadvantages to trying to trigger CursorMoved/Hold this way.  <BS><Space> can fail if we are at the top of the file, or create issues if we are at the start of a line (e.g. temporarily moves a line back, undoing the requested scroll, in a short window when scrolloff is set).  Similarly <Space><BS> can fail on the last char of a line or the last line of a file.  A better solution might be to explicitly call hooks exposed by those specific plugins that we want to trigger.  Alternatively we could call a function to examine the situation and emit whichever of <BS><Space> or <Space><BS> is most appropriate.
+
+" BUG: In Vim and GVim on Mac OSX, <C-J> also gets mapped to <NL>.  As a result, the mapping above fires in visual mode, preventing the selection from growing, and making Vim jitter while the cursor does not move down.  (Or before the gv trick above, it would just drop us out of visual mode.)  We only see this mapping firing (or causing problems) when a very long wrapped line moves off screen, causing a visual jump to occur.  If I unmap <NL> then this also unmaps <C-J>.
+"
+" Here are the earlier notes I wrote in sexy_scroller.txt about this bug:
+"
+" - I was trying to create a visual selection (blockwise or not) by holding down `<Enter>` but the buffer had some very long wrapped lines, with `wrap` enabled.  Vim kept dropping out of Visual mode and into Normal mode!  It looked like this was when one of the long wrapped lines moved out of view (causing a jump of four visual lines).  Taglist was not loaded, but I did have a very high keyboard repeat.  This was on Vim 7.14 (homebrew) under iTerm on Mac OSX Mavericks.
+"
+"  One clue was left on the command-line: `:call g:SexyScroller_ScrollToCursor()`  But that is never actually performed by this plugin; it is one of my other plugins making that call!  That looked like it might be the result of one of my `<C-K>` or `<C-J>` mappings, but it continued to occur even with those disabled.  Curiously it only happened when holding `<Enter>`, not when holding `j`, even though I have no particular visual (or normal) mapping on `<Enter>`.
+"
+"  Aha!  Here is the mapping that caused it:
+"
+"    :verb map <NL>
+"    ov <NL>        * 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
+"            Last set from ~/rc_files/.vim/plugin/joeykeymap.vim
+"
+"  So it looks like when I set the `<C-J>` mapping, it also created a `<NL>` mapping.
 
 "" Split windows "horizontally" (create a new one below) with Ctrl-W s (no need to define - this is a default!)
 "nnoremap <C-W>s :split<Enter>
@@ -751,6 +769,13 @@ nmap ]= :exec "resize ".(&lines-20)<CR>:exec "vert resize ".(&columns-31)<CR>
 nmap [= :exec "resize ".(&lines-10)<CR>:exec "vert resize ".(&columns-31)<CR>
 " The -31 is for when TagList is open with width 30.
 " TODO: But what about when the file browser is open too?!
+
+" TESTING: Search for similarly-named files using AsyncFinder
+nmap <Leader>a :let @n = expand("%:t:r")<CR><C-a><C-r>n.
+
+
+
+" Tools for Visual Mode
 
 " From http://vim.wikia.com/wiki/Creating_new_text_objects
 " vaf will select everything inside the current fold
