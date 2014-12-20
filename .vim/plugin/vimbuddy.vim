@@ -32,6 +32,10 @@ endif
 let g:ShowCurrentGitBranch = get(g:, 'ShowCurrentGitBranch', 1)
 let g:ShowGitStatusForBuffer = get(g:, 'ShowGitStatusForBuffer', 1)
 
+" TODO: Offer a third datum: git branch status (which would display ahead/behind markers/count)?
+" TODO: The caching pattern is repeated, and could be refactored out
+" TODO: The caching pattern is not optimal.  statusline is regularly (continually) recalculated for *all* visible windows, not just the current one.  With many windows open, they might all have different update phase (although they will sync up after a pause), increasing the likelihood of unwanted interruption/delay.  (In fact, if one of the lookups takes a significant amount of time, later lookups in the same statusline will get a different refresh time, so the user might end up seeing them update at different times!)  The solution might be to link all updates to a global debounce (rate-limiting) timer, and to avoid interruption, also link to a CursorHold event.  Although if the CursorHold event fires *after* the statusline update, then we would just be setting up an annoying delay for the *next* keypress.  Therefore the solution is: we should split up the behaviour: performs (possibly debounced) updates on CursorHold, and place that value into a variable that statusline can read; statusline would never actually perform calculations itself inline.  However a concern with this approach is that the CursorHold handler might inefficiently calculate updates for data which is not actually being references in statusline!  A solution to this would be for statusline to leave a message indicating to CursorHold that a result should be calculated, and pick up the actual value on later updates.  Then what if the user changes their statusline, removing some of the calls?  Since statusline cannot inform the CursorHold about this, instead the CursorHold should occasionally or regularly *clear* the set of requested updates, then statusline will re-add still needed requests on the next update (and can at least display older cached values, rather than nothing, to avoid flicker.)  I dare say this two-threaded messaging approach is a little convoluted for such a simple feature, but it appears we can address all the major concerns, and optimize performance for users with slower machines / file access (consider the latency involved with sshfs mounted files - in fact use that as a test case!).
+
 function! ShowGitStatus()
   let str = ""
   if g:ShowCurrentGitBranch
@@ -66,7 +70,15 @@ function! ShowGitStatusForBuffer(...)
   else
     " Get value and cache it
     let full_file_path = resolve(expand('%:p'))
+    " Of the two chars returned, I believe the first is staged status, while the second is file vs HEAD.
+    " I think the user might not be interested in staged status, therefore in future I might modify this to display only the second char.
     let b:last_checked_buffers_git_status_value = s:CleanSystemCall('git status --porcelain '.shellescape(full_file_path))[0:1]
+    " When the file is up-to-date with HEAD, git status returns nothing.
+    " But if nothing is displayed, it looks like the tool is not working, and the status is ambiguous.
+    " So we prefer to display two empty spaces instead of nothing.  (I also considered [ =] but this is non-standard so may be confusing.)
+    if b:last_checked_buffers_git_status_value == ''
+        let b:last_checked_buffers_git_status_value = '  '
+    endif
     let b:last_checked_buffers_git_status_time = reltime()
   endif
   let file_status = b:last_checked_buffers_git_status_value

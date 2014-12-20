@@ -22,7 +22,7 @@ syntax match javaScriptOperation /\(===\|==\|!==\|!=\|<=\|>=\|<\|>\|&&\|||\|&\||
 "highlight javascriptOperation ctermfg=yellow cterm=none guifg=yellow gui=none
 highlight link javaScriptOperation Normal
 
-syntax match javaScriptAssignment /\([ ]\|\>\)=\([ ]\|\<\)/
+syntax match javaScriptAssignment /\(\s\|\>\)=\(\s\|\<\)/
 syntax match javaScriptAssignmentOther /\(++\|--\|+=\|-=\|*=\|\/=\|&=\||=\)/
 highlight link javaScriptAssignment Statement
 highlight link javaScriptAssignmentOther javaScriptAssignment
@@ -66,16 +66,16 @@ highlight javaScriptNumber cterm=none ctermfg=cyan gui=none guifg=LightCyan
 " Added optional \[.*\] to catch e.g. myList[i-1] = ""; but it can catch too much sometimes!
 " silent syn clear javaScriptAssignVar
 " This version caught the var/property before the [...]
-"syn match javaScriptAssignVar /[A-Za-z_$][A-Za-z_$0-9]*\(\[.*\]\|\)[ 	]*\(=\([^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
+"syn match javaScriptAssignVar /[A-Za-z_$][A-Za-z_$0-9]*\(\[.*\]\|\)\s]*\(=\([^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 " But we only really want the [...] itself
-"syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)[ 	]*\(=\([^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
+"syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\([^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 " The =[^=] check ensures that we match 'a=b' but never 'a==b'.  Unfortunately it also selects and highlights the char after the '=', i.e. 'b'!
 " In the following version we fix that using me=e-1 which works for 'a=b' but is not so helpful when '$' end-of-line is matched.
-"syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)[ 	]*\(=\|++\|--\|+=\|-=\|\*=\|\/=\)\([^=]\|$\)/me=e-1 contains=javaScriptAssignment,javaScriptAssignmentOther
+"syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\|++\|--\|+=\|-=\|\*=\|\/=\)\([^=]\|$\)/me=e-1 contains=javaScriptAssignment,javaScriptAssignmentOther
 " A better alternative to syn-pattern-offset is to use \@= which means "match preceding atom with 0 width"
-"syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)[ 	]*\(=\([^=]\@=\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
+"syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\([^=]\@=\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 " Another alternative is to use \ze which means "set match end here"
-syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)[ 	]*\(=\(\ze[^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
+syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\(\ze[^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 highlight javaScriptAssignVar ctermfg=white cterm=bold guifg=white gui=bold
 
 " To match coffeeAssign's dark blue property names:
@@ -119,3 +119,10 @@ syn match javascriptFunctionName /\(\<function\>\s*\)\@<=[A-Za-z0-9_$]*/ contain
 " Matching this ( didn't work on anonymous functions, although it can work if the javascriptFunctionName match stops one char earlier.  O_o
 "syn match javascriptFunctionArgs /(\zs[^)]*\ze)/ ...
 syn match javascriptFunctionArgs /\zs[^()]*\ze)/ contained containedin=javascriptFunctionDeclaration
+" TODO: If we really want to match Sublime Text closely, then beware that properties get highlighted like function names too, but for anonymous functions only.
+"
+"   foo: function () { ... },
+"   ^^^ orange
+"
+"   foo: function bar() { ... },
+"   ^^^ normal    ^^^ orange

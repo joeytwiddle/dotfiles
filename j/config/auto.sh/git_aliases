@@ -276,6 +276,7 @@ alias gpo='verbosely git push origin $(git_get_current_branch)'
 
 alias gss='git stash save'
 alias gsp='git stash pop'
+alias gsa='git stash apply'
 alias gsl='git stash list'
 
 # Git Auto Commit, or Git Add Commit, or Git Add and Commit
