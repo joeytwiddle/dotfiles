@@ -46,16 +46,18 @@ function! s:DimInactiveWindows()
       let dim = 0
     endif
 
-    let l:range = ""
     if dim
       " We used to use winwidth(i) by default, only the max (256) if &wrap was set.
       " But in fact even without &wrap, the buffer may be scrolled to the right.
       " In that case, we could start the range higher and end it higher.
       " But simpler just to fill all the columns we can, starting from 1, and ignore those larger.
+      let l:range = ""
       let l:width = 256
       let l:range = join(range(1, l:width), ',')
+      call setwinvar(i, '&colorcolumn', l:range)
+    else
+      setlocal colorcolumn<
     endif
-    call setwinvar(i, '&colorcolumn', l:range)
   endfor
 
 endfunction
