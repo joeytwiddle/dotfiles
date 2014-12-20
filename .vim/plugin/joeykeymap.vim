@@ -468,7 +468,7 @@ nmap <Leader>i <Leader>f<C-w><Right><Leader>t
 nmap <Leader>p :set invpaste<Enter>
 
 " Toggle (and display) diff settings
-nmap <Leader>d :set fdc=0 invdiff diff?<CR>
+nmap <Leader>d :set fdc=0 invdiff diff?<CR>:let &l:scrollbind = &l:diff<CR>
 
 " Fold everything in the buffer except lines which match the current search pattern (or at second level, the line on either side)
 nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
@@ -554,6 +554,9 @@ function! s:SetupKeysForCSearch()
 	"nnoremap <F4> :Grep<CR><Home>\b<End>\b<CR>   " untested
 	nnoremap <F4> :Grep \b<cword>\b<CR>
 endfunction
+
+vnoremap <F3> "sy:Grep<CR><C-U><C-R>s
+vnoremap <F4> "sy:Grep<CR><C-U><C-R>s<CR><CR>
 
 if exists("g:Grep_Using_CodeSearch") && g:Grep_Using_CodeSearch || exists("g:Grep_Path") && match(g:Grep_Path, '^csearch$\|/csearch$') >= 0
 	call s:SetupKeysForCSearch()
