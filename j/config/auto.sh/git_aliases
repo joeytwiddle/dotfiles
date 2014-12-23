@@ -109,6 +109,7 @@ alias gc='git commit -v'
 alias gca='gc --amend'
 alias gf='git fetch'
 alias gp='git pull'
+alias gpr='git pull --rebase'
 #alias gm='git merge'
 
 #alias gp='git preview'   # This was defined in my .gitconfig as: git diff --stat HEAD..FETCH_HEAD
