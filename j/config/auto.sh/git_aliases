@@ -280,6 +280,11 @@ alias gss='git stash save'
 alias gsp='git_stash_pop_safe'
 alias gsa='git stash apply'
 alias gsl='git stash list'
+# Git Stash Diff shows the diff of the topmost or specified stash.  Notably not `git stash drop` which must be typed in full, to avoid doing it too easily and accidentally.
+alias gsd='git stash show -p'
+# Git Stash (diff) Files shows the files changed (like --stat)
+alias gsf='git stash show'
+# TODO: I would actually like an easy way to display the diffs for all the stashes, i.e. run gsd for every stash id
 
 # Sometimes popping the state results in conflicts because I was popping onto the wrong branch.  I can reset to restore the files, but then I will have lost my stashed changes, because they were popped!
 # So git_stash_pop_safe will only drop the stash if it was successfully applied with no conflicts.
