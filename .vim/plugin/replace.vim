@@ -6,7 +6,7 @@
 " Search for word under cursor and replace with prompted input in this buffer, or in all open buffers
 function! s:Replace(in_all_buffers, whole_word, search, ...)
    let iab = a:in_all_buffers ? "in all buffers " : ""
-   let escaped_search = escape(a:search, '^$.*?\[]')
+   let escaped_search = escape(a:search, '^$.*?/\[]')
    if a:whole_word
       let escaped_search = '\<' . escaped_search . '\>'
    endif
@@ -16,11 +16,12 @@ function! s:Replace(in_all_buffers, whole_word, search, ...)
       let suggested_replacement = escape(a:search, '\')
       let replacement = input("Replace " . iab . escaped_search . " with: ", suggested_replacement)
    endif
+   let escaped_replacement = escape(replacement, '/')
    if a:in_all_buffers
-      exec 'bufdo! %s/' . escaped_search . '/' . replacement . '/gec'
+      exec 'bufdo! %s/' . escaped_search . '/' . escaped_replacement . '/gec'
       " Flag 'e' continues if no changes were made in one of the buffers, or if an error occurred.
    else
-      exec "%s/" . escaped_search . "/" . replacement . "/gc"
+      exec "%s/" . escaped_search . "/" . escaped_replacement . "/gc"
    endif
 endfun
 
