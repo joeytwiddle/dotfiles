@@ -92,7 +92,7 @@ Mod1 grave :PrevWindow {groups} (Workspace=[current])
 #Mod4 Tab :NextWindow {groups}
 #Mod4 grave :PrevWindow {groups}
 # Experiment: Always change workspace when using Super-Tab.
-# Disadvantage: If you start on Workspace 2, refuses to cycle windows on Workspace 1, which you might want to do if the first window focused is not the one you wanted.
+# Disadvantage: If you start on Workspace 2, refuses to cycle windows on Workspace 1, which you might want to do if the first window focused is not the one you wanted.  It seems to miss windows from the list; my theory is that it skips windows on the same desktop which are next to each other in the list, except for the first one in the group.  Ideally we only want to skip windows which were on the *initial* workspace, rather than windows which are on the current workspace.
 Mod4 Tab :NextWindow {groups} (Workspace!=[current])
 Mod4 grave :PrevWindow {groups} (Workspace!=[current])
 
