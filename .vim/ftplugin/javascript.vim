@@ -25,6 +25,9 @@ nmap <buffer> <Leader>Log viW<Leader>log
 
 " === Indenting ===
 
+" The below address some indenting issues, but disabled for now because I am using pangloss/vim-javascript
+if 0
+
 " Outstanding issues:
 " - When an if condition spans multiple lines, the body and the closing } are indented an additional (unwanted) level.
 " - Indent is poor on `key : value,` but fine on `key: value,`.  Can also occur as a result of ({...}) when (...) or {...} work fine.
@@ -79,6 +82,8 @@ function! GetJoeysJavascriptIndent()
   return cindent
 endfunction
 setlocal indentexpr=GetJoeysJavascriptIndent()
+
+endif
 
 
 

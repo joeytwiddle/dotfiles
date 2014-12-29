@@ -665,15 +665,22 @@ autocmd VimLeave * silent !stty ixon
 	"   :Tab /[^ ][^ ]*
 	" but that creates a gap of two spaces.  This CANNOT be fixed by appending /l0 or /l1 or /l2
 
+	" Javascript
+	" Some suggestions for Node: https://github.com/joyent/node/wiki/Vim-Plugins
+	" Some suggestions for Meteor: were recommended at: https://github.com/Slava/vimrc/
+	call add(vamAddons,"github:pangloss/vim-javascript")  " Improved indent and syntax for Javascript
+	"call add(vamAddons,"github:jelera/vim-javascript-syntax") " Even more comprehensive syntax
+	"call add(vamAddons,"github:vim-scripts/JavaScript-Indent") " Improved indent and syntax for Javascript and HTML (OLD alternative).  Joyent says: [somewhat buggy, clicking tab won't indent]
+	call add(vamAddons,"github:elzr/vim-json")
+
+	" Javascript beautification:
+	"call add(vamAddons,"github:maksimr/vim-jsbeautify")    " Just a wrapper for jsbeautify
+	" More options and can handle promise chains: https://github.com/millermedeiros/esformatter
+
 	" For Meteor development
 	call add(vamAddons,"github:mustache/vim-mustache-handlebars")
 	let g:mustache_abbreviations = 1
-
-	" From: https://github.com/Slava/vimrc/
 	call add(vamAddons,"github:slava/vim-spacebars")
-	"call add(vamAddons,"github:groenewege/vim-less")
-	call add(vamAddons,"github:elzr/vim-json")
-	"call add(vamAddons,"github:pangloss/vim-javascript")
 	"call add(vamAddons,"github:leafgarland/typescript-vim")
 	" Actually does much more than syntax highlighting but that's overkill for me
 	"call add(vamAddons,"github:kchmck/vim-coffee-script")
