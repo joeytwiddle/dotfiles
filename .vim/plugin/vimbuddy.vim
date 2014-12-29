@@ -80,6 +80,9 @@ function! ShowGitStatusForBuffer(...)
         let b:last_checked_buffers_git_status_value = '  '
     endif
     let b:last_checked_buffers_git_status_time = reltime()
+    " [ M] means file is modified relative to stage/index
+    " [M ] means changes have been are staged
+    " [MM] means staged but also locally modified since then!
   endif
   let file_status = b:last_checked_buffers_git_status_value
   return file_status == '' ? '' : left_wrapper . file_status . right_wrapper

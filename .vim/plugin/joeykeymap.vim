@@ -592,10 +592,10 @@ autocmd BufReadPost *.vim              vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\
 autocmd BufReadPost *.vim              vnoremap <buffer> <D-/>     :s+^\(\s*\)+\1"+<Enter>:set nohlsearch<CR>
 autocmd BufReadPost *.vim              vnoremap <buffer> <Leader>? :s+^\(\s*\)"+\1+<Enter>:set nohlsearch<CR>
 autocmd BufReadPost *.vim              vnoremap <buffer> <D-?>     :s+^\(\s*\)"+\1+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.{sh,coffee,conf} vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\1#+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.{sh,coffee,conf} vnoremap <buffer> <D-/>     :s+^\(\s*\)+\1#+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.{sh,coffee,conf} vnoremap <buffer> <Leader>? :s+^\(\s*\)#+\1+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.{sh,coffee,conf} vnoremap <buffer> <D-?>     :s+^\(\s*\)#+\1+<Enter>:set nohlsearch<CR>
+autocmd BufReadPost *.{sh,coffee,conf,py} vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\1#+<Enter>:set nohlsearch<CR>
+autocmd BufReadPost *.{sh,coffee,conf,py} vnoremap <buffer> <D-/>     :s+^\(\s*\)+\1#+<Enter>:set nohlsearch<CR>
+autocmd BufReadPost *.{sh,coffee,conf,py} vnoremap <buffer> <Leader>? :s+^\(\s*\)#+\1+<Enter>:set nohlsearch<CR>
+autocmd BufReadPost *.{sh,coffee,conf,py} vnoremap <buffer> <D-?>     :s+^\(\s*\)#+\1+<Enter>:set nohlsearch<CR>
 autocmd BufReadPost *.css              vnoremap <buffer> <Leader>/ :s+^\(\s*\)\(.*\)+\1/* \2 */+<Enter>:set nohlsearch<CR>
 autocmd BufReadPost *.css              vnoremap <buffer> <D-/>     :s+^\(\s*\)\(.*\)+\1/* \2 */+<Enter>:set nohlsearch<CR>
 autocmd BufReadPost *.css              vnoremap <buffer> <Leader>? :s+^\(\s*\)/[*]\(.*\)[*]/+\1\2+<Enter>:set nohlsearch<CR>
@@ -615,6 +615,7 @@ autocmd BufReadPost *.{html,erb}       vnoremap <buffer> <D-?>     :s+^\(\s*\)<!
 "   or :call ThisBufferUsesCommentSymbol("#")
 "   or :call RegisterCommentSymbol('coffee', '#')
 " We could also inspect &comments, but which one should we choose to use?  :-P
+" For multi-line comments, we could inspect &commentstring
 
 " Make Shift-Insert in GVim work like it does in X-Term
 "autocmd GUIEnter * inoremap <S-Insert> <Esc>"*pa
@@ -712,6 +713,7 @@ silent! xunmap <BS>
 " When editing a Vim file, make K lookup Vim's inline :help rather than calling 'man'.
 autocmd BufReadPost *.vim setlocal keywordprg=:help
 
+" My own attempt at a YankRing
 " I'm not sure if this is useful.  It turned out to be no use for the original use-case (I was deleting parts of lines, so they were entering the small delete register, and not the numbered registers).
 function! s:CycleYanks()
 	let unnamed = @"
@@ -725,9 +727,30 @@ function! s:CycleYanks()
 	let @7 = @8
 	let @8 = @9
 	let @9 = unnamed
-	echo strpart( "Unnamed register is now: " . substitute( substitute(@", '\n', '\\n', 'g'), '\t', '->', 'g' ), 0, &columns - 15 )
 endfunction
-nnoremap \cy :call <SID>CycleYanks()<CR>
+function! s:CycleYanksBackwards()
+	let unnamed = @"
+	let @" = @9   " Also writes to @0
+	let @9 = @8
+	let @8 = @7
+	let @7 = @6
+	let @6 = @5
+	let @5 = @4
+	let @4 = @3
+	let @3 = @2
+	let @2 = @1
+	let @1 = unnamed
+endfunction
+function! s:ShowRegisterSummary()
+	echo strpart("Unnamed register is now: " . substitute( substitute(@", '\n', '\\n', 'g'), '\t', '->', 'g' ), 0, &columns - 15)<CR>
+endfunction
+nmap \cy :call <SID>CycleYanks()<CR>:call <SID>ShowRegisterSummary()<CR>
+nmap \cY :call <SID>CycleYanksBackwards()<CR>:call <SID>ShowRegisterSummary()<CR>
+nnoremap \cR :call <SID>ShowRegisterSummary()<CR>
+" Undo last paste, and apply one from earlier/later register.  Problem is, we don't know if the last paste was a 'p' or a 'P'.
+" We could record that info by mapping p and P, but then we will suffer the same issue as other YankRings, no '.' repeats!
+"nnoremap \<C-n> u:call <SID>CycleYanks()<CR>p
+"nnoremap \<C-p> u:call <SID>CycleYanksBackwards()<CR>p
 
 " Search help files.  Don't use this.  Use :helpgrep
 " I want the quickfix to open results in the newly created :help or :new window, but I cannot get that to happen!

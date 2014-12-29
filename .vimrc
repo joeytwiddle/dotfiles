@@ -615,9 +615,14 @@ autocmd VimLeave * silent !stty ixon
 	let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 	" call add(vamAddons,'github:troydm/easybuffer.vim')
 	" call add(vamAddons,'github:chrisbra/NrrwRgn')
+
 	" call add(vamAddons,'github:vim-scripts/YankRing.vim')   " Vim's 1-9 registers provide limited support for this already
 	"" DISABLED: YankRing blocks 'P' (paste) from being a repeatable action with '.' - I cannot have that!  (Is it supported with Repeat.vim present?)
 	"" Instead of how YankRing does it, I'd quite like to have "2p to paste the second-to-last yank.  Oh Vim does that already!  xD
+	"call add(vamAddons,"github:the-isz/MinYankRing.vim") " Minimalist yank ring.  Suffers the same issue!
+	"let g:MYR_NextMap = '\<C-n>'
+	"let g:MYR_PrevMap = '\<C-p>'
+
 	" call add(vamAddons,'github:michaelficarra/vim-coffee-script')   " Coffeescript syntax
 	"call add(vamAddons,"github:paradigm/SkyBison")          " Immediate feedback on the cmdline.  I never use this, Tab-completion is pretty fine for me.
 	call add(vamAddons,"github:joeytwiddle/vim-diff-traffic-lights-colors")
@@ -686,6 +691,8 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:kchmck/vim-coffee-script")
 	"call add(vamAddons,"github:hdima/python-syntax")
 
+	"call add(vamAddons,"github:groenewege/vim-less")
+
 	call add(vamAddons,"github:joeytwiddle/repmo.vim")    " Allows you to repeat the previous motion with ';' or ','
 	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g, <C-w>w|<C-w>W"
 	" Experimenting:
@@ -709,10 +716,12 @@ autocmd VimLeave * silent !stty ixon
 	"       You also need to create a .tern-project file for each project!
 	call add(vamAddons,"github:marijnh/tern_for_vim")     " Static analysis of JS files
 	"let g:tern_show_argument_hints = 'on_hold'
-	let g:tern_show_argument_hints = 'never'              " Disabled because it keeps locking up Vim until tern times out
+	let g:tern_show_argument_hints = 'never'              " Disabled because it keeps locking up Vim until tern times out (our codebase is large)
 	let g:tern_show_signature_in_pum = 1
 	" Curiously the documentation pops up in a Scratch window when I use <Tab> to complete a word, even if both of the above are set to off (defaults).
 	" I also manually installed this: https://github.com/Slava/tern-meteor
+	" When editing a JS or CS file, make K lookup documentation with Tern
+	autocmd BufReadPost *.{js,coffee} nnoremap <buffer> K :TernDoc<CR>
 
 	" Here is a minimal alternative to EasyMotion: https://github.com/vim-scripts/PreciseJump
 	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
@@ -929,22 +938,24 @@ autocmd VimLeave * silent !stty ixon
 		source $HOME/.vimrc.local
 	endif
 
-	" This test does not work!  Yes it does!?
-	" if exists("*vam#ActivateAddons") || 1
+	" This test would work if VAM was already on the runtimepath, but it isn't.
+	"if exists("*vam#ActivateAddons") || 1
+	" I keep VAM in this folder.  It needs to be loaded into the runtimepath!
 	let vam_found_dir = $HOME . "/.vim-addon-manager/vim-addon-manager/"
 	if isdirectory(vam_found_dir)
-
-		" set runtimepath+=$HOME/.vim-addon-manager/vim-addon-manager/
+		"set runtimepath+=$HOME/.vim-addon-manager/vim-addon-manager/
 		let &runtimepath = &runtimepath . "," . vam_found_dir
-		call vam#ActivateAddons(vamAddons, {'auto_install' : 1})
-		"" or
-		" call vam#ActivateAddons(["vim-haxe"])
-		" call vam#ActivateAddons(["github:jdonaldson/vaxe"])
 
-		"" For some unknown reason this stopped working!
-		"" So here I fix what is needed:
-		" set runtimepath+=$HOME/.vim-addon-manager/github-jdonaldson-vaxe/
-		"" Oh - the reason was joeysdefaults.vim sourcing debian.vim unnecessarily.
+		call vam#ActivateAddons(vamAddons, {'auto_install' : 1})
+
+		"let len = len(vamAddons)
+		"let i = 0
+		"while i < len
+			"let plugin = vamAddons[i]
+			"echo "Sourcing plugin ".(i+1)."/".len.": ".plugin
+			"call vam#ActivateAddons([plugin], {'auto_install' : 1})
+			"let i += 1
+		"endwhile
 
 	endif
 
@@ -952,4 +963,4 @@ autocmd VimLeave * silent !stty ixon
 
 
 
-" vim: foldmethod=marker foldenable
+" vim: foldmethod=marker foldenable colorcolumn=57
