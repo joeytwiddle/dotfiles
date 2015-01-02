@@ -1,10 +1,10 @@
 " cndent rule: Indent java anonymous classes correctly.
 ":set cinoptions=j1
 
-" Reserving these variables don't make a lot of sense for NodeJS:
-" (e.g. top, window, ...)
-syntax clear javaScriptMember
-syntax clear javaScriptGlobal
+" Reserving these variables doesn't make a lot of sense for NodeJS.
+" (e.g. top, window, ... are not special words.)
+silent! syntax clear javaScriptMember
+silent! syntax clear javaScriptGlobal
 
 "" TODO: Some of the below slow down Vim a lot.  Look in the distribution's files to see if there may be a way to make them more efficient.
 

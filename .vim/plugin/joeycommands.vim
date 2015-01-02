@@ -154,3 +154,7 @@ endfunction
 
 " I don't find this particularly useful for CSS files, but it is a nice example of advanced :g usage!
 command! SortCSS :g#\({\n\)\@<=#.,/}/sort
+
+" You can use this to get rid of pesky trailing `^M`s
+command! Dos2Unix :e ++ff=dos | :set ff=unix
+

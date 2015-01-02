@@ -104,6 +104,8 @@ function! s:SeekBestWindow(realDirection,reverseDirection)
   if !l:moveDone
     " echo "Doing normal move"
     exec "wincmd ".a:realDirection
+    " BUG: This fails with an error if we attempt to move off the 'cmdwin'
+    "      Although Vim gives an error without this plugin anyway!
   endif
 
   " Record the route back (but not if we didn't actually move!)
