@@ -847,3 +847,7 @@ function! ContiguousVBlock()
 endfunction
 nnoremap <Leader>vcb :<C-U>call ContiguousVBlock()<CR>
 " Or there is a whole plugin: https://github.com/coderifous/textobj-word-column.vim
+
+" Quick thesaurus lookup (actually dictionary lookup)
+nnoremap <Leader>T :!dict <cword><CR>
+
