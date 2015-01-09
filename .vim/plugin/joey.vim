@@ -174,7 +174,12 @@
 
 
 
+	" I think the below is a complex way to search all open buffers or windows for the search string.
+	" I don't know where I got it from in 2002, but I'm pretty sure it wasn't written by me.
+	" We may prefer to use the simpler method above, although it does not let us restrict the search to currently open windows.
+
 	" This needs fixing!
+	" In what way it needs fixing is unknown.  :-p
 
 	" Set this variable to a nonzero value if you want to rewind the
 	" argument list if there was no match in the last (or first) buffer:

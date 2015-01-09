@@ -158,3 +158,22 @@ command! SortCSS :g#\({\n\)\@<=#.,/}/sort
 " You can use this to get rid of pesky trailing `^M`s
 command! Dos2Unix :e ++ff=dos | :set ff=unix
 
+" Performs a normal bufdo but then returns to the buffer you were on initially.
+command! -nargs=+ -complete=command BufDo :call s:BufDoAndReturn(<q-args>)
+function! s:BufDoAndReturn(command)
+	let initial_bufnr = bufnr('%')
+	execute 'bufdo ' . a:command
+	execute initial_bufnr . 'b'
+endfunction
+
+" Performs a normal windo but then returns to the window you were on initially.
+command! -nargs=+ -complete=command WinDo :call s:WinDoAndReturn(<q-args>)
+function! s:WinDoAndReturn(command)
+	let initial_winnr = winnr()
+	execute 'windo ' . a:command
+	execute initial_winnr . 'wincmd w'
+endfunction
+
+" Create a new buffer "without splitting"
+" (Actually does split, but closes the old window)
+command! New :new | wincmd p | wincmd c

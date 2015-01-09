@@ -274,6 +274,7 @@ alias gtpd='gd FETCH_HEAD..HEAD'
 alias gmo='verbosely git merge origin/$(git_get_current_branch)'
 # Git Push Origin (this branch)
 alias gpo='verbosely git push origin $(git_get_current_branch)'
+alias gpp='git pull --rebase && git push'
 
 alias gss='git stash save'
 #alias gsp='git stash pop'
