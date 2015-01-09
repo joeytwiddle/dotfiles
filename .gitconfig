@@ -202,6 +202,10 @@
 #
 # Disabled because I want git to be as difficult for me as for someone without my config.
 #
+# Recent versions of git now default to 'true', but that is different from 'always'.
+# 'true' only sets up the remote tracking branch when we first check out from a remote branch,
+# whereas 'always' also sets one up if we are branching off a local branch (creating a new branch).
+#
 #[branch]
 #	autosetupmerge = true
 
