@@ -16,55 +16,17 @@ function! Joeysyntax()
 	" :syn sync maxlines=50
 	" :syn sync minlines=10
 
-	" :colors pablo
-	" :set guifont=-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv
-	" :set guifont=-schumacher-clean-medium-r-normal-*-*-150-*-*-c-*-iso646.1991-irv
-	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
-	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
-	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
-	" :set guifont=-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv
-	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-14-*-*-*-m-*-iso10646-1
-	" This one for Windows:
-	" :set guifont=-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso10646-1
-	" :set guifont=LucidaTypewriter\ 8
-	" :set guifont=LucidaTypewriter\ 7
-	" :set guifont=clean
-	" See ~/.vimrc for current settings.
-
 	"" Why is this here and not in joeyhighlight.vim ?
 	" :set background=dark
 	"" TODO: Should we move all highlight lines into joeyhighlight.vim ?
 	""       We might risk forgetting to delete them there if we delete syntax here.
-  "" DONE: All highlights which set colors were moved.  Now in here and in after/syntax files when I do highlight, I try to link to an existing group.
+	"" DONE: All highlights which set colors were moved.  Now in here and in after/syntax files when I do highlight, I try to link to an existing group.
 
 	:syntax on
-
-	"" Doesn't work for C - overidden by bracket matches?
-	" :syntax match functionCall /[[:alpha:][:digit:]]+(/
-	" :highlight functionCall ctermfg=cyan
-
-	" :syntax region javaClassLine start=/class / end=/{/ contains=javaClassDecl
-
-	" for jfc diffs
-	:syntax keyword jDiff @@>>
-
-	" for Mason
-	":syntax region jComment start="/\*"  end="\*/"
-	" This is a bit heavy, and it fires on things like "/path/*".
-	" It should be enabled on a per-filetype/extension basis (NOT for all files) and if possible it should avoid matching inside strings.
 
 	" for sh, but bad for #defines!
 	" :syntax region jShComment start="[#]*## " end='$'
 	" :highlight link jShComment jComment
-
-	" :syntax match jEq /=/
-	"" for webscraping log:
-	:syntax match jEq /[[:alpha:]]*=/
-	:highlight link jEq Statement
-
-	" TODO: Failed attempt to highlight operators in Unrealscript.
-	:syntax match jOperator1 /\(==\|!=\|&&\|||\)/
-	:highlight link jOperator1 Statement
 
 	" :syntax keyword jTodo TODO
 	" :highlight link jTodo Todo

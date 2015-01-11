@@ -13,9 +13,6 @@
 :set foldmethod=syntax
 :set foldmethod=manual
 
-" :syntax keyword difference jDiff @@>>
-
-" :highlight jDiff ctermbg=Magenta ctermfg=White
 :highlight DiffLine ctermbg=Magenta ctermfg=White
 :highlight Search ctermbg=White
 :highlight ErrorMsg ctermbg=Red ctermfg=Yellow
