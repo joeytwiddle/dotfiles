@@ -124,6 +124,9 @@ alias gmo='verbosely git merge origin/$(git_get_current_branch)'
 # Git Push Origin (this branch)
 alias gpo='verbosely git push origin $(git_get_current_branch)'
 
+alias gr='git reset'
+alias grh='gr --hard'
+
 #alias gp='git preview'   # This was defined in my .gitconfig as: git diff --stat HEAD..FETCH_HEAD
 #alias gw='git whatsnew'
 
