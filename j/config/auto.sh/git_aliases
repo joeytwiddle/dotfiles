@@ -107,10 +107,22 @@ alias ga='git add'
 #alias gc='git commit'
 alias gc='git commit -v'
 alias gca='gc --amend'
+#alias gi='git commit --interactive'
+# -p "patch" allows us to choose which hunks to add or commit
+alias gap='git add -p'
+alias gcp='git commit -p'
+
 alias gf='git fetch'
 alias gp='git pull'
 alias gpr='git pull --rebase'
+alias gpp='git pull --rebase && git push'
+
 #alias gm='git merge'
+# Git Merge Origin (this branch)
+#alias gmo='verbosely git merge $(git_guess_upstream_branch)'
+alias gmo='verbosely git merge origin/$(git_get_current_branch)'
+# Git Push Origin (this branch)
+alias gpo='verbosely git push origin $(git_get_current_branch)'
 
 #alias gp='git preview'   # This was defined in my .gitconfig as: git diff --stat HEAD..FETCH_HEAD
 #alias gw='git whatsnew'
@@ -248,10 +260,6 @@ update_cindex() {
 }
 
 # TODO: There are a number of other occasions when cindex should be run, e.g. after a pull, reset or file save!  Perhaps it would be better if any programs which use csearch should just run cindex every time before they run csearch.  That should still be faster than grep!
-alias gi='git commit --interactive'
-# -p "patch" allows us to choose which hunks to add or commit
-alias gap='git add -p'
-alias gcp='git commit -p'
 
 # Git What Is Not Pushed (doesn't always work - I use gbs more often)
 #alias gwinp='gll @{upstream}..HEAD'
@@ -268,13 +276,6 @@ alias gtpl='gwinpd'
 alias gtpf='git topush'
 # Git To Push Details / Diff (a direct diff, without listing each commit)
 alias gtpd='gd FETCH_HEAD..HEAD'
-
-# Git Merge Origin (this branch)
-#alias gmo='verbosely git merge $(git_guess_upstream_branch)'
-alias gmo='verbosely git merge origin/$(git_get_current_branch)'
-# Git Push Origin (this branch)
-alias gpo='verbosely git push origin $(git_get_current_branch)'
-alias gpp='git pull --rebase && git push'
 
 alias gss='git stash save'
 #alias gsp='git stash pop'
