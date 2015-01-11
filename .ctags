@@ -1,4 +1,5 @@
---regex-c=/^(COMMENT: C, Java, Javascript, Asm have defaults, so need no langdef, but we can extend them)/\1/X,XXX/
+--regex-c=/^(COMMENT: Vim, C, Java, Javascript, Asm have defaults, so need no langdef, but we can extend them)/\1/X,XXX/
+--regex-c=/^(COMMENT: It is possible to disable built-in tag detection if we want, piecewise, e.g.: ctags --extra=-q --c-kinds=-d)/\1/X,XXX/
 
 --regex-vim=/^(COMMENT: ex-ctags already provides a 'map' tag)/\2/X,XXX/
 --regex-vim=/^DISABLED: [ \t]*(([nvxsoilc]*|)(nore|)map)[ \t]+(<(buffer|silent|special|script|expr|unique)>[ \t]+)*([^ 	]*).*/\6 (\1)/m,mapping/
@@ -35,7 +36,7 @@
 --regex-javascript=/^[ \t]*["']?([a-zA-Z_$][0-9a-zA-Z_$]*)["']?[ \t]*:[ \t]*function\>/\1/f,function/
 --regex-javascript=/^(COMMENT: It used to be:)/\1/X,XXX/
 --regex-javascript=/^DISABLED: [ \t]*(\<[a-zA-Z_$][0-9a-zA-Z_$.]*\>)*[ \t]*=[ \t]*\<function\>/\1/f,function/
---regex-javascript=/^(COMMENT: *** The following should be synced with Coffeescript definitions ***)/\1/X,XXX/
+--regex-javascript=/^(COMMENT: The following should be synced with Coffeescript definitions)/\1/X,XXX/
 --regex-javascript=/^(COMMENT: Express routes: (only if var app is used))/\1/X,XXX/
 --regex-javascript=/^[ \t]*app\.(get|put|post|delete)\([ \t]*["']([^"']+)["']/\2 (\1)/r,route/
 --regex-javascript=/^(COMMENT: Meteor routes (with iron:router):)/\1/X,XXX/
