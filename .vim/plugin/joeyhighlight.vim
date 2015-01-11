@@ -188,13 +188,6 @@ function! Joeyhighlight()
 	"highlight diffChanged term=bold ctermbg=black ctermfg=yellow cterm=bold guibg=DarkYellow guifg=white gui=none
 	"highlight diffLine ctermbg=magenta ctermfg=white guibg=DarkMagenta guifg=white
 
-	" For jfc diffs
-	"syntax keyword difference jDiff @@>>
-	highlight jDiff ctermbg=Magenta ctermfg=White
-
-	" For Mason sources
-	"highlight jComment ctermfg=Yellow guifg=#ffff00
-
 	"" Might belong better in after/syntax/<lang>.vim
 
 	" Haskell:
