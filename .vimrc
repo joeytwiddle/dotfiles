@@ -346,6 +346,10 @@ autocmd VimLeave * silent !stty ixon
 	" :set guifont=Fixed\ Semi-Condensed\ 9
 	" :set guifont=Beeb\ Mode\ One\ 6
 
+	"" Clean is a small fine font for low-res displays:
+	"" It is a bitmap font, so it looks pixelated above 17px or 160pt.
+	" :set guifont=-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv
+	" :set guifont=-schumacher-clean-medium-r-normal-*-*-150-*-*-c-*-iso646.1991-irv
 	"" Good for Debian, a bit naff on Gentoo:
 	" :set guifont=Monospace\ 8
 	"" Good for Gentoo, missing on Debian:
@@ -394,13 +398,15 @@ autocmd VimLeave * silent !stty ixon
 		" :set guifont=Clean\ 8
 		"" Also with screen fonts, you have the option of using LucidaTypewriter, like Console but with sharp edges.  The only problem is that at size 8 its bold is weak: the chars are very slightly wider but no thicker.  At size 10 it is quite passable.
 		" :set guifont=LucidaTypewriter\ Medium\ 8
-		" TODO for Mac:
+		" TODO for Mac (_system_name is not always set; it is created by rvm):
 		if $_system_name == 'OSX'
 			" Popular, aspect like DejaVu Sans Mono / Liberation / Ubuntu Mono
 			":set guifont=Monaco:h12
 			" But I prefer the shorter one!
 			:set guifont=Menlo\ Regular:h11
 		endif
+		" For Windows:
+		":set guifont=LucidaTypewriter\ 8
 		" Hide the menu and toolbar which I never use.
 		:set guioptions-=m
 		:set guioptions-=T
