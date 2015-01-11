@@ -954,11 +954,14 @@ autocmd VimLeave * silent !stty ixon
 
 		call vam#ActivateAddons(vamAddons, {'auto_install' : 1})
 
+		" Or activate addons while showing progress
+		" The conclusion was that this completed very quickly!
+		" Probably the actual loading of scripts happens after this file has finished, and that is why we observe no delay here.
 		"let len = len(vamAddons)
 		"let i = 0
 		"while i < len
 			"let plugin = vamAddons[i]
-			"echo "Sourcing plugin ".(i+1)."/".len.": ".plugin
+			"echon "\rSourcing plugin ".(i+1)."/".len.": ".plugin."                    "
 			"call vam#ActivateAddons([plugin], {'auto_install' : 1})
 			"let i += 1
 		"endwhile
