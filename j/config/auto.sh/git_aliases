@@ -104,11 +104,16 @@ alias gdf='git diff --stat'
 alias gdc='gd --cached'
 
 alias ga='git add -v'
+# I often like to do git commit -a, and wonder why there is no equivalent git add -a.  In fact there is, but the flag is -u!
+alias gau='git add -u'
+alias gaa='gau'
 #alias gc='git commit'
 alias gc='git commit -v'
 alias gca='gc --amend'
 alias gcm='gc -m'
-alias gcam='gc -m'
+# Hmm but sometimes I might mean -a instead of --amend.  The only reason I chose `a` to mean `--amend` instead of `-a` is because `--amend` is long!
+alias gcam='gca -m'
+# I never used this, I prefer -p
 #alias gci='git commit --interactive'
 # -p "patch" allows us to choose which hunks to add or commit
 alias gap='ga -p'
@@ -512,6 +517,9 @@ gdv() {
 	git diff | vim_for_git_logs_from_stdin
 }
 
+# To delete local branches which have been merged into master:
+#   git branch --merged master | grep -v "\* master" | xargs -n 1 git branch -d
+
 git_branch_status() {
     # Original: https://gist.github.com/Mark-Booth/5058384
     # This version by Joeytwiddle
@@ -718,21 +726,24 @@ git_get_current_branch() {
 #}
 
 git_list_all_tracked_files() {
-	git ls-files
+	# Accept a branch name or commit id
+	local tree_arg=''
+	if [ -n "$1" ]
+	then tree_arg="--with-tree=$1"
+	fi
+	git ls-files $tree_arg
 	# Does not work on bare repos.
 }
 
-git_find_branch_start_commit() {
+# Previously called: git_find_branch_start_commit
+# Could also be called: git_find_common_commit
+git_find_base_commit() {
 	local other_branch current_branch
 
 	# It is more likely we want to compare the current branch against an alternative, than to compare an alternative against master.  So we accept the alternative first.
 	if [ -n "$1" ]
 	then other_branch="$1"
-	else
-		#other_branch=master
-		#other_branch=origin/master
-		# TODO: This is a hack for my current project.  It should be set as an option, not hard-coded in here.  E.g. GIT_MERGE_BASE_DEFAULT_OTHER_BRANCH_NAME
-		other_branch=v3-master
+	else other_branch=master
 	fi
 
 	# But user may specify the "current" branch second if they wish
@@ -749,8 +760,8 @@ git_find_branch_start_commit() {
 	git merge-base "$other_branch" "$current_branch"
 }
 
-git_find_branch_start() {
-	local commitId=`git_find_branch_start_commit`
+git_show_base_commit() {
+	local commitId=`git_find_base_commit "$@"`
 
 	if [ -n "$commitId" ]
 	then
