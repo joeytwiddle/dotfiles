@@ -821,6 +821,8 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:kristijanhusak/vim-multiple-cursors") " Doing some nice work on it
 	"let g:multi_cursor_start_key='<F2>'
 	"nnoremap \\r :exec 'MultipleCursorsFind \<'.expand("<cword>").'\>'v
+	" Setting this means the first <Esc> will not exit multiple cursor mode
+	"let g:multi_cursor_exit_from_insert_mode = 0
 	" Note: multiple-cursors appears to conflict with many of my plugins.  But it appears to work if I do the following:
 	"   1. move my .vim/ folder away (May not be needed.)
 	"   2. do not load all of the plugins below (airline.vim grep.vim taglist.vim zoom.vim and sexyscroller.vim)
@@ -831,7 +833,7 @@ autocmd VimLeave * silent !stty ixon
 
 	"call add(vamAddons, "github:koron/nyancat-vim")       " You might need this, but you probably won't
 
-	"call add(vamAddons, "github:scrooloose/syntastic")    " Checks syntax as you are working.  Needs syntax checker for revelant language to be installed separately: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
+	"call add(vamAddons, "github:scrooloose/syntastic")    " Checks syntax as you are working.  Needs syntax checker for relevant language to be installed separately: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
 
 	" https://github.com/bling/vim-airline
 	"call add(vamAddons, "github:bling/vim-airline")        " Cool statusline
