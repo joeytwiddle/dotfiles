@@ -85,9 +85,27 @@ XTerm.*.translations: #override \n\
 #        ~Shift<BtnUp>:                  select-end(PRIMARY, CUT_BUFFER0) \n\
 #        Shift<BtnUp>:                   select-end(CLIPBOARD, CUT_BUFFER1)
 
-# Just experimenting:
-#xterm.*.background: rgb:00/00/00
-#xterm.*.foreground: rgb:dd/dd/dd
+# If you cannot change the foreground or background colors using the settings below, you may want to check whether xterm was invoked with -fg and -bg.
+
+# By default Ubuntu makes blue and red a little bit desaturated.
+# But here we have...
+# Full saturation:
+#xterm.*.color0:      #000000
+#xterm.*.color1:      #c00000
+#xterm.*.color2:      #00c000
+#xterm.*.color3:      #c0c000
+#xterm.*.color4:      #0000c0
+#xterm.*.color5:      #c000c0
+#xterm.*.color6:      #00c0c0
+#xterm.*.color7:      #c0c0c0
+#xterm.*.color8:      #c0c0c0
+#xterm.*.color9:      #ff0000
+#xterm.*.color10:     #00ff00
+#xterm.*.color11:     #ffff00
+#xterm.*.color12:     #0000ff
+#xterm.*.color13:     #ff00ff
+#xterm.*.color14:     #00ffff
+#xterm.*.color15:     #ffffff
 # I didn't much like this guy's colour scheme:
 #xterm.*.color0:     rgb:00/00/00
 #xterm.*.color1:     rgb:d3/62/65
