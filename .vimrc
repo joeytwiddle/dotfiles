@@ -920,6 +920,9 @@ autocmd VimLeave * silent !stty ixon
 	" Open all menus with useful stuff
 	nnoremap <silent> <leader>j :Unite -silent -start-insert menu:all menu:git<CR>" WIP:
 
+	"call add(vamAddons,"github:dahu/vimple")             " ...
+	"call add(vamAddons,"github:dahu/VimFindsMe")         " Edit args, edit options containing lists, cd into relevant folders
+
 	call add(vamAddons,"github:ap/vim-css-color")        " Colour backgrounds of color codes in CSS files
 
 	" Some colorschemes:
