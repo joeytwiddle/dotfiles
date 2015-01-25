@@ -228,17 +228,6 @@ autocmd VimLeave * silent !stty ixon
 		"\ 'file': '\..*\.sw.$',
 		"\ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
 
-	"nmap <C-a> :AsyncFinder<Enter>
-	" I usually have RepeatLast enabled.  If so, this works much better:
-	"nmap <C-a> q:AsyncFinder<Enter>
-	" Or the following is smart enough to decide for us.  BUG: The `normal q` part fails on an empty buffer with error: "E749: empty buffer"
-	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
-	let g:asyncfinder_initial_pattern = '**'
-	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets','*/.meteor/local/*','deploy_TMP']"
-	",'pikto'
-	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
-	"nmap <C-a> :find *
-
 	" Neither of these really worked how I wanted.  How about SkyBison?
 	nmap <C-d> :e **/*<C-k>
 	" This becomes a nice tool for selection but it is slow at the root of deep trees, especially since we have no way to exclude folders.
@@ -639,7 +628,19 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"github:vim-scripts/yaifa.vim")   " Indent Finder
 	" call add(vamAddons,"github:vim-scripts/vtreeexplorer.vim")   " File Manager (I have this in plugin/ already)
 	" call add(vamAddons,"github:kien/ctrlp.vim")          " Quick file finder (I mapped it to Ctrl-T).  Docs: http://kien.github.io/ctrlp.vim/
+
 	call add(vamAddons,"github:joeytwiddle/asyncfinder.vim")   " Another quick file finder (I mapped it to Ctrl-A).
+	"nmap <C-a> :AsyncFinder<Enter>
+	" I usually have RepeatLast enabled.  If so, this works much better:
+	"nmap <C-a> q:AsyncFinder<Enter>
+	" Or the following is smart enough to decide for us.  BUG: The `normal q` part fails on an empty buffer with error: "E749: empty buffer"
+	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
+	let g:asyncfinder_initial_pattern = '**'
+	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets','*/.meteor/local/*','deploy_TMP']"
+	",'pikto'
+	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
+	"nmap <C-a> :find *
+
 	call add(vamAddons,"github:tpope/vim-fugitive")      " Git helper uses copen a lot, and allows editing indexes.  :Glog :Ggrep
 	call add(vamAddons,"github:gregsexton/gitv")         " Addon to fugitive, with range :Gitv!
 	"call add(vamAddons,"github:airblade/vim-gitgutter")  " Git meta-info about each line (in left-hand signs column (the gutter), or the background color of each line)
