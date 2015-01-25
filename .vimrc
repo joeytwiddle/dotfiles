@@ -656,19 +656,30 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:dahu/vimple")             " Get the buffers as a list
 	"call add(vamAddons,"github:Raimondi/vim-buffalo")    " Buffer switcher - requires vimple
 	call add(vamAddons,"surround")                        " Change dict(mykey) to dict[mykey] with cs([ delete with ds( or create with ysiw[
-	" Interesting: source folder's vimrc file for different settings in specific projects
-	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
+
 	"call add(vamAddons,"github:tpope/vim-markdown")       " More recent version of the syntax file bundled with Vim.
-	"call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
-	"let g:vim_markdown_folding_disabled=1
-	call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
+	"call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
+	" The last time I tried, both of the above had trouble with lone '_'s which GitHub markdown was not interpreting as italics.
+	" - tpope's highlighted them as errors (red)
+	" - jtratner's interpreted them as italics even when GitHub did not!
+	" plasticboy's has no such issue:
+	call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
+	let g:vim_markdown_folding_disabled=1
+	silent! hi link mkdCode Preproc
+
 	" This will start a new browser window for realtime markdown preview: https://github.com/vim-scripts/instant-markdown.vim
+
 	"call add(vamAddons,"github:dahu/bisectly")            " Wow!  A useful and light-hearted way to track down a bug to a specific plugin
+
 	call add(vamAddons,"unimpaired")                      " Various next/previous keybinds on ]<key> and [<key>
+
 	call add(vamAddons,"github:tristen/vim-sparkup")      " Expand Zen/Jade-like snippets into HTML
 	let g:sparkupExecuteMapping = '<C-]>'
 	let g:sparkupNextMapping = '<C-]>n'   " The default <C-n> messes with my <Tab> mappings
 	let g:sparkupMappingInsertModeOnly = 1
+
+	" Interesting: source folder's vimrc file for different settings in specific projects
+	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
 	call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
 
 	call add(vamAddons,"github:vim-scripts/Align")        " Line up words across lines with :Align <character>
