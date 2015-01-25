@@ -22,16 +22,16 @@
 #xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
 #xterm.*.font: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
 xterm.*.font: -*-lucidatypewriter-medium-*-*-*-13-*-*-*-*-*-*-*
-xterm*background: #000000
-xterm*foreground: #ffffff
-xterm*cursorColor: #ffdd44
-#xterm*pointerColor: #ffee99
-xterm*pointerColor: #666666
-xterm*pointerColorBackground: #ffffff
-xterm*jumpScroll: false
-xterm*fastScroll: true
+xterm.*.background: #000000
+xterm.*.foreground: #ffffff
+xterm.*.cursorColor: #ffdd44
+#xterm.*.pointerColor: #ffee99
+xterm.*.pointerColor: #666666
+xterm.*.pointerColorBackground: #ffffff
+xterm.*.jumpScroll: false
+xterm.*.fastScroll: true
 ## This may work:
-# XTerm*faceName: Liberation Mono
+# XTerm.*.faceName: Liberation Mono
 #xterm.*.faceSize2: 11
 ## 1=unreadable, 2=tiny, 3=small, 4=medium, 5=large, 7=huge
 xterm.*.font2: -*-lucidatypewriter-medium-*-*-*-9-*-*-*-*-*-*-*
@@ -44,15 +44,15 @@ xterm.*.font6: -*-lucidatypewriter-medium-*-*-*-17-*-*-*-*-*-*-*
 # http://lukas.zapletalovi.com/2013/07/hidden-gems-of-xterm.html
 # Shows how to reconfigure keybinds, and where to find default settings (just list the files in xterm package).
 
-#XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+#XTerm.*.charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 # This doesn't let me drag over spaces:
-#XTerm*on2Clicks: regex [[:alnum:]./_-~\+%@]+
+#XTerm.*.on2Clicks: regex [[:alnum:]./_-~\+%@]+
 # Select links with double click (procol optional to catch files too):
-#XTerm*on3Clicks: regex ([[:alpha:]]+://)?([[:alnum:]!#+,./=?@_~-]|(%[[:xdigit:]][[:xdigit:]]))+
+#XTerm.*.on3Clicks: regex ([[:alpha:]]+://)?([[:alnum:]!#+,./=?@_~-]|(%[[:xdigit:]][[:xdigit:]]))+
 # The existing difficulty with double-click (with or without drag) is that I often don't want to cross ':'s except when I am trying to select a hyperlink, then I do.  It would be great if we could cross ':'s only when we can see it's a hyperlink, e.g. '://' or '(known_protocol)://'
 
 # On Ctrl-Shift-O, open the currently highlighted link:
-#*XTerm*translations: #override Ctrl Shift <Key>o: exec-formatted("browse '%t'", PRIMARY)
+#*XTerm.*.translations: #override Ctrl Shift <Key>o: exec-formatted("browse '%t'", PRIMARY)
 # You could also bind this to `Ctrl Shift <Btn1Up>` but you still need to select the link first!
 # It would be really nice to open the word under the cursor.
 # Instead of assuming a link, we could check if the thing is a file, and use xdg-open if so.  But that is unlikely to work, because the terminal doesn't know the shell's CWD (it might even be on a remote machine!).
@@ -60,13 +60,13 @@ xterm.*.font6: -*-lucidatypewriter-medium-*-*-*-17-*-*-*-*-*-*-*
 # But that message is annoying enough to make me disable it.  =/
 
 # Press Ctrl-/ to open scrollback in less in a new xterm window
-#XTerm*printerCommand: xterm -T History -e sh -c 'less -r <&3' 3<&0
-#XTerm*translations: #override Ctrl <Key>slash: print-everything()
+#XTerm.*.printerCommand: xterm -T History -e sh -c 'less -r <&3' 3<&0
+#XTerm.*.translations: #override Ctrl <Key>slash: print-everything()
 # This works despite xterm saying: Warning: Actions not found: print-everything
 
 # Sidenote: If you want to combine multiple translation statements, you need to do something like:
 #           Although I wonder if we could just skip #override to add additional rules.
-#XTerm*translations: #override \n\
+#XTerm.*.translations: #override \n\
 #  Ctrl <Key>slash: print-everything() \n\
 #  Shift <Btn1Up>: exec-formatted("google-chrome '%t'", PRIMARY)
 
@@ -124,24 +124,23 @@ XTerm.*.translations: #override \n\
 #xterm.*.color15:    rgb:ff/ff/ff
 # Strangely I couldn't change my foreground color with foreground, 7, 15 or 255!
 # Oh, that's because I fixed them on the commandline with -bg and -fg
-# These are what Vim recommends.  They might be even closer to the defaults:
-#XTerm*color0:			#000000
-#XTerm*color1:			#c00000
-#XTerm*color2:			#008000
-#XTerm*color3:			#808000
-#XTerm*color4:			#0000c0
-#XTerm*color5:			#c000c0
-#XTerm*color6:			#008080
-#XTerm*color7:			#c0c0c0
-#XTerm*color8:			#808080
-#XTerm*color9:			#ff6060
-#XTerm*color10:			#00ff00
-#XTerm*color11:			#ffff00
-#XTerm*color12:			#8080ff
-#XTerm*color13:			#ff40ff
-#XTerm*color14:			#00ffff
-#XTerm*color15:			#ffffff
-#Xterm*cursorColor:		Black
+# These are what Vim recommends.  But some of them (e.g. green) are significantly more dull than usual.
+#xterm.*.color0:			#000000
+#xterm.*.color1:			#c00000
+#xterm.*.color2:			#008000
+#xterm.*.color3:			#808000
+#xterm.*.color4:			#0000c0
+#xterm.*.color5:			#c000c0
+#xterm.*.color6:			#008080
+#xterm.*.color7:			#c0c0c0
+#xterm.*.color8:			#808080
+#xterm.*.color9:			#ff6060
+#xterm.*.color10:			#00ff00
+#xterm.*.color11:			#ffff00
+#xterm.*.color12:			#8080ff
+#xterm.*.color13:			#ff40ff
+#xterm.*.color14:			#00ffff
+#xterm.*.color15:			#ffffff
 
 ## For coloured man-pages:
 ## From: http://bugs.gentoo.org/184604
