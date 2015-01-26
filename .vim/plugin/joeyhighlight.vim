@@ -73,6 +73,14 @@ function! Joeyhighlight()
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#660066 guifg=white
 	"" This is what I prefer, but I may have been using the above to ensure b/w terminals get reverse?
 	highlight Visual ctermbg=Magenta ctermfg=White cterm=bold gui=none guibg=#660066 guifg=white
+	"" New orange!  (In GUI and hicolor term only)
+	"highlight Visual guibg=#ee9900 guifg=white
+	highlight Visual guibg=#cc7700 guifg=white
+	" Dark orange might allow us to keen syntax highlight, but it looks dirty brown
+	"highlight Visual guibg=#554400
+	if &t_Co >= 256
+		hi Visual ctermbg=214
+	endif
 	"highlight Comment ctermfg=Magenta guifg=#80a080 " green-grey
 	"highlight Comment ctermfg=DarkMagenta guifg=LightMagenta
 	"highlight Comment ctermfg=DarkMagenta guifg=#d080d0
@@ -302,8 +310,20 @@ function! Joeyhighlight()
 	hi Pmenusel ctermbg=black ctermfg=white cterm=bold guibg=#000066 guifg=white gui=bold
 
 	highlight CursorLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
-	highlight clear CursorColumn
-	highlight link CursorColumn CursorLine
+	" But if possible, I prefer it a dark green
+	highlight CursorLine guibg=#338833
+	if &t_Co >= 256
+		"highlight CursorLine ctermbg=darkgreen
+		highlight CursorLine ctermbg=28
+	endif
+	"highlight clear CursorColumn
+	"highlight link CursorColumn CursorLine
+	highlight CursorColumn term=reverse cterm=none ctermbg=darkmagenta ctermfg=none guibg=darkmagenta
+	" But if possible, I prefer is a subtle grey
+	highlight CursorColumn guibg=#444444
+	if &t_Co >= 256
+		highlight CursorColumn ctermbg=238
+	endif
 
 	" highlight MyTagListFileName cterm=bold ctermbg=darkgray ctermfg=white gui=bold guibg=black guifg=white
 	" highlight link MyTagListFileName MBENormal

@@ -228,17 +228,6 @@ autocmd VimLeave * silent !stty ixon
 		"\ 'file': '\..*\.sw.$',
 		"\ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
 
-	"nmap <C-a> :AsyncFinder<Enter>
-	" I usually have RepeatLast enabled.  If so, this works much better:
-	"nmap <C-a> q:AsyncFinder<Enter>
-	" Or the following is smart enough to decide for us.  BUG: The `normal q` part fails on an empty buffer with error: "E749: empty buffer"
-	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
-	let g:asyncfinder_initial_pattern = '**'
-	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets','*/.meteor/local/*','deploy_TMP']"
-	",'pikto'
-	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
-	"nmap <C-a> :find *
-
 	" Neither of these really worked how I wanted.  How about SkyBison?
 	nmap <C-d> :e **/*<C-k>
 	" This becomes a nice tool for selection but it is slow at the root of deep trees, especially since we have no way to exclude folders.
@@ -642,7 +631,19 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"github:vim-scripts/yaifa.vim")   " Indent Finder
 	" call add(vamAddons,"github:vim-scripts/vtreeexplorer.vim")   " File Manager (I have this in plugin/ already)
 	" call add(vamAddons,"github:kien/ctrlp.vim")          " Quick file finder (I mapped it to Ctrl-T).  Docs: http://kien.github.io/ctrlp.vim/
+
 	call add(vamAddons,"github:joeytwiddle/asyncfinder.vim")   " Another quick file finder (I mapped it to Ctrl-A).
+	"nmap <C-a> :AsyncFinder<Enter>
+	" I usually have RepeatLast enabled.  If so, this works much better:
+	"nmap <C-a> q:AsyncFinder<Enter>
+	" Or the following is smart enough to decide for us.  BUG: The `normal q` part fails on an empty buffer with error: "E749: empty buffer"
+	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
+	let g:asyncfinder_initial_pattern = '**'
+	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets','*/.meteor/local/*','deploy_TMP']"
+	",'pikto'
+	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
+	"nmap <C-a> :find *
+
 	call add(vamAddons,"github:tpope/vim-fugitive")      " Git helper uses copen a lot, and allows editing indexes.  :Glog :Ggrep
 	call add(vamAddons,"github:gregsexton/gitv")         " Addon to fugitive, with range :Gitv!
 	"call add(vamAddons,"github:airblade/vim-gitgutter")  " Git meta-info about each line (in left-hand signs column (the gutter), or the background color of each line)
@@ -658,20 +659,32 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:dahu/vimple")             " Get the buffers as a list
 	"call add(vamAddons,"github:Raimondi/vim-buffalo")    " Buffer switcher - requires vimple
 	call add(vamAddons,"surround")                        " Change dict(mykey) to dict[mykey] with cs([ delete with ds( or create with ysiw[
-	" Interesting: source folder's vimrc file for different settings in specific projects
-	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
+
 	"call add(vamAddons,"github:tpope/vim-markdown")       " More recent version of the syntax file bundled with Vim.
-	"call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
-	"let g:vim_markdown_folding_disabled=1
-	call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
+	"call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
+	" The last time I tried, both of the above had trouble with lone '_'s which GitHub markdown was not interpreting as italics.
+	" - tpope's highlighted them as errors (red)
+	" - jtratner's interpreted them as italics even when GitHub did not!
+	" plasticboy's has no such issue:
+	call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
+	let g:vim_markdown_folding_disabled=1
+	silent! hi link mkdCode Preproc
+
 	" This will start a new browser window for realtime markdown preview: https://github.com/vim-scripts/instant-markdown.vim
+
 	"call add(vamAddons,"github:dahu/bisectly")            " Wow!  A useful and light-hearted way to track down a bug to a specific plugin
+
 	call add(vamAddons,"unimpaired")                      " Various next/previous keybinds on ]<key> and [<key>
+
 	"call add(vamAddons,"github:LFDM/vim-hopper")          " Could be an interesting way to get around - goes modal; requires submode
+
 	call add(vamAddons,"github:tristen/vim-sparkup")      " Expand Zen/Jade-like snippets into HTML
 	let g:sparkupExecuteMapping = '<C-]>'
 	let g:sparkupNextMapping = '<C-]>n'   " The default <C-n> messes with my <Tab> mappings
 	let g:sparkupMappingInsertModeOnly = 1
+
+	" Interesting: source folder's vimrc file for different settings in specific projects
+	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
 	call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
 
 	call add(vamAddons,"github:vim-scripts/Align")        " Line up words across lines with :Align <character>
@@ -912,6 +925,9 @@ autocmd VimLeave * silent !stty ixon
 	nnoremap <silent> <leader>g :Unite -silent -start-insert menu:git<CR>
 	" Open all menus with useful stuff
 	nnoremap <silent> <leader>j :Unite -silent -start-insert menu:all menu:git<CR>" WIP:
+
+	"call add(vamAddons,"github:dahu/vimple")             " ...
+	"call add(vamAddons,"github:dahu/VimFindsMe")         " Edit args, edit options containing lists, cd into relevant folders
 
 	call add(vamAddons,"github:ap/vim-css-color")        " Colour backgrounds of color codes in CSS files
 

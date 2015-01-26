@@ -690,11 +690,22 @@ map <Leader><Leader><Leader>W <Plug>(easymotion-flash-bd-W)
 inoremap <S-Enter> <Esc>O
 " In Xterm, both <S-Enter> and <C-Enter> reach Vim as <Enter>, so we cannot use this.
 
-" Find line easily from High/Middle/Low keys (a far better mnemonic than Home/Middle/Last in the docs)
-nmap <silent> H H:set relativenumber<CR>
-nmap <silent> M M:set relativenumber<CR>
-nmap <silent> L L:set relativenumber<CR>
-autocmd CursorHold * set norelativenumber
+" relativenumber is useful if we are about to make a jump
+" Position screen about cursor
+" Unfortunately these fire CursorHold shortly afterwards, even though the cursor didn't move!
+nmap <silent> zt zt:set relativenumber cursorcolumn cursorline<CR>
+nmap <silent> zz zz:set relativenumber cursorcolumn cursorline<CR>
+nmap <silent> zb zb:set relativenumber cursorcolumn cursorline<CR>
+" Entering Visual mode
+nnoremap <silent> v :set relativenumber cursorcolumn<CR>v
+nnoremap <silent> gv :set relativenumber cursorcolumn<CR>gv
+nnoremap <silent> V :set relativenumber<CR>V
+nnoremap <silent> <C-q> :set relativenumber cursorcolumn<CR><C-q>
+" Jump to High/Middle/Low of screen (the documented mnemonic is Home/Middle/Last)
+nmap <silent> H H:set relativenumber cursorline<CR>
+nmap <silent> M M:set relativenumber cursorline<CR>
+nmap <silent> L L:set relativenumber cursorline<CR>
+autocmd CursorHold * set norelativenumber nocursorcolumn nocursorline
 
 " When writing a :! shell command, the shortcut %<Tab> can be used to insert the current filename.  But the same does not work when writing a standard Ex : command!
 " This naughty workaround should make it work for both, BUT it will always append to the end of the line, regardless where on the line the cursor was.
