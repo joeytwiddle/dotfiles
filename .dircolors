@@ -37,15 +37,23 @@ TERM Eterm
 # Background color codes:
 # 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
 NORMAL 00       # global default, although everything should be something.
+#RESET 0         # reset to "normal" color
 FILE 01;34      # Unknown/unclassed/unclassified file (blue) - everything we recognise is colored below
 DIR 00;32       # directory (green)
-LINK 01;32      # symbolic link (green)
+LINK 01;32      # symbolic link (green) (If you set this to 'target' instead of a numerical value, the color is as for the file pointed to.)
+#MULTIHARDLINK 00 # regular file with more than one link
 FIFO 40;33      # pipe
 SOCK 01;35      # socket
+#DOOR 01;35      # door
 BLK 40;33;01    # block device driver
 CHR 40;33;01    # character device driver
 ORPHAN 00;31;40 # symlink to nonexistent file (bold red)
-
+#SETUID 37;41    # file that is setuid (u+s)
+#SETGID 30;43    # file that is setgid (g+s)
+#CAPABILITY 30;41 # file with capability
+STICKY_OTHER_WRITABLE 30;43 # dir that is sticky and other-writable (+t,o+w) (yellow)
+OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
+#STICKY 37;44 # dir with the sticky bit set (+t) and not other-writable
 
 # List any file extensions like '.gz' or '.tar' that you would like ls
 # to colorize below. Put the extension, a space, and the color init string.
