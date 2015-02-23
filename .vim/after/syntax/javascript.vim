@@ -128,5 +128,12 @@ syn match javascriptFunctionArgs /\zs[^()]*\ze)/ contained containedin=javascrip
 "   ^^^ normal    ^^^ orange
 
 " For pangloss's highlighting (make 'var' and 'function' cyan like they used to be)
+" This should give us close to what we had before pangloss!
 silent! hi link jsStorageClass Identifier
 silent! hi link jsFunction Identifier
+silent! hi link jsFuncName Normal
+silent! hi link jsFuncParens Normal
+silent! hi link jsFuncBraces Identifier
+silent! hi link jsParens Identifier
+silent! hi link jsBraces Identifier
+
