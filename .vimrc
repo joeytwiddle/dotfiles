@@ -922,8 +922,8 @@ autocmd VimLeave * silent !stty ixon
 	nnoremap <silent> <leader>P :Unite -start-insert history/yank<CR>
 	" Trigger the git menu
 	nnoremap <silent> <leader>g :Unite -silent -start-insert menu:git<CR>
-	" Open all menus with useful stuff
-	nnoremap <silent> <leader>j :Unite -silent -start-insert menu:all menu:git<CR>" WIP:
+	" Open all menus with useful stuff (WIP?)
+	nnoremap <silent> <leader>j :Unite -silent -start-insert menu:all menu:git<CR>
 
 	"call add(vamAddons,"github:dahu/vimple")             " ...
 	"call add(vamAddons,"github:dahu/VimFindsMe")         " Edit args, edit options containing lists, cd into relevant folders
