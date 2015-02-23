@@ -221,18 +221,18 @@ nnoremap <C-W>S :vsplit<Enter>
 
 
 
-" Joey's little trick - maybe belongs elsewhere.
 " :e usually clears undo history, so we don't really do :e any more.
 " We delete the contents of the buffer, then read the file in, which
 " is an operation we can undo.  We must delete the top (empty) line also.
-" :map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd
-" BUG: vim still thinks the file is out of sync with the buffer, so if you
-" quit without writing the file, vim complains, which is not how :e behaved.
-":map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
-" Unfortunately the ! in :w! doesn't work
-" But `:checktime | w` may be a solution for that.
-" This is not needed any more.  Recent versions of Vim support undo through
-" file read.
+" Recent versions of Vim support undo through file read.
+if v:version < 703
+	" :map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd
+	" BUG: vim still thinks the file is out of sync with the buffer, so if you
+	" quit without writing the file, vim complains, which is not how :e behaved.
+	map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
+	" Unfortunately the ! in :w! doesn't work
+	" But `:checktime | w` may be a solution for that.
+endif
 
 "" Close the current window on Ctrl-W (like browser tabs).
 "" This overrides a lot of C-w defaults.  Really I want to wait and see if
