@@ -709,7 +709,10 @@ nnoremap <silent> <C-q> :set relativenumber cursorcolumn<CR><C-q>
 nmap <silent> H H:set relativenumber cursorline<CR>
 nmap <silent> M M:set relativenumber cursorline<CR>
 nmap <silent> L L:set relativenumber cursorline<CR>
-autocmd CursorHold * set norelativenumber nocursorcolumn nocursorline
+augroup ClearCursorColumnAndLine
+	autocmd!
+	autocmd CursorHold * set norelativenumber nocursorcolumn nocursorline
+augroup END
 
 " When writing a :! shell command, the shortcut %<Tab> can be used to insert the current filename.  But the same does not work when writing a standard Ex : command!
 " This naughty workaround should make it work for both, BUT it will always append to the end of the line, regardless where on the line the cursor was.
