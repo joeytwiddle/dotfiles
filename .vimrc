@@ -38,6 +38,9 @@ autocmd BufReadPost *.{html,svg,xml,css,scss,less,stylus,js,coffee,erb,jade,blad
 " Also $ can be part of a valid identifier in JS (in fact almost any unicode character can be!):
 autocmd BufReadPost *.{js,coffee} setlocal iskeyword+=$
 
+" I was getting error highlighting on valid braces in SCSS files, because minlines was defaulting to 10!  This should prevent that.
+autocmd BufReadPost *.{scss} syntax sync minlines=200
+
 " At some point undo started working through file-reads.  Given that, I am happier to load changed files automatically.  (Especially useful when peforming git checkout!)
 if v:version >= 703
 	setglobal autoread
