@@ -402,6 +402,8 @@ autocmd VimLeave * silent !stty ixon
 		" Hide the menu and toolbar which I never use.
 		:set guioptions-=m
 		:set guioptions-=T
+		"set guioptions-=r
+		set guioptions-=L
 	endif
 
 
