@@ -38,6 +38,9 @@ autocmd BufReadPost *.{html,svg,xml,css,scss,less,stylus,js,coffee,erb,jade,blad
 " Also $ can be part of a valid identifier in JS (in fact almost any unicode character can be!):
 autocmd BufReadPost *.{js,coffee} setlocal iskeyword+=$
 
+" I was getting error highlighting on valid braces in SCSS files, because minlines was defaulting to 10!  This should prevent that.
+autocmd BufReadPost *.{scss} syntax sync minlines=200
+
 " At some point undo started working through file-reads.  Given that, I am happier to load changed files automatically.  (Especially useful when peforming git checkout!)
 if v:version >= 703
 	setglobal autoread
@@ -402,6 +405,8 @@ autocmd VimLeave * silent !stty ixon
 		" Hide the menu and toolbar which I never use.
 		:set guioptions-=m
 		:set guioptions-=T
+		"set guioptions-=r
+		set guioptions-=L
 	endif
 
 
@@ -923,8 +928,8 @@ autocmd VimLeave * silent !stty ixon
 	nnoremap <silent> <leader>P :Unite -start-insert history/yank<CR>
 	" Trigger the git menu
 	nnoremap <silent> <leader>g :Unite -silent -start-insert menu:git<CR>
-	" Open all menus with useful stuff
-	nnoremap <silent> <leader>j :Unite -silent -start-insert menu:all menu:git<CR>" WIP:
+	" Open all menus with useful stuff (WIP?)
+	nnoremap <silent> <leader>j :Unite -silent -start-insert menu:all menu:git<CR>
 
 	"call add(vamAddons,"github:dahu/vimple")             " ...
 	"call add(vamAddons,"github:dahu/VimFindsMe")         " Edit args, edit options containing lists, cd into relevant folders

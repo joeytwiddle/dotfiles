@@ -221,18 +221,18 @@ nnoremap <C-W>S :vsplit<Enter>
 
 
 
-" Joey's little trick - maybe belongs elsewhere.
 " :e usually clears undo history, so we don't really do :e any more.
 " We delete the contents of the buffer, then read the file in, which
 " is an operation we can undo.  We must delete the top (empty) line also.
-" :map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd
-" BUG: vim still thinks the file is out of sync with the buffer, so if you
-" quit without writing the file, vim complains, which is not how :e behaved.
-":map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
-" Unfortunately the ! in :w! doesn't work
-" But `:checktime | w` may be a solution for that.
-" This is not needed any more.  Recent versions of Vim support undo through
-" file read.
+" Recent versions of Vim support undo through file read.
+if v:version < 703
+	" :map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd
+	" BUG: vim still thinks the file is out of sync with the buffer, so if you
+	" quit without writing the file, vim complains, which is not how :e behaved.
+	map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
+	" Unfortunately the ! in :w! doesn't work
+	" But `:checktime | w` may be a solution for that.
+endif
 
 "" Close the current window on Ctrl-W (like browser tabs).
 "" This overrides a lot of C-w defaults.  Really I want to wait and see if
@@ -705,7 +705,10 @@ nnoremap <silent> <C-q> :set relativenumber cursorcolumn<CR><C-q>
 nmap <silent> H H:set relativenumber cursorline<CR>
 nmap <silent> M M:set relativenumber cursorline<CR>
 nmap <silent> L L:set relativenumber cursorline<CR>
-autocmd CursorHold * set norelativenumber nocursorcolumn nocursorline
+augroup ClearCursorColumnAndLine
+	autocmd!
+	autocmd CursorHold * set norelativenumber nocursorcolumn nocursorline
+augroup END
 
 " When writing a :! shell command, the shortcut %<Tab> can be used to insert the current filename.  But the same does not work when writing a standard Ex : command!
 " This naughty workaround should make it work for both, BUT it will always append to the end of the line, regardless where on the line the cursor was.
@@ -802,8 +805,8 @@ nmap <C-S-Left>  <C-w><
 nmap <C-S-Right> <C-w>>
 
 " This may help to cleanup window sizes are resizing the Vim window.
-nmap ]= :exec "resize ".(&lines-20)<CR>:exec "vert resize ".(&columns-31)<CR>
-nmap [= :exec "resize ".(&lines-10)<CR>:exec "vert resize ".(&columns-31)<CR>
+nmap ]= :exec "resize ".(&lines-10)<CR>:exec "vert resize ".(&columns-31)<CR>
+nmap [= :exec "resize ".(&lines-20)<CR>:exec "vert resize ".(&columns-31)<CR>
 " The -31 is for when TagList is open with width 30.
 " TODO: But what about when the file browser is open too?!
 

@@ -104,6 +104,8 @@ function! Joeysyntax()
 	"" Narrow (comment immediately followed by lower-case char)
 	"syntax match    naffComment /^\s*\(#\|"\|\/\/\)\([a-z0-9:]\).*/  contains=confTodo contains=shTodo
 	"" Slightly broader (any comment not followed by a space)
+	"" TODO: We really need to define this separately for each filetype.
+	""       Lines leading with # in CSS/LESS/SCSS files are not comments!
 	syntax match    naffComment /^\s*\(#\|"\|\/\/\)[^ ].*/ contains=confTodo contains=shTodo
 	syntax match notNaffComment /^\s*\(#\|"\|\/\/\) .*/    contains=confTodo contains=shTodo
 	hi naffComment ctermfg=darkblue guifg=#666666 gui=none
