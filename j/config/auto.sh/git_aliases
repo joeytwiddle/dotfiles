@@ -286,14 +286,15 @@ alias gwinpf='glf $(git_guess_upstream_branch)..HEAD'
 # Git What Is Not Pushed Diff
 alias gwinpd='gd $(git_guess_upstream_branch)..HEAD'
 
-# Git To Push
-alias gtp='gwinp'
-# Git To Push Log
-alias gtpl='gwinpd'
-# Git To Push Files (often works poorly since it compares against FETCH_HEAD)
-alias gtpf='git topush'
-# Git To Push Details / Diff (a direct diff, without listing each commit)
-alias gtpd='gd FETCH_HEAD..HEAD'
+# Shortcuts I never used
+## Git To Push
+#alias gtp='gwinp'
+## Git To Push Log
+#alias gtpl='gwinpd'
+## Git To Push Files (often works poorly since it compares against FETCH_HEAD)
+#alias gtpf='git topush'
+## Git To Push Details / Diff (a direct diff, without listing each commit)
+#alias gtpd='gwinpd'
 
 # Git What Is Not Merged
 alias gwinm='gll HEAD..$(git_guess_upstream_branch)'
