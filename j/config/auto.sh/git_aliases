@@ -17,6 +17,7 @@
 # Powerful tools:
 #
 #   gwinp "git what is not pushed" lists commits on local branch not yet pushed
+#   gwinm "git what is not merged" lists new commits from remote not yet merged
 #
 #   gbs [-M] [.] is "git branch status", a nice way to see which branches are
 #       up-to-date with the remote (which need a push and which need a pull).
@@ -290,6 +291,13 @@ alias gtpl='gwinpd'
 alias gtpf='git topush'
 # Git To Push Details / Diff (a direct diff, without listing each commit)
 alias gtpd='gd FETCH_HEAD..HEAD'
+
+# Git What Is Not Merged
+alias gwinm='gll HEAD..$(git_guess_upstream_branch)'
+# Git What Is Not Merged Details
+alias gwinmd='gl HEAD..$(git_guess_upstream_branch)'
+# Git What Is Not Merged Files
+alias gwinmf='glf HEAD..$(git_guess_upstream_branch)'
 
 alias gss='git stash save'
 #alias gsp='git stash pop'
