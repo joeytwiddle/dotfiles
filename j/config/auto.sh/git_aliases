@@ -279,10 +279,13 @@ update_cindex() {
 # Git What Is Not Pushed (doesn't always work - I use gbs more often)
 #alias gwinp='gll @{upstream}..HEAD'
 alias gwinp='gll $(git_guess_upstream_branch)..HEAD'
-# Git What Is Not Pushed Details
-alias gwinpd='gl $(git_guess_upstream_branch)..HEAD'
+# Git What Is Not Pushed Log
+alias gwinpl='gl $(git_guess_upstream_branch)..HEAD'
 # Git What Is Not Pushed Files
 alias gwinpf='glf $(git_guess_upstream_branch)..HEAD'
+# Git What Is Not Pushed Diff
+alias gwinpd='gd $(git_guess_upstream_branch)..HEAD'
+
 # Git To Push
 alias gtp='gwinp'
 # Git To Push Log
@@ -294,10 +297,12 @@ alias gtpd='gd FETCH_HEAD..HEAD'
 
 # Git What Is Not Merged
 alias gwinm='gll HEAD..$(git_guess_upstream_branch)'
-# Git What Is Not Merged Details
-alias gwinmd='gl HEAD..$(git_guess_upstream_branch)'
+# Git What Is Not Merged Log
+alias gwinml='gl HEAD..$(git_guess_upstream_branch)'
 # Git What Is Not Merged Files
 alias gwinmf='glf HEAD..$(git_guess_upstream_branch)'
+# Git What Is Not Merged Diff
+alias gwinmd='gd HEAD..$(git_guess_upstream_branch)'
 
 alias gss='git stash save'
 #alias gsp='git stash pop'
