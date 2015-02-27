@@ -17,6 +17,7 @@
 # Powerful tools:
 #
 #   gwinp "git what is not pushed" lists commits on local branch not yet pushed
+#   gwinm "git what is not merged" lists new commits from remote not yet merged
 #
 #   gbs [-M] [.] is "git branch status", a nice way to see which branches are
 #       up-to-date with the remote (which need a push and which need a pull).
@@ -121,7 +122,7 @@ alias gci='git commit --interactive'
 alias gap='ga -p'
 alias gcp='gc -p'
 
-alias gf='git fetch'
+alias gf='git fetch -v'
 alias gp='git pull'
 alias gpr='git pull --rebase'
 alias gpp='git pull --rebase && git push'
@@ -155,7 +156,7 @@ gitlog() {
 		git -c color.ui=always log "$@" |
 		#less -R +'/^(commit|diff).*' -X
 		# Needed when using --graph and -p
-		less -R +'/((^|\*[ |]*)commit .*|(^|\| +)diff --git.*)'
+		less -R +'/((^|\*[ |]*)commit .*|(^|\| +)diff --(git|combined).*)'
 	else git log "$@"
 	fi
 	# BUG TODO: The --git may show as --combined when using gl -c, so change it for just -- after the pending merge.
@@ -278,18 +279,31 @@ update_cindex() {
 # Git What Is Not Pushed (doesn't always work - I use gbs more often)
 #alias gwinp='gll @{upstream}..HEAD'
 alias gwinp='gll $(git_guess_upstream_branch)..HEAD'
-# Git What Is Not Pushed Details
-alias gwinpd='gl $(git_guess_upstream_branch)..HEAD'
+# Git What Is Not Pushed Log
+alias gwinpl='gl $(git_guess_upstream_branch)..HEAD'
 # Git What Is Not Pushed Files
 alias gwinpf='glf $(git_guess_upstream_branch)..HEAD'
-# Git To Push
-alias gtp='gwinp'
-# Git To Push Log
-alias gtpl='gwinpd'
-# Git To Push Files (often works poorly since it compares against FETCH_HEAD)
-alias gtpf='git topush'
-# Git To Push Details / Diff (a direct diff, without listing each commit)
-alias gtpd='gd FETCH_HEAD..HEAD'
+# Git What Is Not Pushed Diff
+alias gwinpd='gd $(git_guess_upstream_branch)..HEAD'
+
+# Shortcuts I never used
+## Git To Push
+#alias gtp='gwinp'
+## Git To Push Log
+#alias gtpl='gwinpd'
+## Git To Push Files (often works poorly since it compares against FETCH_HEAD)
+#alias gtpf='git topush'
+## Git To Push Details / Diff (a direct diff, without listing each commit)
+#alias gtpd='gwinpd'
+
+# Git What Is Not Merged
+alias gwinm='gll HEAD..$(git_guess_upstream_branch)'
+# Git What Is Not Merged Log
+alias gwinml='gl HEAD..$(git_guess_upstream_branch)'
+# Git What Is Not Merged Files
+alias gwinmf='glf HEAD..$(git_guess_upstream_branch)'
+# Git What Is Not Merged Diff
+alias gwinmd='gd HEAD..$(git_guess_upstream_branch)'
 
 alias gss='git stash save'
 #alias gsp='git stash pop'
@@ -487,18 +501,18 @@ git_guess_upstream_branch() {
 vim_for_git_logs() {
 	# Our mappings use z<CR> to scroll so the cursor is at the top of the window after n/N search
 	# I tried setting scrolljump=-99 and got a screen jump when going of the bottom, but only half when going off the top.
-	vim_exe=vim
-	#vim_exe=gvim
+	local vim_exe=vim
+	#local vim_exe=gvim
 	"$vim_exe" +'setlocal nomodified nomodifiable filetype=git foldmethod=syntax foldcolumn=2' \
-	    +'/^\(commit\|diff --git\) .*' \
+	    +'/^\(commit\|diff --git\|diff --combined\) .*' \
 	    +'normal gg' \
 	    +'highlight clear Search' \
-	    +'set scrolloff=0' \
 	    +'"When seeking, scroll destination line to top of screen' \
-	    +'nmap n nz<CR>' \
-	    +'nmap N Nz<CR>' \
+	    +'set scrolloff=0' \
+	    +'nnoremap n nzt' \
+	    +'nnoremap N Nzt' \
 	    +'"But when the user performs a custom search, undo the above mappings' \
-	    +'nmap / :nunmap n<CR>:nunmap N<CR>:nunmap /<CR>/' \
+	    +'nnoremap / :nunmap n<CR>:nunmap N<CR>:nunmap /<CR>/' \
 	    "$@"
 	    #+'set nohlsearch' \
 }
