@@ -5,6 +5,8 @@
 "" previous line!
 "" BUG: I saw it failing badly, wrapping up lots of folds of only 2 lines, and wrapping folds inside folds.  Could be my v or n mapping has confused it.
 "" TODO: Solve it by using some logical Vimscript instead of a dodgy macro.
+"" TODO: How about this? :setlocal foldexpr=getline(v:lnum)=~@/?0:1 foldmethod=expr
+""       From here: http://vi.stackexchange.com/questions/2280/show-only-matching-lines
 let g:FoldSearch_Context = 0
 function! FoldSearch()
 	set foldmethod=manual
