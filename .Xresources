@@ -123,22 +123,22 @@ XTerm.*.translations: #override \n\
 #xterm.*.color13:    rgb:ef/9e/be
 #xterm.*.color14:    rgb:71/be/be
 #xterm.*.color15:    rgb:ff/ff/ff
-# This is pretty close to the defaults, although light cyan is a bit lighter, and light blue a bit darker
+# This is pretty close to the defaults, but with a slightly lighter bright red and bright blue, and slightly darker darks.
 #xterm.*.color0:     rgb:22/22/22
-#xterm.*.color1:     rgb:cc/00/00
-#xterm.*.color2:     rgb:00/cc/00
-#xterm.*.color3:     rgb:cc/cc/00
-#xterm.*.color4:     rgb:00/00/cc
-#xterm.*.color5:     rgb:cc/00/cc
-#xterm.*.color6:     rgb:00/cc/cc
+#xterm.*.color1:     rgb:ff/00/00
+#xterm.*.color2:     rgb:00/dd/00
+#xterm.*.color3:     rgb:dd/dd/00
+#xterm.*.color4:     rgb:00/00/ff
+#xterm.*.color5:     rgb:ee/00/ee
+#xterm.*.color6:     rgb:00/dd/dd
 #xterm.*.color7:     rgb:dd/dd/dd
 #xterm.*.color8:     rgb:66/66/66
-#xterm.*.color9:     rgb:ff/66/44
-#xterm.*.color10:    rgb:66/ff/44
-#xterm.*.color11:    rgb:ff/ff/66
-#xterm.*.color12:    rgb:66/44/ff
-#xterm.*.color13:    rgb:ff/66/ff
-#xterm.*.color14:    rgb:66/ff/ff
+#xterm.*.color9:     rgb:ff/33/33
+#xterm.*.color10:    rgb:00/ff/00
+#xterm.*.color11:    rgb:ff/ff/00
+#xterm.*.color12:    rgb:55/55/ff
+#xterm.*.color13:    rgb:ff/00/ff
+#xterm.*.color14:    rgb:00/ff/ff
 #xterm.*.color15:    rgb:ff/ff/ff
 # Strangely I couldn't change my foreground color with foreground, 7, 15 or 255!
 # Oh, that's because I fixed them on the commandline with -bg and -fg
