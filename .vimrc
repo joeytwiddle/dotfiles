@@ -470,6 +470,13 @@ autocmd VimLeave * silent !stty ixon
 	au BufRead,BufNewFile {/usr/share/X11/xkb/*} set ft=c
 	au BufRead,BufNewFile {*.md}                 set ft=markdown
 
+	" View (and save) rich document files in Vim:
+	"autocmd BufReadPost *.odt :%!odt2txt %
+	autocmd BufReadPost  *.docx :%!pandoc -f docx     -t markdown | set readonly
+	autocmd BufWritePost *.docx :!pandoc  -f markdown -t docx     % > /tmp/tmp.docx
+	autocmd BufReadPost  *.odt  :%!pandoc -f odt      -t markdown | set readonly
+	autocmd BufWritePost *.odt  :!pandoc  -f markdown -t odt      % > /tmp/tmp.odt
+
 	"" I need to update some of my highlights for 256 color mode, so I'm not using it at the moment.
 	"" Re-enabled for dim_inactive_windows
 	if $TERM != "linux" && $TERM != "screen"
@@ -928,7 +935,7 @@ autocmd VimLeave * silent !stty ixon
 	"call add(vamAddons,"github:dahu/vimple")             " ...
 	"call add(vamAddons,"github:dahu/VimFindsMe")         " Edit args, edit options containing lists, cd into relevant folders
 
-	call add(vamAddons,"github:ap/vim-css-color")        " Colour backgrounds of color codes in CSS files
+	call add(vamAddons,"github:ap/vim-css-color")        " Colour the backgrounds of colour codes in CSS and Vim files
 
 	" Some colorschemes:
 	call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
@@ -937,9 +944,11 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"github:sickill/vim-monokai")     " Forces t_Co=256, appears more faithful to Sublime
 	"call add(vamAddons,"github:tomasr/molokai")          " Supports 256 colors when available, less faithful to Sublime
 	"let g:molokai_original = 0                           " Makes some changes, but does not help much.
-	call add(vamAddons,"github:29decibel/codeschool-vim-theme") " Clear, clean pastels
+	"call add(vamAddons,"github:29decibel/codeschool-vim-theme") " Clear, clean pastels
 	"call add(vamAddons,"github:Lokaltog/vim-distinguished") " Understated, a bit more earthy/dirty compared to codeschool
 	"call add(vamAddons,"github:Slava/vim-colors-tomorrow") " Solarized options but with tomorrow theme
+	"call add(vamAddons,"github:romainl/Apprentice")      "  A colorscheme as subtle, gentle and pleasant as its creator isn't.  Like Solarized and codeschool, I find it a bit too subtle.
+
 	"call add(vamAddons,"github:flazz/vim-colorschemes")  " A large collection, includes codeschool
 	"call add(vamAddons,"github:rodnaph/vim-color-schemes") " A collection, includes leo
 	                                                        " leo is based on primary colors; it is a bit strong.  version 1 .0 here: http://www.vim.org/scripts/script.php?script_id=2156
