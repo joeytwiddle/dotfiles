@@ -465,7 +465,8 @@ nmap <Leader>i <Leader>f<C-w><Right><Leader>t
 "nnoremap <Leader>k :setlocal iskeyword=65-127<Enter>
 
 " Toggle the paste option (annoying that this doesn't show the current state)
-nmap <Leader>p :set invpaste<Enter>
+nnoremap <Leader>p :set invpaste<CR>:set paste?<CR>
+" Alternatively, try the builtin ]p which pastes at the current level of indentation!
 
 " Toggle (and display) diff settings
 nmap <Leader>d :set fdc=0 invdiff diff?<CR>:let &l:scrollbind = &l:diff<CR>
@@ -690,8 +691,9 @@ map <Leader><Leader><Leader>W <Plug>(easymotion-flash-bd-W)
 inoremap <S-Enter> <Esc>O
 " In Xterm, both <S-Enter> and <C-Enter> reach Vim as <Enter>, so we cannot use this.
 
+" There is a plugin that does the below: github:b3niup/numbers
 " relativenumber is useful if we are about to make a jump
-" Position screen about cursor
+" Position screen about cursor (so cursor appears at top/middle/button)
 " Unfortunately these fire CursorHold shortly afterwards, even though the cursor didn't move!
 nmap <silent> zt zt:set relativenumber cursorcolumn cursorline<CR>
 nmap <silent> zz zz:set relativenumber cursorcolumn cursorline<CR>
@@ -860,4 +862,13 @@ nnoremap <Leader>vcb :<C-U>call ContiguousVBlock()<CR>
 
 " Quick thesaurus lookup (actually dictionary lookup)
 nnoremap <Leader>T :!dict <cword><CR>
+
+" When writing large chunks of text, Vim's undo may be considered too coarsely grained.  We can use <C-g>u to tell Vim to break the undo sequence.
+inoremap <CR> <C-G>u<CR>
+inoremap . <C-G>u.
+inoremap ! <C-G>u!
+inoremap ? <C-G>u?
+inoremap ( <C-G>u(
+inoremap ) <C-G>u)
+inoremap , <C-G>u,
 

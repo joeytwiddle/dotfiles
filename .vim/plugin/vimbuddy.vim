@@ -108,7 +108,10 @@ endfunction
 
 if exists('*ShowGitStatus')
   "let &statusline = substitute(&statusline, '%f', '%{ShowGitStatus()}%f', '')
-  let &statusline = substitute(&statusline, '%f', '%{ShowCurrentGitBranch()}%f%{ShowGitStatusForBuffer(" [","]")}', '')
+  "let &statusline = substitute(&statusline, '%f', '%{ShowCurrentGitBranch()}%f%{ShowGitStatusForBuffer(" [","]")}', '')
+  " If we want to color only the things inside the brackets, then we must always show the brackets.
+  highlight StatusGitStatus cterm=bold,reverse ctermfg=white ctermbg=magenta guifg=white guibg=magenta
+  let &statusline = substitute(&statusline, '%f', '%{ShowCurrentGitBranch()}%f [%#StatusGitStatus#%{ShowGitStatusForBuffer("","")}%##]', '')
 endif
 
 
