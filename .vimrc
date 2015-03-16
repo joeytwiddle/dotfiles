@@ -317,6 +317,16 @@ autocmd VimLeave * silent !stty ixon
 	" :set titlestring=\=%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ [%P]%)
 	"" It will only make things worse.  :p
 
+	"" From: http://vi.stackexchange.com/questions/2572/detect-os-in-vimscript
+	if !exists("g:os")
+		if has("win64") || has("win32") || has("win16")
+			let g:os = "Windows"
+		else
+			let g:os = substitute(system('uname'), '\n', '', '')
+		endif
+	endif
+	" Possible results: "Darwin", "Windows", "Linux"
+
 	" if has("gui_kde")
 	" 	set guifont=Courier\ 10\ Pitch/10/-1/5/50/0/0/0/1/0
 	" endif
@@ -390,8 +400,10 @@ autocmd VimLeave * silent !stty ixon
 		" :set guifont=Clean\ 8
 		"" Also with screen fonts, you have the option of using LucidaTypewriter, like Console but with sharp edges.  The only problem is that at size 8 its bold is weak: the chars are very slightly wider but no thicker.  At size 10 it is quite passable.
 		" :set guifont=LucidaTypewriter\ Medium\ 8
-		" TODO for Mac (_system_name is not always set; it is created by rvm):
-		if $_system_name == 'OSX'
+		" For Mac
+		" (_system_name is not always set; it is created by rvm):
+		"if $_system_name == 'OSX'
+		if g:os == "Darwin"
 			" Popular, aspect like DejaVu Sans Mono / Liberation / Ubuntu Mono
 			":set guifont=Monaco:h12
 			" But I prefer the shorter one!
@@ -399,9 +411,9 @@ autocmd VimLeave * silent !stty ixon
 			" But even more I prefer to install Lucida Console and then use that:
 			":set guifont=Lucida\ Console:h11
 			:set guifont=Envy\ Code\ Squat:h13
+		elseif g:os == "Windows"
+			:set guifont=LucidaTypewriter\ 8
 		endif
-		" For Windows:
-		":set guifont=LucidaTypewriter\ 8
 		" Hide the menu and toolbar which I never use.
 		:set guioptions-=m
 		:set guioptions-=T
