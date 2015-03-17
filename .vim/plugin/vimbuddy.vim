@@ -72,7 +72,9 @@ function! ShowGitStatusForBuffer(...)
     let full_file_path = resolve(expand('%:p'))
     " Of the two chars returned, I believe the first is staged status, while the second is file vs HEAD.
     " I think the user might not be interested in staged status, therefore in future I might modify this to display only the second char.
-    let b:last_checked_buffers_git_status_value = s:CleanSystemCall('git status --porcelain '.shellescape(full_file_path))[0:1]
+    let parent_folder = fnamemodify(full_file_path, ":h")
+    let git_status_cmd = "cd " . shellescape(parent_folder) . " && git status --porcelain ".shellescape(full_file_path)
+    let b:last_checked_buffers_git_status_value = s:CleanSystemCall(git_status_cmd)[0:1]
     " When the file is up-to-date with HEAD, git status returns nothing.
     " But if nothing is displayed, it looks like the tool is not working, and the status is ambiguous.
     " So we prefer to display two empty spaces instead of nothing.  (I also considered [ =] but this is non-standard so may be confusing.)
