@@ -4,11 +4,9 @@
 ## .Xdefaults: old, reloaded whenever an X app starts, but ignored if RESOURCE_MANAGER property is set
 
 ## Apply changes and test with:
-##   cat ~/.Xresources | grep -v "^#" | xrdb -merge
-## If you need to reset, do this before the above:
-##   xrdb -remove
+##   :! xrdb -remove; cat ~/.Xresources | grep -v "^\#" | xrdb -merge
 ## For testing BD/UL: man xrdb ; top -n 3 (hit 'z' for color)
-## Note: If you are doing that grep from Vim's ! then you must escape the # as \#
+## Note: The # above is escaped as \# so it will work from Vim's :!
 
 # Someone once recommended this:
 #xterm.*.utf8: 1
