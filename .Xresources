@@ -71,9 +71,14 @@ xterm.*.font6: -*-lucidatypewriter-medium-*-*-*-17-*-*-*-*-*-*-*
 #  Shift <Btn1Up>: exec-formatted("google-chrome '%t'", PRIMARY)
 
 # Sometimes I want to paste from the CLIPBOARD, not PRIMARY.
+# Ctrl-Shift-C/V matches gnome-terminal's behaviour.
+# Meta-C/V matches Mac's behaviour.
 XTerm.*.translations: #override \n\
-   Ctrl       <KeyPress> Insert: insert-selection(CLIPBOARD) \n\
-   Ctrl Shift <KeyPress> Insert: insert-selection(CLIPBOARD)
+   Ctrl Shift <KeyPress> Insert: insert-selection(CLIPBOARD) \n\
+   Ctrl Shift <KeyPress> v: insert-selection(CLIPBOARD) \n\
+   Ctrl Shift <KeyPress> c: copy-selection(CLIPBOARD) \n\
+   Meta <KeyPress> v: insert-selection(CLIPBOARD) \n\
+   Meta <KeyPress> c: copy-selection(CLIPBOARD)
 
 # To get Cmd-C in Mac OSX:
 #*VT100.translations: #override  Meta <KeyPress> V:  insert-selection(PRIMARY, CUT_BUFFER0) \n
