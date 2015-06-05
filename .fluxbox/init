@@ -91,7 +91,7 @@ session.screen0.toolbar.maxOver:	false
 session.screen0.toolbar.onTop:	false
 session.screen0.toolbar.onhead:	0
 session.screen0.toolbar.placement:	LeftCenter
-session.screen0.toolbar.tools:	workspacename, prevworkspace, nextworkspace, iconbar, systemtray, prevwindow, nextwindow, clock
+session.screen0.toolbar.tools:	RootMenu, workspacename, prevworkspace, nextworkspace, iconbar, prevwindow, nextwindow, systemtray, clock
 session.screen0.toolbar.visible:	true
 session.screen0.toolbar.widthPercent:	82
 session.screen0.tooltipDelay:	500
