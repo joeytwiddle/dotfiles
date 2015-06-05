@@ -157,6 +157,8 @@ OnTitlebar Double Mouse1 :Lower
 # OnTitlebar Double Mouse1 :MacroCmd {Lower} {PrevWindow {groups}}
 # OnTitlebar Double Mouse1 :MacroCmd {Lower} {PrevWindow {groups} (stuck=no) (shaded=no) (minimized=no)}
 # OnTitlebar Mouse2 :Lower
+## When I don't have a middle mouse button, I rather have tabbing than shade.
+OnTitlebar Mouse3 :StartTabbing
 OnTitlebar Mouse3 :Shade
 # OnTitlebar Double Mouse3 :WindowMenu
 # OnTitlebar Mod1 Mouse3 :WindowMenu
