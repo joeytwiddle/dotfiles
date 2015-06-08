@@ -382,6 +382,8 @@ autocmd VimLeave * silent !stty ixon
 			"" I know you have come back here to switch away from Lucida Console.  Don't!
 			"" Now I have stopped using lightdm, all my fonts are appearing differently.  Lucida looks how I want it in GVim yay!
 			:set guifont=Lucida\ Console\ 8
+		elseif $SHORTHOST == "tomato"
+			:set guifont=Lucida\ Console\ 10
 		endif
 		"" If I want to go smaller than Lucida 8...
 		"" Droid Sans Mono can go very small; it is rather fuzzy, but it is even smaller than Clean!
