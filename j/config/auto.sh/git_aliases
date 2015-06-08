@@ -233,7 +233,16 @@ alias glw='gl --word-diff=color'
 # "Git Log Stats/Summary" - Just file stats, no diffs.  BUG: Not grey, because glg uses glp which does -p (diffs)!
 alias gls='gitlog --stat'
 # "Git Log Files" - Compressed version of "Git Log Stats"
-alias glf='glc --stat'
+#alias glf='glc --stat'
+# New version allows easy n/N searching.  Could be merged with gitlog.
+gitlog2() {
+	if [ "$1" = "-search" ]
+	then search="$2"; shift; shift
+	else search='^$'
+	fi
+	glc "$@" | less -R +"/$search"
+}
+alias glf='gitlog2 -search "^[^ ]+" --stat'
 # With glf, we can walk commmits with /^[^ ]+
 # Just commit info, one per line
 
