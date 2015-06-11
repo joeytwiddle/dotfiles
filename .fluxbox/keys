@@ -159,7 +159,7 @@ OnTitlebar Double Mouse1 :Lower
 # OnTitlebar Mouse2 :Lower
 ## When I don't have a middle mouse button, I rather have tabbing than shade.
 OnTitlebar Mouse3 :StartTabbing
-OnTitlebar Mouse3 :Shade
+#OnTitlebar Mouse3 :Shade
 # OnTitlebar Double Mouse3 :WindowMenu
 # OnTitlebar Mod1 Mouse3 :WindowMenu
 OnTitlebar Control Mouse3 :WindowMenu
@@ -377,7 +377,7 @@ Control Mod4 KP_Down :ForEach {MoveUp -1} {{groups}}
 # Mod4 KP_Multiply :HorizontalIncrement
 # Mod4 KP_Subtract :VerticalDecrement
 # Mod4 KP_Add :VerticalIncrement
-## Mmm problem.  xterms require +/-4, other apps require +/-12
+## These values could be larger if it wasn't for XTerm, which interprets +/-N as characters not pixels.
 Mod4 KP_Multiply :Resize +8 0
 Mod4 KP_Divide :Resize -8 0
 Mod4 KP_Add :Resize 0 +8
@@ -467,12 +467,16 @@ Mod4 KP_7 :ExecCommand put_current_xwindow nw
 Mod4 KP_8 :ExecCommand put_current_xwindow top
 Mod4 KP_9 :ExecCommand put_current_xwindow ne
 
-Mod1 Mod4 Up :ExecCommand put_current_xwindow top
-Mod1 Mod4 Left :ExecCommand put_current_xwindow sw
-Mod1 Mod4 Right :ExecCommand put_current_xwindow se
-Mod1 Mod4 Down :ExecCommand put_current_xwindow bottom
-Mod1 Mod4 Delete :ExecCommand put_current_xwindow center
-Mod1 Mod4 BackSpace :ExecCommand put_current_xwindow nw
+Mod1 Mod4 Up :ExecCommand put_current_xwindow top_edge
+Mod1 Mod4 Left :ExecCommand put_current_xwindow left_edge
+Mod1 Mod4 Right :ExecCommand put_current_xwindow right_edge
+Mod1 Mod4 Down :ExecCommand put_current_xwindow bottom_edge
+Mod1 Mod4 BackSpace :ExecCommand put_current_xwindow center
+Mod1 Mod4 Delete :ExecCommand put_current_xwindow nw
+Mod1 Mod4 Shift Right :MoveRight +25
+Mod1 Mod4 Shift Left :MoveRight -25
+Mod1 Mod4 Shift Up :MoveUp +25
+Mod1 Mod4 Shift Down :MoveUp -25
 
 ## Basic tiling - really sucks with kicker panels or gkrellm running.
 Control Mod1 a :ToggleCmd {ArrangeWindows (Stuck=no)} {ArrangeWindowsHorizontal (Stuck=no)} {ArrangeWindowsVertical (Stuck=no)}
