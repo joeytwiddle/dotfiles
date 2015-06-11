@@ -869,10 +869,16 @@ nnoremap <Leader>T :!dict <cword><CR>
 
 " When writing large chunks of text, Vim's undo may be considered too coarsely grained.  We can use <C-g>u to tell Vim to break the undo sequence.
 inoremap <CR> <C-G>u<CR>
-inoremap . <C-G>u.
-inoremap ! <C-G>u!
-inoremap ? <C-G>u?
+"inoremap . <C-G>u.
+"inoremap ! <C-G>u!
+"inoremap ? <C-G>u?
 inoremap ( <C-G>u(
 inoremap ) <C-G>u)
-inoremap , <C-G>u,
+"inoremap , <C-G>u,
+
+" The default definitions for - and + might be good for navigation, but I never found myself using them.
+" So here I remap them to do what other apps do with Ctrl-Minus and Ctrl-Shift-Plus: change font size.
+" I suspect Vim cannot tell the difference between Minus and Ctrl-Minus.
+nnoremap - :ZoomOut<CR>
+nnoremap + :ZoomIn<CR>
 
