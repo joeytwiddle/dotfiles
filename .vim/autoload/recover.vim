@@ -88,7 +88,7 @@ fu! s:CheckRecover() "{{{1
 	    if exists("g:recover_delete_swapfile_if_identical") && g:recover_delete_swapfile_if_identical   " Added by Joey
 		let p = 2
 		echo "Auto-deleting identical swapfile..."
-		sleep 2
+		sleep 1
 	    else
 		let p = confirm("No differences: Delete old swap file '".b:swapname."'?",
 			\ "&No\n&Yes", 2)
@@ -111,7 +111,7 @@ fu! s:CheckRecover() "{{{1
 	    if !allWentWell
 		"echo "Recovery threw an error!  Probably not this: " . v:errmsg
 		echo "Recovery threw an error!"
-		sleep 4
+		sleep 2
 		" Well I seem to be getting an error during
 		" recovery for no good reason, but I don't know
 		" what it is.  So let's just assume allWentWell
@@ -120,7 +120,7 @@ fu! s:CheckRecover() "{{{1
 	    endif
 	    if allWentWell && exists("g:recover_delete_swapfile_when_diffing") && g:recover_delete_swapfile_when_diffing
 		echo "Deleting the flipping swapfile"
-		sleep 2
+		sleep 1
 		"" Copied from above; hope it works!
 		" Workaround for E305 error
 		let v:swapchoice=''
