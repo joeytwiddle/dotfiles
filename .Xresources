@@ -18,8 +18,8 @@
 #xterm.*.font: -*-terminus-bold-r-*-*-16-*-*-*-*-*-*-*
 #xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
 #xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
-#xterm.*.font: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
-xterm.*.font: -*-lucidatypewriter-medium-*-*-*-13-*-*-*-*-*-*-*
+xterm.*.font: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
+#xterm.*.font: -*-lucidatypewriter-medium-*-*-*-13-*-*-*-*-*-*-*
 xterm.*.background: #000000
 xterm.*.foreground: #ffffff
 xterm.*.cursorColor: #ffdd44
