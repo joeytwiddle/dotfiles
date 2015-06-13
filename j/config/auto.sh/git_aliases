@@ -16,9 +16,6 @@
 #
 # Powerful tools:
 #
-#   gwinp "git what is not pushed" lists commits on local branch not yet pushed
-#   gwinm "git what is not merged" lists new commits from remote not yet merged
-#
 #   gbs [-M] [.] is "git branch status", a nice way to see which branches are
 #       up-to-date with the remote (which need a push and which need a pull).
 #
@@ -41,6 +38,9 @@
 #
 #   gdv and glv open diffs and logs in Vim, folded, for interactive browsing.
 #
+#   gwinp "git what is not pushed" lists commits on local branch not yet pushed
+#   gwinm "git what is not merged" lists new commits from remote not yet merged
+#
 # I hope these shortcuts and tools will be of use to you.
 #
 # I rarely use the other aliases and functions in this file (except of course
@@ -53,7 +53,7 @@
 
 # If you think this file has too many comments in it, try: :hi Comment guifg=#222222
 
-# TODO: Turn the aliases into shellscripts so they are available from vim's command line?
+# CONSIDER: Turn the aliases into shellscripts so they are available from vim's command line?
 #       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)  jsh modules...
 
 # If you happen to be using oh-my-zsh's git plugin, redefining its aliases will throw warnings, so we undefine them first.
@@ -133,6 +133,8 @@ alias gpp='git pull --rebase && git push'
 alias gmo='verbosely git merge origin/$(git_get_current_branch)'
 # Git Push Origin (this branch)
 alias gpo='verbosely git push origin $(git_get_current_branch)'
+alias gmm='verbosely git merge master'
+alias gmom='verbosely git merge origin/master'
 
 alias gr='git reset'
 alias grh='gr --hard'
@@ -223,7 +225,7 @@ then
 else alias gllm='gll -m --first-parent'
 fi
 # This shows the commits from merged branches (/), but not the merge commits themselves (\).  It takes less space than gll.
-alias gllmm='gll --no-merges'
+alias gllnm='gll --no-merges'
 # Git Log Long No Graph
 alias gllng='glc'
 alias glls='gll --stat'
@@ -354,7 +356,7 @@ fi
 
 # Git Branch by Date
 git_branch_by_date() {
-	local reset_color=`tput sgr0`
+	local reset_color=`tput sgr0 | sed 's/$//'`
 	# Optional
 	local subject_color=`tput setaf 0 ; tput bold`
 	local author_color=`tput setaf 6`
@@ -374,7 +376,8 @@ git_branch_by_date() {
 
 # Git Branch by Date wrapper
 gbd() {
-	local reset_color=`tput sgr0`
+	# In tmux, reset_color gets an extra `^O` on the end, which the terminal ignores, but which will show up if output is piped to less.  It happens when TERM=screen or screen-256color, but it goes away if we set TERM=xterm.  For now we will just strip that trailing `^O` char.
+	local reset_color=`tput sgr0 | sed 's/$//'`
 	local current_branch_color=`git config --get-color color.branch.current green`
 	local branch_color=`git config --get-color color.branch.local white`
 
@@ -438,7 +441,7 @@ gbd() {
 	then
 		# -R=show_colors -X=no_clear -S=chop_long_lines +G=jump_to_end
 		less -R -X -S +G
-		#more -R   (since more=less on Mac; fails on Linux)
+		#more -R   # (since more=less on Mac; fails on Linux)
 	else
 		# -E=quit_at_end (in other words this just chops long lines)
 		less -R -E -X -S +G
@@ -747,9 +750,22 @@ replace_ancestor_markers_with_colors() {
 
 git_get_current_branch() {
 	# symbolic-ref fails during an incomplete rebase with `fatal: ref HEAD is not a symbolic ref`
-	git symbolic-ref --short HEAD
+	# It can also fail on git 1.7 with "unknown option `short`"
+	#git symbolic-ref --short HEAD
 	# rev-parse does not fail, but responds with "HEAD" instead of the branch name.
 	#git rev-parse --abbrev-ref HEAD
+	# So for git 1.7 we do:
+	local current_branch=`git rev-parse --abbrev-ref HEAD`
+	if [ "$current_branch" = HEAD ]
+	then
+		echo "git rev-parse got branch name: HEAD" >&2
+		# Scripts might assume this value is correct.  For them, we make it obvious it is not!
+		echo "__NO_BRANCH_NAME_FOUND__"
+		return 1
+	else
+		echo "$current_branch"
+		return 0
+	fi
 }
 
 #git_list_all_tracked_files_with_meta() {
