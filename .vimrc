@@ -383,7 +383,13 @@ autocmd VimLeave * silent !stty ixon
 			"" Now I have stopped using lightdm, all my fonts are appearing differently.  Lucida looks how I want it in GVim yay!
 			:set guifont=Lucida\ Console\ 8
 		elseif $SHORTHOST == "tomato"
-			:set guifont=Lucida\ Console\ 10
+			" Under Unity WM:
+			":set guifont=Lucida\ Console\ 10
+			" Under Fluxbox WM:
+			:set guifont=Lucida\ Console\ 7
+			" This looks very flat, it looks like it is fitting a lot of rows onto the screen!  (Fluxbox)
+			" However Lucida Console 6 is still clearer and smaller!
+			":set guifont=Envy\ Code\ S11\ 8
 		endif
 		"" If I want to go smaller than Lucida 8...
 		"" Droid Sans Mono can go very small; it is rather fuzzy, but it is even smaller than Clean!
@@ -642,6 +648,7 @@ autocmd VimLeave * silent !stty ixon
 	call add(vamAddons,"github:vim-scripts/yaifa.vim")   " Indent Finder
 	" call add(vamAddons,"github:vim-scripts/vtreeexplorer.vim")   " File Manager (I have this in plugin/ already)
 	" call add(vamAddons,"github:kien/ctrlp.vim")          " Quick file finder (I mapped it to Ctrl-T).  Docs: http://kien.github.io/ctrlp.vim/
+	call add(vamAddons,"github:guns/xterm-color-table.vim")   " Useful for picking colours
 
 	call add(vamAddons,"github:joeytwiddle/asyncfinder.vim")   " Another quick file finder (I mapped it to Ctrl-A).
 	"nmap <C-a> :AsyncFinder<Enter>
@@ -875,6 +882,13 @@ autocmd VimLeave * silent !stty ixon
 	"let g:airline_right_sep = "╲"
 	"let g:airline_left_sep  = "◤"
 	"let g:airline_right_sep = "◥"
+	" None of the above worked on Ubuntu 12.04's Lucida Console under Fluxbox.
+	"let g:airline_left_sep  = '>'
+	"let g:airline_right_sep = '<'
+	"let g:airline_left_sep  = '|'
+	"let g:airline_right_sep = '|'
+	let g:airline_left_sep  = '\'
+	let g:airline_right_sep = '/'
 	"let g:airline_left_sep  = ""
 	"let g:airline_right_sep = ""
 	"let g:airline_powerline_fonts = 1
