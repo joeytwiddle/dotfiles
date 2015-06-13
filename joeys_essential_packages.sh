@@ -5,7 +5,7 @@ packages_remote="openssh-server screen xtightvncviewer x11vnc tightvncserver tmu
 
 #packages_winman="xfstt"   # To get LucidaConsole in GVim!  (See ~/FONTS folder)
 packages_debugging="iotop atop nmap wireshark mesa-utils lmsensors"
-packages_desktop_extended="mplayer gimp inkscape dict-wn zsh wmctrl xdotool"
+packages_desktop_extended="mplayer gimp inkscape dict-wn zsh wmctrl xdotool xosd-bin"
 # libreoffice compizconfig-settings-manager 
 packages_yummy="hugs"   # ghc is also nice, but 290meg!
 
