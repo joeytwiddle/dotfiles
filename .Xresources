@@ -36,7 +36,8 @@ xterm.*.font2: -*-lucidatypewriter-medium-*-*-*-9-*-*-*-*-*-*-*
 xterm.*.font3: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
 xterm.*.font4: -*-lucidatypewriter-medium-*-*-*-13-*-*-*-*-*-*-*
 xterm.*.font5: -*-lucidatypewriter-medium-*-*-*-15-*-*-*-*-*-*-*
-xterm.*.font6: -*-lucidatypewriter-medium-*-*-*-17-*-*-*-*-*-*-*
+#xterm.*.font6: -*-lucidatypewriter-medium-*-*-*-17-*-*-*-*-*-*-*
+xterm.*.font6: -*-terminus-bold-r-*-*-24-*-*-*-*-*-*-*
 #xterm.vt100.font3
 
 # http://lukas.zapletalovi.com/2013/07/hidden-gems-of-xterm.html
