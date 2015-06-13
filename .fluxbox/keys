@@ -395,6 +395,13 @@ Mod1 KP_Multiply :ExecCommand volumeup 9
 Mod1 KP_Divide   :ExecCommand volumedown 9
 Mod1 KP_Add      :ExecCommand volumeup 2
 Mod1 KP_Subtract :ExecCommand volumedown 2
+XF86AudioLowerVolume   :ExecCommand volumedown 5
+XF86AudioRaiseVolume   :ExecCommand volumeup 5
+XF86AudioMute          :ExecCommand setvolume 0
+#F10          :ExecCommand setvolume 0
+F11   :ExecCommand volumedown 5
+F12   :ExecCommand volumeup 5
+## My bbkeysrc uses Alt-Minus and Alt-Plus.
 ## (play)
 # Mod1 KP_1 :ExecCommand xmms -p
 Mod1 KP_1 :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 xmms -p
@@ -472,6 +479,7 @@ Mod1 Mod4 Left :ExecCommand put_current_xwindow left_edge
 Mod1 Mod4 Right :ExecCommand put_current_xwindow right_edge
 Mod1 Mod4 Down :ExecCommand put_current_xwindow bottom_edge
 Mod1 Mod4 BackSpace :ExecCommand put_current_xwindow center
+Mod1 Mod4 Hash :ExecCommand put_current_xwindow center
 Mod1 Mod4 Delete :ExecCommand put_current_xwindow nw
 Mod1 Mod4 Shift Right :MoveRight +25
 Mod1 Mod4 Shift Left :MoveRight -25
@@ -481,3 +489,14 @@ Mod1 Mod4 Shift Down :MoveUp -25
 ## Basic tiling - really sucks with kicker panels or gkrellm running.
 Control Mod1 a :ToggleCmd {ArrangeWindows (Stuck=no)} {ArrangeWindowsHorizontal (Stuck=no)} {ArrangeWindowsVertical (Stuck=no)}
 
+## My old keyboard let me do Ctrl-Fn-Down = Ctrl-PageDown
+## My new keyboard has audio keys on Fn-arrows, so we intercept those:
+Control XF86AudioStop :ExecCommand xdotool key Ctrl_L+PageUp
+Control XF86AudioPlay :ExecCommand xdotool key Ctrl_L+PageDown
+## Oh it seems this won't work.  xev reports that when I press Ctrl-Fn-arrows, weird things come out (Down becomes Left, Left emits nothing, Up becomes Up and Right becomes XF86AudioNext! asus x453m.
+
+## A few Mac keybinds stolen from porridge
+Mod4 Left               :Delay {ExecCommand xdotool key --clearmodifiers ctrl+Left    }  100
+Mod4 Right              :Delay {ExecCommand xdotool key --clearmodifiers ctrl+Right   }  100
+Mod4 Shift Left         :Delay {ExecCommand xdotool key --clearmodifiers shift+ctrl+Left  }  100
+Mod4 Shift Right        :Delay {ExecCommand xdotool key --clearmodifiers shift+ctrl+Right }  100
