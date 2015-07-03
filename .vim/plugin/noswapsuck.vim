@@ -9,6 +9,15 @@
 
 " Issues:
 "
+" Many developers repeat an edit-save-test-edit-save-test loop.  We need to
+" decide whether to close the swapfile on every write, or leave it open.
+"
+" The default behaviour is to keep the swapfile after the file is written, but
+" to close it if the buffer is unfocused and unmodified.  Leaving the swapfile
+" in place will reduce disk writes, which could be a benefit on low-power
+" devices.
+"
+"
 " If you leave g:NoSwapSuck_CloseSwapfileOnWrite at the default 0, the script
 " will not remove the swapfile every time the file is written.  It will
 " however consider closing the swapfile when the buffer goes out of view (on
