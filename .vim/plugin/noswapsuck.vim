@@ -5,33 +5,19 @@
 " up-to-date versions, or new versions of the file.
 "
 " This plugin only enables the swapfile when we start modifying a buffer.
-" After you save the buffer, and move away from the window, the swapfile is removed.
-
+"
+" After saving a buffer, the swapfile will be removed if you unfocus the
+" buffer via a BufLeave or BufWinLeave event.
+"
 " Issues:
 "
-" Many developers repeat an edit-save-test-edit-save-test loop.  We need to
-" decide whether to close the swapfile on every write, or leave it open.
-"
-" The default behaviour is to keep the swapfile after the file is written, but
-" to close it if the buffer is unfocused and unmodified.  Leaving the swapfile
-" in place will reduce disk writes, which could be a benefit on low-power
-" devices.
-"
-"
-" If you leave g:NoSwapSuck_CloseSwapfileOnWrite at the default 0, the script
-" will not remove the swapfile every time the file is written.  It will
-" however consider closing the swapfile when the buffer goes out of view (on
-" the BufLeave or WinLeave event).  The benefit is that we won't keep spamming
-" the disk during the edit-save-edit-save loop (more of a concern on low power
-" devices).  The drawback is that we might get single swapfiles left after a
-" crash, containing a duplicate of the real file.
-"
-" - If you prefer to remove the swapfile on every save, do this before load:
+" - If you prefer to remove the swapfile immediately after each save, do this
+"   before loading:
 "
 "     let g:NoSwapSuck_CloseSwapfileOnWrite = 0
 "
-" - If your workflow involves an edit-save-edit-save loop, this script will
-"   keep creating and destroying the swapfile.
+"   But if your workflow involves an edit-save-edit-save loop, this setting
+"   will keep creating and destroying the swapfile.
 "
 "   That behaviour may be undesirable in the following situations:
 "
@@ -39,12 +25,21 @@
 "   - your drive is very slow (perhaps saving over a network), or
 "   - you are trying to preserve battery.
 "
-" - Because the script sets swapfile in the middle of editing, that is the moment when
-"   it will prompt you if it finds an old swapfile.  Ideally it will prompt
-"   earlier, but that is not always the case.
+" - Because the script sets 'swapfile' in the middle of editing, that is the
+"   moment when it will prompt you if it finds an old swapfile.  Ideally it
+"   will prompt earlier, but that is not always the case.
+
+" TODO:
+" - All options should work at runtime, including Enable and CloseSwapfileOnWrite.
+
+" Options:
 
 " Allows plugin to be enabled/disabled from config and also at runtime.
 let g:NoSwapSuck_Enabled = get(g:, 'NoSwapSuck_Enabled', 1)
+
+if g:NoSwapSuck_Enabled == 0
+  finish
+endif
 
 " When opening a file for the first time, will `:set swapfile` to force Vim to
 " check if there is a swapfile present for that file.
@@ -62,12 +57,6 @@ let g:NoSwapSuck_CreateSwapfileOnInsert = get(g:, 'NoSwapSuck_CreateSwapfileOnIn
 
 " Close (and remove) the swapfile every time the file is written
 let g:NoSwapSuck_CloseSwapfileOnWrite = get(g:, 'NoSwapSuck_CloseSwapfileOnWrite', 0)
-
-
-
-if !g:NoSwapSuck_Enabled
-  finish
-endif
 
 " Doing this here to prevent the initial message "Setting NO swapfile" from
 " triggering a "Press ENTER to continue" message.  If you remove this, you may
