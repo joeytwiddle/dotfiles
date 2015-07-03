@@ -5,11 +5,22 @@
 " up-to-date versions, or new versions of the file.
 "
 " This plugin only enables the swapfile when we start modifying a buffer.
-" After you save the buffer, the swapfile is removed.
+" After you save the buffer, and move away from the window, the swapfile is removed.
 
-" Disadvantages:
+" Issues:
 "
-" - By default this script does not remove the swapfile every time the file is written (although that can be enabled with g:NoSwapSuck_CloseSwapfileOnWrite).  But it will consider closing the swapfile when the buffer goes out of view (on the BufWinLeave event).
+" If you leave g:NoSwapSuck_CloseSwapfileOnWrite at the default 0, the script
+" will not remove the swapfile every time the file is written.  It will
+" however consider closing the swapfile when the buffer goes out of view (on
+" the BufLeave or WinLeave event).  The benefit is that we won't keep spamming
+" the disk during the edit-save-edit-save loop (more of a concern on low power
+" devices).  The drawback is that we might get single swapfiles left after a
+" crash, containing a duplicate of the real file.
+"
+" - If you prefer to remove the swapfile on every save, do this before load:
+"
+"     let g:NoSwapSuck_CloseSwapfileOnWrite = 0
+"
 " - If your workflow involves an edit-save-edit-save loop, this script will
 "   keep creating and destroying the swapfile.
 "
