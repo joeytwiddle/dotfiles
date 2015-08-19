@@ -27,6 +27,10 @@ function! GetSearchStatus(...)
 	if match(mode(),'[nv]') == -1
 		return ""
 	endif
+	" Do nothing if there is no current search term
+	if @/ == ""
+		return ""
+	endif
 	" Only display when the cursor is sitting on the first character of a match
 	let this_line = getline('.')
 	let current_column = col('.')
