@@ -18,7 +18,11 @@
 " files.
 let g:ShowSearchOccurrences_MaxBufferSize = get(g:, 'ShowSearchOccurrences_MaxBufferSize', 1000000)
 
-function! GetSearchStatus()
+let g:ShowSearchOccurrences_InCmdLine = get(g:, 'ShowSearchOccurrences_InCmdLine', 1)
+
+" Optional argument 'long'
+function! GetSearchStatus(...)
+	let long = a:0 > 0 && a:1
 	" Only display when in normal or visual mode
 	if match(mode(),'[nv]') == -1
 		return ""
@@ -50,9 +54,40 @@ function! GetSearchStatus()
 			endif
 			let lnum += 1
 		endwhile
-		return "(".this_index."/".count_matches.") "
+		if long
+			return "On matching line " . this_index . " of " . count_matches
+			"return "On match " . this_index . " of " . count_matches
+		else
+			return "(".this_index."/".count_matches.") "
+		endif
 	else
 		return ""
 	endif
 endfunction
 
+" Alternatively, instead of using the status line, we can display in the command line
+function! s:ShowSearchStatus()
+	if !g:ShowSearchOccurrences_InCmdLine
+		return
+	endif
+	let status = GetSearchStatus(1)
+	if status != ""
+		echo status
+	else
+		" Clear the command line in case we were displaying something that is no longer valid
+		echo
+	endif
+endfunction
+
+" We can trigger it whenever the cursor has moved
+augroup ShowSearchOccurrence
+	autocmd!
+	"autocmd CursorHold * call s:ShowSearchStatus()
+	autocmd CursorMoved * call s:ShowSearchStatus()
+augroup END
+
+" Or we can trigger it only when we perform searches
+"nnoremap <silent> n n:call <SID>ShowSearchStatus()<CR>
+"nnoremap <silent> N N:call <SID>ShowSearchStatus()<CR>
+"nnoremap <silent> * *:call <SID>ShowSearchStatus()<CR>
+"nnoremap <silent> # #:call <SID>ShowSearchStatus()<CR>
