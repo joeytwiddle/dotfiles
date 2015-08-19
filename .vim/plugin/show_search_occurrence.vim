@@ -20,6 +20,8 @@ let g:ShowSearchOccurrences_MaxBufferSize = get(g:, 'ShowSearchOccurrences_MaxBu
 
 let g:ShowSearchOccurrences_InCmdLine = get(g:, 'ShowSearchOccurrences_InCmdLine', 1)
 
+let s:showing_status = 0
+
 " Optional argument 'long'
 function! GetSearchStatus(...)
 	let long = a:0 > 0 && a:1
@@ -77,9 +79,13 @@ function! s:ShowSearchStatus()
 	let status = GetSearchStatus(1)
 	if status != ""
 		echo status
+		let s:showing_status = 1
 	else
-		" Clear the command line in case we were displaying something that is no longer valid
-		echo
+		" If we were displaying something that is no longer valid, clear it
+		if s:showing_status
+			echo
+			let s:showing_status = 0
+		endif
 	endif
 endfunction
 
