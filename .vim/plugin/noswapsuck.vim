@@ -92,7 +92,7 @@ endfunction
 " At startup, turn 'swapfile' on, to check if there is an existing swapfile which needs to be recovered.
 function! s:SetSwapfileToCheck()
   if g:NoSwapSuck_Enabled && g:NoSwapSuck_CheckSwapfileOnLoad
-    if g:NoSwapSuck_Debug | echo "[noswapsuck] Checking swapfile for ".bufname('%') | endif
+    "if g:NoSwapSuck_Debug | echo "[noswapsuck] Checking for swapfile for ".bufname('%') | endif
     setlocal swapfile
   endif
 endfunction
