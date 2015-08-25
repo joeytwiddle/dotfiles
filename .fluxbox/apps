@@ -15,7 +15,6 @@
   [Close]	{yes}
 [end]
 [app] (name=beebem) (class=beebem)
-  [Position]	(UPPERLEFT)	{1% 6%}
   [Close]	{yes}
 [end]
 [app] (name=glslideshow) (class=TopLevelShell)
@@ -63,6 +62,8 @@
  [app] (title=Error Console)
  [app] (title=Browser Console)
  [app] (title=Console - .*)
+  [Dimensions]	{1218 568}
+  [Position]	(UPPERLEFT)	{1 198}
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
