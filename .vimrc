@@ -548,6 +548,7 @@ autocmd VimLeave * silent !stty ixon
 
 
 
+
 " >>> Custom Plugin Loader (ignore scripts in CVS folders) {{{
 
 	" Plugins
@@ -569,6 +570,10 @@ autocmd VimLeave * silent !stty ixon
 " }}}
 
 
+
+" Sometimes we want to load lightweight, without all the extra plugins
+" At the moment, only when git is prompting us for a commit message.
+if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 " >>> Addons (the neat way) {{{
 
@@ -989,6 +994,7 @@ autocmd VimLeave * silent !stty ixon
 
 " }}}
 
+endif
 
 
 " vim: foldmethod=marker foldenable colorcolumn=57
