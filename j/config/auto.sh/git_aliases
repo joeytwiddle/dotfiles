@@ -110,22 +110,29 @@ git_status_plus() {
 		local current_stats_file="${git_root_folder}/.git/git_status_plus.current.$USER.$$"
 		local previous_stats_file="${git_root_folder}/.git/git_status_plus.previous.$USER.$$"
 
-		cd "$git_root_folder"
+		# Passing a path doesn't stop --porcelain from reporting files in higher folders
+		# -uall appears to be the default
+		target_folder="$1"
+		[ -z "$target_folder" ] && target_folder="."
+		(
+			cd "$target_folder"
+			target_folder_from_root="$(git rev-parse --show-prefix)"
+			git status --porcelain -uall "$@" |
+			grep '^?? ' |
+			cut -c 4- |
+			grep "^${target_folder_from_root}"
+		) | (
+			cd "$git_root_folder"
 
-		# -uall 
-		git status --porcelain |
-		grep '^?? ' |
-		cut -c 4- |
-		while read file
-		do
-			# Size and date of file
-			(
-				stats=$( stat -c '%s %X' "$file" )
-				echo "$stats $file"
-				#echo "$stats $file" >&2
-			)
-		done |
-		sort -n -k 2 > "$current_stats_file"
+			while read file
+			do
+				# Size and date of file
+					stats=$( stat -c '%s %Y' "$file" )
+					echo "$stats $file"
+					#echo "$stats $file" >&2
+			done
+		) |
+		sort -n -k 2 -r > "$current_stats_file"
 
 		#diff "$previous_stats_file" "$current_stats_file" |
 		#grep '^>'
@@ -140,14 +147,14 @@ git_status_plus() {
 			curseon="$cursenormal"
 			# We should really convert at least $file to a regexp.
 			# Ah, -F -x can do that for us.
-			if ! grep -x -F "$size $date $file" "$previous_stats_file" >/dev/null 2>&1
+			if ! grep -F -x "$size $date $file" "$previous_stats_file" >/dev/null 2>&1
 			then curseon="$cursehighlight"
 			fi
 			echo "#       ${curseon}${file}${cursereset}"
 		done
 
 		# For debugging:
-		#'cp' -f "$previous_stats_file" "$previous_stats_file".REAL 2>/dev/null
+		'cp' -f "$previous_stats_file" "$previous_stats_file".REAL 2>/dev/null
 
 		'cp' -f "$current_stats_file" "$previous_stats_file" 2>/dev/null
 	) |
