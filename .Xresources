@@ -4,8 +4,9 @@
 !! .Xdefaults: old, reloaded whenever an X app starts, but ignored if RESOURCE_MANAGER property is set
 
 !! Apply changes and test with:
-!!   :! xrdb -remove; cat ~/.Xresources | grep -v "^\#" | xrdb -merge
-!! For testing BD/UL: man xrdb ; top -n 3 (hit 'z' for color)
+!!   :! xrdb -remove; cat ~/.Xresources | xrdb -merge
+!! In Vim, you can copy the command with `0Wy$`, execute it with `:@0` and repeat it with `:@`.
+!! For testing BD/UL: `man xrdb ; top -n 3 (hit 'z' for color)`
 !! Note: The # above is escaped as \# so it will work from Vim's :!
 
 ! Someone once recommended this:
@@ -33,7 +34,7 @@ xterm.*.fastScroll: true
 !xterm.*.faceSize2: 11
 !! 1=unreadable, 2=tiny, 3=small, 4=medium, 5=large, 7=huge
 xterm.*.font2: -*-lucidatypewriter-medium-*-*-*-9-*-*-*-*-*-*-*
-xterm.*.font3: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
+xterm.*.font3: -*-lucidatypewriter-medium-*-*-*-10-*-*-*-*-*-*-*
 xterm.*.font4: -*-lucidatypewriter-medium-*-*-*-13-*-*-*-*-*-*-*
 xterm.*.font5: -*-lucidatypewriter-medium-*-*-*-15-*-*-*-*-*-*-*
 !xterm.*.font6: -*-lucidatypewriter-medium-*-*-*-17-*-*-*-*-*-*-*
@@ -58,11 +59,6 @@ xterm.*.font6: -*-terminus-bold-r-*-*-24-*-*-*-*-*-*-*
 ! This works despite xterm saying: Warning: Actions not found: exec-formatted
 ! But that message is annoying enough to make me disable it.  =/
 
-! Press Ctrl-/ to open scrollback in less in a new xterm window
-!XTerm.*.printerCommand: xterm -T History -e sh -c 'less -r <&3' 3<&0
-!XTerm.*.translations: #override Ctrl <Key>slash: print-everything()
-! This works despite xterm saying: Warning: Actions not found: print-everything
-
 ! Sidenote: If you want to combine multiple translation statements, you need to do something like:
 !           Although I wonder if we could just skip #override to add additional rules.
 !XTerm.*.translations: #override \n\
@@ -77,7 +73,13 @@ XTerm.*.translations: #override \n\
    Ctrl Shift <KeyPress> v: insert-selection(CLIPBOARD) \n\
    Ctrl Shift <KeyPress> c: copy-selection(CLIPBOARD) \n\
    Meta <KeyPress> v: insert-selection(CLIPBOARD) \n\
-   Meta <KeyPress> c: copy-selection(CLIPBOARD)
+   Meta <KeyPress> c: copy-selection(CLIPBOARD) \n\
+   Ctrl <Key>slash: print-everything()
+
+! The print-everything() above maps Ctrl-/ to open the scrollback for searching in a new xterm
+! Here we decide to open it with less, but we could have chosen vim.
+XTerm.*.printerCommand: xterm -T History -e sh -c 'less -r <&3' 3<&0
+! This works despite xterm saying: Warning: Actions not found: print-everything
 
 ! To get Cmd-C in Mac OSX:
 !*VT100.translations: #override  Meta <KeyPress> V:  insert-selection(PRIMARY, CUT_BUFFER0) \n
