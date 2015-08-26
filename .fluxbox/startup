@@ -36,9 +36,11 @@
 #exec 1> ~/jsh.log
 #exec 2> ~/jsh.error
 
+# You can probably read the fb-startup logs in ~/.xsession-errors
+
 if [ -z "$JPATH" ]
 then
-	echo "Starting jsh before Fluxbox"
+	echo "[fb-startup] Loading jsh before starting Fluxbox" >&2
 	export JPATH="$HOME/j"
 	. "$JPATH"/startj
 fi
@@ -52,20 +54,42 @@ fi
 # wmsmixer -w &
 # idesk &
 
-#randomwallpaper &
-. "$HOME"/.joeys_x_essentials
-
-bbkeys &
-lxpanel &
-gkrellm &
-
 (
-  sleep 2
-  xscreensaver -no-splash &
-  sleep 2
-  /opt/trinity/bin/kicker &
-  sleep 2   # Longer delay will put it in lxpanel?
-  nm-applet &
+
+	sleep 1   # Focus on starting fluxbox
+
+	# Start an xterm.  That is what the user (joey) wants.  Other things can run in parallel.
+	xterm &
+
+	echo "[fb-startup] Running .joeys_x_essentials" >&2
+
+	#randomwallpaper &
+	# I used to source (.) this but:
+	# - If it exits, then this script will stop executing and Fluxbox won't start!
+	# - We don't need it, because it doesn't export any VARS at the moment.
+	bash "$HOME"/.joeys_x_essentials
+
+	echo "[fb-startup] Starting apps" >&2
+
+	sleep 1
+
+	bbkeys &
+	gkrellm &
+
+	sleep 2
+
+	lxpanel &
+	/opt/trinity/bin/kicker &
+
+	# If we wait longer, the nm-applet will be placed in the lxpanel instead of the Flubbox panel.
+	sleep 2
+
+	nm-applet &
+
+	sleep 2
+
+	xscreensaver -no-splash &
+
 ) &
 
 # And last but not least we start fluxbox.
