@@ -1,42 +1,6 @@
-
-#cat $HOME/.my_x_settings 
-cat $HOME/.Xresources | grep -v "^#" | xrdb -merge
-if [ -f "$HOME/.Xresources.local" ]
-then cat $HOME/.Xresources.local | grep -v "^#" | xrdb -merge
-fi
-
-# E.g. if you wanted to switch to GB keyboard layout, you could put the following in that file:
-#setxkbmap -print gb | xkbcomp - "$DISPLAY"
-if [ -f "$HOME"/.custom_keyboard_settings ]
-then . "$HOME"/.custom_keyboard_settings
-fi
-
-# /usr/bin/synclient can be found in the xserver-xorg-input-synaptics package
-
-# If for some reason your OS didn't already enable multi-touch scrolling for you:
-synclient VertTwoFingerScroll=1     # Ubuntu gave me default 1
-synclient HorizTwoFingerScroll=1    # Ubuntu gave me default 0
-
-# "Natural Scrolling" direction for OSX victims.  Applies to mousewheel and touchpad (edge and two-finger scrolling)
-synclient VertScrollDelta=-111
-synclient HorizScrollDelta=-111
-
-# You can even disable scrolling when you drag on the edge of the touchpad if you find it annoying
-synclient VertEdgeScroll=0
-synclient HorizEdgeScroll=0
-
-# Disabled.  This used to work on Debian but now getting issues on Ubuntu 12.04.
-# Although it did give me a nice big I over xterms and a large hand over links, over normal windows and Fluxox desktop it showed me a huge X instead of a nice large arrow.
-if [ -d $HOME/X11_big_cursor ] && false
-then
-	jshinfo "Initialising big cursor."
-	xset fp+ $HOME/X11_big_cursor
-	xset fp rehash
-	xsetroot -cursor_name X_cursor
-fi
-
 # set +x
 ## Animated intro, and/or set background:
+## We start this as early as possible, to hide the default background
 (
 
 	animatedIntro=1
@@ -91,8 +55,46 @@ fi
 	# randomwallpaper
 
 ) &
-
 # set -x
+
+
+sleep 1
+
+#cat $HOME/.my_x_settings 
+cat $HOME/.Xresources | grep -v "^#" | xrdb -merge
+if [ -f "$HOME/.Xresources.local" ]
+then cat $HOME/.Xresources.local | grep -v "^#" | xrdb -merge
+fi
+
+# E.g. if you wanted to switch to GB keyboard layout, you could put the following in that file:
+#setxkbmap -print gb | xkbcomp - "$DISPLAY"
+if [ -f "$HOME"/.custom_keyboard_settings ]
+then . "$HOME"/.custom_keyboard_settings
+fi
+
+# /usr/bin/synclient can be found in the xserver-xorg-input-synaptics package
+
+# If for some reason your OS didn't already enable multi-touch scrolling for you:
+synclient VertTwoFingerScroll=1     # Ubuntu gave me default 1
+synclient HorizTwoFingerScroll=1    # Ubuntu gave me default 0
+
+# "Natural Scrolling" direction for OSX victims.  Applies to mousewheel and touchpad (edge and two-finger scrolling)
+synclient VertScrollDelta=-111
+synclient HorizScrollDelta=-111
+
+# You can even disable scrolling when you drag on the edge of the touchpad if you find it annoying
+synclient VertEdgeScroll=0
+synclient HorizEdgeScroll=0
+
+# Disabled.  This used to work on Debian but now getting issues on Ubuntu 12.04.
+# Although it did give me a nice big I over xterms and a large hand over links, over normal windows and Fluxox desktop it showed me a huge X instead of a nice large arrow.
+if [ -d $HOME/X11_big_cursor ] && false
+then
+	jshinfo "Initialising big cursor."
+	xset fp+ $HOME/X11_big_cursor
+	xset fp rehash
+	xsetroot -cursor_name X_cursor
+fi
 
 ## From fluxbox's xinitrc howto:
 # turn off screen blanking
