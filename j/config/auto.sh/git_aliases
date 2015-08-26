@@ -105,10 +105,12 @@ git_status_plus() {
 		echo '#   (use "git add <file>..." to include in what will be committed)'
 		echo "#"
 
-		local current_stats_file="/tmp/git_status_plus.current.$USER.$$"
-		local previous_stats_file="/tmp/git_status_plus.previous.$USER.$$"
-
 		local git_root_folder=$(git rev-parse --show-toplevel)
+
+		local current_stats_file="${git_root_folder}/.git/git_status_plus.current.$USER.$$"
+		local previous_stats_file="${git_root_folder}/.git/git_status_plus.previous.$USER.$$"
+
+		cd "$git_root_folder"
 
 		# -uall 
 		git status --porcelain |
@@ -118,12 +120,12 @@ git_status_plus() {
 		do
 			# Size and date of file
 			(
-				cd "$git_root_folder"
 				stats=$( stat -c '%s %X' "$file" )
 				echo "$stats $file"
 				#echo "$stats $file" >&2
 			)
-		done > "$current_stats_file"
+		done |
+		sort -n -k 2 > "$current_stats_file"
 
 		#diff "$previous_stats_file" "$current_stats_file" |
 		#grep '^>'
@@ -144,8 +146,10 @@ git_status_plus() {
 			echo "#       ${curseon}${file}${cursereset}"
 		done
 
-		'cp' -f "$previous_stats_file" "$previous_stats_file".REAL
-		'cp' -f "$current_stats_file" "$previous_stats_file"
+		# For debugging:
+		#'cp' -f "$previous_stats_file" "$previous_stats_file".REAL 2>/dev/null
+
+		'cp' -f "$current_stats_file" "$previous_stats_file" 2>/dev/null
 	) |
 	if [ -t 1 ]
 	then less -R -E -X
