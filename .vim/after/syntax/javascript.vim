@@ -119,6 +119,8 @@ syn match javascriptFunctionName /\(\<function\>\s*\)\@<=[A-Za-z0-9_$]*/ contain
 " Matching this ( didn't work on anonymous functions, although it can work if the javascriptFunctionName match stops one char earlier.  O_o
 "syn match javascriptFunctionArgs /(\zs[^)]*\ze)/ ...
 syn match javascriptFunctionArgs /\zs[^()]*\ze)/ contained containedin=javascriptFunctionDeclaration
+" Even if we don't clear it above, javascriptFunction's highlighting is lost, so we need to recreate it.  (Actually I think it may be a bug in the pangloss-joeytwiddle hybrid syntax, because most functions are highlighted as jsFunction but a few (top-level) functions are javascriptFunction.
+silent! hi link javascriptFunction Identifier
 " TODO: If we really want to match Sublime Text closely, then beware that properties get highlighted like function names too, but for anonymous functions only.
 "
 "   foo: function () { ... },
