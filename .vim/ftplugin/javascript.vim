@@ -21,6 +21,12 @@ vnoremap <buffer> <Leader>log yoconsole.log("<C-R>":", <C-R>");<Esc>
 nmap <buffer> <Leader>log viw<Leader>log
 nmap <buffer> <Leader>Log viW<Leader>log
 
+" Refactoring
+" Use `V` to select whole lines when extracting a function
+vnoremap <buffer> <Leader>F >gvdOfunction _ () {<CR><Esc>gPi}<Esc>
+nmap <buffer> <Leader>F Vip<Leader>F
+vnoremap <buffer> <Leader>V sunnamedVar<Esc>Ovar unnamedVar = <Esc>pa;<Esc>
+
 
 
 " === Indenting ===
