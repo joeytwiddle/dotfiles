@@ -7,23 +7,23 @@ source ~/.vim/after/syntax/all.vim
 " :set listchars=tab:.\ ,trail:$
 
 "" comment
-":nmap <buffer> <F5> ^i# <Esc>j^
+":nnoremap <buffer> <F5> ^i# <Esc>j^
 "" uncomment
-":nmap <buffer> <F6> ^2xj^
+":nnoremap <buffer> <F6> ^2xj^
 "" comment
-:nmap <buffer> <F5> ^i#<Esc>j^
+:nnoremap <buffer> <F5> ^i#<Esc>j^
 "" uncomment
-:nmap <buffer> <F6> ^xj^
+:nnoremap <buffer> <F6> ^xj^
 " indent
-:nmap <buffer> <F7> ^i  <Esc>j^
+:nnoremap <buffer> <F7> ^i  <Esc>j^
 " undent
-:nmap <buffer> <F8> 02xj^
+:nnoremap <buffer> <F8> 02xj^
 
 "" TODO: Below will be usable only if we check that we are at start of line / in whitespace, and ^ if not.
 " comment
-":nmap <buffer> <F5> i#<Esc>j
+":nnoremap <buffer> <F5> i#<Esc>j
 " uncomment
-":nmap <buffer> <F6> ^xj^
+":nnoremap <buffer> <F6> ^xj^
 
 " :syntax clear shCaseCommandSub
 
