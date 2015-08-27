@@ -112,21 +112,48 @@ function! s:FoldByPath()
 
 endfunction
 
+" When filenames happen to have the same length it can be difficult to see when one file ends and the next begins in the quicklist.
+" To assist with this problem, SeparateFilesVisually() tries to separate each file block visually.
+"
+" It might be considered overkill, since we already have a technique to fold by filename, which can be visualised by setting `fdc=2`.
+"
 " Disadvantage:
-" Both of the additional highlights below use matchadd() and as such will override the Search highlight used to indicate the most recently selected quickfix line.  At least if we highlight only the filename, the rest of the line will show the Search highlight.
+" Both of the additional highlights below use matchadd() and as such will override the Search highlight used to indicate the most recently selected quickfix line.  But at least if we highlight only the filename, the rest of the line will show the Search highlight.
 
-" Underline the last line of results for each file.
+" Emphasize the first or last line of the results for each file.
 function! g:SeparateFilesVisually()
-	if !hlexists("QuickFixLastLineOfFile")
-		highlight QuickFixLastLineOfFile term=underline cterm=underline gui=underline
-	endif
+	" I was using hlexists checks, but they prevent the highlight from reloading if they get cleared for some reason.  Although :hi says they are "cleared", they still "exist"!
+	"if !hlexists("QuickFixFirstLineOfFile")
+
+	" Brighten/embolden the first line of each matched file.
+	highlight QuickFixFirstLineOfFile term=bold cterm=bold gui=bold
+	" Slightly yellowy green, stands out from normal green as a bit "brighter"
+	highlight QuickFixFirstLineOfFile ctermfg=82 guifg=#44ff00
+	" Since we have a special highlight group for the first line, we could actually hide all the other duplicate filenames below it.  (In that case, we really need to set, not inherit, the colour for the first line highlight!)
+	"highlight qfFileName ctermfg=black guifg=black
+	"highlight QuickFixFirstLineOfFile ctermfg=green guifg=green
+
+	" Underline the last line of each matched file, to mark the end.
+	highlight QuickFixLastLineOfFile term=underline cterm=underline gui=underline
+
+	" But actually, we only want one of the above highlights, not both.  So we disable one!
+	highlight clear QuickFixLastLineOfFile
+
+	" If we are doing FirstLine highlighting, then we can hide all the filenames below it:
+	highlight qfFileName ctermfg=235 guifg=#102626
+
 	call clearmatches()
 	let filename = ""
-	for l in range(1,line("$"))
-		let new_filename = substitute( getline(l), '|.*', '', '')
+	for current_line in range(1,line("$"))
+		let new_filename = substitute( getline(current_line), '|.*', '', '')
 		if new_filename != filename
 			let filename = new_filename
-			let previous_line = l - 1
+			let previous_line = current_line - 1
+			" This prevents highlighting on overflow lines which begin with `|| `
+			if filename == ''
+				continue
+			endif
+			let n = matchadd("QuickFixFirstLineOfFile", '^\%'.current_line.'l[^|]*')
 			if previous_line >= 1
 				" Underline whole line
 				"let m = matchadd("QuickFixLastLineOfFile", '\%'.previous_line.'l.*')
