@@ -112,7 +112,7 @@ nmap Ob <C-W>j
 nmap Od <C-W>h
 nmap Oc <C-W>l
 
-"" For Linux console:
+"" For Linux console (and I think also xterm in Fluxbox on tomato's Ubuntu 12.04):
 nmap [A <C-W>k
 nmap [B <C-W>j
 nmap [D <C-W>h
@@ -140,10 +140,10 @@ nmap [1;5C <C-W>l
 " Ooops.  <Tab> and <C-I> are indistinguishable.  And I use <C-I>.  How sad!
 " We might be able to apply them only in GUI mode, but that would probably just make me sad out of GUI mode.
 " Let's do this like unimpaired does
-"nmap ]w <C-w><Down>
-"nmap [w <C-w><Up>
-nmap ]w <C-w>w
-nmap [w <C-w>W
+nmap ]w <C-w><Down>
+nmap [w <C-w><Up>
+"nmap ]w <C-w>w
+"nmap [w <C-w>W
 nmap ]W <C-w><Right>
 nmap [W <C-w><Left>
 " Wow that is so much better than <Ctrl-Down> or <Ctrl-W><Down>!  Although only a minor improvement over <Ctrl-W>j.
@@ -189,6 +189,21 @@ vnoremap <C-J> 2<C-E>:<C-U>call g:SexyScroller_ScrollToCursor()<CR>gv
 "" OK that fires sexy_scroller, but why did we ever want it to fire hiline anyway?!  Perhaps when we were doing 10<C-K>
 "" Also it exhibits a BUG in sexy_scroller, namely that it will cause horizontal scrolling when moving near a long line whilst `:set nowrap` wrapping is off!
 "" There are disadvantages to trying to trigger CursorMoved/Hold this way.  <BS><Space> can fail if we are at the top of the file, or create issues if we are at the start of a line (e.g. temporarily moves a line back, undoing the requested scroll, in a short window when scrolloff is set).  Similarly <Space><BS> can fail on the last char of a line or the last line of a file.  A better solution might be to explicitly call hooks exposed by those specific plugins that we want to trigger.  Alternatively we could call a function to examine the situation and emit whichever of <BS><Space> or <Space><BS> is most appropriate.
+
+"" DISABLED: Getting too much trouble with holding down <Enter> and having "things happpen" (change windows!)  It is intermittent though, not always 100% reproducable.  Stress seems to help, e.g. additional highlighting.  It may be related to RepeatLast and HiWord too.
+""           Try re-enabling these at some point in the future, but look out for that issue!
+"" Swap C-K/J (Move Windows) with C-Up/Down (Scroll Lines) because I want to try that.
+"" I tried making these nmap but that seemed to increase the rare bug of jumping to the top of the buffer when holding Enter to move down.  I thought it might be TagList-related, but it continued occurring after I closed the taglist.
+"nnoremap <C-K> <C-W>k
+"nnoremap <C-J> <C-W>j
+""nunmap <C-Up>
+""nunmap <C-Down>
+"nnoremap <C-Up> 2<C-Y>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap <C-Down> 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap [1;5A 2<C-Y>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap [1;5B 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap [A 2<C-Y>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap [B 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
 
 " BUG: In Vim and GVim on Mac OSX, <C-J> also gets mapped to <NL>.  As a result, the mapping above fires in visual mode, preventing the selection from growing, and making Vim jitter while the cursor does not move down.  (Or before the gv trick above, it would just drop us out of visual mode.)  We only see this mapping firing (or causing problems) when a very long wrapped line moves off screen, causing a visual jump to occur.  If I unmap <NL> then this also unmaps <C-J>.
 "
@@ -455,8 +470,10 @@ nnoremap <Leader>O :e .<Enter>
 nnoremap <Leader>s :Sopen<Enter>
 nnoremap <Leader>S :SessionList<Enter>
 
-" A common combination (IDE vim!)
+" Vim IDE.  Opens file manager and tag browser sidebars.
 nmap <Leader>i <Leader>f<C-w><Right><Leader>t
+
+nnoremap <Leader>I :set invignorecase<CR>:set ignorecase?<CR>
 
 " Toggle relative line numbers in the margin
 "nmap <Leader>l :set invrelativenumber<Enter>
@@ -472,7 +489,9 @@ nnoremap <Leader>p :set invpaste<CR>:set paste?<CR>
 nmap <Leader>d :set fdc=0 invdiff diff?<CR>:let &l:scrollbind = &l:diff<CR>
 
 " Fold everything in the buffer except lines which match the current search pattern (or at second level, the line on either side)
-nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
+"nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
+" Without the second level
+nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:1 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
 " Alternative, as a command:
 "command! -nargs=+ Foldsearch exe "normal /".<q-args>."^M" | setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\|\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2
 
@@ -487,7 +506,11 @@ nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)
 "" Ctrl-Q is the unlock terminal code, and the terminal swallows it (does not pass it to vim).
 " nnoremap <C-Q> :CloseBuffer<Enter>
 "" Ctrl-Z works ok
-nnoremap <C-Z> :CloseBuffer<Enter>
+"" Temporarily disabled: It's my prefix in tmux but I keep hitting it in Vim!
+" nnoremap <C-Z> :CloseBuffer<Enter>
+"" But now GVim minimizes the window on Ctrl-Z instead!  Let's intercept it and let it do nothing.
+"nnoremap <C-Z> :<CR>
+nnoremap <C-Z> :echoerr "This is Vim not Tmux!"<CR>
 "" CloseBuffer is implemented in (kwbd.vim)
 
 " We cannot use <Ctrl-S> for save because many terminals will just swallow
@@ -695,22 +718,28 @@ map <Leader><Leader><Leader>W <Plug>(easymotion-flash-bd-W)
 inoremap <S-Enter> <Esc>O
 " In Xterm, both <S-Enter> and <C-Enter> reach Vim as <Enter>, so we cannot use this.
 
-" There is a plugin that does the below: github:b3niup/numbers
-" relativenumber is useful if we are about to make a jump
-" Position screen about cursor (so cursor appears at top/middle/button)
+"" There is a plugin that does the below: github:b3niup/numbers
+"" relativenumber is useful if we are about to make a jump, or otherwie select a number of lines for an operation
+"" So we will turn relativenumber on when performing these actions
+" When positioning screen about cursor (so cursor appears at top/middle/button)
 " Unfortunately these fire CursorHold shortly afterwards, even though the cursor didn't move!
 nmap <silent> zt zt:set relativenumber cursorcolumn cursorline<CR>
 nmap <silent> zz zz:set relativenumber cursorcolumn cursorline<CR>
 nmap <silent> zb zb:set relativenumber cursorcolumn cursorline<CR>
-" Entering Visual mode
+" When entering Visual mode
 nnoremap <silent> v :set relativenumber cursorcolumn<CR>v
 nnoremap <silent> gv :set relativenumber cursorcolumn<CR>gv
 nnoremap <silent> V :set relativenumber<CR>V
 nnoremap <silent> <C-q> :set relativenumber cursorcolumn<CR><C-q>
-" Jump to High/Middle/Low of screen (the documented mnemonic is Home/Middle/Last)
+" When jumping to High/Middle/Low of screen (the documented mnemonic is Home/Middle/Last)
 nmap <silent> H H:set relativenumber cursorline<CR>
 nmap <silent> M M:set relativenumber cursorline<CR>
 nmap <silent> L L:set relativenumber cursorline<CR>
+" When changing indentation
+nnoremap <silent> < :set relativenumber cursorline<CR><
+nnoremap <silent> = :set relativenumber cursorline<CR>=
+nnoremap <silent> > :set relativenumber cursorline<CR>>
+"" Return to normal once the operation is completed
 augroup ClearCursorColumnAndLine
 	autocmd!
 	autocmd CursorHold * set norelativenumber nocursorcolumn nocursorline
@@ -788,9 +817,15 @@ command! -bar -nargs=1 Sgrep silent execute "grep <args>" | redraw! | cw
 " I never normally use _ - and +.  I tend to use <Enter> to go down and k to go up.
 " ^ and $ are very useful but hard to reach
 " Sometimes when moving up or down a line, I want to land on the last column, not the first.
-nnoremap _ <Up>^
-nnoremap - <Up>$
-nnoremap + <Down>$
+"nnoremap _ <Up>^
+"nnoremap - <Up>$
+"nnoremap + <Down>$
+" If you want the last *non-blank* character of the next line, use `2g_`
+"nnoremap _ <Down>$
+nnoremap _ 2g_
+" I never use ^ for its default meaning, so we could make it do the opposite of _
+"nnoremap ^ <Up>^
+nnoremap ^ k^
 
 " OTOH, these may be more useful:
 "nnoremap _ <C-w>-
@@ -804,7 +839,7 @@ nmap [< <C-w><
 nmap ]< <C-w><
 nmap [> <C-w>>
 nmap ]> <C-w>>
-" They are not actually pairs!
+" Probably only for GVim.
 nmap <C-S-Up>    <C-w>+
 nmap <C-S-Down>  <C-w>-
 nmap <C-S-Left>  <C-w><
@@ -868,12 +903,13 @@ nnoremap <Leader>vcb :<C-U>call ContiguousVBlock()<CR>
 nnoremap <Leader>T :!dict <cword><CR>
 
 " When writing large chunks of text, Vim's undo may be considered too coarsely grained.  We can use <C-g>u to tell Vim to break the undo sequence.
-inoremap <CR> <C-G>u<CR>
+" I hated this.  It broke up Shift-Inserted text pasted into insert mode, requiring me to perform an unknown number of undos to revert it.
+"inoremap <CR> <C-G>u<CR>
 "inoremap . <C-G>u.
 "inoremap ! <C-G>u!
 "inoremap ? <C-G>u?
-inoremap ( <C-G>u(
-inoremap ) <C-G>u)
+"inoremap ( <C-G>u(
+"inoremap ) <C-G>u)
 "inoremap , <C-G>u,
 
 " The default definitions for - and + might be good for navigation, but I never found myself using them.
