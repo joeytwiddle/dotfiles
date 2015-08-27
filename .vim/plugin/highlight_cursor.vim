@@ -6,7 +6,7 @@
 map <C-g> :call HighlightCursorToggle()<CR>
 
 "" BUGS: If your cursor really has disappeared, this highlighting method will
-""       not help you to edit commands in ex mode.
+""       not help you to edit commands in ex mode.  You could use q: instead.
 
 "" TODO: Choose cursor colour to constrast with &background or :highlight Normal.
 
@@ -44,11 +44,12 @@ function! HighlightCursorToggle()
 		"" Clear autocmds etc.
 		call HighlightCursorOff()
 		" TODO: should restore to whatever it was before
-		set updatetime=1000
+		"set updatetime=1000
 	else
 		let g:highlightcursor=1
-		set updatetime=10
-		autocmd CursorHold * :call HighlightCursorRefresh()
+		"set updatetime=10
+		"autocmd CursorHold * :call HighlightCursorRefresh()
+		autocmd CursorMoved * :call HighlightCursorRefresh()
 		" autocmd BufEnter * :call HighlightCursorRefresh()
 		highlight CursorHighlighted term=reverse ctermfg=black ctermbg=green guifg=black guibg=#00ff00
 		call HighlightCursorRefresh()
