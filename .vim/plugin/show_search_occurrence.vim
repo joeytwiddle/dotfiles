@@ -92,8 +92,10 @@ endfunction
 " We can trigger it whenever the cursor has moved
 augroup ShowSearchOccurrence
 	autocmd!
-	"autocmd CursorHold * call s:ShowSearchStatus()
-	autocmd CursorMoved * call s:ShowSearchStatus()
+	" This might be better at clearing before other plugins trigger on CursorHold.
+	" However it doesn't work well with sexyscroller.  (Appears to echo before scrolling is finished; and the scrolling clears the echoed text away.)
+	"autocmd CursorMoved * call s:ShowSearchStatus()
+	autocmd CursorHold * call s:ShowSearchStatus()
 augroup END
 
 " Or we can trigger it only when we perform searches
