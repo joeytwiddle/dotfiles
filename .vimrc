@@ -120,7 +120,10 @@ autocmd VimLeave * silent !stty ixon
 		let tlist_haxe_settings = 'haxe;p:package;d:typedef;e:enum;t:enum_field;c:class;i:interface;f:function;v:variable'
 		let tlist_grm_settings = 'joeygrammar;r:rule'
 		let tlist_haskell_settings = 'haskell;d:data;t:type;s:signature;f:function' " ;p:pattern
-		let tlist_markdown_settings = 'markdown;1:level1;2:level2;3:level3'
+		"let tlist_markdown_settings = 'markdown;1:level1;2:level2;3:level3'
+		" Ubuntu started detected .md files as filetype 'mkd' not 'markdown'
+		" I will try out their syntax for a while...
+		let tlist_mkd_settings = 'mkd;1:level1;2:level2;3:level3'
 		let tlist_help_settings = 'help;s:section;h:heading;m:marker'
 		let tlist_scala_settings = 'scala;p:package;i:include;c:class;o:object;t:trait;r:cclass;a:aclass;m:method;T:type' " V:value;v:variable;
 		let tlist_man_settings = 'man;s:section'
