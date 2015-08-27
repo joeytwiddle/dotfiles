@@ -13,6 +13,10 @@
 "   and user hitting Escape.  FIXEDFORNOW: no BufExplorer fallback
 " Also, BufExplorer sometimes requires two presses of Ctrl-O to get out of it.
 
+" THIS PLUGIN HAS STOPPED WORKING on tomato. Tab-complete does nothing during the prompt.
+nnoremap <C-e> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
+finish
+
 let g:JBS_Show_Buffer_List_First = get(g:, "JBS_Show_Buffer_List_First", 1)
 
 command! JoeysBufferSwitch call JoeysBufferSwitch()
