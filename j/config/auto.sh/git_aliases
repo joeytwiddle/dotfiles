@@ -391,8 +391,12 @@ update_cindex() {
 		# If any of the indexed folders are equal to or below this project's folder
 		if [ -n "$git_root_folder" ] && cindex -list | grep -q "^$git_root_folder\($\|/\)"
 		then
-			echo -n "Updating cindex (in the background)"
-			nice ionice cindex 2>/dev/null &
+			echo "Updating cindex (in the background)"
+			# We do this in a separate shell in order to disable the tardy job completion message.
+			(
+				[[ -n "$ZSH_NAME" ]] && unsetopt MONITOR
+				nice ionice cindex 2>/dev/null &
+			)
 		fi
 	fi
 }
