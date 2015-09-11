@@ -189,10 +189,10 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .it 01;35
 .mp3 01;35
 .ogg 01;35
-.wma 00;35  #
-.ra 00;35   # RealAudio
-.m4a 00;35  # iTunes
-.m4p 00;35  # iTunes
+.wma 01;35  # Microsoft
+.ra 01;35   # RealAudio
+.m4a 01;35  # iTunes
+.m4p 01;35  # iTunes
 .m3u 01;35
 .pls 01;35
 # Vector images (editable / not really)
@@ -238,6 +238,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .sxi 01;33 # StarOffice Presentation
 .sxw 01;33 # OpenOffice Document
 .sdd 01;33 # OpenOffice Presentation
+.csv 01;33 # Comma Separated Values; it's more like a document than like code
 .mbox 01;33 # Mail folder
 # .sda 01;33 # Drawing (moved to images)
 *readme 01;33
