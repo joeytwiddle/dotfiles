@@ -126,21 +126,25 @@ function! g:SeparateFilesVisually()
 	"if !hlexists("QuickFixFirstLineOfFile")
 
 	" Brighten/embolden the first line of each matched file.
-	highlight QuickFixFirstLineOfFile term=bold cterm=bold gui=bold
-	" Slightly yellowy green, stands out from normal green as a bit "brighter"
-	highlight QuickFixFirstLineOfFile ctermfg=82 guifg=#44ff00
-	" Since we have a special highlight group for the first line, we could actually hide all the other duplicate filenames below it.  (In that case, we really need to set, not inherit, the colour for the first line highlight!)
-	"highlight qfFileName ctermfg=black guifg=black
+	"highlight QuickFixFirstLineOfFile term=bold cterm=bold gui=bold
+	highlight QuickFixFirstLineOfFile term=none cterm=none gui=none
+	" Simple bold green foreground
 	"highlight QuickFixFirstLineOfFile ctermfg=green guifg=green
+	" Slightly yellowy green, stands out from normal green as a bit "brighter".  Very nice but not so different from our current Search fg.
+	"highlight QuickFixFirstLineOfFile ctermfg=82 guifg=#44ff00
+	" Cyan
+	highlight QuickFixFirstLineOfFile ctermfg=cyan guifg=cyan
+	" Cyan (with a hint of green)
+	"highlight QuickFixFirstLineOfFile ctermfg=48 guifg=#00ffaa
+	" If we are doing FirstLine highlighting, then we can hide all the duplicate filenames below it:
+	"highlight qfFileName ctermfg=black guifg=black
+	highlight qfFileName ctermfg=235 guifg=#102626
 
 	" Underline the last line of each matched file, to mark the end.
 	highlight QuickFixLastLineOfFile term=underline cterm=underline gui=underline
 
 	" But actually, we only want one of the above highlights, not both.  So we disable one!
 	highlight clear QuickFixLastLineOfFile
-
-	" If we are doing FirstLine highlighting, then we can hide all the filenames below it:
-	highlight qfFileName ctermfg=235 guifg=#102626
 
 	call clearmatches()
 	let filename = ""
