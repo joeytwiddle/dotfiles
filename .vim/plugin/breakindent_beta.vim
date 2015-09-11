@@ -1,6 +1,6 @@
 " BreakIndent Beta tries to make wrapped lines look neater and less disruptive, by updating showbreak dynamically to match the indent of the current focused line.
 "
-" Vim's default 'wrap' mode shows wrapped lines like this:
+" Vim's default 'wrap' mode shows wrapped lines unindented:
 "
 "     This line is indented and also very
 " \ long so it was displayed wrapped.
@@ -38,6 +38,8 @@
 "   :let g:breakindent_gapchar = '\'      " The symbol used below the word
 "   :let g:breakindent_symbol = ' '       " After gapchars just put a space
 "   :let g:breakindent_use_first_word = 1   " Use the first word as the symbol
+"
+" I also forked this script to create a version that sets the breakindent to the deepest (most indented) wrapped line currently on the screen.  This may be preferable if you dislike indents that are too shallow but don't mind indents that are too deep.  That version is in breakindent_beta.never_shallow.vim
 "
 " Alternative: The real breakindent patch is being kept up-to-date at: https://retracile.net/wiki/VimBreakIndent   (Look for the "Original Format" link at the bottom of the page)
 
@@ -92,15 +94,6 @@ if !exists("g:breakindent_never_shrink")
   let g:breakindent_never_shrink = 0
 endif
 
-" This feature adapts to the current visible lines in the window, taking the deepest indent.
-" I don't mind the indent being too deep sometimes, but I really dislike it when the breakindent currently chosen is too shallow for one of the visible lines.
-" When this option is set to 1, breakindent will be updated regularly (after every cursor move), to match the deepest broken line on the screen.
-" This feature uses somewhat more CPU when enabled, even if breakindent_update_rarely is set.
-" It is disabled by default because, as with breakindent_update_rarely=0, it can be annoying when showbreak keeps frequently changing.
-if !exists("g:breakindent_never_shallow")
-  let g:breakindent_never_shallow = 0
-endif
-
 
 augroup BreakIndent
   autocmd!
@@ -108,29 +101,28 @@ augroup BreakIndent
   autocmd CursorHoldI * call s:UpdateBreakIndent()
 augroup END
 
-" BUG: Surely it would be better to use buffer-local variables for this.
 let g:breakindent_max_so_far = 0
 
 function! s:UpdateBreakIndent()
 
-  if g:breakindent_never_shallow
-    let view = winsaveview()
-    let topline = view.topline
-    " If any lines on the screen are wrapped, then bottomline is an overestimate, and might not even exist in the file.  Likewise if the end of the file is on screen.
-    let bottomline = topline + winheight(0)
-    let deepestIndent = 0
-    for line_num in range(topline, bottomline)
-      let [showIndent, screenLineLength] = s:GetShowIndentForLine(line_num)
-      let deepestIndent = max([deepestIndent, showIndent])
-    endfor
-    let showIndent = deepestIndent
-    " TODO: If all the the lines on screen are not wrapped, (showIndent==-1) then we should just leave breakindent alone.  If we go back where we were before, there will be no change, rather than two unnecessary changes.
-  else
-    let [showIndent, screenLineLength] = s:GetShowIndentForLine(".")
-    " If the current line is not wrapped, don't change showbreak
-    if g:breakindent_update_rarely && showIndent == -1
-      return
-    endif
+  let line = getline(".")
+  let indentString = substitute(line, "[^ 	].*", "", "")
+  let numTabs = len(substitute(indentString, "[^	]*", "", "g"))
+  let numSpaces = len(indentString) - numTabs
+  let tabwidth = &tabstop
+  let screenIndent = numSpaces + tabwidth*numTabs
+  let screenLineLength = len(line) - len(indentString) + screenIndent
+  " BUG TODO: We compare screenLineLength to winwidth(".") later, but this fails to account for the signs columns (and perhaps similarly fails for fold columns).
+
+  " Calculate the first part, that brings us up to the first line.
+  let showIndent = screenIndent
+  " Sanity check - never use more than three quarters of the screen!
+  let maxIndent = 3 * winwidth(".") / 4
+  let showIndent = min([showIndent,maxIndent])
+
+  if g:breakindent_update_rarely && screenLineLength < winwidth(".")
+    return
+    " BUG: If showbreak is particularly high on entry, then the current line might be wrapped now, even if it wouldn't be with a recalculated showbreak!
   endif
 
   if g:breakindent_never_shrink
@@ -143,29 +135,13 @@ function! s:UpdateBreakIndent()
     endif
   endif
 
-  let bis = s:GetBISForCurrentLine()
-
-  " It's a global, so forget about setlocal :P
-  let &showbreak = repeat(strpart(g:breakindent_char, 0, 1), showIndent) . bis
-
-endfunction
-
-function! s:GetBISForCurrentLine()
-
-  let line = getline(".")
-
-  let [showIndent, screenLineLength] = s:GetShowIndentForLine(".")
-
-  " Reset to 0 if -1
-  let showIndent = max([showIndent, 0])
-
   let bis = g:breakindent_symbol
 
   if g:breakindent_match_gap || g:breakindent_use_first_word
     " It seems pointless to try to learn a new gap count from a line which is not itself long enough to wrap.
     if screenLineLength <= winwidth(".")
       " Because we don't remember the last bis we set, we avoid updating the indent at all.
-      return g:breakindent_gapchar . g:breakindent_symbol
+      return
     endif
     let lineAfterIndent = substitute(line, "^[ 	]*", "", "")
     let firstWord = substitute(lineAfterIndent, "[ 	].*", "", "")
@@ -175,38 +151,13 @@ function! s:GetBISForCurrentLine()
       let gapWidth = len(firstWord)
       " Sanity check - never use more than a quarter of what is left for the gap!
       let maxWidth = (winwidth(".") - showIndent) / 4
-      let gapWidth = min([gapWidth, maxWidth])
-      let bis = repeat(strpart(g:breakindent_gapchar, 0, 1), gapWidth) . g:breakindent_symbol
+      let gapWidth = min([gapWidth,maxWidth])
+      let bis = repeat(strpart(g:breakindent_gapchar,0,1), gapWidth) . g:breakindent_symbol
     endif
   endif
 
-  return bis
-
-endfunction
-
-function! s:GetShowIndentForLine(line_num)
-
-  let line = getline(a:line_num)
-  let indentString = substitute(line, "[^ 	].*", "", "")
-  let numTabs = len( substitute(indentString, "[^	]*", "", "g") )
-  let numSpaces = len(indentString) - numTabs
-  let screenIndent = numSpaces + numTabs * &tabstop
-  let screenLineLength = len(line) - len(indentString) + screenIndent
-  " BUG TODO: We compare screenLineLength to winwidth(".") later, but this fails to account for the signs columns (and perhaps similarly fails for fold columns).
-
-  " If the current line is not wrapped, there is no need to make a deep showbreak for it.
-  " BUG: However, if showbreak is particularly high on entry, then the current line might be wrapped now, even if it wouldn't be with a recalculated showbreak!  We could calculate that...
-  if screenLineLength <= winwidth(".")
-    return [-1, screenLineLength]
-  endif
-
-  " Calculate the first part, that brings us up to the first line.
-  let showIndent = screenIndent
-  " Sanity check - never use more than three quarters of the screen!
-  let maxIndent = 3 * winwidth(".") / 4
-  let showIndent = min([showIndent, maxIndent])
-
-  return [showIndent, screenLineLength]
+  " It's a global, so forget about setlocal :P
+  let &showbreak = repeat(strpart(g:breakindent_char,0,1),showIndent) . bis
 
 endfunction
 
