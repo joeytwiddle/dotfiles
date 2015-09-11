@@ -14,5 +14,5 @@
 "nnoremap <silent> <buffer> <S-Tab> ?[<Bar>']\zs\k\+[<Bar>']<CR>:set nohlsearch<CR>
 
 " TESTING: Slightly more accurate regexp, that won't land on a |.....' like the previous.
-nnoremap <silent> <buffer>   <Tab> /\('\zs\k\+'\|<Bar>\zs\k\+<Bar>\)<CR>:set nohlsearch<CR>
-nnoremap <silent> <buffer> <S-Tab> ?\('\zs\k\+'\|<Bar>\zs\k\+<Bar>\)<CR>:set nohlsearch<CR>
+nnoremap <silent> <buffer>   <Tab> /\('\zs\k\+'\\|[<Bar>]\zs\k\+[<Bar>]\)<CR>:set nohlsearch<CR>
+nnoremap <silent> <buffer> <S-Tab> ?\('\zs\k\+'\\|[<Bar>]\zs\k\+[<Bar>]\)<CR>:set nohlsearch<CR>
