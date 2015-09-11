@@ -1,3 +1,9 @@
+# It might be worth doing:
+#
+#   tail -f ~/.xsession_errors
+#
+# to see reports of any keybinds you create that Fluxbox cannot recognise.
+
 ! fluxbox-update_configs added '(workspace=[current])' to (Next|Prev)(Window|Group)
 ! check lines marked by 'FBCV13' if they are correctly updated
 !mouse actions added by fluxbox-update_configs
@@ -64,6 +70,8 @@ OnWindow Mod4 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
 # OnDesktop Mouse3 :RootMenu
 # OnDesktop Mouse4 :NextWorkspace
 # OnDesktop Mouse5 :PrevWorkspace
+
+
 
 ## Joey's keybindings for Fluxbox, some of which require jsh scripts
 ## Mod1 is Alt - some people might be annoyed if they want to access application
@@ -197,8 +205,9 @@ Mod1 Right :NextTab
 # Control grave :NextTab
 # Control Shift Tab :NextTab
 ## Like Mac OSX:
-Mod1 Shift bracketleft :PrevTab
-Mod1 Shift bracketright :NextTab
+## But last I saw it was braceleft not bracketleft
+#Mod1 Shift     bracketleft     :PrevTab
+#Mod1 Shift     bracketright     :NextTab
 ## Move current tab around
 Mod4 Left :MoveTabLeft
 Mod4 Right :MoveTabRight
@@ -209,6 +218,10 @@ Mod4 Right :MoveTabRight
 # Mod4 braceleft :MovePrevTab
 # Mod1 braceright :MoveNextTab
 # Mod4 braceright :MoveNextTab
+Mod4 Shift braceleft  :PrevTab
+Mod4 Shift braceright :NextTab
+Mod1 Shift h :PrevTab
+Mod1 Shift l :NextTab
 
 ## Do things to windows
 # Mod1 c :Close
@@ -216,6 +229,7 @@ Mod4 Right :MoveTabRight
 Mod1 F4 :Close
 Mod1 q :Close
 Mod4 q :KillWindow
+Mod4 Shift q :ExecCommand xkill
 ## None of these work in 1.3.2-4
 # Mod1 a :Lower
 Mod1 a :MacroCmd {Lower} {Focus}
@@ -306,6 +320,10 @@ Control Mod4 Shift Left :ExecCommand move_windows_between_desktops swapdesktops 
 Control Mod4 Shift Right :ExecCommand move_windows_between_desktops swapdesktops right
 Control Mod4 Shift Up :ExecCommand move_windows_between_desktops swapdesktops up
 Control Mod4 Shift Down :ExecCommand move_windows_between_desktops swapdesktops down
+Control Mod1 Shift Left :ExecCommand move_windows_between_desktops swapdesktops left
+Control Mod1 Shift Right :ExecCommand move_windows_between_desktops swapdesktops right
+Control Mod1 Shift Up :ExecCommand move_windows_between_desktops swapdesktops up
+Control Mod1 Shift Down :ExecCommand move_windows_between_desktops swapdesktops down
 # I wanted to bind these to Control Mod1 Shift but for some strange reason that:
 #   1. didn't work, and
 #   2. over an un-tabbed xterm, changed the size of the xterm!
@@ -397,10 +415,10 @@ Mod1 KP_Add      :ExecCommand volumeup 2
 Mod1 KP_Subtract :ExecCommand volumedown 2
 XF86AudioLowerVolume   :ExecCommand volumedown 5
 XF86AudioRaiseVolume   :ExecCommand volumeup 5
-XF86AudioMute          :ExecCommand setvolume 0
-#F10          :ExecCommand setvolume 0
-F11   :ExecCommand volumedown 5
-F12   :ExecCommand volumeup 5
+XF86AudioMute          :ExecCommand set_volume 0
+#F10          :ExecCommand set_volume 0
+#F11   :ExecCommand volumedown 5
+#F12   :ExecCommand volumeup 5
 ## My bbkeysrc uses Alt-Minus and Alt-Plus.
 ## (play)
 # Mod1 KP_1 :ExecCommand xmms -p
@@ -478,8 +496,10 @@ Mod1 Mod4 Up :ExecCommand put_current_xwindow top_edge
 Mod1 Mod4 Left :ExecCommand put_current_xwindow left_edge
 Mod1 Mod4 Right :ExecCommand put_current_xwindow right_edge
 Mod1 Mod4 Down :ExecCommand put_current_xwindow bottom_edge
+# I tried to bind this to Hash, but could not find a way.
+# When I do Alt-Enter or Alt-Win-Enter on an xterm, something toggles :Fullscreen, although the binding is not listed here.
 Mod1 Mod4 BackSpace :ExecCommand put_current_xwindow center
-Mod1 Mod4 Hash :ExecCommand put_current_xwindow center
+Mod1 Mod4 Enter :ExecCommand put_current_xwindow center
 Mod1 Mod4 Delete :ExecCommand put_current_xwindow nw
 Mod1 Mod4 Shift Right :MoveRight +25
 Mod1 Mod4 Shift Left :MoveRight -25
@@ -489,14 +509,58 @@ Mod1 Mod4 Shift Down :MoveUp -25
 ## Basic tiling - really sucks with kicker panels or gkrellm running.
 Control Mod1 a :ToggleCmd {ArrangeWindows (Stuck=no)} {ArrangeWindowsHorizontal (Stuck=no)} {ArrangeWindowsVertical (Stuck=no)}
 
+Shift Mod1 braceleft    :ExecCommand xdotool key --clearmodifiers ctrl+Prior
+Shift Mod1 braceright   :ExecCommand xdotool key --clearmodifiers ctrl+Next
+
 ## My old keyboard let me do Ctrl-Fn-Down = Ctrl-PageDown
 ## My new keyboard has audio keys on Fn-arrows, so we intercept those:
-Control XF86AudioStop :ExecCommand xdotool key Ctrl_L+PageUp
-Control XF86AudioPlay :ExecCommand xdotool key Ctrl_L+PageDown
+Control XF86AudioStop :ExecCommand xdotool key PageUp
+Control XF86AudioPlay :ExecCommand xdotool key PageDown
 ## Oh it seems this won't work.  xev reports that when I press Ctrl-Fn-arrows, weird things come out (Down becomes Left, Left emits nothing, Up becomes Up and Right becomes XF86AudioNext! asus x453m.
 
 ## A few Mac keybinds stolen from porridge
+## These won't actually work while Mod4 Left/Right are intercepted for moving Fluxbox tabs.
 Mod4 Left               :Delay {ExecCommand xdotool key --clearmodifiers ctrl+Left    }  100
 Mod4 Right              :Delay {ExecCommand xdotool key --clearmodifiers ctrl+Right   }  100
 Mod4 Shift Left         :Delay {ExecCommand xdotool key --clearmodifiers shift+ctrl+Left  }  100
 Mod4 Shift Right        :Delay {ExecCommand xdotool key --clearmodifiers shift+ctrl+Right }  100
+
+## Function-Arrow keys
+XF86AudioPrev           :ExecCommand xdotool key --clearmodifiers Home
+XF86AudioNext           :ExecCommand xdotool key --clearmodifiers End
+XF86AudioStop           :ExecCommand xdotool key --clearmodifiers Prior
+XF86AudioPlay           :ExecCommand xdotool key --clearmodifiers Next
+#XF86AudioPrev           :Delay {ExecCommand xdotool key --clearmodifiers Home    }  100
+#XF86AudioNext           :Delay {ExecCommand xdotool key --clearmodifiers End     }  100
+#XF86AudioStop           :Delay {ExecCommand xdotool key --clearmodifiers Prior    }  100
+#XF86AudioPlay           :Delay {ExecCommand xdotool key --clearmodifiers Next   }  100
+
+
+
+## For users with missing or weak right-click button.
+
+# Simulate right-click and middle-click with Control-click and Shift-Control-click
+# Unfortunately Fluxbox does not offer OnAnything.
+# OnWindow does not apply to titlebars, desktop or some dialogs (e.g. Chrome bookmark menus)
+#OnWindow Shift Mouse1          :ExecCommand xdotool click 3
+# I need Ctrl-click for browser's open-in-tab
+#OnWindow Control Mouse1        :ExecCommand xdotool click 3
+#OnWindow Control Shift Mouse1  :ExecCommand xdotool click 2
+
+# But if I block Ctrl-click, then how do I perform Ctrl-click open-in-new-tab?
+# I would like to map Mod1-click.
+# We would need to clear the Mod1 and perhaps mousedown Ctrl before the click.
+#OnWindow Mod1 Mouse1  :MacroCmd {ExecCommand xdotool keydown --clearmodifiers Ctrl_L} {ExecCommand xdotool click 1} {ExecCommand xdotool keyup Ctrl_L}
+#OnWindow Mod1 Mouse1  :ExecCommand xdotool keydown Ctrl_L click 1 keyup Ctrl_L
+# For these to run, I must disable the StartMoving on Mod1 Mouse1.  But even then they still don't work.
+
+# In the end I have settled for the non-standard Ctrl-Shift-click
+OnWindow      Control Shift Mouse1 :ExecCommand xdotool click 3
+OnDesktop     Control Shift Mouse1 :ExecCommand xdotool click 3
+# and for middle-click, Alt-Ctrl-Shift-click
+OnWindow Mod1 Control Shift Mouse1 :ExecCommand xdotool click 2
+# Alt-right-click usually resizes the window.  We could do it on Win-Alt-click or Ctrl-Alt-click.
+#OnWindow Control Mod1 Mouse1   :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+OnWindow    Mod1 Mod4 Mouse1   :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+OnWindow   Control Mod4 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
+OnTitlebar Control Mod4 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
