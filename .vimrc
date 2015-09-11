@@ -147,9 +147,11 @@ autocmd VimLeave * silent !stty ixon
 	let g:Grep_OpenQuickfixWindow = 1
 	let g:Grep_Default_Filelist = ". -r -I"
 	" General exclude folders:
-	let g:Grep_Default_Filelist .= " --exclude-dir=CVS --exclude-dir=.git --exclude-dir=bin --exclude-dir=build --exclude-dir=node_modules"
+	let g:Grep_Default_Filelist .= " --exclude-dir=CVS --exclude-dir=.git --exclude-dir=bin --exclude-dir=build"
 	" General exclude files:
 	let g:Grep_Default_Filelist .= " --exclude=tags --exclude=\'.*.sw?\' --exclude=\\*.min.js --exclude=\\*.min.css --exclude=\'*.log\'"
+	" Javascript:
+	let g:Grep_Default_Filelist .= " --exclude-dir=node_modules --exclude-dir=dist --exclude=bundle.js"
 	let g:Grep_Default_Filelist .= " --exclude=.tags --exclude=.tags_sorted_by_file"   " Tags files built by CTags plugin for Sublime Text
 	" For Haxe:
 	let g:Grep_Default_Filelist .= " --exclude-dir=_build"
@@ -234,12 +236,17 @@ autocmd VimLeave * silent !stty ixon
 	let g:coffeeShowJSChanges = 1
 
 	let g:breakindent_char = ' '
+	let g:breakindent_never_shallow = 1
 
 	" let coffee_compile_on_save=1
 
 	let g:ToggleMaximize_RestoreWhenSwitchingWindow = 1
 
-	let g:NoSwapSuck_CheckSwapfileOnLoad = 0
+	let g:NoSwapSuck_Debug = 1
+	"let g:NoSwapSuck_CheckSwapfileOnLoad = 0
+	let g:NoSwapSuck_CreateSwapfileOnInsert = 1
+	"let g:NoSwapSuck_CloseSwapfileOnWrite = 1
+	setglobal noswapfile
 
 	let g:wrs_default_height_pct = 99
 
@@ -511,6 +518,9 @@ autocmd VimLeave * silent !stty ixon
 	set switchbuf+=useopen
 	" You can get quickfix actions on various keys using https://github.com/mileszs/ack.vim#keyboard-shortcuts or https://github.com/yssl/QFEnter
 
+	" So that fugitive's Gdiff will split left/right
+	set diffopt+=vertical
+
 " }}}
 
 
@@ -580,6 +590,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 " >>> Addons (the neat way) {{{
 
+	" >>> Plugins from the Cloud {{{
+
 	"" TODO: All these plugins increase vim's startup time.
 	"" This is not just about Vim processing the scripts, a significant cost is the traversal of all the filesystem folders for the following plugins.  (To demonstrate this, try opening vim twice in a row - only the first time is slow!)
 	"" Tactics:
@@ -637,7 +649,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Or the following is smart enough to decide for us.  BUG: The `normal q` part fails on an empty buffer with error: "E749: empty buffer"
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
-	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets','*/.meteor/local/*','deploy_TMP']"
+	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets','*/.meteor/local/*','deploy_TMP','dist']"
 	",'pikto'
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
@@ -656,7 +668,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:goldfeld/vim-seek")       " Quickly seek new position by 2 chars, on `s`
 	"call add(vamAddons,"github:dahu/vimple")             " Get the buffers as a list
 	"call add(vamAddons,"github:Raimondi/vim-buffalo")    " Buffer switcher - requires vimple
-	call add(vamAddons,"surround")                        " Change dict(mykey) to dict[mykey] with cs([ delete with ds( or create with ysiw[
+	call add(vamAddons,"surround")                        " Change dict(mykey) to dict[mykey] with cs([ delete with ds( or create with csw[ or ysiw[ or viwS[
 
 	"call add(vamAddons,"github:tpope/vim-markdown")       " More recent version of the syntax file bundled with Vim.
 	"call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
@@ -674,7 +686,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	call add(vamAddons,"unimpaired")                      " Various next/previous keybinds on ]<key> and [<key>
 
-	call add(vamAddons,"github:tristen/vim-sparkup")      " Expand Zen/Jade-like snippets into HTML
+	call add(vamAddons,"github:tristen/vim-sparkup")      " Expand Zen/Jade/Emmet-like snippets into HTML
 	let g:sparkupExecuteMapping = '<C-]>'
 	let g:sparkupNextMapping = '<C-]>n'   " The default <C-n> messes with my <Tab> mappings
 	let g:sparkupMappingInsertModeOnly = 1
@@ -716,7 +728,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	let g:repmo_mapmotions = "j|k h|l zh|zl g;|g, <C-w>w|<C-w>W"
 	" Experimenting:
 	let g:repmo_mapmotions .= " <C-w>+|<C-w>- <C-w>>|<C-w><"
-	" Works but interferes with navigation_enhancer.vim: <C-w>j|<C-w>k 
+	" Works but interferes with navigation_enhancer.vim: " <C-w>j|<C-w>k"
+	" Do not work (presumably because they are non-standard mappings): " [w|]w [W|]W"
 	let g:repmo_key = ";"
 	let g:repmo_revkey = ","
 
@@ -950,6 +963,20 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	                                                        " leo is based on primary colors; it is a bit strong.  version 1 .0 here: http://www.vim.org/scripts/script.php?script_id=2156
 	" Multi-target (editors) color scheme generator: https://github.com/daylerees/colour-schemes
 
+	call add(vamAddons,"github:coderifous/textobj-word-column.vim") " vic to select whole column
+
+	call add(vamAddons,"github:kana/vim-textobj-user")   " Dependency for...
+	call add(vamAddons,"github:kana/vim-textobj-function") " vif and vaf to select in and around function
+
+	"call add(vamAddons,"github:henrik/vim-indexed-search") " Show search progress
+
+	call add(vamAddons,"github:itchyny/vim-qfedit")      " Allows you to edit the quickfix list.
+
+	" Includes executables vimpager and vimcat (which pretty-print files using Vim's syntax highlighting!)
+	call add(vamAddons,"github:rkitover/vimpager")
+
+	" }}}
+
 	" >>> My Plugins from the Cloud (modified versions of other plugins) {{{
 	call add(vamAddons,"github:joeytwiddle/grep.vim")    " With support for csearch and SetQuickfixTitle.
 	call add(vamAddons,"github:joeytwiddle/taglist.vim") " Joey's taglist.vim with vague indentation mode and other madness
@@ -984,6 +1011,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		" Or activate addons while showing progress
 		" The conclusion was that this completed very quickly!
 		" Probably the actual loading of scripts happens after this file has finished, and that is why we observe no delay here.
+		" But after testing, that does not appear to be the case.  It appears any new git clones are performed before this file completes.
 		"let len = len(vamAddons)
 		"let i = 0
 		"while i < len
