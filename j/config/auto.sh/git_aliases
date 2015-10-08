@@ -88,6 +88,7 @@ git_status_user_friendly() {
 }
 
 # An alternative to git status which highlights *new* untracked files differently.
+# Untracked files are listed with most recently modified at the top, and files changed since the last run are highlighted.
 git_status_plus() {
 	if [ -t 1 ]
 	then t=1
@@ -146,7 +147,7 @@ git_status_plus() {
 		local target_folder_from_root="$(cd "$target_folder" ; git rev-parse --show-prefix)"
 
 		cat "$current_stats_file" |
-		grep "^${target_folder_from_root}" |
+		grep "^[0-9]* [0-9]* ${target_folder_from_root}" |
 		while read size date file
 		do
 			curseon="$cursenormal"
@@ -157,6 +158,8 @@ git_status_plus() {
 			fi
 			echo "#       ${curseon}${file}${cursereset}"
 		done
+
+		echo "#"
 
 		# For debugging:
 		'cp' -f "$previous_stats_file" "$previous_stats_file".REAL 2>/dev/null
