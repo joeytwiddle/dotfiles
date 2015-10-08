@@ -294,6 +294,14 @@ Control Mod1 L :NextWorkspace
 Control Mod1 K :PrevWorkspace 3
 Control Mod1 J :NextWorkspace 3
 
+## Or, one handed on right-hand side:
+## --- NOT WORKING ---
+## *** DO NOT CURRENTLY WORK ***
+#RControl Left  :PrevWorkspace
+#RControl Right :NextWorkspace
+#RControl Up    :PrevWorkspace 3
+#RControl Down  :NextWorkspace 3
+
 #Mod1 1 :Workspace 1
 #Mod1 2 :Workspace 2
 #Mod1 3 :Workspace 3
@@ -415,7 +423,7 @@ Mod1 KP_Add      :ExecCommand volumeup 2
 Mod1 KP_Subtract :ExecCommand volumedown 2
 XF86AudioLowerVolume   :ExecCommand volumedown 5
 XF86AudioRaiseVolume   :ExecCommand volumeup 5
-XF86AudioMute          :ExecCommand set_volume 0
+XF86AudioMute          :ExecCommand SHOW_VOLUME=1 set_volume 0
 #F10          :ExecCommand set_volume 0
 #F11   :ExecCommand volumedown 5
 #F12   :ExecCommand volumeup 5
@@ -432,6 +440,7 @@ Mod1 KP_7 :ExecCommand xmms -r
 ## (forward)
 #Mod1 KP_9 :ExecCommand xmms -f
 Mod1 KP_9 :ExecCommand /home/joey/j/jsh nextsong
+XF86AudioNext :ExecCommand /home/joey/j/jsh nextsong
 Mod1 KP_Delete :ExecCommand xmms -s
 Mod1 KP_5     :ExecCommand whatsplaying
 Mod4 slash    :ExecCommand whatsplaying
@@ -526,10 +535,16 @@ Mod4 Shift Left         :Delay {ExecCommand xdotool key --clearmodifiers shift+c
 Mod4 Shift Right        :Delay {ExecCommand xdotool key --clearmodifiers shift+ctrl+Right }  100
 
 ## Function-Arrow keys
-XF86AudioPrev           :ExecCommand xdotool key --clearmodifiers Home
-XF86AudioNext           :ExecCommand xdotool key --clearmodifiers End
-XF86AudioStop           :ExecCommand xdotool key --clearmodifiers Prior
-XF86AudioPlay           :ExecCommand xdotool key --clearmodifiers Next
+#
+# I was using this set successfully:
+#
+#XF86AudioPrev           :ExecCommand xdotool key --clearmodifiers Home
+#XF86AudioNext           :ExecCommand xdotool key --clearmodifiers End
+#XF86AudioStop           :ExecCommand xdotool key --clearmodifiers Prior
+#XF86AudioPlay           :ExecCommand xdotool key --clearmodifiers Next
+#
+# An alternative with delay:
+#
 #XF86AudioPrev           :Delay {ExecCommand xdotool key --clearmodifiers Home    }  100
 #XF86AudioNext           :Delay {ExecCommand xdotool key --clearmodifiers End     }  100
 #XF86AudioStop           :Delay {ExecCommand xdotool key --clearmodifiers Prior    }  100
@@ -560,7 +575,22 @@ OnDesktop     Control Shift Mouse1 :ExecCommand xdotool click 3
 # and for middle-click, Alt-Ctrl-Shift-click
 OnWindow Mod1 Control Shift Mouse1 :ExecCommand xdotool click 2
 # Alt-right-click usually resizes the window.  We could do it on Win-Alt-click or Ctrl-Alt-click.
-#OnWindow Control Mod1 Mouse1   :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
-OnWindow    Mod1 Mod4 Mouse1   :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+# Alt-Win-click (Mod1 Mod4 Mouse1) gets intercepted by the window resize bind, even if we are focused on the titlebar.  So it never works.
+# We could do it on Win-Alt-click or Ctrl-Alt-click.
+#OnWindow    Mod1 Mod4 Mouse1   :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+# We can also trigger on "Move" event (not "Mouse" click event), but it makes no difference.
+OnWindow    Mod1 Mod4 Move1    :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+# I want a shortcut to start tabbing.
+# I rather want this but it isn't working.
+# It seems OnWindow catches it before OnTitlebar can.  It does that even if I listen for Move1, and even if it appears later in the file.
+#OnTitlebar  Mod1 Mod4 Mouse1   :MacroCmd {Focus} {StartTabbing} {Lower}
+# So I have to use a weird keybind: Ctrl-Win-click
+#OnTitlebar Control Mod4 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
+# Since we are using a weird keybind, we may as well listen on the whole window
+# --- THIS IS THE ONLY ONE WHICH WORKS for me at the moment ---
+# It works anywhere on the window
 OnWindow   Control Mod4 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
-OnTitlebar Control Mod4 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
+# Ctrl-Alt-click How is this?
+#OnWindow   Control Mod1 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
+#OnWindow   Control Mod1 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
+
