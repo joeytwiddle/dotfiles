@@ -177,3 +177,29 @@ endfunction
 " Create a new buffer "without splitting"
 " (Actually does split, but closes the old window)
 command! New :new | wincmd p | wincmd c
+
+function! s:GitCommitThis(...)
+	let filenames = expand("%")
+
+	" TODO: Check if something is staged already.
+	" TODO: Allow user to supply other filenames?  Or supply quick commit message?
+
+	"let message = input("Commit message: ")
+	"exec "!git add " . filenames
+	"exec "!git commit -m '". shellescape(message).substitute(/ /,'\ ','g') ."'"
+
+	"let args = input(":!git commit ")
+	"exec "!git add " . filenames
+	"exec "!git commit ". args
+
+	" User supplies the closing '"'
+	let args = input(':!git ', 'commit -m ""')
+	silent exec "!git add " . filenames
+	exec '!git '. args
+
+	"silent! exec "!git add " . filenames
+	"call feedkeys(':!git commit -m ""')
+
+endfunction
+
+command! GCthis :call s:GitCommitThis(<q-args>)
