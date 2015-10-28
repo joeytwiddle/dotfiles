@@ -8,7 +8,9 @@
 
 " This is Joey's statusline and should be moved to his .vimrc
 set shm=atT
-set statusline=%<%f\ %#Error#%m%##%h%r%=\ %P\ (%0l/%-0L,%c~%v)\ \#%02B\ \|%0n\|%<
+" Percentage down file: %P
+" Old position display: (%0l/%-0L,%c~%v)
+set statusline=%<%f\ %#Error#%m%##%h%r%=\ 0x%02B\ %v\|%c/%{len(getline('.'))}\ :%0l/%-0L\ %0n\^%<
 " We highlight the modified flag to make it stand out.
 " I don't really want %m to show [-] when nomodifiable, but since it does, I highlight %h%r ("[Help][RO]") also, so that is clear why there is something highlighted.
 " OK fixed, now we show [+] and [-] in different places, so only [+] gets highlighted.
@@ -18,15 +20,22 @@ set statusline=%<%f\ %#Error#%m%##%h%r%=\ %P\ (%0l/%-0L,%c~%v)\ \#%02B\ \|%0n\|%
 "let &statusline = substitute(&statusline, '%m', '%{ModifiedStatus()}', '')
 " %y for filetype
 let &statusline = substitute(&statusline, '%m', '%{ \&modified ? "[+]" : "" }', '')
-let s:moreflags  = '%{ \&modifiable ? "" : "[-]" }'
+let s:moreflags = '%{ \&modifiable ? "" : "[-]" }'
 let s:moreflags = s:moreflags . '%#StatusDiffing#%{ \&diff ? "[d]" : "" }%##'
 "highlight StatusDiffing ctermbg=darkyellow ctermfg=black guibg=darkyellow guifg=black
 highlight StatusDiffing ctermbg=blue ctermfg=white guibg=blue guifg=white
-let &statusline = substitute(&statusline, '%h', s:moreflags.'%h', '')
+let &statusline = substitute(&statusline, '%h', s:moreflags . '%h', '')
+" If I put the space before the word, it works until the [+] modified symbol appears, at which point it disappears, causing the words to mix together.
+let &statusline = substitute(&statusline, '%=', '%#StatusSwapfile#%{ \&swapfile ? "swap " : "" }%##%=', '')
+let &statusline = substitute(&statusline, '%=', '%#StatusSwapfile#%{ get(b:,"auto_updated_ctags",0) ? "tags " : "" }%##%=', '')
 if exists('*GetSearchStatus')
-  let &statusline = substitute(&statusline, '= ', '= %{GetSearchStatus()}', '')
+  let &statusline = substitute(&statusline, '%= ', '%= %{GetSearchStatus()}', '')
 endif
 
+" I want to make the swap text yellow/brown, but it doesn't match the rest of the statusline.
+"hi StatusSwapfile ctermfg=darkyellow
+" So really I want to inherit from StatusLineUnlit (or just StatusLine), and then change it a little.
+hi link StatusSwapfile StatusLineUnlit
 
 
 let g:ShowCurrentGitBranch = get(g:, 'ShowCurrentGitBranch', 1)
