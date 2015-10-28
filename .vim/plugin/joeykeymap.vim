@@ -934,7 +934,7 @@ nnoremap <Leader>C :call system("xsel -ib", getreg('*'))<CR>
 " This one only ever shows one ~ line, but it has ugly animation with SexyScroller.
 "nnoremap G ggG<C-e>
 " These have shorter (janked) animations, which are acceptable but not ideal.
-nnoremap G :normal! ggG<CR><C-e>
+nnoremap <silent> G :normal! ggG<CR><C-e>
 " Did not help:
 "nnoremap G :normal! ggG<CR><C-e>:call g:SexyScroller_ScrollToCursor()<CR>
 "nnoremap G :noauto normal! ggG<CR><C-e>
