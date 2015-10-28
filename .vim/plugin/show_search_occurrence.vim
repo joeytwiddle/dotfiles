@@ -51,6 +51,9 @@ function! GetSearchStatus(...)
 		let lnum = 1
 		while lnum <= line_count
 			let line = getline(lnum)
+			" TODO: We could count multiple matches on one line like this: len(split(line, @/)) - 1
+			"       I think this will match the number of matches that hitting `n` would traverse, since `n` does not bother with overlapping matches and neither does split().
+			"       Using split() might have a noticeable performance hit!
 			if match(line, @/) >= 0
 				let count_matches += 1
 				" If this match is on the current line, then record the index
