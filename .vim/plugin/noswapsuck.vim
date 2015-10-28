@@ -16,6 +16,14 @@
 " For the moment, disabling on InsertEnter and CursorHoldI.  That means we
 " might not create a swapfile during the first edit.  Gah.
 
+" To easily see whether a swapfile is currently being used, add an indicator to your statusline.
+"
+"   let &statusline = substitute(&statusline, '%=', '%{ \&swapfile ? " swap" : "" }%=', '')
+"
+" This does not work yet:
+"
+"   set statusline.=%{\&swapfile?"swap":""}
+
 " Allows plugin to be enabled/disabled from config and also at runtime.
 let g:NoSwapSuck_Enabled = get(g:, 'NoSwapSuck_Enabled', 1)
 
