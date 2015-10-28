@@ -28,6 +28,10 @@ function! Joeysyntax()
 	" :syntax region jShComment start="[#]*## " end='$'
 	" :highlight link jShComment jComment
 
+	"" When TODO highlighting works in config files, it is because of the confComment and confTodo rules.
+	"" When TODO highlighting works in vim files, it is because of the vimTodo rule.
+	"" These both use "contained TODO" so perhaps we should too!
+
 	" :syntax keyword jTodo TODO
 	" :highlight link jTodo Todo
 	" :syntax keyword jNote NOTE
@@ -40,7 +44,7 @@ function! Joeysyntax()
 	" :highlight! link jTodo Todo
 	" NOTE: these DO work, if you call :Joeysyntax after vim has started.
 	"       But not always.  Sometimes only if the text is outside a Comment (e.g. in Python).
-	:syntax keyword jTodo TODO Todo ToDo todo BUG BUGS WARN CONSIDER Consider NOTE TEST TESTING TOTEST Testing containedin=Comment,jShComment,jComment,shComment,ucComment,vimComment
+	:syntax keyword jTodo TODO Todo ToDo todo BUG BUGS WARN CONSIDER Consider NOTE TEST TESTING TOTEST Testing containedin=Comment,jShComment,jComment,shComment,ucComment,vimComment contained=TODO
 	" Well they don't appear to work in all languages.
 	" See also the shTodo rule I overrode in ~/.vim/after/syntax/sh.vim
 	" :syntax contain jTodo BUG linksto Todo
