@@ -756,7 +756,8 @@ cnoremap %<Tab> <C-r>%
 silent! xunmap <BS>
 
 " When editing a Vim file, make K lookup Vim's inline :help rather than calling 'man'.
-autocmd BufReadPost *.vim setlocal keywordprg=:help
+"autocmd BufReadPost {.vimrc,*.vim} setlocal keywordprg=:help
+autocmd FileType vim setlocal keywordprg=:help
 
 " My own attempt at a YankRing
 " I'm not sure if this is useful.  It turned out to be no use for the original use-case (I was deleting parts of lines, so they were entering the small delete register, and not the numbered registers).
@@ -918,3 +919,29 @@ nnoremap <Leader>T :!dict <cword><CR>
 nnoremap - :ZoomOut<CR>
 nnoremap + :ZoomIn<CR>
 
+" I sometimes have trouble copying from Vim/GVim and pasting into the browser.
+" (I recall this being an issue when testing userscripts with TamperMonkey in Chrome.)
+" So here is an alternative way to populate the clipboard, which might work:
+"nnoremap <Leader>C :call system("xsel -ib", getreg('+'))<CR>
+nnoremap <Leader>C :call system("xsel -ib", getreg('*'))<CR>
+"nnoremap <Leader>C :call system("echo -n $'" . escape(getreg(), "'") . "' | xsel -ib")<CR>
+" It happens especially in GVim.  The above don't help.
+" Try Ctrl-Shift-C instead of the above.  It might be a built-in binding.
+
+" When viewing the bottom of the file (after jumping to it), show one ~ line after the last line, so the end of the file is obvious to the viewer.
+" This one will show more ~ lines if you are already at the bottom.
+"nnoremap G G<C-e>
+" This one only ever shows one ~ line, but it has ugly animation with SexyScroller.
+"nnoremap G ggG<C-e>
+" These have shorter (janked) animations, which are acceptable but not ideal.
+nnoremap G :normal! ggG<CR><C-e>
+" Did not help:
+"nnoremap G :normal! ggG<CR><C-e>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap G :noauto normal! ggG<CR><C-e>
+" This does not work:
+"nnoremap G :set nolazyredraw<CR>:set lazyredraw<CR>:normal! ggG<C-e><CR>
+" Only scroll if we are on the last line of the screen.  (Prevent scrolling if the file height is less than the screen height.)
+" None of these are working properly yet.
+"nnoremap <silent> G :normal! ggG<CR>$:if winline() >= winheight("%") <Bar> call feedkeys(":normal! <CR>") <Bar> endif<CR>
+"nnoremap <silent> G :normal! ggG<CR>$<C-e>:if winline() < winheight("%") <Bar> exec ":normal! ggG" <Bar> :endif<CR>
+"nnoremap <silent> G :normal! ggG<CR>$<C-e>exec ( winline() < winheight("%") ? ":normal! ggG" : "" )<CR>
