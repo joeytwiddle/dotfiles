@@ -218,10 +218,16 @@ Mod4 Right :MoveTabRight
 # Mod4 braceleft :MovePrevTab
 # Mod1 braceright :MoveNextTab
 # Mod4 braceright :MoveNextTab
-Mod4 Shift braceleft  :PrevTab
-Mod4 Shift braceright :NextTab
+## This is like what a Mac has:
+#Mod1 Shift braceleft  :PrevTab
+#Mod1 Shift braceright :NextTab
+## Moved over by one key:
+#Mod4 Shift braceleft  :PrevTab
+#Mod4 Shift braceright :NextTab
 Mod1 Shift h :PrevTab
 Mod1 Shift l :NextTab
+Control Mod1 braceleft  :PrevTab
+Control Mod1 braceright :NextTab
 
 ## Do things to windows
 # Mod1 c :Close
