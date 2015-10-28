@@ -15,6 +15,13 @@ packages_desktop_extended="mplayer gimp inkscape dict-wn zsh wmctrl xdotool xosd
 # But I prefer exim!
 # Both postfix and exim open a dpkg config dialog.
 packages_desktop_extended="$packages_desktop_extended exim4"
+# Extended audio
+packages_to_install="$packages_to_install mp3gain vorbisgain" # For randommp3
+packages_to_install="$packages_to_install mpg123" # In case mplayer is not available
+packages_to_install="$packages_to_install lame mp3info" # For reencoding to mp3
+# bladeenc 
+# For reencode_video_to_x264:
+packages_to_install="$packages_to_install faac gpac x264 mencoder"
 # libreoffice compizconfig-settings-manager 
 packages_yummy="hugs"   # ghc is also nice, but 290meg!
 
@@ -87,4 +94,5 @@ fi
 
 [ -n "$added_repo" ] && sudo apt-get update
 
-sudo apt-get install $packages_to_install $packages_editor $packages_winman $packages_ui $packages_remote $packages_debugging $packages_desktop_extended $packages_yummy $packages_system $packages_development $packages_deployment $packages_deps $packages_io $packages_av_creation $packages_packaging "$@"
+sudo apt-get install $packages_to_install $packages_editor $packages_winman $packages_ui $packages_remote $packages_debugging $packages_desktop_extended $packages_yummy $packages_system $packages_development $packages_deployment $packages_deps $packages_io $packages_av_creation $packages_packaging "$@" |
+grep -v "is already the newest version.$"
