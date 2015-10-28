@@ -129,6 +129,7 @@ autocmd VimLeave * silent !stty ixon
 		let tlist_man_settings = 'man;s:section'
 		let tlist_html_settings = 'html;t:template;a:anchor;f:javascript function;i:id'
 		let tlist_opa_settings = 'opa;m:module;t:type;d:database;g:global;f:function'
+		let tlist_php_settings = 'php;c:class;d:constant;f:function' " ;v:variable
 
 	" }}}
 
@@ -372,6 +373,13 @@ autocmd VimLeave * silent !stty ixon
 			" This looks very flat, it looks like it is fitting a lot of rows onto the screen!  (Fluxbox)
 			" However Lucida Console 6 is still clearer and smaller!
 			":set guifont=Envy\ Code\ S11\ 8
+
+			" These sizes were chose *after* gnome-settings-daemon had run!
+			":set guifont=Envy\ Code\ S11\ 10
+			" Nice thin
+			:set guifont=Envy\ Code\ S11\ 13
+			" First thick
+			":set guifont=Envy\ Code\ S11\ 17
 		endif
 		"" If I want to go smaller than Lucida 8...
 		"" Droid Sans Mono can go very small; it is rather fuzzy, but it is even smaller than Clean!
@@ -586,6 +594,7 @@ autocmd VimLeave * silent !stty ixon
 
 " Sometimes we want to load lightweight, without all the extra plugins
 " At the moment, only when git is prompting us for a commit message.
+" CONSIDER: For a truly minimal vim, we should skip everything else in this file, and convince Vim not to load plugins from our .vim folder too.
 if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 " >>> Addons (the neat way) {{{
@@ -704,10 +713,13 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Javascript
 	" Some suggestions for Node: https://github.com/joyent/node/wiki/Vim-Plugins
 	" Some suggestions for Meteor: were recommended at: https://github.com/Slava/vimrc/
-	call add(vamAddons,"github:pangloss/vim-javascript")  " Improved indent and syntax for Javascript
+	" Improved indent and syntax for Javascript
+	" This kills my assignment highlights, but it has more types for colorschemes like monokai.
+	call add(vamAddons,"github:pangloss/vim-javascript")
 	"call add(vamAddons,"github:jelera/vim-javascript-syntax") " Even more comprehensive syntax
 	"call add(vamAddons,"github:vim-scripts/JavaScript-Indent") " Improved indent and syntax for Javascript and HTML (OLD alternative).  Joyent says: [somewhat buggy, clicking tab won't indent]
-	call add(vamAddons,"github:elzr/vim-json")
+	" Conceals ""s until we are focused on them:
+	"call add(vamAddons,"github:elzr/vim-json")
 
 	" Javascript beautification:
 	"call add(vamAddons,"github:maksimr/vim-jsbeautify")    " Just a wrapper for jsbeautify
@@ -949,7 +961,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Some colorschemes:
 	call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
 	"call add(vamAddons,"github:shawncplus/skittles_berry") " Cute and colorful
-	" Originally for Text Mate, monokai/molokai is the default theme for Sublime Text
+	" Molokai (Monokai) was originally a theme for Text Mate, and is the default theme for Sublime Text
 	call add(vamAddons,"github:sickill/vim-monokai")     " Forces t_Co=256, appears more faithful to Sublime
 	"call add(vamAddons,"github:tomasr/molokai")          " Supports 256 colors when available, less faithful to Sublime
 	"let g:molokai_original = 0                           " Makes some changes, but does not help much.
