@@ -86,6 +86,11 @@ synclient HorizScrollDelta=-111
 synclient VertEdgeScroll=0
 synclient HorizEdgeScroll=0
 
+# Now we want to do the same for the mouse
+#xmodmap - << !
+#pointer = 1 2 3 5 4 6 7 8 9 10 11 12
+#!
+
 # Disabled.  This used to work on Debian but now getting issues on Ubuntu 12.04.
 # Although it did give me a nice big I over xterms and a large hand over links, over normal windows and Fluxox desktop it showed me a huge X instead of a nice large arrow.
 if [ -d $HOME/X11_big_cursor ] && false
