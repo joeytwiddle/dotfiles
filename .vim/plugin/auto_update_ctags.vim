@@ -20,6 +20,11 @@ function! AutoUpdateCTags()
 		let filename = substitute(filename, '^./',     '', '')
 		"let filename = substitute(filename, getcwd().'/', '', '')
 		silent exec '!ctags -a ' . shellescape(filename) . ' 2> >(grep -v "^ctags: Warning: ignoring null tag")'
+
+		" Let other plugins know that this buffer is being tagged.
+		let b:auto_updated_ctags = 1
+	else
+		let b:auto_updated_ctags = 0
 	endif
 endfunction
 
