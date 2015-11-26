@@ -90,6 +90,13 @@ fi
 
 	xscreensaver -no-splash &
 
+	sleep 2
+
+	# Later I will probably start gnome-settings-daemon, otherwise Chrome's font size will be awful.
+	# But that will take over screen locking, and will mess up my keyboard repeat speed when unlocking.
+	# We can workaround that like this:
+	run_after_screen_unlock "sh $HOME/.joeys_x_essentials" &
+
 ) &
 
 # And last but not least we start fluxbox.
