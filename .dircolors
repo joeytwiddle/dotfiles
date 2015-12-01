@@ -208,6 +208,10 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .sda 01;35
 # Windows SVG?
 .wmf 01;35
+# Subtitles
+.srt 01;36
+.sub 01;36
+.sbv 01;36
 
 # ?
 .gl 01;37
@@ -216,7 +220,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 ## How odd.  } in vim usually skips a paragraph, but here for me it stops on .ppt, and again later on .sh!
 # yellow
 # Documents (human readable) (and editing)
-.diff 01;33
+.diff 01;33 # Despite being basically the same, I have given diffs and patches different colours!
 .sync 01;33
 .txt 01;33
 .TXT 01;33
@@ -267,6 +271,9 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .odg 01;33   # ODF drawing
 .odb 01;33   # ODF database
 .otp 01;33   # ODF template
+# Ebook formats
+.epub 01;33
+.mobi 01;33
 
 # cyan
 # Code / input for software
@@ -298,7 +305,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .sty 01;36
 .cls 01;36
 .dsc 01;33
-.patch 01;36
+.patch 00;36 # Patches; made a little darker because it's nice to distinguish them from code files
 # PHP (IMC)
 .php3 01;36
 .inc 01;36
