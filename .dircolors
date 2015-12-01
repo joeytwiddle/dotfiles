@@ -180,7 +180,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .mkv 01;35
 .h264 01;35
 .x264 01;35
-.3gp 01;35
+.3gp 00;35
 # Audio
 .wav 01;35
 .raw 01;35
@@ -189,10 +189,12 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .it 01;35
 .mp3 01;35
 .ogg 01;35
-.wma 01;35  # Microsoft
-.ra 01;35   # RealAudio
-.m4a 01;35  # iTunes
-.m4p 01;35  # iTunes
+# We distinguish proprietary formats, by making them a bit darker
+.wma 00;35  # Microsoft
+.ra 00;35   # RealAudio
+.m4a 00;35  # iTunes
+.m4p 00;35  # iTunes
+# Playlists
 .m3u 01;35
 .pls 01;35
 # Vector images (editable / not really)
