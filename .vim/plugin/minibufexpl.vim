@@ -645,6 +645,11 @@ if !exists('g:miniBufExplorerDebugOutput')
   let g:miniBufExplorerDebugOutput = ''
 endif
 
+" By Joey.  Whether or not to display buffer numbers.
+if !exists('g:miniBufExplShowBufNums')
+  let g:miniBufExplShowBufNums = 1
+endif
+
 " TODO: Undocumented!!!  By Joey.
 if !exists('g:miniBufExplForceDisplay')
   let g:miniBufExplForceDisplay = 0
@@ -1374,7 +1379,13 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
             let l:shortBufName = substitute(l:shortBufName, '[][()]', '', 'g') 
             " let l:tab = '['.l:i.':'.l:shortBufName.']'
             " let l:tab = '['.l:shortBufName.']'
-            let l:tab = l:shortBufName
+            if g:miniBufExplShowBufNums
+              "let l:tab = '(' . l:i . ') ' . l:shortBufName
+              "let l:tab = l:shortBufName . ' <' . l:i . '>'
+              let l:tab = l:shortBufName . '/' . l:i . ''
+            else
+              let l:tab = l:shortBufName
+            endif
 
             if l:tab == ""
                 let l:tab = "___"
