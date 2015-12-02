@@ -717,6 +717,16 @@ augroup END
 
 let s:userFocusedBuffer = -1
 
+function! HlExists(hl)
+  if !hlexists(a:hl)
+    return 0
+  endif
+  redir => hlstatus
+  exe "silent hi" a:hl
+  redir END
+  return (hlstatus !~ "cleared")
+endfunction
+
 " Functions
 "
 " StartExplorer - Sets up our explorer and causes it to be displayed {{{
@@ -826,7 +836,9 @@ function! <SID>StartExplorer(sticky, delBufNum)
 
 
 
-    if !exists("g:did_minibufexplorer_syntax_inits")
+    " Define highlights only if they have not been created yet, or if they were cleared somehow.
+    "if !exists("g:did_minibufexplorer_syntax_inits")
+    if !HlExists("MBENormal")
       let g:did_minibufexplorer_syntax_inits = 1
       " highlight MBEGap            ctermfg=white ctermbg=magenta guibg=magenta
       " highlight MBEGap            term=none cterm=none ctermbg=black ctermfg=grey guibg=black guifg=grey
