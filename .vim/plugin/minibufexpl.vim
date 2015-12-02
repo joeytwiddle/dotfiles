@@ -307,9 +307,9 @@
 "
 " Has this plugin already been loaded? {{{
 "
-if exists('loaded_minibufexplorer')
-  finish
-endif
+"if exists('loaded_minibufexplorer')
+  "finish
+"endif
 let loaded_minibufexplorer = 1
 " }}}
 
