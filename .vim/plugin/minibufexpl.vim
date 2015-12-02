@@ -710,6 +710,7 @@ augroup MiniBufExplorer
 
   " Experiments...
   "autocmd MiniBufExplorer BufWinEnter * call <SID>DEBUG('-=> BufWinEnter AutoCmd', 10) |call <SID>AutoUpdate(-1)
+  "autocmd MiniBufExplorer BufWritePost * call <SID>DEBUG('-=> BufWritePost AutoCmd', 10) |call <SID>AutoUpdate(-1)
 
 augroup END
 " }}}
