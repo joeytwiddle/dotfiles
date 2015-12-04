@@ -31,6 +31,12 @@ packages_development="git-core ccache sshfs encfs unison lftp" # 'git-core' is t
 
 packages_packaging="aptitude dpkg-repack alien fakeroot"
 
+# You never know when you might need this
+#packages_to_install="$packages_to_install dosbox"
+
+# Color pickers, to conveniently pick colors from off the screen.
+#packages_to_install="$packages_to_install gpick gcolor2"
+
 #packages_demodev="ocaml-nox liblz4-tool menhir ocamldsort"
 
 # festival festvox-rablpc16k
@@ -53,7 +59,7 @@ add_repository() {
 	local apt_sources_path="/etc/apt/sources.list.d/${apt_sources_file}"
 	if [ -f "$apt_sources_path" ]
 	then
-		echo "### Confirmed ppa:$ppa_repo"
+		echo "### We already have ppa:$ppa_repo"
 	else
 		echo "### Installing $ppa_repo to $apt_sources_path"
 		sudo add-apt-repository ppa:"$ppa_repo"
@@ -61,11 +67,26 @@ add_repository() {
 	fi
 }
 
+add_repository gwendal-lebihan-dev/hexchat-stable
+packages_to_install="$packages_to_install hexchat"
+
 # Install NodeJS 0.10
 # Alternative methods can be found here: https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 # To install io.js, look here: https://nodesource.com/blog/nodejs-v012-iojs-and-the-nodesource-linux-repositories
 add_repository chris-lea/node.js
 packages_development="$packages_development nodejs"
+
+#install_scala_build_tool=true
+if [ -n "$install_scala_build_tool" ]
+then
+	if [ ! -f "/etc/apt/sources.list.d/sbt.list" ]
+	then
+		echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+		sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+		added_repo=1
+	fi
+	packages_development="$packages_development sbt"
+fi
 
 #add_repository saltstack/salt
 #packages_deployment="salt-master python-software-properties"
@@ -92,7 +113,26 @@ then
 	# Last time I installed, they gave me version 3.0.6
 fi
 
+
+
+# === Less crucial ===
+
+# shellcheck
+# msttcorefonts
+# texlive-fonts-recommended
+
+# xbacklight
+# sudo add-apt-repository ppa:indicator-brightness/ppa
+# indicator-brightness
+# sudo add-apt-repository ppa:kamalmostafa/linux-kamal-mjgbacklight
+
+
+
 [ -n "$added_repo" ] && sudo apt-get update
 
-sudo apt-get install $packages_to_install $packages_editor $packages_winman $packages_ui $packages_remote $packages_debugging $packages_desktop_extended $packages_yummy $packages_system $packages_development $packages_deployment $packages_deps $packages_io $packages_av_creation $packages_packaging "$@" |
-grep -v "is already the newest version.$"
+sudo apt-get -V install $packages_to_install $packages_editor $packages_winman $packages_ui $packages_remote $packages_debugging $packages_desktop_extended $packages_yummy $packages_system $packages_development $packages_deployment $packages_deps $packages_io $packages_av_creation $packages_packaging "$@"
+
+#grep --line-buffered -v "is already the newest version.$"
+
+# Unfortunately if we use grep, the "Do you want to continue [Y/n]?" will not be displayed, because no newline is sent!
+
