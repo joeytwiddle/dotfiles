@@ -76,7 +76,7 @@ fi
 	bbkeys &
 	gkrellm &
 
-	sleep 2
+	sleep 1
 
 	lxpanel &
 	/opt/trinity/bin/kicker &
@@ -92,10 +92,19 @@ fi
 
 	sleep 2
 
+	# I was doing this earlier, but it was getting reset by something!
+	# On Ubuntu 14.04 (upgraded from 12.04), /etc/default/keyboard is not being respected by X, so we force it here:
+	. /etc/default/keyboard
+	#[ -z "$XKBLAYOUT" ] && XKBLAYOUT=gb
+	[ -n "$XKBLAYOUT" ] && setxkbmap "$XKBLAYOUT"
+
 	# Later I will probably start gnome-settings-daemon, otherwise Chrome's font size will be awful.
 	# But that will take over screen locking, and will mess up my keyboard repeat speed when unlocking.
-	# We can workaround that like this:
-	run_after_screen_unlock "sh $HOME/.joeys_x_essentials" &
+	# I tried to workaround that using this:
+	#run_after_screen_unlock "sh $HOME/.joeys_x_essentials" &
+	# It works, but only after Gnome interface is used to unlock.
+	# But I discovered my settings are lost more often that - whenever the machine resumes from suspend.
+	# So I started using this instead: /etc/pm/sleep.d/50_restore_joeys_x_settings
 
 ) &
 
