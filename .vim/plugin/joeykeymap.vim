@@ -442,7 +442,7 @@ nnoremap <Leader>w :set invwrap<Enter>
 "" Select buffer by any part of filename and Tab completion or arrows, or by number
 "nnoremap <C-E> :ls<CR>:b<space>
 nnoremap <Leader>W :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
-nnoremap <C-E> :JoeysBufferSwitch<Enter>
+nnoremap <C-E> :<C-U>JoeysBufferSwitch<Enter>
 "" An interesting alternative, assuming you have MBE as your first window:
 "nnoremap <C-E> 1<C-W><C-W>/
 "" Select file by filename with completion
