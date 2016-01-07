@@ -440,16 +440,26 @@ Mod1 Mod4 Prior :Resize 0 -8
 Mod1 F2 :ExecCommand runacommand
 
 ## Audio
-Mod1 KP_Multiply :ExecCommand volumeup 9
-Mod1 KP_Divide   :ExecCommand volumedown 9
-Mod1 KP_Add      :ExecCommand volumeup 2
-Mod1 KP_Subtract :ExecCommand volumedown 2
-XF86AudioLowerVolume   :ExecCommand volumedown 5
-XF86AudioRaiseVolume   :ExecCommand volumeup 5
+Mod1 KP_Multiply :ExecCommand SHOW_VOLUME=1 volumeup 9
+Mod1 KP_Divide   :ExecCommand SHOW_VOLUME=1 volumedown 9
+Mod1 KP_Add      :ExecCommand SHOW_VOLUME=1 volumeup 2
+Mod1 KP_Subtract :ExecCommand SHOW_VOLUME=1 volumedown 2
 XF86AudioMute          :ExecCommand SHOW_VOLUME=1 set_volume 0
-#F10          :ExecCommand set_volume 0
-#F11   :ExecCommand volumedown 5
-#F12   :ExecCommand volumeup 5
+XF86AudioLowerVolume   :ExecCommand SHOW_VOLUME=1 volumedown 3
+XF86AudioRaiseVolume   :ExecCommand SHOW_VOLUME=1 volumeup 3
+# Do the same thing if I accidentally use the Mod4 instead of Fn key.
+Mod4 F10   :ExecCommand SHOW_VOLUME=1 set_volume 0
+Mod4 F11   :ExecCommand SHOW_VOLUME=1 volumedown 4
+Mod4 F12   :ExecCommand SHOW_VOLUME=1 volumeup 4
+# But sometimes I really want one-handed operation.
+F10   :ExecCommand SHOW_VOLUME=1 set_volume 0
+F11   :ExecCommand SHOW_VOLUME=1 volumedown 5
+F12   :ExecCommand SHOW_VOLUME=1 volumeup 5
+# Then how could we get real F10/11/12?
+# Even when disabled above, these won't work: they get interpreted by Fluxbox again!
+#XF86AudioLowerVolume   :ExecCommand xdotool key --clearmodifiers F11
+#XF86AudioRaiseVolume   :ExecCommand xdotool key --clearmodifiers F12
+#XF86AudioMute          :ExecCommand xdotool key --clearmodifiers F10
 ## My bbkeysrc uses Alt-Minus and Alt-Plus.
 ## (play)
 # Mod1 KP_1 :ExecCommand xmms -p
