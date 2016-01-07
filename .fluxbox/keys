@@ -138,25 +138,39 @@ Control Shift F2 :CommandDialog
 # OnDesktop Mouse2 :workspaceMenu
 # OnDesktop Mouse3 :rootMenu
 
-## Change desktop with mousewheel on wallpaper
-## These next two are really no fun when you have a scrollbar on your laptop's mousepad!
-#OnDesktop Mouse4 :PrevWorkspace
-#OnDesktop Mouse5 :NextWorkspace
-OnDesktop Mod1 Mouse4 :PrevWorkspace
-OnDesktop Mod1 Mouse5 :NextWorkspace
-OnDesktop Shift Mouse4 :PrevWorkspace 3
-OnDesktop Shift Mouse5 :NextWorkspace 3
-OnDesktop Mod4 Mouse4 :PrevWorkspace 3
-OnDesktop Mod4 Mouse5 :NextWorkspace 3
+## I had to disable the following because of a small disaster with two-finger scrolling.
+## Basically I am sometimes tempted to flick-scroll the browser page back to the top, and then before it stops, go and switch to a different desktop or window.
+## But my two-finger scroller will continue sending button 4/5 (mousewheel) events, and not necessarily to the original window!
+## - If I happen to press Alt (Mod1) for any reason, Fluxbox will receive Mod1 Mouse4, and change workspace!
+## - If I happen to move my mouse over the desktop or toolbar, Fluxbox will detect OnDesktop Mouse4, and change workspace!
+## Unfortunately this means mousewheel to change desktop is disabled for the moment.
+## But perhaps it could be reintroduced with less common modifiers, e.g. Mod1-Mod4 or Ctrl-Alt-Shift.
 
-## Or, to go alongside my compiz binds:
-Mod1 Mouse4 :PrevWorkspace
-Mod1 Mouse5 :NextWorkspace
-Mod4 Mouse4 :PrevWorkspace 3
-Mod4 Mouse5 :NextWorkspace 3
-
-OnToolbar Mouse4 :PrevWorkspace
-OnToolbar Mouse5 :NextWorkspace
+### Change desktop with mousewheel on wallpaper
+### These next two are really no fun when you have a scrollbar on your laptop's mousepad!
+##OnDesktop Mouse4 :PrevWorkspace
+##OnDesktop Mouse5 :NextWorkspace
+#OnDesktop Mod1 Mouse4 :PrevWorkspace
+#OnDesktop Mod1 Mouse5 :NextWorkspace
+#OnDesktop Shift Mouse4 :PrevWorkspace 3
+#OnDesktop Shift Mouse5 :NextWorkspace 3
+#OnDesktop Mod4 Mouse4 :PrevWorkspace 3
+#OnDesktop Mod4 Mouse5 :NextWorkspace 3
+#
+### Or, to go alongside my compiz binds:
+#Mod1 Mouse4 :PrevWorkspace
+#Mod1 Mouse5 :NextWorkspace
+### Disabled for now, so that we can fake mousewheel up/down with Mod4 Up/Down.
+### If we don't disable this, `Mod4 Down` triggers Mouse5 but with Mod4 set that becomes `Mod4 Mouse5` which is intercepted here!
+##Mod4 Mouse4 :PrevWorkspace 3
+##Mod4 Mouse5 :NextWorkspace 3
+#Shift Mod1 Mouse4 :PrevWorkspace 3
+#Shift Mod1 Mouse5 :NextWorkspace 3
+#Control Mod1 Mouse4 :PrevWorkspace 3
+#Control Mod1 Mouse5 :NextWorkspace 3
+#
+#OnToolbar Mouse4 :PrevWorkspace
+#OnToolbar Mouse5 :NextWorkspace
 
 ## Sometimes brings the window back to the front again after (due to focus?)
 OnTitlebar Double Mouse1 :Lower
