@@ -223,10 +223,11 @@ Mod1 Right :NextTab
 #Mod1 Shift     bracketleft     :PrevTab
 #Mod1 Shift     bracketright     :NextTab
 ## Move current tab around
-Mod4 Left :MoveTabLeft
-Mod4 Right :MoveTabRight
-# Mod4 Shift Left :MoveTabLeft
-# Mod4 Shift Right :MoveTabRight
+## Disabled to make Mod4 Left/Right free for mousewheel simulation
+#Mod4 Left :MoveTabLeft
+#Mod4 Right :MoveTabRight
+Mod1 Shift Left :MoveTabLeft
+Mod1 Shift Right :MoveTabRight
 ## not working:
 # Mod1 braceleft :MovePrevTab
 # Mod4 braceleft :MovePrevTab
@@ -301,10 +302,10 @@ Control Mod1 Left :PrevWorkspace
 Control Mod1 Right :NextWorkspace
 Control Mod1 Up :PrevWorkspace 3
 Control Mod1 Down :NextWorkspace 3
-Shift Mod1 Left :TakeToPrevWorkspace
-Shift Mod1 Right :TakeToNextWorkspace
-Shift Mod1 Up :TakeToPrevWorkspace 3
-Shift Mod1 Down :TakeToNextWorkspace 3
+Shift Mod4 Left :TakeToPrevWorkspace
+Shift Mod4 Right :TakeToNextWorkspace
+Shift Mod4 Up :TakeToPrevWorkspace 3
+Shift Mod4 Down :TakeToNextWorkspace 3
 ## Slower; I was only using them for debugging.
 #Control Mod1 H :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
 #Control Mod1 L :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
@@ -628,16 +629,77 @@ Control XF86AudioPlay :ExecCommand xdotool key PageDown
 # For these to run, I must disable the StartMoving on Mod1 Mouse1.  But even then they still don't work.
 
 # In the end I have settled for the non-standard Ctrl-Shift-click
-OnWindow      Control Shift Mouse1 :ExecCommand xdotool click 3
-OnDesktop     Control Shift Mouse1 :ExecCommand xdotool click 3
-# and for middle-click, Alt-Ctrl-Shift-click
-OnWindow Mod1 Control Shift Mouse1 :ExecCommand xdotool click 2
+#OnWindow      Control Shift Mouse1 :ExecCommand xdotool click 3
+#OnDesktop     Control Shift Mouse1 :ExecCommand xdotool click 3
+#Control Shift Mouse1 :ExecCommand xdotool click 3
+Control Shift Mouse1 :ExecCommand sleep 0.1 ; xdotool click 3
+# For some reason these are not very reliable.  Perhaps the real ButtonPress/Release and the simulated ButtonPress/Release overlap.
+#Mod4 Mouse1 :ExecCommand xdotool click 3
+# If we wait just a moment for the real click to release, it's much more reliable.
+# (Unlike the "click 1" below, it seems we don't need to worry about the modifier key being released.)
+Mod4 Mouse1 :ExecCommand sleep 0.1 ; xdotool click 3
+#Menu Mouse1 :ExecCommand xdotool click 3
+
+# And for middle-click
+#OnWindow Mod1 Control Shift Mouse1 :ExecCommand xdotool click 2
+# Sends button 2 but also sends nasty modifiers!
+#Mod1 Control Shift Mouse1 :ExecCommand sleep 0.1 ; xdotool click 2
+# Even with these fewer modifiers it's often not useful.
+#Shift Control Mouse3 :ExecCommand sleep 0.1 ; xdotool click 2
+# Does nothing:
+#Mod1 Control Shift Mouse1 :ExecCommand sleep 0.1 ; xdotool --clearmodifiers click 2
+# No better:
+#Mod1 Control Shift Mouse1 :MacroCmd {ExecCommand sleep 0.1 ; xdotool --clearmodifiers click 2} {ExecCommand xdotool click 2}
+# Works, but only now that I actually can click button3 myself!
+# But it has a problem: If I use Mod4 Mouse1 to simulate Mouse3, it gets caught here, and goes on to simulate Mouse2!
+#Mod4 Mouse3 :ExecCommand sleep 0.1 ; xdotool click 2
+
+# Why not make a keybind for normal click?
+# Not working.
+# I think, no matter what modifier key I choose, the click happens with that modifier key pressed, and that has a different meaning from a plain click!
+#Mod4 c :ExecCommand xdotool click 1
+# Does nothing:
+#Mod4 c :ExecCommand xdotool --clearmodifiers click 1
+# Ah but this works!  Give the user time to release the modifier key.
+Mod4 c :MacroCmd {ExecCommand sleep 0.3 ; xdotool click 1}
+
+# For scroll wheel up/down
+# When you don't have a scroll wheel on your mouse or similar actions on your trackpad, then a workaround (for browsers) is to use the Up/Down keys.  Unfortunately this suffers from focus issues, while mouse wheel always focuses the element under the mouse.  That is why wheel emulation is desirable.
+# These work but I'd rather keep them performing their default action
+#Control Shift Up     :ExecCommand xdotool click 4
+#Control Shift Down   :ExecCommand xdotool click 5
+# Did not work.  I don't know why.
+#Shift Mod4 Up     :ExecCommand xdotool click 4
+#Shift Mod4 Down   :ExecCommand xdotool click 5
+# Sometimes work, sometimes don't.  Chrome picks up the Control, and as a result it performs zoom instead of scroll!
+# But if I run xdotool with --clearmodifiers, then nothing happens!  Because --clearmodifiers is only defined for xdotool's key commands.
+#Control Mod4 Up     :ExecCommand xdotool click 4
+#Control Mod4 Down   :ExecCommand xdotool click 5
+# We are already using these for put_current_xwindow!
+#Mod1 Mod4 Up     :ExecCommand xdotool click 4
+#Mod1 Mod4 Down   :ExecCommand xdotool click 5
+# So we listen on Mod4 alone.
+# These conflict with rules elsewhere, if they are not disabled: `Mod4 Left :MoveTabLeft` and trigger `Mod4 Mouse4 :PrevWorkspace 3`
+Mod4 Up     :MacroCmd {ExecCommand xdotool click 4} {ExecCommand xdotool click 4}
+Mod4 Down   :MacroCmd {ExecCommand xdotool click 5} {ExecCommand xdotool click 5}
+Mod4 Left   :MacroCmd {ExecCommand xdotool click 6} {ExecCommand xdotool click 6}
+Mod4 Right  :MacroCmd {ExecCommand xdotool click 7} {ExecCommand xdotool click 7}
+# I love these!
+Mod4 k      :MacroCmd {ExecCommand xdotool click 4} {ExecCommand xdotool click 4}
+Mod4 j      :MacroCmd {ExecCommand xdotool click 5} {ExecCommand xdotool click 5}
+# These don't appear to work.  Probably because the Shift is interpreted?
+#Shift Mod4 Up     :MacroCmd {ExecCommand xdotool click 6} {ExecCommand xdotool click 6}
+#Shift Mod4 Down   :MacroCmd {ExecCommand xdotool click 7} {ExecCommand xdotool click 7}
+#Shift Mod4 Left   :MacroCmd {ExecCommand xdotool click 6} {ExecCommand xdotool click 6}
+#Shift Mod4 Right  :MacroCmd {ExecCommand xdotool click 7} {ExecCommand xdotool click 7}
+
 # Alt-right-click usually resizes the window.  We could do it on Win-Alt-click or Ctrl-Alt-click.
 # Alt-Win-click (Mod1 Mod4 Mouse1) gets intercepted by the window resize bind, even if we are focused on the titlebar.  So it never works.
 # We could do it on Win-Alt-click or Ctrl-Alt-click.
 #OnWindow    Mod1 Mod4 Mouse1   :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
 # We can also trigger on "Move" event (not "Mouse" click event), but it makes no difference.
 OnWindow    Mod1 Mod4 Move1    :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+
 # I want a shortcut to start tabbing.
 # I rather want this but it isn't working.
 # It seems OnWindow catches it before OnTitlebar can.  It does that even if I listen for Move1, and even if it appears later in the file.
@@ -649,6 +711,10 @@ OnWindow    Mod1 Mod4 Move1    :MacroCmd {Raise} {Focus} {StartResizing NearestC
 # It works anywhere on the window
 OnWindow   Control Mod4 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
 # Ctrl-Alt-click How is this?
-#OnWindow   Control Mod1 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
-#OnWindow   Control Mod1 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
+OnWindow   Control Mod1 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
+# I think I prefer the second one.  It's easier for my thumb to find Alt than Win.
 
+Mod1 space :ExecCommand xterm -e fish
+# I preferred Synapse to Kupfer.  But it bound itself to <Control>space, which I use in bash, zsh and vim.  If I tried to bind it to <Super_L>space or <Alt_L>space then it would activate on *just* space!
+#Mod1 space :ExecCommand synapse
+Mod4 space :ExecCommand kupfer
