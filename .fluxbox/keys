@@ -482,6 +482,23 @@ Control Mod1 slash    :ExecCommand whatsplaying
 #Control Slash :ExecCommand whatsplaying
 #Control Shift Slash :ExecCommand whatsplaying
 
+
+
+### Tools
+
+## Lock screen
+Mod1 Control Shift L   :ExecCommand xscreensaver-command -lock
+
+## Modify brightness
+# Fn-Up
+XF86AudioStop :ExecCommand adjust_brightness_by +6
+# Fn-Down
+XF86AudioPlay :ExecCommand adjust_brightness_by -6
+# Shift-Fn-Up (not working)
+XF86Eject :ExecCommand adjust_brightness_by +3
+# Shift-Fn-Down (not working)
+XF86AudioPause :ExecCommand adjust_brightness_by -3
+
 ## only work if your X is configured correctly:
 ## actually completely steals my keyboard!
 # None XF86AudioPlay :ExecCommand xmms -u
