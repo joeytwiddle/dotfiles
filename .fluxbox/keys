@@ -251,38 +251,38 @@ Mod1 F4 :Close
 Mod1 q :Close
 Mod4 q :KillWindow
 Mod4 Shift q :ExecCommand xkill
-## None of these work in 1.3.2-4
 # Mod1 a :Lower
-Mod1 a :MacroCmd {Lower} {Focus}
+## None of these do the magic I wanted (FB 1.3.2-4)
+# Mod1 a :MacroCmd {Lower} {Focus}
 # Mod1 a :MacroCmd {Lower} {Activate}
 # Mod1 a :MacroCmd {Lower} {ActivateTab} {Raise}
 # Mod1 a :MacroCmd {Lower} {Reconfig}
 Mod4 a :Lower
-Mod1 d :ShadeWindow
+#Mod1 d :ShadeWindow
 Mod4 d :ShadeWindow
-Mod1 o :DetachClient
+#Mod1 o :DetachClient
 Mod4 o :DetachClient
 # Mod1 s :StickWindow
-Mod1 s :StickWindow {groups} (shaded=no)
+#Mod1 s :StickWindow {groups} (shaded=no)
 Mod4 s :StickWindow {groups} (shaded=no)
 # To do this from the cmdline: wmctrl -i -r $(xdotool getwindowfocus) -b toggle,sticky
-Mod1 i :Minimize
+#Mod1 i :Minimize
 Mod4 i :Minimize
-Mod1 z :MaximizeWindow
+#Mod1 z :MaximizeWindow
 Mod4 z :MaximizeWindow
 ## Like Mac OSX "Grow"
 Mod1 Mod4 equal :MaximizeWindow
 ## Strangely my Chromium ignores this (it captures the keypress)
 # Mod1 Enter :Fullscreen
 # Mod1 Enter :MacroCmd {ToggleDecor} {MaximizeWindow}
-## But it works fine on a different keybinding
-Mod1 Shift z :Fullscreen
-Mod1 Shift f :Fullscreen
-Mod1 v :MaximizeVertical
+## But it works fine on these different keybindings:
+#Mod1 Shift z :Fullscreen
+#Mod1 Shift f :Fullscreen
+#Mod1 v :MaximizeVertical
 Mod4 v :MaximizeVertical
-Mod1 h :MaximizeHorizontal
+#Mod1 h :MaximizeHorizontal
 Mod4 h :MaximizeHorizontal
-Mod1 f :ToggleDecor
+#Mod1 f :ToggleDecor
 Mod4 f :ToggleDecor
 # Mod1 t :ToggleTab
 # Mod4 t :ToggleTab
@@ -531,12 +531,12 @@ Shift Mod1 x :ExecCommand gnome-terminal
 # Mod4 x :ExecCommand xtermbg
 Mod4 x :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 xmms -p
 
-Mod1 e :ExecCommand eterm
+#Mod1 e :ExecCommand eterm
 Mod4 e :ExecCommand ~/bin/konqueror
 # Mod1 w :ExecCommand google-chrome
-# Mod4 w :ExecCommand google-chrome
-Mod1 w :ExecCommand chromium-browser
-Mod4 w :ExecCommand chromium-browser
+Mod4 w :ExecCommand google-chrome
+# Mod1 w :ExecCommand chromium-browser
+# Mod4 w :ExecCommand chromium-browser
 
 ## Push windows to edges or corners of the screen (no resizing)
 ## These got a lot faster when I linked that script into ~/bin
