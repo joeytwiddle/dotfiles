@@ -264,6 +264,7 @@ Mod4 o :DetachClient
 # Mod1 s :StickWindow
 Mod1 s :StickWindow {groups} (shaded=no)
 Mod4 s :StickWindow {groups} (shaded=no)
+# To do this from the cmdline: wmctrl -i -r $(xdotool getwindowfocus) -b toggle,sticky
 Mod1 i :Minimize
 Mod4 i :Minimize
 Mod1 z :MaximizeWindow
@@ -292,7 +293,7 @@ Mod4 F9 :ExecCommand xsnapshot
 Control F9 :ExecCommand xsnapshot -window
 
 ## Run top in an xterm to peek on the system and processes
-Mod1 t :ExecCommand xtermbg -bg '#330000' -geometry 132x28 -e top -n 100
+Mod1 t :ExecCommand xtermbg -bg '#330000' -geometry 132x28 -e top -c -n 100
 
 ## Changing workspace
 ## These settings make sense if you have three columns of desktops
@@ -322,6 +323,7 @@ Control Mod1 J :NextWorkspace 3
 #RControl Up    :PrevWorkspace 3
 #RControl Down  :NextWorkspace 3
 
+## Firefox uses these to select tabs by position
 #Mod1 1 :Workspace 1
 #Mod1 2 :Workspace 2
 #Mod1 3 :Workspace 3
@@ -330,18 +332,19 @@ Control Mod1 J :NextWorkspace 3
 ## http://sourceforge.net/tracker/?func=detail&aid=3190205&group_id=35398&atid=413960
 ## So we try this workaround, but it is pretty slow.  I think the original bug was better!
 ## (20111210: I may have sped it up a bit by linking the script into ~/bin.)
-Control Mod4 Left  :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
-Control Mod4 Right :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
-Control Mod4 Up    :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace       3
-Control Mod4 Down  :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace       3
-Mod4 Shift Left    :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace
-Mod4 Shift Right   :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace
-Mod4 Shift Up      :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace 3
-Mod4 Shift Down    :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace 3
-Control Mod4 H     :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
-Control Mod4 L     :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
-Control Mod4 K     :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace       3
-Control Mod4 J     :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace       3
+## (2012/13: The devs fixed the bug!)
+#Control Mod4 Left  :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
+#Control Mod4 Right :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
+#Control Mod4 Up    :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace       3
+#Control Mod4 Down  :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace       3
+#Mod4 Shift Left    :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace
+#Mod4 Shift Right   :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace
+#Mod4 Shift Up      :ExecCommand wmctrl_emulate_fluxbox_command :TakeToPrevWorkspace 3
+#Mod4 Shift Down    :ExecCommand wmctrl_emulate_fluxbox_command :TakeToNextWorkspace 3
+#Control Mod4 H     :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace
+#Control Mod4 L     :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace
+#Control Mod4 K     :ExecCommand wmctrl_emulate_fluxbox_command :PrevWorkspace       3
+#Control Mod4 J     :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace       3
 
 # Swap all windows between two workspaces
 Control Mod4 Shift Left :ExecCommand move_windows_between_desktops swapdesktops left
@@ -464,6 +467,7 @@ XF86AudioNext :ExecCommand /home/joey/j/jsh nextsong
 Mod1 KP_Delete :ExecCommand xmms -s
 Mod1 KP_5     :ExecCommand whatsplaying
 Mod4 slash    :ExecCommand whatsplaying
+Control Mod1 slash    :ExecCommand whatsplaying
 ## Neither of these worked:
 #Control Slash :ExecCommand whatsplaying
 #Control Shift Slash :ExecCommand whatsplaying
@@ -475,8 +479,8 @@ Mod4 slash    :ExecCommand whatsplaying
 Mod1 Print :ExecCommand import -window root /tmp/screenshot-$$.bmp
 Mod4 Print :ExecCommand import -window root /tmp/screenshot-$$.bmp
 
-Mod4 k :ExecCommand save_desktop
-Mod4 l :ExecCommand load_desktop
+Control Mod4 k :ExecCommand save_desktop
+Control Mod4 l :ExecCommand load_desktop
 
 # Mod1 x :ExecCommand xterm -bg black -fg white -font '-*-fixed-*-r-*-*-12-*-*-*-*-*-*-*'
 # Mod4 x :ExecCommand xterm
@@ -521,10 +525,14 @@ Mod4 KP_7 :ExecCommand put_current_xwindow nw
 Mod4 KP_8 :ExecCommand put_current_xwindow top
 Mod4 KP_9 :ExecCommand put_current_xwindow ne
 
-Mod1 Mod4 Up :ExecCommand put_current_xwindow top_edge
-Mod1 Mod4 Left :ExecCommand put_current_xwindow left_edge
+Mod1 Mod4 Up    :ExecCommand put_current_xwindow top_edge
+Mod1 Mod4 Left  :ExecCommand put_current_xwindow left_edge
 Mod1 Mod4 Right :ExecCommand put_current_xwindow right_edge
-Mod1 Mod4 Down :ExecCommand put_current_xwindow bottom_edge
+Mod1 Mod4 Down  :ExecCommand put_current_xwindow bottom_edge
+Mod1 Mod4 K     :ExecCommand put_current_xwindow top
+Mod1 Mod4 H     :ExecCommand put_current_xwindow left
+Mod1 Mod4 L     :ExecCommand put_current_xwindow right
+Mod1 Mod4 J     :ExecCommand put_current_xwindow bottom
 # I tried to bind this to Hash, but could not find a way.
 # When I do Alt-Enter or Alt-Win-Enter on an xterm, something toggles :Fullscreen, although the binding is not listed here.
 Mod1 Mod4 BackSpace :ExecCommand put_current_xwindow center
@@ -572,11 +580,10 @@ Mod4 Shift Right        :Delay {ExecCommand xdotool key --clearmodifiers shift+c
 
 
 
-## For users with missing or weak right-click button.
+## For problematic mice (no right or middle buttons, no scrolling)
 
 # Simulate right-click and middle-click with Control-click and Shift-Control-click
-# Unfortunately Fluxbox does not offer OnAnything.
-# OnWindow does not apply to titlebars, desktop or some dialogs (e.g. Chrome bookmark menus)
+# Unfortunately (even without OnWindow) these binds do not apply to some dialogs (e.g. Chrome bookmark menus)
 #OnWindow Shift Mouse1          :ExecCommand xdotool click 3
 # I need Ctrl-click for browser's open-in-tab
 #OnWindow Control Mouse1        :ExecCommand xdotool click 3
