@@ -576,18 +576,22 @@ Control Mod1 a :ToggleCmd {ArrangeWindows (Stuck=no)} {ArrangeWindowsHorizontal 
 Shift Mod1 braceleft    :ExecCommand xdotool key --clearmodifiers ctrl+Prior
 Shift Mod1 braceright   :ExecCommand xdotool key --clearmodifiers ctrl+Next
 
+
+
+## Mac-like keybinds
+
 ## My old keyboard let me do Ctrl-Fn-Down = Ctrl-PageDown
 ## My new keyboard has audio keys on Fn-arrows, so we intercept those:
+## But on Ubuntu 14.04 when I hold Control, these are not generated.
 Control XF86AudioStop :ExecCommand xdotool key PageUp
 Control XF86AudioPlay :ExecCommand xdotool key PageDown
 ## Oh it seems this won't work.  xev reports that when I press Ctrl-Fn-arrows, weird things come out (Down becomes Left, Left emits nothing, Up becomes Up and Right becomes XF86AudioNext! asus x453m.
 
-## A few Mac keybinds stolen from porridge
 ## These won't actually work while Mod4 Left/Right are intercepted for moving Fluxbox tabs.
-Mod4 Left               :Delay {ExecCommand xdotool key --clearmodifiers ctrl+Left    }  100
-Mod4 Right              :Delay {ExecCommand xdotool key --clearmodifiers ctrl+Right   }  100
-Mod4 Shift Left         :Delay {ExecCommand xdotool key --clearmodifiers shift+ctrl+Left  }  100
-Mod4 Shift Right        :Delay {ExecCommand xdotool key --clearmodifiers shift+ctrl+Right }  100
+#Mod4 Left               :Delay {ExecCommand xdotool key --clearmodifiers ctrl+Left    }  100
+#Mod4 Right              :Delay {ExecCommand xdotool key --clearmodifiers ctrl+Right   }  100
+#Mod4 Shift Left         :Delay {ExecCommand xdotool key --clearmodifiers shift+ctrl+Left  }  100
+#Mod4 Shift Right        :Delay {ExecCommand xdotool key --clearmodifiers shift+ctrl+Right }  100
 
 ## Function-Arrow keys
 #
