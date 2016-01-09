@@ -42,6 +42,8 @@
 --regex-javascript=/^(COMMENT: Meteor routes (with iron:router):)/\1/X,XXX/
 --regex-javascript=/^[ \t]*this\.route\([ \t]*["']([^"']*)["']/\1/r,route/
 --regex-javascript=/^[ \t]*Meteor.publish\([ \t]*["']([^"']*)["']/\1/u,publication/
+--regex-javascript=/^(COMMENT: Backbone router: (if var router is used))/\1/X,XXX/
+--regex-javascript=/^[ \t]*router\.on[ \t]*\([ \t]*["']route:([^"']*)["']/\1/r,route/
 
 --langdef=opa
 --langmap=opa:+.opa
