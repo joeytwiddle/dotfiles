@@ -1,3 +1,5 @@
+--regex-c=/^(COMMENT: The reason we use [ \t] instead of \s is that \s was not working on OS X)/\1/X,XXX/
+
 --regex-c=/^(COMMENT: Vim, C, Java, Javascript, Asm have defaults, so need no langdef, but we can extend them)/\1/X,XXX/
 --regex-c=/^(COMMENT: It is possible to disable built-in tag detection if we want, piecewise, e.g.: ctags --extra=-q --c-kinds=-d)/\1/X,XXX/
 
@@ -175,5 +177,5 @@
 --regex-scss=/(^([^\/\/])*)[ \t]+([A-Za-z0-9_-]+)) *[,|\{]/\3/t,tag,tags/
 --regex-scss=/(^(.*, *)([A-Za-z0-9_-]+)) *[,|\{]/\3/t,tag,tags/
 --regex-scss=/(^[ \t]+([A-Za-z0-9_-]+)) *[,|\{]/\1/t,tag,tags/
---regex-scss=/^[ \t]*@media\s+([A-Za-z0-9_-]+)/\1/d,media,media/
+--regex-scss=/^[ \t]*@media[ \t]+([A-Za-z0-9_-]+)/\1/d,media,media/
 
