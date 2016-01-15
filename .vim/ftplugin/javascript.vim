@@ -151,7 +151,10 @@ function! s:LoadNodeModule()
   let cfile = expand("<cfile>")
   let fname = cfile
   if !filereadable(fname)
-    let fname = s:SeekFile([expand("%:h"), '.', './node_modules'], ['', '.js'], fname)
+    let fname = s:SeekFile([expand("%:h"), '.', './node_modules'], ['', '.js'], cfile)
+    if !filereadable(fname)
+      let fname = s:SeekFile(['./node_modules/' . cfile . '/lib'], ['', '.js'], 'index.js')
+    endif
   endif
   if filereadable(fname)
     let fname = simplify(fname)
