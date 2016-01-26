@@ -8,9 +8,9 @@ install_package() {
 	packages_to_install="$packages_to_install $*"
 }
 
-packages_editor="vim-gtk exuberant-ctags"
 
-# Desktop
+# Desktop {{{
+
 install_package fluxbox
 install_package wmctrl xdotool xosd-bin
 install_package xfonts-75dpi xfonts-100dpi
@@ -26,20 +26,15 @@ install_package zsh
 install_package mutt
 install_package geeqie
 
-packages_remote="openssh-server screen xtightvncviewer x11vnc tightvncserver tmux"
+# Editors
+install_package vim-gtk exuberant-ctags
+
+# Remote access (server)
+install_package openssh-server screen tmux xtightvncviewer x11vnc tightvncserver
+# Remote access (client)
+install_package xtightvncviewer
 
 #packages_winman="xfstt"   # To get LucidaConsole in GVim!  (See ~/FONTS folder)
-packages_debugging="iotop atop nmap wireshark mesa-utils lm-sensors"
-# Shows network usage by process.  'm' to toggle between rate and total, and select units.  'r' and 's' to sort by received/sent.
-install_package nethogs
-# Shows network usage by remote host and local/remote ports.
-#install_package jnettop
-# tcptrack is similar but with a simplified display.  It shows duration but no totals.
-#install_package tcptrack
-# Shows a graph, in a terminal, but no process separation: slurm
-# But in fact this does a better job: speedometer
-# Nerdy, shows TCP flags and UDP packets.  It's a bit like wireshark.
-#install_package iptraf
 
 # More desktop apps
 install_package mplayer gimp inkscape
@@ -56,61 +51,116 @@ install_package dict-moby-thesaurus
 # Both postfix and exim open a dpkg config dialog.
 install_package exim4
 
-# Extended audio
-install_package mp3gain vorbisgain   # For randommp3
-install_package mpg123   # In case mplayer is not available
-install_package lame mp3info   # For reencoding to mp3
-# bladeenc 
-install_package vorbis-tools   # For reencoding to ogg
+# Audio tools (for randommp3)
+install_package mp3gain vorbisgain
 
 # In Ubuntu 14.04, avconf from libav-tools replaces ffmpeg (it is a fork)
 # However ffmpeg is back in 15.04!
 #install_package libav-tools
 
+install_package wine
+
+# Dashes / launchers
+#install_package kupfer
+#sudo add-apt-repository ppa:synapse-core/ppa 
+#install_package synapse
+
+# }}}
+
+
+# Audio/video reencoding {{{
+
+# Extended audio
+install_package mpg123   # In case mplayer is not available
+install_package lame mp3info   # For reencoding to mp3
+# bladeenc 
+install_package vorbis-tools   # For reencoding to ogg
+
 # For reencode_video_to_x264:
 install_package faac gpac x264 mencoder
 
-install_package hugs
-# ghc is also nice, but 290meg!
-#install_package ghc
-#install_package cabal-install
+# }}}
 
-install_package wine
 
 # System {{{
 
-packages_system="cpufrequtils"
-#install_package bootlogd
+# Logging
+install_package bootlogd
+
+# Control
+install_package lm-sensors
+install_package cpufrequtils
 
 # TODO: This may be worth configuring.  It can save battery by stopping the disk from spinning when off AC power.
 # It is mentioned here: https://help.ubuntu.com/community/PowerManagement/ReducedPower
 # Although with all the stuff I have running (e.g. Chrome browser) I think my disk will be hit every couple of minutes at least, so it may keep waking up again.
 #install_package laptop-power-mode
 
+# Debugging
+install_package iotop atop
+install_package mesa-utils
+
+# Network debugging
+install_package nmap wireshark
+# Shows network usage by process.  'm' to toggle between rate and total, and select units.  'r' and 's' to sort by received/sent.
+install_package nethogs
+# Shows network usage by remote host and local/remote ports.
+#install_package jnettop
+# tcptrack is similar but with a simplified display.  It shows duration but no totals.
+#install_package tcptrack
+# Shows a graph, in a terminal, but no process separation: slurm
+# But in fact this does a better job: speedometer
+# Nerdy, shows TCP flags and UDP packets.  It's a bit like wireshark.
+#install_package iptraf
+
 # Provides an easy way to flood the CPU, for testing purposes.  Supposedly optimized for different hardware, but I couldn't find a way to flood both my Celeron cores at once!
 #install_package cpuburn
 # Alternative.  E.g.: stress --cpu 2 --timeout 120s
 #install_package stress
 
+# Packaging
+install_package aptitude dpkg-repack alien fakeroot
+# Alternative to make install which generates a deb, for easy clean removal
+install_package checkinstall
+install_package equivs
+# For building Debian packages
+install_package devscripts build-essential
+
 # }}}
 
-packages_development="git-core ccache sshfs encfs unison lftp" # 'git-core' is transitioning to 'git'
+
+# Development {{{
+
+install_package git-core ccache sshfs encfs unison lftp
+# 'git-core' is transitioning to 'git'
 # 20th century revision control
 install_package rcs
 
 install_package nginx
 
-packages_packaging="aptitude dpkg-repack alien fakeroot"
-install_package checkinstall   # alternative to make install which generates a deb, for easy clean removal!
-install_package equivs
+install_package hugs
+# ghc is also nice, but 290meg!
+#install_package ghc
+#install_package cabal-install
+
+# Shell development
+install_package shellcheck
+# For portability testing
+install_package posh ksh
+
+# Install Java Development Kit
+install_package default-jdk
+
+# }}}
+
 
 # Not crucial but desirable {{{
 
+# Vim uses links to open/dump web pages
+install_package links
+
 # Needed by scdl (soundcloud download)
 install_package curl
-
-# For building Debian packages
-install_package devscripts build-essential
 
 install_package rar p7zip-full
 install_package festival festvox-rablpc16k
@@ -124,25 +174,14 @@ install_package gpick gcolor2
 
 #packages_demodev="ocaml-nox liblz4-tool menhir ocamldsort"
 
-# Shell development
-install_package shellcheck
-# For portability testing
-install_package posh ksh
-
 # Mount Android device over USB
 install_package mtpfs
-# This is for downloading photos from iPod/iPhone
-# An alternative is shotwell, which has a GUI
+# Download photos from iPod/iPhone, from command-line
 install_package gphoto2
-
-install_package mencoder
+# Download photos from iPod/iPhone, using a GUI
+install_package shotwell
 
 # }}}
-
-# Dashes / launchers
-#install_package kupfer
-#sudo add-apt-repository ppa:synapse-core/ppa 
-#install_package synapse
 
 
 
@@ -169,21 +208,18 @@ install_package unetbootin
 add_repository mc3man/mplayer-test
 
 add_repository gwendal-lebihan-dev/hexchat-stable
-packages_to_install="$packages_to_install hexchat"
+install_package hexchat
 
 # Install NodeJS 0.10
 # Alternative methods can be found here: https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 # To install io.js, look here: https://nodesource.com/blog/nodejs-v012-iojs-and-the-nodesource-linux-repositories
 add_repository chris-lea/node.js
-packages_development="$packages_development nodejs"
+install_package nodejs
 
 # But you probably want NVM so you can get the latest version of Node, or switch versions for different projects.
 # To install it using `curl|sh` check the README: https://github.com/creationix/nvm/
 # When I last installed it, the command was:
 #     curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.30.1/install.sh | bash
-
-# Install Java Development Kit
-install_package default-jdk
 
 # Want Heroku?
 # wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
@@ -197,11 +233,11 @@ then
 		sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
 		added_repo=1
 	fi
-	packages_development="$packages_development sbt"
+	install_package sbt
 fi
 
 #add_repository saltstack/salt
-#packages_deployment="salt-master python-software-properties"
+#install_package salt-master python-software-properties
 
 install_latest_mongodb=true
 if [ -n "$install_latest_mongodb" ]
@@ -216,7 +252,7 @@ then
 		sudo tee "$apt_sources_path"
 		added_repo=1
 	fi
-	packages_to_install="$packages_to_install mongodb-org"
+	install_package mongodb-org
 	# Note that the mongo package in Ubuntu's repository is called 'mongodb' not 'mongodb-org'
 	# On Ubuntu I had these installed: mongodb mongodb-clients mongodb-dev mongodb-server
 	# Not sure what brought them in!  ;)
@@ -241,9 +277,7 @@ fi
 
 [ -n "$added_repo" ] && sudo apt-get update
 
-all_packages_to_install="$packages_to_install $packages_editor $packages_remote $packages_debugging $packages_system $packages_development $packages_deployment $packages_packaging"
-
-sudo apt-get -V install $all_packages_to_install "$@"
+sudo apt-get -V install $packages_to_install "$@"
 
 #grep --line-buffered -v "is already the newest version.$"
 
