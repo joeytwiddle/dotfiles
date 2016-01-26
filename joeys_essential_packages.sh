@@ -5,7 +5,22 @@
 packages_to_install=""
 
 install_package() {
-	packages_to_install="$packages_to_install $*"
+  packages_to_install="$packages_to_install $*"
+}
+
+add_repository() {
+  local ppa_repo="$1"
+  . /etc/lsb-release
+  local apt_sources_file="$(echo "${ppa_repo}" | tr '/.' '-_')-${DISTRIB_CODENAME}.list"
+  local apt_sources_path="/etc/apt/sources.list.d/${apt_sources_file}"
+  if [ -f "$apt_sources_path" ]
+  then
+    echo "### We already have ppa:$ppa_repo"
+  else
+    echo "### Installing $ppa_repo to $apt_sources_path"
+    sudo add-apt-repository ppa:"$ppa_repo"
+    added_repo=1
+  fi
 }
 
 
@@ -23,7 +38,6 @@ install_package gkrellm
 
 # Core desktop apps
 install_package zsh
-install_package mutt
 install_package geeqie
 
 # Editors
@@ -37,6 +51,8 @@ install_package xtightvncviewer
 #packages_winman="xfstt"   # To get LucidaConsole in GVim!  (See ~/FONTS folder)
 
 # More desktop apps
+# MPlayer which can play h265
+add_repository mc3man/mplayer-test
 install_package mplayer gimp inkscape
 install_package okular
 install_package libreoffice
@@ -64,6 +80,12 @@ install_package wine
 #install_package kupfer
 #sudo add-apt-repository ppa:synapse-core/ppa 
 #install_package synapse
+
+# Communication
+install_package mutt
+# Hexchat IRC client
+add_repository gwendal-lebihan-dev/hexchat-stable
+install_package hexchat
 
 # }}}
 
@@ -185,30 +207,9 @@ install_package shotwell
 
 
 
-add_repository() {
-	local ppa_repo="$1"
-	. /etc/lsb-release
-	local apt_sources_file="$(echo "${ppa_repo}" | tr '/.' '-_')-${DISTRIB_CODENAME}.list"
-	local apt_sources_path="/etc/apt/sources.list.d/${apt_sources_file}"
-	if [ -f "$apt_sources_path" ]
-	then
-		echo "### We already have ppa:$ppa_repo"
-	else
-		echo "### Installing $ppa_repo to $apt_sources_path"
-		sudo add-apt-repository ppa:"$ppa_repo"
-		added_repo=1
-	fi
-}
-
 # Unetbootin
 add_repository gezakovacs/ppa
 install_package unetbootin
-
-# MPlayer which can play h265
-add_repository mc3man/mplayer-test
-
-add_repository gwendal-lebihan-dev/hexchat-stable
-install_package hexchat
 
 # Install NodeJS 0.10
 # Alternative methods can be found here: https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
@@ -227,13 +228,13 @@ install_package nodejs
 install_scala_build_tool=true
 if [ -n "$install_scala_build_tool" ]
 then
-	if [ ! -f "/etc/apt/sources.list.d/sbt.list" ]
-	then
-		echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
-		sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
-		added_repo=1
-	fi
-	install_package sbt
+  if [ ! -f "/etc/apt/sources.list.d/sbt.list" ]
+  then
+    echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+    added_repo=1
+  fi
+  install_package sbt
 fi
 
 #add_repository saltstack/salt
@@ -242,23 +243,23 @@ fi
 install_latest_mongodb=true
 if [ -n "$install_latest_mongodb" ]
 then
-	# Derived from here: http://docs.mongodb.org/master/tutorial/install-mongodb-on-ubuntu/
-	. /etc/lsb-release
-	apt_sources_path="/etc/apt/sources.list.d/mongodb-org-3.0.list"
-	if [ ! -f "$apt_sources_path" ]
-	then
-		sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-		echo "deb http://repo.mongodb.org/apt/ubuntu ${DISTRIB_CODENAME}/mongodb-org/3.0 multiverse" |
-		sudo tee "$apt_sources_path"
-		added_repo=1
-	fi
-	install_package mongodb-org
-	# Note that the mongo package in Ubuntu's repository is called 'mongodb' not 'mongodb-org'
-	# On Ubuntu I had these installed: mongodb mongodb-clients mongodb-dev mongodb-server
-	# Not sure what brought them in!  ;)
-	# After removing them, they left behind /var/lib/mongodb and /var/log/mongodb
-	# The mongo repo installs: mongodb-org mongodb-org-mongos mongodb-org-server mongodb-org-shell mongodb-org-tools
-	# Last time I installed, they gave me version 3.0.6
+  # Derived from here: http://docs.mongodb.org/master/tutorial/install-mongodb-on-ubuntu/
+  . /etc/lsb-release
+  apt_sources_path="/etc/apt/sources.list.d/mongodb-org-3.0.list"
+  if [ ! -f "$apt_sources_path" ]
+  then
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+    echo "deb http://repo.mongodb.org/apt/ubuntu ${DISTRIB_CODENAME}/mongodb-org/3.0 multiverse" |
+    sudo tee "$apt_sources_path"
+    added_repo=1
+  fi
+  install_package mongodb-org
+  # Note that the mongo package in Ubuntu's repository is called 'mongodb' not 'mongodb-org'
+  # On Ubuntu I had these installed: mongodb mongodb-clients mongodb-dev mongodb-server
+  # Not sure what brought them in!  ;)
+  # After removing them, they left behind /var/lib/mongodb and /var/log/mongodb
+  # The mongo repo installs: mongodb-org mongodb-org-mongos mongodb-org-server mongodb-org-shell mongodb-org-tools
+  # Last time I installed, they gave me version 3.0.6
 fi
 
 
@@ -272,6 +273,14 @@ fi
 # sudo add-apt-repository ppa:indicator-brightness/ppa
 # indicator-brightness
 # sudo add-apt-repository ppa:kamalmostafa/linux-kamal-mjgbacklight
+
+
+
+# Things I usually install which are not packaged {{{
+# - skype
+# - nvm
+# - rvm
+# }}}
 
 
 
