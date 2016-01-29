@@ -2,6 +2,8 @@
 
 # For automated installation, pass -yq
 
+# Functions {{{
+
 packages_to_install=""
 
 install_package() {
@@ -23,6 +25,8 @@ add_repository() {
   fi
 }
 
+# }}}
+
 
 # Desktop {{{
 
@@ -36,29 +40,40 @@ install_package imagemagick
 install_package xloadimage
 install_package gkrellm
 
+# To get LucidaConsole in GVim!  (See ~/FONTS folder)
+# No longer required
+#packages_winman="xfstt"
+
 # Core desktop apps
 install_package zsh
-install_package geeqie
 
 # Editors
 install_package vim-gtk exuberant-ctags
 
-# Remote access (server)
-install_package openssh-server screen tmux xtightvncviewer x11vnc tightvncserver
 # Remote access (client)
 install_package xtightvncviewer
 
-#packages_winman="xfstt"   # To get LucidaConsole in GVim!  (See ~/FONTS folder)
+# Remote access (server)
+install_package openssh-server screen tmux xtightvncviewer x11vnc tightvncserver
 
 # More desktop apps
-# MPlayer which can play h265
-add_repository mc3man/mplayer-test
-install_package mplayer gimp inkscape
-install_package okular
-install_package libreoffice
 
 install_package dict-wn
 install_package dict-moby-thesaurus
+
+install_package okular
+install_package libreoffice
+
+install_package geeqie
+install_package gimp inkscape
+#install_package krita
+
+# MPlayer which can play h265
+add_repository mc3man/mplayer-test
+install_package mplayer
+
+# Audio tools (for randommp3)
+install_package mp3gain vorbisgain
 
 # Ubuntu recommends installing mailtools in order to get the 'mail' command.
 # It installs postfix.
@@ -66,9 +81,6 @@ install_package dict-moby-thesaurus
 # But I prefer exim!
 # Both postfix and exim open a dpkg config dialog.
 install_package exim4
-
-# Audio tools (for randommp3)
-install_package mp3gain vorbisgain
 
 # In Ubuntu 14.04, avconf from libav-tools replaces ffmpeg (it is a fork)
 # However ffmpeg is back in 15.04!
@@ -125,6 +137,7 @@ install_package mesa-utils
 # Network debugging
 install_package nmap wireshark
 # Shows network usage by process.  'm' to toggle between rate and total, and select units.  'r' and 's' to sort by received/sent.
+# Usage: nethogs [device]
 install_package nethogs
 # Shows network usage by remote host and local/remote ports.
 #install_package jnettop
@@ -207,6 +220,28 @@ install_package shotwell
 
 
 
+# === Less crucial ===
+
+#install_package msttcorefonts
+# texlive-fonts-recommended
+
+# xbacklight
+# sudo add-apt-repository ppa:indicator-brightness/ppa
+# indicator-brightness
+# sudo add-apt-repository ppa:kamalmostafa/linux-kamal-mjgbacklight
+
+# Things I usually install which are not packaged {{{
+
+# - skype
+# - nvm
+# - rvm
+
+# }}}
+
+
+
+# From PPAs {{{
+
 # Unetbootin
 add_repository gezakovacs/ppa
 install_package unetbootin
@@ -225,18 +260,6 @@ install_package nodejs
 # Want Heroku?
 # wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 
-install_scala_build_tool=true
-if [ -n "$install_scala_build_tool" ]
-then
-  if [ ! -f "/etc/apt/sources.list.d/sbt.list" ]
-  then
-    echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
-    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
-    added_repo=1
-  fi
-  install_package sbt
-fi
-
 #add_repository saltstack/salt
 #install_package salt-master python-software-properties
 
@@ -250,7 +273,7 @@ then
   then
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
     echo "deb http://repo.mongodb.org/apt/ubuntu ${DISTRIB_CODENAME}/mongodb-org/3.0 multiverse" |
-    sudo tee "$apt_sources_path"
+      sudo tee "$apt_sources_path"
     added_repo=1
   fi
   install_package mongodb-org
@@ -262,24 +285,20 @@ then
   # Last time I installed, they gave me version 3.0.6
 fi
 
+install_scala_build_tool=true
+if [ -n "$install_scala_build_tool" ]
+then
+  apt_sources_path="/etc/apt/sources.list.d/sbt.list"
+  if [ ! -f "/etc/apt/sources.list.d/sbt.list" ]
+  then
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+    echo "deb https://dl.bintray.com/sbt/debian /" |
+      sudo tee -a "$apt_sources_path"
+    added_repo=1
+  fi
+  install_package sbt
+fi
 
-
-# === Less crucial ===
-
-#install_package msttcorefonts
-# texlive-fonts-recommended
-
-# xbacklight
-# sudo add-apt-repository ppa:indicator-brightness/ppa
-# indicator-brightness
-# sudo add-apt-repository ppa:kamalmostafa/linux-kamal-mjgbacklight
-
-
-
-# Things I usually install which are not packaged {{{
-# - skype
-# - nvm
-# - rvm
 # }}}
 
 
@@ -292,3 +311,4 @@ sudo apt-get -V install $packages_to_install "$@"
 
 # Unfortunately if we use grep, the "Do you want to continue [Y/n]?" will not be displayed, because no newline is sent!
 
+# vim: foldmethod=marker foldlevel=0 fdc=2 number relativenumber
