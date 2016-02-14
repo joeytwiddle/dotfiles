@@ -17,7 +17,7 @@ function! AutoUpdateCTags()
 		" We can also remove the current working directory from the path, if we want to.
 		" When manually running ctags, you should be sure to create filenames with the same path, or we will see duplicates in the tag file.
 		let filename = expand('%')
-		let filename = substitute(filename, '^./',     '', '')
+		let filename = substitute(filename, '^\./',     '', '')
 		"let filename = substitute(filename, getcwd().'/', '', '')
 		silent exec '!ctags -a ' . shellescape(filename) . ' 2> >(grep -v "^ctags: Warning: ignoring null tag")'
 
