@@ -30,7 +30,7 @@ endfunction
 
 augroup AutoUpdateCTags
 	autocmd!
-	autocmd BufWritePost,FileWritePost *.* call AutoUpdateCTags()
+	autocmd BufWritePost,FileWritePost * call AutoUpdateCTags()
 augroup END
 
 " TODO: Update ../tags or ../../tags or ../../../tags if it exists.  Could cache it in b:my_nearest_tagsfile.
