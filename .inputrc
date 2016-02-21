@@ -34,3 +34,9 @@ set bell-style visual
 "\e[1;2C": forward-word
 "\e[2D": backward-word
 "\e[2C": forward-word
+
+## Ctrl-Shift-Left and -Right
+"\e[1;6D": backward-word
+"\e[1;6C": forward-word
+"\e[6D": backward-word
+"\e[6C": forward-word
