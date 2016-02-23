@@ -138,19 +138,28 @@ git_status_plus() {
 		cut -c 4- |
 		# Because the process below is slow, we put a limit on how many files we will tolerate.
 		# Unfortunately we need to do this now, and not after the sort-by-date.
+		# The best solution for the user is to use git ignore properly.
+		# The slowness of this process should encourage that!
 		# CONSIDER: The following while loop could be replaced by a call to xargs.
-		head -n 2500 |
+		head -n 20000 |
 		(
 			cd "$git_root_folder"
 
-			while read file
-			do
-				# Size and date of file
-					#stats=$( stat -c '%s %Y' "$file" ) 
-					#echo "$stats $file"
-					find "$file" -maxdepth 0 -printf "%s %T@ %p\n" | sed 's+\.[0-9]*++'
-					#echo "$stats $file" >&2
-			done
+			#while read file
+			#do
+			#	# Size and date of file
+			#		#stats=$( stat -c '%s %Y' "$file" ) 
+			#		#echo "$stats $file"
+			#		find "$file" -maxdepth 0 -printf "%s %T@ %p\n" | sed 's+\.[0-9]*++'
+			#		#echo "$stats $file" >&2
+			#done
+
+			# Do the above find using xargs.
+			# The `bash -c ... $0 $@` trick allows us to place 200 arguments in the middle of the line, as opposed to the end which xargs usually does.
+			# This may be very ugly, but it runs a lot faster than invoking find multiple times!
+			xargs -d '\n' -n 200 -- bash -c 'find $0 $@ -maxdepth 0 -printf "%s %T@ %p\n"' |
+			# Remove the fractional part of the date.
+			sed 's+\.[0-9]*++'
 		) |
 		sort -n -k 2 -r > "$current_stats_file"
 
@@ -164,7 +173,7 @@ git_status_plus() {
 		# CONSIDER TODO: The below is very inefficient.  Instead of all these greps, can we sort them and do a one-way diff?
 		cat "$current_stats_file" |
 		grep "^[0-9]* [0-9]* ${target_folder_from_root}" |
-		head -n 500 |
+		head -n 1000 |
 		while read size date file
 		do
 			curseon="$cursenormal"
