@@ -95,6 +95,11 @@ git_status_plus() {
 	else t=
 	fi
 
+	# When there are many unknown files, this process can take a very long time.
+	# This subshell is needed so that in zsh, the user can break out of the process with Ctrl-C.
+	# Without it, even after spamming Ctrl-C, zsh will not return to the prompt until the processing is complete.
+	(
+
 	(
 		if [ -n "${t}" ]
 		then git -c color.status=always status -uno "$@"
@@ -116,7 +121,7 @@ git_status_plus() {
 		# TODO: We should either store different lists for different args,
 		#       or we should not allow filtering.
 
-		# Passing a path doesn't stop --porcelain from reporting files in higher folders.
+		# Passing a path doesn_t stop --porcelain from reporting files in higher folders.
 		# But ideally I only want to see changes below the current folder.
 		# So we need to filter the results to the current folder.
 		local target_folder
@@ -182,6 +187,8 @@ git_status_plus() {
 	then less -R -E -X
 	else cat
 	fi
+
+	)
 }
 
 #alias gd='git diff'
