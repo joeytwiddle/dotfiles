@@ -38,7 +38,7 @@ install_package xscreensaver xscreensaver-data-extra xscreensaver-screensaver-bs
 install_package imagemagick
 # Provides xsetbg, used by randomwallpaper/jxsetbg.  (They can fall back to fbsetbg, but that crops-to-fit rather than shrink-to-fit.)
 install_package xloadimage
-install_package gkrellm
+install_package gkrellm gkrellweather
 
 # To get LucidaConsole in GVim!  (See ~/FONTS folder)
 # No longer required
@@ -82,7 +82,7 @@ install_package mp3gain vorbisgain
 # Both postfix and exim open a dpkg config dialog.
 install_package exim4
 
-# In Ubuntu 14.04, avconf from libav-tools replaces ffmpeg (it is a fork)
+# In Ubuntu 14.04, avconv from libav-tools replaces ffmpeg (it is a fork)
 # However ffmpeg is back in 15.04!
 #install_package libav-tools
 
@@ -98,6 +98,14 @@ install_package mutt
 # Hexchat IRC client
 add_repository gwendal-lebihan-dev/hexchat-stable
 install_package hexchat
+
+# }}}
+
+
+# Mathematics {{{
+
+#install_package wxmaxima
+#install_package octave
 
 # }}}
 
@@ -118,8 +126,11 @@ install_package faac gpac x264 mencoder
 
 # System {{{
 
+# Automatic packages updates
+install_package unattended-upgrades apt-listchanges
+
 # Logging
-install_package bootlogd
+#install_package bootlogd
 
 # Control
 install_package lm-sensors
@@ -135,7 +146,7 @@ install_package iotop atop
 install_package mesa-utils
 
 # Network debugging
-install_package nmap wireshark
+install_package nmap wireshark tcpdump
 # Shows network usage by process.  'm' to toggle between rate and total, and select units.  'r' and 's' to sort by received/sent.
 # Usage: nethogs [device]
 install_package nethogs
@@ -230,7 +241,11 @@ install_package shotwell
 # indicator-brightness
 # sudo add-apt-repository ppa:kamalmostafa/linux-kamal-mjgbacklight
 
-# Things I usually install which are not packaged {{{
+
+
+# Things I have to install manually {{{
+
+# curl -L https://atom.io/download/deb -o atom-dunno.deb
 
 # - skype
 # - nvm
