@@ -410,20 +410,27 @@ alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
 
 unalias gco 2>/dev/null   # REMOVEME
 #alias gco='git checkout'
+
+# After successfully doing a 'git checkout', also run the commands in the POST_GIT_CHECKOUT env var.
+# The proper way to do this is to use git hooks, e.g.: https://github.com/yannvanhalewyn/dotfiles/tree/master/git_template/hooks
 gco() {
 	# highlighting stderr here is useless, because git reports success on stderr too!
 	git checkout "$@"
 	local ret_status="$?"
+
 	if [ "$ret_status" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
-	then "$POST_GIT_CHECKOUT" "$@"
+	then eval "$POST_GIT_CHECKOUT"
 	fi
+
 	# I find I don't always notice failed checkouts, because at a glance the warning message looks similar to the success message.
 	if [ "$ret_status" != 0 ]
-	then highlightstderr eval 'echo "FAILED" >/dev/stderr'
+	then echo "$(tput setaf 1 ; tput bold)FAILED$(tput sgr0)" >/dev/stderr
 	fi
+
 	return "$ret_status"
 }
-POST_GIT_CHECKOUT=update_cindex
+
+POST_GIT_CHECKOUT="$POST_GIT_CHECKOUT ; update_cindex"
 if ! which ionice >/dev/null
 then
 	ionice() {
@@ -431,6 +438,9 @@ then
 	}
 fi
 update_cindex() {
+	# If CSEARCHINDEX is set (to an absolute or relative folder) then use that,
+	# otherwise use the default file in HOME folder.
+	# CONSIDER: If we are in a repo subfolder but the repo root folder contains a ".csearchindex" then we could point CSEARCHINDEX at that file temporarily.
 	if which cindex >/dev/null && ( [ -z "$CSEARCHINDEX" ] && [ -f "$HOME"/.csearchindex ] || [ -n "$CSEARCHINDEX" ] && [ -f "$CSEARCHINDEX" ] )
 	then
 		local git_root_folder=$(git rev-parse --show-toplevel)
