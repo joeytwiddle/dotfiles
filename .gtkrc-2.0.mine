@@ -1,6 +1,6 @@
 ## This file is expected by .gtkrc-2.0
 
 ## Sexier
-include "/home/joey/linux/.gtkrc-2.0.fonts"
+# include "/home/joey/linux/.gtkrc-2.0.fonts"
 ## Nerdier
-# include "/home/joey/linux/.gtkrc-2.0.fonts_small"
+include "/home/joey/linux/.gtkrc-2.0.fonts_small"
