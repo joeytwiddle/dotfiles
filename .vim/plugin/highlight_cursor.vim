@@ -34,6 +34,7 @@ function! HighlightCursorOn()
 	" exe 'highlight CursorHighlighted ctermfg=black ctermbg=' . g:highlightcursor
 	" " sleep 200m
 	" " endwhile
+	"" BUG: Does not work on empty lines
 	match ToDo /.*\%#.*/
 	match CursorHighlighted /\%#/
 endfunction
@@ -48,7 +49,7 @@ function! HighlightCursorToggle()
 	else
 		let g:highlightcursor=1
 		"set updatetime=10
-		"autocmd CursorHold * :call HighlightCursorRefresh()
+		autocmd CursorHold * :call HighlightCursorRefresh()
 		autocmd CursorMoved * :call HighlightCursorRefresh()
 		" autocmd BufEnter * :call HighlightCursorRefresh()
 		highlight CursorHighlighted term=reverse ctermfg=black ctermbg=green guifg=black guibg=#00ff00
