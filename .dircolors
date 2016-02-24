@@ -274,6 +274,9 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 # Ebook formats
 .epub 01;33
 .mobi 01;33
+# Microsoft Office XML formats
+.docx 01;33
+# ...
 
 # cyan
 # Code / input for software
