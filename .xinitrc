@@ -1,14 +1,5 @@
 #!/bin/bash
 
-if pgrep -u $UID gkrellm >/dev/null
-then
-	echo
-	echo "It looks like .xinitrc has already been run!"
-	echo "You may have wanted to run: ~/.joeys_x_essentials"
-	echo
-	sleep 2
-fi
-
 # TODO: This needs to be split into two files:
 #   - One of which is the universal WM chooser (unfinished).  (It has two goals: to allow user to choose WM when WM crashes/closes, and also to prevent X from closing, with all its apps, just because WM closed!)
 #   - The other, joey's personal X bootup requirements.
