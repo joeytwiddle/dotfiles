@@ -4,3 +4,4 @@ CVS/
 .vim/.netrwhist
 .vim/sessions/*
 .csearchindex
+.gkrellm2/data
