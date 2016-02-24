@@ -1,5 +1,14 @@
 #!/bin/bash
 
+if pgrep -u $UID gkrellm >/dev/null
+then
+	echo
+	echo "It looks like .xinitrc has already been run!"
+	echo "You may have wanted to run: ~/.joeys_x_essentials"
+	echo
+	sleep 2
+fi
+
 # TODO: This needs to be split into two files:
 #   - One of which is the universal WM chooser (unfinished).  (It has two goals: to allow user to choose WM when WM crashes/closes, and also to prevent X from closing, with all its apps, just because WM closed!)
 #   - The other, joey's personal X bootup requirements.
@@ -276,7 +285,7 @@ xterm -geometry 80x24+570+680 &
 	# if [ ! "$WinMan" = fluxbox ] && [ -x /usr/bin/bbkeys ]
 	# then bbkeys &
 	# fi
-	## Yes it's overkill for Fluxbox, but I tend to switch out of Fluxbox these days!
+	## Yes it is overkill for Fluxbox, but I tend to switch out of Fluxbox these days!
 	# bbkeys&
 
 	# A simple workspace indicator
@@ -310,8 +319,8 @@ xterm -geometry 80x24+570+680 &
 
 	if [ "$HOSTNAME" = hwi ]
 	then
-		# xgamma -rgamma 0.7 -ggamma 1.0 -bgamma 1.0 ## for Tim's red-ish monitor
-		# xgamma -rgamma 0.8 -ggamma 1.2 -bgamma 1.2 ## for Tim's red-ish monitor
+		# xgamma -rgamma 0.7 -ggamma 1.0 -bgamma 1.0 ## for the big red-ish monitor
+		# xgamma -rgamma 0.8 -ggamma 1.2 -bgamma 1.2 ## for the big red-ish monitor
 		## OK so first I adjust the monitor's settings to get pure white, then I apply xgamma to fix greys.
 		# xgamma -rgamma 1.0 -ggamma 1.4 -bgamma 1.4 ## Brighter so I can read my greys!
 		# xgamma -rgamma 1.1 -ggamma 1.4 -bgamma 1.3 ## When the bloody thing goes darker and bluer!
@@ -332,15 +341,16 @@ xterm -geometry 80x24+570+680 &
 		# GNOMEFP_PID="$!"
 
 		## Start other things slowly, because the Gnome2 panel takes so long!
-			## I *need* xscreensaver to turn off my monitor when idle, in case the other dpms methods don't work!
+			## I *need* xscreensaver to turn off my monitor when idle, in case the other dpms methods do not work!
 			## This appears to be hanging my machine again, and I don't think it's even running any GL!
 			## If you dare to test it again, don't test in both Gentoo and Debian chroot at the same time!
 			# sleep 2
 			## FAIL (sees itself!): if ps aux | grep xscreensaver >/dev/null
-			if pgrep xscreensaver >/dev/null
-			then : ## Even with multiple displays, we don't want more than one xscreensaver gobbling up CPU.
-			else xscreensaver -nosplash &
-			fi
+			#if pgrep -u $UID xscreensaver >/dev/null
+			#then : ## Even with multiple displays, we don't want more than one xscreensaver gobbling up CPU.
+			#else xscreensaver -nosplash &
+			#fi
+			# xscreensaver is now being started from ~/.fluxbox/startup
 
 			# sleep 2
 			# /opt/ymessenger/bin/ymessenger & # Yahoo! Messenger
@@ -371,12 +381,11 @@ xterm -geometry 80x24+570+680 &
 	# fi
 
 	sleep 6
-	gkrellm &
+	if which gkrellm && !pgrep -u $UID gkrellm >/dev/null
+	then gkrellm &
+	fi
 
 ) &
-
-## Re-enable Ctrl+Alt+Backspace to close X, since Gentoo removed it.
-setxkbmap -option terminate:ctrl_alt_bksp
 
 ### End Config. }}}
 
