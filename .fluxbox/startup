@@ -85,11 +85,6 @@ fi
 
 	nm-applet &
 
-	# Something is starting gnome-screensaver.  I think it might be nm-applet but I'm not sure.
-	# I don't want gnome-screensaver if I have xscreensaver running, because I end up having to unlock twice!
-	( sleep 20 ; pgrep -u $UID xscreensaver && killall gnome-screensaver ) &
-	# Possibly if I started xscreensaver later, or gnome-screensaver explicitly, one would disable the other.  But currently this is not happening.
-
 	sleep 1
 
 	(
@@ -128,6 +123,11 @@ fi
 
 	sleep 2
 
+	# Something is starting gnome-screensaver.  I think it might be nm-applet but I'm not sure.
+	# I don't want gnome-screensaver if I have xscreensaver running, because I end up having to unlock twice!
+	# Although actually recently xscreensaver has been refusing to start when gnome-screensaver is present.
+	sleep 20
+	killall -u "$USER" gnome-screensaver
 	xscreensaver -no-splash &
 
 ) &
