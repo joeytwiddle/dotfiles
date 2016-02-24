@@ -203,3 +203,12 @@ function! s:GitCommitThis(...)
 endfunction
 
 command! GCthis :call s:GitCommitThis(<q-args>)
+
+"command! -nargs=+ ET e $JPATH/tools/<args>
+"command! -nargs=+ EP e $HOME/.vim/plugin/<args>
+"command! -nargs=+ EA :call feedkeys(":e $HOME/.vim-addon-manager/*" . <q-args> . "*")
+"nnoremap :ET<Space> :e $JPATH/tools/*
+nnoremap :ET<Space> :e $JPATH/code/shellscript/**/*
+nnoremap :EV<Space> :e $HOME/.vim/**/*
+nnoremap :EP<Space> :e $HOME/.vim/plugin/*
+nnoremap :EA<Space> :e $HOME/.vim-addon-manager/*
