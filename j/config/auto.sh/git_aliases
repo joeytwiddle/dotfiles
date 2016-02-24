@@ -157,7 +157,7 @@ git_status_plus() {
 			# Do the above find using xargs.
 			# The `bash -c ... $0 $@` trick allows us to place 200 arguments in the middle of the line, as opposed to the end which xargs usually does.
 			# This may be very ugly, but it runs a lot faster than invoking find multiple times!
-			xargs -d '\n' -n 200 -- bash -c 'find $0 $@ -maxdepth 0 -printf "%s %T@ %p\n"' |
+			xargs -d '\n' -n 200 -- bash -c 'find "$0" "$@" -maxdepth 0 -printf "%s %T@ %p\n"' |
 			# Remove the fractional part of the date.
 			sed 's+\.[0-9]*++'
 		) |
