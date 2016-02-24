@@ -142,7 +142,9 @@ function! Joeyhighlight()
 	highlight cType ctermfg=Cyan guifg=Cyan
 	" highlight PreProc ctermfg=Red guifg=Red
 	" highlight PreProc ctermfg=Blue guifg=Blue
-	highlight PreProc ctermfg=cyan guifg=cyan
+	" highlight PreProc ctermfg=cyan guifg=cyan
+	"" I like pink for .sh files.  It's possible I might want to return to cyan for other file types.
+	highlight PreProc ctermfg=magenta cterm=bold guifg=magenta gui=bold
 
 	" Java
 	" It appears to ignore the contains, otherwise I could use start=/^/ =)
@@ -402,7 +404,7 @@ function! Joeyhighlight()
 		hi Statement guifg=yellow gui=bold
 		hi Identifier guifg=cyan gui=bold
 		hi Special guifg=magenta gui=bold
-		hi Search guifg=blue guibg=green gui=bold,reverse
+		hi Search guifg=blue guibg=#00ff00 gui=bold,reverse
 		hi HLCurrentWord guifg=red gui=bold
 		"hi Number guifg=cyan
 		hi Normal guifg=#f7f7f7
