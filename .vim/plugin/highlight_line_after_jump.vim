@@ -13,8 +13,11 @@ endif
 if !exists('g:hiline_min_lines')
   let g:hiline_min_lines = 2
 endif
-if !exists('g:hiline_also_highlight_column')
-  let g:hiline_also_highlight_column = 0
+if !exists('g:hiline_min_cols')
+  let g:hiline_min_cols = 2
+endif
+if !exists('g:hiline_highlight_column')
+  let g:hiline_highlight_column = 0
 endif
 
 " CONSIDER: If syntax is window/buffer-local, we might want to use a
@@ -27,10 +30,7 @@ function! HighlightLine()
   endif
   let s:highlightOn = 1
   if g:hiline_use_cursorline
-    set cul
-    if g:hiline_also_highlight_column
-      set cursorcolumn
-    endif
+    set cursorline
   else
     let l:line = "FAIL"
     " let l:line = GetRegAfter('""yy')
@@ -73,13 +73,14 @@ endfunction
 function! UnHighlightLine()
   let s:highlightOn = 0
   if g:hiline_use_cursorline
-    silent! set nocul
-    if g:hiline_also_highlight_column
-      silent! set nocursorcolumn
-    endif
+    silent! set nocursorline
   else
     silent! syntax clear HLCurrentLine
   endif
+endfunction
+
+function! UnHighlightColumn()
+  silent! set nocursorcolumn
 endfunction
 
 function! HL_Cursor_Moved()
@@ -91,6 +92,9 @@ function! HL_Cursor_Moved()
 
   let diff = s:last_pos - cur_pos
 
+  let cur_col = wincol()
+  let col_diff = s:last_col - cur_col
+
   " Note if we have just switched window, last_pos will be from the previous
   " window, so we also check last_win.
 
@@ -100,6 +104,9 @@ function! HL_Cursor_Moved()
   "
   let showBufferJump = s:last_win!=winnr() && len(getbufline('%',0,'$'))!=1
   let showLineJump = s:last_win==winnr() && ( diff>=g:hiline_min_lines || diff<=-g:hiline_min_lines )
+  "let showColumnJump = s:last_win==winnr() && ( col_diff>=g:hiline_min_cols || col_diff<=-g:hiline_min_cols )
+  " Only on same line, not when moving between lines
+  let showColumnJump = s:last_win==winnr() && diff==0 && ( col_diff>=g:hiline_min_cols || col_diff<=-g:hiline_min_cols )
 
   if showBufferJump || showLineJump
     call HighlightLine()
@@ -108,7 +115,12 @@ function! HL_Cursor_Moved()
     if s:highlightOn | call UnHighlightLine() | end
   endif
 
+  if g:hiline_highlight_column
+    let &cursorcolumn = showBufferJump || showColumnJump
+  endif
+
   let s:last_pos = cur_pos
+  let s:last_col = cur_col
   let s:last_win = winnr()
 
 endfunction
@@ -126,12 +138,13 @@ augroup HighlightLineAfterJump
   autocmd!
   " autocmd CursorMoved,CursorMovedI * call HL_Cursor_Moved()
   autocmd CursorMoved * call HL_Cursor_Moved()
-  autocmd CursorHold * call UnHighlightLine()
+  autocmd CursorHold * call UnHighlightLine() | call UnHighlightColumn()
   " autocmd CursorHold * call s:HL_Cursor_Moved()
-  autocmd WinLeave * call UnHighlightLine()
+  autocmd WinLeave * call UnHighlightLine() | call UnHighlightColumn()
 augroup END
 
 let s:last_pos = -1
+let s:last_col = -1
 let s:last_win = -1
 
 " set updatetime=1000
