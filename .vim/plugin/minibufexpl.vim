@@ -1448,23 +1448,29 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
 
   " let l:fileNames = substitute(l:fileNames,' *$','','')
   let l:line = ''
-  if exists('g:vloaded_tree_explorer') || exists('g:loaded_nerd_tree') || exists('g:loaded_netrwPlugin') || exists("loaded_winfileexplorer")
-    let l:line = l:line . "[File] "
+
+  if get(g:, 'miniBufExplShowMenu', 0)
+    if exists('g:vloaded_tree_explorer') || exists('g:loaded_nerd_tree') || exists('g:loaded_netrwPlugin') || exists("loaded_winfileexplorer")
+      let l:line .= "[File] "
+    endif
+    if exists('g:loaded_sessionman')
+      let l:line .= "[Sess] "
+    endif
+    if exists('g:loaded_taglist')
+      let l:line .= "[Tags] "
+    endif
+    let l:line .= '[Wrap] [Fold] [Term] '
+    "" [Wrap] toggles dsplayed line-wrapping (:set wrap/nowrap)
+    "" but it should probably be an option in the [View menu]?
+    "" Let users reconfigure toolbars+buttons.
+    "" Defaults could be e.g.:
+    ""   File:Open,Save,Rename,Close,Quit
+    ""   View:Wrap Lines,Tabs
+    ""   Help:About
   endif
-  if exists('g:loaded_sessionman')
-    let l:line .= "[Sess] "
-  endif
-  if exists('g:loaded_taglist')
-    let l:line = l:line . "[Tags] "
-  endif
-  let l:line = l:line . '[Wrap] [Fold] [Term] ' . l:fileNames . "| "
-  "" [Wrap] toggles dsplayed line-wrapping (:set wrap/nowrap)
-  "" but it should probably be an option in the [View menu]?
-  "" Let users reconfigure toolbars+buttons.
-  "" Defaults could be e.g.:
-  ""   File:Open,Save,Rename,Close,Quit
-  ""   View:Wrap Lines,Tabs
-  ""   Help:About
+
+  let l:line .= l:fileNames . "| "
+
   "" Right-align the close button:
   let l:subtr = 0
   if &wrap
