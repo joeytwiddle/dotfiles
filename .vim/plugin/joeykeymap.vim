@@ -258,8 +258,6 @@ endif
 
 "" Quick access to ConqueTerm
 :nnoremap <C-x> :ConqueTermSplit zsh<Enter>
-:inoremap <C-x> <Esc>:echo "Hello"<Enter>
-" :inoremap <C-x> <Esc>:bdel<Enter>
 "" My ConqueTerm settings live in ~/.vimrc
 
 "" I want :q to close the buffer, not the window.
@@ -353,9 +351,11 @@ cnoremap <C-X> <C-W>
 " cnoremap <C-V> <C-Right><C-W>
 "" Lazy move.  Ctrl-Space just walks over the current char.
 "" We must use C-@ instead of C-Space for this to work on the terminal.
+"" But actually I use Ctrl-SPACE for Tern.  Does it override this mapping?
 cnoremap <C-@> <Right>
 inoremap <C-@> <Right>
 "" But in GUI mode we need to define the mapping properly.
+"" Is there any reason why we did this only on GUIEnter?
 autocmd GUIEnter * cnoremap <c-Space> <Right>
 "" Disabled for now because we are using it for something else below
 " autocmd GUIEnter * inoremap <c-Space> <Right>
@@ -388,22 +388,25 @@ cnoremap \<C-R> <C-R>
 "" And of course, <C-R>q will paste/insert the q register.
 "" For all the other <C-R> tricks, see: :help c_CTRL-R_CTRL-F
 
-"" Now the same for Insert-mode?  Well a select few perhaps...
-"inoremap <C-X> <Esc>dbxi
-"" This works better at the end of a line.  It inserts a char them removes it later.
-inoremap <C-X> _<Esc>dbs
-"" Except we won't do <C-V> because that has a useful meaning already
-inoremap <C-D> <Esc>bi
-"" And <C-F> already means toggle fullscreen.
-"inoremap <C-F> <Esc>ea
-inoremap <C-F> <Esc>wi
-"inoremap <C-A> <Home>
-"inoremap <C-E> <End>
-"" By default <C-A> performs the last . which could be pretty handy.
-"" Default <C-E> copies 1 char from the cell above (useful in the 80s).
-
-"" Because we overwrote Ctrl-D, we need a new one:
+"" Because we overwrote Ctrl-D, we now need an alternative!
 cnoremap <C-L> <C-D>
+
+"" My shell shortcut keys for Insert-mode.  Disabled.
+"" <C-X> Default: Completion
+""inoremap <C-X> <Esc>dbxi
+"" This works better at the end of a line.  It inserts a char them removes it later.
+"inoremap <C-X> _<Esc>dbs
+"" Except we won't do <C-V> because that has a useful meaning already
+"" Default: Unindent
+"inoremap <C-D> <Esc>bi
+"" Default: re-indent
+"" But I have <C-F> set to toggle fullscreen.
+""inoremap <C-F> <Esc>ea
+"inoremap <C-F> <Esc>wi
+"" Default: performs the insertion again (equivalent to `<C-R>.`)
+"inoremap <C-A> <Home>
+"" Default: copies 1 char from the cell above (useful in the 80s).
+"inoremap <C-E> <End>
 
 " This is how my zsh does completion, and it rocks (unless for some reason you
 " always want the first match of multiples, then you must always Tab twice).
@@ -554,6 +557,11 @@ nnoremap <Leader>e :execute getline(".")<CR>
 " Execute line from clipboard in ex.  But which clipboard?  Let's display them and let the user choose.
 nnoremap <Leader>E :registers " + *<CR>:execute @
 
+" A simple search for the word under cursor
+"nnoremap <F4> :<C-U>grep "\<<cword>\>" . -r --exclude-dir=node_modules<CR><CR>:cwindow<CR>
+
+" My more complex setup for searching, using my modified version of the grep.vim plugin.
+
 function! s:SetupKeysForGrep()
 	" Now that <F4> is doing a search for the word under the cursor.  <F3> could start empty, waiting for a typed word.  But for the user's convenience, we start them off with the whole-word symbols.
 	nnoremap <F3> :Grep<CR><C-U>\<\><Left><Left>
@@ -666,7 +674,8 @@ vnoremap <C-c> "+y
 "vnoremap <Leader><C-v> <C-v>
 
 " Select All from Insert mode using <Ctrl-A> (overrides default "Insert previously inserted text").  Finishes in Visual mode.
-inoremap <C-a> <Esc>ggvG$
+"inoremap <C-a> <Esc>ggvG$
+" Disabled because I want to try using the default <C-A> which adds the last inserted text.  (It is equivalent to `<C-R>.`)
 " Same when in Visual mode:
 vnoremap <C-a> <Esc>ggvG$
 
@@ -718,32 +727,39 @@ map <Leader><Leader><Leader>W <Plug>(easymotion-flash-bd-W)
 inoremap <S-Enter> <Esc>O
 " In Xterm, both <S-Enter> and <C-Enter> reach Vim as <Enter>, so we cannot use this.
 
-"" There is a plugin that does the below: github:b3niup/numbers
-"" relativenumber is useful if we are about to make a jump, or otherwie select a number of lines for an operation
-"" So we will turn relativenumber on when performing these actions
-" When positioning screen about cursor (so cursor appears at top/middle/button)
-" Unfortunately these fire CursorHold shortly afterwards, even though the cursor didn't move!
-nmap <silent> zt zt:set relativenumber cursorcolumn cursorline<CR>
-nmap <silent> zz zz:set relativenumber cursorcolumn cursorline<CR>
-nmap <silent> zb zb:set relativenumber cursorcolumn cursorline<CR>
-" When entering Visual mode
-nnoremap <silent> v :set relativenumber cursorcolumn<CR>v
-nnoremap <silent> gv :set relativenumber cursorcolumn<CR>gv
-nnoremap <silent> V :set relativenumber<CR>V
-nnoremap <silent> <C-q> :set relativenumber cursorcolumn<CR><C-q>
-" When jumping to High/Middle/Low of screen (the documented mnemonic is Home/Middle/Last)
-nmap <silent> H H:set relativenumber cursorline<CR>
-nmap <silent> M M:set relativenumber cursorline<CR>
-nmap <silent> L L:set relativenumber cursorline<CR>
-" When changing indentation
-nnoremap <silent> < :set relativenumber cursorline<CR><
-nnoremap <silent> = :set relativenumber cursorline<CR>=
-nnoremap <silent> > :set relativenumber cursorline<CR>>
-"" Return to normal once the operation is completed
-augroup ClearCursorColumnAndLine
-	autocmd!
-	autocmd CursorHold * set norelativenumber nocursorcolumn nocursorline
-augroup END
+" DISABLED because it's too visually disruptive.  Better to keep 'number' on at all times.
+""" There is a plugin that does the below: github:b3niup/numbers
+""" relativenumber is useful if we are about to make a jump, or otherwie select a number of lines for an operation
+""" So we will turn relativenumber on when performing these actions
+"" When positioning screen about cursor (so cursor appears at top/middle/button)
+"" Unfortunately these fire CursorHold shortly afterwards, even though the cursor didn't move!
+"nmap <silent> zt zt:set relativenumber cursorcolumn cursorline<CR>
+"nmap <silent> zz zz:set relativenumber cursorcolumn cursorline<CR>
+"nmap <silent> zb zb:set relativenumber cursorcolumn cursorline<CR>
+"" When entering Visual mode
+"nnoremap <silent> v :set relativenumber cursorcolumn<CR>v
+"nnoremap <silent> gv :set relativenumber cursorcolumn<CR>gv
+"nnoremap <silent> V :set relativenumber<CR>V
+"nnoremap <silent> <C-q> :set relativenumber cursorcolumn<CR><C-q>
+"" When jumping to High/Middle/Low of screen (the documented mnemonic is Home/Middle/Last)
+"nmap <silent> H H:set relativenumber cursorline<CR>
+"nmap <silent> M M:set relativenumber cursorline<CR>
+"nmap <silent> L L:set relativenumber cursorline<CR>
+"" When changing indentation
+"nnoremap <silent> < :set relativenumber cursorline<CR><
+"nnoremap <silent> = :set relativenumber cursorline<CR>=
+"nnoremap <silent> > :set relativenumber cursorline<CR>>
+"" (But these don't set relativenumber immediately; they wait for the timeout.  This is due to >p and >P from unimpaired.)
+"" But apparently I can't disable them here, because they haven't loaded yet.
+""nunmap <p
+""nunmap <P
+""nunmap >p
+""nunmap >P
+""" Return to normal once the operation is completed
+"augroup ClearCursorColumnAndLine
+"	autocmd!
+"	autocmd CursorHold * set norelativenumber nocursorcolumn nocursorline
+"augroup END
 
 " When writing a :! shell command, the shortcut %<Tab> can be used to insert the current filename.  But the same does not work when writing a standard Ex : command!
 " This naughty workaround should make it work for both, BUT it will always append to the end of the line, regardless where on the line the cursor was.
@@ -847,8 +863,8 @@ nmap <C-S-Left>  <C-w><
 nmap <C-S-Right> <C-w>>
 
 " This may help to cleanup window sizes are resizing the Vim window.
-nmap ]= :exec "resize ".(&lines-10)<CR>:exec "vert resize ".(&columns-31)<CR>
-nmap [= :exec "resize ".(&lines-20)<CR>:exec "vert resize ".(&columns-31)<CR>
+nnoremap ]= :exec "resize ".(&lines - 10)<CR>:exec "vert resize ".(&columns - (bufwinnr('__Tag_List__')>=0 ? 31 : 0) - (bufwinnr('TreeExplorer')>=0 ? 25 : 0))<CR>
+nnoremap [= :exec "resize ".(&lines - 20)<CR>:exec "vert resize ".(&columns - (bufwinnr('__Tag_List__')>=0 ? 31 : 0) - (bufwinnr('TreeExplorer')>=0 ? 25 : 0))<CR>
 " The -31 is for when TagList is open with width 30.
 " TODO: But what about when the file browser is open too?!
 
@@ -928,7 +944,7 @@ nnoremap <Leader>C :call system("xsel -ib", getreg('*'))<CR>
 " It happens especially in GVim.  The above don't help.
 " Try Ctrl-Shift-C instead of the above.  It might be a built-in binding.
 
-" When viewing the bottom of the file (after jumping to it), show one ~ line after the last line, so the end of the file is obvious to the viewer.
+" After jumping to the bottom of the file with G, I want to show one ~ line after the last line, so the end of the file is obvious to the viewer.
 " This one will show more ~ lines if you are already at the bottom.
 "nnoremap G G<C-e>
 " This one only ever shows one ~ line, but it has ugly animation with SexyScroller.
@@ -944,4 +960,38 @@ nnoremap <silent> G :normal! ggG<CR><C-e>
 " None of these are working properly yet.
 "nnoremap <silent> G :normal! ggG<CR>$:if winline() >= winheight("%") <Bar> call feedkeys(":normal! <CR>") <Bar> endif<CR>
 "nnoremap <silent> G :normal! ggG<CR>$<C-e>:if winline() < winheight("%") <Bar> exec ":normal! ggG" <Bar> :endif<CR>
-"nnoremap <silent> G :normal! ggG<CR>$<C-e>exec ( winline() < winheight("%") ? ":normal! ggG" : "" )<CR>
+"nnoremap <silent> G :normal! ggG<CR>$<C-e>:exec ( winline() < winheight("%") ? ":normal! ggG" : "" )<CR>
+" This one does ok, but winline makes more sense than line, because there may be folding.
+"nnoremap <silent> G :normal! ggG<CR>$<C-e>:exec ( line('$') < winheight("%") ? ":normal! ggG" : "" )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap <silent> G :normal! gg<CR>:normal! G$<CR>:exec ( line('$') < winheight("%") ? "" : 'normal! <'.'C-E>' )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap <silent> G :normal! gg<CR>:normal! G$<CR>:normal! <C-e>:exec ( winline() < winheight("%") ? ":normal! ggG" : "" )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+" I could have sworn this was working but now it's not.
+" If we do G and $ in separate normal! commands then they open a fold, but G$ together does not.
+"nnoremap <silent> G :normal! gg<CR>:normal! G$<CR>:exec ( winline() == winheight("%") ? 'normal! \'.'<C-e>' : '')<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+" But I am removing the $ because it is not what G is supposed to do.  Use ggVG to select the whole file (not ggvG)
+" This would be my favourite IFF I could fire the <C-e> through exec 'normal! ...' from within the mapping.
+"nnoremap <silent> G :normal! ggG<CR>:exec ( winline() == winheight("%") ? 'normal! \'.'<C-e>' : '')<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap <silent> G :normal! gg<CR>:normal! G<CR>:redraw<CR><C-e>:redraw<CR>:echo winline() .','. winheight("%")<CR>
+"nnoremap <silent> G :normal! gg<CR>:normal! G<CR>:redraw<CR><C-e>:redraw<CR>:exec ( winline() < winheight("%")-1 ? ":normal! ggG" : "" )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+" This works:
+"nnoremap <silent> G :normal! gg<CR>:normal! G<CR><C-e>:exec ( winline() < winheight("%")-1 ? ":normal! ggG" : "" )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+nnoremap <silent> G :normal! ggG<CR><C-e>:exec ( winline() < winheight("%")-1 ? ":normal! ggG" : "" )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+" I am removing the first gg too.  It doesn't really belong.  The second gg doesn't either, but it's needed to undo the <C-e>
+" But this one has a bug that if you are on the last line, G toggles makes it appear and disappear alternately.
+"nnoremap <silent> G :normal! G<CR><C-e>:exec ( winline() < winheight("%")-1 ? ":normal! ggG" : "" )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+" TODO: This is bad if you want to ue [count]G to jump to a line.  We should disable it when there is a leading count!
+" TODO: It should only ever increase the number of ~ lines displayed, not reduce them.  If we are already displaying 12 ~ lines, I usually don't want it to reduce that to 1 ~ line.
+
+" Make unimpaired's create-new-blank-line bindings create a blank comment line when over a comment.
+" Only works when 'formatoptions' contains `o`
+" The C-@ binds are needed for xterm.  I hope C-Space will work for GVim, but haven't tested them yet.
+nnoremap [<C-@> mzO<Esc>g'z
+nnoremap ]<C-@> mzo<Esc>g'z
+nnoremap [<C-Space> mzO<Esc>g'z
+nnoremap ]<C-Space> mzo<Esc>g'z
+
+" <C-^> is hard to reach for the common operation of switching to a buffer by number.
+" In the end I implemented [count]<C-E> in joeys_buffer_switcher.vim
+
+nnoremap <Leader>U :UndotreeToggle<CR>
+
