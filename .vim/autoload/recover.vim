@@ -86,6 +86,9 @@ fu! s:CheckRecover() "{{{1
 	    call inputsave()
 	    redraw! " prevent overwriting of 'Select File to use for recovery dialog'
 	    if exists("g:recover_delete_swapfile_if_identical") && g:recover_delete_swapfile_if_identical   " Added by Joey
+	        " BUG: If the user selected to recover swapfile .swo, and it is identical to the file, this process will delete .swp!
+		"      And when .swp is missing, Vim ignores .swo next time it starts.
+		"      (This may have been confused by the presence of a significant whitespace .sws file, which Vim also offered in the list of files for recovery, despite it having no leading '.')
 		let p = 2
 		echo "Auto-deleting identical swapfile..."
 		sleep 1
