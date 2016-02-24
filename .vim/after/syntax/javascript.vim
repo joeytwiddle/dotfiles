@@ -78,6 +78,9 @@ highlight javaScriptNumber cterm=none ctermfg=cyan gui=none guifg=LightCyan
 syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\(\ze[^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 highlight javaScriptAssignVar ctermfg=white cterm=bold guifg=white gui=bold
 
+" Pangloss's Javascript syntax destroys my tricks above, but fortunately he creates his own syntax groups we can use!
+highlight link jsAssignExpIdent javaScriptAssignVar
+
 " To match coffeeAssign's dark blue property names:
 "syn match javaScriptPropertyName /[A-Za-z_$][A-Za-z_$0-9]*\ze\s*:/ contains=javaScriptColon
 "highlight javaScriptPropertyName ctermfg=darkblue cterm=bold guifg=#6666ff gui=bold
