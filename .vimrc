@@ -10,6 +10,13 @@ autocmd BufReadPost *.{html,svg,xml,css,scss,less,stylus,js,coffee,erb,jade,blad
 " Also $ can be part of a valid identifier in JS (in fact almost any unicode character can be!):
 autocmd BufReadPost *.{js,coffee} setlocal iskeyword+=$
 
+" In package.json files, I quite like packages with '-' in their name to be whole words.
+autocmd BufReadPost *.json setlocal iskeyword+=-
+
+autocmd BufReadPost *.js command! -buffer -range=% JSB let b:winview = winsaveview() |
+    \ execute <line1> . "," . <line2> . "!js-beautify -f - -j -t -s " . &shiftwidth |
+    \ call winrestview(b:winview)
+
 " I was getting error highlighting on valid braces in SCSS files, because minlines was defaulting to 10!  This should prevent that.
 autocmd BufReadPost *.{scss} syntax sync minlines=200
 
@@ -112,10 +119,10 @@ autocmd VimLeave * silent !stty ixon
 		let tlist_asm_settings = 'asm;c:context;m:macro;d:define' " l:label;
 		let tlist_ocaml_settings = 'ocaml;M:module;t:type;c:class;m:method;v:variable;e:exception'
 		let tlist_python_settings = 'python;c:class;m:member;f:function'
-		" BUG: It seems taglist won't even use it's own defined defaults.  I get
-		" no tags for a language until I define it here.  That can't be right,
-		" have I broken taglist?!
-		let tlist_vim_settings = 'vim;a:autocmds;v:variable;f:function;c:command;m:map' " ;h:htag'
+		" BUG: It seems taglist won't even use it's own defined defaults.  I get no tags for a language until I define it here.  That can't be right, have I broken taglist?!
+		" BUG: If I enable m:map for vim files, it detects "import" lines as a "map".
+		" I guess "map" must be a built-in ctags rule, because the rule I created myself in ~/.ctags is called "mapping".
+		let tlist_vim_settings = 'vim;a:autocmds;v:variable;f:function;c:command;m:mapping' " ;h:htag ;m:map
 		let tlist_dosini_settings = 'dosini;s:section'
 		let tlist_haxe_settings = 'haxe;p:package;d:typedef;e:enum;t:enum_field;c:class;i:interface;f:function;v:variable'
 		let tlist_grm_settings = 'joeygrammar;r:rule'
@@ -147,6 +154,7 @@ autocmd VimLeave * silent !stty ixon
 
 	let g:Grep_OpenQuickfixWindow = 1
 	let g:Grep_Default_Filelist = ". -r -I"
+	" Note that g:Grep_Default_Filelist should be kept in sync with g:asyncfinder_ignore_dirs below.
 	" General exclude folders:
 	let g:Grep_Default_Filelist .= " --exclude-dir=CVS --exclude-dir=.git --exclude-dir=bin --exclude-dir=build"
 	" General exclude files:
@@ -166,9 +174,12 @@ autocmd VimLeave * silent !stty ixon
 	" However this works fine there!
 	let g:Grep_Default_Filelist .= " --exclude-dir=./public/assets"   " Precompiled assets (e.g. images)
 	" Of course 'public' or 'assets' on its own should work fine, but we don't want that!
-	" This doesn't seem to work even when we add './' as above.
-	" However it is less of an issue because we are excluding 'build' folders above already.
-	"let g:Grep_Default_Filelist .= " --exclude-dir=.meteor/local"   " Installed packages
+	" For Meteor:
+	" bundler-cache and plugin-cache and other folders sit below here
+	"let g:Grep_Default_Filelist .= " --exclude-dir=./.meteor/local"
+	" On Linux, I could not get a two-folder exclude working
+	" The only thing I could do was this:
+	let g:Grep_Default_Filelist .= " --exclude-dir=.meteor"
 	" For UL:
 	let g:Grep_Default_Filelist .= " --exclude-dir=deploy_TMP"
 
@@ -243,13 +254,20 @@ autocmd VimLeave * silent !stty ixon
 
 	let g:ToggleMaximize_RestoreWhenSwitchingWindow = 1
 
-	let g:NoSwapSuck_Debug = 1
+	"let g:NoSwapSuck_Debug = 1
 	"let g:NoSwapSuck_CheckSwapfileOnLoad = 0
-	let g:NoSwapSuck_CreateSwapfileOnInsert = 1
-	"let g:NoSwapSuck_CloseSwapfileOnWrite = 1
-	setglobal noswapfile
+	"let g:NoSwapSuck_CreateSwapfileOnInsert = 0
+	"let g:NoSwapSuck_CloseSwapfileOnWrite = 0
+	"set noswapfile
+
+	" recover.vim works better if 'swapfile' is enabled when it runs.
+	"set swapfile
+
+	" But in fact, 'swapfile' is unset by noswapfile.vim!
 
 	let g:wrs_default_height_pct = 99
+
+	let g:JBS_Show_Buffer_List_First = 0
 
 " }}}
 
@@ -389,6 +407,7 @@ autocmd VimLeave * silent !stty ixon
 		"" Also with screen fonts, you have the option of using LucidaTypewriter, like Console but with sharp edges.  The only problem is that at size 8 its bold is weak: the chars are very slightly wider but no thicker.  At size 10 it is quite passable.
 		" :set guifont=LucidaTypewriter\ Medium\ 8
 		" TODO for Mac (_system_name is not always set; it is created by rvm):
+		" Solution: Check system("uname") instead (should be "Linux" or "Darwin")
 		if $_system_name == 'OSX'
 			" Popular, aspect like DejaVu Sans Mono / Liberation / Ubuntu Mono
 			":set guifont=Monaco:h12
@@ -446,6 +465,7 @@ autocmd VimLeave * silent !stty ixon
 	au BufReadPost * set formatoptions+=l   " Don't wrap lines that were already long
 	au BufReadPost * set formatoptions-=c   " Don't auto-wrap comments
 	au BufReadPost * set formatoptions-=t   " Don't auto-wrap in general
+	"au BufReadPost * set formatoptions+=o   " When hitting O or o on a comment line, start the new empty line with a comment.
 	" BUG: This was breaking joeyhighlight!
 	"au BufReadPost * try | set formatoptions+=j | catch e | endtry
 	" Workaround: Try it now; if it works then setup the autocmd
@@ -526,8 +546,12 @@ autocmd VimLeave * silent !stty ixon
 	set switchbuf+=useopen
 	" You can get quickfix actions on various keys using https://github.com/mileszs/ack.vim#keyboard-shortcuts or https://github.com/yssl/QFEnter
 
-	" So that fugitive's Gdiff will split left/right
+	" So that fugitive's :Gdiff will split left/right
+	" Although the recommended way to achieve that is to call :Gvdiff
 	set diffopt+=vertical
+
+	" Prevent $(...) from being marked as an error.
+	let g:is_bash = 1
 
 " }}}
 
@@ -613,13 +637,16 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"" I build the list, rather than declare it, so lines can be easily added/removed.
 	let vamAddons = []
 
-	call add(vamAddons, 'github:joeytwiddle/vtreeexplorer') " File (tree) explorer
+	" Note that one of the biggest changes for my config is that 8-color terminals will upgrade to 16-color, with the result that cterm highlights marked bold will actually display as bright and not as bold or bold-and-bright.
+	call add(vamAddons,"github:tpope/vim-sensible")      " Good defaults
 
 	" call add(vamAddons,"vim-haxe")                       " Haxe syntax
 	" call add(vamAddons,'github:jdonaldson/vim-haxe')     " Haxe syntax
 	call add(vamAddons,'github:jdonaldson/vaxe')           " Haxe syntax (preferred)
+
 	" call add(vamAddons,'github:derekwyatt/vim-scala')      " Scala syntax and more
 	" call add(vamAddons,'/stuff/joey/projects/scala/scala-dist-vim') " Older but does not load this way!
+
 	call add(vamAddons,'github:mbbill/undotree')           " Allows you to view undos.  I need a newer Vim for this!
 	"call add(vamAddons,'github:majutsushi/tagbar')         " Nests tags in some languages.  Don't actually try using this with custom .ctags settings.  It will explode until you have configured it correctly.
 	" call add(vamAddons,"VOoM")                           " Another outliner
@@ -658,7 +685,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Or the following is smart enough to decide for us.  BUG: The `normal q` part fails on an empty buffer with error: "E749: empty buffer"
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
-	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*','*.DS_Store*','.git','*.hg*','*.bzr*','CVS','.svn','node_modules','tmp','./public/assets','*/.meteor/local/*','deploy_TMP','dist']"
+	" Note that g:asyncfinder_ignore_dirs should be kept in sync with g:Grep_Default_Filelist above.
+	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*', '*.DS_Store*', '.git', '*.hg*', '*.bzr*', 'CVS', '.svn', 'node_modules', 'dist', 'tmp', './public/assets', '*/.meteor/local/*', 'deploy_TMP']"
 	",'pikto'
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
@@ -684,7 +712,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" The last time I tried, both of the above had trouble with lone '_'s which GitHub markdown was not interpreting as italics.
 	" - tpope's highlighted them as errors (red)
 	" - jtratner's interpreted them as italics even when GitHub did not!
-	" plasticboy's has no such issue:
+	" plasticboy's has no such issue.
+	" Maybe it is better to be warned, for general flavours of markdown.  But many of the popular ones are being kind to intra-word and lone _s now.
 	call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
 	let g:vim_markdown_folding_disabled=1
 	silent! hi link mkdCode Preproc
@@ -695,14 +724,24 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	call add(vamAddons,"unimpaired")                      " Various next/previous keybinds on ]<key> and [<key>
 
-	call add(vamAddons,"github:tristen/vim-sparkup")      " Expand Zen/Jade/Emmet-like snippets into HTML
-	let g:sparkupExecuteMapping = '<C-]>'
-	let g:sparkupNextMapping = '<C-]>n'   " The default <C-n> messes with my <Tab> mappings
-	let g:sparkupMappingInsertModeOnly = 1
+	" Expand Zen/Jade/Emmet-like snippets into HTML
+	"call add(vamAddons,"github:tristen/vim-sparkup")     " Deprecated version
+	"call add(vamAddons,"github:rstacruz/sparkup")        " Up-to-date version
+	"let g:sparkupExecuteMapping = '<C-]>'
+	"let g:sparkupNextMapping = '<C-]>n'   " The default <C-n> messes with my <Tab> mappings
+	"let g:sparkupMappingInsertModeOnly = 1
+
+	" A different implementation, by chrisgeo.  Default key is <C-e>
+	call add(vamAddons,"sparkup")
+	" Note that these configs will break rstacruz's sparkup!
+	let g:sparkup = {}
+	let g:sparkup.lhs_expand = '<C-]>'
 
 	" Interesting: source folder's vimrc file for different settings in specific projects
 	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
 	call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
+	" An alternative is ".lvimrc":
+	" http://www.vim.org/scripts/script.php?script_id=441
 
 	call add(vamAddons,"github:vim-scripts/Align")        " Line up words across lines with :Align <character>
 	call add(vamAddons,"github:vim-scripts/Tabular")      " Line up words across lines with :Tab /<regexp>
@@ -714,12 +753,18 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Some suggestions for Node: https://github.com/joyent/node/wiki/Vim-Plugins
 	" Some suggestions for Meteor: were recommended at: https://github.com/Slava/vimrc/
 	" Improved indent and syntax for Javascript
-	" This kills my assignment highlights, but it has more types for colorschemes like monokai.
+	" This has more types for colorschemes like monokai.
 	call add(vamAddons,"github:pangloss/vim-javascript")
 	"call add(vamAddons,"github:jelera/vim-javascript-syntax") " Even more comprehensive syntax
 	"call add(vamAddons,"github:vim-scripts/JavaScript-Indent") " Improved indent and syntax for Javascript and HTML (OLD alternative).  Joyent says: [somewhat buggy, clicking tab won't indent]
 	" Conceals ""s until we are focused on them:
 	"call add(vamAddons,"github:elzr/vim-json")
+	" ES6 syntax highlighting and UltiSnips snippets
+	call add(vamAddons,"github:isRuslan/vim-es6")
+	" JSX syntax highlighting
+	call add(vamAddons,"github:mxw/vim-jsx")
+	" This will turn all ft=javascript files into ft=javascript.jsx, which might be nice for syntax highlighting, but not for ctags!
+	"let g:jsx_ext_required = 0
 
 	" Javascript beautification:
 	"call add(vamAddons,"github:maksimr/vim-jsbeautify")    " Just a wrapper for jsbeautify
@@ -892,8 +937,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"let g:airline_right_sep = '<'
 	"let g:airline_left_sep  = '|'
 	"let g:airline_right_sep = '|'
-	let g:airline_left_sep  = '\'
-	let g:airline_right_sep = '/'
+	"let g:airline_left_sep  = '\'
+	"let g:airline_right_sep = '/'
 	"let g:airline_left_sep  = ""
 	"let g:airline_right_sep = ""
 	"let g:airline_powerline_fonts = 1
@@ -987,12 +1032,41 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Includes executables vimpager and vimcat (which pretty-print files using Vim's syntax highlighting!)
 	call add(vamAddons,"github:rkitover/vimpager")
 
+	call add(vamAddons, 'github:sheerun/vim-polyglot')   " Syntax and ftplugins for various languages
+
+	call add(vamAddons, 'github:dag/vim-fish')           " Friendly interactive shell support
+	" There is also a different syntax-only plugin: https://github.com/vim-scripts/fish-syntax
+
+	"call add(vamAddons, 'github:tpope/vim-scriptease')   " Assist with vim scripting
+
+	" Minimap made from Braille dots
+	"call add(vamAddons,"github:severin-lemaignan/vim-minimap")
+	" Minimap in a new Vim instance with tiny font size
+	"call add(vamAddons,"github:koron/minimap-vim")
+
+	" Comment toggle on gcc, works in embedded languages
+	call add(vamAddons,"github:tomtom/tcomment_vim")
+	" Another comment toggle on gcc, set commentstring for unsupported languages
+	"call add(vamAddons,"github:tpope/vim-commentary")
+
+	" Allow us to modify syntax highlighting for specified lines in a file
+	" Use [range]:SyntaxIgnore and [range]:SyntaxInclude [filetype]
+	" Can also be configured to automatically detect start-end of regions and set syntax for them
+	call add(vamAddons,"SyntaxRange")
+
+	" Use :NarrowRegion or <Leader>nr to edit the selected lines in a scratch buffer
+	" Can be useful to restrict a file-wide operation to only those lines.
+	call add(vamAddons,"NrrwRgn")
+
 	" }}}
 
 	" >>> My Plugins from the Cloud (modified versions of other plugins) {{{
 	call add(vamAddons,"github:joeytwiddle/grep.vim")    " With support for csearch and SetQuickfixTitle.
 	call add(vamAddons,"github:joeytwiddle/taglist.vim") " Joey's taglist.vim with vague indentation mode and other madness
 	call add(vamAddons,"github:joeytwiddle/zoom.vim")    " Change font size easily
+
+	call add(vamAddons, 'github:joeytwiddle/vtreeexplorer') " File (tree) explorer
+
 	"call add(vamAddons,"github:joeytwiddle/vim-seek")    " Two char search (I added multi-line support).  But I never use it; prefer EasyMotion.
 	let g:seek_multi_line = 1
 	let g:SeekKey = 'l'
