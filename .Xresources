@@ -80,6 +80,9 @@ XTerm.*.translations: #override \n\
 !!!   Ctrl Shift <Key>slash: print-everything() \n\
 !!!   Ctrl <Key>question: print-everything() \n\
 !!!   Ctrl Shift <Key>question: print-everything()
+!!! Worked:
+!!!   Ctrl <KeyPress> 3: print-everything()
+!!!   Ctrl <Key>3: print-everything()
 
 ! The print-everything() above maps Ctrl-/ to open the scrollback for searching in a new xterm
 ! Here we decide to open it with less, but we could have chosen vim.
