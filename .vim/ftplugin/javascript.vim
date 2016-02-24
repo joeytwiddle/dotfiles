@@ -32,9 +32,17 @@ vnoremap <buffer> <Leader>V sunnamedVar<Esc>Ovar unnamedVar = <Esc>pa;<Esc>
 
 
 
+" Convenient command for js-beautify
+command! -buffer JSBeautify %!js-beautify -f - -s 2
+" Attempt at Feross standard style.  For some reason ';+x' gets pulled up onto the line above.
+command! -buffer JSBeautifySS %!js-beautify -f - -s 2 | sed 's+;$++ ; s:^\(\s*\)\(/[^/]\|+[^+]\|-[^-]\|[(\[]\):\1;\2:'
+
+
+
 " === Indenting ===
 
 " The below address some indenting issues, but disabled for now because I am using pangloss/vim-javascript
+" Autodetect pangloss would be great ;)
 if 0
 
 " Outstanding issues:
