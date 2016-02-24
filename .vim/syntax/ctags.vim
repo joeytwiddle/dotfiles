@@ -1,3 +1,8 @@
+" Some syntax rules to make ctags files more readable
+
+" CONSIDER: ctags is not the only filetype where regexps can be used
+"           We might want to propagate these additional syntax rules (and custom colours) to regexps in other filetypes too.
+
 " TODO: I used hs= and he= but perhaps I should have used ms= and me= instead.
 "       That might avoid having to specify contains just because we matched
 "       outside the desired target.
