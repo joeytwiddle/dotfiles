@@ -226,13 +226,21 @@ alias gca='gc --amend'
 alias gcm='gc -m'
 # I think I tend to use --amend more than -a.  At least, I like to be explicit about -a.  (But probably feel the same about --amend)
 # gcam providing --amend
-alias gcam='gc --amend -m'
+# (I have found myself using this incorrectly!)
+#alias gcam='gc --amend -m'
 # gcam providing -a
-#alias gcam='gc -a -m'
+# (This is inconsistent with gca; so I might also end up using this incorrectly too!  But it is slightly easier to recover from, if noticed.)
+alias gcam='gc -a -m'
 alias gci='git commit --interactive'
 # -p "patch" allows us to choose which hunks to add or commit
 alias gap='ga -p'
-alias gcp='gc -p'
+# This is better used for git cherry-pick, as that is a greater saving, and I use it more often.
+#alias gcp='gc -p'
+
+if [ -n "$ZSH_NAME" ]
+then
+	: #compdef ga=git
+fi
 
 gpr_safe() {
 	local current_commit=`git rev-parse HEAD`
@@ -268,6 +276,8 @@ alias gmu='verbosely git merge $(git_guess_upstream_branch)'
 alias gr='git reset'
 alias grh='gr --hard'
 
+alias gcp='git cherry-pick'
+
 alias gri='git rebase -i'
 alias grc='git rebase --continue'
 
@@ -275,7 +285,10 @@ alias gmt='git mergetool'
 alias gma='git merge --abort'
 alias gra='git rebase --abort'
 
-alias fgc='friendlygitcommit'
+alias fgc=friendlygitcommit
+alias lg=gitls
+alias gls=gitls
+alias glsl=gitls
 
 #alias gp='git preview'   # This was defined in my .gitconfig as: git diff --stat HEAD..FETCH_HEAD
 #alias gw='git whatsnew'
@@ -369,11 +382,13 @@ alias glls='gll --stat'
 # "Git Log Word-diffed" - It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
 alias glw='gl --word-diff=color'
 # "Git Log Stats/Summary" - Just file stats, no diffs.  BUG: Not grey, because glg uses glp which does -p (diffs)!
-alias gls='gitlog --stat'
+# Deprecated in favour of gls=gitls.  Use glf for this instead.
+#alias gls='gitlog --stat'
 # "Git Log Files" - Compressed version of "Git Log Stats"
 #alias glf='glc --stat'
 # New version allows easy n/N searching.  Could be merged with gitlog.
 gitlog2() {
+	local search
 	if [ "$1" = "-search" ]
 	then search="$2"; shift; shift
 	else search='^$'
@@ -464,6 +479,7 @@ alias gwinmf='glf HEAD..$(git_guess_upstream_branch)'
 alias gwinmd='gd HEAD..$(git_guess_upstream_branch)'
 
 alias gss='git stash save'
+alias gssu='git stash save --include-untracked'
 #alias gsp='git stash pop'
 alias gsp='git_stash_pop_safe'
 alias gsa='git stash apply'
@@ -484,6 +500,18 @@ grho() {
 	local current_branch=`git_get_current_branch`
 	verbosely git reset --hard "origin/$current_branch"
 }
+
+# Like git clone but shows the username in the target directory
+git_clone_friendly() {
+	if [ $# -gt 1 ]
+	then git clone "$@"
+	else
+		local url="$1"
+		local username_dot_repo=$(printf "%s\n" "$1" | grep -o "[^/]*/[^/]*$" | tr '/' '.')
+		git clone "$url" "$username_dot_repo"
+	fi
+}
+alias gcl='git_clone_friendly'
 
 # Sometimes popping the state results in conflicts because I was popping onto the wrong branch.  I can reset to restore the files, but then I will have lost my stashed changes, because they were popped!
 # So git_stash_pop_safe will only drop the stash if it was successfully applied with no conflicts.
@@ -636,6 +664,8 @@ alias gwu=gitwhatsup
 
 # Guesses the name of the upstream branch, given the local branch name (or no arguments, which assumes current branch)
 git_guess_upstream_branch() {
+	# CONSIDER: This might be a simpler solution: git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)
+
 	local local_branch remote_branch remote_commit
 	# No problem if this arg is empty, it will work fine for the current branch anyway
 	local_branch="$1"
