@@ -3,6 +3,8 @@
 " DONE: Determine the previous line which *did not* start with '||', before doing the comparison.  Hence wrapped '||' lines get folded with the previous, and do not cause a break in the folding.
 " Note that '||' lines appear when the line length exceeds the compile-time macro CMDBUFSIZE, which looks to be 1024 here.
 
+" BUG: Does not fold grep's "context" lines properly.  These also start with '||' but are then followed by either an ambiguous '--' (this may or may not separate files) or the filename and the line number surrounded by dashes `-53-` rather than pipes `|54|`.
+
 let g:FoldByPath_SeparateFilesVisually = get(g:, "FoldByPath_SeparateFilesVisually", 1)
 
 command! FoldByFiles :call s:FoldByFiles()
@@ -125,6 +127,8 @@ function! g:SeparateFilesVisually()
 	" I was using hlexists checks, but they prevent the highlight from reloading if they get cleared for some reason.  Although :hi says they are "cleared", they still "exist"!
 	"if !hlexists("QuickFixFirstLineOfFile")
 
+	:setlocal fdc=2
+
 	" Brighten/embolden the first line of each matched file.
 	"highlight QuickFixFirstLineOfFile term=bold cterm=bold gui=bold
 	highlight QuickFixFirstLineOfFile term=none cterm=none gui=none
@@ -139,6 +143,7 @@ function! g:SeparateFilesVisually()
 	" If we are doing FirstLine highlighting, then we can hide all the duplicate filenames below it:
 	"highlight qfFileName ctermfg=black guifg=black
 	highlight qfFileName ctermfg=235 guifg=#102626
+	" containedin=Search contained
 
 	" Underline the last line of each matched file, to mark the end.
 	highlight QuickFixLastLineOfFile term=underline cterm=underline gui=underline
