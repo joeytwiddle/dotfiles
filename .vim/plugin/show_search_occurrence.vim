@@ -12,6 +12,7 @@
 " See also: http://www.vim.org/scripts/script.php?script_id=1682#IndexedSearch
 "           https://github.com/henrik/vim-indexed-search
 " See also: http://www.vim.org/scripts/script.php?script_id=2634#SearchPosition
+" See also: |count-items|
 
 " If the current file is larger than the threshold (in bytes), then do not
 " display the summary.  This can prevent sluggishness when working on large
@@ -19,6 +20,9 @@
 let g:ShowSearchOccurrences_MaxBufferSize = get(g:, 'ShowSearchOccurrences_MaxBufferSize', 1000000)
 
 let g:ShowSearchOccurrences_InCmdLine = get(g:, 'ShowSearchOccurrences_InCmdLine', 1)
+
+let g:ShowSearchOccurrences_PadLeft  = ""
+let g:ShowSearchOccurrences_PadRight = " "
 
 let s:showing_status = 0
 
@@ -67,7 +71,9 @@ function! GetSearchStatus(...)
 			return "On matching line " . this_index . " of " . count_matches
 			"return "On match " . this_index . " of " . count_matches
 		else
-			return "(".this_index."/".count_matches.") "
+			let padLeft  = (g:ShowSearchOccurrences_PadLeft  ? " " : "")
+			let padRight = (g:ShowSearchOccurrences_PadRight ? " " : "")
+			return g:ShowSearchOccurrences_PadLeft . "(".this_index."/".count_matches.")" . g:ShowSearchOccurrences_PadRight
 		endif
 	else
 		return ""
