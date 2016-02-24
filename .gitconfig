@@ -262,6 +262,12 @@
 	# Mac OSX users may prefer:
 	#helper = osxkeychain
 
+# If you don't want to type a password ever, add your SSH key to github, and then use ssh-agent.
+#   https://help.github.com/articles/generating-ssh-keys/
+# If you run into trouble authenticating, this page may help:
+#   https://help.github.com/articles/error-permission-denied-publickey/
+# Note also that the SSH key is only valid for git-protocol remotes, not https remotes!
+
 [merge]
 	## When marking conflict in a file, also shows original (base) lines, after ||||||||
 	#conflictstyle = diff3
