@@ -3,11 +3,17 @@ export PATH="$HOME/bin:$PATH"
 
 # On a Mac / BSD system/usr/local/opt/coreutils/libexec/gnubin, load GNU core utils onto the PATH:
 # This might be unwise.  Some of the scripts we run might be expecting BSD tools, not GNU tools!
-gnubinfolder=/usr/local/opt/coreutils/libexec/gnubin
-if [ -d "$gnubinfolder" ]
+gnucorefolder=/usr/local/opt/coreutils/libexec/gnubin
+if [ -d "$gnucorefolder" ]
 then
-	PATH="$gnubinfolder:$PATH"
-	MANPATH="$gnubinfolder/../gnuman:$MANPATH"
+	PATH="$gnucorefolder:$PATH"
+	MANPATH="$gnucorefolder/../gnuman:$MANPATH"
+fi
+gnusedfolder=/usr/local/opt/gnu-sed/libexec/gnubin
+if [ -d "$gnusedfolder" ]
+then
+	PATH="$gnusedfolder:$PATH"
+	MANPATH="$gnusedfolder/../gnuman:$MANPATH"
 fi
 
 # Similarly, let's promote /usr/local/bin over the defaults
