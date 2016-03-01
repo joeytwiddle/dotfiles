@@ -1,6 +1,6 @@
 " BreakIndent Beta tries to make wrapped lines look neater and less disruptive, by updating showbreak dynamically to match the indent of the current focused line.
 "
-" Vim's default 'wrap' mode shows wrapped lines like this:
+" Vim's default 'wrap' mode shows wrapped lines unindented:
 "
 "     This line is indented and also very
 " \ long so it was displayed wrapped.
@@ -38,6 +38,8 @@
 "   :let g:breakindent_gapchar = '\'      " The symbol used below the word
 "   :let g:breakindent_symbol = ' '       " After gapchars just put a space
 "   :let g:breakindent_use_first_word = 1   " Use the first word as the symbol
+"
+" I also forked this script to create a version that sets the breakindent to the deepest (most indented) wrapped line currently on the screen.  This may be preferable if you dislike indents that are too shallow but don't mind indents that are too deep.  That version is in breakindent_beta.never_shallow.vim
 "
 " Alternative: The real breakindent patch is being kept up-to-date at: https://retracile.net/wiki/VimBreakIndent   (Look for the "Original Format" link at the bottom of the page)
 

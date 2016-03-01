@@ -38,6 +38,7 @@ function! s:FindNextChangeVisual(moveKey) range
   call s:FindNextChange(a:moveKey, 1, a:firstline, a:lastline)
 endfunction
 function! s:FindNextChange(moveKey, in_visual_mode, first_line, last_line)
+  " BUG TODO: If we are in visual mode, then the "start" of the visual is not the current col+row (that is in fact the end of the visual, which we are about to change).  Can we get it somehow?  We could `o` to get to the start of the visual, and `o` again to get back.
   let startCol = wincol()
   let startRow = line(".")
   let unwatedChar = s:GetCharUnderCursor()
@@ -47,11 +48,14 @@ function! s:FindNextChange(moveKey, in_visual_mode, first_line, last_line)
   let startColChars = getpos(".")[2]
   " TODO BUG: startCol is always 1 when in_visual_mode and without g:move_once_at_start
   "           But somehow if we do move_once_at_start then it goes where it should be.
-  " TODO BUG: There are three types of visual mode (char, line, block) but
+  " DONE:     There are three types of visual mode (char, line, block) but
   "           this function always returns us to character mode.
   "           We can find this from mode() or visualmode().
+  " BUG:      But the plugin still doesn't work properly for Ctrl-Q mode!
+  "           (Currently the mode is restored after moving, but we are left with an empty selection.)
   if a:in_visual_mode
     let startCol = wincol()
+    let visualMode = visualmode()
   endif
   let nextCharUnderCursor = s:GetCharUnderCursor()
   if nextCharUnderCursor != unwatedChar
@@ -60,7 +64,7 @@ function! s:FindNextChange(moveKey, in_visual_mode, first_line, last_line)
   let lastRow = line(".")
   " echo "start (".startCol.",".lastRow.") ".unwatedChar
   while 1
-    exec "normal ".a:moveKey
+    exec "normal! ".a:moveKey
     let newCol = wincol()
     let newRow = line(".")
     let newCharUnderCursor = s:GetCharUnderCursor()
@@ -93,8 +97,10 @@ function! s:FindNextChange(moveKey, in_visual_mode, first_line, last_line)
     " We don't know if we were in v or V mode (lost during the keymapping) so we just assume v.
     let finalRow = line(".")
     let finalColChars = getpos(".")[2]
+    echo "visualMode=".visualMode
     call setpos(".", [0, startRow, startColChars])
-    normal v
+    " BUG: Doesn't seem to work in Ctrl-V/Ctrl-Q (^V) mode
+    exe "normal " . visualMode
     call setpos(".", [0, finalRow, finalColChars])
   endif
 endfunction

@@ -307,9 +307,9 @@
 "
 " Has this plugin already been loaded? {{{
 "
-if exists('loaded_minibufexplorer')
-  finish
-endif
+"if exists('loaded_minibufexplorer')
+  "finish
+"endif
 let loaded_minibufexplorer = 1
 " }}}
 
@@ -645,6 +645,11 @@ if !exists('g:miniBufExplorerDebugOutput')
   let g:miniBufExplorerDebugOutput = ''
 endif
 
+" By Joey.  Whether or not to display buffer numbers.
+if !exists('g:miniBufExplShowBufNums')
+  let g:miniBufExplShowBufNums = 1
+endif
+
 " TODO: Undocumented!!!  By Joey.
 if !exists('g:miniBufExplForceDisplay')
   let g:miniBufExplForceDisplay = 0
@@ -705,11 +710,22 @@ augroup MiniBufExplorer
 
   " Experiments...
   "autocmd MiniBufExplorer BufWinEnter * call <SID>DEBUG('-=> BufWinEnter AutoCmd', 10) |call <SID>AutoUpdate(-1)
+  "autocmd MiniBufExplorer BufWritePost * call <SID>DEBUG('-=> BufWritePost AutoCmd', 10) |call <SID>AutoUpdate(-1)
 
 augroup END
 " }}}
 
 let s:userFocusedBuffer = -1
+
+function! HlExists(hl)
+  if !hlexists(a:hl)
+    return 0
+  endif
+  redir => hlstatus
+  exe "silent hi" a:hl
+  redir END
+  return (hlstatus !~ "cleared")
+endfunction
 
 " Functions
 "
@@ -820,7 +836,9 @@ function! <SID>StartExplorer(sticky, delBufNum)
 
 
 
-    if !exists("g:did_minibufexplorer_syntax_inits")
+    " Define highlights only if they have not been created yet, or if they were cleared somehow.
+    "if !exists("g:did_minibufexplorer_syntax_inits")
+    if !HlExists("MBENormal")
       let g:did_minibufexplorer_syntax_inits = 1
       " highlight MBEGap            ctermfg=white ctermbg=magenta guibg=magenta
       " highlight MBEGap            term=none cterm=none ctermbg=black ctermfg=grey guibg=black guifg=grey
@@ -1374,7 +1392,13 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
             let l:shortBufName = substitute(l:shortBufName, '[][()]', '', 'g') 
             " let l:tab = '['.l:i.':'.l:shortBufName.']'
             " let l:tab = '['.l:shortBufName.']'
-            let l:tab = l:shortBufName
+            if g:miniBufExplShowBufNums
+              "let l:tab = '(' . l:i . ') ' . l:shortBufName
+              "let l:tab = l:shortBufName . ' <' . l:i . '>'
+              let l:tab = l:shortBufName . '/' . l:i . ''
+            else
+              let l:tab = l:shortBufName
+            endif
 
             if l:tab == ""
                 let l:tab = "___"
@@ -1424,23 +1448,29 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
 
   " let l:fileNames = substitute(l:fileNames,' *$','','')
   let l:line = ''
-  if exists('g:vloaded_tree_explorer') || exists('g:loaded_nerd_tree') || exists('g:loaded_netrwPlugin') || exists("loaded_winfileexplorer")
-    let l:line = l:line . "[File] "
+
+  if get(g:, 'miniBufExplShowMenu', 0)
+    if exists('g:vloaded_tree_explorer') || exists('g:loaded_nerd_tree') || exists('g:loaded_netrwPlugin') || exists("loaded_winfileexplorer")
+      let l:line .= "[File] "
+    endif
+    if exists('g:loaded_sessionman')
+      let l:line .= "[Sess] "
+    endif
+    if exists('g:loaded_taglist')
+      let l:line .= "[Tags] "
+    endif
+    let l:line .= '[Wrap] [Fold] [Term] '
+    "" [Wrap] toggles dsplayed line-wrapping (:set wrap/nowrap)
+    "" but it should probably be an option in the [View menu]?
+    "" Let users reconfigure toolbars+buttons.
+    "" Defaults could be e.g.:
+    ""   File:Open,Save,Rename,Close,Quit
+    ""   View:Wrap Lines,Tabs
+    ""   Help:About
   endif
-  if exists('g:loaded_sessionman')
-    let l:line .= "[Sess] "
-  endif
-  if exists('g:loaded_taglist')
-    let l:line = l:line . "[Tags] "
-  endif
-  let l:line = l:line . '[Wrap] [Fold] [Term] ' . l:fileNames . "| "
-  "" [Wrap] toggles dsplayed line-wrapping (:set wrap/nowrap)
-  "" but it should probably be an option in the [View menu]?
-  "" Let users reconfigure toolbars+buttons.
-  "" Defaults could be e.g.:
-  ""   File:Open,Save,Rename,Close,Quit
-  ""   View:Wrap Lines,Tabs
-  ""   Help:About
+
+  let l:line .= l:fileNames . "| "
+
   "" Right-align the close button:
   let l:subtr = 0
   if &wrap

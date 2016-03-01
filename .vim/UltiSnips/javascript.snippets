@@ -1,6 +1,6 @@
 
 snippet fun "function (fun)" !
-function ${1:function_name}(${2:argument}) {
+function ${1:function_name} (${2}) {
 	${VISUAL}$0
 }
 endsnippet
@@ -39,20 +39,20 @@ for (var ${1:x} in ${2:obj}) {
 endsnippet
 
 snippet .forE ".forEach()" !w
-.forEach(function(${1:item}){
+.forEach(function (${1:item}) {
 	${0:// body...}
 });
 endsnippet
 
 snippet .each ".each() [JQuery]" !w
-.each(function(){
+.each(function () {
 	var \$${1:item} = \$(this);
 	$0
 });
 endsnippet
 
 snippet .map ".map()" !w
-.map(function(${1:item}){
+.map(function (${1:item}) {
 	return $0$1;
 });
 endsnippet
@@ -70,7 +70,7 @@ try {
 }
 endsnippet
 
-snippet log( "console.log" w
+snippet Log( "console.log" w
 console.log("$0");
 endsnippet
 

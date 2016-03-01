@@ -1,3 +1,5 @@
+" Some of these are only recognised by pasta / my own asm.  If they are disruptive to other asm files, they should detect by extension or a new filetype or some other means.
+
 " highlight asmComment ctermfg=darkgrey gui=none guifg=#999999
 highlight link asmComment Comment
 " highlight Comment ctermfg=darkgrey guifg=darkgrey

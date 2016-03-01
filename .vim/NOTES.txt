@@ -239,3 +239,34 @@ Undo and other commands to get out of bad situations:
   Ctrl-w c    close window (when you have split open a new window and don't want it)
   or :q
 
+
+== Completion ==
+
+  Ctrl-n           word completion forwards
+  Ctrl-p           word completion backwards (more often what you want)
+  Ctrl-x Ctrl-]    tag completion (from ctags)
+  Ctrl-x Ctrl-n    context-aware completion (keep hitting it to pull in words from earlier sentences)
+  Ctrl-x Ctrl-o    language-aware completion
+  Ctrl-x Ctrl-l    line completion
+
+
+== Motions ==
+
+  [count]G         to line [count] inclusive
+                   use with 'c' or 'd' to clear lots of lines
+                   easier when 'number' is enabled!
+
+== Jumps ==
+
+  Ctrl-o           go back one jump
+  Ctrl-i           go forward one jump
+  Ctrl-t           go back one tag jump
+                   (a good alternative to my custom Ctrl-u)
+
+== Scrolling ==
+
+  zt         Scroll so cursor is at top
+  zz         Scroll so cursor is in middle
+  zb         Scroll so cursor is at bottom
+
+

@@ -1,0 +1,92 @@
+# If we have nvm, then use the latest node
+# But disabled for now, because this slows down my shell startup
+if false && nvm --version >/dev/null
+then
+
+	unset PREFIX
+	nvm use node
+
+else
+
+	# Use the node package manually installed in /usr/local
+	#export PATH="/usr/local/node/bin:$PATH"
+
+	# Otherwise there may be a nodejs package installed via dpkg or rpm
+
+	# I like to keep my global packages in "$HOME/npm", to avoid conflicts with ownership in /usr/local/node
+
+	# Assuming you have previously done: npm config set prefix ~/npm
+	# BUT THIS IS UNDESIRABLE if you might want to use nvm later, because nvm cannot handle prefix in ~/.npmrc
+	#export PATH="$HOME/npm/bin:$PATH"
+
+	# So a friendlier way is to set the PREFIX var.  (Too bad they didn't call this NODE_PREFIX or NPM_PREFIX)
+	export PREFIX="$HOME/npm"
+	export PATH="$PREFIX/bin:$PATH"
+
+	# Even with this, when I want to do `nvm use` I must first do `unset PREFIX`.
+
+	# Becuase it is slow to run nvm for every shell, we don't run it, but we do this instead:
+	#alias node='echo "You may want to run nvmusenode or nvmusesystem first"'
+	#alias npm='echo "You may want to run nvmusenode or nvmusesystem first"'
+	# This doesn't really work unless it is run twice.  The first time, nvm gets called with PREFIX still set!
+	#alias nvmusenode='unset PREFIX ; unalias node ; unalias npm ; nvm use node'
+	# Using a function instead of an alias works on the first attempt.
+	nvmusenode() {
+		#unalias node 2>/dev/null
+		#unalias npm 2>/dev/null
+
+		# We could also remove this function, but why not leave it available, in case the user wants to switch to/from?
+		# Bash:
+		#unset -f nvmusenode
+		# Zsh:
+		#unfunction nvmusenode
+
+		unset PREFIX
+		nvm use node
+
+		nodewhatsup
+	}
+	# These two don't necessarily use the system node
+	# They just use whichever node + npm are currently on the PATH.
+	# So if you run `nvm use node` before running one of these, you might be using a different version of node!
+	# So `nvm use system` is safer.  Although it won't set PREFIX correctly.  Gah!
+	# So the safe thing is: nvm use system ; nvmusesystem
+	nvmusesystem() {
+		nvm use system
+		# Because that will set the prefix to `/usr/local/npm`, which is not where I keep it!
+		export PREFIX="$HOME/npm"
+		export PATH="$PREFIX/bin:$PATH"
+
+		nodewhatsup
+	}
+	nvmusetempprefix() {
+		# Change the npm location, but keep using the same node we were using before.
+		# Beware that the folder may get confused, with different versions.
+		export PREFIX="$HOME/tmp/npm"
+		export PATH="$PREFIX/bin:$PATH"
+
+		nodewhatsup
+	}
+	nodewhatsup() {
+		echo "node:   $(which node)"
+		echo "npm:    $(which npm)"
+		echo "PREFIX: $PREFIX"
+		echo "nvm current: $(nvm current)"
+	}
+	nodestatus() {
+		nodewhatsup
+	}
+
+fi
+
+
+# Just notes on using nvm, for me:
+#
+# nvm install 1.2.3 --reinstall-packages-from=default
+#
+#   will install version 1.2.3 of node, and also install all global packages from your default node version
+#
+# To do it after an install:
+#
+#   nvm use iojs; nvm reinstall-packages node, or nvm install iojs --reinstall-packages-from=iojs
+#

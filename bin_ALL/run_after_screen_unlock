@@ -1,0 +1,38 @@
+#!/bin/sh
+
+outer_callback="$*"
+
+catch_signal_and_do() {
+	local signal="$1"
+	local inner_callback="$2"
+
+	dbus-monitor --session "type='signal',interface='${signal}'" |
+	tee -a "$HOME/run_after_screen_unlock.log" |
+	while read message
+	do
+		#echo "Got message from $signal: $message"
+		case "$message" in
+			*"boolean true"*)
+				echo "$(date) SCREEN_LOCKED" | tee -a "$HOME/run_after_screen_unlock.log"
+			;;
+			*"boolean false"*)
+				echo "$(date) SCREEN_UNLOCKED" | tee -a "$HOME/run_after_screen_unlock.log"
+				#echo "Running ${inner_callback}"
+				"${inner_callback}"
+			;;
+		esac
+	done
+}
+
+callback() {
+	echo "callback: Running ${outer_callback}" | tee -a "$HOME/run_after_screen_unlock.log"
+	${outer_callback}
+}
+
+# Ubuntu 12.04
+catch_signal_and_do org.gnome.ScreenSaver callback &
+# Ubuntu 14.04
+catch_signal_and_do com.ubuntu.Upstart0_6 callback &
+# Mint
+#catch_signal_and_do org.mate.ScreenSaver callback &
+

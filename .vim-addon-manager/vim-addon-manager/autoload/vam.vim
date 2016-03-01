@@ -58,6 +58,10 @@ let s:c.source_missing_files = get(s:c, 'source_missing_files', &loadplugins)
 let s:c.activate_on = get(s:c, 'activate_on', {'tag': [], 'ft_regex': [], 'filename_regex': []})
 let s:c.lazy_loading_au_commands = get(s:c, 'lazy_loading_au_commands', 1)
 
+" example: vam#ForceUsersAfterDirectoriesToBeLast
+let s:c.rtp_list_hook = get(s:c, 'rtp_list_hook', '')
+
+
 " experimental: will be documented when its tested
 " don't echo lines, add them to a buffer to prevent those nasty "Press Enter"
 " to show more requests by Vim
@@ -104,9 +108,18 @@ fun! vam#VerifyIsJSON(s)
   return scalarless_body !~# "[^,:{}[\\] \t]"
 endfun
 
+fun! vam#ForceUsersAfterDirectoriesToBeLast(list)
+  let regex_last = '^'.escape($HOME, '/').'/[._]vim\/after$'
+  return filter(copy(a:list), 'v:val !~ '.string(regex_last))
+     \ + filter(copy(a:list), 'v:val =~ '.string(regex_last))
+endfun
+
 " use join so that you can break the dict into multiple lines. This makes
 " reading it much easier
 fun! vam#ReadAddonInfo(path)
+  if !filereadable(a:path)
+    return {}
+  endif
 
   " don't add "b" because it'll read dos files as "\r\n" which will fail the
   " check and evaluate in eval. \r\n is checked out by some msys git
@@ -139,9 +152,8 @@ endfun
 fun! vam#PluginDirFromName(...)
   return call(s:c.plugin_dir_by_name, a:000, {})
 endfun
-fun! vam#PluginRuntimePath(name)
-  let info = vam#AddonInfo(a:name)
-  return vam#PluginDirFromName(a:name).(has_key(info, 'runtimepath') ? '/'.info.runtimepath : '')
+fun! vam#PluginRuntimePath(pluginDir, info)
+  return a:pluginDir.(has_key(a:info, 'runtimepath') ? '/'. a:info.runtimepath : '')
 endfun
 
 " adding VAM, so that its contained in list passed to :UpdateActivatedAddons 
@@ -160,12 +172,23 @@ fun! vam#IsPluginInstalled(name)
     \     || !empty(glob(fnameescape(d).'/archive/*', 1)))
 endfun
 
-" {} if file doesn't exist
+" TODO: remove this
 fun! vam#AddonInfo(name)
-  let infoFile = vam#AddonInfoFile(a:name)
-  return filereadable(infoFile)
-    \ ? vam#ReadAddonInfo(infoFile)
-    \ : {}
+  throw "deprecated"
+  " use this code instead:
+  " vam#ReadAddonInfo(vam#AddonInfoFile(vam#PluginDirFromName(name), name))
+endfun
+
+
+fun! vam#ActivateDependencies(opts, dependencies, name)
+
+  " activate dependencies merging opts with given repository sources
+  " sources given in opts will win
+  call vam#ActivateAddons(keys(a:dependencies),
+    \ extend(copy(a:opts), {
+        \ 'plugin_sources' : extend(copy(a:dependencies), get(a:opts, 'plugin_sources',{})),
+        \ 'requested_by' : [a:name] + get(a:opts, 'requested_by', [])
+    \ }))
 endfun
 
 
@@ -178,44 +201,55 @@ fun! vam#ActivateRecursively(list_of_scripts, ...)
   let opts = extend({'run_install_hooks': 1}, a:0 == 0 ? {} : a:1)
 
   for script_ in a:list_of_scripts
-    let name = script_.name
-    if !has_key(s:c.activated_plugins,  name)
+    " try to find plugin root / rtp
+
+    if has_key(script_, 'activate_this_rtp')
+      " hack: allow passing {'activate_this_rtp': 'path'} to get all the
+      " workarounds when activating rtps after Vim has started up
+      let name = get(script_, 'name', 'unkown, rtp: '. script_.activate_this_rtp)
+      let rtp = script_.activate_this_rtp
+      if index(split(&runtimepath, '\v(\\@<!(\\.)*\\)@<!\,'), rtp) > 0
+        " don't readd rtp
+        continue
+      endif
+      let info = vam#ReadAddonInfo(vam#AddonInfoFile(rtp, ""))
+      call vam#ActivateDependencies(opts, get(info, 'dependencies', {}), name)
+
+      let s:c.activated_plugins['rtp:'.rtp] = 1
+    else
+      let name = script_.name
+      let pluginRoot = vam#PluginDirFromName(name)
+      if has_key(s:c.activated_plugins,  name)
+        continue
+      endif
       " break circular dependencies..
       let s:c.activated_plugins[name] = 0
 
-      let infoFile = vam#AddonInfoFile(name)
+      let infoFile = vam#AddonInfoFile(pluginRoot, name)
       if !filereadable(infoFile) && !vam#IsPluginInstalled(name)
         if empty(vam#install#Install([script_], opts))
           unlet s:c.activated_plugins[name]
           continue
         endif
       endif
-      let info = vam#AddonInfo(name)
-      let dependencies = get(info,'dependencies', {})
-
-      " activate dependencies merging opts with given repository sources
-      " sources given in opts will win
-      call vam#ActivateAddons(keys(dependencies),
-        \ extend(copy(opts), {
-            \ 'plugin_sources' : extend(copy(dependencies), get(opts, 'plugin_sources',{})),
-            \ 'requested_by' : [name] + get(opts, 'requested_by', [])
-        \ }))
-
-      " source plugin/* files ?
-      let rtp = vam#PluginRuntimePath(name)
-      call add(opts.new_runtime_paths, rtp)
+      let info = vam#ReadAddonInfo(infoFile)
+      call vam#ActivateDependencies(opts, get(info, 'dependencies', {}), name)
 
       let s:c.activated_plugins[name] = 1
+      " source plugin/* files ?
+      let rtp = vam#PluginRuntimePath(pluginRoot, info)
+    endif
 
-      if s:c.debug_activation
-        " activation takes place later (-> new_runtime_paths), but messages will be in order
-        " XXX Lengths of “as it was requested by” and “which was requested by” 
-        "     match
-        call vam#Log('Will activate '.name.(empty(get(opts, 'requested_by'))?
-              \                             (' as it was specified by user.'):
-              \                             ("\n  as it was requested by ".
-              \                               join(opts.requested_by, "\n  which was requested by ").'.')))
-      endif
+    call add(opts.new_runtime_paths, rtp)
+
+    if s:c.debug_activation
+      " activation takes place later (-> new_runtime_paths), but messages will be in order
+      " XXX Lengths of “as it was requested by” and “which was requested by” 
+      "     match
+      call vam#Log('Will activate '.name.(empty(get(opts, 'requested_by'))?
+            \                             (' as it was specified by user.'):
+            \                             ("\n  as it was requested by ".
+            \                               join(opts.requested_by, "\n  which was requested by ").'.')))
     endif
   endfor
 endfun
@@ -246,14 +280,29 @@ fun! s:ResetVars(buf)
   endif
 endfun
 
-fun! vam#PreprocessScriptIdentifier(list)
+" turn name into {'name': ...}
+" turn {'names': ...} into {'name': name1}, {'name': name2}
+fun! vam#PreprocessScriptIdentifier(list, opts)
+  let r = []
   " turn name into dictionary
-  for i in range(0, len(a:list)-1)
+  for x in a:list
     " 1 is string
-    if type(a:list[i]) == 1
-      let a:list[i] = {'name': a:list[i]}
+    if type(x) == 1
+      call add(r, {'name': x})
+    elseif has_key(x, 'names') && a:opts.rewrite_names
+      for n in x.names
+        let y = extend({}, x)
+        let y.name = n
+        call remove(y, 'names')
+        call add(r, y)
+      endfor
+    else
+      call add(r, x)
     endif
+    unlet x
   endfor
+
+  return r
 
   " Merging with the pool will be done in install.vim because that's only
   " sourced when installations take place
@@ -311,7 +360,7 @@ fun! vam#ActivateAddons(...) abort
 
   let to_activate = args[0]
 
-  call vam#PreprocessScriptIdentifier(args[0])
+  let args[0] = vam#PreprocessScriptIdentifier(args[0], {'rewrite_names': 1})
 
   if exists('g:vam_plugin_whitelist') && topLevel
     call filter(args[0],   'index(g:vam_plugin_whitelist, v:val.name) != -1')
@@ -326,7 +375,8 @@ fun! vam#ActivateAddons(...) abort
   let opts.to_be_activated   = to_be_activated
 
   for a in args[0]
-    let to_be_activated[a.name] = a
+    let to_be_activated[has_key(a, 'name') ? a.name : 'rtp:'.a.activate_this_rtp] = a
+    " a.name
   endfor
 
   call call('vam#ActivateRecursively', args)
@@ -344,10 +394,15 @@ fun! vam#ActivateAddons(...) abort
     let escapeComma = 'escape(v:val, '','')'
     let after = filter(map(copy(new_runtime_paths), 'v:val."/after"'), 'isdirectory(v:val)')
     if !s:c.dont_source
-      let &runtimepath=join(rtp[:0] + map(copy(new_runtime_paths), escapeComma)
-                  \                 + rtp[1:]
-                  \                 + map(after, escapeComma),
-                  \         ",")
+      " rtp[-1:-1] keep users /after directory last, see github issue #165
+      let list = rtp[:0] + map(copy(new_runtime_paths), escapeComma)
+                  \                 + rtp[1:-2]
+                  \                 + map(after, escapeComma)
+                  \                 + rtp[-1:-1]
+      if s:c.rtp_list_hook != ''
+        let list = call(s:c.rtp_list_hook, [list])
+      endif
+      let &runtimepath=join(list , ",")
     endif
     unlet rtp
 
@@ -433,7 +488,7 @@ fun! vam#Scripts(scripts, opts) abort
   let activate = []
   let keys_ = keys(s:c.activate_on)
   let scripts = (type(a:scripts) == type([])) ? a:scripts : map(readfile(a:scripts), 'eval(v:val)')
-  call vam#PreprocessScriptIdentifier(scripts)
+  let scripts = vam#PreprocessScriptIdentifier(scripts, {'rewrite_names': 0})
   for x in scripts
     for k in keys_
       if has_key(x, k)
@@ -600,7 +655,7 @@ fun! vam#SourceMissingPlugins()
   call vam#SourceFiles(fs)
 endfun
 
-fun! vam#AddonInfoFile(name)
+fun! vam#AddonInfoFile(pluginRoot, name)
   " history:
   " 1) plugin-info.txt was the first name (deprecated)
   " 2) a:name-addon-info.txt was the second recommended name (maybe deprecated - no hurry)
@@ -609,15 +664,13 @@ fun! vam#AddonInfoFile(name)
   "   - json says all about its contents (Let's hope all browsers still render
   "     it in a readable way
 
-  let p = vam#PluginDirFromName(a:name)
-  let default = p.'/addon-info.json'
-  let choices = [ default , p.'/plugin-info.txt', p.'/'.a:name.'-addon-info.txt']
+  let choices = [ a:pluginRoot.'/addon-info.json' , a:pluginRoot.'/plugin-info.txt', a:pluginRoot.'/'.a:name.'-addon-info.txt']
   for f in choices
     if filereadable(f)
       return f
     endif
   endfor
-  return default
+  return choices[0]
 endfun
 
 " looks like an error but is not. Catches users attention. Logs to :messages
@@ -686,7 +739,7 @@ command! -nargs=* -complete=customlist,vam#bisect#BisectCompletion VAMBisect :ca
 
 fun! s:RunInstallHooks(plugins)
   for name in a:plugins
-    call vam#install#RunHook('post-install', vam#AddonInfo(name), vam#install#GetRepo(name, {}), vam#PluginDirFromName(name), {})
+    call vam#install#RunHook('post-install', vam#ReadAddonInfo(vam#AddonInfoFile(vam#PluginDirFromName(name), name)), vam#install#GetRepo(name, {}), vam#PluginDirFromName(name), {})
   endfor
 endfun
 command! -nargs=+ -complete=customlist,vam#install#InstalledAddonCompletion RunInstallHooks :call s:RunInstallHooks([<f-args>])

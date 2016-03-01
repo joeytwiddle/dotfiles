@@ -1,0 +1,8 @@
+# This only needs to be run once per user, not for every shell started.
+# So we use pgrep to check if an ssh-agent is already running.
+if ! pgrep -u $USER ssh-agent >/dev/null
+then
+	eval $(ssh-agent)
+	[ -f "$HOME/.ssh/id_dsa" ] && ssh-add "$HOME/.ssh/id_dsa"
+	[ -f "$HOME/.ssh/id_rsa" ] && ssh-add "$HOME/.ssh/id_rsa"
+fi

@@ -112,7 +112,7 @@ nmap Ob <C-W>j
 nmap Od <C-W>h
 nmap Oc <C-W>l
 
-"" For Linux console:
+"" For Linux console (and I think also xterm in Fluxbox on tomato's Ubuntu 12.04):
 nmap [A <C-W>k
 nmap [B <C-W>j
 nmap [D <C-W>h
@@ -140,10 +140,10 @@ nmap [1;5C <C-W>l
 " Ooops.  <Tab> and <C-I> are indistinguishable.  And I use <C-I>.  How sad!
 " We might be able to apply them only in GUI mode, but that would probably just make me sad out of GUI mode.
 " Let's do this like unimpaired does
-"nmap ]w <C-w><Down>
-"nmap [w <C-w><Up>
-nmap ]w <C-w>w
-nmap [w <C-w>W
+nmap ]w <C-w><Down>
+nmap [w <C-w><Up>
+"nmap ]w <C-w>w
+"nmap [w <C-w>W
 nmap ]W <C-w><Right>
 nmap [W <C-w><Left>
 " Wow that is so much better than <Ctrl-Down> or <Ctrl-W><Down>!  Although only a minor improvement over <Ctrl-W>j.
@@ -189,6 +189,21 @@ vnoremap <C-J> 2<C-E>:<C-U>call g:SexyScroller_ScrollToCursor()<CR>gv
 "" OK that fires sexy_scroller, but why did we ever want it to fire hiline anyway?!  Perhaps when we were doing 10<C-K>
 "" Also it exhibits a BUG in sexy_scroller, namely that it will cause horizontal scrolling when moving near a long line whilst `:set nowrap` wrapping is off!
 "" There are disadvantages to trying to trigger CursorMoved/Hold this way.  <BS><Space> can fail if we are at the top of the file, or create issues if we are at the start of a line (e.g. temporarily moves a line back, undoing the requested scroll, in a short window when scrolloff is set).  Similarly <Space><BS> can fail on the last char of a line or the last line of a file.  A better solution might be to explicitly call hooks exposed by those specific plugins that we want to trigger.  Alternatively we could call a function to examine the situation and emit whichever of <BS><Space> or <Space><BS> is most appropriate.
+
+"" DISABLED: Getting too much trouble with holding down <Enter> and having "things happpen" (change windows!)  It is intermittent though, not always 100% reproducable.  Stress seems to help, e.g. additional highlighting.  It may be related to RepeatLast and HiWord too.
+""           Try re-enabling these at some point in the future, but look out for that issue!
+"" Swap C-K/J (Move Windows) with C-Up/Down (Scroll Lines) because I want to try that.
+"" I tried making these nmap but that seemed to increase the rare bug of jumping to the top of the buffer when holding Enter to move down.  I thought it might be TagList-related, but it continued occurring after I closed the taglist.
+"nnoremap <C-K> <C-W>k
+"nnoremap <C-J> <C-W>j
+""nunmap <C-Up>
+""nunmap <C-Down>
+"nnoremap <C-Up> 2<C-Y>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap <C-Down> 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap [1;5A 2<C-Y>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap [1;5B 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap [A 2<C-Y>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap [B 2<C-E>:call g:SexyScroller_ScrollToCursor()<CR>
 
 " BUG: In Vim and GVim on Mac OSX, <C-J> also gets mapped to <NL>.  As a result, the mapping above fires in visual mode, preventing the selection from growing, and making Vim jitter while the cursor does not move down.  (Or before the gv trick above, it would just drop us out of visual mode.)  We only see this mapping firing (or causing problems) when a very long wrapped line moves off screen, causing a visual jump to occur.  If I unmap <NL> then this also unmaps <C-J>.
 "
@@ -243,8 +258,6 @@ endif
 
 "" Quick access to ConqueTerm
 :nnoremap <C-x> :ConqueTermSplit zsh<Enter>
-:inoremap <C-x> <Esc>:echo "Hello"<Enter>
-" :inoremap <C-x> <Esc>:bdel<Enter>
 "" My ConqueTerm settings live in ~/.vimrc
 
 "" I want :q to close the buffer, not the window.
@@ -338,9 +351,11 @@ cnoremap <C-X> <C-W>
 " cnoremap <C-V> <C-Right><C-W>
 "" Lazy move.  Ctrl-Space just walks over the current char.
 "" We must use C-@ instead of C-Space for this to work on the terminal.
+"" But actually I use Ctrl-SPACE for Tern.  Does it override this mapping?
 cnoremap <C-@> <Right>
 inoremap <C-@> <Right>
 "" But in GUI mode we need to define the mapping properly.
+"" Is there any reason why we did this only on GUIEnter?
 autocmd GUIEnter * cnoremap <c-Space> <Right>
 "" Disabled for now because we are using it for something else below
 " autocmd GUIEnter * inoremap <c-Space> <Right>
@@ -373,22 +388,25 @@ cnoremap \<C-R> <C-R>
 "" And of course, <C-R>q will paste/insert the q register.
 "" For all the other <C-R> tricks, see: :help c_CTRL-R_CTRL-F
 
-"" Now the same for Insert-mode?  Well a select few perhaps...
-"inoremap <C-X> <Esc>dbxi
-"" This works better at the end of a line.  It inserts a char them removes it later.
-inoremap <C-X> _<Esc>dbs
-"" Except we won't do <C-V> because that has a useful meaning already
-inoremap <C-D> <Esc>bi
-"" And <C-F> already means toggle fullscreen.
-"inoremap <C-F> <Esc>ea
-inoremap <C-F> <Esc>wi
-"inoremap <C-A> <Home>
-"inoremap <C-E> <End>
-"" By default <C-A> performs the last . which could be pretty handy.
-"" Default <C-E> copies 1 char from the cell above (useful in the 80s).
-
-"" Because we overwrote Ctrl-D, we need a new one:
+"" Because we overwrote Ctrl-D, we now need an alternative!
 cnoremap <C-L> <C-D>
+
+"" My shell shortcut keys for Insert-mode.  Disabled.
+"" <C-X> Default: Completion
+""inoremap <C-X> <Esc>dbxi
+"" This works better at the end of a line.  It inserts a char them removes it later.
+"inoremap <C-X> _<Esc>dbs
+"" Except we won't do <C-V> because that has a useful meaning already
+"" Default: Unindent
+"inoremap <C-D> <Esc>bi
+"" Default: re-indent
+"" But I have <C-F> set to toggle fullscreen.
+""inoremap <C-F> <Esc>ea
+"inoremap <C-F> <Esc>wi
+"" Default: performs the insertion again (equivalent to `<C-R>.`)
+"inoremap <C-A> <Home>
+"" Default: copies 1 char from the cell above (useful in the 80s).
+"inoremap <C-E> <End>
 
 " This is how my zsh does completion, and it rocks (unless for some reason you
 " always want the first match of multiples, then you must always Tab twice).
@@ -427,7 +445,7 @@ nnoremap <Leader>w :set invwrap<Enter>
 "" Select buffer by any part of filename and Tab completion or arrows, or by number
 "nnoremap <C-E> :ls<CR>:b<space>
 nnoremap <Leader>W :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
-nnoremap <C-E> :JoeysBufferSwitch<Enter>
+nnoremap <C-E> :<C-U>JoeysBufferSwitch<Enter>
 "" An interesting alternative, assuming you have MBE as your first window:
 "nnoremap <C-E> 1<C-W><C-W>/
 "" Select file by filename with completion
@@ -455,8 +473,10 @@ nnoremap <Leader>O :e .<Enter>
 nnoremap <Leader>s :Sopen<Enter>
 nnoremap <Leader>S :SessionList<Enter>
 
-" A common combination (IDE vim!)
+" Vim IDE.  Opens file manager and tag browser sidebars.
 nmap <Leader>i <Leader>f<C-w><Right><Leader>t
+
+nnoremap <Leader>I :set invignorecase<CR>:set ignorecase?<CR>
 
 " Toggle relative line numbers in the margin
 "nmap <Leader>l :set invrelativenumber<Enter>
@@ -472,7 +492,9 @@ nnoremap <Leader>p :set invpaste<CR>:set paste?<CR>
 nmap <Leader>d :set fdc=0 invdiff diff?<CR>:let &l:scrollbind = &l:diff<CR>
 
 " Fold everything in the buffer except lines which match the current search pattern (or at second level, the line on either side)
-nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
+"nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
+" Without the second level
+nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:1 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
 " Alternative, as a command:
 "command! -nargs=+ Foldsearch exe "normal /".<q-args>."^M" | setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\|\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2
 
@@ -487,7 +509,11 @@ nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)
 "" Ctrl-Q is the unlock terminal code, and the terminal swallows it (does not pass it to vim).
 " nnoremap <C-Q> :CloseBuffer<Enter>
 "" Ctrl-Z works ok
-nnoremap <C-Z> :CloseBuffer<Enter>
+"" Temporarily disabled: It's my prefix in tmux but I keep hitting it in Vim!
+" nnoremap <C-Z> :CloseBuffer<Enter>
+"" But now GVim minimizes the window on Ctrl-Z instead!  Let's intercept it and let it do nothing.
+"nnoremap <C-Z> :<CR>
+nnoremap <C-Z> :echoerr "This is Vim not Tmux!"<CR>
 "" CloseBuffer is implemented in (kwbd.vim)
 
 " We cannot use <Ctrl-S> for save because many terminals will just swallow
@@ -530,6 +556,11 @@ nnoremap <Leader>e :execute getline(".")<CR>
 " I would quite like a version that could work on multiple lines (from a visual selection).
 " Execute line from clipboard in ex.  But which clipboard?  Let's display them and let the user choose.
 nnoremap <Leader>E :registers " + *<CR>:execute @
+
+" A simple search for the word under cursor
+"nnoremap <F4> :<C-U>grep "\<<cword>\>" . -r --exclude-dir=node_modules<CR><CR>:cwindow<CR>
+
+" My more complex setup for searching, using my modified version of the grep.vim plugin.
 
 function! s:SetupKeysForGrep()
 	" Now that <F4> is doing a search for the word under the cursor.  <F3> could start empty, waiting for a typed word.  But for the user's convenience, we start them off with the whole-word symbols.
@@ -639,7 +670,8 @@ vnoremap <C-c> "+y
 "vnoremap <Leader><C-v> <C-v>
 
 " Select All from Insert mode using <Ctrl-A> (overrides default "Insert previously inserted text").  Finishes in Visual mode.
-inoremap <C-a> <Esc>ggvG$
+"inoremap <C-a> <Esc>ggvG$
+" Disabled because I want to try using the default <C-A> which adds the last inserted text.  (It is equivalent to `<C-R>.`)
 " Same when in Visual mode:
 vnoremap <C-a> <Esc>ggvG$
 
@@ -691,26 +723,39 @@ map <Leader><Leader><Leader>W <Plug>(easymotion-flash-bd-W)
 inoremap <S-Enter> <Esc>O
 " In Xterm, both <S-Enter> and <C-Enter> reach Vim as <Enter>, so we cannot use this.
 
-" There is a plugin that does the below: github:b3niup/numbers
-" relativenumber is useful if we are about to make a jump
-" Position screen about cursor (so cursor appears at top/middle/button)
-" Unfortunately these fire CursorHold shortly afterwards, even though the cursor didn't move!
-nmap <silent> zt zt:set relativenumber cursorcolumn cursorline<CR>
-nmap <silent> zz zz:set relativenumber cursorcolumn cursorline<CR>
-nmap <silent> zb zb:set relativenumber cursorcolumn cursorline<CR>
-" Entering Visual mode
-nnoremap <silent> v :set relativenumber cursorcolumn<CR>v
-nnoremap <silent> gv :set relativenumber cursorcolumn<CR>gv
-nnoremap <silent> V :set relativenumber<CR>V
-nnoremap <silent> <C-q> :set relativenumber cursorcolumn<CR><C-q>
-" Jump to High/Middle/Low of screen (the documented mnemonic is Home/Middle/Last)
-nmap <silent> H H:set relativenumber cursorline<CR>
-nmap <silent> M M:set relativenumber cursorline<CR>
-nmap <silent> L L:set relativenumber cursorline<CR>
-augroup ClearCursorColumnAndLine
-	autocmd!
-	autocmd CursorHold * set norelativenumber nocursorcolumn nocursorline
-augroup END
+" DISABLED because it's too visually disruptive.  Better to keep 'number' on at all times.
+""" There is a plugin that does the below: github:b3niup/numbers
+""" relativenumber is useful if we are about to make a jump, or otherwie select a number of lines for an operation
+""" So we will turn relativenumber on when performing these actions
+"" When positioning screen about cursor (so cursor appears at top/middle/button)
+"" Unfortunately these fire CursorHold shortly afterwards, even though the cursor didn't move!
+"nmap <silent> zt zt:set relativenumber cursorcolumn cursorline<CR>
+"nmap <silent> zz zz:set relativenumber cursorcolumn cursorline<CR>
+"nmap <silent> zb zb:set relativenumber cursorcolumn cursorline<CR>
+"" When entering Visual mode
+"nnoremap <silent> v :set relativenumber cursorcolumn<CR>v
+"nnoremap <silent> gv :set relativenumber cursorcolumn<CR>gv
+"nnoremap <silent> V :set relativenumber<CR>V
+"nnoremap <silent> <C-q> :set relativenumber cursorcolumn<CR><C-q>
+"" When jumping to High/Middle/Low of screen (the documented mnemonic is Home/Middle/Last)
+"nmap <silent> H H:set relativenumber cursorline<CR>
+"nmap <silent> M M:set relativenumber cursorline<CR>
+"nmap <silent> L L:set relativenumber cursorline<CR>
+"" When changing indentation
+"nnoremap <silent> < :set relativenumber cursorline<CR><
+"nnoremap <silent> = :set relativenumber cursorline<CR>=
+"nnoremap <silent> > :set relativenumber cursorline<CR>>
+"" (But these don't set relativenumber immediately; they wait for the timeout.  This is due to >p and >P from unimpaired.)
+"" But apparently I can't disable them here, because they haven't loaded yet.
+""nunmap <p
+""nunmap <P
+""nunmap >p
+""nunmap >P
+""" Return to normal once the operation is completed
+"augroup ClearCursorColumnAndLine
+"	autocmd!
+"	autocmd CursorHold * set norelativenumber nocursorcolumn nocursorline
+"augroup END
 
 " When writing a :! shell command, the shortcut %<Tab> can be used to insert the current filename.  But the same does not work when writing a standard Ex : command!
 " This naughty workaround should make it work for both, BUT it will always append to the end of the line, regardless where on the line the cursor was.
@@ -723,7 +768,8 @@ cnoremap %<Tab> <C-r>%
 silent! xunmap <BS>
 
 " When editing a Vim file, make K lookup Vim's inline :help rather than calling 'man'.
-autocmd BufReadPost *.vim setlocal keywordprg=:help
+"autocmd BufReadPost {.vimrc,*.vim} setlocal keywordprg=:help
+autocmd FileType vim setlocal keywordprg=:help
 
 " My own attempt at a YankRing
 " I'm not sure if this is useful.  It turned out to be no use for the original use-case (I was deleting parts of lines, so they were entering the small delete register, and not the numbered registers).
@@ -784,9 +830,15 @@ command! -bar -nargs=1 Sgrep silent execute "grep <args>" | redraw! | cw
 " I never normally use _ - and +.  I tend to use <Enter> to go down and k to go up.
 " ^ and $ are very useful but hard to reach
 " Sometimes when moving up or down a line, I want to land on the last column, not the first.
-nnoremap _ <Up>^
-nnoremap - <Up>$
-nnoremap + <Down>$
+"nnoremap _ <Up>^
+"nnoremap - <Up>$
+"nnoremap + <Down>$
+" If you want the last *non-blank* character of the next line, use `2g_`
+"nnoremap _ <Down>$
+nnoremap _ 2g_
+" I never use ^ for its default meaning, so we could make it do the opposite of _
+"nnoremap ^ <Up>^
+nnoremap ^ k^
 
 " OTOH, these may be more useful:
 "nnoremap _ <C-w>-
@@ -800,15 +852,15 @@ nmap [< <C-w><
 nmap ]< <C-w><
 nmap [> <C-w>>
 nmap ]> <C-w>>
-" They are not actually pairs!
+" Probably only for GVim.
 nmap <C-S-Up>    <C-w>+
 nmap <C-S-Down>  <C-w>-
 nmap <C-S-Left>  <C-w><
 nmap <C-S-Right> <C-w>>
 
 " This may help to cleanup window sizes are resizing the Vim window.
-nmap ]= :exec "resize ".(&lines-10)<CR>:exec "vert resize ".(&columns-31)<CR>
-nmap [= :exec "resize ".(&lines-20)<CR>:exec "vert resize ".(&columns-31)<CR>
+nnoremap ]= :exec "resize ".(&lines - 10)<CR>:exec "vert resize ".(&columns - (bufwinnr('__Tag_List__')>=0 ? 31 : 0) - (bufwinnr('TreeExplorer')>=0 ? 25 : 0))<CR>
+nnoremap [= :exec "resize ".(&lines - 20)<CR>:exec "vert resize ".(&columns - (bufwinnr('__Tag_List__')>=0 ? 31 : 0) - (bufwinnr('TreeExplorer')>=0 ? 25 : 0))<CR>
 " The -31 is for when TagList is open with width 30.
 " TODO: But what about when the file browser is open too?!
 
@@ -864,11 +916,78 @@ nnoremap <Leader>vcb :<C-U>call ContiguousVBlock()<CR>
 nnoremap <Leader>T :!dict <cword><CR>
 
 " When writing large chunks of text, Vim's undo may be considered too coarsely grained.  We can use <C-g>u to tell Vim to break the undo sequence.
-inoremap <CR> <C-G>u<CR>
-inoremap . <C-G>u.
-inoremap ! <C-G>u!
-inoremap ? <C-G>u?
-inoremap ( <C-G>u(
-inoremap ) <C-G>u)
-inoremap , <C-G>u,
+" I hated this.  It broke up Shift-Inserted text pasted into insert mode, requiring me to perform an unknown number of undos to revert it.
+"inoremap <CR> <C-G>u<CR>
+"inoremap . <C-G>u.
+"inoremap ! <C-G>u!
+"inoremap ? <C-G>u?
+"inoremap ( <C-G>u(
+"inoremap ) <C-G>u)
+"inoremap , <C-G>u,
+
+" The default definitions for - and + might be good for navigation, but I never found myself using them.
+" So here I remap them to do what other apps do with Ctrl-Minus and Ctrl-Shift-Plus: change font size.
+" I suspect Vim cannot tell the difference between Minus and Ctrl-Minus.
+nnoremap - :ZoomOut<CR>
+nnoremap + :ZoomIn<CR>
+
+" I sometimes have trouble copying from Vim/GVim and pasting into the browser.
+" (I recall this being an issue when testing userscripts with TamperMonkey in Chrome.)
+" So here is an alternative way to populate the clipboard, which might work:
+"nnoremap <Leader>C :call system("xsel -ib", getreg('+'))<CR>
+nnoremap <Leader>C :call system("xsel -ib", getreg('*'))<CR>
+"nnoremap <Leader>C :call system("echo -n $'" . escape(getreg(), "'") . "' | xsel -ib")<CR>
+" It happens especially in GVim.  The above don't help.
+" Try Ctrl-Shift-C instead of the above.  It might be a built-in binding.
+
+" After jumping to the bottom of the file with G, I want to show one ~ line after the last line, so the end of the file is obvious to the viewer.
+" This one will show more ~ lines if you are already at the bottom.
+"nnoremap G G<C-e>
+" This one only ever shows one ~ line, but it has ugly animation with SexyScroller.
+"nnoremap G ggG<C-e>
+" These have shorter (janked) animations, which are acceptable but not ideal.
+nnoremap <silent> G :normal! ggG<CR><C-e>
+" Did not help:
+"nnoremap G :normal! ggG<CR><C-e>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap G :noauto normal! ggG<CR><C-e>
+" This does not work:
+"nnoremap G :set nolazyredraw<CR>:set lazyredraw<CR>:normal! ggG<C-e><CR>
+" Only scroll if we are on the last line of the screen.  (Prevent scrolling if the file height is less than the screen height.)
+" None of these are working properly yet.
+"nnoremap <silent> G :normal! ggG<CR>$:if winline() >= winheight("%") <Bar> call feedkeys(":normal! <CR>") <Bar> endif<CR>
+"nnoremap <silent> G :normal! ggG<CR>$<C-e>:if winline() < winheight("%") <Bar> exec ":normal! ggG" <Bar> :endif<CR>
+"nnoremap <silent> G :normal! ggG<CR>$<C-e>:exec ( winline() < winheight("%") ? ":normal! ggG" : "" )<CR>
+" This one does ok, but winline makes more sense than line, because there may be folding.
+"nnoremap <silent> G :normal! ggG<CR>$<C-e>:exec ( line('$') < winheight("%") ? ":normal! ggG" : "" )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap <silent> G :normal! gg<CR>:normal! G$<CR>:exec ( line('$') < winheight("%") ? "" : 'normal! <'.'C-E>' )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap <silent> G :normal! gg<CR>:normal! G$<CR>:normal! <C-e>:exec ( winline() < winheight("%") ? ":normal! ggG" : "" )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+" I could have sworn this was working but now it's not.
+" If we do G and $ in separate normal! commands then they open a fold, but G$ together does not.
+"nnoremap <silent> G :normal! gg<CR>:normal! G$<CR>:exec ( winline() == winheight("%") ? 'normal! \'.'<C-e>' : '')<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+" But I am removing the $ because it is not what G is supposed to do.  Use ggVG to select the whole file (not ggvG)
+" This would be my favourite IFF I could fire the <C-e> through exec 'normal! ...' from within the mapping.
+"nnoremap <silent> G :normal! ggG<CR>:exec ( winline() == winheight("%") ? 'normal! \'.'<C-e>' : '')<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+"nnoremap <silent> G :normal! gg<CR>:normal! G<CR>:redraw<CR><C-e>:redraw<CR>:echo winline() .','. winheight("%")<CR>
+"nnoremap <silent> G :normal! gg<CR>:normal! G<CR>:redraw<CR><C-e>:redraw<CR>:exec ( winline() < winheight("%")-1 ? ":normal! ggG" : "" )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+" This works:
+"nnoremap <silent> G :normal! gg<CR>:normal! G<CR><C-e>:exec ( winline() < winheight("%")-1 ? ":normal! ggG" : "" )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+nnoremap <silent> G :normal! ggG<CR><C-e>:exec ( winline() < winheight("%")-1 ? ":normal! ggG" : "" )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+" I am removing the first gg too.  It doesn't really belong.  The second gg doesn't either, but it's needed to undo the <C-e>
+" But this one has a bug that if you are on the last line, G toggles makes it appear and disappear alternately.
+"nnoremap <silent> G :normal! G<CR><C-e>:exec ( winline() < winheight("%")-1 ? ":normal! ggG" : "" )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
+" TODO: This is bad if you want to ue [count]G to jump to a line.  We should disable it when there is a leading count!
+" TODO: It should only ever increase the number of ~ lines displayed, not reduce them.  If we are already displaying 12 ~ lines, I usually don't want it to reduce that to 1 ~ line.
+
+" Make unimpaired's create-new-blank-line bindings create a blank comment line when over a comment.
+" Only works when 'formatoptions' contains `o`
+" The C-@ binds are needed for xterm.  I hope C-Space will work for GVim, but haven't tested them yet.
+nnoremap [<C-@> mzO<Esc>g'z
+nnoremap ]<C-@> mzo<Esc>g'z
+nnoremap [<C-Space> mzO<Esc>g'z
+nnoremap ]<C-Space> mzo<Esc>g'z
+
+" <C-^> is hard to reach for the common operation of switching to a buffer by number.
+" In the end I implemented [count]<C-E> in joeys_buffer_switcher.vim
+
+nnoremap <Leader>U :UndotreeToggle<CR>
 

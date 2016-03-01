@@ -13,20 +13,33 @@
 "   and user hitting Escape.  FIXEDFORNOW: no BufExplorer fallback
 " Also, BufExplorer sometimes requires two presses of Ctrl-O to get out of it.
 
+" I had an issue on Ubuntu 12.04 that Tab-complete was does nothing during the prompt.
+" At that time I disabled the plugin and used this fallback:
+"nnoremap <C-e> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
+"finish
+
+" You are recommended to bind this plugin to a key, for example one of these:
+"   nnoremap <C-E> :<C-U>JoeysBufferSwitch<CR>
+"   nnoremap <Leader>b :<C-U>JoeysBufferSwitch<CR>
+
+" Some alternatives to this plugin are:
+"   nnoremap <C-E> :ls<CR>:b<space>
+"   nnoremap <C-B> :BufExplorer<Enter>
+"   nnoremap <Leader>b :MRU<Enter>
+"   nnoremap <Leader>o :e .<Enter>
+"   nnoremap <Leader>f :Explore .<Enter>
+
 let g:JBS_Show_Buffer_List_First = get(g:, "JBS_Show_Buffer_List_First", 1)
 
 command! JoeysBufferSwitch call JoeysBufferSwitch()
-" Disabled because I am using this for something else now:
-"nnoremap <Leader>e :JoeysBufferSwitch<Enter>
-
-"" Some alternatives:
-" nnoremap <C-E> :ls<CR>:b<space>
-" nnoremap <C-B> :BufExplorer<Enter>
-" nnoremap <Leader>b :MRU<Enter>
-" nnoremap <Leader>o :e .<Enter>
-" nnoremap <Leader>f :Explore .<Enter>
 
 function! JoeysBufferSwitch()
+  " If a count was provided before the keypress, then jump directly to the buffer with that number
+  if v:count > 0
+    exec v:count . "b"
+    return
+  endif
+  " TODO: Consider improving that by jumping to the window containing that buffer, if it is visible.
 
   let more_was = &more
   if g:JBS_Show_Buffer_List_First

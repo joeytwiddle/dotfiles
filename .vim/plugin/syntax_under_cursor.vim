@@ -9,7 +9,10 @@
 
 " My adapted version, additionally shows where the highlight rule was defined
 
-map <F10> :call <SID>ShowSyntaxUnderCursor()<CR>
+nnoremap <F10>   :call <SID>ShowSyntaxUnderCursor()<CR>
+nnoremap <S-F10> :call <SID>ShowSyntaxUnderCursor()<CR>
+
+command! ShowSyntaxUnderCursor call s:ShowSyntaxUnderCursor()
 
 function! s:ShowSyntaxUnderCursor()
 	call s:ShowSyntaxRule(synIDattr(synID(line("."),col("."),1),"name"))
@@ -26,4 +29,3 @@ function! s:ShowSyntaxRule(rule)
 	"exec ":verbose syntax list ".a:rule
 	exec ":verbose highlight ".a:rule
 endfunction
-

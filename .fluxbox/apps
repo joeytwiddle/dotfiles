@@ -1,6 +1,6 @@
 [app] (name=xv) (class=MPlayer)
   [Deco]	{NORMAL}
-  [Sticky]	{yes}
+  [Sticky]	{no}
   [Layer]	{2}
   [Close]	{yes}
 [end]
@@ -15,10 +15,9 @@
   [Close]	{yes}
 [end]
 [app] (name=beebem) (class=beebem)
-  [Position]	(UPPERLEFT)	{1% 6%}
   [Close]	{yes}
 [end]
-[app] (name=glslideshow) (class=TopLevelShell)
+[app] (title=GLSlideshow.*)
   [Deco]	{NONE}
   [Close]	{yes}
 [end]
@@ -36,7 +35,7 @@
 [end]
 [app] (name=smplayer) (class=Smplayer)
   [Sticky]	{yes}
-  [Layer]	{8}
+  [Layer]	{6}
   [Close]	{yes}
 [end]
 [app] (name=gimp) (class=Gimp) (role=gimp-image-window)
@@ -63,6 +62,8 @@
  [app] (title=Error Console)
  [app] (title=Browser Console)
  [app] (title=Console - .*)
+  [Dimensions]	{82% 48%}
+  [Position]	(UPPERLEFT)	{18% 52%}
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
@@ -75,6 +76,7 @@
  [app] (name=konqueror)
  [app] (name=chrome)
  [app] (name=X-www-browser)
+  [Close]	{yes}
 [end]
 [group]  (workspace=[current])
  [app] (name=kopete)
@@ -93,8 +95,8 @@
   [Layer]	{8}
 [end]
 [app] (name=xchat) (class=Xchat)
-  [Dimensions]	{1055 839}
-  [Position]	(UPPERLEFT)	{113 83}
+  [Dimensions]	{1154 726}
+  [Position]	(UPPERLEFT)	{0 0}
 [end]
 [app] (name=XMMS_Equalizer) (class=xmms)
   [Workspace]	{1}
@@ -110,9 +112,10 @@
   [Sticky]	{yes}
 [end]
 [app] (name=ktorrent) (class=Ktorrent) (role=MainWindow#1)
-  [Workspace]	{5}
-  [Dimensions]	{1085 875}
-  [Position]	(UPPERLEFT)	{98 65}
+  [Workspace]	{8}
+  [Dimensions]	{84% 104%}
+  [Position]	(UPPERLEFT)	{0% 0%}
+  [Close]	{yes}
 [end]
 [app] (name=) (class=)
   [Position]	(UPPERLEFT)	{21 485}
@@ -122,8 +125,9 @@
   [Position]	(UPPERLEFT)	{520 92}
 [end]
 [transient] (name=google-chrome) (class=Google-chrome)
-  [Dimensions]	{650 775}
-  [Position]	(UPPERLEFT)	{537 102}
+  [Dimensions]	{69% 98%}
+  [Position]	(UPPERLEFT)	{10% -1%}
+  [Close]	{yes}
 [end]
 [app] (name=Global) (class=Firefox) (role=console)
   [Close]	{yes}

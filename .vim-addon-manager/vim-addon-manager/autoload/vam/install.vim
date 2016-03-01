@@ -173,9 +173,8 @@ endfun
 
 " opts: same as ActivateAddons
 fun! vam#install#Install(toBeInstalledList, ...)
-  let toBeInstalledList = a:toBeInstalledList
-  call vam#PreprocessScriptIdentifier(toBeInstalledList)
-  call vam#install#ReplaceAndFetchUrls(map(copy(a:toBeInstalledList),'v:val.name'))
+  let toBeInstalledList = vam#PreprocessScriptIdentifier(a:toBeInstalledList, {'rewrite_names': 1})
+  call vam#install#ReplaceAndFetchUrls(map(copy(toBeInstalledList),'v:val.name'))
   let opts = a:0 == 0 ? {} : a:1
   let auto_install = get(opts, 'auto_install', s:c.auto_install)
   let installed = []
@@ -223,13 +222,13 @@ fun! vam#install#Install(toBeInstalledList, ...)
 
       call vam#install#Checkout(pluginDir, repository)
 
-      let infoFile = vam#AddonInfoFile(name)
+      let infoFile = vam#AddonInfoFile(pluginDir, name)
       if has_key(repository, 'addon-info') && !filereadable(infoFile)
         call writefile([string(repository['addon-info'])], infoFile)
       endif
 
       " install dependencies
-      let info = vam#AddonInfo(name)
+      let info = vam#ReadAddonInfo(infoFile)
 
       let dependencies = get(info, 'dependencies', {})
 
@@ -336,7 +335,7 @@ fun! vam#install#UpdateAddon(name)
     let hook_opts={'oldVersion': oldVersion, 'newVersion': newVersion, 'sdescr': sdescr}
     if r isnot# 'unknown'
       if r is# 'updated'
-        call vam#install#RunHook('post-scms-update', vam#AddonInfo(a:name), {}, pluginDir, hook_opts)
+        call vam#install#RunHook('post-scms-update', vam#ReadAddonInfo(vam#AddonInfoFile(pluginDir, a:name)), {}, pluginDir, hook_opts)
       endif
       return r
     endif
@@ -377,7 +376,7 @@ fun! vam#install#UpdateAddon(name)
     echom "Updating plugin ".a:name." because ".(newVersion == '?' ? 'version is unknown' : 'there is a different version')
 
     let hook_opts={'oldVersion': oldVersion, 'newVersion': newVersion}
-    call vam#install#RunHook('pre-update', vam#AddonInfo(a:name), repository, pluginDir, hook_opts)
+    call vam#install#RunHook('pre-update', vam#ReadAddonInfo(vam#AddonInfoFile(pluginDir, a:name)), repository, pluginDir, hook_opts)
 
     " checkout new version (checkout into empty location - same as installing):
     if isdirectory(pluginDir)
@@ -385,7 +384,8 @@ fun! vam#install#UpdateAddon(name)
     endif
     call vam#install#Checkout(pluginDir, repository)
 
-    call vam#install#RunHook('post-update', vam#AddonInfo(a:name), repository, pluginDir, hook_opts)
+    " addon info file name could have changed here ..
+    call vam#install#RunHook('post-update', vam#ReadAddonInfo(vam#AddonInfoFile(pluginDir, a:name)), repository, pluginDir, hook_opts)
 
     return 'updated'
   elseif oldVersion == newVersion
@@ -573,7 +573,9 @@ fun! vam#install#UninstallAddons(list)
 endfun
 
 fun! vam#install#HelpTags(name)
-  let d=vam#PluginRuntimePath(a:name).'/doc'
+  let pluginDir = vam#PluginDirFromName(a:name)
+  let info = vam#ReadAddonInfo(vam#AddonInfoFile(pluginDir, a:name))
+  let d=vam#PluginRuntimePath(pluginDir, info).'/doc'
   if isdirectory(d) | exec 'helptags '.fnameescape(d) | endif
 endfun
 
@@ -664,7 +666,7 @@ fun! vam#install#MergePluginFiles(plugins, skip_pattern)
     endif
   endfor
 
-  let runtimepaths = map(copy(a:plugins), 'vam#PluginRuntimePath(v:val)')
+  let runtimepaths = map(copy(a:plugins), 'vam#PluginRuntimePath(vam#PluginDirFromName(v:val), vam#ReadAddonInfo(vam#AddonInfoFile(vam#PluginDirFromName(v:val), v:val)))')
 
   " 1)
   for r in runtimepaths
@@ -762,7 +764,7 @@ fun! vam#install#MergePluginFiles(plugins, skip_pattern)
 endfun
 
 fun! vam#install#UnmergePluginFiles()
-  let path = fnamemodify(vam#PluginRuntimePath('vim-addon-manager'),':h')
+  let path = fnamemodify(vam#PluginRuntimePath('vim-addon-manager', {}),':h')
   for merged in vam#GlobInDir(path, '{,*/}*/plugin-merged')
     echo "unmerging ".merged
     call rename(merged, substitute(merged,'-merged$','',''))

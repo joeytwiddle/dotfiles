@@ -187,10 +187,12 @@
 
 	" Set this variable to specify which buffers to search.
 	" Possible values:
-	"       ""      argument list (default)
-	"       "b"     buffer list
+	"       ""      argument list
+	"       "b"     buffer list (default)
 	"       "w"     window list
-	let SearchBuffersList = ""
+	if !exists("g:SearchBuffersList")
+		let g:SearchBuffersList = "b"
+	endif
 
 
 	" Search for the last search pattern (register /)
@@ -205,6 +207,7 @@
 	"       1       no match was found
 	"       2       an error occured
 	" Todo: May fail if the match is on the first character of a buffer.  With the args list, we may end prematurely if the first buffer is not in the list.
+	" BUG: Will infloop if the search string is not found in any buffer.
 	fun! SearchBuffers(pat, direction)
 		" On nonzero value here, we rewind the argument/buffer/window
 		" list after the last argument/buffer/window
@@ -241,6 +244,7 @@
 				let nextcmd = "silent " . list . "previous"
 				let rewcmd = "last"
 			endif
+			let gotostart="normal! G"
 		else
 			let flags = "W"
 			if list == "w"
@@ -248,8 +252,9 @@
 				let rewcmd = "1wincmd w"
 			else
 				let nextcmd = "silent " . list . "next"
-				let rewcmd = "rewind"
+				let rewcmd = "first"
 			endif
+			let gotostart="0"
 		endif
 
 		" Break points when we rewind on the last buffer/window
@@ -295,9 +300,8 @@
 						endif
 					endif
 				endif
-				" Move the cursor to the top of the buffer
-				1
-				norm 0
+				" Move the cursor to the top of the buffer (or bottom for reverse search)
+				exec gotostart
 			endif
 		endwhile
 	endfun

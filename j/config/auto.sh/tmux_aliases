@@ -1,0 +1,9 @@
+alias tma='tmux attach'
+alias tmnw='tmux new-window'
+# In BackGround / Do in BackGround
+alias ibg=tmnw
+alias dibg=tmnw
+alias dbg=tmnw
+alias bgdo=tmnw
+
+alias tmsb='tmux show-buffer'

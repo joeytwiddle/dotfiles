@@ -78,6 +78,9 @@ highlight javaScriptNumber cterm=none ctermfg=cyan gui=none guifg=LightCyan
 syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\(\ze[^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 highlight javaScriptAssignVar ctermfg=white cterm=bold guifg=white gui=bold
 
+" Pangloss's Javascript syntax destroys my tricks above, but fortunately he creates his own syntax groups we can use!
+highlight link jsAssignExpIdent javaScriptAssignVar
+
 " To match coffeeAssign's dark blue property names:
 "syn match javaScriptPropertyName /[A-Za-z_$][A-Za-z_$0-9]*\ze\s*:/ contains=javaScriptColon
 "highlight javaScriptPropertyName ctermfg=darkblue cterm=bold guifg=#6666ff gui=bold
@@ -119,6 +122,8 @@ syn match javascriptFunctionName /\(\<function\>\s*\)\@<=[A-Za-z0-9_$]*/ contain
 " Matching this ( didn't work on anonymous functions, although it can work if the javascriptFunctionName match stops one char earlier.  O_o
 "syn match javascriptFunctionArgs /(\zs[^)]*\ze)/ ...
 syn match javascriptFunctionArgs /\zs[^()]*\ze)/ contained containedin=javascriptFunctionDeclaration
+" Even if we don't clear it above, javascriptFunction's highlighting is lost, so we need to recreate it.  (Actually I think it may be a bug in the pangloss-joeytwiddle hybrid syntax, because most functions are highlighted as jsFunction but a few (top-level) functions are javascriptFunction.
+silent! hi link javascriptFunction Identifier
 " TODO: If we really want to match Sublime Text closely, then beware that properties get highlighted like function names too, but for anonymous functions only.
 "
 "   foo: function () { ... },

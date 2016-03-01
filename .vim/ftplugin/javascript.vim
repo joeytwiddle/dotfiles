@@ -16,16 +16,33 @@ iab \f function) {<CR><Up><End><Left><Left><Left>
 inoremap <buffer> {<CR> {<CR><CR>}<Up><Esc>cc
 
 " Grabs the highlighted expression and logs it
-vnoremap <buffer> <Leader>log yoconsole.log("<C-R>":", <C-R>");<Esc>
+" Adds the filename and escapes all '$'s in the string.
+"vnoremap <buffer> <Leader>log yoconsole.log("<C-R>":", <C-R>");<Esc>
+" We use :silent! in case escaping '"' to '\"' fails because there are no '"'s in the expression.
+vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_[<C-R>=expand('%:t')<Enter>] <C-R>":_QUOTE_<Esc>:silent! s/"/\\"/g <Bar> s/_QUOTE_/"/g<CR>A, <C-R>");<Esc>
 " viW is *sometimes* preferable, e.g. to catch 'obj.prop[i]' but more often than not it grabs too much, e.g. it catches 'obj.prop[i]);'
 nmap <buffer> <Leader>log viw<Leader>log
 nmap <buffer> <Leader>Log viW<Leader>log
+
+" Refactoring
+" Use `V` to select whole lines when extracting a function
+vnoremap <buffer> <Leader>F >gvdOfunction _ () {<CR><Esc>gPi}<Esc>
+nmap <buffer> <Leader>F Vip<Leader>F
+vnoremap <buffer> <Leader>V sunnamedVar<Esc>Ovar unnamedVar = <Esc>pa;<Esc>
+
+
+
+" Convenient command for js-beautify
+command! -buffer JSBeautify %!js-beautify -f - -s 2
+" Attempt at Feross standard style.  For some reason ';+x' gets pulled up onto the line above.
+command! -buffer JSBeautifySS %!js-beautify -f - -s 2 | sed 's+;$++ ; s:^\(\s*\)\(/[^/]\|+[^+]\|-[^-]\|[(\[]\):\1;\2:'
 
 
 
 " === Indenting ===
 
 " The below address some indenting issues, but disabled for now because I am using pangloss/vim-javascript
+" Autodetect pangloss would be great ;)
 if 0
 
 " Outstanding issues:
@@ -142,7 +159,10 @@ function! s:LoadNodeModule()
   let cfile = expand("<cfile>")
   let fname = cfile
   if !filereadable(fname)
-    let fname = s:SeekFile([expand("%:h"), '.', './node_modules'], ['', '.js'], fname)
+    let fname = s:SeekFile([expand("%:h"), '.', './node_modules'], ['', '.js'], cfile)
+    if !filereadable(fname)
+      let fname = s:SeekFile(['./node_modules/' . cfile . '/lib'], ['', '.js'], 'index.js')
+    endif
   endif
   if filereadable(fname)
     let fname = simplify(fname)

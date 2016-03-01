@@ -1,0 +1,1 @@
+/home/joey/src/git-aware-prompt/prompt.sh

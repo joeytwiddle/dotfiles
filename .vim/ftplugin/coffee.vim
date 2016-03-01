@@ -120,6 +120,7 @@ function! s:CoffeeAutoCompile_Check(coffeefile)
     "" No error
 
     if g:coffeeShowJSChanges != 0
+      "" For more context, add -u2
       " silent exec '!diff "'.jsFile.'.last" "'.jsFile.'" > /tmp/jsdiffs.diff'
       silent exec '!diff "'.jsFile.'.last" "'.jsFile.'" | grep "^[><+-]" > /tmp/jsdiffs.diff'
       let diffLines = readfile("/tmp/jsdiffs.diff")

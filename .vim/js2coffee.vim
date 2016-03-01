@@ -31,7 +31,9 @@ silent! %s/\<function\s*\([A-Z"a-z_0-9]*\)(\(.*\))\s*{/\1 = (\2) ->/
 silent! %s/ {$//
 " :%s/^\s*}$//
 silent! %s/ }$//
-silent! %s/[^ 	]*} *//
+" This was breaking `x = {blah: blur}` into `x = {blah: `
+" I'm not sure what it was originally for!  I added it early 2015.
+"silent! %s/[^ 	]*} *//
 
 " TODO: We should probably check for one-liners and convert them into "if ... then" or "while ... then" CS one-liners.
 " Drop ()s from if statements

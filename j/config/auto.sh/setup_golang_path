@@ -1,0 +1,3 @@
+# I put go on my system so that I could run Google's CodeSearch (csearch, cindex)
+export GOPATH="$HOME/src/go"
+export PATH="$PATH:$GOPATH/bin"

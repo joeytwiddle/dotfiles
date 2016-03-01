@@ -1,0 +1,26 @@
+# NOTE: The syntax below was causing desktop login to fail.
+
+# I downloaded the hub binary, and placed it in ~/bin
+# I also manually installed the zsh and bash completions into the folders mentioned below
+# Feel free to replace this with a more streamlined install in future!
+
+# We check for alias-compatible shells
+# In fact dash can handle 'alias' too, but posh cannot.
+if which hub >/dev/null && ( [ -n "$BASH" ] || [ -n "$ZSH_NAME" ] )
+then
+	eval $(hub alias -s)
+
+	# Load completion rules
+	if [ -n "$ZSH_NAME" ]
+	then
+		# DANGEROUS!  This (...) syntax will cause old POSIX shells to fail, even if this line is never run!
+		# Since I configure fluxbox to call jsh, and hence this script, during login, it can cause login to fail.
+		# Therefore the following have been moved into .zshrc
+		#fpath=(~/.zsh/completions $fpath)
+		#autoload -U compinit && compinit
+		:
+	elif [ -n "$BASH" ]
+	then
+		. ~/.bash/completions/hub.bash_completion.sh
+	fi
+fi

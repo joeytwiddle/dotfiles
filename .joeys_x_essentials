@@ -1,42 +1,6 @@
-
-#cat $HOME/.my_x_settings 
-cat $HOME/.Xresources | grep -v "^#" | xrdb -merge
-if [ -f "$HOME/.Xresources.local" ]
-then cat $HOME/.Xresources.local | grep -v "^#" | xrdb -merge
-fi
-
-# E.g. if you wanted to switch to GB keyboard layout, you could put the following in that file:
-#setxkbmap -print gb | xkbcomp - "$DISPLAY"
-if [ -f "$HOME"/.custom_keyboard_settings ]
-then . "$HOME"/.custom_keyboard_settings
-fi
-
-# /usr/bin/synclient can be found in the xserver-xorg-input-synaptics package
-
-# If for some reason your OS didn't already enable multi-touch scrolling for you:
-synclient VertTwoFingerScroll=1     # Ubuntu gave me default 1
-synclient HorizTwoFingerScroll=1    # Ubuntu gave me default 0
-
-# "Natural Scrolling" direction for OSX victims.  Applies to mousewheel and touchpad (edge and two-finger scrolling)
-synclient VertScrollDelta=-111
-synclient HorizScrollDelta=-111
-
-# You can even disable scrolling when you drag on the edge of the touchpad if you find it annoying
-synclient VertEdgeScroll=0
-synclient HorizEdgeScroll=0
-
-# Disabled.  This used to work on Debian but now getting issues on Ubuntu 12.04.
-# Although it did give me a nice big I over xterms and a large hand over links, over normal windows and Fluxox desktop it showed me a huge X instead of a nice large arrow.
-if [ -d $HOME/X11_big_cursor ] && false
-then
-	jshinfo "Initialising big cursor."
-	xset fp+ $HOME/X11_big_cursor
-	xset fp rehash
-	xsetroot -cursor_name X_cursor
-fi
-
 # set +x
 ## Animated intro, and/or set background:
+## We start this as early as possible, to hide the default background
 (
 
 	animatedIntro=1
@@ -74,10 +38,11 @@ fi
 
 	else
 		xsetroot -solid black
+		## Delay because without animation randomwallpaper is heavy and retards wm startup.
+		sleep 2
 	fi
 
-	## Delay because without animation randomwallpaper is heavy and delays wm startup.
-	( sleep 2 ; nice -n 15 randomwallpaper ) &
+	nice -n 15 randomwallpaper
 	# xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/abstract/mosaic.jpg
 	# xv -root -rmode 5 -maxpect -quit /stuff/wallpapers/abstract/mindflow.jpg
 	# jxsetbg /stuff/wallpapers/abstract/mindflow.jpg
@@ -91,8 +56,94 @@ fi
 	# randomwallpaper
 
 ) &
-
 # set -x
+
+
+#cat $HOME/.my_x_settings 
+cat $HOME/.Xresources | grep -v "^#" | xrdb -merge
+if [ -f "$HOME/.Xresources.local" ]
+then cat $HOME/.Xresources.local | grep -v "^#" | xrdb -merge
+fi
+
+# E.g. if you wanted to switch to GB keyboard layout, you could put the following in that file:
+#setxkbmap -print gb | xkbcomp - "$DISPLAY"
+if [ -f "$HOME"/.custom_keyboard_settings ]
+then . "$HOME"/.custom_keyboard_settings
+fi
+
+# /usr/bin/synclient can be found in the xserver-xorg-input-synaptics package
+
+# If for some reason your OS didn't already enable multi-touch scrolling for you:
+synclient VertTwoFingerScroll=1     # Ubuntu gave me default 1
+synclient HorizTwoFingerScroll=1    # Ubuntu gave me default 0
+
+# "Natural Scrolling" direction for OSX victims.  Applies to mousewheel and touchpad (edge and two-finger scrolling)
+# Sensitivity is also set here.
+synclient VertScrollDelta=-40
+synclient HorizScrollDelta=-80
+
+# Disable scrolling when you drag on the edge of the touchpad
+synclient VertEdgeScroll=0
+synclient HorizEdgeScroll=0
+
+# My touchpad is too sensitive.  To prevent accidental clicks when thumb grazes it, increase the threshold.  (Default was 30.)
+# I'm not convinced this has any effect.  I can still click easily with value 50000000000!
+#synclient FingerHigh=50
+
+# Defaults on my system:
+#synclient AccelFactor=0.0678887
+#synclient MinSpeed=1
+#synclient MaxSpeed=1.75
+
+# Increase speed of touchpad without affecting mouse
+# Make it really high, so I don't have to move my fingers so much (but I will have to move them fast)
+
+#synclient MinSpeed=1.2
+#synclient AccelFactor=0.0678887
+#synclient MaxSpeed=10.0
+
+synclient MinSpeed=0.75
+#synclient AccelFactor=0.1
+#synclient MaxSpeed=4.0
+
+synclient AccelFactor=0.15
+synclient MaxSpeed=5.0
+
+# Bottom-right of touchpad is right-click
+#synclient SoftButtonAreas="50% 0 82% 0 0 0 0 0"
+# Bottom-right of touchpad is right-click, and bottom-middle is middle click
+#synclient SoftButtonAreas="60% 0 82% 0 40% 59% 82% 0"
+
+# To avoid accidentally tapping while typing, we can enable palm detection, which rejects all touches which are wider than the given PalmMinWidth.
+# Defaults:
+#   synclient PalmDetect=0
+#   synclient PalmMinWidth=10
+#   synclient PalmMinZ=200
+# My settings:
+synclient PalmDetect=1
+# If this doesn't work well enough, there are other options: https://wiki.archlinux.org/index.php/Touchpad_Synaptics#Disable_trackpad_while_typing
+
+# Disable keyboard taps when typing.
+killall -u "$USER" syndaemon 2>/dev/null
+syndaemon -d -i 0.8s -K -R -t
+
+# Reverse the normal direction of the mouse scrollwheel
+#echo "pointer = 1 2 3 5 4 6 7 8 9 10 11 12" | xmodmap -
+# Set the normal direction of the mouse scrollwheel
+echo "pointer = 1 2 3 4 5 6 7 8 9 10 11 12" | xmodmap -
+
+# You could also put settings like this into ~/.Xmodmap
+# When using gnome-settings-daemon or gnome-screensaver, these get loaded again whenever the screen is unlocked (or the machine unsuspends).  (Here "or" means "I don't know which".)
+
+# Disabled.  This used to work on Debian but now getting issues on Ubuntu 12.04.
+# Although it did give me a nice big I over xterms and a large hand over links, over normal windows and Fluxox desktop it showed me a huge X instead of a nice large arrow.
+if [ -d $HOME/X11_big_cursor ] && false
+then
+	jshinfo "Initialising big cursor."
+	xset fp+ $HOME/X11_big_cursor
+	xset fp rehash
+	xsetroot -cursor_name X_cursor
+fi
 
 ## From fluxbox's xinitrc howto:
 # turn off screen blanking
@@ -111,7 +162,11 @@ xset -b
 ## This is fun for scrolling:
 # xset r rate 270 99
 ## But to actually stop in the right place, we need something smaller:
-xset r rate 270 65
+#xset r rate 270 65
+## I must be getting old; that's too fast for me now!
+#xset r rate 270 45
+## Fits nicely to framerate
+xset r rate 250 60
 
 ## Mouse acceleration
 ## <acceleration> (scalar) <threshold> (pixels per update)
@@ -119,12 +174,18 @@ xset r rate 270 65
 # xset m 2/3
 # xset m 2/3 3
 # xset m 4/5 3
-# Save wrists with fast acceleration
-xset m 12/5 10
+# Save wrists with fast acceleration (hwi, porridge)
+#xset m 12/5 10
 # Even faster:
 #xset m 20/5 5
 # For yas:
 #xset m 6/5 5
+# Tomato:
+#xset m 12/10 0
+# Tomato with touchpad using focaltech-dkms driver, feeling lazy (but this is too fast for mouse!):
+#xset m 20/10 0
+# Tomato with USB mouse:
+xset m 14/10 0
 
 ## Got problems with characters displaying as squares [] ?
 xset fp- unix/:7100     ## xfstt on ubuntu
@@ -149,7 +210,34 @@ if [ -f "$HOME"/.custom_x_settings ]
 then . "$HOME"/.custom_x_settings
 fi
 
-if [ -d "$HOME/Dropbox" ]
-then dropbox start
+if [ -d "$HOME/Dropbox" ] && ! pgrep -u $UID dropbox >/dev/null
+then
+	(
+		sleep 20
+		dropbox start
+	) &
 fi
 
+## Re-enable Ctrl+Alt+Backspace to close X, since Gentoo removed it.
+#setxkbmap -option terminate:ctrl_alt_bksp
+
+## Pre-cache files which I am likely to use soon
+false && (
+	folders_to_cache=".vim* /usr/share/vim .config/google-chrome .mozilla/firefox/Joey j/tools"
+	packages_to_cache="google-chrome-stable firefox"
+
+	nicely_do="nice -n 15 ionice -c 3"
+	sleep 10
+	$nicely_do tar ch $folders_to_cache >/dev/null
+
+	## Simple, but does not recurse through dependent packages
+	## DISABLED for now because it wasn't really helping me.  I was just waiting for it to finish!
+	#for package in $packages_to_cache
+	#do $nicely_do dpkg -L "$package" | $nicely_do filesonly | $nicely_do withalldo tar c >/dev/null
+	#done
+
+	## This does recurse through dependencies, but it takes a long time (due to lots of small packages with little in them) and doesn't appear to help much
+	#$nicely_do precache_files_from_package $packages_to_cache >/dev/null 2>&1
+
+	echo "Precaching completed" >&2
+) &

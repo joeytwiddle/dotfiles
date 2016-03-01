@@ -1,5 +1,8 @@
-" This is an alternative thing with a bit of SkyBison like behaviour
-" Basically it's what I made after I tried SkyBison but missed my familiar wildmenu.
+" An attempt to do what SkyBison does in a really simple way.
+" In command mode, it will perform autocompletion after every keystroke, and display the next set of options.
+" I actually made this after I tried SkyBison but missed my familiar wildmenu.
+
+" It interferes with the / search prompt.
 
 " It seems to have some significant issues:
 " If completion is unavailable (e.g. :set ft=p) then a literal ^Z is inserted.

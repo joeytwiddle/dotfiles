@@ -36,9 +36,11 @@
 #exec 1> ~/jsh.log
 #exec 2> ~/jsh.error
 
+# You can probably read the fb-startup logs in ~/.xsession-errors
+
 if [ -z "$JPATH" ]
 then
-	echo "Starting jsh before Fluxbox"
+	echo "[fb-startup] Loading jsh before starting Fluxbox" >&2
 	export JPATH="$HOME/j"
 	. "$JPATH"/startj
 fi
@@ -52,20 +54,82 @@ fi
 # wmsmixer -w &
 # idesk &
 
-#randomwallpaper &
-. "$HOME"/.joeys_x_essentials
-
-bbkeys &
-lxpanel &
-gkrellm &
-
 (
-  sleep 2
-  xscreensaver -no-splash &
-  sleep 2
-  /opt/trinity/bin/kicker &
-  sleep 2   # Longer delay will put it in lxpanel?
-  nm-applet &
+
+	sleep 1   # Focus on starting fluxbox
+
+	# Start an xterm.  That is what the user (joey) wants.  Other things can run in parallel.
+	xterm &
+
+	echo "[fb-startup] Running .joeys_x_essentials" >&2
+
+	#randomwallpaper &
+	# I used to source (.) this but:
+	# - If it exits, then this script will stop executing and Fluxbox won't start!
+	# - We don't need it, because it doesn't export any VARS at the moment.
+	bash "$HOME"/.joeys_x_essentials
+
+	echo "[fb-startup] Starting apps" >&2
+
+	sleep 1
+
+	bbkeys &
+	gkrellm &
+
+	sleep 1
+
+	lxpanel &
+	/opt/trinity/bin/kicker &
+	# If we wait a bit longer, the nm-applet will be placed in the lxpanel instead of the Flubbox panel.
+	#sleep 2
+
+	nm-applet &
+
+	sleep 1
+
+	(
+		# If I try to do this too early, there is no ibus running to replace!
+		sleep 5
+
+		# Note that this should be done before running setxkbmap, because it resets it!
+		if pgrep -u $UID ibus-daemon >/dev/null
+		then
+			echo "Restarting ibus-daemon in synchronous mode" >&2
+			#IBUS_ENABLE_SYNC_MODE=1 ibus-daemon -xrd
+			# Apparently an alternative is to run it without --xim:
+			IBUS_ENABLE_SYNC_MODE=0 ibus-daemon --replace --verbose -d
+			# Neither of the above worked for me! :P
+		else
+			echo "I cannot restart ibus-daemon because Ubuntu hasn't started it yet!" >&2
+		fi
+
+		sleep 1
+
+		# I was doing this earlier, but it was getting reset by something!  (Not us running ibus-daemon, but perhaps Ubuntu running it?)
+		# On Ubuntu 14.04 (upgraded from 12.04), /etc/default/keyboard is not being respected by X, so we force it here:
+		. /etc/default/keyboard
+		#[ -z "$XKBLAYOUT" ] && XKBLAYOUT=gb
+		[ -n "$XKBLAYOUT" ] && setxkbmap "$XKBLAYOUT"
+
+	) &
+
+	# Later I will probably start gnome-settings-daemon, otherwise Chrome's font size will be awful.
+	# But that will take over screen locking, and will mess up my keyboard repeat speed when unlocking.
+	# I tried to workaround that using this:
+	#run_after_screen_unlock "sh $HOME/.joeys_x_essentials" &
+	# It works, but only after Gnome interface is used to unlock.
+	# But I discovered my settings are lost more often that - whenever the machine resumes from suspend.
+	# So I started using this instead: /etc/pm/sleep.d/50_restore_joeys_x_settings
+
+	sleep 2
+
+	# Something is starting gnome-screensaver.  I think it might be nm-applet but I'm not sure.
+	# I don't want gnome-screensaver if I have xscreensaver running, because I end up having to unlock twice!
+	# Although actually recently xscreensaver has been refusing to start when gnome-screensaver is present.
+	sleep 20
+	killall -u "$USER" gnome-screensaver
+	xscreensaver -no-splash &
+
 ) &
 
 # And last but not least we start fluxbox.

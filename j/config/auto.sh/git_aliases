@@ -16,9 +16,6 @@
 #
 # Powerful tools:
 #
-#   gwinp "git what is not pushed" lists commits on local branch not yet pushed
-#   gwinm "git what is not merged" lists new commits from remote not yet merged
-#
 #   gbs [-M] [.] is "git branch status", a nice way to see which branches are
 #       up-to-date with the remote (which need a push and which need a pull).
 #
@@ -41,6 +38,9 @@
 #
 #   gdv and glv open diffs and logs in Vim, folded, for interactive browsing.
 #
+#   gwinp "git what is not pushed" lists commits on local branch not yet pushed
+#   gwinm "git what is not merged" lists new commits from remote not yet merged
+#
 # I hope these shortcuts and tools will be of use to you.
 #
 # I rarely use the other aliases and functions in this file (except of course
@@ -53,7 +53,7 @@
 
 # If you think this file has too many comments in it, try: :hi Comment guifg=#222222
 
-# TODO: Turn the aliases into shellscripts so they are available from vim's command line?
+# CONSIDER: Turn the aliases into shellscripts so they are available from vim's command line?
 #       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)  jsh modules...
 
 # If you happen to be using oh-my-zsh's git plugin, redefining its aliases will throw warnings, so we undefine them first.
@@ -66,11 +66,10 @@ unalias gitwhatsup 2>/dev/null
 #   unset -f fn_name
 
 #alias gs='git status'
-gs() {
-	# Show color if not piping.  Skip to next section on 'n'.  Leave output on screen with -X (so user can copy paste).
-	# Using more instead of less because on short output, less fills the rest of the screen with '~'s (or ''s) we don't need.  Those lines are actually caused by the search.  git's default 'pager' will do the same iff the +/ is added.
-	# More has slightly different searching behaviour than less: it will not skip to the start of a section which is already visible on the screen.
-	# This now rather equivalent to the default, except for the default search.
+#alias gs='git_status_user_friendly'
+alias gs='git_status_plus'
+
+git_status_user_friendly() {
 	if [ -t 1 ]
 	then
 		git -c color.status=always status "$@" |
@@ -86,6 +85,119 @@ gs() {
 		#pager -R +'/^# [^ ].*' -E -X --tilde
 	else git status "$@"
 	fi
+}
+
+# An alternative to git status which highlights *new* untracked files differently.
+# Untracked files are listed with most recently modified at the top, and files changed since the last run are highlighted.
+git_status_plus() {
+	if [ -t 1 ]
+	then t=1
+	else t=
+	fi
+
+	# When there are many unknown files, this process can take a very long time.
+	# This subshell is needed so that in zsh, the user can break out of the process with Ctrl-C.
+	# Without it, even after spamming Ctrl-C, zsh will not return to the prompt until the processing is complete.
+	(
+
+	(
+		if [ -n "${t}" ]
+		then git -c color.status=always status -uno "$@"
+		else git status -uno "$@"
+		fi
+
+		echo "#"
+		echo "# Untracked files:"
+		echo '#   (use "git add <file>..." to include in what will be committed)'
+		echo "#"
+
+		local git_root_folder=$(git rev-parse --show-toplevel)
+
+		local current_stats_file="${git_root_folder}/.git/git_status_plus.current.$USER"
+		local previous_stats_file="${git_root_folder}/.git/git_status_plus.previous.$USER"
+
+		# BUG: If a path is passed as an argument, then this will filter the status list.
+		#      But a filtered status list will not compare well with an older unfiltered one!
+		# TODO: We should either store different lists for different args,
+		#       or we should not allow filtering.
+
+		# Passing a path doesn_t stop --porcelain from reporting files in higher folders.
+		# But ideally I only want to see changes below the current folder.
+		# So we need to filter the results to the current folder.
+		local target_folder
+		if [ -z "$1" ]
+		then target_folder=$(git rev-parse --show-toplevel)   # project root
+		else target_folder="$1"   # specified folder
+		fi
+		local target_folder_from_root="$(cd "$target_folder" ; git rev-parse --show-prefix)"
+		#echo "[log] target_folder_from_root: $target_folder_from_root"
+
+		# -uall appears to be the default
+		git status --porcelain -uall |
+		grep '^?? ' |
+		cut -c 4- |
+		# Because the process below is slow, we put a limit on how many files we will tolerate.
+		# Unfortunately we need to do this now, and not after the sort-by-date.
+		# The best solution for the user is to use git ignore properly.
+		# The slowness of this process should encourage that!
+		# CONSIDER: The following while loop could be replaced by a call to xargs.
+		head -n 20000 |
+		(
+			cd "$git_root_folder"
+
+			#while read file
+			#do
+			#	# Size and date of file
+			#		#stats=$( stat -c '%s %Y' "$file" ) 
+			#		#echo "$stats $file"
+			#		find "$file" -maxdepth 0 -printf "%s %T@ %p\n" | sed 's+\.[0-9]*++'
+			#		#echo "$stats $file" >&2
+			#done
+
+			# Do the above find using xargs.
+			# The `bash -c ... $0 $@` trick allows us to place 200 arguments in the middle of the line, as opposed to the end which xargs usually does.
+			# This may be very ugly, but it runs a lot faster than invoking find multiple times!
+			xargs -d '\n' -n 200 -- bash -c 'find "$0" "$@" -maxdepth 0 -printf "%s %T@ %p\n"' |
+			# Remove the fractional part of the date.
+			sed 's+\.[0-9]*++'
+		) |
+		sort -n -k 2 -r > "$current_stats_file"
+
+		#diff "$previous_stats_file" "$current_stats_file" |
+		#grep '^>'
+
+		cursereset=`cursenorm`
+		cursenormal=`cursecyan`
+		cursehighlight=`curseyellow;cursebold`
+
+		# CONSIDER TODO: The below is very inefficient.  Instead of all these greps, can we sort them and do a one-way diff?
+		cat "$current_stats_file" |
+		grep "^[0-9]* [0-9]* ${target_folder_from_root}" |
+		head -n 1000 |
+		while read size date file
+		do
+			curseon="$cursenormal"
+			# We should really convert at least $file to a regexp.
+			# Ah, -F -x can do that for us.
+			if ! grep -F -x "$size $date $file" "$previous_stats_file" >/dev/null 2>&1
+			then curseon="$cursehighlight"
+			fi
+			echo "#       ${curseon}${file}${cursereset}"
+		done
+
+		'cp' -f "$current_stats_file" "$previous_stats_file" 2>/dev/null
+
+		# For debugging:
+		'cp' -f "$previous_stats_file" "$previous_stats_file".REAL 2>/dev/null
+
+		echo "#"
+	) |
+	if [ -t 1 ]
+	then less -R -E -X
+	else cat
+	fi
+
+	)
 }
 
 #alias gd='git diff'
@@ -114,18 +226,42 @@ alias gca='gc --amend'
 alias gcm='gc -m'
 # I think I tend to use --amend more than -a.  At least, I like to be explicit about -a.  (But probably feel the same about --amend)
 # gcam providing --amend
-alias gcam='gc --amend -m'
+# (I have found myself using this incorrectly!)
+#alias gcam='gc --amend -m'
 # gcam providing -a
-#alias gcam='gc -a -m'
+# (This is inconsistent with gca; so I might also end up using this incorrectly too!  But it is slightly easier to recover from, if noticed.)
+alias gcam='gc -a -m'
 alias gci='git commit --interactive'
 # -p "patch" allows us to choose which hunks to add or commit
 alias gap='ga -p'
-alias gcp='gc -p'
+# This is better used for git cherry-pick, as that is a greater saving, and I use it more often.
+#alias gcp='gc -p'
 
-alias gf='git fetch -v'
+if [ -n "$ZSH_NAME" ]
+then
+	: #compdef ga=git
+fi
+
+gpr_safe() {
+	local current_commit=`git rev-parse HEAD`
+	echo "Current commit before rebase (in case abort desired): ${current_commit}"
+	git pull --rebase
+}
+#alias gf='git fetch -v'
 alias gp='git pull'
-alias gpr='git pull --rebase'
-alias gpp='git pull --rebase && git push'
+#alias gpr='git pull --rebase'
+alias gpr='gpr_safe'
+alias gpp='gpr && git push'
+
+git_fetch_all() {
+	local remote
+	git remote |
+	while read remote
+	do git fetch $remote "$@"
+	done
+}
+alias gf='git_fetch_all -v'
+alias gfa='git_fetch_all -v'
 
 #alias gm='git merge'
 # Git Merge Origin (this branch)
@@ -133,11 +269,26 @@ alias gpp='git pull --rebase && git push'
 alias gmo='verbosely git merge origin/$(git_get_current_branch)'
 # Git Push Origin (this branch)
 alias gpo='verbosely git push origin $(git_get_current_branch)'
+alias gmm='verbosely git merge master'
+alias gmom='verbosely git merge origin/master'
+alias gmu='verbosely git merge $(git_guess_upstream_branch)'
 
 alias gr='git reset'
 alias grh='gr --hard'
 
+alias gcp='git cherry-pick'
+
 alias gri='git rebase -i'
+alias grc='git rebase --continue'
+
+alias gmt='git mergetool'
+alias gma='git merge --abort'
+alias gra='git rebase --abort'
+
+alias fgc=friendlygitcommit
+alias lg=gitls
+alias gls=gitls
+alias glsl=gitls
 
 #alias gp='git preview'   # This was defined in my .gitconfig as: git diff --stat HEAD..FETCH_HEAD
 #alias gw='git whatsnew'
@@ -156,7 +307,7 @@ gitlog() {
 		git -c color.ui=always log "$@" |
 		#less -R +'/^(commit|diff).*' -X
 		# Needed when using --graph and -p
-		less -R +'/((^|\*[ |]*)commit .*|(^|\| +)diff --(git|combined).*)'
+		less -R +'/((^|\*[ |]*)commit .*|(^|\|{0,1} +)diff --(git|combined) .*)'
 	else git log "$@"
 	fi
 	# BUG TODO: The --git may show as --combined when using gl -c, so change it for just -- after the pending merge.
@@ -223,7 +374,7 @@ then
 else alias gllm='gll -m --first-parent'
 fi
 # This shows the commits from merged branches (/), but not the merge commits themselves (\).  It takes less space than gll.
-alias gllmm='gll --no-merges'
+alias gllnm='gll --no-merges'
 # Git Log Long No Graph
 alias gllng='glc'
 alias glls='gll --stat'
@@ -231,9 +382,22 @@ alias glls='gll --stat'
 # "Git Log Word-diffed" - It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
 alias glw='gl --word-diff=color'
 # "Git Log Stats/Summary" - Just file stats, no diffs.  BUG: Not grey, because glg uses glp which does -p (diffs)!
-alias gls='gitlog --stat'
+# Deprecated in favour of gls=gitls.  Use glf for this instead.
+#alias gls='gitlog --stat'
 # "Git Log Files" - Compressed version of "Git Log Stats"
-alias glf='glc --stat'
+#alias glf='glc --stat'
+# New version allows easy n/N searching.  Could be merged with gitlog.
+gitlog2() {
+	local search
+	if [ "$1" = "-search" ]
+	then search="$2"; shift; shift
+	else search='^$'
+	fi
+	# Because we pipe to less, we need --color=always to color the stats in glf
+	glc --color=always "$@" | less -R +"/$search"
+	#glc "$@"
+}
+alias glf='gitlog2 -search "^[^ ]+" --stat'
 # With glf, we can walk commmits with /^[^ ]+
 # Just commit info, one per line
 
@@ -246,15 +410,27 @@ alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
 
 unalias gco 2>/dev/null   # REMOVEME
 #alias gco='git checkout'
+
+# After successfully doing a 'git checkout', also run the commands in the POST_GIT_CHECKOUT env var.
+# The proper way to do this is to use git hooks, e.g.: https://github.com/yannvanhalewyn/dotfiles/tree/master/git_template/hooks
 gco() {
+	# highlighting stderr here is useless, because git reports success on stderr too!
 	git checkout "$@"
 	local ret_status="$?"
+
 	if [ "$ret_status" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
-	then "$POST_GIT_CHECKOUT" "$@"
+	then eval "$POST_GIT_CHECKOUT"
 	fi
+
+	# I find I don't always notice failed checkouts, because at a glance the warning message looks similar to the success message.
+	if [ "$ret_status" != 0 ]
+	then echo "$(tput setaf 1 ; tput bold)FAILED$(tput sgr0)" >/dev/stderr
+	fi
+
 	return "$ret_status"
 }
-POST_GIT_CHECKOUT=update_cindex
+
+POST_GIT_CHECKOUT="$POST_GIT_CHECKOUT ; update_cindex"
 if ! which ionice >/dev/null
 then
 	ionice() {
@@ -262,14 +438,21 @@ then
 	}
 fi
 update_cindex() {
+	# If CSEARCHINDEX is set (to an absolute or relative folder) then use that,
+	# otherwise use the default file in HOME folder.
+	# CONSIDER: If we are in a repo subfolder but the repo root folder contains a ".csearchindex" then we could point CSEARCHINDEX at that file temporarily.
 	if which cindex >/dev/null && ( [ -z "$CSEARCHINDEX" ] && [ -f "$HOME"/.csearchindex ] || [ -n "$CSEARCHINDEX" ] && [ -f "$CSEARCHINDEX" ] )
 	then
 		local git_root_folder=$(git rev-parse --show-toplevel)
 		# If any of the indexed folders are equal to or below this project's folder
 		if [ -n "$git_root_folder" ] && cindex -list | grep -q "^$git_root_folder\($\|/\)"
 		then
-			echo -n "Updating cindex (in the background)"
-			nice ionice cindex 2>/dev/null &
+			echo "Updating cindex (in the background)"
+			# We do this in a separate shell in order to disable the tardy job completion message.
+			(
+				[[ -n "$ZSH_NAME" ]] && unsetopt MONITOR
+				nice ionice cindex 2>/dev/null &
+			)
 		fi
 	fi
 }
@@ -306,12 +489,19 @@ alias gwinmf='glf HEAD..$(git_guess_upstream_branch)'
 alias gwinmd='gd HEAD..$(git_guess_upstream_branch)'
 
 alias gss='git stash save'
+alias gssu='git stash save --include-untracked'
 #alias gsp='git stash pop'
 alias gsp='git_stash_pop_safe'
 alias gsa='git stash apply'
-alias gsl='git stash list'
+#alias gsl='git stash list'
+#alias gsl='git stash list --date=relative --oneline'
+alias gsl='git stash list --date=relative --oneline | PADDING=0 DELIM=" " numbereachline | sedreplace "^\([0-9]*\)" "stash@{\1}" | sedreplace "refs/stash@" "" | dropcols 2'
+#alias gsl='git stash list --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an <%ae>%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
 # Git Stash Diff shows the diff of the topmost or specified stash.  Notably not `git stash drop` which must be typed in full, to avoid doing it too easily and accidentally.
-alias gsd='git stash show -p'
+# This shows only the diff:
+#alias gsd='git stash show -p'
+# This shows the log and other header info too:
+alias gsd='git show stash@{0}'
 # Git Stash (diff) Files shows the files changed (like --stat)
 alias gsf='git stash show'
 # TODO: I would actually like an easy way to display the diffs for all the stashes, i.e. run gsd for every stash id
@@ -320,6 +510,18 @@ grho() {
 	local current_branch=`git_get_current_branch`
 	verbosely git reset --hard "origin/$current_branch"
 }
+
+# Like git clone but shows the username in the target directory
+git_clone_friendly() {
+	if [ $# -gt 1 ]
+	then git clone "$@"
+	else
+		local url="$1"
+		local username_dot_repo=$(printf "%s\n" "$1" | grep -o "[^/]*/[^/]*$" | tr '/' '.')
+		git clone "$url" "$username_dot_repo"
+	fi
+}
+alias gcl='git_clone_friendly'
 
 # Sometimes popping the state results in conflicts because I was popping onto the wrong branch.  I can reset to restore the files, but then I will have lost my stashed changes, because they were popped!
 # So git_stash_pop_safe will only drop the stash if it was successfully applied with no conflicts.
@@ -345,7 +547,7 @@ fi
 
 # Git Branch by Date
 git_branch_by_date() {
-	local reset_color=`tput sgr0`
+	local reset_color=`tput sgr0 | sed 's/$//'`
 	# Optional
 	local subject_color=`tput setaf 0 ; tput bold`
 	local author_color=`tput setaf 6`
@@ -365,7 +567,8 @@ git_branch_by_date() {
 
 # Git Branch by Date wrapper
 gbd() {
-	local reset_color=`tput sgr0`
+	# In tmux, reset_color gets an extra `^O` on the end, which the terminal ignores, but which will show up if output is piped to less.  It happens when TERM=screen or screen-256color, but it goes away if we set TERM=xterm.  For now we will just strip that trailing `^O` char.
+	local reset_color=`tput sgr0 | sed 's/$//'`
 	local current_branch_color=`git config --get-color color.branch.current green`
 	local branch_color=`git config --get-color color.branch.local white`
 
@@ -429,7 +632,7 @@ gbd() {
 	then
 		# -R=show_colors -X=no_clear -S=chop_long_lines +G=jump_to_end
 		less -R -X -S +G
-		#more -R   (since more=less on Mac; fails on Linux)
+		#more -R   # (since more=less on Mac; fails on Linux)
 	else
 		# -E=quit_at_end (in other words this just chops long lines)
 		less -R -E -X -S +G
@@ -471,6 +674,8 @@ alias gwu=gitwhatsup
 
 # Guesses the name of the upstream branch, given the local branch name (or no arguments, which assumes current branch)
 git_guess_upstream_branch() {
+	# CONSIDER: This might be a simpler solution: git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)
+
 	local local_branch remote_branch remote_commit
 	# No problem if this arg is empty, it will work fine for the current branch anyway
 	local_branch="$1"
@@ -738,24 +943,42 @@ replace_ancestor_markers_with_colors() {
 
 git_get_current_branch() {
 	# symbolic-ref fails during an incomplete rebase with `fatal: ref HEAD is not a symbolic ref`
-	git symbolic-ref --short HEAD
+	# It can also fail on git 1.7 with "unknown option `short`"
+	#git symbolic-ref --short HEAD
 	# rev-parse does not fail, but responds with "HEAD" instead of the branch name.
 	#git rev-parse --abbrev-ref HEAD
+	# So for git 1.7 we do:
+	local current_branch=`git rev-parse --abbrev-ref HEAD`
+	if [ "$current_branch" = HEAD ]
+	then
+		echo "git rev-parse got branch name: HEAD" >&2
+		# Scripts might assume this value is correct.  For them, we make it obvious it is not!
+		echo "__NO_BRANCH_NAME_FOUND__"
+		return 1
+	else
+		echo "$current_branch"
+		return 0
+	fi
 }
 
-#git_list_all_tracked_files_with_meta() {
-#	git ls-tree --full-tree -r HEAD
-#	# Add --name-only if you don't want meta; works on bare repo.
-#}
-
 git_list_all_tracked_files() {
-	# Accept a branch name or commit id
-	local tree_arg=''
+	# Accepts a branch name or commit id
+
+	# Version using ls-files.  (I don't see any advantage to this version.)
+	# - Shows files under current directory, not all files in repo (unless you are in root directory, or pass the root directory as the second argument).
+	# - Does not work on bare repos.
+	#local tree_arg=''
+	#if [ -n "$1" ]
+	#then tree_arg="--with-tree=$1"; shift
+	#fi
+	#git ls-files $tree_arg "$@"
+
+	# Alternative version, using ls-tree instead of ls-files.
+	local tree=HEAD
 	if [ -n "$1" ]
-	then tree_arg="--with-tree=$1"
+	then tree="$1"; shift
 	fi
-	git ls-files $tree_arg
-	# Does not work on bare repos.
+	git ls-tree -r --name-only --full-tree "$tree" "$@"
 }
 
 # Previously called: git_find_branch_start_commit
