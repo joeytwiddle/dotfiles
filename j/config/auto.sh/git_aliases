@@ -433,7 +433,8 @@ gco() {
 	return "$ret_status"
 }
 
-POST_GIT_CHECKOUT="$POST_GIT_CHECKOUT ; update_cindex"
+[ -n "$POST_GIT_CHECKOUT" ] && POST_GIT_CHECKOUT="$POST_GIT_CHECKOUT ;"
+POST_GIT_CHECKOUT="$POST_GIT_CHECKOUT update_cindex"
 if ! which ionice >/dev/null
 then
 	ionice() {
