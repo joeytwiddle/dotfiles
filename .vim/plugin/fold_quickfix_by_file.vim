@@ -138,6 +138,8 @@ function! g:SeparateFilesVisually()
 	"highlight QuickFixFirstLineOfFile ctermfg=82 guifg=#44ff00
 	" Cyan
 	highlight QuickFixFirstLineOfFile ctermfg=cyan guifg=cyan
+	" But on MacVim this is unreadable, because the fg we set here becomes the bg when the line is also selected.
+	highlight QuickFixFirstLineOfFile ctermfg=cyan guifg=#00aaaa
 	" Cyan (with a hint of green)
 	"highlight QuickFixFirstLineOfFile ctermfg=48 guifg=#00ffaa
 	" If we are doing FirstLine highlighting, then we can hide all the duplicate filenames below it:
