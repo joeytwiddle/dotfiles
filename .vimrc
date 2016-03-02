@@ -237,7 +237,7 @@ autocmd VimLeave * silent !stty ixon
 
 	let g:blinking_statusline = 1
 
-	let g:RepeatLast_Enabled = 1
+	let g:RepeatLast_Enabled = 0
 	let g:RepeatLast_TriggerCursorHold = 3
 	let g:RepeatLast_SaveToRegister = 'l'
 	set ch=2
