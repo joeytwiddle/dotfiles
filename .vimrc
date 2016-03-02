@@ -423,12 +423,13 @@ autocmd VimLeave * silent !stty ixon
 		" Alternatively: Check system("uname") instead (should be "Linux" or "Darwin")
 		if g:os == "Darwin"
 			" Popular, aspect like DejaVu Sans Mono / Liberation / Ubuntu Mono
-			":set guifont=Monaco:h12
-			" But I prefer the shorter one!
+			:set guifont=Monaco:h11
+			" But I prefer the shorter fatter one.  Less elegant.
 			":set guifont=Menlo\ Regular:h11
 			" But even more I prefer to install Lucida Console and then use that:
 			":set guifont=Lucida\ Console:h11
-			:set guifont=Envy\ Code\ Squat:h13
+			" On Mac, S11 and S12 are both quite short, but Squat is just about right.
+			:silent! :set guifont=Envy\ Code\ Squat:h13
 		elseif g:os == "Windows"
 			:set guifont=LucidaTypewriter\ 8
 		endif
