@@ -240,9 +240,8 @@ autocmd VimLeave * silent !stty ixon
 	let g:RepeatLast_Enabled = 0
 	let g:RepeatLast_TriggerCursorHold = 3
 	let g:RepeatLast_SaveToRegister = 'l'
-	set ch=2
-	" let g:RepeatLast_Show_Debug_Info = 1
-	" set ch=3
+	let g:RepeatLast_Show_Debug_Info = 0
+	let &ch += g:RepeatLast_Enabled + g:RepeatLast_Show_Debug_Info
 
 	let g:coffeeAutoCompileAll = 1
 	let g:coffeeShowJSChanges = 1
