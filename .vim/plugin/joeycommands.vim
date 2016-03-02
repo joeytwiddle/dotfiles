@@ -212,3 +212,7 @@ nnoremap :ET<Space> :e $JPATH/code/shellscript/**/*
 nnoremap :EV<Space> :e $HOME/.vim/**/*
 nnoremap :EP<Space> :e $HOME/.vim/plugin/*
 nnoremap :EA<Space> :e $HOME/.vim-addon-manager/*
+
+" Especially needed for MacVim, which is otherwise difficult to maximize.
+:command! MaximizeVim set lines=999 columns=9999
+
