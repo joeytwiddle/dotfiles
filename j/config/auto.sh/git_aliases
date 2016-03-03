@@ -818,6 +818,9 @@ where:
     done
     shift $((OPTIND - 1))
 
+		# If we call a getopts from a function, it may change the value of OPTIND.  We need to reset it to the default (1), or future calls to getopts will start looking at the wrong argument!  (Needed for bash 3.2.57 at least.  Reproduce with two calls from an interactive shell, e.g. `git_branch_status -a -v`, and notice the arguments are ignored on the second call.)
+    OPTIND=1
+
     branch_name_regexp="$1"
     if [ -n "$branch_name_regexp" ]
     then filter=refs/heads
