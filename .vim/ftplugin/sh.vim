@@ -53,3 +53,7 @@ nmap <buffer> <Leader>Log viW<Leader>log
 " exec "set comments=" . &comments . ",b:##"
 "" Fixed:   :)
 let &comments = &comments . ",b:##"
+
+if exists("*SyntaxRange#Include")
+  command! -buffer HereDocHighlightSh call SyntaxRange#Include('<< !$', '^!$', 'sh', 'shCmdSubRegion')
+endif
