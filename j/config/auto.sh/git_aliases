@@ -818,6 +818,9 @@ where:
     done
     shift $((OPTIND - 1))
 
+		# If we call a getopts from a function, it may change the value of OPTIND.  We need to reset it to the default (1), or future calls to getopts will start looking at the wrong argument!  (Needed for bash 3.2.57 at least.  Reproduce with two calls from an interactive shell, e.g. `git_branch_status -a -v`, and notice the arguments are ignored on the second call.)
+    OPTIND=1
+
     branch_name_regexp="$1"
     if [ -n "$branch_name_regexp" ]
     then filter=refs/heads
@@ -911,7 +914,7 @@ gbs() {
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
-  else git_branch_status -a -v "$@"
+  else git_branch_status -a -v $GBS_OPTIONS "$@"
   fi |
   column -s ' ' -t | sed 's+ \( *\)+\1+g' |
   #columnise |
@@ -932,6 +935,10 @@ gbs() {
   else cat
   fi
 }
+# git branch status "long": show all the details, takes longer
+alias gbsl='gbs -dM'
+# Alternatively, to get this all the time, you could do:
+#   export GBS_OPTIONS='-d -M'
 
 replace_ancestor_markers_with_colors() {
 	local current_branch_color=`git config --get-color color.branch.current green`

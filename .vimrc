@@ -20,8 +20,15 @@ autocmd BufReadPost *.js command! -buffer -range=% JSB let b:winview = winsavevi
 " I was getting error highlighting on valid braces in SCSS files, because minlines was defaulting to 10!  This should prevent that.
 autocmd BufReadPost *.{scss} syntax sync minlines=200
 
-" At some point undo started working through file-reads.  Given that, I am happier to load changed files automatically.  (Especially useful when peforming git checkout!)
-if v:version >= 703
+" If Vim can undo through file-reads, then I am happy for it to automatically reload any file that changes on disk, e.g. as a result of editing in a different editor, or from a git checkout.
+if exists('&undoreload')
+	" I have been dealing with some pretty huge files recently!
+	if &undoreload < 50000
+		let &undoreload = 50000
+	endif
+
+	" This is not entirely satisfactory, because I don't want autoread if the file length is less than 'undoreload'.
+	" Perhaps an autocmd could check this at runtime.
 	setglobal autoread
 endif
 " Also mildly related, Vim now has persistent_undo feature, which can be enabled by setting 'undofile'
@@ -692,6 +699,10 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	call add(vamAddons,"github:tpope/vim-fugitive")      " Git helper uses copen a lot, and allows editing indexes.  :Glog :Ggrep
 	call add(vamAddons,"github:gregsexton/gitv")         " Addon to fugitive, with range :Gitv!
+	" Under MacVim, gitgutter is somehow affecting my statusline highlight.
+	" It seems that the first %#HighlightGroup# works ok, but the next one turns us to white-on-black.
+	" If you get into a mess, here is a quick way to clear all highlights from the statusline:
+	"   let &statusline = substitute(&statusline, '%#[A-Za-z]*#', '', 'g')
 	"call add(vamAddons,"github:airblade/vim-gitgutter")  " Git meta-info about each line (in left-hand signs column (the gutter), or the background color of each line)
 	"let g:gitgutter_diff_args = '-w "master@{1 week ago}"'
 	"call add(vamAddons,"github:mhinz/vim-signify")       " Similar but supports more VCSs!  BUT was pretty slow on some files, and completely locking up vim on some others (e.g.: j/tools/wine and ~/.vim/ftplugin/sh.vim).  Even turning it off with :SignifyToggle took ages!
@@ -1056,6 +1067,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Use :NarrowRegion or <Leader>nr to edit the selected lines in a scratch buffer
 	" Can be useful to restrict a file-wide operation to only those lines.
 	call add(vamAddons,"NrrwRgn")
+
+	" Diff sometimes presents a mess instead of detecting that some lines has moved in the file.  Run `:EnhancedDiff histogram` or `:PatienceDiff` and it might fix it!
+	call add(vamAddons,"github:chrisbra/vim-diff-enhanced")
 
 	" }}}
 

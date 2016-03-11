@@ -236,15 +236,16 @@ nnoremap <C-W>S :vsplit<Enter>
 
 
 
-" :e usually clears undo history, so we don't really do :e any more.
-" We delete the contents of the buffer, then read the file in, which
-" is an operation we can undo.  We must delete the top (empty) line also.
-" Recent versions of Vim support undo through file read.
-if v:version < 703
+" Before the 'undoreload' option, `:e` would clear undo history.
+" I didn't like that, so I modified the action of `:e`
+" Here it will delete the contents of the buffer, then read the file in, which
+" is an operation we can undo.  We must also delete the top (empty) line.
+" Recent versions of Vim support undo through file read, so if that is set high enough, I don't bother to remap `:e`
+if !exists('&undoreload') || &undoreload < 9999
 	" :map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd
 	" BUG: vim still thinks the file is out of sync with the buffer, so if you
 	" quit without writing the file, vim complains, which is not how :e behaved.
-	map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
+	nnoremap :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
 	" Unfortunately the ! in :w! doesn't work
 	" But `:checktime | w` may be a solution for that.
 endif
@@ -995,3 +996,6 @@ nnoremap ]<C-Space> mzo<Esc>g'z
 
 nnoremap <Leader>U :UndotreeToggle<CR>
 
+" For Mac, inspired by WebStorm
+inoremap <D-Enter> <Enter><Up>
+inoremap <D-> <Up><End><Enter>
