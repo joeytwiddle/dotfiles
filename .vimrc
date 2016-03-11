@@ -20,8 +20,15 @@ autocmd BufReadPost *.js command! -buffer -range=% JSB let b:winview = winsavevi
 " I was getting error highlighting on valid braces in SCSS files, because minlines was defaulting to 10!  This should prevent that.
 autocmd BufReadPost *.{scss} syntax sync minlines=200
 
-" At some point undo started working through file-reads.  Given that, I am happier to load changed files automatically.  (Especially useful when peforming git checkout!)
-if v:version >= 703
+" If Vim can undo through file-reads, then I am happy for it to automatically reload any file that changes on disk, e.g. as a result of editing in a different editor, or from a git checkout.
+if exists('&undoreload')
+	" I have been dealing with some pretty huge files recently!
+	if &undoreload < 50000
+		let &undoreload = 50000
+	endif
+
+	" This is not entirely satisfactory, because I don't want autoread if the file length is less than 'undoreload'.
+	" Perhaps an autocmd could check this at runtime.
 	setglobal autoread
 endif
 " Also mildly related, Vim now has persistent_undo feature, which can be enabled by setting 'undofile'
