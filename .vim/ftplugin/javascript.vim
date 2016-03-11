@@ -19,6 +19,8 @@ inoremap <buffer> {<CR> {<CR><CR>}<Up><Esc>cc
 " Adds the filename and escapes all '$'s in the string.
 "vnoremap <buffer> <Leader>log yoconsole.log("<C-R>":", <C-R>");<Esc>
 " We use :silent! in case escaping '"' to '\"' fails because there are no '"'s in the expression.
+" ISSUES: Clobbers clipboard (easily fixed)
+"         :s clobbers search (@/) so we may want to store and restore it.
 vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_[<C-R>=expand('%:t')<Enter>] <C-R>":_QUOTE_<Esc>:silent! s/"/\\"/g <Bar> s/_QUOTE_/"/g<CR>A, <C-R>");<Esc>
 " viW is *sometimes* preferable, e.g. to catch 'obj.prop[i]' but more often than not it grabs too much, e.g. it catches 'obj.prop[i]);'
 nmap <buffer> <Leader>log viw<Leader>log
