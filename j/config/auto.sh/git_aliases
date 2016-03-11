@@ -914,7 +914,7 @@ gbs() {
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
-  else git_branch_status -a -v "$@"
+  else git_branch_status -a -v $GBS_OPTIONS "$@"
   fi |
   column -s ' ' -t | sed 's+ \( *\)+\1+g' |
   #columnise |
@@ -935,6 +935,10 @@ gbs() {
   else cat
   fi
 }
+# git branch status "long": show all the details, takes longer
+alias gbsl='gbs -dM'
+# Alternatively, to get this all the time, you could do:
+#   export GBS_OPTIONS='-d -M'
 
 replace_ancestor_markers_with_colors() {
 	local current_branch_color=`git config --get-color color.branch.current green`
