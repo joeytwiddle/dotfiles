@@ -996,3 +996,6 @@ nnoremap ]<C-Space> mzo<Esc>g'z
 
 nnoremap <Leader>U :UndotreeToggle<CR>
 
+" For Mac, inspired by WebStorm
+inoremap <D-Enter> <Enter><Up>
+inoremap <D-> <Up><End><Enter>
