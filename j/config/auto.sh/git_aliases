@@ -132,8 +132,9 @@ git_status_plus() {
 		local target_folder_from_root="$(cd "$target_folder" ; git rev-parse --show-prefix)"
 		#echo "[log] target_folder_from_root: $target_folder_from_root"
 
-		# -uall appears to be the default
-		git status --porcelain -uall |
+		# -uall lists files below un-added folders; without it only the parent folder is listed
+		#git status --porcelain -uall |
+		git status --porcelain |
 		grep '^?? ' |
 		cut -c 4- |
 		# Because the process below is slow, we put a limit on how many files we will tolerate.
