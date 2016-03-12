@@ -243,6 +243,7 @@ then
 	: #compdef ga=git
 fi
 
+# Git pull --rebase will attempt to splice the new upstreams commits in before your unpushed commits.
 gpr_safe() {
 	local current_commit=`git rev-parse HEAD`
 	echo "Current commit before rebase (in case abort desired): ${current_commit}"
@@ -253,9 +254,19 @@ alias gp='git pull'
 #alias gpr='git pull --rebase'
 alias gpr='gpr_safe'
 alias gpp='gpr && git push'
+# If you have already fetched the remote branch, or you want to rebase against a branch that isn't upstream, you can use this
+grp_safe() {
+	local current_commit=`git rev-parse HEAD`
+	echo "Current commit before rebase (in case abort desired): ${current_commit}"
+	local other_branch="$1"
+	[ -z "$other_branch" ] && other_branch="$(git_guess_upstream_branch)" || shift
+	git rebase --preserve-merges "$other_branch" "$@"
+}
+#alias grp='git rebase --preserve-merges $(git_guess_upstream_branch)'
+alias grp='grp_safe'
 
+# This is for older versions of git which didn't accept the --all parameter.
 git_fetch_all() {
-	# This might be for older versions of git which don't accept the --all parameter.
 	local remote
 	git remote |
 	while read remote
@@ -263,17 +274,24 @@ git_fetch_all() {
 	done
 }
 alias gf='git_fetch_all -v'
-alias gfa='git_fetch_all -v'
+alias gfa='git_fetch_all -v --tags --prune'
 
-#alias gm='git merge'
+# Git Push Origin
+alias gpo='verbosely git push origin $(git_get_current_branch)'
+# Git Push Upstream
+alias gpu='verbosely git push -u'
+
+alias gm='git merge'
 # Git Merge Origin (this branch)
 #alias gmo='verbosely git merge $(git_guess_upstream_branch)'
 alias gmo='verbosely git merge origin/$(git_get_current_branch)'
 # Git Push Origin (this branch)
-alias gpo='verbosely git push origin $(git_get_current_branch)'
 alias gmm='verbosely git merge master'
 alias gmom='verbosely git merge origin/master'
+# These are a little inconsistent
 alias gmu='verbosely git merge $(git_guess_upstream_branch)'
+alias gmu='verbosely git merge upstream/$(git_get_current_branch)'
+alias gmum='verbosely git merge upstream/master'
 
 alias gr='git reset'
 alias grh='gr --hard'
@@ -288,6 +306,10 @@ alias gma='git merge --abort'
 alias gra='git rebase --abort'
 
 alias grl='git reflog'
+
+alias grem='git remote -v'
+
+alias gt='git tag'
 
 alias fgc=friendlygitcommit
 alias lg=gitls
@@ -643,6 +665,7 @@ gbd() {
 		#cat
 	fi
 }
+alias gbdr='gbd -r'
 
 # May rename "gitsummary"
 gitwhatsup() {
