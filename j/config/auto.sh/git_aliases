@@ -884,7 +884,7 @@ where:
         fi
         # If we do not have a remote to compare to, display no counts, rather than relative to current branch, which is quite arbitrary (but can be achieved using $compareto if desired).
         if [ -n "$remote" ]
-        then DELTAS=$(git rev-list --left-right ${local}...${remote})
+        then DELTAS=$(git rev-list --left-right "${local}...${remote}")
         else DELTAS=""
         fi
         LEFT_AHEAD=$(echo "$DELTAS" | grep -c '^<')
@@ -909,7 +909,7 @@ where:
             fi
         fi
 
-        if [ $verbose ] || [ $LEFT_AHEAD -gt 0 ] || [ $RIGHT_AHEAD -gt 0 ] || [ "$local" = "$current_branch" ] ; then
+        if [ -n "$verbose" ] || [ "$LEFT_AHEAD" -gt 0 ] || [ "$RIGHT_AHEAD" -gt 0 ] || [ "$local" = "$current_branch" ] ; then
             if [ -z "$remote" ]
             then abstatus="(none)"
             else abstatus="(ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD)"
