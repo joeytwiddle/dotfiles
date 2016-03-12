@@ -262,7 +262,7 @@ grp_safe() {
 	[ -z "$other_branch" ] && other_branch="$(git_guess_upstream_branch)" || shift
 	git rebase --preserve-merges "$other_branch" "$@"
 }
-#alias grp='git rebase --preserve-merges $(git_guess_upstream_branch)'
+#alias grp='git rebase --preserve-merges "$(git_guess_upstream_branch)"'
 alias grp='grp_safe'
 
 # This is for older versions of git which didn't accept the --all parameter.
@@ -277,20 +277,20 @@ alias gf='git_fetch_all -v'
 alias gfa='git_fetch_all -v --tags --prune'
 
 # Git Push Origin
-alias gpo='verbosely git push origin $(git_get_current_branch)'
+alias gpo='verbosely git push origin "$(git_get_current_branch)"'
 # Git Push Upstream
 alias gpu='verbosely git push -u'
 
 alias gm='git merge'
 # Git Merge Origin (this branch)
-#alias gmo='verbosely git merge $(git_guess_upstream_branch)'
-alias gmo='verbosely git merge origin/$(git_get_current_branch)'
+#alias gmo='verbosely git merge "$(git_guess_upstream_branch)"'
+alias gmo='verbosely git merge "origin/$(git_get_current_branch)"'
 # Git Push Origin (this branch)
 alias gmm='verbosely git merge master'
 alias gmom='verbosely git merge origin/master'
 # These are a little inconsistent
-alias gmu='verbosely git merge $(git_guess_upstream_branch)'
-alias gmu='verbosely git merge upstream/$(git_get_current_branch)'
+alias gmu='verbosely git merge "$(git_guess_upstream_branch)"'
+alias gmu='verbosely git merge "upstream/$(git_get_current_branch)"'
 alias gmum='verbosely git merge upstream/master'
 
 alias gr='git reset'
@@ -487,13 +487,13 @@ update_cindex() {
 
 # Git What Is Not Pushed (doesn't always work - I use gbs more often)
 #alias gwinp='gll @{upstream}..HEAD'
-alias gwinp='gll $(git_guess_upstream_branch)..HEAD'
+alias gwinp='gll "$(git_guess_upstream_branch)..HEAD"'
 # Git What Is Not Pushed Log
-alias gwinpl='gl $(git_guess_upstream_branch)..HEAD'
+alias gwinpl='gl "$(git_guess_upstream_branch)..HEAD"'
 # Git What Is Not Pushed Files
-alias gwinpf='glf $(git_guess_upstream_branch)..HEAD'
+alias gwinpf='glf "$(git_guess_upstream_branch)..HEAD"'
 # Git What Is Not Pushed Diff
-alias gwinpd='gd $(git_guess_upstream_branch)..HEAD'
+alias gwinpd='gd "$(git_guess_upstream_branch)..HEAD"'
 
 # Shortcuts I never used
 ## Git To Push
@@ -506,13 +506,13 @@ alias gwinpd='gd $(git_guess_upstream_branch)..HEAD'
 #alias gtpd='gwinpd'
 
 # Git What Is Not Merged
-alias gwinm='gll HEAD..$(git_guess_upstream_branch)'
+alias gwinm='gll "HEAD..$(git_guess_upstream_branch)"'
 # Git What Is Not Merged Log
-alias gwinml='gl HEAD..$(git_guess_upstream_branch)'
+alias gwinml='gl "HEAD..$(git_guess_upstream_branch)"'
 # Git What Is Not Merged Files
-alias gwinmf='glf HEAD..$(git_guess_upstream_branch)'
+alias gwinmf='glf "HEAD..$(git_guess_upstream_branch)"'
 # Git What Is Not Merged Diff
-alias gwinmd='gd HEAD..$(git_guess_upstream_branch)'
+alias gwinmd='gd "HEAD..$(git_guess_upstream_branch)"'
 
 alias gss='git stash save'
 alias gssu='git stash save --include-untracked'
@@ -616,7 +616,7 @@ gbd() {
 	fi
 
 	local need_pager=
-	if [ $count -gt $((LINES-2)) ]
+	if [ $count -gt "$((LINES-2))" ]
 	then need_pager=1
 	fi
 
@@ -701,7 +701,7 @@ alias gwu=gitwhatsup
 
 # Guesses the name of the upstream branch, given the local branch name (or no arguments, which assumes current branch)
 git_guess_upstream_branch() {
-	# CONSIDER: This might be a simpler solution: git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)
+	# CONSIDER: This might be a simpler solution: git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)"
 
 	local local_branch remote_branch remote_commit
 	# No problem if this arg is empty, it will work fine for the current branch anyway
@@ -840,7 +840,7 @@ where:
            ;;
       esac
     done
-    shift $((OPTIND - 1))
+    shift "$((OPTIND - 1))"
 
 		# If we call a getopts from a function, it may change the value of OPTIND.  We need to reset it to the default (1), or future calls to getopts will start looking at the wrong argument!  (Needed for bash 3.2.57 at least.  Reproduce with two calls from an interactive shell, e.g. `git_branch_status -a -v`, and notice the arguments are ignored on the second call.)
     OPTIND=1
