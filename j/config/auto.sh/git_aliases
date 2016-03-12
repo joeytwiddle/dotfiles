@@ -247,11 +247,11 @@ fi
 gpr_safe() {
 	local current_commit="$(git rev-parse HEAD)"
 	echo "Current commit before rebase (in case abort desired): ${current_commit}"
-	git pull --rebase
+	git pull --rebase=preserve
 }
 #alias gf='git fetch -v'
 alias gp='git pull'
-#alias gpr='git pull --rebase'
+#alias gpr='git pull --rebase=preserve'
 alias gpr='gpr_safe'
 alias gpp='gpr && git push'
 # If you have already fetched the remote branch, or you want to rebase against a branch that isn't upstream, you can use this
