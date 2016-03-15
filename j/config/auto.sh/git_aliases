@@ -264,6 +264,8 @@ grp_safe() {
 }
 #alias grp='git rebase --preserve-merges "$(git_guess_upstream_branch)"'
 alias grp='grp_safe'
+# Git Merge Rebase
+alias gmr='grp_safe'
 
 # This is for older versions of git which didn't accept the --all parameter.
 git_fetch_all() {
