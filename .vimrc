@@ -1069,7 +1069,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	call add(vamAddons,"NrrwRgn")
 
 	" Diff sometimes presents a mess instead of detecting that some lines has moved in the file.  Run `:EnhancedDiff histogram` or `:PatienceDiff` and it might fix it!
-	call add(vamAddons,"github:chrisbra/vim-diff-enhanced")
+	if v:version >= 704
+		call add(vamAddons,"github:chrisbra/vim-diff-enhanced")
+	endif
 
 	" }}}
 
