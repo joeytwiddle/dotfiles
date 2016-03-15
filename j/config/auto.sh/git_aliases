@@ -545,7 +545,7 @@ git_clone_friendly() {
 	then git clone "$@"
 	else
 		local url="$1"
-		local username_dot_repo="$(printf "%s\n" "$1" | grep -o "[^/]*/[^/]*$" | tr '/' '.')"
+		local username_dot_repo="$(printf "%s\n" "$1" | sed 's+/$++' | grep -o "[^/]*/[^/]*$" | tr '/' '.')"
 		git clone "$url" "$username_dot_repo"
 	fi
 }
