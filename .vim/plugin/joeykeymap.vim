@@ -577,6 +577,8 @@ function! s:SetupKeysForGrep()
 
 	" WIP: We can avoid all the prompts by passing the filelist, e.g.:
 	"nnoremap <F4> :Grep \<<cword>\> . -r<CR>
+
+	nnoremap <D-F> :Grep<CR><C-U>\<<cword>\>
 endfunction
 
 function! s:SetupKeysForCSearch()
@@ -586,6 +588,8 @@ function! s:SetupKeysForCSearch()
 	"nnoremap <F4> :Grep<CR><CR>
 	"nnoremap <F4> :Grep<CR><Home>\b<End>\b<CR>   " untested
 	nnoremap <F4> :Grep \b<cword>\b<CR>
+
+	nnoremap <D-F> :Grep<CR>
 endfunction
 
 vnoremap <F3> "sy:Grep<CR><C-U><C-R>s
@@ -985,7 +989,7 @@ nnoremap <silent> G :normal! ggG<CR><C-e>:exec ( winline() < winheight("%")-1 ? 
 
 " Make unimpaired's create-new-blank-line bindings create a blank comment line when over a comment.
 " Only works when 'formatoptions' contains `o`
-" The C-@ binds are needed for xterm.  I hope C-Space will work for GVim, but haven't tested them yet.
+" The C-@ binds are for xterm, the C-Space binds are for GVim.
 nnoremap [<C-@> mzO<Esc>g'z
 nnoremap ]<C-@> mzo<Esc>g'z
 nnoremap [<C-Space> mzO<Esc>g'z
@@ -997,5 +1001,9 @@ nnoremap ]<C-Space> mzo<Esc>g'z
 nnoremap <Leader>U :UndotreeToggle<CR>
 
 " For Mac, inspired by WebStorm
-inoremap <D-Enter> <Enter><Up>
-inoremap <D-> <Up><End><Enter>
+" Command-Enter: Split the current line at cursor (like <Enter>), but don't move down
+inoremap <D-Enter> <Enter><Up><End>
+" Shift-Enter: Start editing a new line below the current line
+inoremap <S-Enter> <End><Enter>
+" Command-Option-Enter: Start editing a new line above the current line
+inoremap <D-> <Home><Enter><Up>
