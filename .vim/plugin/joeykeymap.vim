@@ -236,15 +236,16 @@ nnoremap <C-W>S :vsplit<Enter>
 
 
 
-" :e usually clears undo history, so we don't really do :e any more.
-" We delete the contents of the buffer, then read the file in, which
-" is an operation we can undo.  We must delete the top (empty) line also.
-" Recent versions of Vim support undo through file read.
-if v:version < 703
+" Before the 'undoreload' option, `:e` would clear undo history.
+" I didn't like that, so I modified the action of `:e`
+" Here it will delete the contents of the buffer, then read the file in, which
+" is an operation we can undo.  We must also delete the top (empty) line.
+" Recent versions of Vim support undo through file read, so if that is set high enough, I don't bother to remap `:e`
+if !exists('&undoreload') || &undoreload < 9999
 	" :map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd
 	" BUG: vim still thinks the file is out of sync with the buffer, so if you
 	" quit without writing the file, vim complains, which is not how :e behaved.
-	map :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
+	nnoremap :e<Enter> :%d<Enter>:r<Enter>:0<Enter>dd:w!<Enter>
 	" Unfortunately the ! in :w! doesn't work
 	" But `:checktime | w` may be a solution for that.
 endif
@@ -576,6 +577,12 @@ function! s:SetupKeysForGrep()
 
 	" WIP: We can avoid all the prompts by passing the filelist, e.g.:
 	"nnoremap <F4> :Grep \<<cword>\> . -r<CR>
+
+	" cword doesn't work here
+	"nnoremap <D-F> :Grep<CR><C-U>\<<cword>\>
+	" No fun to clobber clipboard with cword if you were trying to search for what was in the clipboard before!
+	"nnoremap <D-F> :let @+ = expand('<cword>')<CR>:Grep<CR><C-U>\<\><Left><Left>
+	nnoremap <D-F> :Grep<CR>
 endfunction
 
 function! s:SetupKeysForCSearch()
@@ -585,6 +592,8 @@ function! s:SetupKeysForCSearch()
 	"nnoremap <F4> :Grep<CR><CR>
 	"nnoremap <F4> :Grep<CR><Home>\b<End>\b<CR>   " untested
 	nnoremap <F4> :Grep \b<cword>\b<CR>
+
+	nnoremap <D-F> :Grep<CR>
 endfunction
 
 vnoremap <F3> "sy:Grep<CR><C-U><C-R>s
@@ -980,7 +989,7 @@ nnoremap <silent> G :normal! ggG<CR><C-e>:exec ( winline() < winheight("%")-1 ? 
 
 " Make unimpaired's create-new-blank-line bindings create a blank comment line when over a comment.
 " Only works when 'formatoptions' contains `o`
-" The C-@ binds are needed for xterm.  I hope C-Space will work for GVim, but haven't tested them yet.
+" The C-@ binds are for xterm, the C-Space binds are for GVim.
 nnoremap [<C-@> mzO<Esc>g'z
 nnoremap ]<C-@> mzo<Esc>g'z
 nnoremap [<C-Space> mzO<Esc>g'z
@@ -991,3 +1000,10 @@ nnoremap ]<C-Space> mzo<Esc>g'z
 
 nnoremap <Leader>U :UndotreeToggle<CR>
 
+" For Mac, inspired by WebStorm
+" Command-Enter: Split the current line at cursor (like <Enter>), but don't move down
+inoremap <D-Enter> <Enter><Up><End>
+" Shift-Enter: Start editing a new line below the current line
+inoremap <S-Enter> <End><Enter>
+" Command-Option-Enter: Start editing a new line above the current line
+inoremap <D-> <Home><Enter><Up>

@@ -132,8 +132,9 @@ git_status_plus() {
 		local target_folder_from_root="$(cd "$target_folder" ; git rev-parse --show-prefix)"
 		#echo "[log] target_folder_from_root: $target_folder_from_root"
 
-		# -uall appears to be the default
-		git status --porcelain -uall |
+		# -uall lists files below un-added folders; without it only the parent folder is listed
+		#git status --porcelain -uall |
+		git status --porcelain |
 		grep '^?? ' |
 		cut -c 4- |
 		# Because the process below is slow, we put a limit on how many files we will tolerate.
@@ -155,9 +156,9 @@ git_status_plus() {
 			#done
 
 			# Do the above find using xargs.
-			# The `bash -c ... $0 $@` trick allows us to place 200 arguments in the middle of the line, as opposed to the end which xargs usually does.
+			# The `bash -c '... "$@"' "$0"` trick allows us to place 200 arguments in the middle of the line, as opposed to the end which xargs usually does.
 			# This may be very ugly, but it runs a lot faster than invoking find multiple times!
-			xargs -d '\n' -n 200 -- bash -c 'find "$0" "$@" -maxdepth 0 -printf "%s %T@ %p\n"' |
+			xargs -d '\n' -n 200 -- bash -c 'find "$@" -maxdepth 0 -printf "%s %T@ %p\n"' "$0" |
 			# Remove the fractional part of the date.
 			sed 's+\.[0-9]*++'
 		) |
@@ -166,9 +167,9 @@ git_status_plus() {
 		#diff "$previous_stats_file" "$current_stats_file" |
 		#grep '^>'
 
-		cursereset=`cursenorm`
-		cursenormal=`cursecyan`
-		cursehighlight=`curseyellow;cursebold`
+		cursereset="$(cursenorm)"
+		cursenormal="$(cursecyan)"
+		cursehighlight="$(curseyellow;cursebold)"
 
 		# CONSIDER TODO: The below is very inefficient.  Instead of all these greps, can we sort them and do a one-way diff?
 		cat "$current_stats_file" |
@@ -242,8 +243,9 @@ then
 	: #compdef ga=git
 fi
 
+# Git pull --rebase will attempt to splice the new upstreams commits in before your unpushed commits.
 gpr_safe() {
-	local current_commit=`git rev-parse HEAD`
+	local current_commit="$(git rev-parse HEAD)"
 	echo "Current commit before rebase (in case abort desired): ${current_commit}"
 	git pull --rebase
 }
@@ -252,9 +254,21 @@ alias gp='git pull'
 #alias gpr='git pull --rebase'
 alias gpr='gpr_safe'
 alias gpp='gpr && git push'
+# If you have already fetched the remote branch, or you want to rebase against a branch that isn't upstream, you can use this
+grp_safe() {
+	local current_commit="$(git rev-parse HEAD)"
+	echo "Current commit before rebase (in case abort desired): ${current_commit}"
+	local other_branch="$1"
+	[ -z "$other_branch" ] && other_branch="$(git_guess_upstream_branch)" || shift
+	git rebase --preserve-merges "$other_branch" "$@"
+}
+#alias grp='git rebase --preserve-merges "$(git_guess_upstream_branch)"'
+alias grp='grp_safe'
+# Git Merge Rebase
+alias gmr='grp_safe'
 
+# This is for older versions of git which didn't accept the --all parameter.
 git_fetch_all() {
-	# This might be for older versions of git which don't accept the --all parameter.
 	local remote
 	git remote |
 	while read remote
@@ -262,17 +276,24 @@ git_fetch_all() {
 	done
 }
 alias gf='git_fetch_all -v'
-alias gfa='git_fetch_all -v'
+alias gfa='git_fetch_all -v --tags --prune'
 
-#alias gm='git merge'
+# Git Push Origin
+alias gpo='verbosely git push origin "$(git_get_current_branch)"'
+# Git Push Upstream
+alias gpu='verbosely git push -u'
+
+alias gm='git merge'
 # Git Merge Origin (this branch)
-#alias gmo='verbosely git merge $(git_guess_upstream_branch)'
-alias gmo='verbosely git merge origin/$(git_get_current_branch)'
+#alias gmo='verbosely git merge "$(git_guess_upstream_branch)"'
+alias gmo='verbosely git merge "origin/$(git_get_current_branch)"'
 # Git Push Origin (this branch)
-alias gpo='verbosely git push origin $(git_get_current_branch)'
 alias gmm='verbosely git merge master'
 alias gmom='verbosely git merge origin/master'
-alias gmu='verbosely git merge $(git_guess_upstream_branch)'
+# These are a little inconsistent
+alias gmu='verbosely git merge "$(git_guess_upstream_branch)"'
+alias gmu='verbosely git merge "upstream/$(git_get_current_branch)"'
+alias gmum='verbosely git merge upstream/master'
 
 alias gr='git reset'
 alias grh='gr --hard'
@@ -287,6 +308,10 @@ alias gma='git merge --abort'
 alias gra='git rebase --abort'
 
 alias grl='git reflog'
+
+alias grem='git remote -v'
+
+alias gt='git tag'
 
 alias fgc=friendlygitcommit
 alias lg=gitls
@@ -447,7 +472,7 @@ update_cindex() {
 	# CONSIDER: If we are in a repo subfolder but the repo root folder contains a ".csearchindex" then we could point CSEARCHINDEX at that file temporarily.
 	if which cindex >/dev/null && ( [ -z "$CSEARCHINDEX" ] && [ -f "$HOME"/.csearchindex ] || [ -n "$CSEARCHINDEX" ] && [ -f "$CSEARCHINDEX" ] )
 	then
-		local git_root_folder=$(git rev-parse --show-toplevel)
+		local git_root_folder="$(git rev-parse --show-toplevel)"
 		# If any of the indexed folders are equal to or below this project's folder
 		if [ -n "$git_root_folder" ] && cindex -list | grep -q "^$git_root_folder\($\|/\)"
 		then
@@ -465,13 +490,13 @@ update_cindex() {
 
 # Git What Is Not Pushed (doesn't always work - I use gbs more often)
 #alias gwinp='gll @{upstream}..HEAD'
-alias gwinp='gll $(git_guess_upstream_branch)..HEAD'
+alias gwinp='gll "$(git_guess_upstream_branch)..HEAD"'
 # Git What Is Not Pushed Log
-alias gwinpl='gl $(git_guess_upstream_branch)..HEAD'
+alias gwinpl='gl "$(git_guess_upstream_branch)..HEAD"'
 # Git What Is Not Pushed Files
-alias gwinpf='glf $(git_guess_upstream_branch)..HEAD'
+alias gwinpf='glf "$(git_guess_upstream_branch)..HEAD"'
 # Git What Is Not Pushed Diff
-alias gwinpd='gd $(git_guess_upstream_branch)..HEAD'
+alias gwinpd='gd "$(git_guess_upstream_branch)..HEAD"'
 
 # Shortcuts I never used
 ## Git To Push
@@ -484,13 +509,13 @@ alias gwinpd='gd $(git_guess_upstream_branch)..HEAD'
 #alias gtpd='gwinpd'
 
 # Git What Is Not Merged
-alias gwinm='gll HEAD..$(git_guess_upstream_branch)'
+alias gwinm='gll "HEAD..$(git_guess_upstream_branch)"'
 # Git What Is Not Merged Log
-alias gwinml='gl HEAD..$(git_guess_upstream_branch)'
+alias gwinml='gl "HEAD..$(git_guess_upstream_branch)"'
 # Git What Is Not Merged Files
-alias gwinmf='glf HEAD..$(git_guess_upstream_branch)'
+alias gwinmf='glf "HEAD..$(git_guess_upstream_branch)"'
 # Git What Is Not Merged Diff
-alias gwinmd='gd HEAD..$(git_guess_upstream_branch)'
+alias gwinmd='gd "HEAD..$(git_guess_upstream_branch)"'
 
 alias gss='git stash save'
 alias gssu='git stash save --include-untracked'
@@ -511,7 +536,7 @@ alias gsf='git stash show'
 # TODO: I would actually like an easy way to display the diffs for all the stashes, i.e. run gsd for every stash id
 
 grho() {
-	local current_branch=`git_get_current_branch`
+	local current_branch="$(git_get_current_branch)"
 	verbosely git reset --hard "origin/$current_branch"
 }
 
@@ -521,7 +546,7 @@ git_clone_friendly() {
 	then git clone "$@"
 	else
 		local url="$1"
-		local username_dot_repo=$(printf "%s\n" "$1" | grep -o "[^/]*/[^/]*$" | tr '/' '.')
+		local username_dot_repo="$(printf "%s\n" "$1" | sed 's+/$++' | grep -o "[^/]*/[^/]*$" | tr '/' '.')"
 		git clone "$url" "$username_dot_repo"
 	fi
 }
@@ -551,18 +576,18 @@ fi
 
 # Git Branch by Date
 git_branch_by_date() {
-	local reset_color=`tput sgr0 | sed 's/$//'`
+	local reset_color="$(tput sgr0 | sed 's/$//')"
 	# Optional
-	local subject_color=`tput setaf 0 ; tput bold`
-	local author_color=`tput setaf 6`
+	local subject_color="$(tput setaf 0 ; tput bold)"
+	local author_color="$(tput setaf 6)"
 
 	local target=refs/heads
-	#local commit_color=`git config --get-color color.diff.commit yellow`
+	#local commit_color="$(git config --get-color color.diff.commit yellow)"
 	if [ "$1" = -r ]
 	then
 		#target=refs/remotes/origin
 		target=refs/remotes
-		#branch_color=`git config --get-color color.branch.remote red`
+		#branch_color="$(git config --get-color color.branch.remote red)"
 	fi
 
 	# %(committerdate:iso8601)
@@ -572,15 +597,15 @@ git_branch_by_date() {
 # Git Branch by Date wrapper
 gbd() {
 	# In tmux, reset_color gets an extra `^O` on the end, which the terminal ignores, but which will show up if output is piped to less.  It happens when TERM=screen or screen-256color, but it goes away if we set TERM=xterm.  For now we will just strip that trailing `^O` char.
-	local reset_color=`tput sgr0 | sed 's/$//'`
-	local current_branch_color=`git config --get-color color.branch.current green`
-	local branch_color=`git config --get-color color.branch.local white`
+	local reset_color="$(tput sgr0 | sed 's/$//')"
+	local current_branch_color="$(git config --get-color color.branch.current green)"
+	local branch_color="$(git config --get-color color.branch.local white)"
 
 	# TODO: Parse args in no particular order, and show help, like gbs does
 	# CONSIDER: Decide whether or not to show_color based on terminal type, and arguments
 
 	# For quick results, we show just one page of history by default
-	local count=$((LINES-2))
+	local count="$((LINES-2))"
 	# but if the user is piping (e.g. to grep), then we should search further back (but not too far because a lot of branches can make -M very slow)
 	if [ ! -t 1 ]
 	then count=500
@@ -594,11 +619,11 @@ gbd() {
 	fi
 
 	local need_pager=
-	if [ $count -gt $((LINES-2)) ]
+	if [ $count -gt "$((LINES-2))" ]
 	then need_pager=1
 	fi
 
-	current_branch=`git_get_current_branch`
+	current_branch="$(git_get_current_branch)"
 
 	git_branch_by_date "$@" |
 	tail -n "${count}" |
@@ -613,8 +638,8 @@ gbd() {
             preBranch=". "
             if [ -n "$showancestors" ]
             then
-                local_branch_commit_hash=`git rev-parse --verify "$local"`
-                common_commit_between_branch_and_current=`git merge-base "$local" "$current_branch"`
+                local_branch_commit_hash="$(git rev-parse --verify "$local")"
+                common_commit_between_branch_and_current="$(git merge-base "$local" "$current_branch")"
                 if [ "$common_commit_between_branch_and_current" = "$local_branch_commit_hash" ]
                 then preBranch="| "
                 else preBranch="/ "
@@ -643,6 +668,7 @@ gbd() {
 		#cat
 	fi
 }
+alias gbdr='gbd -r'
 
 # May rename "gitsummary"
 gitwhatsup() {
@@ -654,21 +680,21 @@ gitwhatsup() {
 	local greenBackground=$(tput setab 2)
 	local whiteForeground=$(tput setaf 7)
 	#echo "${greenBackground}${whiteForeground}$(cursebold)GITDIR:$(tput init) $gitDir"
-	echo "`cursecyan`=== Git directory ===`cursenorm`"
+	echo "$(cursecyan)=== Git directory ===$(cursenorm)"
 	echo "$gitDir"
 	echo
-	#echo "`cursecyan`$gitDir`cursenorm`"
+	#echo "$(cursecyan)$gitDir$(cursenorm)"
 	#echo "${greenBackground}${whiteForeground}$(cursebold)$gitDir$(tput init)"
-	echo "`cursecyan`=== Remotes ===`cursenorm`"
+	echo "$(cursecyan)=== Remotes ===$(cursenorm)"
 	git remote -v #| prepend_each_line "   "
 	echo
-	echo "`cursecyan`=== Local branches ===`cursenorm`"
+	echo "$(cursecyan)=== Local branches ===$(cursenorm)"
 	git branch -vv #| prepend_each_line "   "
 	echo
-	echo "`cursecyan`=== Remote branches ===`cursenorm`"
+	echo "$(cursecyan)=== Remote branches ===$(cursenorm)"
 	git branch -r -vv #| prepend_each_line "   "
 	echo
-	echo "`cursecyan`=== Not yet pushed ===`cursenorm`"
+	echo "$(cursecyan)=== Not yet pushed ===$(cursenorm)"
 	gll "@{u}..HEAD" | cat
 	echo
 	echo
@@ -678,7 +704,7 @@ alias gwu=gitwhatsup
 
 # Guesses the name of the upstream branch, given the local branch name (or no arguments, which assumes current branch)
 git_guess_upstream_branch() {
-	# CONSIDER: This might be a simpler solution: git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)
+	# CONSIDER: This might be a simpler solution: git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)"
 
 	local local_branch remote_branch remote_commit
 	# No problem if this arg is empty, it will work fine for the current branch anyway
@@ -817,7 +843,7 @@ where:
            ;;
       esac
     done
-    shift $((OPTIND - 1))
+    shift "$((OPTIND - 1))"
 
 		# If we call a getopts from a function, it may change the value of OPTIND.  We need to reset it to the default (1), or future calls to getopts will start looking at the wrong argument!  (Needed for bash 3.2.57 at least.  Reproduce with two calls from an interactive shell, e.g. `git_branch_status -a -v`, and notice the arguments are ignored on the second call.)
     OPTIND=1
@@ -831,7 +857,7 @@ where:
         filter=$(git symbolic-ref -q HEAD)
     fi
 
-    current_branch=`git_get_current_branch`
+    current_branch="$(git_get_current_branch)"
 
     git for-each-ref $sorting --format="%(refname:short) %(upstream:short)" $filter |
     grep -e "$branch_name_regexp" |
@@ -861,7 +887,7 @@ where:
         fi
         # If we do not have a remote to compare to, display no counts, rather than relative to current branch, which is quite arbitrary (but can be achieved using $compareto if desired).
         if [ -n "$remote" ]
-        then DELTAS=$(git rev-list --left-right ${local}...${remote})
+        then DELTAS=$(git rev-list --left-right "${local}...${remote}")
         else DELTAS=""
         fi
         LEFT_AHEAD=$(echo "$DELTAS" | grep -c '^<')
@@ -875,8 +901,8 @@ where:
             then
                 # We can actually get a list of merged branches from: git branch --merged $current_branch
                 # http://devblog.springest.com/a-script-to-remove-old-git-branches/
-                local_branch_commit_hash=`git rev-parse --verify "$local"`
-                common_commit_between_branch_and_current=`git merge-base "$local" "$current_branch"`
+                local_branch_commit_hash="$(git rev-parse --verify "$local")"
+                common_commit_between_branch_and_current="$(git merge-base "$local" "$current_branch")"
                 if [ "$common_commit_between_branch_and_current" = "$local_branch_commit_hash" ]
                 then preBranch="| "
                 else preBranch="/ "
@@ -886,7 +912,7 @@ where:
             fi
         fi
 
-        if [ $verbose ] || [ $LEFT_AHEAD -gt 0 ] || [ $RIGHT_AHEAD -gt 0 ] || [ "$local" = "$current_branch" ] ; then
+        if [ -n "$verbose" ] || [ "$LEFT_AHEAD" -gt 0 ] || [ "$RIGHT_AHEAD" -gt 0 ] || [ "$local" = "$current_branch" ] ; then
             if [ -z "$remote" ]
             then abstatus="(none)"
             else abstatus="(ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD)"
@@ -908,25 +934,25 @@ gbs() {
   # Or perhaps better: https://gist.github.com/jehiah/1288596 (from http://stackoverflow.com/questions/7773939/show-git-ahead-and-behind-info-for-all-branches-including-remotes )
 
   local show_color
-  local color_setting=`git config --get color.ui`
+  local color_setting="$(git config --get color.ui)"
   if [ "$color_setting" = 'true' ] || [ "$color_setting" = 'auto' ] && [ -t 1 ]
   then show_color=true
   fi
 
   if [ "$1" = . ]
   then shift ; git_branch_status "$@"
-  else git_branch_status -a -v "$@"
+  else git_branch_status -a -v $GBS_OPTIONS "$@"
   fi |
   column -s ' ' -t | sed 's+ \( *\)+\1+g' |
   #columnise |
   if [ -n "$show_color" ]
   then
     # We should probably only do this jazz if $() = 'true' or = 'auto' && [ -t 1 ]
-    local reset_color=`tput sgr0`
-    local ahead_color=`tput setaf 2 ; tput bold`    # green
-    local behind_color=`tput setaf 1 ; tput bold`   # red
+    local reset_color="$(tput sgr0)"
+    local ahead_color="$(tput setaf 2 ; tput bold)"    # green
+    local behind_color="$(tput setaf 1 ; tput bold)"   # red
     # Git's default remote branch color is red, but that conflicts with behind_color, so I have set it to 'white' here.
-    local remote_branch_color=`git config --get-color color.branch.remote white`
+    local remote_branch_color="$(git config --get-color color.branch.remote white)"
     sed "
       s+\()  *\)\([^ ]*\)$+\1$remote_branch_color\2$reset_color+
       s+(ahead *[1-9][0-9]*)+$ahead_color\0$reset_color+
@@ -936,11 +962,15 @@ gbs() {
   else cat
   fi
 }
+# git branch status "long": show all the details, takes longer
+alias gbsl='gbs -dM'
+# Alternatively, to get this all the time, you could do:
+#   export GBS_OPTIONS='-d -M'
 
 replace_ancestor_markers_with_colors() {
-	local current_branch_color=`git config --get-color color.branch.current green`
-	local local_branch_color=`git config --get-color color.branch.local white`
-	local ancestor_branch_color=`git config --get-color color.branch.ancestor cyan`
+	local current_branch_color="$(git config --get-color color.branch.current green)"
+	local local_branch_color="$(git config --get-color color.branch.local white)"
+	local ancestor_branch_color="$(git config --get-color color.branch.ancestor cyan)"
 	sed "
 		s+^[*] *\([^ ]*\)+* $current_branch_color\1$reset_color+
 		s+^[./x-] *\([^ ]*\)+  $local_branch_color\1$reset_color+
@@ -955,7 +985,7 @@ git_get_current_branch() {
 	# rev-parse does not fail, but responds with "HEAD" instead of the branch name.
 	#git rev-parse --abbrev-ref HEAD
 	# So for git 1.7 we do:
-	local current_branch=`git rev-parse --abbrev-ref HEAD`
+	local current_branch="$(git rev-parse --abbrev-ref HEAD)"
 	if [ "$current_branch" = HEAD ]
 	then
 		echo "git rev-parse got branch name: HEAD" >&2
@@ -1002,7 +1032,7 @@ git_find_base_commit() {
 	# But user may specify the "current" branch second if they wish
 	if [ -n "$2" ]
 	then current_branch="$2"
-	else current_branch=`git_get_current_branch`
+	else current_branch="$(git_get_current_branch)"
 	fi
 	# Although the order doesn't really matter when passing 2 arguments, since merge-base is symmetric!
 
@@ -1014,7 +1044,7 @@ git_find_base_commit() {
 }
 
 git_show_base_commit() {
-	local commitId=`git_find_base_commit "$@"`
+	local commitId="$(git_find_base_commit "$@")"
 
 	if [ -n "$commitId" ]
 	then

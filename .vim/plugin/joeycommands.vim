@@ -214,5 +214,10 @@ nnoremap :EP<Space> :e $HOME/.vim/plugin/*
 nnoremap :EA<Space> :e $HOME/.vim-addon-manager/*
 
 " Especially needed for MacVim, which is otherwise difficult to maximize.
-:command! MaximizeVim set lines=999 columns=9999
+" It would be great to turn this into a toggler
+command! MaximizeVim set lines=999 columns=9999
 
+" For Mac OS X Opt-Cmd-Equals
+nnoremap <D-≠> :MaximizeVim<CR>
+
+command! GitMergeToolSetup set lines=999 columns=9999 | exec ":source ~/.vim/colors_for_elvin_monokai.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | set nodiff | wincmd k | set nodiff | wincmd p | redraw | wincmd = | let @/ = "<<<<<<" | normal! n
