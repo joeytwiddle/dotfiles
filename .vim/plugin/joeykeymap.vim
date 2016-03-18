@@ -578,7 +578,11 @@ function! s:SetupKeysForGrep()
 	" WIP: We can avoid all the prompts by passing the filelist, e.g.:
 	"nnoremap <F4> :Grep \<<cword>\> . -r<CR>
 
-	nnoremap <D-F> :Grep<CR><C-U>\<<cword>\>
+	" cword doesn't work here
+	"nnoremap <D-F> :Grep<CR><C-U>\<<cword>\>
+	" No fun to clobber clipboard with cword if you were trying to search for what was in the clipboard before!
+	"nnoremap <D-F> :let @+ = expand('<cword>')<CR>:Grep<CR><C-U>\<\><Left><Left>
+	nnoremap <D-F> :Grep<CR>
 endfunction
 
 function! s:SetupKeysForCSearch()
