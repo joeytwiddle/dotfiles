@@ -58,6 +58,12 @@ else
 		unset PREFIX
 		nvm use node
 
+		# NODE_PATH was being set by nodejs=0.10.37-1chl1~trusty1 in the file /etc/profile.d/nodejs.sh
+		# But Yeoman requires it to be set correctly for the current node version.
+		#export NODE_PATH="${NVM_PATH}_modules:${NODE_PATH}"
+		# Or just not having it set incorrectly is good enough!
+		unset NODE_PATH
+
 		nodewhatsup
 	}
 	# These two don't necessarily use the system node
@@ -70,6 +76,7 @@ else
 		# Because that will set the prefix to `/usr/local/npm`, which is not where I keep it!
 		export PREFIX="$HOME/npm"
 		export PATH="$PREFIX/bin:$PATH"
+		unset NODE_PATH
 
 		nodewhatsup
 	}
