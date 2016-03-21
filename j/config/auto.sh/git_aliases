@@ -32,7 +32,7 @@
 #
 # Some more shortcuts:
 #
-#   gap and gcp let you select which chunks of code to stage or commit next
+#   gap lets you select which chunks of code to stage or commit next
 #
 #   gdc shows the "cached" diff of what is staged (what you are about to commit).
 #
@@ -46,10 +46,11 @@
 # I rarely use the other aliases and functions in this file (except of course
 # indirectly those which are dependencies of the ones I do use!).
 #
-# Some of the functions (gbs, gbd) do not work on Mac OSX / FreeBSD because I
-# don't know how to get BSD sed to do search-replace.  However if you have
-# installed the GNU coreutils package (e.g. via Homebrew) and GNU sed is on
-# the *front* of your path, then they should work fine.
+# Some of the functions (git_branch_status, git_branch_by_date,
+# git_status_plus) do not work on Mac OSX / FreeBSD because they require GNU
+# versions of sed, xargs and find.  However if you install the GNU coreutils,
+# gnu-sed and findutils packages (e.g. via Homebrew) and ensure they are on the
+# *front* of your PATH, then they should work fine.
 
 # If you think this file has too many comments in it, try: :hi Comment guifg=#222222
 
@@ -69,6 +70,7 @@ unalias gitwhatsup 2>/dev/null
 #alias gs='git_status_user_friendly'
 alias gs='git_status_plus'
 
+# Just adds a pager, while still providing colour output
 git_status_user_friendly() {
 	if [ -t 1 ]
 	then
@@ -247,11 +249,12 @@ fi
 gpr_safe() {
 	local current_commit="$(git rev-parse HEAD)"
 	echo "Current commit before rebase (in case abort desired): ${current_commit}"
-	git pull --rebase
+	git pull --rebase=preserve
 }
 #alias gf='git fetch -v'
-alias gp='git pull'
-#alias gpr='git pull --rebase'
+alias gpl='git pull'
+alias gpll='git pull'
+#alias gpr='git pull --rebase=preserve'
 alias gpr='gpr_safe'
 alias gpp='gpr && git push'
 # If you have already fetched the remote branch, or you want to rebase against a branch that isn't upstream, you can use this
@@ -264,7 +267,7 @@ grp_safe() {
 }
 #alias grp='git rebase --preserve-merges "$(git_guess_upstream_branch)"'
 alias grp='grp_safe'
-# Git Merge Rebase
+# Git Merge Rebase (mnemonic)
 alias gmr='grp_safe'
 
 # This is for older versions of git which didn't accept the --all parameter.
@@ -278,10 +281,17 @@ git_fetch_all() {
 alias gf='git_fetch_all -v'
 alias gfa='git_fetch_all -v --tags --prune'
 
+alias gps='git push'
+alias gpsh='git push'
 # Git Push Origin
 alias gpo='verbosely git push origin "$(git_get_current_branch)"'
-# Git Push Upstream
-alias gpu='verbosely git push -u'
+# Git Push Upstream.  Disabled because:
+# - 'gpu' is ambiguous: Does it mean git pull or git push?
+# - Makes no sense because pushing to upstream is what Git Push does normally.
+# - Conceptually, I believe we should pull from upstream, and push to downstream.
+#alias gpu='verbosely git push "$(git_guess_upstream_branch)"'
+# -u sets upstream tracking branch
+#alias gpu='verbosely git push -u'
 
 alias gm='git merge'
 # Git Merge Origin (this branch)
@@ -428,6 +438,8 @@ gitlog2() {
 alias glf='gitlog2 -search "^[^ ]+" --stat'
 # With glf, we can walk commmits with /^[^ ]+
 # Just commit info, one per line
+# Git Log Files Porcelain: does not abbreviate filenames, shows numbers instead of '+'s and '-'s
+alias glfp='gitlog2 -search "^[a-z0-9]{7}" --numstat'
 
 alias gb='git branch'
 

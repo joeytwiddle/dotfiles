@@ -243,6 +243,10 @@
 [difftool]
 	prompt = false
 
+[diff]
+	# When showing diffs, present renames as renames, with a similarity index.  You will not see the lines of code which were moved.
+	renames = true
+
 [format]
 	# Simple:
 	#pretty = %C(yellow)%h%C(magenta bold)%d%C(reset) %s %C(cyan)- %an (%ar)%Creset

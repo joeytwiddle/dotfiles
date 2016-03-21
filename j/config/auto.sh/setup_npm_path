@@ -8,6 +8,18 @@ then
 
 else
 
+	# It is too slow to run nvm for every shell that starts up.
+
+	# Although if we did it during X startup, and the vars were exported to all desktop terminals, that might be good enough.
+	# (But beware this might not work smoothly.  I think Fluxbox starts up with sh.  Does nvm work in sh?!  If not, Fluxbox might not start at all!)
+
+	# Our current approach is to not run npm, but use the version of node installed on the system.
+	# This version of node will let us run simple/common tools like jsbeautify.
+	# When actually working on a Node project, we will need to run nvm to select a more recent version of Node.
+	# But actually nvm has trouble with the PREFIX which I like to set.
+	# For that reason, we offer functions below for running nvm.
+	# Although in fact these do little more than `unset PREFIX` and `unset NODE_PATH`
+
 	# Use the node package manually installed in /usr/local
 	#export PATH="/usr/local/node/bin:$PATH"
 
@@ -22,6 +34,8 @@ else
 	# So a friendlier way is to set the PREFIX var.  (Too bad they didn't call this NODE_PREFIX or NPM_PREFIX)
 	export PREFIX="$HOME/npm"
 	export PATH="$PREFIX/bin:$PATH"
+
+	# The code below assumes that we have nvm installed.
 
 	# Even with this, when I want to do `nvm use` I must first do `unset PREFIX`.
 
@@ -44,6 +58,12 @@ else
 		unset PREFIX
 		nvm use node
 
+		# NODE_PATH was being set by nodejs=0.10.37-1chl1~trusty1 in the file /etc/profile.d/nodejs.sh
+		# But Yeoman requires it to be set correctly for the current node version.
+		#export NODE_PATH="${NVM_PATH}_modules:${NODE_PATH}"
+		# Or just not having it set incorrectly is good enough!
+		unset NODE_PATH
+
 		nodewhatsup
 	}
 	# These two don't necessarily use the system node
@@ -56,11 +76,13 @@ else
 		# Because that will set the prefix to `/usr/local/npm`, which is not where I keep it!
 		export PREFIX="$HOME/npm"
 		export PATH="$PREFIX/bin:$PATH"
+		unset NODE_PATH
 
 		nodewhatsup
 	}
 	nvmusetempprefix() {
 		# Change the npm location, but keep using the same node we were using before.
+		# This might be desirable to play around with npm.
 		# Beware that the folder may get confused, with different versions.
 		export PREFIX="$HOME/tmp/npm"
 		export PATH="$PREFIX/bin:$PATH"
@@ -68,10 +90,13 @@ else
 		nodewhatsup
 	}
 	nodewhatsup() {
-		echo "node:   $(which node)"
-		echo "npm:    $(which npm)"
-		echo "PREFIX: $PREFIX"
 		echo "nvm current: $(nvm current)"
+		echo "PREFIX:    $PREFIX"
+		echo "node:      $(which node)"
+		echo "npm:       $(which npm)"
+		echo "NVM_PATH:  $NVM_PATH"
+		echo "NVM_BIN:   $NVM_BIN"
+		echo "NODE_PATH: $NODE_PATH"
 	}
 	nodestatus() {
 		nodewhatsup

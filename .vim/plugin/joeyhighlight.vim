@@ -156,7 +156,7 @@ function! Joeyhighlight()
 	highlight javaType term=NONE cterm=NONE guifg=LightBlue gui=bold
 	highlight link javaOperator SpecialChar
 	" highlight Type ctermfg=Red guifg=Red
-	highlight Type ctermfg=green guifg=green
+	highlight Type ctermfg=green guifg=#00ff00
 	highlight Number ctermfg=LightBlue guifg=LightBlue
 	" To bring first sentence of Java comments in line with Comments.
 	highlight Special ctermfg=Magenta guifg=#d080d0
@@ -350,14 +350,14 @@ function! Joeyhighlight()
 
 	" LightUpStatusLine has now moved to blinking_statusline.vim
 
-	hi WildMenu ctermbg=green ctermfg=black guibg=green guifg=black
+	hi WildMenu ctermbg=green ctermfg=black guibg=#00ff00 guifg=black
 
 
 	"" Colors for file/folder explorers, trying to match jsh dark theme:
 
 	" VTreeExplorer (vtreeexplorer.vim, :VSTreeExplore)
-	hi Directory ctermfg=green cterm=none guifg=green gui=none
-	hi TreeLnk ctermfg=green cterm=bold guifg=green gui=bold
+	hi Directory ctermfg=green cterm=none guifg=#00ff00 gui=none
+	hi TreeLnk ctermfg=green cterm=bold guifg=#00ff00 gui=bold
 
 	" NERD Tree (NERD_tree.vim, :NERDTree)
 	hi link treeDirSlash Directory
@@ -385,7 +385,7 @@ function! Joeyhighlight()
 
 	hi SignColumn guibg=black
 
-	hi EchoMsg ctermfg=green guifg=green
+	hi EchoMsg ctermfg=green guifg=#00ff00
 	" BUG: This will not work for long.  echohl is set and unset at realtime by scripts.
 	echohl EchoMsg
 	" However I see no workaround.  Echo messages are highlighted as 'Normal' by default.
