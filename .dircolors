@@ -237,6 +237,9 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .HTML 01;33
 .htm 01;33
 .HTM 01;33
+.haml 01;33
+.jade 01;33
+.blade 01;33
 .css 01;33
 .dvi 01;33
 .pdf 01;33
