@@ -1073,6 +1073,11 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		call add(vamAddons,"github:chrisbra/vim-diff-enhanced")
 	endif
 
+	" Vim highlights all the text between the first and last different characters on a changed line.
+	" But this plugin will find and display the exact differences, character by character.
+	" https://github.com/rickhowe/diffchar.vim
+	call add(vamAddons,"github:rickhowe/diffchar.vim")
+
 	" }}}
 
 	" >>> My Plugins from the Cloud (modified versions of other plugins) {{{
