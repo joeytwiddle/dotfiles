@@ -4,7 +4,7 @@
 --regex-c=/^(COMMENT: It is possible to disable built-in tag detection if we want, piecewise, e.g.: ctags --extra=-q --c-kinds=-d)/\1/X,XXX/
 
 --regex-vim=/^(COMMENT: ex-ctags already provides a 'map' tag)/\2/X,XXX/
---regex-vim=/[ \t]*(([nvxsoilc]*|)(nore|)map)[ \t]+(<(buffer|silent|special|script|expr|unique)>[ \t]+)*([^ 	]*).*/\6 (\1)/m,mapping/
+--regex-vim=/[ \t]*(([nvxsoilc]*)(noremap|map))[ \t]+(<(buffer|silent|special|script|expr|unique)>[ \t]+)*([^ 	]*).*/\6 (\1)/m,mapping/
 --regex-vim=/^(COMMENT: python functions)/\1/X,XXX/
 --regex-vim=/^[ \t]*def[ \t]+([a-zA-Z0-9_$]+)/\1/f,function/
 
@@ -55,7 +55,7 @@
 --regex-opa=/^[ \t]*\<database\>[ \t]*(\<[a-zA-Z_$.][0-9a-zA-Z_$.]*\>)/\1/d,database/
 --regex-opa=/^[ \t]*\<module\>[ \t]*(\<[a-zA-Z_$.][0-9a-zA-Z_$.]*\>)/\1/m,module/
 --regex-opa=/^(\<[a-zA-Z_$.][0-9a-zA-Z_$.]*\>)[ \t]*=/\1/g,global/
---regex-opa=/^[ \t]*(client|server|)[ \t]*\<function\>[ \t]*(\<[a-zA-Z_$.][0-9a-zA-Z_$.]*\>)/\2/f,function/
+--regex-opa=/^([ \t]*client|[ \t]*server|[ \t]*)[ \t]*\<function\>[ \t]*(\<[a-zA-Z_$.][0-9a-zA-Z_$.]*\>)/\2/f,function/
 
 --langdef=man
 --langmap=man:+.~,man:+.man
@@ -76,7 +76,7 @@
 --regex-coffee=/^[ \t]*(@[.]*|this\.)([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]*=.*$/\2/a,assigned/
 --regex-coffee=/^(COMMENT: Choose one of the following rules, but not both, or you will generate duplicate tags!  1. all properties, 2. only function properties.  TODO: We might be able to fudge the property regexp to ignore functions (with or without arguments) so we can keep both rules at once.)/\1/X,XXX/
 --regex-coffee=/^DISABLED: [ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*):[^:]/\1/p,property/
---regex-coffee=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*):[ \t]*(\([^(]*\)[ \t]*|)[-=]>.*$/\1/f,function/
+--regex-coffee=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*):[ \t]*(\([^(]*\)[ \t]*|[ \t]*)[-=]>.*$/\1/f,function/
 --regex-coffee=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$.:]*)[ \t]*=.*[-=]>.*$/\1/f,function/
 --regex-coffee=/^[ \t]*([a-zA-Z_$][0-9a-zA-Z_$]*)[ \t]*=[^->\n]*$/\1/v,variable/
 
