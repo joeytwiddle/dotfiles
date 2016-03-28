@@ -302,8 +302,9 @@ alias gmm='verbosely git merge master'
 alias gmom='verbosely git merge origin/master'
 # These are a little inconsistent
 alias gmu='verbosely git merge "$(git_guess_upstream_branch)"'
-alias gmu='verbosely git merge "upstream/$(git_get_current_branch)"'
+#alias gmu='verbosely git merge "upstream/$(git_get_current_branch)"'
 alias gmum='verbosely git merge upstream/master'
+alias grpu='verbosely git rebase --preserve-merges $(git_guess_upstream_branch)'
 
 alias gr='git reset'
 alias grh='gr --hard'
