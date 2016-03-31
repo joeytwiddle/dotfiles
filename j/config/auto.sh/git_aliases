@@ -218,6 +218,7 @@ alias gdf='git diff --stat'
 # Git Diff Staged / Cached (see which one I use most ... I used gdc!)
 #alias gds='gdc'
 alias gdc='gd --cached'
+alias gdcw='gd --cached --word-diff=color'
 
 alias ga='git add -v'
 # I often like to do git commit -a, and wonder why there is no equivalent git add -a.  In fact there is, but the flag is -u!
@@ -269,8 +270,11 @@ grp_safe() {
 alias grp='grp_safe'
 # Git Merge Rebase (mnemonic)
 alias gmr='grp_safe'
+alias grpu='grp $(git_guess_upstream_branch)'
+alias gmru='gmr $(git_guess_upstream_branch)'
 
-# This is for older versions of git which didn't accept the --all parameter.
+# This is for older versions of git (<1.7.0) which didn't accept the --all parameter.
+# We could actually perform the same action with the old built-in `git remote update`, but that won't let us fetch tags and do pruning.
 git_fetch_all() {
 	local remote
 	git remote |
@@ -304,7 +308,6 @@ alias gmom='verbosely git merge origin/master'
 alias gmu='verbosely git merge "$(git_guess_upstream_branch)"'
 #alias gmu='verbosely git merge "upstream/$(git_get_current_branch)"'
 alias gmum='verbosely git merge upstream/master'
-alias grpu='verbosely git rebase --preserve-merges $(git_guess_upstream_branch)'
 
 alias gr='git reset'
 alias grh='gr --hard'
@@ -319,6 +322,12 @@ alias gma='git merge --abort'
 alias gra='git rebase --abort'
 
 alias grl='git reflog'
+alias grll='glc -g'
+# This steps through diffs (and over commit messages, which is a little confusing):
+#alias grlll='glc -g -p'
+# This steps through commits:
+alias grlll='gitlog2 -search "^[a-z0-9]{7}" -g -p'
+alias grlll='gitlog2 -search "^(diff|[a-z0-9]{7}) .*" -g -p'
 
 alias grem='git remote -v'
 
@@ -470,6 +479,8 @@ gco() {
 
 	return "$ret_status"
 }
+# `git checkout -p [. | path]` allows us to select hunks to reset.  It's a lighter version of `git checkout -- <path>`
+alias gcop='git checkout -p'
 
 POST_GIT_CHECKOUT="$POST_GIT_CHECKOUT ; update_cindex"
 if ! which ionice >/dev/null
@@ -531,6 +542,8 @@ alias gwinmd='gd "HEAD..$(git_guess_upstream_branch)"'
 
 alias gss='git stash save'
 alias gssu='git stash save --include-untracked'
+# -p lets us choose which hunks to stash
+alias gssp='git stash -p'
 #alias gsp='git stash pop'
 alias gsp='git_stash_pop_safe'
 alias gsa='git stash apply'
