@@ -1096,6 +1096,12 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Vim highlights all the text between the first and last different characters on a changed line.
 	" But this plugin will find and display the exact differences, character by character.
 	" https://github.com/rickhowe/diffchar.vim
+	map <silent> <Leader><Leader>dc<F7> <Plug>ToggleDiffCharAllLines
+	map <silent> <Leader><Leader>dc<F8> <Plug>ToggleDiffCharCurrentLine
+	nmap <silent> <Leader><Leader>dc[b <Plug>JumpDiffCharPrevStart
+	nmap <silent> <Leader><Leader>dc]b <Plug>JumpDiffCharNextStart
+	nmap <silent> <Leader><Leader>dc[e <Plug>JumpDiffCharPrevEnd
+	nmap <silent> <Leader><Leader>dc]e <Plug>JumpDiffCharNextEnd
 	call add(vamAddons,"github:rickhowe/diffchar.vim")
 
 	" }}}
