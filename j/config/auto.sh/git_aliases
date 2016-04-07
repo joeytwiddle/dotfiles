@@ -303,11 +303,13 @@ alias gm='git merge'
 alias gmo='verbosely git merge "origin/$(git_get_current_branch)"'
 # Git Push Origin (this branch)
 alias gmm='verbosely git merge master'
-alias gmom='verbosely git merge origin/master'
 # These are a little inconsistent
 alias gmu='verbosely git merge "$(git_guess_upstream_branch)"'
 #alias gmu='verbosely git merge "upstream/$(git_get_current_branch)"'
+alias gmom='verbosely git merge origin/master'
+alias gmod='verbosely git merge origin/develop'
 alias gmum='verbosely git merge upstream/master'
+alias gmud='verbosely git merge upstream/develop'
 
 alias gr='git reset'
 alias grh='gr --hard'
@@ -323,10 +325,11 @@ alias gra='git rebase --abort'
 
 alias grl='git reflog'
 alias grll='glc -g'
-# This steps through diffs (and over commit messages, which is a little confusing):
+# This steps through diffs (but over commit messages, which is a little confusing):
 #alias grlll='glc -g -p'
-# This steps through commits:
-alias grlll='gitlog2 -search "^[a-z0-9]{7}" -g -p'
+# This steps through commits, but over diffs:
+#alias grlll='gitlog2 -search "^[a-z0-9]{7}" -g -p'
+# This steps through commits and diffs:
 alias grlll='gitlog2 -search "^(diff|[a-z0-9]{7}) .*" -g -p'
 
 alias grem='git remote -v'
@@ -457,6 +460,11 @@ alias gb='git branch'
 alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
 # For remotes too, add: --all
 # Could also be Git View Tree or Git Tree View, although I might want to save those for gitv!  :P
+
+#alias gbs='git bisect start'
+alias gbg='git bisect good'
+alias gbb='git bisect bad'
+#alias gbr='git bisect reset'
 
 unalias gco 2>/dev/null   # REMOVEME
 #alias gco='git checkout'
@@ -595,7 +603,7 @@ gac() {
 if ! which verbosely >/dev/null
 then
 	verbosely() {
-		echo "[EXEC] % $*" >&2
+		printf "%s\n" "[EXEC] % $*" >&2
 		"$@"
 	}
 fi
@@ -807,6 +815,7 @@ gdv() {
 git_branch_status() {
     # Original: https://gist.github.com/Mark-Booth/5058384
     # This version by Joeytwiddle
+    # Similar functionality can be had from: git branch -vv | highlight -bold '\<behind\> [0-9]*' red | highlight -bold '\<ahead\> [0-9]*' green
 
     # Displays your git branches with a summary of how many commits ahead or behind the local is from its remote branch.
     # Also displays (through color/labels) which branches are ancestors of (have already been merged into) the current branch.
@@ -1080,5 +1089,7 @@ git_show_base_commit() {
 		glc -1 "$commitId"
 	fi
 }
+
+# If `git blame` is not going back far enough, consider using `git log -S<search_string>` or `git log -L<start_line>,<end_line>`
 
 # vim: ft=sh
