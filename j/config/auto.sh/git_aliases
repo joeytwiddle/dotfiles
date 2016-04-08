@@ -918,6 +918,13 @@ where:
                 else continue
                 fi
             fi
+        else
+          # Sometimes the remote branch may have been removed, but the local branch is still trying to track it
+          if ! git rev-parse "$remote" >/dev/null 2>&1
+          then
+            echo "Remote branch no longer exists: $remote" >&2
+            remote=""
+          fi
         fi
         # If we do not have a remote to compare to, display no counts, rather than relative to current branch, which is quite arbitrary (but can be achieved using $compareto if desired).
         if [ -n "$remote" ]
