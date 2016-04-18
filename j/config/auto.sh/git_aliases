@@ -14,6 +14,9 @@
 #
 #   gpo does git push origin <current_branch>
 #
+#   gss and gsp are git stash save and git stash pop respectively.  gsd shows
+#   the patch of your stop stash.
+#
 # Powerful tools:
 #
 #   gbs [-M] [.] is "git branch status", a nice way to see which branches are
@@ -41,18 +44,17 @@
 #   gwinp "git what is not pushed" lists commits on local branch not yet pushed
 #   gwinm "git what is not merged" lists new commits from remote not yet merged
 #
+#   git_status_plus sorts untracked files by modification date, and highlights
+#   new files created since you last ran it (so you don't forget to add them).
+#
 # I hope these shortcuts and tools will be of use to you.
 #
-# I rarely use the other aliases and functions in this file (except of course
-# indirectly those which are dependencies of the ones I do use!).
-#
 # Some of the functions (git_branch_status, git_branch_by_date,
-# git_status_plus) do not work on Mac OSX / FreeBSD because they require GNU
-# versions of sed, xargs and find.  However if you install the GNU coreutils,
-# gnu-sed and findutils packages (e.g. via Homebrew) and ensure they are on the
-# *front* of your PATH, then they should work fine.
+# git_status_plus) will only work on Mac OSX and FreeBSD if you have GNU
+# versions of sed, xargs and find near the front of your PATH.
 
-# If you think this file has too many comments in it, try: :hi Comment guifg=#222222
+# If you think this file has too many comments in it (you are right), try
+# hiding them with: :hi Comment guifg=#222222
 
 # CONSIDER: Turn the aliases into shellscripts so they are available from vim's command line?
 #       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)  jsh modules...
@@ -919,6 +921,13 @@ where:
                 else continue
                 fi
             fi
+        else
+          # Sometimes the remote branch may have been removed, but the local branch is still trying to track it
+          if ! git rev-parse "$remote" >/dev/null 2>&1
+          then
+            echo "Remote branch no longer exists: $remote" >&2
+            remote=""
+          fi
         fi
         # If we do not have a remote to compare to, display no counts, rather than relative to current branch, which is quite arbitrary (but can be achieved using $compareto if desired).
         if [ -n "$remote" ]
@@ -1089,6 +1098,8 @@ git_show_base_commit() {
 		glc -1 "$commitId"
 	fi
 }
+
+# `git remote prune origin [--dry-run]` is faster than `git fetch --prune`
 
 # If `git blame` is not going back far enough, consider using `git log -S<search_string>` or `git log -L<start_line>,<end_line>`
 
