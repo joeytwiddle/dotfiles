@@ -1095,14 +1095,16 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	" Vim highlights all the text between the first and last different characters on a changed line.
 	" But this plugin will find and display the exact differences, character by character.
+	" It can slow down Vim somewhat, especially when opening git mergetool, and then maximizing the window!
 	" https://github.com/rickhowe/diffchar.vim
-	map <silent> <Leader><Leader>dc<F7> <Plug>ToggleDiffCharAllLines
-	map <silent> <Leader><Leader>dc<F8> <Plug>ToggleDiffCharCurrentLine
-	nmap <silent> <Leader><Leader>dc[b <Plug>JumpDiffCharPrevStart
-	nmap <silent> <Leader><Leader>dc]b <Plug>JumpDiffCharNextStart
-	nmap <silent> <Leader><Leader>dc[e <Plug>JumpDiffCharPrevEnd
-	nmap <silent> <Leader><Leader>dc]e <Plug>JumpDiffCharNextEnd
-	call add(vamAddons,"github:rickhowe/diffchar.vim")
+	" Its default key mappings conflict with Unimpaired's [b and ]b, so we set our own mappings instead:
+	noremap <silent> <Leader><Leader>dc<F7> <Plug>ToggleDiffCharAllLines
+	noremap <silent> <Leader><Leader>dc<F8> <Plug>ToggleDiffCharCurrentLine
+	nnoremap <silent> <Leader><Leader>dc[b <Plug>JumpDiffCharPrevStart
+	nnoremap <silent> <Leader><Leader>dc]b <Plug>JumpDiffCharNextStart
+	nnoremap <silent> <Leader><Leader>dc[e <Plug>JumpDiffCharPrevEnd
+	nnoremap <silent> <Leader><Leader>dc]e <Plug>JumpDiffCharNextEnd
+	"call add(vamAddons,"github:rickhowe/diffchar.vim")
 
 	" }}}
 

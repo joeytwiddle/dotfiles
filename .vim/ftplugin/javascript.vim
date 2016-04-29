@@ -32,6 +32,10 @@ vnoremap <buffer> <Leader>F >gvdOfunction _ () {<CR><Esc>gPi}<Esc>
 nmap <buffer> <Leader>F Vip<Leader>F
 vnoremap <buffer> <Leader>V sunnamedVar<Esc>Ovar unnamedVar = <Esc>pa;<Esc>
 
+" Like WebStorm, when closing a block, indent all the lines inbetween
+" DISABLED because currently = does not indent function callbacks correctly when they come after a `).then(`
+"inoremap } }<Esc>v%=a
+
 
 
 " Convenient command for js-beautify

@@ -43,7 +43,7 @@ function! s:FindNextChange(moveKey, in_visual_mode, first_line, last_line)
   let startRow = line(".")
   let unwatedChar = s:GetCharUnderCursor()
   if g:move_once_at_start
-    exec "normal "a:moveKey
+    exec "normal ".a:moveKey
   endif
   let startColChars = getpos(".")[2]
   " TODO BUG: startCol is always 1 when in_visual_mode and without g:move_once_at_start
