@@ -55,6 +55,14 @@
 " Probably the best way to deal with this is to allow a regexp (or perhaps for clarity, a list of regexps) to pick out these special lines.  Each regexp might have some extra rules attached about how far to indent.  E.g. some users might prefer the \ to appear under the - in the previous example (depends whether he prefers the words aligned, or likes to see the vertical gap between '-'s).
 
 
+
+" If this version of Vim has the breakindent patch, then this plugin isn't needed.
+if exists('&breakindent')
+  finish
+endif
+
+
+
 " == Options ==
 
 " This character will be used to display the indent.  I like it blank ' '.
