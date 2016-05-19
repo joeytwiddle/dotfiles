@@ -274,6 +274,8 @@ alias grp='grp_safe'
 alias gmr='grp_safe'
 alias grpu='grp $(git_guess_upstream_branch)'
 alias gmru='gmr $(git_guess_upstream_branch)'
+alias gmrom='gmr origin/master'
+alias gmrod='gmr origin/develop'
 
 # This is for older versions of git (<1.7.0) which didn't accept the --all parameter.
 # We could actually perform the same action with the old built-in `git remote update`, but that won't let us fetch tags and do pruning.
@@ -319,6 +321,7 @@ alias gmud='verbosely git merge upstream/develop'
 
 alias gr='git reset'
 alias grh='gr --hard'
+alias grhu='grh "@{u}"'
 
 alias gcp='git cherry-pick'
 
@@ -1009,6 +1012,8 @@ gbs() {
   else cat
   fi
 }
+# git branch status by "date": most recent last
+alias gbsd='gbs -d'
 # git branch status "long": show all the details, takes longer
 alias gbsl='gbs -dM'
 # Alternatively, to get this all the time, you could do:
