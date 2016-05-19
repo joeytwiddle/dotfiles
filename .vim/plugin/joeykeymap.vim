@@ -1011,3 +1011,8 @@ inoremap <D-Enter> <Enter><Up><End>
 inoremap <S-Enter> <End><Enter>
 " Command-Option-Enter: Start editing a new line above the current line
 inoremap <D-> <Home><Enter><Up>
+nnoremap <D-[> <C-O>
+nnoremap <D-]> <C-I>
+" These do not work for me.  They have a default action of moving between tabs.
+"nnoremap <D-S-[> :bp<CR>
+"nnoremap <D-S-]> :bn<CR>
