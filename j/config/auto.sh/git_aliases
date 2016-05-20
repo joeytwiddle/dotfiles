@@ -325,7 +325,8 @@ alias grhu='grh "@{u}"'
 
 alias gcp='git cherry-pick'
 
-alias gri='git rebase -i'
+#alias gri='git rebase -i'
+alias gri='git rebase --interactive --autosquash'
 alias grc='git rebase --continue'
 
 alias gmt='git mergetool'
