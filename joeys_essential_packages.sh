@@ -251,6 +251,12 @@ install_package shotwell
 # - nvm
 # - rvm
 
+## Things I like to have installed in ~/src/
+# joeytwiddle/git-aware-prompt
+## https://github.com/tj/git-extras/blob/master/Commands.md
+# tj/git-extras
+# gitbits/git-shift
+
 # }}}
 
 
