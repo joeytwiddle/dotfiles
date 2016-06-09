@@ -412,16 +412,25 @@ autocmd VimLeave * silent !stty ixon
 		" :set guifont=Clean\ 8
 		"" Also with screen fonts, you have the option of using LucidaTypewriter, like Console but with sharp edges.  The only problem is that at size 8 its bold is weak: the chars are very slightly wider but no thicker.  At size 10 it is quite passable.
 		" :set guifont=LucidaTypewriter\ Medium\ 8
-		" TODO for Mac (_system_name is not always set; it is created by rvm):
-		" Solution: Check system("uname") instead (should be "Linux" or "Darwin")
-		if $_system_name == 'OSX'
-			" Popular, aspect like DejaVu Sans Mono / Liberation / Ubuntu Mono
-			":set guifont=Monaco:h12
-			" But I prefer the shorter one!
+		" For Mac
+		" (_system_name is not always set; it is created by rvm):
+		"if $_system_name == 'OSX'
+		" So we check g:os
+		" Alternatively: Check system("uname") instead (should be "Linux" or "Darwin")
+		if g:os == "Darwin"
+			" Popular default for many Mac editors, "the Comic Sans of monospaced fonts" @codinghorror
+			":set guifont=Monaco:h11
+			" But I prefer the shorter fatter one.  Less elegant.
 			:set guifont=Menlo\ Regular:h11
+			" Lucida Sans Typewriter is finer than Menlo:
+			:set guifont=Lucida\ Sans\ Typewriter\ Regular:h11
+			" Lucida console is far again, but a bit too squat in GVim
+			":set guifont=Lucida\ Console:h11
+			" On Mac, S11 and S12 are both quite short, but Squat is just about right.
+			":silent! :set guifont=Envy\ Code\ Squat:h13
+		elseif g:os == "Windows"
+			:set guifont=LucidaTypewriter\ 8
 		endif
-		" For Windows:
-		":set guifont=LucidaTypewriter\ 8
 		" Hide the menu and toolbar which I never use.
 		:set guioptions-=m
 		:set guioptions-=T
