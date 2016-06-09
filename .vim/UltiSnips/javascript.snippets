@@ -1,5 +1,5 @@
 
-snippet fun "function (fun)" !
+snippet fun "named function (fun)" !
 function ${1:function_name} (${2}) {
 	${VISUAL}$0
 }
@@ -11,8 +11,8 @@ function (${1}) {
 }
 endsnippet
 
-snippet ff "anonymous function (ff)" w
-function(${1}){
+snippet func "anonymous function (func)" w
+function (${1}) {
 	${VISUAL}$0
 }
 endsnippet
@@ -76,4 +76,12 @@ endsnippet
 
 snippet \log "console.log" w
 console.log("$0");
+endsnippet
+
+snippet log1 "console.log" w
+console.log("$0");
+endsnippet
+
+snippet log "console.log with line number" w
+console.log("[log] (" + new Error().stack.split('\n')[1].replace(/^ *at /, '').split('/').slice(-2).join('/') + ") $1:", $1);$0
 endsnippet

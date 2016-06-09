@@ -274,6 +274,8 @@ alias grp='grp_safe'
 alias gmr='grp_safe'
 alias grpu='grp $(git_guess_upstream_branch)'
 alias gmru='gmr $(git_guess_upstream_branch)'
+alias gmrom='gmr origin/master'
+alias gmrod='gmr origin/develop'
 
 # This is for older versions of git (<1.7.0) which didn't accept the --all parameter.
 # We could actually perform the same action with the old built-in `git remote update`, but that won't let us fetch tags and do pruning.
@@ -319,10 +321,12 @@ alias gmud='verbosely git merge upstream/develop'
 
 alias gr='git reset'
 alias grh='gr --hard'
+alias grhu='grh "@{u}"'
 
 alias gcp='git cherry-pick'
 
-alias gri='git rebase -i'
+#alias gri='git rebase -i'
+alias gri='git rebase --interactive --autosquash'
 alias grc='git rebase --continue'
 
 alias gmt='git mergetool'
@@ -461,6 +465,8 @@ alias glf='gitlog2 -search "^[^ ]+" --stat'
 alias glfp='gitlog2 -search "^[a-z0-9]{7}" --numstat'
 
 alias gb='git branch'
+# Git Branch Force can be used to change the HEAD of a branch that is not the current branch
+alias gbf='git branch -f'
 
 # Git View Branches (tree-like)
 alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
@@ -845,7 +851,7 @@ git_branch_status() {
 
     local usage option filter OPTARG compareto showancestors verbose branch_name_regexp
 
-    local current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch
+    local current_branch local remote DELTAS LEFT_AHEAD RIGHT_AHEAD preBranch guessed_remote
     local local_branch_commit_hash common_commit_between_branch_and_current abstatus
 
     local sorting=
@@ -910,14 +916,17 @@ where:
         #[ -z "$remote" ] && continue
         # This is an assumption I made for our project - that if a branch does not have an upstream set, then we should assume the upstream is a branch on 'origin' with the same name.
         # It could be avoided if we used --track when initially creating the local branch with git branch or git checkout.  Tracking can also be setup retrospectively with `git branch -u <remote_branch>` in Git > 1.8.0 or `git branch --set-upstream <local_branch> <remote_branch>` in Git > 1.7.0.
+				guessed_remote=""
         if [ -z "$remote" ]
         then
+					  guessed_remote=" ?"
             # If no upstream has been set, assume a remote branch with the same name
             remote="origin/$local"
             if ! git branch --list -r "$remote" | grep . >/dev/null
             then
                 # No remote branch exists
                 remote=""
+								guessed_remote=""
                 # But if this is the current branch, or we are in verbose mode, we might still like to display it anyway.
                 # However ahead/behind counts are meaningless without a remote.
                 if [ "$local" = "$current_branch" ] || [ -n "$verbose" ]
@@ -965,7 +974,7 @@ where:
             then abstatus="(none)"
             else abstatus="(ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD)"
             fi
-            echo "$preBranch$local $if_merged$abstatus $remote"
+            echo "$preBranch$local $abstatus $remote$guessed_remote"
         fi
     done
 }
@@ -1010,6 +1019,8 @@ gbs() {
   else cat
   fi
 }
+# git branch status by "date": most recent last
+alias gbsd='gbs -d'
 # git branch status "long": show all the details, takes longer
 alias gbsl='gbs -dM'
 # Alternatively, to get this all the time, you could do:

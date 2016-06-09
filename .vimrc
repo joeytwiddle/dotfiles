@@ -428,14 +428,16 @@ autocmd VimLeave * silent !stty ixon
 		" So we check g:os
 		" Alternatively: Check system("uname") instead (should be "Linux" or "Darwin")
 		if g:os == "Darwin"
-			" Popular, aspect like DejaVu Sans Mono / Liberation / Ubuntu Mono
-			:set guifont=Monaco:h11
+			" Popular default for many Mac editors, "the Comic Sans of monospaced fonts" @codinghorror
+			":set guifont=Monaco:h11
 			" But I prefer the shorter fatter one.  Less elegant.
-			":set guifont=Menlo\ Regular:h11
-			" But even more I prefer to install Lucida Console and then use that:
+			:set guifont=Menlo\ Regular:h11
+			" Lucida Sans Typewriter is finer than Menlo:
+			:set guifont=Lucida\ Sans\ Typewriter\ Regular:h11
+			" Lucida console is far again, but a bit too squat in GVim
 			":set guifont=Lucida\ Console:h11
 			" On Mac, S11 and S12 are both quite short, but Squat is just about right.
-			:silent! :set guifont=Envy\ Code\ Squat:h13
+			":silent! :set guifont=Envy\ Code\ Squat:h13
 		elseif g:os == "Windows"
 			:set guifont=LucidaTypewriter\ 8
 		endif

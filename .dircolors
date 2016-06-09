@@ -125,6 +125,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .encrypted 00;33
 .ssd 00;33 # 8-bit disc image
 .jnlp 00;33 # Java WebStart Launch file
+.dmg 00;33 # Mac disk image
 
 # magenta = Media
 # would of course be nice to distinguish video, raster, vector, audio
@@ -201,23 +202,30 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .fig 01;35
 .obj 01;35 # tfig
 .eps 01;35
-.ps 01;35 # maybe should be under docs?
+.ps 01;35 # maybe should be under docs, alongside pdf?
 # SVG
 .svg 01;35
 # StarOffice drawings
 .sda 01;35
-# Windows SVG?
+# Windows metafile format
 .wmf 01;35
+# Fonts
+.fon 01;35
+.FON 01;35
+.font 01;35
+.ttf 01;35
+.TTF 01;35
+.woff 01;35
+.pfb 01;35
+.otf 01;35
+.bdf 01;35
+.pcf 01;35
+.ufm 01;35
 # Subtitles
 .srt 01;36
 .sub 01;36
 .sbv 01;36
 
-# ?
-.gl 01;37
-.dl 01;37
-
-## How odd.  } in vim usually skips a paragraph, but here for me it stops on .ppt, and again later on .sh!
 # yellow
 # Documents (human readable) (and editing)
 .diff 01;33 # Despite being basically the same, I have given diffs and patches different colours!
