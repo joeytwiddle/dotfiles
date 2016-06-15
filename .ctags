@@ -184,4 +184,5 @@
 --langdef=pug
 --langmap=pug:+.jade,pug:+.blade,pug:+.pug
 --regex-pug=/^[ \t]*[^"'()]*#([A-Za-z0-9_-]*)/\1/i,id/
+--regex-pug=/^[ \t]*mixin [ \t]*([A-Za-z0-9_$]*)[ \t]*\(/\1/m,mixin/
 
