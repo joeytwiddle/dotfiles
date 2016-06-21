@@ -1048,6 +1048,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	call add(vamAddons,"github:itchyny/vim-qfedit")      " Allows you to edit the quickfix list.
 
+	" :AnsiEsc interprets any ANSI escape sequences in the current file, conceals them, and uses them for highlighting
+	" Beware that vimpager exposes its own version of AnsiEsc !
+	"call add(vamAddons,"github:powerman/vim-plugin-AnsiEsc")
 	" Includes executables vimpager and vimcat (which pretty-print files using Vim's syntax highlighting!)
 	call add(vamAddons,"github:rkitover/vimpager")
 
