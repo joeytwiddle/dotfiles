@@ -262,11 +262,39 @@ alias gpr='gpr_safe'
 alias gpp='gpr && git push'
 # If you have already fetched the remote branch, or you want to rebase against a branch that isn't upstream, you can use this
 grp_safe() {
+	local other_branch="$1"
+	[ -z "${other_branch}" ] && other_branch="$(git_guess_upstream_branch)" || shift
+
+	# Optional safety check: If we will be cherry-picking a commit that is already in other branches, rebasing could cause confusion for those branches.
+	# But that's not really a problem if those other branches are essentially throwaway branches, or if they are the upstream which we intend to override.
+	local base_commit="$(git_find_base_commit "${other_branch}" HEAD)"
+	local first_commit_after_base="$(git rev-list "${base_commit}..HEAD" | tail -n 1)"
+	if [ -z "${first_commit_after_base}" ]
+	then
+		# This could happen if you have no local commits that need to be rebased, e.g. if the other_branch already contains this commit.
+		echo
+		echo "I could not find any local commits after the base commit: ${base_commit}"
+		echo
+	else
+		local branches_containing_rebased_commit="$(git branch -vv -a --contains "${first_commit_after_base}")"
+		# We always expect one commit: the current one.  But if there is more than one...
+		local count_branches_containing_rebased_commit="$(printf "%s\n" "${branches_containing_rebased_commit}" | wc -l)"
+		if [ "${count_branches_containing_rebased_commit}" -gt 1 ]
+		then
+			echo
+			echo "WARNING!  The following branches contain one of the commits that will be rebased:"
+			printf "%s\n" "${branches_containing_rebased_commit}"
+			echo
+			# CONSIDER: Could ask for confirmation to continue (Y/N)?
+		fi
+	fi
+
+	# Helpful: log the way back
 	local current_commit="$(git rev-parse HEAD)"
 	echo "Current commit before rebase (in case abort desired): ${current_commit}"
-	local other_branch="$1"
-	[ -z "$other_branch" ] && other_branch="$(git_guess_upstream_branch)" || shift
-	git rebase --preserve-merges "$other_branch" "$@"
+	echo
+
+	git rebase --preserve-merges "${other_branch}" "$@"
 }
 #alias grp='git rebase --preserve-merges "$(git_guess_upstream_branch)"'
 alias grp='grp_safe'
