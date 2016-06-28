@@ -886,8 +886,12 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	highlight EasyMotionTarget2Second cterm=bold ctermbg=0 ctermfg=blue   gui=bold guifg=blue
 	" The default green move highlight made it hard to see where my cursor was.  Something darker contrasts better.
 	highlight EasyMotionMoveHL  ctermbg=darkblue guibg=darkblue
-	let g:EasyMotion_keys = 'asdfghjklqwertyuiopzxcvbnm;'
-	"let g:EasyMotion_keys = 'asdfghjkl;'
+	" Default: All standard QWERTY keys, prefer 'f' 'j' and ';' for grouping.
+	"let g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfj;'
+	" Home row keys only, again with the keys which are easiest to type last.
+	let g:EasyMotion_keys = 'asdghklfj;'
+	" Other keys I feel might be easy to type: R, T, U, Q, M and C
+	" Space could also be an option, but it should probably be rendered as `_` so we can see it!
 	"let g:EasyMotion_do_shade = 1             " Without this I confuse yellow/green syntax with yellow/green targets
 	"let g:EasyMotion_do_shade_for_flash = 0   " But it's too slow and disruptive when we are just flashing
 	"let g:EasyMotion_move_highlight = 0
