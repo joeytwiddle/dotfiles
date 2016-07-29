@@ -638,6 +638,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 " >>> Addons (the neat way) {{{
 
+	" Note that vim-addon-manager clones shallow git history, which is faster and saves disk space, but can make a mess of merges.
+	" To expand a repository to full history, simply: git fetch --depth=999999
+
 	" >>> Plugins from the Cloud {{{
 
 	"" TODO: All these plugins increase vim's startup time.
@@ -667,10 +670,22 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" call add(vamAddons,"VOoM")                           " Another outliner
 	" call add(vamAddons,'github:xolox/vim-easytags')      " Runs ctags automatic for you, to update them
 	"call add(vamAddons,'github:ervandew/supertab')         " Seems a lot like another_tabcompletion.vim but the list appears backwards! =/
-	"call add(vamAddons,'UltiSnips')                        " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
-	call add(vamAddons,'github:joeytwiddle/ultisnips')     " Fix that restores my usual Tab-completion.
+
+	" asyncfinder wants python 2 (aka python), UltiSnips wants python3.
+	" So let's try:
+	"   brew reinstall macvim --with-python --with-python3
+	" Optional: --without-python
+	" Actually no matter what arguments I try giving it, it always says:
+	"   MacVim can no longer be brewed with dynamic support for both Python versions.
+	"   Only Python 3 support has been provided.
+
 	let g:UltiSnipsJumpForwardTrigger="<tab>"
 	let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+	" With MacVim, UltiSnips picks python3 by default, which stops Asyncfinder from working.  Specifying python2 here prevents that problem.
+	let g:UltiSnipsUsePythonVersion = 2
+	"call add(vamAddons,'UltiSnips')                        " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
+	call add(vamAddons,'github:joeytwiddle/ultisnips')     " Fix that restores my usual Tab-completion.
+
 	" call add(vamAddons,'github:troydm/easybuffer.vim')
 	" call add(vamAddons,'github:chrisbra/NrrwRgn')
 
