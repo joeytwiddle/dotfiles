@@ -350,11 +350,16 @@ alias gmud='verbosely git merge upstream/develop'
 alias gr='git reset'
 alias grh='gr --hard'
 alias grhu='grh "@{u}"'
+alias grhom='grh origin/master'
+alias grhod='grh origin/develop'
 
 alias gcp='git cherry-pick'
 
 #alias gri='git rebase -i'
 alias gri='git rebase --interactive --autosquash'
+alias griu='gri @{u}'
+alias griom='gri origin/master'
+alias griod='gri origin/develop'
 alias grc='git rebase --continue'
 
 alias gmt='git mergetool'
@@ -491,6 +496,12 @@ alias glf='gitlog2 -search "^[^ ]+" --stat'
 # Just commit info, one per line
 # Git Log Files Porcelain: does not abbreviate filenames, shows numbers instead of '+'s and '-'s
 alias glfp='gitlog2 -search "^[a-z0-9]{7}" --numstat'
+
+# Some common branches I like to read/search
+alias glom='gl origin/master'
+alias glod='gl origin/develop'
+alias glum='gl upstream/master'
+alias glud='gl upstream/develop'
 
 alias gb='git branch'
 # Git Branch Force can be used to change the HEAD of a branch that is not the current branch

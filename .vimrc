@@ -648,6 +648,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 " >>> Addons (the neat way) {{{
 
+	" Note that vim-addon-manager clones shallow git history, which is faster and saves disk space, but can make a mess of merges.
+	" To expand a repository to full history, simply: git fetch --depth=999999
+
 	" >>> Plugins from the Cloud {{{
 
 	"" TODO: All these plugins increase vim's startup time.
@@ -677,10 +680,22 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" call add(vamAddons,"VOoM")                           " Another outliner
 	" call add(vamAddons,'github:xolox/vim-easytags')      " Runs ctags automatic for you, to update them
 	"call add(vamAddons,'github:ervandew/supertab')         " Seems a lot like another_tabcompletion.vim but the list appears backwards! =/
-	"call add(vamAddons,'UltiSnips')                        " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
-	call add(vamAddons,'github:joeytwiddle/ultisnips')     " Fix that restores my usual Tab-completion.
+
+	" asyncfinder wants python 2 (aka python), UltiSnips wants python3.
+	" So let's try:
+	"   brew reinstall macvim --with-python --with-python3
+	" Optional: --without-python
+	" Actually no matter what arguments I try giving it, it always says:
+	"   MacVim can no longer be brewed with dynamic support for both Python versions.
+	"   Only Python 3 support has been provided.
+
 	let g:UltiSnipsJumpForwardTrigger="<tab>"
 	let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+	" With MacVim, UltiSnips picks python3 by default, which stops Asyncfinder from working.  Specifying python2 here prevents that problem.
+	let g:UltiSnipsUsePythonVersion = 2
+	"call add(vamAddons,'UltiSnips')                        " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
+	call add(vamAddons,'github:joeytwiddle/ultisnips')     " Fix that restores my usual Tab-completion.
+
 	" call add(vamAddons,'github:troydm/easybuffer.vim')
 	" call add(vamAddons,'github:chrisbra/NrrwRgn')
 
@@ -986,32 +1001,32 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	endif
 	" TODO: Airline whitespace option slows down Vim on large files, between every keystroke!  We should ensure it is never automatically enabled when we open a large file.
 
-	"call add(vamAddons, "github:Shougo/vimproc.vim")       " Used by unite for async; requires `make` after install!
+	call add(vamAddons, "github:Shougo/vimproc.vim")       " Used by unite for async; requires `make` after install!
 	call add(vamAddons, "github:Shougo/unite.vim")         " Buffer and file explorer, all in one plugin
 	let g:unite_source_history_yank_enable = 1
-	nnoremap <silent> <Leader>u* :Unite source<CR>A*
-	nnoremap <silent> <Leader>uu :Unite<CR>A*
-	nnoremap <silent> <Leader>ub :Unite buffer<CR>A
-	nnoremap <silent> <Leader>uf :Unite file_point file file/new<CR>A
-	nnoremap <silent> <Leader>ua :Unite file_point file_rec file/new<CR>A
-	"nnoremap <silent> <Leader>ua :Unite find<CR>A   " Requires vimproc
-	nnoremap <silent> <Leader>ug :Unite file_rec/git<CR>A
-	nnoremap <silent> <Leader>ud :Unite directory directory/new<CR>A
-	nnoremap <silent> <Leader>uj :<C-u>Unite -buffer-name=jumps change jump<CR>A
-	nnoremap <silent> <Leader>uc :Unite command<CR>A
-	nnoremap <silent> <Leader>ul :Unite line<CR>A
-	nnoremap <silent> <Leader>up :Unite process<CR>A
-	nnoremap <silent> <Leader>ur :Unite runtimepath<CR>A
-	nnoremap <silent> <Leader>us :Unite runtimepath<CR>A
-	nnoremap <silent> <Leader>uh :Unite history/yank register<CR>A
-	nnoremap <silent> <Leader>uy :Unite history/yank<CR>A
-	nnoremap <silent> <Leader>ue :Unite launcher<CR>A
-	nnoremap <silent> <Leader>uH :Unite output:highlight<CR>A
-	nnoremap <silent> <Leader>uS :Unite output:syntax<CR>A
-	nnoremap <silent> <Leader>uM :Unite output:mapping<CR>A
-	nnoremap <silent> <Leader>uA :Unite output:autocmd<CR>A
-	"nnoremap <silent> <Leader>uF :Unite output:function<CR>A   " more colorful than function but does not offer 'call' action
-	nnoremap <silent> <Leader>uF :Unite function<CR>A
+	nmap <silent> <Leader>u* :Unite source<CR>A*
+	nmap <silent> <Leader>uu :Unite<CR>A*
+	nmap <silent> <Leader>ub :Unite buffer<CR>A
+	nmap <silent> <Leader>uf :Unite file_point file file/new<CR>A
+	nmap <silent> <Leader>ua :Unite file_point file_rec file/new<CR>A
+	"nmap <silent> <Leader>ua :Unite find<CR>A   " Requires vimproc
+	nmap <silent> <Leader>ug :Unite file_rec/git<CR>A
+	nmap <silent> <Leader>ud :Unite directory directory/new<CR>A
+	nmap <silent> <Leader>uj :<C-u>Unite -buffer-name=jumps change jump<CR>A
+	nmap <silent> <Leader>uc :Unite command<CR>A
+	nmap <silent> <Leader>ul :Unite line<CR>A
+	nmap <silent> <Leader>up :Unite process<CR>A
+	nmap <silent> <Leader>ur :Unite runtimepath<CR>A
+	nmap <silent> <Leader>us :Unite runtimepath<CR>A
+	nmap <silent> <Leader>uh :Unite history/yank register<CR>A
+	nmap <silent> <Leader>uy :Unite history/yank<CR>A
+	nmap <silent> <Leader>ue :Unite launcher<CR>A
+	nmap <silent> <Leader>uH :Unite output:highlight<CR>A
+	nmap <silent> <Leader>uS :Unite output:syntax<CR>A
+	nmap <silent> <Leader>uM :Unite output:mapping<CR>A
+	nmap <silent> <Leader>uA :Unite output:autocmd<CR>A
+	"nmap <silent> <Leader>uF :Unite output:function<CR>A   " more colorful than function but does not offer 'call' action
+	nmap <silent> <Leader>uF :Unite function<CR>A
 	" We cannot do these until after it has loaded!
 	"call unite#filters#matcher_default#use(['matcher_fuzzy'])
 	"call unite#custom#profile('default', 'context', { 'winheight': 50, })
@@ -1028,11 +1043,11 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"au BufEnter unite imap <buffer> <Tab>   <Plug>(unite_loop_cursor_down)
 	"au BufEnter unite imap <buffer> <S-Tab> <Plug>(unite_loop_cursor_up)
 	" Paste from the yank history (may need unite_source_history_yank_enable)
-	nnoremap <silent> <leader>P :Unite -start-insert history/yank<CR>
+	nmap <silent> <leader>P :Unite -start-insert history/yank<CR>
 	" Trigger the git menu
-	nnoremap <silent> <leader>g :Unite -silent -start-insert menu:git<CR>
+	nmap <silent> <leader>g :Unite -silent -start-insert menu:git<CR>
 	" Open all menus with useful stuff (WIP?)
-	nnoremap <silent> <leader>j :Unite -silent -start-insert menu:all menu:git<CR>
+	nmap <silent> <leader>j :Unite -silent -start-insert menu:all menu:git<CR>
 
 	"call add(vamAddons,"github:dahu/vimple")             " ...
 	"call add(vamAddons,"github:dahu/VimFindsMe")         " Edit args, edit options containing lists, cd into relevant folders

@@ -10,7 +10,7 @@
 set shm=atT
 " Percentage down file: %P
 " Old position display: (%0l/%-0L,%c~%v)
-set statusline=%<%f\ %#Error#%m%##%h%r%=0x%02B\ %v\|%c/%{len(getline('.'))}\ :%0l/%-0L\ %0n\^%<
+set statusline=%<%f\ %#Error#%m%##%h%w%r%=0x%02B\ %v\|%c/%{len(getline('.'))}\ :%0l/%-0L\ %0n\^%<
 " We highlight the modified flag to make it stand out.
 " I don't really want %m to show [-] when nomodifiable, but since it does, I highlight %h%r ("[Help][RO]") also, so that is clear why there is something highlighted.
 " OK fixed, now we show [+] and [-] in different places, so only [+] gets highlighted.

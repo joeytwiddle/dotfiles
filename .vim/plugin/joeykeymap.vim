@@ -514,7 +514,7 @@ nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:1 foldmethod=expr 
 " nnoremap <C-Z> :CloseBuffer<Enter>
 "" But now GVim minimizes the window on Ctrl-Z instead!  Let's intercept it and let it do nothing.
 "nnoremap <C-Z> :<CR>
-nnoremap <C-Z> :echoerr "This is Vim not Tmux!"<CR>
+"nnoremap <C-Z> :echoerr "This is Vim not Tmux!"<CR>
 "" CloseBuffer is implemented in (kwbd.vim)
 
 " We cannot use <Ctrl-S> for save because many terminals will just swallow
@@ -524,7 +524,7 @@ nnoremap <C-Z> :echoerr "This is Vim not Tmux!"<CR>
 "inoremap S <Esc>:w<Enter>i
 " Putting a custom mapping on S was a bad idea.  Because if muscle-memory tries to use it on a Vim without my keybinds, I end up clearing part of the current line and entering insert mode, which is probably terrifying for whoever is watching me edit.  Let's retrain the muscles to use Z instead:
 nnoremap <silent> S :echohl ErrorMsg <Bar> echo "NOT SAVED!  Press Z to save." <Bar> echohl<Enter>
-nnoremap Z :w<Enter>
+"nnoremap Z :w<Enter>
 " Oh damnit Z was a little better, but not much.  Although Z does nothing on default Vim, ZZ is save-and-quit!  :S
 " We could instead go for something safer and easier to reach that I never use, e.g. L or H.  (Currently I have l seek forwards and L seek back, but I hardly ever use them.)
 " Finally we could go for Ctrl-s which is safe given that I know Ctrl-q.  The difficulty here it ensuring it is executed when vim is started by other programs, e.g. git merge or visudo.
@@ -542,6 +542,11 @@ nnoremap Q :q<Enter>
 "if $_system_name == 'OSX'
 "	nmap <d-s> <C-s>
 "endif
+
+" The default ZZ gets confused by MiniBufExplorer
+" Normally ZZ quits just the current window, not the whole session.
+" Perhaps I should just set MBE to close when it is the last buffer.
+nnoremap ZZ :wqa<Enter>
 
 " If there is more than one matching tag, let the user choose.
 nnoremap <C-]> g<C-]>
@@ -647,6 +652,7 @@ autocmd BufReadPost *.css              vnoremap <buffer> <D-?>     :s+^\(\s*\)/[
 "autocmd BufReadPost *.{c,cpp,C,c++,js} vnoremap <buffer> <Leader>? :s+^\(\s*\)//+\1+<Enter>:set nohlsearch<CR>
 "autocmd BufReadPost *.{c,cpp,C,c++,js} vnoremap <buffer> <D-?>     :s+^\(\s*\)//+\1+<Enter>:set nohlsearch<CR>
 " TODO: If we don't want to clobber the search pattern, we could store and retore the value of the @/ variable before and after.
+"       Another way to avoid clobbering the search pattern is to prepend :keeppatterns although that wasn't as easy as I had hoped.
 " TODO: We should use a function to generate the above.  That same function could setup F5 and F6 how I currently do in ~/.vim/ftplugin/*.vim
 " e.g. :call ThisBufferUsesCommentSymbol("/*", "*/")
 "   or :call ThisBufferUsesCommentSymbol("#")
