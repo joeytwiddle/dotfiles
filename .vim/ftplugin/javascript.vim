@@ -166,9 +166,16 @@ function! s:LoadNodeModule()
   let fname = cfile
   if !filereadable(fname)
     let fname = s:SeekFile([expand("%:h"), '.', './node_modules'], ['', '.js'], cfile)
+    " Node looks in <package>/index.js first
+    if !filereadable(fname)
+      let fname = s:SeekFile(['./node_modules/' . cfile . '/'], ['', '.js'], 'index.js')
+    endif
+    " But <package>/lib/index.js is quite a common location
     if !filereadable(fname)
       let fname = s:SeekFile(['./node_modules/' . cfile . '/lib'], ['', '.js'], 'index.js')
     endif
+    " TODO: In fact the entry point file location is configurable in
+    " package.json, so really we should read that!
   endif
   if filereadable(fname)
     let fname = simplify(fname)
