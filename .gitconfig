@@ -45,7 +45,7 @@
 	# May not be for everyone!  Actually changes your files as you commit them!
 	# TODO: Look up what the hell this does and document it!
 	#whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
-	excludesfile = /home/joey/.gitignore.global
+	excludesfile = ~/.gitignore.global
 	# Wrap lines when reading diffs
 	# This sometimes drops the top of the log off the top of the screen, which is annoying
 	#pager = less -r
