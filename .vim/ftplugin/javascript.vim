@@ -170,12 +170,17 @@ function! s:LoadNodeModule()
     if !filereadable(fname)
       let fname = s:SeekFile(['./node_modules/' . cfile . '/'], ['', '.js'], 'index.js')
     endif
-    " But <package>/lib/index.js is quite a common location
+    " But <package>/main.js is quite a common location
+    if !filereadable(fname)
+      let fname = s:SeekFile(['./node_modules/' . cfile . '/'], ['', '.js'], 'main.js')
+    endif
+    " And <package>/lib/index.js is quite a common location
     if !filereadable(fname)
       let fname = s:SeekFile(['./node_modules/' . cfile . '/lib'], ['', '.js'], 'index.js')
     endif
     " TODO: In fact the entry point file location is configurable in
     " package.json, so really we should read that!
+    " We could assume node is available, and do: node --eval 'fs=require("fs");data=JSON.parse(fs.readFileSync("./package.json"));console.log(data.bin)'
   endif
   if filereadable(fname)
     let fname = simplify(fname)
