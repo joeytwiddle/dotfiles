@@ -617,7 +617,15 @@ alias gsl='git stash list --date=relative --oneline | PADDING=0 DELIM=" " number
 alias gsd='git show stash@{0}'
 # Git Stash (diff) Files shows the files changed (like --stat)
 alias gsf='git stash show'
-# TODO: I would actually like an easy way to display the diffs for all the stashes, i.e. run gsd for every stash id
+# Git Stash List Diffs: lists all stashed commits, displaying their diffs
+gsld() {
+	local stashes="$(git stash list | cut -d ':' -f 1)"
+	local commit_id
+	for commit_id in ${stashes}
+	do git -c color.diff=always show "${commit_id}"
+	done |
+	less -R +'/(^commit .*|^diff .*)'
+}
 
 grho() {
 	local current_branch="$(git_get_current_branch)"
