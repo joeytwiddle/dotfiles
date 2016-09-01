@@ -243,6 +243,37 @@ alias gap='ga -p'
 # This is better used for git cherry-pick, as that is a greater saving, and I use it more often.
 #alias gcp='gc -p'
 
+# Perform git commit --fixup and do the rebase immediately
+git_commit_immediate_fixup() {
+	local commit_to_amend="$1"
+	if [ -z "$commit_to_amend" ]
+	then
+		echo "You must provide a commit to fixup!"
+		return
+	fi
+
+	# We need a static commit ref, in case the commit is something relative like HEAD~
+	commit_to_amend="$(git rev-parse "${commit_to_amend}")"
+
+	git commit --fixup "${commit_to_amend}"
+
+	echo
+	echo "Performing rebase:"
+
+	# We don't really need to manage the stash ourselves here, because git rebase has an --autostash option.
+	# But I have kept this pattern anyway, in case I need it some time in the future.
+	local stashed_commit="$(git stash create)"
+	git reset --hard
+
+	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
+	EDITOR=true git rebase -i --autosquash --preserve-merges "${commit_to_amend}~"
+
+	if [ -n "${stashed_commit}" ]
+	then git stash apply "${stashed_commit}"
+	fi
+}
+alias gcf='git_commit_immediate_fixup'
+
 if [ -n "$ZSH_NAME" ]
 then
 	: #compdef ga=git
