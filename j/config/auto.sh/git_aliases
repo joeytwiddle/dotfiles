@@ -512,10 +512,10 @@ alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
 # For remotes too, add: --all
 # Could also be Git View Tree or Git Tree View, although I might want to save those for gitv!  :P
 
-#alias gbs='git bisect start'
-alias gbg='git bisect good'
-alias gbb='git bisect bad'
-#alias gbr='git bisect reset'
+#alias gbs='git_in_root_dir git bisect start'
+alias gbg='git_in_root_dir git bisect good'
+alias gbb='git_in_root_dir git bisect bad'
+#alias gbr='git_in_root_dir git bisect reset'
 
 unalias gco 2>/dev/null   # REMOVEME
 #alias gco='git checkout'
@@ -1150,6 +1150,14 @@ git_show_base_commit() {
 		#git log --pretty=oneline -1 "$commitId"
 		glc -1 "$commitId"
 	fi
+}
+
+git_in_root_dir() {
+	(
+		git_root_folder="$(git rev-parse --show-toplevel)"
+		cd "${git_root_folder}"
+		"$@"
+	)
 }
 
 # `git remote prune origin [--dry-run]` is faster than `git fetch --prune`
