@@ -243,6 +243,37 @@ alias gap='ga -p'
 # This is better used for git cherry-pick, as that is a greater saving, and I use it more often.
 #alias gcp='gc -p'
 
+# Perform git commit --fixup and do the rebase immediately
+git_commit_immediate_fixup() {
+	local commit_to_amend="$1"
+	if [ -z "$commit_to_amend" ]
+	then
+		echo "You must provide a commit to fixup!"
+		return
+	fi
+
+	# We need a static commit ref, in case the commit is something relative like HEAD~
+	commit_to_amend="$(git rev-parse "${commit_to_amend}")"
+
+	git commit --fixup "${commit_to_amend}"
+
+	echo
+	echo "Performing rebase:"
+
+	# We don't really need to manage the stash ourselves here, because git rebase has an --autostash option.
+	# But I have kept this pattern anyway, in case I need it some time in the future.
+	local stashed_commit="$(git stash create)"
+	git reset --hard
+
+	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
+	EDITOR=true git rebase -i --autosquash --preserve-merges "${commit_to_amend}~"
+
+	if [ -n "${stashed_commit}" ]
+	then git stash apply "${stashed_commit}"
+	fi
+}
+alias gcf='git_commit_immediate_fixup'
+
 if [ -n "$ZSH_NAME" ]
 then
 	: #compdef ga=git
@@ -512,10 +543,10 @@ alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
 # For remotes too, add: --all
 # Could also be Git View Tree or Git Tree View, although I might want to save those for gitv!  :P
 
-#alias gbs='git bisect start'
-alias gbg='git bisect good'
-alias gbb='git bisect bad'
-#alias gbr='git bisect reset'
+#alias gbs='git_in_root_dir git bisect start'
+alias gbg='git_in_root_dir git bisect good'
+alias gbb='git_in_root_dir git bisect bad'
+#alias gbr='git_in_root_dir git bisect reset'
 
 unalias gco 2>/dev/null   # REMOVEME
 #alias gco='git checkout'
@@ -618,7 +649,15 @@ alias gsl='git stash list --date=relative --oneline | PADDING=0 DELIM=" " number
 alias gsd='git show stash@{0}'
 # Git Stash (diff) Files shows the files changed (like --stat)
 alias gsf='git stash show'
-# TODO: I would actually like an easy way to display the diffs for all the stashes, i.e. run gsd for every stash id
+# Git Stash List Diffs: lists all stashed commits, displaying their diffs
+gsld() {
+	local stashes="$(git stash list | cut -d ':' -f 1)"
+	local commit_id
+	for commit_id in ${stashes}
+	do git -c color.diff=always show "${commit_id}"
+	done |
+	less -R +'/(^commit .*|^diff .*)'
+}
 
 grho() {
 	local current_branch="$(git_get_current_branch)"
@@ -1151,6 +1190,14 @@ git_show_base_commit() {
 		#git log --pretty=oneline -1 "$commitId"
 		glc -1 "$commitId"
 	fi
+}
+
+git_in_root_dir() {
+	(
+		git_root_folder="$(git rev-parse --show-toplevel)"
+		cd "${git_root_folder}"
+		"$@"
+	)
 }
 
 # `git remote prune origin [--dry-run]` is faster than `git fetch --prune`

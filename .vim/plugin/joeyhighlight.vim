@@ -201,21 +201,21 @@ function! Joeyhighlight()
 	"" Might belong better in after/syntax/<lang>.vim
 
 	" Haskell:
-	highlight hsStructure ctermfg=DarkYellow
-	highlight hsOperator ctermfg=DarkCyan
+	highlight hsStructure ctermfg=DarkYellow guifg=Yellow
+	highlight hsOperator ctermfg=DarkCyan guifg=Cyan
 
 	" Prolog
-	highlight prologClauseHead ctermfg=DarkCyan
+	highlight prologClauseHead ctermfg=DarkCyan guifg=Cyan
 
 	" Log4j:
 	"highlight log4jDebug ctermfg=White
 	"highlight log4jInfo  ctermfg=DarkGreen
 	"highlight log4jWarn  ctermfg=Yellow
 	"highlight log4jError ctermfg=Red
-	highlight log4jDebug ctermfg=Grey
-	highlight log4jInfo  ctermfg=White
-	highlight log4jWarn  ctermfg=Yellow
-	highlight log4jError ctermfg=Red
+	highlight log4jDebug ctermfg=Grey   guifg=Grey
+	highlight log4jInfo  ctermfg=White  guifg=White
+	highlight log4jWarn  ctermfg=Yellow guifg=Yellow
+	highlight log4jError ctermfg=Red    guifg=#ff8888
 
 	"" For GNU diffs:
 	"if &filetype == "diff" "" It appears that at this point we don't know the filetype
@@ -230,9 +230,9 @@ function! Joeyhighlight()
 	":so /home/joey/linux/.vim/joeyfolding.vim
 
 	"" For shellscript:
-	highlight shOption ctermfg=blue cterm=bold
-	highlight shCommandSub ctermfg=red
-	highlight shOperator ctermfg=yellow " cterm=bold
+	highlight shOption ctermfg=blue cterm=bold guifg=#8888ff gui=bold
+	highlight shCommandSub ctermfg=red guifg=#ff8888
+	highlight shOperator ctermfg=yellow guifg=yellow   " cterm=bold
 
 	"" Highlight search (doesn't work if called at top of this file!)
 	set hlsearch
@@ -254,7 +254,7 @@ function! Joeyhighlight()
 	"highlight StatusLineNC term=reverse cterm=reverse ctermfg=grey ctermbg=black
 	"" cterm=bold was showing hiddens chars - specifically "^^^^^^^"s I didn't like.
 	" highlight StatusLine term=reverse cterm=none ctermfg=darkblue ctermbg=white gui=none,underline guifg=#000066 guibg=white
-  " We get stronger white and blue in reverse!
+	" We get stronger white and blue in reverse!
 	highlight StatusLine term=reverse cterm=reverse ctermfg=white ctermbg=blue gui=none,underline guifg=#000066 guibg=white
 	" highlight StatusLineNC term=reverse,bold,italic,underline cterm=none,bold,italic,underline ctermfg=darkgrey ctermbg=black gui=none,italic,underline guifg=#222222 guibg=#bbbbbb " Looks wrong in Konsole
 	" highlight StatusLineNC term=reverse,italic,underline cterm=none,italic,underline ctermfg=grey ctermbg=black gui=none,italic,underline guifg=#222222 guibg=#bbbbbb
@@ -376,8 +376,8 @@ function! Joeyhighlight()
 
 
 
-	hi TabLine ctermbg=blue ctermfg=cyan cterm=none
-	hi TabLineSel ctermfg=green ctermbg=blue cterm=bold,reverse
+	hi TabLine ctermbg=blue ctermfg=cyan cterm=none guibg=blue guifg=cyan gui=none
+	hi TabLineSel ctermfg=green ctermbg=blue cterm=bold,reverse guifg=green guibg=blue gui=bold,reverse
 
 
 	hi LineNr ctermfg=darkmagenta guifg=magenta
