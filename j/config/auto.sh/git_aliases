@@ -256,14 +256,11 @@ git_commit_immediate_fixup() {
 	commit_to_amend="$(git rev-parse "${commit_to_amend}")"
 
 	echo ">> Committing"
-
 	git commit --fixup "${commit_to_amend}"
 
 	echo ">> Performing rebase"
-
-	# Instead of git_do_with_changes_stashed we could just use --autostash here
 	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
-	EDITOR=true git_do_with_changes_stashed git rebase -i --autosquash --preserve-merges "${commit_to_amend}~"
+	EDITOR=true git rebase -i --autosquash --autostash --preserve-merges "${commit_to_amend}~"
 }
 alias gcf='git_commit_immediate_fixup'
 
@@ -318,7 +315,7 @@ grp_safe() {
 	echo "Current commit before rebase (in case abort desired): ${current_commit}"
 	echo
 
-	git rebase --preserve-merges "${other_branch}" "$@"
+	git rebase --preserve-merges --autostash "${other_branch}" "$@"
 }
 #alias grp='git rebase --preserve-merges "$(git_guess_upstream_branch)"'
 alias grp='grp_safe'
@@ -663,12 +660,13 @@ gsld() {
 # Use this to remove (reset) selected patches of uncommitted files.  Finer grained than `git reset` or `git checkout --` and also more convenient.
 # How does it work?  It stashes the few patches you select, and then drops the new commit from the stash.
 # This affects the working tree, and thus is different from `git reset -p` which affects the index.
-# But how does it compare against gcop?
+# Oh.  It is basically identical to the built-in `git checkout -p` (gcop).
 git_kill_patch() {
 	gssp &&
 	git stash drop
 }
 alias gkp='git_kill_patch'
+alias gssk='git_kill_patch'
 
 # Apply a stash even if there are uncommitted changes in some of the affected files
 git_stash_force_apply() {
@@ -1225,17 +1223,18 @@ git_do_with_changes_stashed() {
 	local stashed_commit="$(git stash create)"
 	git reset --hard
 	if [ -n "${stashed_commit}" ]
-	then echo ">> Temporarily stashed uncommitted changes"
+	then echo "Created tempstash: ${stashed_commit}"
 	fi
 
 	"$@"
 
 	if [ -n "${stashed_commit}" ]
 	then
-		echo ">> Restoring stashed changes"
 		git stash apply --quiet "${stashed_commit}"
+		echo "Restored tempstash."
 	fi
 }
+alias git_autostashed=git_do_with_changes_stashed
 
 # `git remote prune origin [--dry-run]` is faster than `git fetch --prune`
 
