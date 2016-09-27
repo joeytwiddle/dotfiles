@@ -255,22 +255,12 @@ git_commit_immediate_fixup() {
 	# We need a static commit ref, in case the commit is something relative like HEAD~
 	commit_to_amend="$(git rev-parse "${commit_to_amend}")"
 
+	echo ">> Committing"
 	git commit --fixup "${commit_to_amend}"
 
-	echo
-	echo "Performing rebase:"
-
-	# We don't really need to manage the stash ourselves here, because git rebase has an --autostash option.
-	# But I have kept this pattern anyway, in case I need it some time in the future.
-	local stashed_commit="$(git stash create)"
-	git reset --hard
-
+	echo ">> Performing rebase"
 	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
-	EDITOR=true git rebase -i --autosquash --preserve-merges "${commit_to_amend}~"
-
-	if [ -n "${stashed_commit}" ]
-	then git stash apply "${stashed_commit}"
-	fi
+	EDITOR=true git rebase -i --autosquash --autostash --preserve-merges "${commit_to_amend}~"
 }
 alias gcf='git_commit_immediate_fixup'
 
@@ -325,7 +315,7 @@ grp_safe() {
 	echo "Current commit before rebase (in case abort desired): ${current_commit}"
 	echo
 
-	git rebase --preserve-merges "${other_branch}" "$@"
+	git rebase --preserve-merges --autostash "${other_branch}" "$@"
 }
 #alias grp='git rebase --preserve-merges "$(git_guess_upstream_branch)"'
 alias grp='grp_safe'
@@ -383,6 +373,11 @@ alias grh='gr --hard'
 alias grhu='grh "@{u}"'
 alias grhom='grh origin/master'
 alias grhod='grh origin/develop'
+
+grho() {
+	local current_branch="$(git_get_current_branch)"
+	verbosely git reset --hard "origin/$current_branch"
+}
 
 alias gcp='git cherry-pick'
 
@@ -569,6 +564,10 @@ gco() {
 
 	return "$ret_status"
 }
+# Sometimes we can't checkout because there are uncommitted changes to files which differ between the two branches
+# This can be handled by `git checkout -m` or by our own `gcos`
+alias gcom='gco -m'
+alias gcos='git_do_with_changes_stashed gco'
 # `git checkout -p [. | path]` allows us to select hunks to reset.  It's a lighter version of `git checkout -- <path>`
 alias gcop='git checkout -p'
 
@@ -659,10 +658,31 @@ gsld() {
 	less -R +'/(^commit .*|^diff .*)'
 }
 
-grho() {
-	local current_branch="$(git_get_current_branch)"
-	verbosely git reset --hard "origin/$current_branch"
+# Use this to remove (reset) selected patches of uncommitted files.  Finer grained than `git reset` or `git checkout --` and also more convenient.
+# How does it work?  It stashes the few patches you select, and then drops the new commit from the stash.
+# This affects the working tree, and thus is different from `git reset -p` which affects the index.
+# Oh.  It is basically identical to the built-in `git checkout -p` (gcop).
+git_kill_patch() {
+	gssp &&
+	git stash drop
 }
+alias gkp='git_kill_patch'
+alias gssk='git_kill_patch'
+
+# Apply a stash even if there are uncommitted changes in some of the affected files
+git_stash_force_apply() {
+	git commit -a -m 'TEMPORARY COMMIT' &&
+		git stash apply "$@" &&
+		git reset HEAD~
+}
+alias gsfa='git_stash_force_apply'
+
+# Pop a stash even if there are uncommitted changes in some of the affected files
+git_stash_force_pop() {
+	git_stash_force_apply "$@" &&
+		git stash drop
+}
+alias gsfp='git_stash_force_pop'
 
 # Like git clone but shows the username in the target directory
 git_clone_friendly() {
@@ -1199,6 +1219,23 @@ git_in_root_dir() {
 		"$@"
 	)
 }
+
+git_do_with_changes_stashed() {
+	local stashed_commit="$(git stash create)"
+	git reset --hard
+	if [ -n "${stashed_commit}" ]
+	then echo "Created tempstash: ${stashed_commit}"
+	fi
+
+	"$@"
+
+	if [ -n "${stashed_commit}" ]
+	then
+		git stash apply --quiet "${stashed_commit}"
+		echo "Restored tempstash."
+	fi
+}
+alias git_autostashed=git_do_with_changes_stashed
 
 # `git remote prune origin [--dry-run]` is faster than `git fetch --prune`
 
