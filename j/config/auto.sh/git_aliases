@@ -567,6 +567,10 @@ gco() {
 
 	return "$ret_status"
 }
+# Sometimes we can't checkout because there are uncommitted changes to files which differ between the two branches
+# This can be handled by `git checkout -m` or by our own `gcos`
+alias gcom='gco -m'
+alias gcos='git_do_with_changes_stashed gco'
 # `git checkout -p [. | path]` allows us to select hunks to reset.  It's a lighter version of `git checkout -- <path>`
 alias gcop='git checkout -p'
 
