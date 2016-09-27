@@ -255,22 +255,15 @@ git_commit_immediate_fixup() {
 	# We need a static commit ref, in case the commit is something relative like HEAD~
 	commit_to_amend="$(git rev-parse "${commit_to_amend}")"
 
+	echo ">> Committing"
+
 	git commit --fixup "${commit_to_amend}"
 
-	echo
-	echo "Performing rebase:"
+	echo ">> Performing rebase"
 
-	# We don't really need to manage the stash ourselves here, because git rebase has an --autostash option.
-	# But I have kept this pattern anyway, in case I need it some time in the future.
-	local stashed_commit="$(git stash create)"
-	git reset --hard
-
+	# Instead of git_do_with_changes_stashed we could just use --autostash here
 	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
-	EDITOR=true git rebase -i --autosquash --preserve-merges "${commit_to_amend}~"
-
-	if [ -n "${stashed_commit}" ]
-	then git stash apply "${stashed_commit}"
-	fi
+	EDITOR=true git_do_with_changes_stashed git rebase -i --autosquash --preserve-merges "${commit_to_amend}~"
 }
 alias gcf='git_commit_immediate_fixup'
 
@@ -1222,6 +1215,22 @@ git_in_root_dir() {
 		cd "${git_root_folder}"
 		"$@"
 	)
+}
+
+git_do_with_changes_stashed() {
+	local stashed_commit="$(git stash create)"
+	git reset --hard
+	if [ -n "${stashed_commit}" ]
+	then echo ">> Temporarily stashed uncommitted changes"
+	fi
+
+	"$@"
+
+	if [ -n "${stashed_commit}" ]
+	then
+		echo ">> Restoring stashed changes"
+		git stash apply --quiet "${stashed_commit}"
+	fi
 }
 
 # `git remote prune origin [--dry-run]` is faster than `git fetch --prune`
