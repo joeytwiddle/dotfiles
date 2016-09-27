@@ -324,6 +324,16 @@ autocmd VimLeave * silent !stty ixon
 	" :set titlestring=\=%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ [%P]%)
 	"" It will only make things worse.  :p
 
+	"" From: http://vi.stackexchange.com/questions/2572/detect-os-in-vimscript
+	if !exists("g:os")
+		if has("win64") || has("win32") || has("win16")
+			let g:os = "Windows"
+		else
+			let g:os = substitute(system('uname'), '\n', '', '')
+		endif
+	endif
+	" Possible results: "Darwin", "Windows", "Linux"
+
 	" if has("gui_kde")
 	" 	set guifont=Courier\ 10\ Pitch/10/-1/5/50/0/0/0/1/0
 	" endif
