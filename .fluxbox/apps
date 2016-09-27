@@ -140,3 +140,10 @@
  [app] (title=joeys_get_for_chromium.*)
  [app] (name=joeys_get_for_chromium.*)
 [end]
+[group]  (workspace=[current])
+ [app] (class=Slack)
+ [app] (class=Hexchat)
+ [app] (class=.*-nativefier-.*)
+ [app] (class=Telegram)
+ [app] (class=Skype)
+[end]
