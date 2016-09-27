@@ -384,6 +384,11 @@ alias grhu='grh "@{u}"'
 alias grhom='grh origin/master'
 alias grhod='grh origin/develop'
 
+grho() {
+	local current_branch="$(git_get_current_branch)"
+	verbosely git reset --hard "origin/$current_branch"
+}
+
 alias gcp='git cherry-pick'
 
 #alias gri='git rebase -i'
@@ -658,10 +663,30 @@ gsld() {
 	less -R +'/(^commit .*|^diff .*)'
 }
 
-grho() {
-	local current_branch="$(git_get_current_branch)"
-	verbosely git reset --hard "origin/$current_branch"
+# Use this to remove (reset) selected patches of uncommitted files.  Finer grained than `git reset` or `git checkout --` and also more convenient.
+# How does it work?  It stashes the few patches you select, and then drops the new commit from the stash.
+# This affects the working tree, and thus is different from `git reset -p` which affects the index.
+# But how does it compare against gcop?
+git_kill_patch() {
+	gssp &&
+	git stash drop
 }
+alias gkp='git_kill_patch'
+
+# Apply a stash even if there are uncommitted changes in some of the affected files
+git_stash_force_apply() {
+	git commit -a -m 'TEMPORARY COMMIT' &&
+		git stash apply "$@" &&
+		git reset HEAD~
+}
+alias gsfa='git_stash_force_apply'
+
+# Pop a stash even if there are uncommitted changes in some of the affected files
+git_stash_force_pop() {
+	git_stash_force_apply "$@" &&
+		git stash drop
+}
+alias gsfp='git_stash_force_pop'
 
 # Like git clone but shows the username in the target directory
 git_clone_friendly() {
