@@ -28,6 +28,7 @@ if exists('&undoreload')
 	endif
 
 	" This is not entirely satisfactory, because I don't want autoread if the file length is less than 'undoreload'.
+	" I would rather see a clear warning instead.
 	" Perhaps an autocmd could check this at runtime.
 	setglobal autoread
 endif
@@ -324,16 +325,6 @@ autocmd VimLeave * silent !stty ixon
 	" :set titlestring=\=%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ [%P]%)
 	"" It will only make things worse.  :p
 
-	"" From: http://vi.stackexchange.com/questions/2572/detect-os-in-vimscript
-	if !exists("g:os")
-		if has("win64") || has("win32") || has("win16")
-			let g:os = "Windows"
-		else
-			let g:os = substitute(system('uname'), '\n', '', '')
-		endif
-	endif
-	" Possible results: "Darwin", "Windows", "Linux"
-
 	" if has("gui_kde")
 	" 	set guifont=Courier\ 10\ Pitch/10/-1/5/50/0/0/0/1/0
 	" endif
@@ -403,17 +394,22 @@ autocmd VimLeave * silent !stty ixon
 			" Under Unity WM:
 			":set guifont=Lucida\ Console\ 10
 			" Under Fluxbox WM:
-			:set guifont=Lucida\ Console\ 7
-			" This looks very flat, it looks like it is fitting a lot of rows onto the screen!  (Fluxbox)
-			" However Lucida Console 6 is still clearer and smaller!
-			":set guifont=Envy\ Code\ S11\ 8
-
-			" These sizes were chose *after* gnome-settings-daemon had run!
-			":set guifont=Envy\ Code\ S11\ 10
-			" Nice thin
-			:set guifont=Envy\ Code\ S11\ 13
-			" First thick
-			":set guifont=Envy\ Code\ S11\ 17
+			call system("pgrep -f gnome-settings-daemon")
+			if v:shell_error == 0
+				" If gnome-settings-daemon has been run, these fonts look good, whilst Lucida has weird proportions.
+				:set guifont=Envy\ Code\ S11\ 10
+				" Nice thin
+				":set guifont=Envy\ Code\ S11\ 13
+				" First thick
+				":set guifont=Envy\ Code\ S11\ 17
+				":set guifont=Envy\ Code\ S12\ 9
+			else
+				" If gnome-settings-daemon has not been run, Lucida looks better.
+				:set guifont=Lucida\ Console\ 8
+				" This looks very flat, it looks like it is fitting a lot of rows onto the screen!  (Fluxbox)
+				" However Lucida Console 6 is still clearer and smaller!
+				":set guifont=Envy\ Code\ S11\ 8
+			endif
 		endif
 		"" If I want to go smaller than Lucida 8...
 		"" Droid Sans Mono can go very small; it is rather fuzzy, but it is even smaller than Clean!
@@ -422,19 +418,30 @@ autocmd VimLeave * silent !stty ixon
 		" :set guifont=Clean\ 8
 		"" Also with screen fonts, you have the option of using LucidaTypewriter, like Console but with sharp edges.  The only problem is that at size 8 its bold is weak: the chars are very slightly wider but no thicker.  At size 10 it is quite passable.
 		" :set guifont=LucidaTypewriter\ Medium\ 8
-		" For Mac
-		" (_system_name is not always set; it is created by rvm):
-		"if $_system_name == 'OSX'
-		" So we check g:os
-		" Alternatively: Check system("uname") instead (should be "Linux" or "Darwin")
+		" See: http://vi.stackexchange.com/questions/2572/detect-os-in-vimscript
+		if !exists('g:os')
+			if has('mac') || has('macunix')
+				let g:os = "Darwin"
+			elseif has('win16') || has('win95') || has('win32') || has('win64')
+				let g:os = "Windows"
+			elseif has('unix')
+				let g:os = "Linux"
+			else
+				let g:os = "other"
+			endif
+			" If we can't trust 'has()' then this is an alernative for Unixes:
+			" Possible results: "Darwin", "Linux"
+			"let g:os = substitute(system('uname'), '\n', '', '')
+		endif
 		if g:os == "Darwin"
 			" Popular default for many Mac editors, "the Comic Sans of monospaced fonts" @codinghorror
 			":set guifont=Monaco:h11
 			" But I prefer the shorter fatter one.  Less elegant.
 			:set guifont=Menlo\ Regular:h11
-			" Lucida Sans Typewriter is finer than Menlo:
+			" Manually installed fonts...
+			" Lucida Sans Typewriter is finer and cleaner than Menlo:
 			:set guifont=Lucida\ Sans\ Typewriter\ Regular:h11
-			" Lucida console is far again, but a bit too squat in GVim
+			" Lucida console is fat again, but a bit too squat in GVim
 			":set guifont=Lucida\ Console:h11
 			" On Mac, S11 and S12 are both quite short, but Squat is just about right.
 			":silent! :set guifont=Envy\ Code\ Squat:h13
@@ -798,7 +805,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Some suggestions for Meteor: were recommended at: https://github.com/Slava/vimrc/
 	" Improved indent and syntax for Javascript
 	" This has more types for colorschemes like monokai.
-	call add(vamAddons,"github:pangloss/vim-javascript")
+	"call add(vamAddons,"github:pangloss/vim-javascript")
 	"call add(vamAddons,"github:jelera/vim-javascript-syntax") " Even more comprehensive syntax
 	"call add(vamAddons,"github:vim-scripts/JavaScript-Indent") " Improved indent and syntax for Javascript and HTML (OLD alternative).  Joyent says: [somewhat buggy, clicking tab won't indent]
 	" Conceals ""s until we are focused on them:
@@ -1062,6 +1069,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:Lokaltog/vim-distinguished") " Understated, a bit more earthy/dirty compared to codeschool
 	"call add(vamAddons,"github:Slava/vim-colors-tomorrow") " Solarized options but with tomorrow theme
 	"call add(vamAddons,"github:romainl/Apprentice")      "  A colorscheme as subtle, gentle and pleasant as its creator isn't.  Like Solarized and codeschool, I find it a bit too subtle.
+	call add(vamAddons,"git:https://gitlab.com/davidogg/vim-dichromatic.git") " A dark colorscheme for color blind vimmers
 
 	"call add(vamAddons,"github:flazz/vim-colorschemes")  " A large collection, includes codeschool
 	"call add(vamAddons,"github:rodnaph/vim-color-schemes") " A collection, includes leo
@@ -1126,6 +1134,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	nnoremap <silent> <Leader><Leader>dc[e <Plug>JumpDiffCharPrevEnd
 	nnoremap <silent> <Leader><Leader>dc]e <Plug>JumpDiffCharNextEnd
 	"call add(vamAddons,"github:rickhowe/diffchar.vim")
+
+	"call add(vamAddons,"github:jpalardy/vim-slime")      " Paste commands from buffer to a REPL open in another screen window
 
 	" }}}
 
