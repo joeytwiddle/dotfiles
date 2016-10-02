@@ -282,6 +282,7 @@ alias gpll='git pull'
 alias gpr='gpr_safe'
 alias gpp='gpr && git push'
 # If you have already fetched the remote branch, or you want to rebase against a branch that isn't upstream, you can use this
+# TODO: This function could be wrapped in with_stash_temporarily_suppressed just like `gcf` is.
 grp_safe() {
 	local other_branch="$1"
 	[ -z "${other_branch}" ] && other_branch="$(git_guess_upstream_branch)" || shift
@@ -344,7 +345,8 @@ alias gpsh='git push'
 alias gpo='verbosely git push origin "$(git_get_current_branch)"'
 # Git Push Upstream.  Disabled because:
 # - 'gpu' is ambiguous: Does it mean git pull or git push?
-# - Makes no sense because pushing to upstream is what Git Push does normally.
+#                       Does it mean push to upstream, or `push -u` (push and set upstream)?
+# - I guess it should mean `push -u` because pushing to upstream is what `git push` does normally.
 # - Conceptually, I believe we should pull from upstream, and push to downstream.
 #alias gpu='verbosely git push "$(git_guess_upstream_branch)"'
 # -u sets upstream tracking branch
@@ -361,8 +363,8 @@ alias gmo='verbosely git merge "origin/$(git_get_current_branch)"'
 # Git Push Origin (this branch)
 alias gmm='verbosely git merge master'
 # These are a little inconsistent
-alias gmu='verbosely git merge "$(git_guess_upstream_branch)"'
 #alias gmu='verbosely git merge "upstream/$(git_get_current_branch)"'
+alias gmu='verbosely git merge "$(git_guess_upstream_branch)"'
 alias gmom='verbosely git merge origin/master'
 alias gmod='verbosely git merge origin/develop'
 alias gmum='verbosely git merge upstream/master'
@@ -382,7 +384,7 @@ grho() {
 alias gcp='git cherry-pick'
 
 #alias gri='git rebase -i'
-alias gri='git rebase --interactive --autosquash'
+alias gri='git rebase --interactive --autosquash --preserve-merges'
 alias griu='gri @{u}'
 alias griom='gri origin/master'
 alias griod='gri origin/develop'
@@ -1235,6 +1237,13 @@ git_do_with_changes_stashed() {
 	fi
 }
 alias git_autostashed=git_do_with_changes_stashed
+
+git_create_empty_branch() {
+	local git_root_folder=$(git rev-parse --show-toplevel)
+	git checkout --orphan empty &&
+	git reset --hard &&
+	git commit --allow-empty -m "== Empty commit =="
+}
 
 # `git remote prune origin [--dry-run]` is faster than `git fetch --prune`
 
