@@ -282,7 +282,6 @@ alias gpll='git pull'
 alias gpr='gpr_safe'
 alias gpp='gpr && git push'
 # If you have already fetched the remote branch, or you want to rebase against a branch that isn't upstream, you can use this
-# TODO: This function could be wrapped in with_stash_temporarily_suppressed just like `gcf` is.
 grp_safe() {
 	local other_branch="$1"
 	[ -z "${other_branch}" ] && other_branch="$(git_guess_upstream_branch)" || shift
@@ -344,9 +343,8 @@ alias gpsh='git push'
 # Git Push Origin
 alias gpo='verbosely git push origin "$(git_get_current_branch)"'
 # Git Push Upstream.  Disabled because:
-# - 'gpu' is ambiguous: Does it mean git pull or git push?
-#                       Does it mean push to upstream, or `push -u` (push and set upstream)?
-# - I guess it should mean `push -u` because pushing to upstream is what `git push` does normally.
+# - 'gpu' is ambiguous: Does it mean `git pull` or `git push` or `git push -u`?
+# - Anyway pushing to guessed or real upstream is what Git Push does normally.
 # - Conceptually, I believe we should pull from upstream, and push to downstream.
 #alias gpu='verbosely git push "$(git_guess_upstream_branch)"'
 # -u sets upstream tracking branch
@@ -356,13 +354,12 @@ alias gpshf='git push --force'
 alias gpshnv='git push --no-verify'
 alias gpshnvf='git push --no-verify --force'
 
+# I wanted to perform `git pull` and `git merge` with `git_autostashed` however they sometimes drop out unfinished, in which case the stash does not get popped as intended.
 alias gm='git merge'
 # Git Merge Origin (this branch)
 #alias gmo='verbosely git merge "$(git_guess_upstream_branch)"'
 alias gmo='verbosely git merge "origin/$(git_get_current_branch)"'
-# Git Push Origin (this branch)
 alias gmm='verbosely git merge master'
-# These are a little inconsistent
 #alias gmu='verbosely git merge "upstream/$(git_get_current_branch)"'
 alias gmu='verbosely git merge "$(git_guess_upstream_branch)"'
 alias gmom='verbosely git merge origin/master'
@@ -384,7 +381,7 @@ grho() {
 alias gcp='git cherry-pick'
 
 #alias gri='git rebase -i'
-alias gri='git rebase --interactive --autosquash --preserve-merges'
+alias gri='git rebase --interactive --autosquash --preserve-merges --autostash'
 alias griu='gri @{u}'
 alias griom='gri origin/master'
 alias griod='gri origin/develop'
@@ -636,6 +633,12 @@ alias gssu='git stash save --include-untracked'
 # -p lets us choose which hunks to stash
 alias gssp='git stash -p'
 #alias gsp='git stash pop'
+# Sometimes popping the state results in conflicts because I was popping onto the wrong branch.  I can reset to restore the files, but then I will have lost my stashed changes, because they were popped!
+# So git_stash_pop_safe will only drop the stash if it was successfully applied with no conflicts.
+git_stash_pop_safe() {
+	git stash apply "$@" &&
+	git stash drop "$@"
+}
 alias gsp='git_stash_pop_safe'
 alias gsa='git stash apply'
 #alias gsl='git stash list'
@@ -671,19 +674,21 @@ alias gkp='git_kill_patch'
 alias gssk='git_kill_patch'
 
 # Apply a stash even if there are uncommitted changes in some of the affected files
-git_stash_force_apply() {
+git_stash_apply_merge() {
 	git commit -a -m 'TEMPORARY COMMIT' &&
 		git stash apply "$@" &&
 		git reset HEAD~
 }
-alias gsfa='git_stash_force_apply'
+alias gsam='git_stash_apply_merge'
+alias gsaf='git_stash_apply_merge'
 
 # Pop a stash even if there are uncommitted changes in some of the affected files
-git_stash_force_pop() {
-	git_stash_force_apply "$@" &&
-		git stash drop
+git_stash_pop_merge() {
+	git_stash_apply_merge "$@" &&
+	git stash drop
 }
-alias gsfp='git_stash_force_pop'
+alias gspm='git_stash_pop_merge'
+alias gspf='git_stash_pop_merge'
 
 # Like git clone but shows the username in the target directory
 git_clone_friendly() {
@@ -696,12 +701,6 @@ git_clone_friendly() {
 	fi
 }
 alias gcl='git_clone_friendly'
-
-# Sometimes popping the state results in conflicts because I was popping onto the wrong branch.  I can reset to restore the files, but then I will have lost my stashed changes, because they were popped!
-# So git_stash_pop_safe will only drop the stash if it was successfully applied with no conflicts.
-git_stash_pop_safe() {
-	git stash apply "$@" && git stash drop "$@"
-}
 
 # Git Auto Commit, or Git Add Commit, or Git Add and Commit
 gac() {
@@ -1221,6 +1220,8 @@ git_in_root_dir() {
 	)
 }
 
+# This basically works like --autostash
+# If you have unstashed changes, it stashes them, then it runs the given command, and then it unstashes them.
 git_do_with_changes_stashed() {
 	local stashed_commit="$(git stash create)"
 	git reset --hard
@@ -1237,6 +1238,7 @@ git_do_with_changes_stashed() {
 	fi
 }
 alias git_autostashed=git_do_with_changes_stashed
+alias git_stashed=git_do_with_changes_stashed
 
 git_create_empty_branch() {
 	local git_root_folder=$(git rev-parse --show-toplevel)
