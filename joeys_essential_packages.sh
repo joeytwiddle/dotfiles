@@ -82,16 +82,22 @@ install_package mp3gain vorbisgain
 # Both postfix and exim open a dpkg config dialog.
 install_package exim4
 
-# In Ubuntu 14.04, avconv from libav-tools replaces ffmpeg (it is a fork)
-# However ffmpeg is back in 15.04!
-#install_package libav-tools
-
 install_package wine
+
+install_package cairo-dock
 
 # Dashes / launchers
 #install_package kupfer
-#sudo add-apt-repository ppa:synapse-core/ppa 
+#sudo add-apt-repository ppa:synapse-core/ppa
 #install_package synapse
+install_package launchy
+install_package gnome-do
+
+# Cardapio, a launcher like Ubuntu Unity's Dash or Mac OS X's Spotlight
+# Appears to be out-of-date.
+#add_repository cardapio-team/cardapio-ppa
+#add_repository nilarimogard/webupd8
+#install_package cardapio
 
 # Communication
 install_package mutt
@@ -104,6 +110,7 @@ install_package hexchat
 
 # Mathematics {{{
 
+#install_package gnuplot
 #install_package wxmaxima
 #install_package octave
 
@@ -118,8 +125,13 @@ install_package lame mp3info   # For reencoding to mp3
 # bladeenc 
 install_package vorbis-tools   # For reencoding to ogg
 
-# For reencode_video_to_x264:
+# For reencode_video_to_x264
 install_package faac gpac x264 mencoder
+
+install_package ffmpeg
+# In Ubuntu 14.04, avconv from libav-tools replaces ffmpeg (it is a fork)
+# However ffmpeg is back in 15.04!
+#install_package libav-tools
 
 # }}}
 
@@ -143,6 +155,7 @@ install_package cpufrequtils
 
 # Debugging
 install_package iotop atop
+install_package inotify-tools
 install_package mesa-utils
 
 # Network debugging
@@ -151,7 +164,7 @@ install_package nmap wireshark tcpdump
 # Usage: nethogs [device]
 install_package nethogs
 # Shows network usage by remote host and local/remote ports.
-#install_package jnettop
+install_package jnettop
 # tcptrack is similar but with a simplified display.  It shows duration but no totals.
 #install_package tcptrack
 # Shows a graph, in a terminal, but no process separation: slurm
@@ -193,6 +206,7 @@ install_package hugs
 install_package shellcheck
 # For portability testing
 install_package posh ksh
+# dash ash
 
 # Install Java Development Kit
 install_package default-jdk
@@ -323,6 +337,16 @@ fi
 
 # }}}
 
+
+
+#sudo gem install git-background
+
+
+#
+#          https://github.com/jwiegley/git-scripts
+#
+
+# Run Android apps on Linux (provided they have x86 binaries): http://www.shashlik.io/download/
 
 
 [ -n "$added_repo" ] && sudo apt-get update

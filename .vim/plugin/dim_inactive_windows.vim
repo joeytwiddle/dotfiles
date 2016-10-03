@@ -11,6 +11,10 @@
 " Those highlights disappear when dim_inactive_windows dims those windows (at
 " least on MacVim they do).
 
+if !exists('+colorcolumn')
+  finish
+endif
+
 "highlight InactiveWindowsDefault ctermbg=black guibg=#203838
 "highlight InactiveWindowsDefault ctermbg=black guibg=#445555 guifg=#999999
 highlight InactiveWindowsDefault ctermbg=black guibg=#334444

@@ -39,15 +39,18 @@ else
 
 	# Even with this, when I want to do `nvm use` I must first do `unset PREFIX`.
 
-	# Becuase it is slow to run nvm for every shell, we don't run it, but we do this instead:
-	#alias node='echo "You may want to run nvmusenode or nvmusesystem first"'
-	#alias npm='echo "You may want to run nvmusenode or nvmusesystem first"'
+	# Becuase it is slow to run nvm for every shell, we don't run it.
+	# We should have started in a state that can use the local (system) node just fine.
+	# But nonetheless I want to warn myself if I try to use the local node without explicitly deciding it, because I might have been intending to use the latest.
+	# Perhaps a first time warning per shell would be enough.
+	alias node='echo "You may want to run nvmusenode or nvmuselocal first"'
+	alias npm='echo "You may want to run nvmusenode or nvmuselocal first"'
 	# This doesn't really work unless it is run twice.  The first time, nvm gets called with PREFIX still set!
 	#alias nvmusenode='unset PREFIX ; unalias node ; unalias npm ; nvm use node'
 	# Using a function instead of an alias works on the first attempt.
 	nvmusenode() {
-		#unalias node 2>/dev/null
-		#unalias npm 2>/dev/null
+		unalias node 2>/dev/null
+		unalias npm 2>/dev/null
 
 		# We could also remove this function, but why not leave it available, in case the user wants to switch to/from?
 		# Bash:
@@ -66,13 +69,44 @@ else
 
 		nodewhatsup
 	}
+	nvmusesystem() {
+		unalias node 2>/dev/null
+		unalias npm 2>/dev/null
+
+		nvm use system
+		# But that will set the prefix to `/usr/local/npm`, which is not where I keep it!  So let's fix that:
+		export PREFIX="$HOME/npm"
+		export PATH="$PREFIX/bin:$PATH"
+		unset NODE_PATH
+
+		nodewhatsup
+	}
+	# nvmusemagic should be a fast way of getting the same as nvmusenode
+	nvmusemagic() {
+		unalias node 2>/dev/null
+		unalias npm 2>/dev/null
+
+		#export PREFIX="$HOME/.nvm/versions/node/v5.3.0"
+		export PREFIX="$HOME/.nvm/versions/node/v6.2.2"
+		export PATH="$PREFIX/bin:$PATH"
+		unset NODE_PATH
+		unset PREFIX
+		# Actually `nvm use system` would do this:
+		#export NVM_PATH="$PREFIX/lib/node"
+		#export NVM_BIN="$PREFIX/bin"
+
+		nodewhatsup
+	}
 	# These two don't necessarily use the system node
 	# They just use whichever node + npm are currently on the PATH.
 	# So if you run `nvm use node` before running one of these, you might be using a different version of node!
 	# So `nvm use system` is safer.  Although it won't set PREFIX correctly.  Gah!
 	# So the safe thing is: nvm use system ; nvmusesystem
-	nvmusesystem() {
-		nvm use system
+	# nvmuselocal should be a fast way of getting the same as nvmusesystem
+	nvmuselocal() {
+		unalias node 2>/dev/null
+		unalias npm 2>/dev/null
+
 		# Because that will set the prefix to `/usr/local/npm`, which is not where I keep it!
 		export PREFIX="$HOME/npm"
 		export PATH="$PREFIX/bin:$PATH"
@@ -81,8 +115,11 @@ else
 		nodewhatsup
 	}
 	nvmusetempprefix() {
+		unalias node 2>/dev/null
+		unalias npm 2>/dev/null
+
 		# Change the npm location, but keep using the same node we were using before.
-		# This might be desirable to play around with npm.
+		# This might be desirable to play around with npm, without installing stuff in your normal global.
 		# Beware that the folder may get confused, with different versions.
 		export PREFIX="$HOME/tmp/npm"
 		export PATH="$PREFIX/bin:$PATH"
