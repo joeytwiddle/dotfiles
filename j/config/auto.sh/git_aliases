@@ -115,10 +115,13 @@ git_status_plus() {
 		echo '#   (use "git add <file>..." to include in what will be committed)'
 		echo "#"
 
-		local git_root_folder=$(git rev-parse --show-toplevel)
+		local git_root_folder=$(git rev-parse --show-toplevel) || exit 1
+		# The .git folder is not always at "${git_root_folder}/.git", e.g. inside of submodules.
+		local git_folder=$(git rev-parse --git-dir) || exit 1
 
-		local current_stats_file="${git_root_folder}/.git/git_status_plus.current.$USER"
-		local previous_stats_file="${git_root_folder}/.git/git_status_plus.previous.$USER"
+		# There is no .git folder inside a submodule
+		local current_stats_file="${git_folder}/git_status_plus.current.$USER"
+		local previous_stats_file="${git_folder}/git_status_plus.previous.$USER"
 
 		# BUG: If a path is passed as an argument, then this will filter the status list.
 		#      But a filtered status list will not compare well with an older unfiltered one!
@@ -228,15 +231,18 @@ alias gau='ga -u'
 alias gaa='gau'
 #alias gc='git commit'
 alias gc='git commit -v'
+# I never use this, so disabled it.
+#alias gcm='gc -m'
 alias gca='gc --amend'
-alias gcm='gc -m'
-# I think I tend to use --amend more than -a.  At least, I like to be explicit about -a.  (But probably feel the same about --amend)
-# gcam providing --amend
-# (I have found myself using this incorrectly!)
+# Amend last commit without the editor prompt
+#alias gcaq='EDITOR=true gca'
+# Oh there is already an option for that!
+alias gcane='gca --no-edit'
+# gcam could mean -m with --amend or with -a
+# With --amend is more of a timesaver, and more consistent with gca.  But it is more dangerous if used accidentally!
 #alias gcam='gc --amend -m'
-# gcam providing -a
-# (This is inconsistent with gca; so I might also end up using this incorrectly too!  But it is slightly easier to recover from, if noticed.)
-alias gcam='gc -a -m'
+#alias gcam='gc -a -m'
+# In reality, I rarely use gcam, so I just disabled it.
 alias gci='git commit --interactive'
 # -p "patch" allows us to choose which hunks to add or commit
 alias gap='ga -p'
@@ -367,6 +373,9 @@ alias gmod='verbosely git merge origin/develop'
 alias gmum='verbosely git merge upstream/master'
 alias gmud='verbosely git merge upstream/develop'
 
+alias gmt='git mergetool'
+alias gma='git merge --abort'
+
 alias gr='git reset'
 alias grh='gr --hard'
 alias grhu='grh "@{u}"'
@@ -379,16 +388,16 @@ grho() {
 }
 
 alias gcp='git cherry-pick'
+alias gcpc='git cherry-pick --continue'
+alias gcpa='git cherry-pick --abort'
 
 #alias gri='git rebase -i'
-alias gri='git rebase --interactive --autosquash --preserve-merges --autostash'
+alias gri='git rebase --interactive --autosquash --autostash'
+# I used to include --preserve-merges here, but it started dropping commits during a rebase, so I think it's safer off!
 alias griu='gri @{u}'
 alias griom='gri origin/master'
 alias griod='gri origin/develop'
 alias grc='git rebase --continue'
-
-alias gmt='git mergetool'
-alias gma='git merge --abort'
 alias gra='git rebase --abort'
 
 alias grl='git reflog'
@@ -818,7 +827,7 @@ alias gbdr='gbd -r'
 gitwhatsup() {
 	echo
 	# Absolute path:
-	local gitDir=$(git rev-parse --show-toplevel)/.git
+	local gitDir=$(git rev-parse --git-dir)
 	# On some systems, gives relative path:
 	#local gitDir=$(git rev-parse --git-dir)
 	local greenBackground=$(tput setab 2)
@@ -1245,6 +1254,10 @@ git_create_empty_branch() {
 	git checkout --orphan empty &&
 	git reset --hard &&
 	git commit --allow-empty -m "== Empty commit =="
+}
+
+git_list_submodule_urls() {
+	git submodule foreach -q git config remote.origin.url
 }
 
 # `git remote prune origin [--dry-run]` is faster than `git fetch --prune`
