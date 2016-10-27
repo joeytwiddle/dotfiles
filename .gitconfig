@@ -293,3 +293,7 @@
 #   git config branch.autosetuprebase always # Force all new branches to automatically use rebase
 #   git config branch.*branch-name*.rebase true # Force existing branches to use rebase.
 
+[rebase]
+	# When displaying commits in git-rebase --interactive, also display the authors
+	instructionFormat = %s - %an
+
