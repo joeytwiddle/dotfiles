@@ -799,6 +799,14 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" To align by spaces, the best I have found so far is:
 	"   :Tab /[^ ][^ ]*
 	" but that creates a gap of two spaces.  This CANNOT be fixed by appending /l0 or /l1 or /l2
+	" Tabularise by spaces, right-align first column, left-align second column (I don't know why but I needed l1 twice!)
+	"   :Tab / /r1l1l1
+	" Left align the second column (leave the rest of the line untouched, don't mind leading spaces):
+	"   :Tab /^ *[^ ]* *[^ ]*\zs /l1
+	" Right align the first column (leave the rest of the line untouched):
+	"   :Tab /^[^ ]*\zs /r1l1l1
+	"  :Tab /^[^ ]*\zs /r1l1l1
+	"  :Tab /^ *[^ ]* *[^ ]*\zs /l1
 
 	" Javascript
 	" Some suggestions for Node: https://github.com/joyent/node/wiki/Vim-Plugins
@@ -816,6 +824,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	call add(vamAddons,"github:mxw/vim-jsx")
 	" This will turn all ft=javascript files into ft=javascript.jsx, which might be nice for syntax highlighting, but not for ctags!
 	"let g:jsx_ext_required = 0
+	" Linter: https://github.com/ruanyl/vim-fixmyjs
+	"call add(vamAddons,"github:ruanyl/vim-fixmyjs")
 
 	" Javascript beautification:
 	"call add(vamAddons,"github:maksimr/vim-jsbeautify")    " Just a wrapper for jsbeautify
