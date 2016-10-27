@@ -21,6 +21,8 @@ then
 		:
 	elif [ -n "$BASH" ]
 	then
-		. ~/.bash/completions/hub.bash_completion.sh
+		if [ -e ~/.bash/completions/hub.bash_completion.sh ]
+		then . ~/.bash/completions/hub.bash_completion.sh
+		fi
 	fi
 fi
