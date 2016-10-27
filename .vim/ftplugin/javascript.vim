@@ -34,7 +34,7 @@ vnoremap <buffer> <Leader>V sunnamedVar<Esc>Ovar unnamedVar = <Esc>pa;<Esc>
 
 " Like WebStorm, when closing a block, indent all the lines inbetween
 " DISABLED because currently = does not indent function callbacks correctly when they come after a `).then(`
-"inoremap } }<Esc>v%=a
+"inoremap <buffer> } }<Esc>mzv%=g'za
 
 
 
