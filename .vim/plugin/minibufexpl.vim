@@ -1155,6 +1155,10 @@ function! <SID>FindCreateWindow(bufName, forceEdge, isExplorer, doDebug)
       setlocal list
       "" Unfortunately this seems to be global only
       " setlocal showbreak=
+
+      "" Make the MiniBufExplorer statusline more helpful, by displaying the CWD.
+      " %{expand('$USER')}@%{expand('$HOSTNAME')}:
+      setlocal statusline=%<%{fnamemodify(getcwd(),\ ':~')}\ %f\ %#Error#%{\ &modified\ ?\ \"[+]\"\ :\ \"\"\ }%##%{\ &modifiable\ ?\ \"\"\ :\ \"[-]\"\ }%h%w%r%=0x%02B\ %v\|%c/%{len(getline('.'))}\ :%0l/%-0L\ %0n^%<
     endif
 
     if a:doDebug

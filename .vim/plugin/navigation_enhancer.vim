@@ -76,8 +76,8 @@ function! s:SeekBestWindow(realDirection,reverseDirection)
   if exists("w:lastWinInDir_".a:realDirection)
     let l:targetWin = eval("w:lastWinInDir_".a:realDirection)
     " echo "Last window from that direction was ".l:targetWin
-    if l:targetWin == l:startWin
-      " Window numbers have become confused.  This move is no use!
+    if l:targetWin == l:startWin || l:targetWin > winnr('$')
+      " Window numbers have become confused, probably due to layout change.  This move is no use!
     else
       " Go to the recommended target window
       noautocmd exec l:targetWin."wincmd w"
