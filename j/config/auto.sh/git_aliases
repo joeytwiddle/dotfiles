@@ -536,6 +536,10 @@ alias glom='gl origin/master'
 alias glod='gl origin/develop'
 alias glum='gl upstream/master'
 alias glud='gl upstream/develop'
+alias gllom='gll origin/master'
+alias gllod='gll origin/develop'
+alias gllum='gll upstream/master'
+alias gllud='gll upstream/develop'
 
 alias gb='git branch'
 # Git Branch Force can be used to change the HEAD of a branch that is not the current branch

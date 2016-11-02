@@ -1077,12 +1077,19 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Molokai (Monokai) was originally a theme for Text Mate, and is the default theme for Sublime Text
 	call add(vamAddons,"github:sickill/vim-monokai")     " Forces t_Co=256, appears more faithful to Sublime
 	"call add(vamAddons,"github:tomasr/molokai")          " Supports 256 colors when available, less faithful to Sublime
+	"call add(vamAddons,"github:crusoexia/vim-monokai")   " An alternative
 	"let g:molokai_original = 0                           " Makes some changes, but does not help much.
 	"call add(vamAddons,"github:29decibel/codeschool-vim-theme") " Clear, clean pastels
 	"call add(vamAddons,"github:Lokaltog/vim-distinguished") " Understated, a bit more earthy/dirty compared to codeschool
 	"call add(vamAddons,"github:Slava/vim-colors-tomorrow") " Solarized options but with tomorrow theme
 	"call add(vamAddons,"github:romainl/Apprentice")      "  A colorscheme as subtle, gentle and pleasant as its creator isn't.  Like Solarized and codeschool, I find it a bit too subtle.
 	call add(vamAddons,"git:https://gitlab.com/davidogg/vim-dichromatic.git") " A dark colorscheme for color blind vimmers
+	"call add(vamAddons,"github:jacoborus/tender.vim")    " Nice and gentle, could be good for presentations
+	"call add(vamAddons,"github:raphamorim/lucario")      " Note sure about the rusty red.  Available for lots of apps!  https://github.com/raphamorim/lucario
+	"call add(vamAddons,"github:AlessandroYorba/Despacio") " Very brown, coffee focus
+	"call add(vamAddons,"github:tyrannicaltoucan/vim-quantum") " Based on the Material Design palette
+	"call add(vamAddons,"github:YorickPeterse/happy_hacking.vim") " Fairly gentle, brown and browny-greens
+	"call add(vamAddons,"github:")
 
 	"call add(vamAddons,"github:flazz/vim-colorschemes")  " A large collection, includes codeschool
 	"call add(vamAddons,"github:rodnaph/vim-color-schemes") " A collection, includes leo
