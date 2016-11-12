@@ -3,19 +3,39 @@
  */
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); /* set default namespace to XUL */
 
-/* This surrounds the location bar and the bookmarks toolbar */
-#navigator-toolbox {
-    /* border: 1px solid black !important; */
-}
-/* Bookmarks Bar */
-#PersonalToolbar {
-    border: 1px !important;
-}
-
 /*Added to re-enable min tab width=0 in Firefox-4 */
+/*
 .tabbrowser-tab:not([pinned]) {
     min-width: 1px !important;
 }
+*/
+
+/* Actually the recommended selector is: */
+/*
+.tabbrowser-tab[fadein]:not([pinned]) {
+    min-width: 240px !important;
+}
+*/
+
+/* Just enough for favicons? */
+/*
+.tabbrowser-tab[fadein]:not([pinned]) {
+    min-width: 35px !important;
+}
+*/
+
+/* This surrounds the location bar and the bookmarks toolbar */
+/*
+#navigator-toolbox {
+    border: 1px solid black !important;
+}
+*/
+/* Bookmarks Bar */
+/*
+#PersonalToolbar {
+    border: 1px !important;
+}
+*/
 
 /* Joey's styles for TreeStyleTabs */
 /* These do make a difference, but a little opacity is still inherited, and the shadow still appears on the text (in Metal theme). */
