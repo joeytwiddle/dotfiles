@@ -1,7 +1,7 @@
 [app] (name=xv) (class=MPlayer)
   [Deco]	{NORMAL}
   [Sticky]	{no}
-  [Layer]	{2}
+  [Layer]	{6}
   [Close]	{yes}
 [end]
 [app] (name=gl) (class=MPlayer)
@@ -34,8 +34,8 @@
   [Close]	{yes}
 [end]
 [app] (name=smplayer) (class=Smplayer)
-  [Sticky]	{yes}
-  [Layer]	{6}
+  [Sticky]	{no}
+  [Layer]	{8}
   [Close]	{yes}
 [end]
 [app] (name=gimp) (class=Gimp) (role=gimp-image-window)
@@ -62,8 +62,8 @@
  [app] (title=Error Console)
  [app] (title=Browser Console)
  [app] (title=Console - .*)
-  [Dimensions]	{82% 48%}
-  [Position]	(UPPERLEFT)	{18% 52%}
+  [Dimensions]	{91% 44%}
+  [Position]	(UPPERLEFT)	{9% 56%}
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
@@ -112,8 +112,8 @@
   [Sticky]	{yes}
 [end]
 [app] (name=ktorrent) (class=Ktorrent) (role=MainWindow#1)
-  [Workspace]	{8}
-  [Dimensions]	{84% 104%}
+  [Workspace]	{5}
+  [Dimensions]	{84% 98%}
   [Position]	(UPPERLEFT)	{0% 0%}
   [Close]	{yes}
 [end]
@@ -125,8 +125,8 @@
   [Position]	(UPPERLEFT)	{520 92}
 [end]
 [transient] (name=google-chrome) (class=Google-chrome)
-  [Dimensions]	{69% 98%}
-  [Position]	(UPPERLEFT)	{10% -1%}
+  [Dimensions]	{69% 86%}
+  [Position]	(UPPERLEFT)	{15% 4%}
   [Close]	{yes}
 [end]
 [app] (name=Global) (class=Firefox) (role=console)
