@@ -331,6 +331,9 @@ alias grpu='grp $(git_guess_upstream_branch)'
 alias gmru='gmr $(git_guess_upstream_branch)'
 alias gmrom='gmr origin/master'
 alias gmrod='gmr origin/develop'
+# Abort the rebase (like gra) but using the terminology we introduced above (grp and gmr)
+alias grpa='git rebase --abort'
+alias gmra='git rebase --abort'
 
 # This is for older versions of git (<1.7.0) which didn't accept the --all parameter.
 # We could actually perform the same action with the old built-in `git remote update`, but that won't let us fetch tags and do pruning.
@@ -381,6 +384,10 @@ alias grh='gr --hard'
 alias grhu='grh "@{u}"'
 alias grhom='grh origin/master'
 alias grhod='grh origin/develop'
+alias grh~='grh head~'
+alias grh~~='grh head~~'
+alias grh~~~='grh head~~~'
+alias grh~~~~='grh head~~~~'
 
 grho() {
 	local current_branch="$(git_get_current_branch)"
