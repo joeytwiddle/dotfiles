@@ -1,7 +1,6 @@
-" Language:    CoffeeScript
-" Maintainer:  Mick Koch <kchmck@gmail.com>
-" URL:         http://github.com/kchmck/vim-coffee-script
-" License:     WTFPL
+" Setup for Coffeescript language
+
+" Originally I was using https://github.com/kchmck/vim-coffee-script/blob/master/ftplugin/coffee.vim
 
 if exists("b:did_coffee_ftpluginn")
   finish
@@ -27,13 +26,13 @@ let &comments=":##,".&comments
 
 
 "" Joey's coffee -> js autocompile on write
-"" Now with ShowJSChanges
+"" Now with ShowJSChanges feature
 
 let g:coffeeAutoCompileAll = get(g:, "coffeeAutoCompileAll", 1)
 let g:coffeeShowJSChanges = get(g:, "coffeeShowJSChanges", 0)
-" If set, places compiles js files in the given folder.
+" If set, places compiled js files in the given folder.
 " Useful to keep compiled files out of the source tree, or to compile into a
-" temp dir purely for the Changes feature.
+" temp dir purely for the view-changes feature.
 let g:coffeeCompileIntoFolder = get(g:, "coffeeCompileIntoFolder", "")
 
 " DONE: If coffeeShowJSChanges is used in a split window which is not the
