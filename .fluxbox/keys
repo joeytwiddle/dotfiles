@@ -159,7 +159,8 @@ Control Shift F2 :CommandDialog
 ## But my two-finger scroller will continue sending button 4/5 (mousewheel) events, and not necessarily to the original window!
 ## - If I happen to press Alt (Mod1) for any reason, Fluxbox will receive Mod1 Mouse4, and change workspace!
 ## - If I happen to move my mouse over the desktop or toolbar, Fluxbox will detect OnDesktop Mouse4, and change workspace!
-## Unfortunately this means mousewheel to change desktop is disabled for the moment.
+## This is still happening even with the latest touchpad driver.
+## Therefore I have disabled mousewheel to change desktop for the moment.
 ## But perhaps it could be reintroduced with less common modifiers, e.g. Mod1-Mod4 or Ctrl-Alt-Shift.
 
 ### Change desktop with mousewheel on wallpaper
@@ -214,6 +215,8 @@ OnDesktop Mouse1 :hideMenus
 OnDesktop Mouse2 :workspaceMenu
 ## I think this might be opening while I am playing UT in wine, but I'm not sure why.
 # OnDesktop Mouse3 :rootMenu
+## So for now, we must hold Control to get the menu.
+OnDesktop Control Mouse3 :rootMenu
 
 ## The Lower works but the StartTabbing does not.
 # Mod1 t :MacroCmd {Raise} {Focus} {StartTabbing} {Lower}
@@ -630,24 +633,26 @@ Control XF86AudioPlay :ExecCommand xdotool key Next
 #Mod4 Shift Right        :Delay {ExecCommand xdotool key --clearmodifiers shift+ctrl+Right }  100
 
 # On Xterm windows
-Mod1 c                   :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+shift+c
-Mod1 v                   :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+shift+v
+# Disabled because too buggy
+#Mod1 c                   :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+shift+c
+#Mod1 v                   :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+shift+v
 #Mod1 v                   :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers shift+Insert
-Mod1 s                   :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+s
+#Mod1 s                   :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+s
 # I tried that with :Delay - it didn't work at all!  sleep did.  (fluxbox=1.3.5-2, Ubuntu 12.04 trusty)
 # We can enable Alt-X = Cut when I stop hitting Alt-x to get an xterm!
 #Mod1 x                   :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+x
 
 # I keep pressing Alt-h but I should train to use Win-h.  In the meantime, let Alt-h do nothing.
-Mod1 h                   :ExecCommand :
-Mod1 z                   :ExecCommand :
-Mod1 a                   :ExecCommand :
-Mod1 x                   :ExecCommand echo X | osd_cat -d 1 -c red -A center -f '-*-lucida-*-r-*-*-*-1800-*-*-*-*-*-*'
+#Mod1 h                   :ExecCommand :
+#Mod1 z                   :ExecCommand :
+#Mod1 a                   :ExecCommand :
+#Mod1 x                   :ExecCommand echo X | osd_cat -d 1 -c red -A center -f '-*-lucida-*-r-*-*-*-1800-*-*-*-*-*-*'
 
 #Mod1 Shift braceleft     :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+Prior
 #Mod1 Shift braceright    :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+Next
-Mod1 Shift braceleft     :ExecCommand sleep 0.01 ; xdotool key --clearmodifiers ctrl+Prior
-Mod1 Shift braceright    :ExecCommand sleep 0.01 ; xdotool key --clearmodifiers ctrl+Next
+# These were good but now I have bound them in WebStorm, where they do the same but are a lot snappier.
+#Mod1 Shift braceleft     :ExecCommand sleep 0.01 ; xdotool key --clearmodifiers ctrl+Prior
+#Mod1 Shift braceright    :ExecCommand sleep 0.01 ; xdotool key --clearmodifiers ctrl+Next
 
 ## Function-Arrow keys
 #
