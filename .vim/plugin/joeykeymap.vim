@@ -996,6 +996,7 @@ nnoremap <silent> G :normal! ggG<CR><C-e>:exec ( winline() < winheight("%")-1 ? 
 "nnoremap <silent> G :normal! G<CR><C-e>:exec ( winline() < winheight("%")-1 ? ":normal! ggG" : "" )<CR>:call g:SexyScroller_ScrollToCursor()<CR>
 " TODO: This is bad if you want to ue [count]G to jump to a line.  We should disable it when there is a leading count!
 " TODO: It should only ever increase the number of ~ lines displayed, not reduce them.  If we are already displaying 12 ~ lines, I usually don't want it to reduce that to 1 ~ line.
+" TODO: I think we can solve this by making it an additional feature to SexyScroller.  If the scroll ends on the last line, and the cursor will be at the bottom of the screen, then shift the target up one line.
 
 " Make unimpaired's create-new-blank-line bindings create a blank comment line when over a comment.
 " Only works when 'formatoptions' contains `o`
@@ -1022,3 +1023,18 @@ nnoremap <D-]> <C-I>
 " These do not work for me.  They have a default action of moving between tabs.
 "nnoremap <D-S-[> :bp<CR>
 "nnoremap <D-S-]> :bn<CR>
+
+" Training:
+" Unfortunately this message is immediately made invisible by the -- INSERT -- message.
+"inoremap <silent> <Esc> <Esc>:echohl ErrorMsg <Bar> echo "Use Ctrl-C or Ctrl-[ instead!" <Bar> echohl<Enter>a
+"inoremap <silent> <Esc> <Nop>
+" This is bad because when I forget that Escape is a nop, I type subsequent normal commands but these get inserted!
+" What we really need is for Escape to drop all subsequent strokes until Ctrl-C or Ctrl-[ are hit.
+" And worse, mapping <Esc> also maps <Ctrl-[> so I can only use <Ctrl-C> to exit.  But Ctrl-C has behaviour which is not always desirable (e.g. it cancels repeats when exiting blockwise-visual mode).
+
+" If this isn't working, see:
+" :verb set timeout? ttimeout? timeoutlen? ttimeoutlen?
+inoremap jj <Esc>
+inoremap jk <Esc>
+inoremap kj <Esc>
+inoremap ;l <Esc>
