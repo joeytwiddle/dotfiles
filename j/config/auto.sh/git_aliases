@@ -539,10 +539,12 @@ alias glf='gitlog2 -search "^[^ ]+" --stat'
 alias glfp='gitlog2 -search "^[a-z0-9]{7}" --numstat'
 
 # Some common branches I like to read/search
+alias glu='gl @{u}'
 alias glom='gl origin/master'
 alias glod='gl origin/develop'
 alias glum='gl upstream/master'
 alias glud='gl upstream/develop'
+alias gllu='gll @{u}'
 alias gllom='gll origin/master'
 alias gllod='gll origin/develop'
 alias gllum='gll upstream/master'
