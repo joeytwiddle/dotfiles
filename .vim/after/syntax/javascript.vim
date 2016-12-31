@@ -60,7 +60,10 @@ highlight javaScriptDot cterm=bold ctermfg=white guifg=white gui=bold
 " highlight javaScriptComma cterm=bold ctermfg=white guifg=white gui=bold
 
 highlight link javaScriptNull javaScriptNumber
-highlight javaScriptNumber cterm=none ctermfg=cyan gui=none guifg=LightCyan
+" We shouldn't really be defining colors here.
+if get(g:, 'colors_name', 'default') == 'default'
+  highlight javaScriptNumber cterm=none ctermfg=cyan gui=none guifg=LightCyan
+endif
 
 " Like coffeeScript, highlight only the *last* property in an assignment
 " Added optional \[.*\] to catch e.g. myList[i-1] = ""; but it can catch too much sometimes!
@@ -141,4 +144,26 @@ silent! hi link jsFuncParens Normal
 silent! hi link jsFuncBraces Identifier
 silent! hi link jsParens Identifier
 silent! hi link jsBraces Identifier
+
+" Then I started using isRuslan/vim-es6, with monokai
+
+" isRuslan's syntax does not have any rule to match object properties which are functions.
+" So I stole this one from pangloss, and tweaked it:
+"syntax match javascriptFunctionKey /\<[a-zA-Z_$][0-9a-zA-Z_$]*\>\ze\(\s*:\s*function\s*\)/
+" Now it can detect arrow functions too:
+syntax match javascriptFunctionKey /\<[a-zA-Z_$][0-9a-zA-Z_$]*\>\ze\s*:\s*\(function\>\|(.*)\s*=>\|\w*\s*=>\)/
+silent! hi link javascriptFunctionKey Function
+
+" Also missing from isRuslan's:
+syntax match javascriptFunction "=>"
+
+" Also anything before a ( is a function call
+syntax match jsFunctionCall /\<[a-zA-Z_$][0-9a-zA-Z_$]*\>\ze\s*(/ contains=javascriptFunctionDeclaration
+hi link jsFunctionCall Function
+" Except the word "function"!
+"syntax keyword javascriptFunction function
+syntax match javascriptFunction /\<function\>/ contains=javascriptFunctionDeclaration
+hi clear javaScriptGlobalObjects
+hi link javaScriptGlobalObjects jsBuiltins
+" We need the contains=javascriptFunctionDeclaration above, or the args won't turn orange!
 
