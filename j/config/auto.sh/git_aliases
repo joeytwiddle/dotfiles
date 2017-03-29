@@ -721,6 +721,9 @@ alias gwinpshd='gd "$(git_guess_upstream_branch)..HEAD"'
 #[ -z "$remote_upstream_branch" ] && remote_upstream_branch="origin/master"
 [ -z "$remote_upstream_branch" ] && remote_upstream_branch="origin/develop"
 
+alias grm='git rm'
+alias gmv='git mv'
+
 # Git What Is Not Merged
 alias gwinm='gll "HEAD..${remote_upstream_branch}"'
 # Git What Is Not Merged Log
@@ -800,6 +803,9 @@ git_stash_pop_merge() {
 }
 alias gspm='git_stash_pop_merge'
 alias gspf='git_stash_pop_merge'
+
+alias gsi='git submodule init'
+alias gsu='git submodule update'
 
 # Like git clone but shows the username in the target directory
 # I no longer enjoy using this, because I care more about tab-completion of the project name than the author's name.  If there are separate repos with the same name, why not just put them all in one folder as different remotes?
