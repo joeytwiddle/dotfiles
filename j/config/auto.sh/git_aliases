@@ -768,7 +768,7 @@ gsld() {
 	stashes=($(git stash list | cut -d ':' -f 1))
 	local commit_id
 	for commit_id in "${stashes[@]}"
-	do git -c color.diff=always show "${commit_id}"
+	do git -c color.diff=always show "$@" "${commit_id}"
 	done |
 	less -R +'/(^commit .*|^diff .*)'
 }
