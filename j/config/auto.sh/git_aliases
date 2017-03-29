@@ -763,9 +763,11 @@ alias gsd='git show stash@{0}'
 alias gsf='git stash show'
 # Git Stash List Diffs: lists all stashed commits, displaying their diffs
 gsld() {
-	local stashes="$(git stash list | cut -d ':' -f 1)"
+	# We must use an array if we want to expand the words later in zsh; an array requires local on a separate line
+	local stashes
+	stashes=($(git stash list | cut -d ':' -f 1))
 	local commit_id
-	for commit_id in ${stashes}
+	for commit_id in "${stashes[@]}"
 	do git -c color.diff=always show "${commit_id}"
 	done |
 	less -R +'/(^commit .*|^diff .*)'
