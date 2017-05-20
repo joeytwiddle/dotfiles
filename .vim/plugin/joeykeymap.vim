@@ -535,7 +535,7 @@ nnoremap <C-s> :w<Enter>
 " Similarly I cannot map Ctrl-q
 "nnoremap Q :qa<Enter>
 " OK this is safer, my MBE settings will require it be hit twice.  And also it can be used to close a window.
-nnoremap Q :q<Enter>
+"nnoremap Q :q<Enter>
 " NOTE: If you really do want to use C-s and C-q then do this before loading vim:
 "   stty -ixon
 " Save for MacVim on normal Mac save key.
