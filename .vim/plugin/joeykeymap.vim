@@ -784,6 +784,10 @@ inoremap <S-Enter> <Esc>O
 " This one is better; it should insert at the cursor.
 cnoremap %<Tab> <C-r>%
 
+" To get the current line under the cursor as a command line argument
+cnoremap $_<Tab> <C-r>=shellescape(getline('.'))<CR>
+cnoremap $=<Tab> <C-r>=shellescape(getline('.'))<CR>
+
 " MacVim maps Backspace in visual mode to `"-d` which differs from the behaviour I am accustomed to (a lazy way to move back a character).
 " silent! will prevent it complaining it the mapping does not exist (or was cleared on an earlier load of this script)
 silent! xunmap <BS>
