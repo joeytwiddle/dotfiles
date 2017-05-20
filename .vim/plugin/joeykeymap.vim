@@ -441,6 +441,7 @@ cmap w!! w !sudo tee % >/dev/null
 " Because Tlist does not fire autocmds, it causes a bug where dim_inactive_windows dims the current window on startup.  We workaround this by switching window, and switching back again
 nnoremap <Leader>t :Tlist<Enter><C-w>w<C-w>p
 nnoremap <Leader>w :set invwrap<Enter>
+nnoremap <Leader>l :set invnumber<Enter>
 
 " Quick buffer switching (beyond Ctrl-PageUp/Down)
 "" Select buffer by any part of filename and Tab completion or arrows, or by number
