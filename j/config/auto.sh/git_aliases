@@ -986,6 +986,8 @@ gitwhatsup() {
 	echo "$(cursecyan)=== Not yet pushed ===$(cursenorm)"
 	gll "@{u}..HEAD" | cat
 	echo
+	echo "$(cursecyan)=== Current branch is tracking ===$(cursenorm)"
+	git rev-parse --abbrev-ref --symbolic-full-name @{u}
 	echo
 	# Try `git remote update` if you can't see all the remote branches
 }
