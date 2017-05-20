@@ -107,7 +107,7 @@ fi
 	sleep 1
 
 	lxpanel &
-	/opt/trinity/bin/kicker &
+	#/opt/trinity/bin/kicker &
 	# If we wait a bit longer, the nm-applet will be placed in the lxpanel instead of the Flubbox panel.
 	#sleep 2
 
@@ -152,6 +152,7 @@ fi
 	sleep 2
 
 	# Something is starting gnome-screensaver.  I think it might be nm-applet but I'm not sure.
+	# Mmm actually I think it might be mplayer or smplayer!
 	# I don't want gnome-screensaver if I have xscreensaver running, because I end up having to unlock twice!
 	# Although actually recently xscreensaver has been refusing to start when gnome-screensaver is present.
 	sleep 20
