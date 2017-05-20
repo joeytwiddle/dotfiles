@@ -117,6 +117,7 @@ unalias gd 2>/dev/null
 unalias gitlog 2>/dev/null
 unalias gac 2>/dev/null
 unalias gitwhatsup 2>/dev/null
+unalias gco 2>/dev/null
 # By the way, if you want to undefine a function instead of an alias, this works for bash and zsh:
 #   unset -f fn_name
 
@@ -644,27 +645,7 @@ alias gbg='git_in_root_dir git bisect good'
 alias gbb='git_in_root_dir git bisect bad'
 #alias gbr='git_in_root_dir git bisect reset'
 
-unalias gco 2>/dev/null   # REMOVEME
-#alias gco='git checkout'
-
-# After successfully doing a 'git checkout', also run the commands in the POST_GIT_CHECKOUT env var.
-# The proper way to do this is to use git hooks, e.g.: https://github.com/yannvanhalewyn/dotfiles/tree/master/git_template/hooks
-gco() {
-	# highlighting stderr here is useless, because git reports success on stderr too!
-	git checkout "$@"
-	local ret_status="$?"
-
-	if [ "$ret_status" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
-	then eval "$POST_GIT_CHECKOUT"
-	fi
-
-	# I find I don't always notice failed checkouts, because at a glance the warning message looks similar to the success message.
-	if [ "$ret_status" != 0 ]
-	then echo "$(tput setaf 1 ; tput bold)FAILED$(tput sgr0)" >/dev/stderr
-	fi
-
-	return "$ret_status"
-}
+alias gco='git checkout'
 # Sometimes we can't checkout because there are uncommitted changes to files which differ between the two branches
 # This can be handled by `git checkout -m` or by our own `gcos`
 alias gcom='gco -m'
@@ -672,32 +653,55 @@ alias gcos='git_do_with_changes_stashed gco'
 # `git checkout -p [. | path]` allows us to select hunks to reset.  It's a lighter version of `git checkout -- <path>`
 alias gcop='git checkout -p'
 
-POST_GIT_CHECKOUT="$POST_GIT_CHECKOUT ; update_cindex"
-if ! which ionice >/dev/null
-then
-	ionice() {
-		"$@"
-	}
-fi
-update_cindex() {
-	# If CSEARCHINDEX is set (to an absolute or relative folder) then use that,
-	# otherwise use the default file in HOME folder.
-	# CONSIDER: If we are in a repo subfolder but the repo root folder contains a ".csearchindex" then we could point CSEARCHINDEX at that file temporarily.
-	if which cindex >/dev/null && ( [ -z "$CSEARCHINDEX" ] && [ -f "$HOME"/.csearchindex ] || [ -n "$CSEARCHINDEX" ] && [ -f "$CSEARCHINDEX" ] )
-	then
-		local git_root_folder="$(git rev-parse --show-toplevel)"
-		# If any of the indexed folders are equal to or below this project's folder
-		if [ -n "$git_root_folder" ] && cindex -list | grep -q "^$git_root_folder\($\|/\)"
-		then
-			echo "Updating cindex (in the background)"
-			# We do this in a separate shell in order to disable the tardy job completion message.
-			(
-				[[ -n "$ZSH_NAME" ]] && unsetopt MONITOR
-				nice ionice cindex 2>/dev/null &
-			)
-		fi
-	fi
-}
+# After successfully doing a 'git checkout', also run the commands in the POST_GIT_CHECKOUT env var.
+# Now disabled in favour of the alias above, because that can provide tab-completion from the shell, which this function suppresses
+# The proper way to do this is to use git hooks, e.g.: https://github.com/yannvanhalewyn/dotfiles/tree/master/git_template/hooks
+# We can't make a global git hook but we can make templates and easily add them to existing repos: http://stackoverflow.com/questions/2293498/git-commit-hooks-global-settings
+#unalias gco 2>/dev/null
+#gco() {
+#	# highlighting stderr here is useless, because git reports success on stderr too!
+#	git checkout "$@"
+#	local ret_status="$?"
+#
+#	if [ "$ret_status" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
+#	then eval "$POST_GIT_CHECKOUT"
+#	fi
+#
+#	# I find I don't always notice failed checkouts, because at a glance the warning message looks similar to the success message.
+#	if [ "$ret_status" != 0 ]
+#	then echo "$(tput setaf 1 ; tput bold)FAILED$(tput sgr0)" >/dev/stderr
+#	fi
+#
+#	return "$ret_status"
+#}
+#
+## Primarily I use POST_GIT_CHECKOUT to run cindex whenever I change branch
+#POST_GIT_CHECKOUT="$POST_GIT_CHECKOUT ; update_cindex"
+#if ! which ionice >/dev/null
+#then
+#	ionice() {
+#		"$@"
+#	}
+#fi
+#update_cindex() {
+#	# If CSEARCHINDEX is set (to an absolute or relative folder) then use that,
+#	# otherwise use the default file in HOME folder.
+#	# CONSIDER: If we are in a repo subfolder but the repo root folder contains a ".csearchindex" then we could point CSEARCHINDEX at that file temporarily.
+#	if which cindex >/dev/null && ( [ -z "$CSEARCHINDEX" ] && [ -f "$HOME"/.csearchindex ] || [ -n "$CSEARCHINDEX" ] && [ -f "$CSEARCHINDEX" ] )
+#	then
+#		local git_root_folder="$(git rev-parse --show-toplevel)"
+#		# If any of the indexed folders are equal to or below this project's folder
+#		if [ -n "$git_root_folder" ] && cindex -list | grep -q "^$git_root_folder\($\|/\)"
+#		then
+#			echo "Updating cindex (in the background)"
+#			# We do this in a separate shell in order to disable the tardy job completion message.
+#			(
+#				[[ -n "$ZSH_NAME" ]] && unsetopt MONITOR
+#				nice ionice cindex 2>/dev/null &
+#			)
+#		fi
+#	fi
+#}
 
 # TODO: There are a number of other occasions when cindex should be run, e.g. after a pull, reset or file save!  Perhaps it would be better if any programs which use csearch should just run cindex every time before they run csearch.  That should still be faster than grep!
 
