@@ -772,15 +772,34 @@ alias gsd='git show stash@{0}'
 # Git Stash (diff) Files shows the files changed (like --stat)
 alias gsf='git stash show'
 # Git Stash List Diffs: lists all stashed commits, displaying their diffs
+# This was bailing out with an error in zsh 5.0.2 when I was trying to start Fluxbox.
+#gsld() {
+#	# We must use an array if we want to expand the words later in zsh; an array requires local on a separate line
+#	local stashes
+#	stashes=($(git stash list | cut -d ':' -f 1))
+#	local commit_id
+#	for commit_id in "${stashes[@]}"
+#	do git -c color.diff=always show "$@" "${commit_id}"
+#	done |
+#	less -R +'/(^commit .*|^diff .*)'
+#}
+# So here is a safer version
 gsld() {
-	# We must use an array if we want to expand the words later in zsh; an array requires local on a separate line
-	local stashes
-	stashes=($(git stash list | cut -d ':' -f 1))
-	local commit_id
-	for commit_id in "${stashes[@]}"
-	do git -c color.diff=always show "$@" "${commit_id}"
-	done |
-	less -R +'/(^commit .*|^diff .*)'
+	(
+		# We run in a subshell so that we can do this without affecting the outer environment
+		# Most shells will expand the unquoted $stashes below, zsh needs a nudge in order to do that
+		if [ -n "$ZSH_NAME" ]
+		then setopt SH_WORD_SPLIT
+		fi
+		# We must use an array if we want to expand the words later in zsh; an array requires local on a separate line
+		local stashes
+		stashes="$(git stash list | cut -d ':' -f 1)"
+		local commit_id
+		for commit_id in $stashes
+		do git -c color.diff=always show "$@" "${commit_id}"
+		done |
+		less -R +'/(^commit .*|^diff .*)'
+	)
 }
 
 # Use this to remove (reset) selected patches of uncommitted files.  Finer grained than `git reset` or `git checkout --` and also more convenient.
