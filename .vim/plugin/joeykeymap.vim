@@ -544,9 +544,10 @@ nnoremap <C-s> :w<Enter>
 "	nmap <d-s> <C-s>
 "endif
 
-" The default ZZ gets confused by MiniBufExplorer
-" Normally ZZ quits just the current window, not the whole session.
-" Perhaps I should just set MBE to close when it is the last buffer.
+" Normally ZZ quits only the current window, and quits Vim if it was the last window.
+" But the builtin ZZ gets confused by MiniBufExplorer.
+" Our mapping here quits the entire Vim session when ZZ is used.
+" TODO: But perhaps I should just set MBE to close when it is the last buffer.
 nnoremap ZZ :wqa<Enter>
 
 " If there is more than one matching tag, let the user choose.
