@@ -136,6 +136,11 @@ if exists('*ShowGitStatus')
 endif
 
 
+" WORKAROUND: Remove highlighting because it tends to go black after the GitStatus when I switch color scheme.
+"let &statusline = substitute(&statusline, '%#[^#]*#', '', 'g')
+" (I had to do this again for MiniBufExplorer because we set a local statusline for that.)
+
+
 " Shows time:
 " :set rulerformat=%55(%{strftime('%a\ %b\ %e\ %I:%M\ %p')}\ %5l,%-6(%c%V%)\ %P%)
 " Previous:
