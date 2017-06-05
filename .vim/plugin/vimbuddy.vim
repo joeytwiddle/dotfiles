@@ -129,8 +129,10 @@ if exists('*ShowGitStatus')
   "let &statusline = substitute(&statusline, '%f', '%{ShowCurrentGitBranch()}%f%{ShowGitStatusForBuffer(" [","]")}', '')
   " If we want to color only the things inside the brackets, then we must always show the brackets.
   " It seems least bad to use the "not-current" background on the current window than to use the "current" background on many not-current windows!
-  highlight StatusGitStatus cterm=bold,reverse ctermfg=white ctermbg=magenta guifg=magenta guibg=#bbbbbb gui=bold
-  let &statusline = substitute(&statusline, '%f', '%{ShowCurrentGitBranch()}%f [%#StatusGitStatus#%{ShowGitStatusForBuffer("","")}%##]', '')
+  "highlight StatusGitStatus cterm=bold,reverse ctermfg=white ctermbg=magenta guifg=magenta guibg=#bbbbbb gui=bold
+  "let &statusline = substitute(&statusline, '%f', '%{ShowCurrentGitBranch()}%f [%#StatusGitStatus#%{ShowGitStatusForBuffer("","")}%##]', '')
+  " But perhaps even better just to use no special color at all
+  let &statusline = substitute(&statusline, '%f', '%{ShowCurrentGitBranch()}%f [%{ShowGitStatusForBuffer("","")}%##]', '')
 endif
 
 
