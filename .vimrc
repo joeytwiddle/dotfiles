@@ -978,7 +978,14 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	"call add(vamAddons, "github:koron/nyancat-vim")       " You might need this, but you probably won't
 
-	"call add(vamAddons, "github:scrooloose/syntastic")    " Checks syntax as you are working.  Needs syntax checker for relevant language to be installed separately: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
+	call add(vamAddons, "github:scrooloose/syntastic")    " Checks syntax as you are working.  Needs syntax checker for relevant language to be installed separately: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
+	set statusline+=%#warningmsg#
+	set statusline+=%{SyntasticStatuslineFlag()}
+	set statusline+=%*
+	let g:syntastic_always_populate_loc_list = 1
+	let g:syntastic_auto_loc_list = 1
+	let g:syntastic_check_on_open = 1
+	let g:syntastic_check_on_wq = 0
 
 	" https://github.com/bling/vim-airline
 	"call add(vamAddons, "github:bling/vim-airline")        " Cool statusline
