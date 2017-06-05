@@ -699,7 +699,8 @@ alias gsp='git_stash_pop_safe'
 alias gsa='git stash apply'
 #alias gsl='git stash list'
 #alias gsl='git stash list --date=relative --oneline'
-alias gsl='git stash list --date=relative --oneline | PADDING=0 DELIM=" " numbereachline | sedreplace "^\([0-9]*\)" "stash@{\1}" | sedreplace "refs/stash@" "" | dropcols 2'
+# All this just adds the date to the normal git stash list:
+alias gsl='git stash list --date=relative --oneline | PADDING=0 DELIM=" " numbereachline | sedreplace "^\([0-9]*\)" "stash@{\1}" | sedreplace "refs/stash@" "" | dropcols 2 | less -REX'
 #alias gsl='git stash list --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an <%ae>%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
 # Git Stash Diff shows the diff of the topmost or specified stash.  Notably not `git stash drop` which must be typed in full, to avoid doing it too easily and accidentally.
 # This shows only the diff:
@@ -747,6 +748,7 @@ alias gspm='git_stash_pop_merge'
 alias gspf='git_stash_pop_merge'
 
 # Like git clone but shows the username in the target directory
+# I no longer enjoy using this, because I care more about tab-completion of the project name than the author's name.  If there are separate repos with the same name, why not just put them all in one folder as different remotes?
 git_clone_friendly() {
 	if [ $# -gt 1 ]
 	then git clone "$@"
@@ -756,7 +758,8 @@ git_clone_friendly() {
 		git clone "$url" "$username_dot_repo"
 	fi
 }
-alias gcl='git_clone_friendly'
+#alias gcl='git_clone_friendly'
+alias gcl='git clone'
 
 # Git Auto Commit, or Git Add Commit, or Git Add and Commit
 gac() {
