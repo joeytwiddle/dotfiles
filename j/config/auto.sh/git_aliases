@@ -481,6 +481,7 @@ gitlog() {
 # I am now finding this a little more informative than glg: git log -p --graph --decorate
 # I rarely want to use glp directly; I prefer glg because it customizes the color of the commit message.
 # OK so I recently had to track down some code which had been deleted/lost during a merge.  I was using git log <filename>.  The *only* way which worked was -c; -cc or neither would not display this line!  So -c all the way... at least for that case!  If -c causes duplicate information to be displayed, perhaps we should use it at the same time as not showing branches.
+# The --stat option sometimes abbreviates the filenames it displays.  If you need the whole path, use --numstat instead.
 alias glp='gitlog -p -U2 --stat'
 # Here --stat show a quick summary of changed files, before actually showing the diffs.  I rather enjoy this when using 'gl' as it lets me decide from the top of each commit whether there are any files I am interested in, and if not I can happily skip straight to the next commit.  In other situations, e.g. when I am planning to read all the details, --stat is just chaff.
 # "Git Log Grey" - Like 'gl' except we present my favourite colors
@@ -642,14 +643,16 @@ update_cindex() {
 # TODO: There are a number of other occasions when cindex should be run, e.g. after a pull, reset or file save!  Perhaps it would be better if any programs which use csearch should just run cindex every time before they run csearch.  That should still be faster than grep!
 
 # Git What Is Not Pushed (doesn't always work - I use gbs more often)
-#alias gwinp='gll @{upstream}..HEAD'
-alias gwinp='gll "$(git_guess_upstream_branch)..HEAD"'
+# I very rarely use this these days, because my git-status-prompt tells me how many local commits need to be pushed.
+alias gwinp=gwinpsh
+#alias gwinpsh='gll @{upstream}..HEAD'
+alias gwinpsh='gll "$(git_guess_upstream_branch)..HEAD"'
 # Git What Is Not Pushed Log
-alias gwinpl='gl "$(git_guess_upstream_branch)..HEAD"'
+alias gwinpshl='gl "$(git_guess_upstream_branch)..HEAD"'
 # Git What Is Not Pushed Files
-alias gwinpf='glf "$(git_guess_upstream_branch)..HEAD"'
+alias gwinpshf='glf "$(git_guess_upstream_branch)..HEAD"'
 # Git What Is Not Pushed Diff
-alias gwinpd='gd "$(git_guess_upstream_branch)..HEAD"'
+alias gwinpshd='gd "$(git_guess_upstream_branch)..HEAD"'
 
 # Shortcuts I never used
 ## Git To Push
@@ -661,14 +664,25 @@ alias gwinpd='gd "$(git_guess_upstream_branch)..HEAD"'
 ## Git To Push Details / Diff (a direct diff, without listing each commit)
 #alias gtpd='gwinpd'
 
+# Usually my @{upstream} is where I push to, but not where I pull from.
+# So I need to specify where I will pull from:
+#[ -z "$remote_upstream_branch" ] && remote_upstream_branch="origin/master"
+[ -z "$remote_upstream_branch" ] && remote_upstream_branch="origin/develop"
+
 # Git What Is Not Merged
-alias gwinm='gll "HEAD..$(git_guess_upstream_branch)"'
+alias gwinm='gll "HEAD..${remote_upstream_branch}"'
 # Git What Is Not Merged Log
-alias gwinml='gl "HEAD..$(git_guess_upstream_branch)"'
+alias gwinml='gl "HEAD..${remote_upstream_branch}"'
 # Git What Is Not Merged Files
-alias gwinmf='glf "HEAD..$(git_guess_upstream_branch)"'
+alias gwinmf='glf "HEAD..${remote_upstream_branch}"'
 # Git What Is Not Merged Diff
-alias gwinmd='gd "HEAD..$(git_guess_upstream_branch)"'
+alias gwinmd='gd "HEAD..${remote_upstream_branch}"'
+
+# Git What Is Not Pulled (alias for Merged)
+alias gwinpl=gwinm
+alias gwinpll=gwinml
+alias gwinplf=gwinmf
+alias gwinpld=gwinmd
 
 alias gss='git stash save'
 alias gssu='git stash save --include-untracked'
