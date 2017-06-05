@@ -353,12 +353,20 @@ alias gmrod='gmr origin/develop'
 
 # This is for older versions of git (<1.7.0) which didn't accept the --all parameter.
 # We could actually perform the same action with the old built-in `git remote update`, but that won't let us fetch tags and do pruning.
+# We use --all if git supports it, although it isn't significantly faster.
 git_fetch_all() {
-	local remote
-	git remote |
-	while read remote
-	do git fetch $remote "$@"
-	done
+	if [[ $(git --version | awk '/git/ {print $3}') < 1.7 ]]
+	then
+		local remote
+		git remote |
+		while read remote
+		do
+			echo "Fetching ${remote}"
+			git fetch "${remote}" "$@"
+		done
+	else
+		git fetch --all "$@"
+	fi
 }
 alias gf='git_fetch_all -v'
 alias gfa='git_fetch_all -v --tags --prune'
