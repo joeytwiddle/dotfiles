@@ -298,3 +298,6 @@
 	# When displaying commits in git-rebase --interactive, also display the authors
 	instructionFormat = %s - %an
 
+[mergetool]
+	# This prevents mergetool from leaving those annoying <file>.orig files around
+	keepBackup = false
