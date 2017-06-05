@@ -270,6 +270,25 @@ git_commit_immediate_fixup() {
 }
 alias gcf='git_commit_immediate_fixup'
 
+# Performs gap but offers the files in most-recently-modified order.
+# This is useful if you have made a few changes tangential to your main work, and now want to "pop" them off into a commit.
+# This is useful if you want to commit some of your most recent changes, while still leaving your older changes in the working tree.
+git_add_patch_by_date() {
+	local git_root_folder="$(git rev-parse --show-toplevel)"
+	cd "${git_root_folder}"
+	local modified_files
+	IFS=$'\n' modified_files=($(git status --porcelain | grep '^.M' | sed 's+^.. ++' | sortfilesbydate | reverse))
+	# This did not allow any user input, and would have suffered the same as below anyway.
+	#| xargs -d '\n' git add -p
+	# This just puts them back into alphabetical/disk/git order!
+	#git add -p "${modified_files[@]}"
+	# This offers them in the desired reverse-date order, but now 'q' doesn't work.  Use Ctrl-C instead.
+	for file in "${modified_files[@]}"
+	do git add -p "${file}"
+	done
+}
+alias gapd='git_add_patch_by_date'
+
 if [ -n "$ZSH_NAME" ]
 then
 	: #compdef ga=git
