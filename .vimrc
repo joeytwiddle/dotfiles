@@ -288,8 +288,10 @@ autocmd VimLeave * silent !stty ixon
 
 	" My defaults, which may be overridden later by filetype rules, plugins, or
 	" modeline.
-	set sw=3 "shiftwidth
-	set ts=3 "tabstop
+	"set sw=3 "shiftwidth
+	"set ts=3 "tabstop
+	" I find these are better defaults given that I am often editing markdown.
+	set ts=4 sw=4 expandtab
 
 	" The default textwidth=0 will wrap to screen width, if screen width is <79.  This seems undesirable to me.  If we are wrapping, let's wrap to "the standard width" 80.
 	"set textwidth=79
