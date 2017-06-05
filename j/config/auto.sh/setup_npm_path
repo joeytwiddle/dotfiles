@@ -69,6 +69,17 @@ else
 
 		nodewhatsup
 	}
+	nvmusedefault() {
+		unalias node 2>/dev/null
+		unalias npm 2>/dev/null
+
+		unset PREFIX
+		nvm use default
+
+		unset NODE_PATH
+
+		nodewhatsup
+	}
 	nvmusesystem() {
 		unalias node 2>/dev/null
 		unalias npm 2>/dev/null
