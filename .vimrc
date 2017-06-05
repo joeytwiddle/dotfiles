@@ -746,7 +746,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" It seems that the first %#HighlightGroup# works ok, but the next one turns us to white-on-black.
 	" If you get into a mess, here is a quick way to clear all highlights from the statusline:
 	"   let &statusline = substitute(&statusline, '%#[A-Za-z]*#', '', 'g')
-	"call add(vamAddons,"github:airblade/vim-gitgutter")  " Git meta-info about each line (in left-hand signs column (the gutter), or the background color of each line)
+	call add(vamAddons,"github:airblade/vim-gitgutter")  " Git meta-info about each line (in left-hand signs column (the gutter), or the background color of each line)
 	"let g:gitgutter_diff_args = '-w "master@{1 week ago}"'
 	"call add(vamAddons,"github:mhinz/vim-signify")       " Similar but supports more VCSs!  BUT was pretty slow on some files, and completely locking up vim on some others (e.g.: j/tools/wine and ~/.vim/ftplugin/sh.vim).  Even turning it off with :SignifyToggle took ages!
 	call add(vamAddons,"github:terryma/vim-expand-region")   " Grow the visual block easily
