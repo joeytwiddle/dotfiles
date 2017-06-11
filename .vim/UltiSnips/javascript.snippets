@@ -81,3 +81,9 @@ endsnippet
 snippet Loge "console.log an expression with file and line number" w
 console.log("[log] (" + new Error().stack.split('\n')[1].replace(/^ *at /, '').split('/').slice(-2).join('/') + ") $1:", $1);$0
 endsnippet
+
+snippet Prom "Promise" w
+new Promise((resolve, reject) => {
+	$0
+});
+endsnippet
