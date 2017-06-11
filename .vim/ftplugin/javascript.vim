@@ -4,7 +4,7 @@
 " This one causes a flash but seems to work :)
 "iab \f function) {<CR>}<Up><End><Left><Left><Left>
 " But with the {} mapping below, it seems we don't need this one.
-iab \f function) {<CR><Up><End><Left><Left><Left>
+iab \f function () {<CR><Up><End><Left><Left><Left>
 "iab -> function) {ODODOD
 " These only trigger with a space before and after them.  =/
 "iab ( ()<Left>
@@ -31,6 +31,10 @@ nmap <buffer> <Leader>Log viW<Leader>log
 vnoremap <buffer> <Leader>F >gvdOfunction _ () {<CR><Esc>gPi}<Esc>
 nmap <buffer> <Leader>F Vip<Leader>F
 vnoremap <buffer> <Leader>V sunnamedVar<Esc>Ovar unnamedVar = <Esc>pa;<Esc>
+
+" Select entire function from visual mode ("v in function")
+"vnoremap if <Esc>?^\s*function<CR>v/{<CR>%o
+vnoremap if <Esc>?\<function\>\s*[A-Za-z0-9_$]*\s*(<CR>v/{<CR>%o
 
 " Like WebStorm, when closing a block, indent all the lines inbetween
 " DISABLED because currently = does not indent function callbacks correctly when they come after a `).then(`
