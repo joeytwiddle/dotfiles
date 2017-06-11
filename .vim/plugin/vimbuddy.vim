@@ -93,7 +93,7 @@ endfunction
 function! ShowGitStatusForBuffer(...)
   let  left_wrapper = a:0 >= 1 ? a:1 : '['
   let right_wrapper = a:0 >= 2 ? a:2 : '] '
-  if exists('b:last_checked_buffers_git_status_time') && s:get_ms_since(b:last_checked_buffers_git_status_time) < 10000
+  if exists('b:last_checked_buffers_git_status_time') && s:get_ms_since(b:last_checked_buffers_git_status_time) < 30000
     " Use cached value
   else
     " Get value and cache it
@@ -121,6 +121,8 @@ function! ShowGitStatusForBuffer(...)
   let file_status = b:last_checked_buffers_git_status_value
   return file_status == '' ? '' : left_wrapper . file_status . right_wrapper
 endfunction
+
+autocmd BufWritePost * unlet! b:last_checked_buffers_git_status_time
 
 function! s:CleanSystemCall(command)
   let result = system(a:command)
