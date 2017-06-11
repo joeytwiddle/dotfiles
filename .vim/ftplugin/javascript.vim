@@ -200,3 +200,22 @@ function! s:LoadNodeModule()
   endif
 endfunction
 
+" Instead of FindFileAbove we could probably use findfile(fname, path.';')
+function! s:FindFileAbove(fname, path)
+  let path = a:path
+  while 1
+    if filereadable(path . "/" . a:fname)
+      return 1
+    endif
+    if path == "/"
+      break
+    endif
+    let path = fnamemodify(path . "/../", ":p")
+  endwhile
+  return 0
+endfunction
+
+" Use CTRL-] for Tern if possible
+if s:FindFileAbove(".tern-project", ".")
+  noremap <buffer> <silent> <c-]> :TernDef<CR>
+endif
