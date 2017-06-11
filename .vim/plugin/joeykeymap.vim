@@ -825,7 +825,7 @@ function! s:CycleYanksBackwards()
 	let @1 = unnamed
 endfunction
 function! s:ShowRegisterSummary()
-	echo strpart("Unnamed register is now: " . substitute( substitute(@", '\n', '\\n', 'g'), '\t', '->', 'g' ), 0, &columns - 15)<CR>
+	echo strpart("Unnamed register is now: " . substitute( substitute(@", '\n', '\\n', 'g'), '\t', '->', 'g' ), 0, &columns - 15)
 endfunction
 nmap \cy :call <SID>CycleYanks()<CR>:call <SID>ShowRegisterSummary()<CR>
 nmap \cY :call <SID>CycleYanksBackwards()<CR>:call <SID>ShowRegisterSummary()<CR>
@@ -834,6 +834,9 @@ nnoremap \cR :call <SID>ShowRegisterSummary()<CR>
 " We could record that info by mapping p and P, but then we will suffer the same issue as other YankRings, no '.' repeats!
 "nnoremap \<C-n> u:call <SID>CycleYanks()<CR>p
 "nnoremap \<C-p> u:call <SID>CycleYanksBackwards()<CR>p
+
+" Display registers when we are about to paste (or cut) into one
+"nnoremap " :reg<CR>:sleep 3<CR>"
 
 " Search help files.  Don't use this.  Use :helpgrep
 " I want the quickfix to open results in the newly created :help or :new window, but I cannot get that to happen!
@@ -1017,6 +1020,16 @@ nnoremap ]<C-Space> mzo<Esc>g'z
 
 nnoremap <Leader>U :UndotreeToggle<CR>
 
+" This is popular and home-row, and it's probably better than <Escape> and <Ctrl-C>
+" If these aren't working, see:
+" :verb set timeout? ttimeout? timeoutlen? ttimeoutlen?
+" I no longer need these, now I am using xcape
+"inoremap jj <Esc>
+" Other people like jk
+"inoremap jk <Esc>
+"inoremap kj <Esc>
+"inoremap ;l <Esc>
+
 " For Mac, inspired by WebStorm
 " Command-Enter: Split the current line at cursor (like <Enter>), but don't move down
 inoremap <D-Enter> <Enter><Up><End>
@@ -1038,9 +1051,8 @@ nnoremap <D-]> <C-I>
 " What we really need is for Escape to drop all subsequent strokes until Ctrl-C or Ctrl-[ are hit.
 " And worse, mapping <Esc> also maps <Ctrl-[> so I can only use <Ctrl-C> to exit.  But Ctrl-C has behaviour which is not always desirable (e.g. it cancels repeats when exiting blockwise-visual mode).
 
-" If this isn't working, see:
-" :verb set timeout? ttimeout? timeoutlen? ttimeoutlen?
-inoremap jj <Esc>
-inoremap jk <Esc>
-inoremap kj <Esc>
-inoremap ;l <Esc>
+" Play filename under cursor (entire line)
+"nnoremap <Leader>play :execute "!mplayer " . shellescape(getline("."))<CR>
+"nnoremap <Leader>play :execute "!xterm -e mplayer " . shellescape(getline(".")) . " &"<CR><CR>
+nnoremap <Leader>play :execute "!xterm -e env EQ=widebass ~/j/tools/mplayer " . shellescape(getline(".")) . " &"<CR><CR>
+nnoremap <Leader>del :execute "!del " . shellescape(getline(".")) . " ; sleep 1"<CR><CR>
