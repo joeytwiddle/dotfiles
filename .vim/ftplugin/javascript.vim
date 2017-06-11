@@ -148,6 +148,7 @@ endfunction
 
 call s:CheckNotCoffee()
 
+" NPM-compatible gF
 " If the user has no custom mapping for gF, let gF find required JS files
 " Adapted from my jade.vim magic gF
 " Should be refactored so that various filetypes can configure it for their needs.
@@ -182,9 +183,10 @@ function! s:LoadNodeModule()
     if !filereadable(fname)
       let fname = s:SeekFile(['./node_modules/' . cfile . '/lib'], ['', '.js'], 'index.js')
     endif
-    " TODO: In fact the entry point file location is configurable in
-    " package.json, so really we should read that!
-    " We could assume node is available, and do: node --eval 'fs=require("fs");data=JSON.parse(fs.readFileSync("./package.json"));console.log(data.bin)'
+    " TODO: In fact the entry point file location is configurable in package.json.
+    " We could try to extract it: node --eval 'fs=require("fs");data=JSON.parse(fs.readFileSync("./package.json"));console.log(data.bin)'
+    " But perhaps easier: node --eval "console.log( require.resolve('" . cfile . "') )"   (We should run this from the same folder as the current file.)
+    " This returns an absolute filename, which we might want to relativise.  Otherwise it will spew an error to stderr, but still exit with exit code 0.
   endif
   if filereadable(fname)
     let fname = simplify(fname)
