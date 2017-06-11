@@ -107,6 +107,10 @@ highlight OperatorPlus ctermfg=green guifg=green
 highlight OperatorMultiply ctermfg=yellow guifg=yellow
 highlight OperatorDivide ctermfg=red guifg=red
 
+" I was running isRuslan/vim-es6 and vim-jsx and also polyglot.  In the monokai theme my arrow functions were getting half highlighted as an = operator by isRuslan.  This was to fix it:
+syn match jsArrowFunctionJoey /=>/
+highlight link jsArrowFunctionJoey jsFunction
+
 "" Added some more, getting silly now!
 "syn match ComparatorPositive /\(>\|>=\|===\|==\)/
 "syn match ComparatorNegative /\(<\|<=\|!==\|!=\)/
