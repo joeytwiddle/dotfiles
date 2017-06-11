@@ -1158,7 +1158,25 @@ function! <SID>FindCreateWindow(bufName, forceEdge, isExplorer, doDebug)
 
       "" Make the MiniBufExplorer statusline more helpful, by displaying the CWD.
       " %{expand('$USER')}@%{expand('$HOSTNAME')}:
-      setlocal statusline=%<%{fnamemodify(getcwd(),\ ':~')}\ %f\ %#Error#%{\ &modified\ ?\ \"[+]\"\ :\ \"\"\ }%##%{\ &modifiable\ ?\ \"\"\ :\ \"[-]\"\ }%h%w%r%=0x%02B\ %v\|%c/%{len(getline('.'))}\ :%0l/%-0L\ %0n^%<
+      " setlocal statusline=%<%{fnamemodify(getcwd(),\ ':~')}\ %f\ %#Error#%{\ &modified\ ?\ \"[+]\"\ :\ \"\"\ }%##%{\ &modifiable\ ?\ \"\"\ :\ \"[-]\"\ }%h%w%r%=0x%02B\ %v\|%c/%{len(getline('.'))}\ :%0l/%-0L\ %0n^%<
+      "" Although getcwd() shows the cwd of whatever window is focused, I could not get the filename of whatever window was focused.  %{bufname(winbufnr(winnr()))}
+      "let mbe_statusline = '%<%{expand("$USER")}@' . hostname . ':%{fnamemodify(getcwd(), ":~")} '
+      "let &l:statusline = mbe_statusline . substitute(&statusline, '.*%=', '%=', '')
+      "let mbe_statusline = '%{fnamemodify(getcwd(), ":~")}%=%<%{expand("$USER")}@' . hostname . ' %{substitute(system("date"), "\n.*", "", "")}'
+      " We will add the hostname only if we are working over ssh
+      if $SSH_CONNECTION == ""
+        let hostname_prefix = ""
+      else
+        "" I only know how to get the hostname on unix machines
+        if has('unix') || has('macunix')
+          let hostname = substitute(substitute(system("hostname"),'\n.*', '', ''), '%', '%%', 'g')
+          let hostname_prefix = '%<%{expand("$USER")}@' . hostname . ':'
+        else
+          let hostname = ""
+        endif
+      endif
+      let mbe_statusline = hostname_prefix . '%{fnamemodify(getcwd(), ":~")}%=%{substitute(system("date"), "\n.*", "", "")}'
+      let &l:statusline = mbe_statusline
     endif
 
     if a:doDebug
