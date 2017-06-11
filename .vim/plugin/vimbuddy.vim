@@ -98,6 +98,10 @@ function! ShowGitStatusForBuffer(...)
   else
     " Get value and cache it
     let full_file_path = resolve(expand('%:p'))
+    " We might not have a filename (e.g. this a new unnamed buffer, or a named buffer which we have not yet written)
+    if !filereadable(full_file_path)
+        return '  '
+    endif
     " Of the two chars returned, I believe the first is staged status, while the second is file vs HEAD.
     " I think the user might not be interested in staged status, therefore in future I might modify this to display only the second char.
     let parent_folder = fnamemodify(full_file_path, ":h")
