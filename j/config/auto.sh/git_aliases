@@ -270,6 +270,25 @@ git_commit_immediate_fixup() {
 }
 alias gcf='git_commit_immediate_fixup'
 
+# Performs gap but offers the files in most-recently-modified order.
+# This is useful if you have made a few changes tangential to your main work, and now want to "pop" them off into a commit.
+# This is useful if you want to commit some of your most recent changes, while still leaving your older changes in the working tree.
+git_add_patch_by_date() {
+	local git_root_folder="$(git rev-parse --show-toplevel)"
+	cd "${git_root_folder}"
+	local modified_files
+	IFS=$'\n' modified_files=($(git status --porcelain | grep '^.M' | sed 's+^.. ++' | sortfilesbydate | reverse))
+	# This did not allow any user input, and would have suffered the same as below anyway.
+	#| xargs -d '\n' git add -p
+	# This just puts them back into alphabetical/disk/git order!
+	#git add -p "${modified_files[@]}"
+	# This offers them in the desired reverse-date order, but now 'q' doesn't work.  Use Ctrl-C instead.
+	for file in "${modified_files[@]}"
+	do git add -p "${file}"
+	done
+}
+alias gapd='git_add_patch_by_date'
+
 if [ -n "$ZSH_NAME" ]
 then
 	: #compdef ga=git
@@ -337,12 +356,20 @@ alias gmra='git rebase --abort'
 
 # This is for older versions of git (<1.7.0) which didn't accept the --all parameter.
 # We could actually perform the same action with the old built-in `git remote update`, but that won't let us fetch tags and do pruning.
+# We use --all if git supports it, although it isn't significantly faster.
 git_fetch_all() {
-	local remote
-	git remote |
-	while read remote
-	do git fetch $remote "$@"
-	done
+	if [[ $(git --version | awk '/git/ {print $3}') < 1.7 ]]
+	then
+		local remote
+		git remote |
+		while read remote
+		do
+			echo "Fetching ${remote}"
+			git fetch "${remote}" "$@"
+		done
+	else
+		git fetch --all "$@"
+	fi
 }
 alias gf='git_fetch_all -v'
 alias gfa='git_fetch_all -v --tags --prune'
@@ -461,6 +488,7 @@ gitlog() {
 # I am now finding this a little more informative than glg: git log -p --graph --decorate
 # I rarely want to use glp directly; I prefer glg because it customizes the color of the commit message.
 # OK so I recently had to track down some code which had been deleted/lost during a merge.  I was using git log <filename>.  The *only* way which worked was -c; -cc or neither would not display this line!  So -c all the way... at least for that case!  If -c causes duplicate information to be displayed, perhaps we should use it at the same time as not showing branches.
+# The --stat option sometimes abbreviates the filenames it displays.  If you need the whole path, use --numstat instead.
 alias glp='gitlog -p -U2 --stat'
 # Here --stat show a quick summary of changed files, before actually showing the diffs.  I rather enjoy this when using 'gl' as it lets me decide from the top of each commit whether there are any files I am interested in, and if not I can happily skip straight to the next commit.  In other situations, e.g. when I am planning to read all the details, --stat is just chaff.
 # "Git Log Grey" - Like 'gl' except we present my favourite colors
@@ -623,14 +651,16 @@ update_cindex() {
 # TODO: There are a number of other occasions when cindex should be run, e.g. after a pull, reset or file save!  Perhaps it would be better if any programs which use csearch should just run cindex every time before they run csearch.  That should still be faster than grep!
 
 # Git What Is Not Pushed (doesn't always work - I use gbs more often)
-#alias gwinp='gll @{upstream}..HEAD'
-alias gwinp='gll "$(git_guess_upstream_branch)..HEAD"'
+# I very rarely use this these days, because my git-status-prompt tells me how many local commits need to be pushed.
+alias gwinp=gwinpsh
+#alias gwinpsh='gll @{upstream}..HEAD'
+alias gwinpsh='gll "$(git_guess_upstream_branch)..HEAD"'
 # Git What Is Not Pushed Log
-alias gwinpl='gl "$(git_guess_upstream_branch)..HEAD"'
+alias gwinpshl='gl "$(git_guess_upstream_branch)..HEAD"'
 # Git What Is Not Pushed Files
-alias gwinpf='glf "$(git_guess_upstream_branch)..HEAD"'
+alias gwinpshf='glf "$(git_guess_upstream_branch)..HEAD"'
 # Git What Is Not Pushed Diff
-alias gwinpd='gd "$(git_guess_upstream_branch)..HEAD"'
+alias gwinpshd='gd "$(git_guess_upstream_branch)..HEAD"'
 
 # Shortcuts I never used
 ## Git To Push
@@ -642,14 +672,25 @@ alias gwinpd='gd "$(git_guess_upstream_branch)..HEAD"'
 ## Git To Push Details / Diff (a direct diff, without listing each commit)
 #alias gtpd='gwinpd'
 
+# Usually my @{upstream} is where I push to, but not where I pull from.
+# So I need to specify where I will pull from:
+#[ -z "$remote_upstream_branch" ] && remote_upstream_branch="origin/master"
+[ -z "$remote_upstream_branch" ] && remote_upstream_branch="origin/develop"
+
 # Git What Is Not Merged
-alias gwinm='gll "HEAD..$(git_guess_upstream_branch)"'
+alias gwinm='gll "HEAD..${remote_upstream_branch}"'
 # Git What Is Not Merged Log
-alias gwinml='gl "HEAD..$(git_guess_upstream_branch)"'
+alias gwinml='gl "HEAD..${remote_upstream_branch}"'
 # Git What Is Not Merged Files
-alias gwinmf='glf "HEAD..$(git_guess_upstream_branch)"'
+alias gwinmf='glf "HEAD..${remote_upstream_branch}"'
 # Git What Is Not Merged Diff
-alias gwinmd='gd "HEAD..$(git_guess_upstream_branch)"'
+alias gwinmd='gd "HEAD..${remote_upstream_branch}"'
+
+# Git What Is Not Pulled (alias for Merged)
+alias gwinpl=gwinm
+alias gwinpll=gwinml
+alias gwinplf=gwinmf
+alias gwinpld=gwinmd
 
 alias gss='git stash save'
 alias gssu='git stash save --include-untracked'
@@ -666,7 +707,8 @@ alias gsp='git_stash_pop_safe'
 alias gsa='git stash apply'
 #alias gsl='git stash list'
 #alias gsl='git stash list --date=relative --oneline'
-alias gsl='git stash list --date=relative --oneline | PADDING=0 DELIM=" " numbereachline | sedreplace "^\([0-9]*\)" "stash@{\1}" | sedreplace "refs/stash@" "" | dropcols 2'
+# All this just adds the date to the normal git stash list:
+alias gsl='git stash list --date=relative --oneline | PADDING=0 DELIM=" " numbereachline | sedreplace "^\([0-9]*\)" "stash@{\1}" | sedreplace "refs/stash@" "" | dropcols 2 | less -REX'
 #alias gsl='git stash list --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an <%ae>%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
 # Git Stash Diff shows the diff of the topmost or specified stash.  Notably not `git stash drop` which must be typed in full, to avoid doing it too easily and accidentally.
 # This shows only the diff:
@@ -714,6 +756,7 @@ alias gspm='git_stash_pop_merge'
 alias gspf='git_stash_pop_merge'
 
 # Like git clone but shows the username in the target directory
+# I no longer enjoy using this, because I care more about tab-completion of the project name than the author's name.  If there are separate repos with the same name, why not just put them all in one folder as different remotes?
 git_clone_friendly() {
 	if [ $# -gt 1 ]
 	then git clone "$@"
@@ -723,7 +766,8 @@ git_clone_friendly() {
 		git clone "$url" "$username_dot_repo"
 	fi
 }
-alias gcl='git_clone_friendly'
+#alias gcl='git_clone_friendly'
+alias gcl='git clone'
 
 # Git Auto Commit, or Git Add Commit, or Git Add and Commit
 gac() {

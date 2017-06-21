@@ -69,6 +69,17 @@ else
 
 		nodewhatsup
 	}
+	nvmusedefault() {
+		unalias node 2>/dev/null
+		unalias npm 2>/dev/null
+
+		unset PREFIX
+		nvm use default
+
+		unset NODE_PATH
+
+		nodewhatsup
+	}
 	nvmusesystem() {
 		unalias node 2>/dev/null
 		unalias npm 2>/dev/null
@@ -134,6 +145,17 @@ else
 		echo "NVM_PATH:  $NVM_PATH"
 		echo "NVM_BIN:   $NVM_BIN"
 		echo "NODE_PATH: $NODE_PATH"
+		# This is probably correct for nvm nodes, but is it also correct for a globally installed node?
+		#local node_modules_folder="${NVM_BIN/%\/bin//lib/node_modules}"
+		#local node_modules_folder
+		#if [ -n "$PREFIX" ]
+		#then node_modules_folder="$PREFIX/lib/node_modules"
+		#else node_modules_folder="$(echo "$NVM_BIN" | sed 's+/bin$+/lib/node_modules+')"
+		#fi
+		#if [ -d "${node_modules_folder}" ]
+		#then echo "Modules:   $node_modules_folder"
+		#fi
+		echo "npm root:  $('npm' root -g)"
 	}
 	nodestatus() {
 		nodewhatsup

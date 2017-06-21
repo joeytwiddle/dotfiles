@@ -19,31 +19,38 @@ nnoremap <silent> <Space> <Space>:call <SID>ShowTagDecl()<CR>
 "augroup END
 
 function! s:ShowTagDecl()
-  redir => output
-  silent! exec "tselect ".expand("<cword>")
-  redir END
-  let fname = '???'
-  for line in split(output, "\n")
-    " None of the lines contains a line number
-    "echo line
-    if match(line,'^        ') != -1
-      redraw
-      let prototype = substitute(line,'^ *','','')
-      "let message = fname.": ".prototype
-      let message = prototype."   [".fname."]"
-      if len(message) >= &columns - 12
-        let message = strpart(message, 0, &columns - 12)
+  try
+    redir => l:output
+    silent! exec "tselect ".expand("<cword>")
+    redir END
+    let fname = '???'
+    for line in split(l:output, "\n")
+      " None of the lines contains a line number
+      "echo line
+      if match(line,'^        ') != -1
+        redraw
+        let prototype = substitute(line,'^ *','','')
+        "let message = fname.": ".prototype
+        let message = prototype."   [".fname."]"
+        if len(message) >= &columns - 12
+          let message = strpart(message, 0, &columns - 12)
+        endif
+        let oldRuler = &ruler
+        let &ruler = 0
+        echo message
+        let &ruler = oldRuler
+        return 0
+      else
+        let bits = split(line,' ')
+        let lastbit = bits[len(bits)-1]
+        let fname = lastbit
       endif
-      let oldRuler = &ruler
-      let &ruler = 0
-      echo message
-      let &ruler = oldRuler
-      return 0
-    else
-      let bits = split(line,' ')
-      let lastbit = bits[len(bits)-1]
-      let fname = lastbit
-    endif
-  endfor
+    endfor
+  catch /.*/
+    " If I interrupt the lookup (due to a big slow tags file), then l:output does not exist.
+    " Vim complains about l:output on the next use of <Space>.
+    " The try...catch stops that from happening, but then I still get the message later, when I change window!
+    echo 'caught error in showtagdecl.vim'
+  endtry
 endfunction
 

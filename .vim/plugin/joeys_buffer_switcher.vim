@@ -41,6 +41,10 @@ function! JoeysBufferSwitch()
   endif
   " TODO: Consider improving that by jumping to the window containing that buffer, if it is visible.
 
+  " Without a count, fall back to a common buffer list and prompt that allows Tab completion.
+  "call feedkeys(":ls\n:b ")
+  "return
+
   let more_was = &more
   if g:JBS_Show_Buffer_List_First
     " This successfully prevents the "-- More --" pager, but it still demands "Press ENTER to continue" message!
