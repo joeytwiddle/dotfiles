@@ -52,7 +52,8 @@
 "     //   - Another list item.
 "
 " As you can see, I would like the wrapped indentation to be much deeper than usual, simply because this long line is a list item.
-" Probably the best way to deal with this is to allow a regexp (or perhaps for clarity, a list of regexps) to pick out these special lines.  Each regexp might have some extra rules attached about how far to indent.  E.g. some users might prefer the \ to appear under the - in the previous example (depends whether he prefers the words aligned, or likes to see the vertical gap between '-'s).
+" A simple approach to this would be to indent to the same level as the first alphabetic character.
+" A more advanced way would be to allow a regexp (or perhaps for clarity, a list of regexps) to pick out these special lines.  Each regexp might have some extra rules attached about how far to indent.  E.g. some users might prefer the \ to appear under the - in the previous example (depends whether he prefers the words aligned, or likes to see the vertical gap between '-'s).
 
 
 
