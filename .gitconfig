@@ -292,10 +292,6 @@
 [url "https://joeytwiddle@github.com/"]
 	insteadOf = https://github.com/
 
-[mergetool]
-	# This prevents mergetool from leaving those annoying <file>.orig files around
-	keepBackup = false
-
 # What's that you say?  You hate merge bubbles and want to rebase instead of merge?  Use `git pull --rebase`!
 #   http://stevenharman.net/git-pull-with-automatic-rebase
 # But I fear you may be in for some explosions.  :-)
@@ -305,3 +301,7 @@
 [rebase]
 	# When displaying commits in git-rebase --interactive, also display the authors
 	instructionFormat = %s - %an
+
+[mergetool]
+	# This prevents mergetool from leaving those annoying <file>.orig files around
+	keepBackup = false

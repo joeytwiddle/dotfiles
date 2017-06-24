@@ -190,6 +190,8 @@ autocmd VimLeave * silent !stty ixon
 	let g:Grep_Default_Filelist .= " --exclude-dir=.meteor"
 	" For UL:
 	let g:Grep_Default_Filelist .= " --exclude-dir=deploy_TMP"
+	" For MCan:
+	let g:Grep_Default_Filelist .= " --exclude-dir=private"
 
 	let g:ConqueTerm_Color = 1
 	" let g:ConqueTerm_CloseOnEnd = 1
@@ -327,6 +329,25 @@ autocmd VimLeave * silent !stty ixon
 	" :set titlestring=\=%(\ %M%)\ %t%(\ (%{expand(\"%:~:.:h\")})%)%(\ [%P]%)
 	"" It will only make things worse.  :p
 
+	"" Show working folder, filename, path to file, and server name
+	set titlestring=%{ShortenIfNeeded(fnamemodify(getcwd(),':~'))}\ (\ \ \ %t\ \ \ )\ %<%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.:h'))}
+	" \ \ \ %{v:servername}
+	function! ShortenIfNeeded(_path)
+		let path = a:_path
+		let maxlen = &columns / 3
+		if len(path) > maxlen
+			"return shortenpath(path)
+			return "<" . path[len(path) - maxlen - 1 : len(path)]
+		else
+			return path
+		endif
+	endfunction
+
+	"" To keep the netrw file listing open, open the first file with 'v' and subsequent files with 'P'
+	"" This option makes v open the file on the right rather than the left.
+	let g:netrw_altv = 1
+
+
 	" if has("gui_kde")
 	" 	set guifont=Courier\ 10\ Pitch/10/-1/5/50/0/0/0/1/0
 	" endif
@@ -400,14 +421,17 @@ autocmd VimLeave * silent !stty ixon
 			if v:shell_error == 0
 				" If gnome-settings-daemon has been run, these fonts look good, whilst Lucida has weird proportions.
 				:set guifont=Envy\ Code\ S11\ 10
+				" Smaller
+				":set guifont=Envy\ Code\ S12\ 9
 				" Nice thin
 				":set guifont=Envy\ Code\ S11\ 13
 				" First thick
 				":set guifont=Envy\ Code\ S11\ 17
-				":set guifont=Envy\ Code\ S12\ 9
 			else
 				" If gnome-settings-daemon has not been run, Lucida looks better.
 				:set guifont=Lucida\ Console\ 8
+				" Although this is pretty good, and a bit smaller, provided we don't use bold too much
+				":set guifont=Envy\ Code\ S12\ 9
 				" This looks very flat, it looks like it is fitting a lot of rows onto the screen!  (Fluxbox)
 				" However Lucida Console 6 is still clearer and smaller!
 				":set guifont=Envy\ Code\ S11\ 8
@@ -718,7 +742,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" call add(vamAddons,'github:michaelficarra/vim-coffee-script')   " Coffeescript syntax
 	"call add(vamAddons,"github:paradigm/SkyBison")          " Immediate feedback on the cmdline.  I never use this, Tab-completion is pretty fine for me.
 	call add(vamAddons,"github:joeytwiddle/vim-diff-traffic-lights-colors")
-	"call add(vamAddons,"github:gokcehan/vim-yacom")      " Toggle comments with <Leader>c.  I never got around to trying it.  (Anyway there is a CVS binding on \c already!)
+	"call add(vamAddons,"github:gokcehan/vim-yacom")      " Toggle comments with <Leader>c.  I never got around to trying it.
+	call add(vamAddons,"github:tpope/vim-commentary")    " Toggle comments with gc[motion] or gcc for the current line  Supports multiple languages via commentstring.
 	call add(vamAddons,"github:digitaltoad/vim-jade")    " Jade syntax
 	"call add(vamAddons,"github:FredKSchott/CoVim")       " Collaborative editing with vim!
 	" call add(vamAddons,"github:Raimondi/YAIFA")          " Indent Finder
@@ -735,20 +760,22 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
 	" Note that g:asyncfinder_ignore_dirs should be kept in sync with g:Grep_Default_Filelist above.
-	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*', '*.DS_Store*', '.git', '*.hg*', '*.bzr*', 'CVS', '.svn', 'node_modules', 'dist', 'tmp', './public/assets', '*/.meteor/local/*', 'deploy_TMP']"
+	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*', '*.DS_Store*', '.git', '*.hg*', '*.bzr*', 'CVS', '.svn', 'node_modules', 'dist', 'tmp', './public/assets', '*/.meteor/local/*', 'deploy_TMP', 'private']"
 	",'pikto'
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
 
 	call add(vamAddons,"github:tpope/vim-fugitive")      " Git helper uses copen a lot, and allows editing indexes.  :Glog :Ggrep
 	call add(vamAddons,"github:gregsexton/gitv")         " Addon to fugitive, with range :Gitv!
-	" Under MacVim, gitgutter is somehow affecting my statusline highlight.
-	" It seems that the first %#HighlightGroup# works ok, but the next one turns us to white-on-black.
+	" For some reason, gitgutter is somehow affecting my statusline highlight.  (Seen on MacVim and Linux vim and gvim)
+	" BUG: It seems that the first %#HighlightGroup# works ok, but the next one turns us to white-on-black.
+	" This can be fixed by opening plugin/gitgutter.vim and removing the BufEnter autocmd event.
 	" If you get into a mess, here is a quick way to clear all highlights from the statusline:
 	"   let &statusline = substitute(&statusline, '%#[A-Za-z]*#', '', 'g')
 	call add(vamAddons,"github:airblade/vim-gitgutter")  " Git meta-info about each line (in left-hand signs column (the gutter), or the background color of each line)
 	"let g:gitgutter_diff_args = '-w "master@{1 week ago}"'
 	"call add(vamAddons,"github:mhinz/vim-signify")       " Similar but supports more VCSs!  BUT was pretty slow on some files, and completely locking up vim on some others (e.g.: j/tools/wine and ~/.vim/ftplugin/sh.vim).  Even turning it off with :SignifyToggle took ages!
+	"call add(vamAddons,"github:chrisbra/changesPlugin")  " Another gutter plugin to indicate buffer edits (not git).  Requires Vim8
 	call add(vamAddons,"github:terryma/vim-expand-region")   " Grow the visual block easily
 	call add(vamAddons,"github:vim-scripts/ScreenShot")  " Take HTML screenshots of your Vim
 	call add(vamAddons,"github:tpope/vim-repeat")        " Helps `.` to work with plugins (including fanfingtastic)
@@ -814,10 +841,11 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Some suggestions for Node: https://github.com/joyent/node/wiki/Vim-Plugins
 	" Some suggestions for Meteor: were recommended at: https://github.com/Slava/vimrc/
 	" Improved indent and syntax for Javascript
-	" This has more types for colorschemes like monokai.
+	"call add(vamAddons,"github:vim-scripts/JavaScript-Indent") " Improved indent and syntax for Javascript and HTML (OLD, apparently buggy)
+	" pangloss has more types for colorschemes like monokai.
 	"call add(vamAddons,"github:pangloss/vim-javascript")
 	"call add(vamAddons,"github:jelera/vim-javascript-syntax") " Even more comprehensive syntax
-	"call add(vamAddons,"github:vim-scripts/JavaScript-Indent") " Improved indent and syntax for Javascript and HTML (OLD alternative).  Joyent says: [somewhat buggy, clicking tab won't indent]
+	"call add(vamAddons,"github:othree/yajs.vim")         " Fork of jelera's with almost as many stars
 	" Conceals ""s until we are focused on them:
 	"call add(vamAddons,"github:elzr/vim-json")
 	" ES6 syntax highlighting and UltiSnips snippets
@@ -828,6 +856,11 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"let g:jsx_ext_required = 0
 	" Linter: https://github.com/ruanyl/vim-fixmyjs
 	"call add(vamAddons,"github:ruanyl/vim-fixmyjs")
+
+	" Switch between single-line and multi-line statement using gS or gJ.
+	" Supports a bunch of languages.
+	" But it interferes with my move_to_next_char on gJ, so disabled for now
+	"call add(vamAddons,"github:AndrewRadev/splitjoin.vim")
 
 	" Javascript beautification:
 	"call add(vamAddons,"github:maksimr/vim-jsbeautify")    " Just a wrapper for jsbeautify
@@ -979,6 +1012,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons, "github:koron/nyancat-vim")       " You might need this, but you probably won't
 
 	call add(vamAddons, "github:scrooloose/syntastic")    " Checks syntax as you are working.  Needs syntax checker for relevant language to be installed separately: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
+	" Options for Mac:
 	set statusline+=%#warningmsg#
 	set statusline+=%{SyntasticStatuslineFlag()}
 	set statusline+=%*
@@ -986,6 +1020,20 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	let g:syntastic_auto_loc_list = 1
 	let g:syntastic_check_on_open = 1
 	let g:syntastic_check_on_wq = 0
+	" Options for Linux:
+	let g:syntastic_javascript_checkers = ['eslint']
+	let g:syntastic_always_populate_loc_list = 1
+	"let g:syntastic_check_on_open = 1
+	let g:syntastic_warning_symbol = '--'
+	"let g:syntastic_auto_jump = 2
+	"let g:syntastic_auto_loc_list = 1
+	"let g:syntastic_ignore_files = ['\m^/usr/include/', '\m\c\.h$']
+
+	" Syntastic supports a lot of languages, but it was never refactored to run linters asynchronously.
+	" Some alternatives to consider are:
+	" - https://github.com/w0rp/ale (async with Vim8 or Neovim)
+	
+	"call add(vamAddons, "github:w0rp/ale")
 
 	" https://github.com/bling/vim-airline
 	"call add(vamAddons, "github:bling/vim-airline")        " Cool statusline
@@ -1181,6 +1229,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	" >>> My Plugins from the Cloud (all by me!) {{{
 	call add(vamAddons,"github:joeytwiddle/sexy_scroller.vim")   " Smooth animation when scrolling
+	"let g:SexyScroller_MaxTime = 200
 	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
 	call add(vamAddons,"github:joeytwiddle/RepeatLast.vim") " Easily repeat groups of previous actions
 	" }}}
