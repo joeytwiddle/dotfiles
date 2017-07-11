@@ -42,6 +42,11 @@ hi StatusInfo cterm=bold,reverse ctermfg=15 ctermbg=12 guifg=blue guibg=white
 " And override the things you want to be special:
 hi StatusInfo ctermbg=darkyellow guifg=darkyellow
 
+" Disable highlight instructions in the statusline, until I can fix the bug
+" Using an autocmd so it also works on the custom statusline I put into MiniBufExplorer
+au WinEnter * let &l:statusline = substitute(&l:statusline, '%#[^#]*#', '', 'g')
+au WinEnter * let &g:statusline = substitute(&g:statusline, '%#[^#]*#', '', 'g')
+
 
 let g:ShowCurrentGitBranch = get(g:, 'ShowCurrentGitBranch', 1)
 let g:ShowGitStatusForBuffer = get(g:, 'ShowGitStatusForBuffer', 1)

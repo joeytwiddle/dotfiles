@@ -1,31 +1,82 @@
 # What is useful in this file?
 #
-# Shortcuts:
+# Most of this file is just abbreviations for common git operations.  If you
+# use git at the command line, using these shorcuts can save you keystrokes.
 #
-#   gs ga gd gc gb gco and gm are simple aliases for git status, add, diff,
-#   commit, branch, checkout and merge.  Use them to save yourself keystrokes.
+# Viewing history:
 #
 #   gll shows a log *overview*, with one commit per line, with graph layout.
 #
-#   gl is my favourite *detailed* log display, showing diffs, stats and commit
-#      messages and graph.  Keys n and N jump forwards/backwards through diffs.
+#   gl shows a *detailed* log, including diffs, stats and commit messages and
+#      graph.  Keys n and N jump forwards/backwards through diffs.
 #
-#   gmo does git merge origin/<current_branch>
+#   gs is git status, and gd is git diff.
+#
+#   gb lists branches alphabetically, gbd lists branches by date.  [-r] for remotes.
+#
+#   gco is git checkout, to quickly switch branch.  (gco - to switch to previous)
+#
+# Staging and committing:
+#
+#   ga <filename>s will stage the given files with git add.  Use it for new files.
+#
+#   gap lets you select (y/n) which chunks of code to stage for the next commit.
+#       Use this for changes.  It is healthy to overview as you stage.
+#
+#   gdc shows the "cached" diff of what is staged (what you are about to commit).
+#
+#   gc -m '_____' is a quick way to commit the staged changes.
+#
+#   gca -m '_____' amends the previous commit with any newly staged changes,
+#       or you can just use it to change the commit message.
+#
+#   gcane adds the currently staged changes to the previous commit, but does
+#         not prompt for a commit message (gca --no-edit).
+#
+#   gcf <commit> adds the currently staged changes to an earlier commit.
+#       This is very useful to fix a commit you made earlier.  It uses rebase
+#       with fixup.  You should not amend commits you have already pushed.
+#
+# Pulling, merging and pushing:
+#
+#   gpll is git pull
+#
+#   gf will fetch new commits for all remotes
+#
+#   gmo does git merge origin/<current_branch> (or use gm <branch> yourself).
+#
+#   gmom and gmod merge from origin/master and origin/develop respectively.
+#
+#   gmr gmrom and gmrod do a rebase instead of a merge, to keep history linear.
 #
 #   gpo does git push origin <current_branch>
 #
-#   gss and gsp are git stash save and git stash pop respectively.  gsd shows
-#   the patch of your stop stash.
+#   gpsh is git push.  It pushes to the upstream branch.  gpshf adds --force
 #
-# Powerful tools:
+#   gpsh -u <remote> will push this new branch to the specified remote, and set
+#        up tracking.
+#
+# Stashing (and dropping changes):
+#
+#   gss and gsp are git stash save and git stash pop respectively.
+#   gsd shows the diff/patch of your top stash.
+#
+#   gssp allows you to select (y/n) which changes to stash, leaving the others.
+#
+#   gssk lets you select (y/n) which changes to destroy (kill).
+#        It actually does gssp but then drops the stash afterwards.
+#        As a result it is recoverable (e.g. using git-list-dropped-stashes).
+#        So it is a less dangerous version of git reset --hard (grh).
+#
+# Useful tools:
+#
+#   gbd [-M] [-r] [-n <num>] is "git branch by date", a nice way to see which
+#       branches were recently updated.  -r lists remote branches.
 #
 #   gbs [-M] [.] is "git branch status", a nice way to see which branches are
 #       up-to-date with the remote (which need a push and which need a pull).
 #
 #       Use `gbs .` to show the status of the current branch only (faster).
-#
-#   gbd [-M] [-r] [-n <num>] is "git branch by date", a nice way to see which
-#       branches were recently updated.  -r lists remote branches.
 #
 #   The -M argument to gbs and gbd is slower, but will display whether or not
 #   each branch has been merged into the current branch.  Cool!
@@ -33,11 +84,12 @@
 #   gbd will only align neatly into columns if you have jsh's columnise-clever
 #   installed.  Making that work independently is something I should TODO!
 #
-# Some more shortcuts:
+#   gmt is a shortcut for git mergetool
 #
-#   gap lets you select which chunks of code to stage or commit next
+#   gmr as mentioned earlier does git rebase --preserve-merges
+#       You should only really use this on branches you have not yet pushed.
 #
-#   gdc shows the "cached" diff of what is staged (what you are about to commit).
+# Less used shortcuts:
 #
 #   gdv and glv open diffs and logs in Vim, folded, for interactive browsing.
 #
