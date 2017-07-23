@@ -40,7 +40,8 @@
       "name": "Keyword",
       "scope": "keyword, modifier, variable.language.this, support.type.object, constant.language",
       "settings": {
-        "foreground": "#AF4A67"
+        "foreground": "#AF4A67",
+        "fontStyle": "bold"
       }
     },
     {
@@ -54,7 +55,8 @@
       "name": "Storage",
       "scope": "storage.type, storage.modifier",
       "settings": {
-        "foreground": "#AF4A67"
+        "foreground": "#AF4A67",
+        "fontStyle": "bold"
       }
     },
     {
@@ -120,7 +122,8 @@
       "name": "Template expression",
       "scope": "template.expression.begin, template.expression.end",
       "settings": {
-        "foreground": "#AF4A67"
+        "foreground": "#AF4A67",
+        "fontStyle": "bold"
       }
     },
     {
@@ -148,7 +151,8 @@
       "name": "JSON constant",
       "scope": "constant.language.json",
       "settings": {
-        "foreground": "#AF4A67"
+        "foreground": "#AF4A67",
+        "fontStyle": "bold"
       }
     },
     {
@@ -176,7 +180,8 @@
       "name": "HTML tag outer",
       "scope": "meta.tag, punctuation.definition.tag",
       "settings": {
-        "foreground": "#AF4A67"
+        "foreground": "#AF4A67",
+        "fontStyle": "bold"
       }
     },
     {
@@ -197,7 +202,8 @@
       "name": "Markdown heading",
       "scope": "markup.heading",
       "settings": {
-        "foreground": "#AF4A67"
+        "foreground": "#AF4A67",
+        "fontStyle": "bold"
       }
     },
     {
@@ -211,7 +217,8 @@
       "name": "Markdown list item",
       "scope": "text.html.markdown beginning.punctuation.definition.list",
       "settings": {
-        "foreground": "#AF4A67"
+        "foreground": "#AF4A67",
+        "fontStyle": "bold"
       }
     },
     {
@@ -249,7 +256,8 @@
       "name": "INI section title",
       "scope": "entity.name.section.group-title.ini",
       "settings": {
-        "foreground": "#AF4A67"
+        "foreground": "#AF4A67",
+        "fontStyle": "bold"
       }
     },
     {
