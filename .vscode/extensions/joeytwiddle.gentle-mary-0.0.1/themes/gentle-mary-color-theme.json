@@ -71,14 +71,14 @@
       "name": "Type",
       "scope": "support.type",
       "settings": {
-        "foreground": "#C586C0"
+        "foreground": "#A576A0"
       }
     },
     {
       "name": "Type",
       "scope": "entity.name.type, entity.other.inherited-class",
       "settings": {
-        "foreground": "#C586C0"
+        "foreground": "#A576A0"
       }
     },
     {
@@ -173,7 +173,7 @@
       "name": "CSS tag",
       "scope": "source.css entity.name.tag",
       "settings": {
-        "foreground": "#C586C0"
+        "foreground": "#A576A0"
       }
     },
     {
@@ -286,14 +286,14 @@
       "name": "C# type",
       "scope": "source.cs storage.type",
       "settings": {
-        "foreground": "#C586C0"
+        "foreground": "#A576A0"
       }
     },
     {
       "name": "C# return type",
       "scope": "source.cs meta.method.return-type",
       "settings": {
-        "foreground": "#C586C0"
+        "foreground": "#A576A0"
       }
     },
     {
