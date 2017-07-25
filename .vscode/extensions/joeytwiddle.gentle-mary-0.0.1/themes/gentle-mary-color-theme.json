@@ -53,15 +53,7 @@
     },
     {
       "name": "Storage",
-      "scope": "storage.type",
-      "settings": {
-        "foreground": "#777777",
-        "fontStyle": "italic"
-      }
-    },
-    {
-      "name": "Storage",
-      "scope": "storage.modifier",
+      "scope": "storage.type, storage.modifier",
       "settings": {
         "foreground": "#AF4A67",
         "fontStyle": "bold"
