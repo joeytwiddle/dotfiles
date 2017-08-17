@@ -1,8 +1,12 @@
+# For documnetation, see:
+#
+#   man fluxbox-keys
+#
 # It might be worth doing:
 #
 #   tail -f ~/.xsession_errors
 #
-# to see reports of any keybinds you create that Fluxbox cannot recognise.
+# to get warnings about keybinds you create that Fluxbox cannot recognise.
 
 ! fluxbox-update_configs added '(workspace=[current])' to (Next|Prev)(Window|Group)
 ! check lines marked by 'FBCV13' if they are correctly updated
@@ -20,6 +24,7 @@ OnWindowBorder Move1 :StartMoving
 ## Disable this next line for Homeworld!
 OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
 OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+OnWindow Mod1 Mod4 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
 OnWindow Mod1 Mouse2 :MacroCmd {Raise} {Focus} {StartTabbing} {Lower}
 # Workaround when Alt-Left-Drag is disabled:
 OnWindow Mod4 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
@@ -104,6 +109,15 @@ Mod1 grave :PrevWindow {groups} (Workspace=[current])
 Mod4 Tab :NextWindow {groups} (Workspace!=[current])
 Mod4 grave :PrevWindow {groups} (Workspace!=[current])
 
+## Cycle through windows of the same type as the current one (like Cmd-grave on Mac OS X)
+Mod1 Shift Tab   :NextWindow {groups} (Workspace=[current]) (Name=[current])
+Mod1 Shift grave :PrevWindow {groups} (Workspace=[current]) (Name=[current])
+Mod4 Shift Tab   :NextWindow {groups} (Workspace!=[current]) (Name=[current])
+Mod4 Shift grave :PrevWindow {groups} (Workspace!=[current]) (Name=[current])
+
+## We can make the same key act differently on different windows:
+# Mod4 z :If {Matches (Title=.*VIM)} {MaximizeVertical} {If {Matches (Name=xterm)} {MaximizeHorizontal} {MaximizeWindow}}
+
 ## Move between windows using a Window List Menu
 # Control Tab :ClientMenu (Workspace=[current])
 # Control grave :ClientMenu
@@ -122,12 +136,14 @@ OnTitlebar Mouse2 :MacroCmd {Focus} {StartTabbing} {Lower}
 OnTitlebar Mod1 Mouse2 :MacroCmd {Focus} {StartTabbing}
 OnTitlebar Mod4 Mouse2 :MacroCmd {Focus} {StartTabbing}
 
-# I had this for years:
+## I had this for years:
 Control Mod1 r :Reconfigure
-# But for some reason these days, my fingers gravitate towards:
-Shift Mod1 r :Reconfigure
 Control Mod4 r :Restart
-Control Mod1 q :Exit
+## But for some reason these days, my fingers gravitate towards:
+Shift Mod1 r :Reconfigure
+Shift Mod4 r :Restart
+#Control Mod1 q :Exit
+## Allows you to run Fluxbox commands:
 Control Shift F2 :CommandDialog
 
 # OnTitlebar Mouse2 :StartTabbing
@@ -143,7 +159,8 @@ Control Shift F2 :CommandDialog
 ## But my two-finger scroller will continue sending button 4/5 (mousewheel) events, and not necessarily to the original window!
 ## - If I happen to press Alt (Mod1) for any reason, Fluxbox will receive Mod1 Mouse4, and change workspace!
 ## - If I happen to move my mouse over the desktop or toolbar, Fluxbox will detect OnDesktop Mouse4, and change workspace!
-## Unfortunately this means mousewheel to change desktop is disabled for the moment.
+## This is still happening even with the latest touchpad driver.
+## Therefore I have disabled mousewheel to change desktop for the moment.
 ## But perhaps it could be reintroduced with less common modifiers, e.g. Mod1-Mod4 or Ctrl-Alt-Shift.
 
 ### Change desktop with mousewheel on wallpaper
@@ -158,19 +175,19 @@ Control Shift F2 :CommandDialog
 #OnDesktop Mod4 Mouse5 :NextWorkspace 3
 #
 ### Or, to go alongside my compiz binds:
-#Mod1 Mouse4 :PrevWorkspace
-#Mod1 Mouse5 :NextWorkspace
+Mod1 Mouse4 :PrevWorkspace
+Mod1 Mouse5 :NextWorkspace
 ### Disabled for now, so that we can fake mousewheel up/down with Mod4 Up/Down.
 ### If we don't disable this, `Mod4 Down` triggers Mouse5 but with Mod4 set that becomes `Mod4 Mouse5` which is intercepted here!
-##Mod4 Mouse4 :PrevWorkspace 3
-##Mod4 Mouse5 :NextWorkspace 3
+Mod4 Mouse4 :PrevWorkspace 3
+Mod4 Mouse5 :NextWorkspace 3
 #Shift Mod1 Mouse4 :PrevWorkspace 3
 #Shift Mod1 Mouse5 :NextWorkspace 3
 #Control Mod1 Mouse4 :PrevWorkspace 3
 #Control Mod1 Mouse5 :NextWorkspace 3
 #
-#OnToolbar Mouse4 :PrevWorkspace
-#OnToolbar Mouse5 :NextWorkspace
+OnToolbar Mouse4 :PrevWorkspace
+OnToolbar Mouse5 :NextWorkspace
 
 ## Sometimes brings the window back to the front again after (due to focus?)
 OnTitlebar Double Mouse1 :Lower
@@ -180,8 +197,8 @@ OnTitlebar Double Mouse1 :Lower
 # OnTitlebar Double Mouse1 :MacroCmd {Lower} {PrevWindow {groups} (stuck=no) (shaded=no) (minimized=no)}
 # OnTitlebar Mouse2 :Lower
 ## When I don't have a middle mouse button, I rather have tabbing than shade.
-OnTitlebar Mouse3 :StartTabbing
-#OnTitlebar Mouse3 :Shade
+#OnTitlebar Mouse3 :StartTabbing
+OnTitlebar Mouse3 :Shade
 # OnTitlebar Double Mouse3 :WindowMenu
 # OnTitlebar Mod1 Mouse3 :WindowMenu
 OnTitlebar Control Mouse3 :WindowMenu
@@ -196,7 +213,10 @@ OnTitlebar Mouse5 :MacroCmd {ShadeWindow} {Raise}
 
 OnDesktop Mouse1 :hideMenus
 OnDesktop Mouse2 :workspaceMenu
-OnDesktop Mouse3 :rootMenu
+## I think this might be opening while I am playing UT in wine, but I'm not sure why.
+# OnDesktop Mouse3 :rootMenu
+## So for now, we must hold Control to get the menu.
+OnDesktop Control Mouse3 :rootMenu
 
 ## The Lower works but the StartTabbing does not.
 # Mod1 t :MacroCmd {Raise} {Focus} {StartTabbing} {Lower}
@@ -243,6 +263,8 @@ Mod1 Shift h :PrevTab
 Mod1 Shift l :NextTab
 Control Mod1 braceleft  :PrevTab
 Control Mod1 braceright :NextTab
+Mod4 Shift braceleft    :PrevTab
+Mod4 Shift braceright   :NextTab
 
 ## Do things to windows
 # Mod1 c :Close
@@ -253,7 +275,7 @@ Mod4 q :KillWindow
 Mod4 Shift q :ExecCommand xkill
 # Mod1 a :Lower
 ## None of these do the magic I wanted (FB 1.3.2-4)
-Mod1 a :MacroCmd {Lower} {Focus}
+#Mod1 a :MacroCmd {Lower} {Focus}
 # Mod1 a :MacroCmd {Lower} {Activate}
 # Mod1 a :MacroCmd {Lower} {ActivateTab} {Raise}
 # Mod1 a :MacroCmd {Lower} {Reconfig}
@@ -263,12 +285,12 @@ Mod4 d :ShadeWindow
 #Mod1 o :DetachClient
 Mod4 o :DetachClient
 # Mod1 s :StickWindow
-Mod1 s :StickWindow {groups} (shaded=no)
+#Mod1 s :StickWindow {groups} (shaded=no)
 Mod4 s :StickWindow {groups} (shaded=no)
 # To do this from the cmdline: wmctrl -i -r $(xdotool getwindowfocus) -b toggle,sticky
 #Mod1 i :Minimize
 Mod4 i :Minimize
-Mod1 z :MaximizeWindow
+#Mod1 z :MaximizeWindow
 Mod4 z :MaximizeWindow
 ## Like Mac OSX "Grow"
 Mod1 Mod4 equal :MaximizeWindow
@@ -278,9 +300,9 @@ Mod1 Mod4 equal :MaximizeWindow
 ## But it works fine on these different keybindings:
 #Mod1 Shift z :Fullscreen
 #Mod1 Shift f :Fullscreen
-Mod1 v :MaximizeVertical
+#Mod1 v :MaximizeVertical
 Mod4 v :MaximizeVertical
-Mod1 h :MaximizeHorizontal
+#Mod1 h :MaximizeHorizontal
 Mod4 h :MaximizeHorizontal
 #Mod1 f :ToggleDecor
 Mod4 f :ToggleDecor
@@ -348,10 +370,10 @@ Control Mod1 J :NextWorkspace 3
 #Control Mod4 J     :ExecCommand wmctrl_emulate_fluxbox_command :NextWorkspace       3
 
 # Swap all windows between two workspaces
-Control Mod4 Shift Left :ExecCommand move_windows_between_desktops swapdesktops left
-Control Mod4 Shift Right :ExecCommand move_windows_between_desktops swapdesktops right
-Control Mod4 Shift Up :ExecCommand move_windows_between_desktops swapdesktops up
-Control Mod4 Shift Down :ExecCommand move_windows_between_desktops swapdesktops down
+#Control Mod4 Shift Left :ExecCommand move_windows_between_desktops swapdesktops left
+#Control Mod4 Shift Right :ExecCommand move_windows_between_desktops swapdesktops right
+#Control Mod4 Shift Up :ExecCommand move_windows_between_desktops swapdesktops up
+#Control Mod4 Shift Down :ExecCommand move_windows_between_desktops swapdesktops down
 Control Mod1 Shift Left :ExecCommand move_windows_between_desktops swapdesktops left
 Control Mod1 Shift Right :ExecCommand move_windows_between_desktops swapdesktops right
 Control Mod1 Shift Up :ExecCommand move_windows_between_desktops swapdesktops up
@@ -413,6 +435,10 @@ Control Shift KP_Right :ForEach {MoveRight +4} {{groups}}
 Control Shift KP_Left :ForEach {MoveRight -4} {{groups}}
 Control Shift KP_Up :ForEach {MoveUp +4} {{groups}}
 Control Shift KP_Down :ForEach {MoveUp -4} {{groups}}
+Control Mod4 Shift Right :ForEach {MoveRight +4} {{groups}}
+Control Mod4 Shift Left :ForEach {MoveRight -4} {{groups}}
+Control Mod4 Shift Up :ForEach {MoveUp +4} {{groups}}
+Control Mod4 Shift Down :ForEach {MoveUp -4} {{groups}}
 ## by small amouts with Control Win
 Control Mod4 KP_Right :ForEach {MoveRight +1} {{groups}}
 Control Mod4 KP_Left :ForEach {MoveRight -1} {{groups}}
@@ -436,6 +462,7 @@ Mod1 Mod4 End :Resize +8 0
 Mod1 Mod4 Home :Resize -8 0
 Mod1 Mod4 Next :Resize 0 +8
 Mod1 Mod4 Prior :Resize 0 -8
+
 # PageUp=Prior PageDown=Next
 
 Mod1 F2 :ExecCommand runacommand
@@ -474,7 +501,7 @@ Mod1 KP_7 :ExecCommand xmms -r
 ## (forward)
 #Mod1 KP_9 :ExecCommand xmms -f
 Mod1 KP_9 :ExecCommand /home/joey/j/jsh nextsong
-XF86AudioNext :ExecCommand /home/joey/j/jsh nextsong
+#XF86AudioNext :ExecCommand /home/joey/j/jsh nextsong
 Mod1 KP_Delete :ExecCommand xmms -s
 Mod1 KP_5     :ExecCommand whatsplaying
 Mod4 slash    :ExecCommand whatsplaying
@@ -521,15 +548,15 @@ Control Mod4 l :ExecCommand load_desktop
 # Mod1 x :ExecCommand /usr/bin/xterm -cc 33:48,37:48,45-47:48,64:48,126:48 -rightbar +sb -sl 5000 -vb -si -sk -bg black -fg white -font '-b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1' -rightbar -j -s
 ## Now let's try the symlink in my PATH:
 # Mod1 x :ExecCommand xterm
-Mod1 x :ExecCommand /home/joey/j/tools/xterm
+Mod4 x :ExecCommand /home/joey/j/tools/xterm
 # The problem is my 'xtermbg' script runs my 'xterm' script and that uses 'unj'
 # which is part of jsh.  For faster startup we need to run xterm without
 # involving jsh (or trim down jsh's tools folder!).
 
-Shift Mod1 x :ExecCommand gnome-terminal
+Shift Mod4 x :ExecCommand gnome-terminal
 
 # Mod4 x :ExecCommand xtermbg
-Mod4 x :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 xmms -p
+#Mod4 x :ExecCommand XLIB_SKIP_ARGB_VISUALS=1 xmms -p
 
 #Mod1 e :ExecCommand eterm
 Mod4 e :ExecCommand ~/bin/konqueror
@@ -564,7 +591,8 @@ Mod1 Mod4 J     :ExecCommand put_current_xwindow bottom
 # I tried to bind this to Hash, but could not find a way.
 # When I do Alt-Enter or Alt-Win-Enter on an xterm, something toggles :Fullscreen, although the binding is not listed here.
 Mod1 Mod4 BackSpace :ExecCommand put_current_xwindow center
-Mod1 Mod4 Enter :ExecCommand put_current_xwindow center
+# For some unknown reason, fluxbox complains about this.  (Perhaps because Mod1-Enter is already mapped?)
+#Mod1 Mod4 Enter :ExecCommand put_current_xwindow center
 Mod1 Mod4 Delete :ExecCommand put_current_xwindow nw
 Mod1 Mod4 Shift Right :MoveRight +25
 Mod1 Mod4 Shift Left :MoveRight -25
@@ -584,14 +612,18 @@ Control Mod1 a :ToggleCmd {ArrangeWindows (Stuck=no)} {ArrangeWindowsHorizontal 
 
 #Control BackSpace       :ExecCommand xdotool key --clearmodifiers Delete
 
-Shift Mod1 braceleft    :ExecCommand xdotool key --clearmodifiers ctrl+Prior
-Shift Mod1 braceright   :ExecCommand xdotool key --clearmodifiers ctrl+Next
+#Shift Mod1 braceleft    :ExecCommand xdotool key --clearmodifiers ctrl+Prior
+#Shift Mod1 braceright   :ExecCommand xdotool key --clearmodifiers ctrl+Next
+
+# Although in my reality, I am more likely to hit that when trying to switch Fluxbox tabs
+#Shift Mod1 braceleft    :PrevTab
+#Shift Mod1 braceright   :NextTab
 
 ## My old keyboard let me do Ctrl-Fn-Down = Ctrl-PageDown
 ## My new keyboard has audio keys on Fn-arrows, so we intercept those:
 ## But on Ubuntu 14.04 when I hold Control, these are not generated.
-Control XF86AudioStop :ExecCommand xdotool key PageUp
-Control XF86AudioPlay :ExecCommand xdotool key PageDown
+Control XF86AudioStop :ExecCommand xdotool key Prior
+Control XF86AudioPlay :ExecCommand xdotool key Next
 ## Oh it seems this won't work.  xev reports that when I press Ctrl-Fn-arrows, weird things come out (Down becomes Left, Left emits nothing, Up becomes Up and Right becomes XF86AudioNext! asus x453m.
 
 ## These won't actually work while Mod4 Left/Right are intercepted for moving Fluxbox tabs.
@@ -600,12 +632,34 @@ Control XF86AudioPlay :ExecCommand xdotool key PageDown
 #Mod4 Shift Left         :Delay {ExecCommand xdotool key --clearmodifiers shift+ctrl+Left  }  100
 #Mod4 Shift Right        :Delay {ExecCommand xdotool key --clearmodifiers shift+ctrl+Right }  100
 
+# On Xterm windows
+# Disabled because too buggy
+#Mod1 c                   :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+shift+c
+#Mod1 v                   :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+shift+v
+#Mod1 v                   :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers shift+Insert
+#Mod1 s                   :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+s
+# I tried that with :Delay - it didn't work at all!  sleep did.  (fluxbox=1.3.5-2, Ubuntu 12.04 trusty)
+# We can enable Alt-X = Cut when I stop hitting Alt-x to get an xterm!
+#Mod1 x                   :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+x
+
+# I keep pressing Alt-h but I should train to use Win-h.  In the meantime, let Alt-h do nothing.
+#Mod1 h                   :ExecCommand :
+#Mod1 z                   :ExecCommand :
+#Mod1 a                   :ExecCommand :
+#Mod1 x                   :ExecCommand echo X | osd_cat -d 1 -c red -A center -f '-*-lucida-*-r-*-*-*-1800-*-*-*-*-*-*'
+
+#Mod1 Shift braceleft     :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+Prior
+#Mod1 Shift braceright    :ExecCommand sleep 0.1 ; xdotool key --clearmodifiers ctrl+Next
+# These were good but now I have bound them in WebStorm, where they do the same but are a lot snappier.
+#Mod1 Shift braceleft     :ExecCommand sleep 0.01 ; xdotool key --clearmodifiers ctrl+Prior
+#Mod1 Shift braceright    :ExecCommand sleep 0.01 ; xdotool key --clearmodifiers ctrl+Next
+
 ## Function-Arrow keys
 #
 # I was using this set successfully:
 #
-#XF86AudioPrev           :ExecCommand xdotool key --clearmodifiers Home
-#XF86AudioNext           :ExecCommand xdotool key --clearmodifiers End
+XF86AudioPrev           :ExecCommand xdotool key --clearmodifiers Home
+XF86AudioNext           :ExecCommand xdotool key --clearmodifiers End
 #XF86AudioStop           :ExecCommand xdotool key --clearmodifiers Prior
 #XF86AudioPlay           :ExecCommand xdotool key --clearmodifiers Next
 #
@@ -685,20 +739,20 @@ Mod4 c :MacroCmd {ExecCommand sleep 0.3 ; xdotool click 1}
 # We are already using these for put_current_xwindow!
 #Mod1 Mod4 Up     :ExecCommand xdotool click 4
 #Mod1 Mod4 Down   :ExecCommand xdotool click 5
-# So we listen on Mod4 alone.
-# These conflict with rules elsewhere, if they are not disabled: `Mod4 Left :MoveTabLeft` and trigger `Mod4 Mouse4 :PrevWorkspace 3`
-Mod4 Up     :MacroCmd {ExecCommand xdotool click 4} {ExecCommand xdotool click 4}
-Mod4 Down   :MacroCmd {ExecCommand xdotool click 5} {ExecCommand xdotool click 5}
-Mod4 Left   :MacroCmd {ExecCommand xdotool click 6} {ExecCommand xdotool click 6}
-Mod4 Right  :MacroCmd {ExecCommand xdotool click 7} {ExecCommand xdotool click 7}
-# I love these!
-Mod4 k      :MacroCmd {ExecCommand xdotool click 4} {ExecCommand xdotool click 4}
-Mod4 j      :MacroCmd {ExecCommand xdotool click 5} {ExecCommand xdotool click 5}
 # These don't appear to work.  Probably because the Shift is interpreted?
 #Shift Mod4 Up     :MacroCmd {ExecCommand xdotool click 6} {ExecCommand xdotool click 6}
 #Shift Mod4 Down   :MacroCmd {ExecCommand xdotool click 7} {ExecCommand xdotool click 7}
 #Shift Mod4 Left   :MacroCmd {ExecCommand xdotool click 6} {ExecCommand xdotool click 6}
 #Shift Mod4 Right  :MacroCmd {ExecCommand xdotool click 7} {ExecCommand xdotool click 7}
+# So we listen on Mod4 alone.
+# These conflict with rules elsewhere, if they are not disabled: `Mod4 Left :MoveTabLeft` and trigger `Mod4 Mouse4 :PrevWorkspace 3`
+#Mod4 Up     :MacroCmd {ExecCommand xdotool click 4} {ExecCommand xdotool click 4}
+#Mod4 Down   :MacroCmd {ExecCommand xdotool click 5} {ExecCommand xdotool click 5}
+#Mod4 Left   :MacroCmd {ExecCommand xdotool click 6} {ExecCommand xdotool click 6}
+#Mod4 Right  :MacroCmd {ExecCommand xdotool click 7} {ExecCommand xdotool click 7}
+# I love these!
+#Mod4 k      :MacroCmd {ExecCommand xdotool click 4} {ExecCommand xdotool click 4}
+#Mod4 j      :MacroCmd {ExecCommand xdotool click 5} {ExecCommand xdotool click 5}
 
 # Alt-right-click usually resizes the window.  We could do it on Win-Alt-click or Ctrl-Alt-click.
 # Alt-Win-click (Mod1 Mod4 Mouse1) gets intercepted by the window resize bind, even if we are focused on the titlebar.  So it never works.
@@ -707,17 +761,8 @@ Mod4 j      :MacroCmd {ExecCommand xdotool click 5} {ExecCommand xdotool click 5
 # We can also trigger on "Move" event (not "Mouse" click event), but it makes no difference.
 OnWindow    Mod1 Mod4 Move1    :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
 
-# I want a shortcut to start tabbing.
-# I rather want this but it isn't working.
-# It seems OnWindow catches it before OnTitlebar can.  It does that even if I listen for Move1, and even if it appears later in the file.
-#OnTitlebar  Mod1 Mod4 Mouse1   :MacroCmd {Focus} {StartTabbing} {Lower}
-# So I have to use a weird keybind: Ctrl-Win-click
-#OnTitlebar Control Mod4 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
-# Since we are using a weird keybind, we may as well listen on the whole window
-# --- THIS IS THE ONLY ONE WHICH WORKS for me at the moment ---
-# It works anywhere on the window
-OnWindow   Control Mod4 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
-# Ctrl-Alt-click How is this?
+# Start tabbing with a keybind
+#OnWindow   Control Mod4 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
 OnWindow   Control Mod1 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
 # I think I prefer the second one.  It's easier for my thumb to find Alt than Win.
 
@@ -725,5 +770,10 @@ OnWindow   Control Mod1 Mouse1 :MacroCmd {Focus} {StartTabbing} {Lower}
 # Dash alternatives (quick search to access applications/files/bookmarks/contacts/...)
 Mod1 space :ExecCommand xterm -e fish
 # I preferred Synapse to Kupfer.  But it bound itself to <Control>space, which I use in bash, zsh and vim.  If I tried to bind it to <Super_L>space or <Alt_L>space then it would activate on *just* space!
-#Mod1 space :ExecCommand synapse
-Mod4 space :ExecCommand kupfer
+#Mod4 space :ExecCommand synapse
+#Mod4 space :ExecCommand kupfer
+Mod4 space :ExecCommand launchy
+Shift Mod4 space :ExecCommand gnome-do
+
+
+# Mac-like keys

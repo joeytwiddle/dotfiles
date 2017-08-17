@@ -178,6 +178,23 @@ XTerm.*.printerCommand: xterm -T History -e sh -c 'less -r <&3' 3<&0
 !xterm.*.color13:			#ff40ff
 !xterm.*.color14:			#00ffff
 !xterm.*.color15:			#ffffff
+! My color theme based on Argonaut for iTerm2
+xterm.*.color0:			#232323
+xterm.*.color1:			#c50020
+xterm.*.color2:			#3ca91e
+xterm.*.color3:			#bb8417
+xterm.*.color4:			#1561d3
+xterm.*.color5:			#8742a6
+xterm.*.color6:			#1fb2ae
+xterm.*.color7:			#d5d5d5
+xterm.*.color8:			#555555
+xterm.*.color9:			#fc283f
+xterm.*.color10:			#57e252
+xterm.*.color11:			#fec444
+xterm.*.color12:			#0092ff
+xterm.*.color13:			#c05eeb
+xterm.*.color14:			#3ad7bc
+xterm.*.color15:			#ffffff
 
 !! For coloured man-pages:
 !! From: http://bugs.gentoo.org/184604

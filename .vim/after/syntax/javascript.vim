@@ -78,7 +78,8 @@ endif
 " A better alternative to syn-pattern-offset is to use \@= which means "match preceding atom with 0 width"
 "syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\([^=]\@=\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 " Another alternative is to use \ze which means "set match end here"
-syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\(\ze[^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
+"syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\(\ze[^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
+syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\(\ze[^=>]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 highlight javaScriptAssignVar ctermfg=white cterm=bold guifg=white gui=bold
 
 " Pangloss's Javascript syntax destroys my tricks above, but fortunately he creates his own syntax groups we can use!
@@ -105,6 +106,10 @@ highlight OperatorPlus ctermfg=green guifg=green
 "highlight OperatorMinus ctermfg=red guifg=red
 highlight OperatorMultiply ctermfg=yellow guifg=yellow
 highlight OperatorDivide ctermfg=red guifg=red
+
+" I was running isRuslan/vim-es6 and vim-jsx and also polyglot.  In the monokai theme my arrow functions were getting half highlighted as an = operator by isRuslan.  This was to fix it:
+syn match jsArrowFunctionJoey /=>/
+highlight link jsArrowFunctionJoey jsFunction
 
 "" Added some more, getting silly now!
 "syn match ComparatorPositive /\(>\|>=\|===\|==\)/

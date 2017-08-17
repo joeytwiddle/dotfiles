@@ -181,6 +181,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .mkv 01;35
 .h264 01;35
 .x264 01;35
+.nsv 01;35
 .3gp 00;35
 # Audio
 .wav 01;35

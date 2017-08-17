@@ -215,7 +215,7 @@ function! Joeyhighlight()
 	highlight log4jDebug ctermfg=Grey   guifg=Grey
 	highlight log4jInfo  ctermfg=White  guifg=White
 	highlight log4jWarn  ctermfg=Yellow guifg=Yellow
-	highlight log4jError ctermfg=Red    guifg=#ff8888
+	highlight log4jError ctermfg=Red    guifg=#ff2222
 
 	"" For GNU diffs:
 	"if &filetype == "diff" "" It appears that at this point we don't know the filetype
@@ -231,7 +231,7 @@ function! Joeyhighlight()
 
 	"" For shellscript:
 	highlight shOption ctermfg=blue cterm=bold guifg=#8888ff gui=bold
-	highlight shCommandSub ctermfg=red guifg=#ff8888
+	highlight shCommandSub ctermfg=red guifg=#ff2222
 	highlight shOperator ctermfg=yellow guifg=yellow   " cterm=bold
 
 	"" Highlight search (doesn't work if called at top of this file!)

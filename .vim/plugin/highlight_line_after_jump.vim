@@ -71,6 +71,9 @@ function! HighlightLine()
 endfunction
 
 function! UnHighlightLine()
+  if exists('g:hiline') && g:hiline == 0
+    return
+  endif
   let s:highlightOn = 0
   if g:hiline_use_cursorline
     silent! set nocursorline
@@ -80,10 +83,16 @@ function! UnHighlightLine()
 endfunction
 
 function! UnHighlightColumn()
+  if exists('g:hiline') && g:hiline == 0
+    return
+  endif
   silent! set nocursorcolumn
 endfunction
 
 function! HL_Cursor_Moved()
+  if exists('g:hiline') && g:hiline == 0
+    return
+  endif
 
   "" Line on screen - activates when cursor has moved visually.
   let cur_pos = winline()

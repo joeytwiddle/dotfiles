@@ -1,3 +1,6 @@
+" Replaces some common Javascript keywords with symbols
+" Inspired by Firefly's script
+
 command! JSConcealOn :call s:JSConcealOn()
 command! JSConcealOff :call s:JSConcealOff()
 command! JSConcealCycle :call s:JSConcealCycle()
@@ -20,7 +23,7 @@ function! s:JSConcealOn()
   syn match   jsNiceThis       /\<this\(\.\|\>\)/ conceal cchar=@
   syn match   jsNicePrototype  /\.prototype\./  conceal cchar=∷
   if level > 0
-    syn keyword jsNiceFunction   function skipwhite conceal cchar=𝒇 "λ𝑓𝐟𝐅𝑭𝗙𝗳
+    syn keyword jsNiceFunction   function skipwhite conceal cchar=λ "𝒇𝑓𝐟𝐅𝑭𝗙𝗳
   endif
   if level > 3
     syn clear javascriptAssignVar
@@ -41,7 +44,9 @@ function! s:JSConcealOn()
     syn match   jsNiceOperator   /\<Infinity\>/ conceal cchar=∞
   endif
   if level > 4
-    syn keyword jsNiceVar        var   conceal cchar=▼ "⚫☼✪⚙∃𝒗𝒍𝑳𝐕𝑽𝗩𝐯𝘃☀⚪⚫●♰☪☾⚡☪♥♦♝☛♦⚹▶◀⧨◥▾□
+    syn keyword jsNiceVar        var   conceal cchar=𝒗 "⚫☼✪⚙𝒗𝐕𝑽𝗩𝐯𝘃☀⚪⚫●♰☪☾⚡☪♥♦♝☛♦⚹▶◀⧨◥▾□
+    syn keyword jsNiceVar        const conceal cchar=∃ "∃
+    syn keyword jsNiceVar        let   conceal cchar=𝒍 "𝒍𝑳
   endif
   if level > 5
     syn keyword jsNiceFunction   forEach conceal cchar=∀

@@ -246,7 +246,8 @@
 
 [diff]
 	# When showing diffs, present renames as renames, with a similarity index.  You will not see the lines of code which were moved.
-	renames = true
+	# However it also reports daft things like: "Binary files /dev/null and b/example/image.png differ"
+	#renames = true
 
 [format]
 	# Simple:
@@ -288,7 +289,10 @@
 [rerere]
 	enabled = true
 
-# What's that you say?  You hate merge bubbles and want to rebase instead of merge?
+[url "https://joeytwiddle@github.com/"]
+	insteadOf = https://github.com/
+
+# What's that you say?  You hate merge bubbles and want to rebase instead of merge?  Use `git pull --rebase`!
 #   http://stevenharman.net/git-pull-with-automatic-rebase
 # But I fear you may be in for some explosions.  :-)
 #   git config branch.autosetuprebase always # Force all new branches to automatically use rebase

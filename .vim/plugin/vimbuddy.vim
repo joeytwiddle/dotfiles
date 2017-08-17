@@ -42,11 +42,6 @@ hi StatusInfo cterm=bold,reverse ctermfg=15 ctermbg=12 guifg=blue guibg=white
 " And override the things you want to be special:
 hi StatusInfo ctermbg=darkyellow guifg=darkyellow
 
-" Disable highlight instructions in the statusline, until I can fix the bug
-" Using an autocmd so it also works on the custom statusline I put into MiniBufExplorer
-au WinEnter * let &l:statusline = substitute(&l:statusline, '%#[^#]*#', '', 'g')
-au WinEnter * let &g:statusline = substitute(&g:statusline, '%#[^#]*#', '', 'g')
-
 
 let g:ShowCurrentGitBranch = get(g:, 'ShowCurrentGitBranch', 1)
 let g:ShowGitStatusForBuffer = get(g:, 'ShowGitStatusForBuffer', 1)
@@ -86,11 +81,15 @@ endfunction
 function! ShowGitStatusForBuffer(...)
   let  left_wrapper = a:0 >= 1 ? a:1 : '['
   let right_wrapper = a:0 >= 2 ? a:2 : '] '
-  if exists('b:last_checked_buffers_git_status_time') && s:get_ms_since(b:last_checked_buffers_git_status_time) < 10000
+  if exists('b:last_checked_buffers_git_status_time') && s:get_ms_since(b:last_checked_buffers_git_status_time) < 30000
     " Use cached value
   else
     " Get value and cache it
     let full_file_path = resolve(expand('%:p'))
+    " We might not have a filename (e.g. this a new unnamed buffer, or a named buffer which we have not yet written)
+    if !filereadable(full_file_path)
+        return '  '
+    endif
     " Of the two chars returned, I believe the first is staged status, while the second is file vs HEAD.
     " I think the user might not be interested in staged status, therefore in future I might modify this to display only the second char.
     let parent_folder = fnamemodify(full_file_path, ":h")
@@ -110,6 +109,8 @@ function! ShowGitStatusForBuffer(...)
   let file_status = b:last_checked_buffers_git_status_value
   return file_status == '' ? '' : left_wrapper . file_status . right_wrapper
 endfunction
+
+autocmd BufWritePost * unlet! b:last_checked_buffers_git_status_time
 
 function! s:CleanSystemCall(command)
   let result = system(a:command)
@@ -230,3 +231,16 @@ function! VimBuddy()
     return ":-)"
 endfunction
 
+" Somtimes vim gets into a state which causes all the %## highlights to fail, turning black instead of returning to the default color.
+" A quick workaround is to remove them:
+"   let &statusline = substitute(&statusline, '%##', '', 'g')
+" Or replace them with something (unfortunately this applies the same color to unfocused statuslines, which might look confusing if you usually highlight them differently):
+"   let &statusline = substitute(&statusline, '%##', '%#StatusLine#', 'g')
+" Or perhaps more tidy, remove all highlights:
+"   let &statusline = substitute(&statusline, '%#[^#]*#', '', 'g')
+" Disable highlight instructions in the statusline, until I can fix the bug
+" Using an autocmd so it also works on the custom statusline I put into MiniBufExplorer
+let &g:statusline = substitute(&g:statusline, '%#[^#]*#', '', 'g')
+let &l:statusline = substitute(&l:statusline, '%#[^#]*#', '', 'g')
+au WinEnter * let &g:statusline = substitute(&g:statusline, '%#[^#]*#', '', 'g')
+au WinEnter * let &l:statusline = substitute(&l:statusline, '%#[^#]*#', '', 'g')

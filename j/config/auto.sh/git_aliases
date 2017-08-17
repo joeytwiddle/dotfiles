@@ -117,6 +117,7 @@ unalias gd 2>/dev/null
 unalias gitlog 2>/dev/null
 unalias gac 2>/dev/null
 unalias gitwhatsup 2>/dev/null
+unalias gco 2>/dev/null
 # By the way, if you want to undefine a function instead of an alias, this works for bash and zsh:
 #   unset -f fn_name
 
@@ -276,6 +277,7 @@ alias gdf='git diff --stat'
 #alias gds='gdc'
 alias gdc='gd --cached'
 alias gdcw='gd --cached --word-diff=color'
+alias gdu='gd @{upstream}'
 
 alias ga='git add -v'
 # I often like to do git commit -a, and wonder why there is no equivalent git add -a.  In fact there is, but the flag is -u!
@@ -311,10 +313,10 @@ git_commit_immediate_fixup() {
 	fi
 
 	# We need a static commit ref, in case the commit is something relative like HEAD~
-	commit_to_amend="$(git rev-parse "${commit_to_amend}")"
+	commit_to_amend="$(git rev-parse "${commit_to_amend}")" || return
 
 	echo ">> Committing"
-	git commit --fixup "${commit_to_amend}"
+	git commit --fixup "${commit_to_amend}" || return
 
 	echo ">> Performing rebase"
 	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
@@ -402,6 +404,8 @@ alias grpu='grp $(git_guess_upstream_branch)'
 alias gmru='gmr $(git_guess_upstream_branch)'
 alias gmrom='gmr origin/master'
 alias gmrod='gmr origin/develop'
+alias gmrum='gmr upstream/master'
+alias gmrud='gmr upstream/develop'
 # Abort the rebase (like gra) but using the terminology we introduced above (grp and gmr)
 alias grpa='git rebase --abort'
 alias gmra='git rebase --abort'
@@ -463,6 +467,8 @@ alias grh='gr --hard'
 alias grhu='grh "@{u}"'
 alias grhom='grh origin/master'
 alias grhod='grh origin/develop'
+alias grhum='grh upstream/master'
+alias grhud='grh upstream/develop'
 alias grh~='grh head~'
 alias grh~~='grh head~~'
 alias grh~~~='grh head~~~'
@@ -483,6 +489,8 @@ alias gri='git rebase --interactive --autosquash --autostash'
 alias griu='gri @{u}'
 alias griom='gri origin/master'
 alias griod='gri origin/develop'
+alias grium='gri upstream/master'
+alias griud='gri upstream/develop'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
 
@@ -644,27 +652,7 @@ alias gbg='git_in_root_dir git bisect good'
 alias gbb='git_in_root_dir git bisect bad'
 #alias gbr='git_in_root_dir git bisect reset'
 
-unalias gco 2>/dev/null   # REMOVEME
-#alias gco='git checkout'
-
-# After successfully doing a 'git checkout', also run the commands in the POST_GIT_CHECKOUT env var.
-# The proper way to do this is to use git hooks, e.g.: https://github.com/yannvanhalewyn/dotfiles/tree/master/git_template/hooks
-gco() {
-	# highlighting stderr here is useless, because git reports success on stderr too!
-	git checkout "$@"
-	local ret_status="$?"
-
-	if [ "$ret_status" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
-	then eval "$POST_GIT_CHECKOUT"
-	fi
-
-	# I find I don't always notice failed checkouts, because at a glance the warning message looks similar to the success message.
-	if [ "$ret_status" != 0 ]
-	then echo "$(tput setaf 1 ; tput bold)FAILED$(tput sgr0)" >/dev/stderr
-	fi
-
-	return "$ret_status"
-}
+alias gco='git checkout'
 # Sometimes we can't checkout because there are uncommitted changes to files which differ between the two branches
 # This can be handled by `git checkout -m` or by our own `gcos`
 alias gcom='gco -m'
@@ -672,33 +660,57 @@ alias gcos='git_do_with_changes_stashed gco'
 # `git checkout -p [. | path]` allows us to select hunks to reset.  It's a lighter version of `git checkout -- <path>`
 alias gcop='git checkout -p'
 
-[ -n "$POST_GIT_CHECKOUT" ] && POST_GIT_CHECKOUT="$POST_GIT_CHECKOUT ;"
-POST_GIT_CHECKOUT="$POST_GIT_CHECKOUT update_cindex"
-if ! which ionice >/dev/null
-then
-	ionice() {
-		"$@"
-	}
-fi
-update_cindex() {
-	# If CSEARCHINDEX is set (to an absolute or relative folder) then use that,
-	# otherwise use the default file in HOME folder.
-	# CONSIDER: If we are in a repo subfolder but the repo root folder contains a ".csearchindex" then we could point CSEARCHINDEX at that file temporarily.
-	if which cindex >/dev/null && ( [ -z "$CSEARCHINDEX" ] && [ -f "$HOME"/.csearchindex ] || [ -n "$CSEARCHINDEX" ] && [ -f "$CSEARCHINDEX" ] )
-	then
-		local git_root_folder="$(git rev-parse --show-toplevel)"
-		# If any of the indexed folders are equal to or below this project's folder
-		if [ -n "$git_root_folder" ] && cindex -list | grep -q "^$git_root_folder\($\|/\)"
-		then
-			echo "Updating cindex (in the background)"
-			# We do this in a separate shell in order to disable the tardy job completion message.
-			(
-				[[ -n "$ZSH_NAME" ]] && unsetopt MONITOR
-				nice ionice cindex 2>/dev/null &
-			)
-		fi
-	fi
-}
+# After successfully doing a 'git checkout', also run the commands in the POST_GIT_CHECKOUT env var.
+# Now disabled in favour of the alias above, because that can provide tab-completion from the shell, which this function suppresses
+# The proper way to do this is to use git hooks, e.g.: https://github.com/yannvanhalewyn/dotfiles/tree/master/git_template/hooks
+# We can't make a global git hook but we can make templates and easily add them to existing repos: http://stackoverflow.com/questions/2293498/git-commit-hooks-global-settings
+#unalias gco 2>/dev/null
+#gco() {
+#	# highlighting stderr here is useless, because git reports success on stderr too!
+#	git checkout "$@"
+#	local ret_status="$?"
+#
+#	if [ "$ret_status" = 0 ] && [ -n "$POST_GIT_CHECKOUT" ]
+#	then eval "$POST_GIT_CHECKOUT"
+#	fi
+#
+#	# I find I don't always notice failed checkouts, because at a glance the warning message looks similar to the success message.
+#	if [ "$ret_status" != 0 ]
+#	then echo "$(tput setaf 1 ; tput bold)FAILED$(tput sgr0)" >/dev/stderr
+#	fi
+#
+#	return "$ret_status"
+#}
+#
+## Primarily I use POST_GIT_CHECKOUT to run cindex whenever I change branch
+## Avoid "syntax error near unexpected token `;'" from bash 3 (Mac OS X)
+#[ -n "$POST_GIT_CHECKOUT" ] && POST_GIT_CHECKOUT="$POST_GIT_CHECKOUT ;"
+#POST_GIT_CHECKOUT="$POST_GIT_CHECKOUT update_cindex"
+#if ! which ionice >/dev/null
+#then
+#	ionice() {
+#		"$@"
+#	}
+#fi
+#update_cindex() {
+#	# If CSEARCHINDEX is set (to an absolute or relative folder) then use that,
+#	# otherwise use the default file in HOME folder.
+#	# CONSIDER: If we are in a repo subfolder but the repo root folder contains a ".csearchindex" then we could point CSEARCHINDEX at that file temporarily.
+#	if which cindex >/dev/null && ( [ -z "$CSEARCHINDEX" ] && [ -f "$HOME"/.csearchindex ] || [ -n "$CSEARCHINDEX" ] && [ -f "$CSEARCHINDEX" ] )
+#	then
+#		local git_root_folder="$(git rev-parse --show-toplevel)"
+#		# If any of the indexed folders are equal to or below this project's folder
+#		if [ -n "$git_root_folder" ] && cindex -list | grep -q "^$git_root_folder\($\|/\)"
+#		then
+#			echo "Updating cindex (in the background)"
+#			# We do this in a separate shell in order to disable the tardy job completion message.
+#			(
+#				[[ -n "$ZSH_NAME" ]] && unsetopt MONITOR
+#				nice ionice cindex 2>/dev/null &
+#			)
+#		fi
+#	fi
+#}
 
 # TODO: There are a number of other occasions when cindex should be run, e.g. after a pull, reset or file save!  Perhaps it would be better if any programs which use csearch should just run cindex every time before they run csearch.  That should still be faster than grep!
 
@@ -728,6 +740,9 @@ alias gwinpshd='gd "$(git_guess_upstream_branch)..HEAD"'
 # So I need to specify where I will pull from:
 #[ -z "$remote_upstream_branch" ] && remote_upstream_branch="origin/master"
 [ -z "$remote_upstream_branch" ] && remote_upstream_branch="origin/develop"
+
+alias grm='git rm'
+alias gmv='git mv'
 
 # Git What Is Not Merged
 alias gwinm='gll "HEAD..${remote_upstream_branch}"'
@@ -770,13 +785,34 @@ alias gsd='git show stash@{0}'
 # Git Stash (diff) Files shows the files changed (like --stat)
 alias gsf='git stash show'
 # Git Stash List Diffs: lists all stashed commits, displaying their diffs
+# This was bailing out with an error in zsh 5.0.2 when I was trying to start Fluxbox.
+#gsld() {
+#	# We must use an array if we want to expand the words later in zsh; an array requires local on a separate line
+#	local stashes
+#	stashes=($(git stash list | cut -d ':' -f 1))
+#	local commit_id
+#	for commit_id in "${stashes[@]}"
+#	do git -c color.diff=always show "$@" "${commit_id}"
+#	done |
+#	less -R +'/(^commit .*|^diff .*)'
+#}
+# So here is a safer version
 gsld() {
-	local stashes="$(git stash list | cut -d ':' -f 1)"
-	local commit_id
-	for commit_id in ${stashes}
-	do git -c color.diff=always show "${commit_id}"
-	done |
-	less -R +'/(^commit .*|^diff .*)'
+	(
+		# We run in a subshell so that we can do this without affecting the outer environment
+		# Most shells will expand the unquoted $stashes below, zsh needs a nudge in order to do that
+		if [ -n "$ZSH_NAME" ]
+		then setopt SH_WORD_SPLIT
+		fi
+		# We must use an array if we want to expand the words later in zsh; an array requires local on a separate line
+		local stashes
+		stashes="$(git stash list | cut -d ':' -f 1)"
+		local commit_id
+		for commit_id in $stashes
+		do git -c color.diff=always show "$@" "${commit_id}"
+		done |
+		less -R +'/(^commit .*|^diff .*)'
+	)
 }
 
 # Use this to remove (reset) selected patches of uncommitted files.  Finer grained than `git reset` or `git checkout --` and also more convenient.
@@ -806,6 +842,9 @@ git_stash_pop_merge() {
 }
 alias gspm='git_stash_pop_merge'
 alias gspf='git_stash_pop_merge'
+
+alias gsi='git submodule init'
+alias gsu='git submodule update'
 
 # Like git clone but shows the username in the target directory
 # I no longer enjoy using this, because I care more about tab-completion of the project name than the author's name.  If there are separate repos with the same name, why not just put them all in one folder as different remotes?
@@ -960,6 +999,8 @@ gitwhatsup() {
 	echo "$(cursecyan)=== Not yet pushed ===$(cursenorm)"
 	gll "@{u}..HEAD" | cat
 	echo
+	echo "$(cursecyan)=== Current branch is tracking ===$(cursenorm)"
+	git rev-parse --abbrev-ref --symbolic-full-name @{u}
 	echo
 	# Try `git remote update` if you can't see all the remote branches
 }

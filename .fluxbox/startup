@@ -56,7 +56,7 @@ fi
 
 (
 
-	sleep 1   # Focus on starting fluxbox
+	sleep 1   # Focus on starting fluxbox and xcompmgr
 
 	# Start an xterm.  That is what the user (joey) wants.  Other things can run in parallel.
 	xterm &
@@ -69,6 +69,34 @@ fi
 	# - We don't need it, because it doesn't export any VARS at the moment.
 	bash "$HOME"/.joeys_x_essentials
 
+	# When I started this early, it ran but didn't operate.  Perhaps it needs Fluxbox to be established first.
+	killall compton >/dev/null 2>&1
+	# -F -f
+	# Big shadow:
+	#compton -c -r40 -D3 -C -o0.4 -l -50 -t -50 &
+	# Medium-large, very dark shadow:
+	#compton -c -r30 -D3 -C -o1.0 -l -40 -t -40 &
+	#compton -c -r30 -D3 -C -o0.9 -l -40 -t -20 &
+	#compton -c -r30 -D3 -C -o0.9 -l -40 -t -15 &
+	# Medium shadow:
+	#compton -c -r20 -D3 -C -o0.3 -l -30 -t -20 &
+	#compton -c -r20 -D3 -C -o0.4 -l -30 -t -15 &
+	#compton -c -r20 -D3 -C -o0.5 -l -30 -t -10 &
+	#compton -c -r20 -D3 -C -o0.9 -l -30 -t -10 &
+	# Medium-small shadow:
+	#compton -c -r15 -D3 -C -o0.4 -l -23 -t -22 &
+	# Small shadow:
+	#compton -c -r10 -D3 -C -o0.3 -l -15 -t -15 &
+	# Very small shadow:
+	#compton -c -r6 -D3 -C -o0.3 -l -9 -t -9 &
+	#
+	# --inactive-dim 0.05
+	# Recommended on the web:
+	#compton -CcfF -I-.015 -O-.03 -D4 -t-5 -l-5 -r4.2 -o.75 -m.82 &
+	#
+	# Use the config file
+	compton &
+
 	echo "[fb-startup] Starting apps" >&2
 
 	sleep 1
@@ -79,7 +107,7 @@ fi
 	sleep 1
 
 	lxpanel &
-	/opt/trinity/bin/kicker &
+	#/opt/trinity/bin/kicker &
 	# If we wait a bit longer, the nm-applet will be placed in the lxpanel instead of the Flubbox panel.
 	#sleep 2
 
@@ -124,6 +152,7 @@ fi
 	sleep 2
 
 	# Something is starting gnome-screensaver.  I think it might be nm-applet but I'm not sure.
+	# Mmm actually I think it might be mplayer or smplayer!
 	# I don't want gnome-screensaver if I have xscreensaver running, because I end up having to unlock twice!
 	# Although actually recently xscreensaver has been refusing to start when gnome-screensaver is present.
 	sleep 20

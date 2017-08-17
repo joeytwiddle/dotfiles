@@ -441,6 +441,7 @@ cmap w!! w !sudo tee % >/dev/null
 " Because Tlist does not fire autocmds, it causes a bug where dim_inactive_windows dims the current window on startup.  We workaround this by switching window, and switching back again
 nnoremap <Leader>t :Tlist<Enter><C-w>w<C-w>p
 nnoremap <Leader>w :set invwrap<Enter>
+nnoremap <Leader>l :set invnumber<Enter>
 
 " Quick buffer switching (beyond Ctrl-PageUp/Down)
 "" Select buffer by any part of filename and Tab completion or arrows, or by number
@@ -534,7 +535,7 @@ nnoremap <C-s> :w<Enter>
 " Similarly I cannot map Ctrl-q
 "nnoremap Q :qa<Enter>
 " OK this is safer, my MBE settings will require it be hit twice.  And also it can be used to close a window.
-nnoremap Q :q<Enter>
+"nnoremap Q :q<Enter>
 " NOTE: If you really do want to use C-s and C-q then do this before loading vim:
 "   stty -ixon
 " Save for MacVim on normal Mac save key.
@@ -543,9 +544,10 @@ nnoremap Q :q<Enter>
 "	nmap <d-s> <C-s>
 "endif
 
-" The default ZZ gets confused by MiniBufExplorer
-" Normally ZZ quits just the current window, not the whole session.
-" Perhaps I should just set MBE to close when it is the last buffer.
+" Normally ZZ quits only the current window, and quits Vim if it was the last window.
+" But the builtin ZZ gets confused by MiniBufExplorer.
+" Our mapping here quits the entire Vim session when ZZ is used.
+" TODO: But perhaps I should just set MBE to close when it is the last buffer.
 nnoremap ZZ :wqa<Enter>
 
 " If there is more than one matching tag, let the user choose.
@@ -778,6 +780,10 @@ inoremap <S-Enter> <Esc>O
 " This one is better; it should insert at the cursor.
 cnoremap %<Tab> <C-r>%
 
+" To get the current line under the cursor as a command line argument
+cnoremap $_<Tab> <C-r>=shellescape(getline('.'))<CR>
+cnoremap $=<Tab> <C-r>=shellescape(getline('.'))<CR>
+
 " MacVim maps Backspace in visual mode to `"-d` which differs from the behaviour I am accustomed to (a lazy way to move back a character).
 " silent! will prevent it complaining it the mapping does not exist (or was cleared on an earlier load of this script)
 silent! xunmap <BS>
@@ -815,7 +821,7 @@ function! s:CycleYanksBackwards()
 	let @1 = unnamed
 endfunction
 function! s:ShowRegisterSummary()
-	echo strpart("Unnamed register is now: " . substitute( substitute(@", '\n', '\\n', 'g'), '\t', '->', 'g' ), 0, &columns - 15)<CR>
+	echo strpart("Unnamed register is now: " . substitute( substitute(@", '\n', '\\n', 'g'), '\t', '->', 'g' ), 0, &columns - 15)
 endfunction
 nmap \cy :call <SID>CycleYanks()<CR>:call <SID>ShowRegisterSummary()<CR>
 nmap \cY :call <SID>CycleYanksBackwards()<CR>:call <SID>ShowRegisterSummary()<CR>
@@ -824,6 +830,9 @@ nnoremap \cR :call <SID>ShowRegisterSummary()<CR>
 " We could record that info by mapping p and P, but then we will suffer the same issue as other YankRings, no '.' repeats!
 "nnoremap \<C-n> u:call <SID>CycleYanks()<CR>p
 "nnoremap \<C-p> u:call <SID>CycleYanksBackwards()<CR>p
+
+" Display registers when we are about to paste (or cut) into one
+"nnoremap " :reg<CR>:sleep 3<CR>"
 
 " Search help files.  Don't use this.  Use :helpgrep
 " I want the quickfix to open results in the newly created :help or :new window, but I cannot get that to happen!
@@ -1007,6 +1016,16 @@ nnoremap ]<C-Space> mzo<Esc>g'z
 
 nnoremap <Leader>U :UndotreeToggle<CR>
 
+" This is popular and home-row, and it's probably better than <Escape> and <Ctrl-C>
+" If these aren't working, see:
+" :verb set timeout? ttimeout? timeoutlen? ttimeoutlen?
+" I no longer need these, now I am using xcape
+"inoremap jj <Esc>
+" Other people like jk
+"inoremap jk <Esc>
+"inoremap kj <Esc>
+"inoremap ;l <Esc>
+
 " For Mac, inspired by WebStorm
 " Command-Enter: Split the current line at cursor (like <Enter>), but don't move down
 inoremap <D-Enter> <Enter><Up><End>
@@ -1028,9 +1047,8 @@ nnoremap <D-]> <C-I>
 " What we really need is for Escape to drop all subsequent strokes until Ctrl-C or Ctrl-[ are hit.
 " And worse, mapping <Esc> also maps <Ctrl-[> so I can only use <Ctrl-C> to exit.  But Ctrl-C has behaviour which is not always desirable (e.g. it cancels repeats when exiting blockwise-visual mode).
 
-" If this isn't working, see:
-" :verb set timeout? ttimeout? timeoutlen? ttimeoutlen?
-inoremap jj <Esc>
-inoremap jk <Esc>
-inoremap kj <Esc>
-inoremap ;l <Esc>
+" Play filename under cursor (entire line)
+"nnoremap <Leader>play :execute "!mplayer " . shellescape(getline("."))<CR>
+"nnoremap <Leader>play :execute "!xterm -e mplayer " . shellescape(getline(".")) . " &"<CR><CR>
+nnoremap <Leader>play :execute "!xterm -e env EQ=widebass ~/j/tools/mplayer " . shellescape(getline(".")) . " &"<CR><CR>
+nnoremap <Leader>del :execute "!del " . shellescape(getline(".")) . " ; sleep 1"<CR><CR>
