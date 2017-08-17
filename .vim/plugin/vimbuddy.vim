@@ -42,18 +42,6 @@ hi StatusInfo cterm=bold,reverse ctermfg=15 ctermbg=12 guifg=blue guibg=white
 " And override the things you want to be special:
 hi StatusInfo ctermbg=darkyellow guifg=darkyellow
 
-" Somtimes vim gets into a state which causes all the %## highlights to fail, turning black instead of returning to the default color.
-" A quick workaround is to remove them:
-"   let &statusline = substitute(&statusline, '%##', '', 'g')
-" Or replace them with something (unfortunately this applies the same color to unfocused statuslines, which might look confusing if you usually highlight them differently):
-"   let &statusline = substitute(&statusline, '%##', '%#StatusLine#', 'g')
-" Or perhaps more tidy, remove all highlights:
-"   let &statusline = substitute(&statusline, '%#[^#]*#', '', 'g')
-" Disable highlight instructions in the statusline, until I can fix the bug
-" Using an autocmd so it also works on the custom statusline I put into MiniBufExplorer
-au WinEnter * let &l:statusline = substitute(&l:statusline, '%#[^#]*#', '', 'g')
-au WinEnter * let &g:statusline = substitute(&g:statusline, '%#[^#]*#', '', 'g')
-
 
 let g:ShowCurrentGitBranch = get(g:, 'ShowCurrentGitBranch', 1)
 let g:ShowGitStatusForBuffer = get(g:, 'ShowGitStatusForBuffer', 1)
@@ -243,3 +231,16 @@ function! VimBuddy()
     return ":-)"
 endfunction
 
+" Somtimes vim gets into a state which causes all the %## highlights to fail, turning black instead of returning to the default color.
+" A quick workaround is to remove them:
+"   let &statusline = substitute(&statusline, '%##', '', 'g')
+" Or replace them with something (unfortunately this applies the same color to unfocused statuslines, which might look confusing if you usually highlight them differently):
+"   let &statusline = substitute(&statusline, '%##', '%#StatusLine#', 'g')
+" Or perhaps more tidy, remove all highlights:
+"   let &statusline = substitute(&statusline, '%#[^#]*#', '', 'g')
+" Disable highlight instructions in the statusline, until I can fix the bug
+" Using an autocmd so it also works on the custom statusline I put into MiniBufExplorer
+let &g:statusline = substitute(&g:statusline, '%#[^#]*#', '', 'g')
+let &l:statusline = substitute(&l:statusline, '%#[^#]*#', '', 'g')
+au WinEnter * let &g:statusline = substitute(&g:statusline, '%#[^#]*#', '', 'g')
+au WinEnter * let &l:statusline = substitute(&l:statusline, '%#[^#]*#', '', 'g')
