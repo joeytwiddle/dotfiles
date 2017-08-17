@@ -313,10 +313,10 @@ git_commit_immediate_fixup() {
 	fi
 
 	# We need a static commit ref, in case the commit is something relative like HEAD~
-	commit_to_amend="$(git rev-parse "${commit_to_amend}")"
+	commit_to_amend="$(git rev-parse "${commit_to_amend}")" || return
 
 	echo ">> Committing"
-	git commit --fixup "${commit_to_amend}"
+	git commit --fixup "${commit_to_amend}" || return
 
 	echo ">> Performing rebase"
 	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
