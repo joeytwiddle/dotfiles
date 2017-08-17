@@ -353,12 +353,44 @@ autocmd VimLeave * silent !stty ixon
 	" 	set guifont=Courier\ 10\ Pitch/10/-1/5/50/0/0/0/1/0
 	" endif
 
-	" if has("gui_kde")
-	" set guifont=Lucida\ Console/8/-1/5/50/0/0/0/1/0
-	" endif
+	if has('gui')
+		" Hide the menu and toolbar which I never use.
+		set guioptions-=m
+		set guioptions-=T
+        "" Remove the right scrollbar
+		"set guioptions-=r
+        " Remove the left scrollbar
+		set guioptions-=L
+	endif
 
+
+	" Before choosing which font to use, we need to know which OS we are running on.
+	" See: http://vi.stackexchange.com/questions/2572/detect-os-in-vimscript
+	if !exists('g:os')
+		if has('mac') || has('macunix')
+			let g:os = "Darwin"
+		elseif has('win16') || has('win95') || has('win32') || has('win64')
+			let g:os = "Windows"
+		elseif has('unix')
+			let g:os = "Linux"
+		else
+			let g:os = "other"
+		endif
+		" If we can't trust 'has()' then this is an alernative for Unixes:
+		" Possible results: "Darwin", "Linux"
+		"let g:os = substitute(system('uname'), '\n', '', '')
+	endif
+
+
+	"" Select font!
+	"" These are some old methods I used to select the font
+
+	" if has("gui_kde")
+	" 	set guifont=Courier\ 10\ Pitch/10/-1/5/50/0/0/0/1/0
+	" 	set guifont=Lucida\ Console/8/-1/5/50/0/0/0/1/0
+	" endif
 	" if has("gui_kde") || has("gui_x")
-		" set guifont=Bitstream\ Vera\ Sans\ Mono/10/-1/5/50/0/0/0/1/0
+    " 	set guifont=Bitstream\ Vera\ Sans\ Mono/10/-1/5/50/0/0/0/1/0
 	" endif
 
 	"" Medium for any linux:
@@ -372,6 +404,7 @@ autocmd VimLeave * silent !stty ixon
 
 	"" Clean is a small fine font for low-res displays:
 	"" It is a bitmap font, so it looks pixelated above 17px or 160pt.
+	"" Sadly in modern Ubuntu, this font is not available/enabled by default.
 	" :set guifont=-schumacher-clean-medium-r-normal-*-*-120-*-*-c-*-iso646.1991-irv
 	" :set guifont=-schumacher-clean-medium-r-normal-*-*-150-*-*-c-*-iso646.1991-irv
 	"" Good for Debian, a bit naff on Gentoo:
@@ -387,10 +420,13 @@ autocmd VimLeave * silent !stty ixon
 	" :set guifont=Lucida\ Console\ Semi-Condensed\ 7
 	" :set guifont=Lucida\ Console\ Semi-Condensed\ 8
 	"" On pod Semi-Condensed was actually wider!  So:
-	:set guifont=Lucida\ Console\ 8
+	" :set guifont=Lucida\ Console\ 8
 	"" Very small and clear; quite like Teletext font
 	" :set guifont=MonteCarlo\ Fixed\ 12\ 11
-	if exists("&guifont")
+
+	"" In Vim 800 on Mac OS X, if I was in GVim (Mac Vim) and loaded this file, and tried to select a font that did not exist on the system, then I got interrupted by an error message.
+
+	if exists("&guifont") && g:os == "Linux"
 		if $SHORTHOST == "pod"
 			"" Most Linux offer Mono but it's a little tall
 			" :set guifont=Monospace\ 8
@@ -437,6 +473,10 @@ autocmd VimLeave * silent !stty ixon
 				" However Lucida Console 6 is still clearer and smaller!
 				":set guifont=Envy\ Code\ S11\ 8
 			endif
+		else
+			"" A good default for all Linux systems?
+			" :set guifont=Lucida\ Console\ 8
+			"" Set nothing.  Use the real default!
 		endif
 		"" If I want to go smaller than Lucida 8...
 		"" Droid Sans Mono can go very small; it is rather fuzzy, but it is even smaller than Clean!
@@ -445,41 +485,26 @@ autocmd VimLeave * silent !stty ixon
 		" :set guifont=Clean\ 8
 		"" Also with screen fonts, you have the option of using LucidaTypewriter, like Console but with sharp edges.  The only problem is that at size 8 its bold is weak: the chars are very slightly wider but no thicker.  At size 10 it is quite passable.
 		" :set guifont=LucidaTypewriter\ Medium\ 8
-		" See: http://vi.stackexchange.com/questions/2572/detect-os-in-vimscript
-		if !exists('g:os')
-			if has('mac') || has('macunix')
-				let g:os = "Darwin"
-			elseif has('win16') || has('win95') || has('win32') || has('win64')
-				let g:os = "Windows"
-			elseif has('unix')
-				let g:os = "Linux"
-			else
-				let g:os = "other"
-			endif
-			" If we can't trust 'has()' then this is an alernative for Unixes:
-			" Possible results: "Darwin", "Linux"
-			"let g:os = substitute(system('uname'), '\n', '', '')
-		endif
+	endif
+	if exists("&guifont") && g:os != "Linux"
 		if g:os == "Darwin"
 			" Popular default for many Mac editors, "the Comic Sans of monospaced fonts" @codinghorror
 			":set guifont=Monaco:h11
 			" But I prefer the shorter fatter one.  Less elegant.
 			:set guifont=Menlo\ Regular:h11
 			" Manually installed fonts...
-			" Lucida Sans Typewriter is finer and cleaner than Menlo:
-			:set guifont=Lucida\ Sans\ Typewriter\ Regular:h11
-			" Lucida console is fat again, but a bit too squat in GVim
-			":set guifont=Lucida\ Console:h11
-			" On Mac, S11 and S12 are both quite short, but Squat is just about right.
-			":silent! :set guifont=Envy\ Code\ Squat:h13
+			" Better check we are on a known machine first
+			if $SHORTHOST == "Sinonets-MacBook-Pro-4"
+				" Lucida Sans Typewriter is finer and cleaner than Menlo:
+				:set guifont=Lucida\ Sans\ Typewriter\ Regular:h11
+				" Lucida console is fat again, but a bit too squat in GVim
+				":set guifont=Lucida\ Console:h11
+				" On Mac, S11 and S12 are both quite short, but Squat is just about right.
+				":silent! :set guifont=Envy\ Code\ Squat:h13
+			endif
 		elseif g:os == "Windows"
 			:set guifont=LucidaTypewriter\ 8
 		endif
-		" Hide the menu and toolbar which I never use.
-		:set guioptions-=m
-		:set guioptions-=T
-		"set guioptions-=r
-		set guioptions-=L
 	endif
 
 
