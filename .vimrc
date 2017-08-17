@@ -38,6 +38,7 @@ endif
 " Although it may mess with other plugins that use timeoutlen.
 " A better solution might be to get more familiar with my Esc shortcut on £ (Shift-3), although that isn't an option on US keyboards.
 " Another keybind that some people like to use for <Esc> is <Ctrl-[>.  In fact that works by default!
+" TODO: If gui is not running, then we should add this setup to the autocommand GUIEnter.  (Probably need to put the setup into a function.)
 if ! has('gui_running')
     set ttimeoutlen=10
     augroup FastEscape
