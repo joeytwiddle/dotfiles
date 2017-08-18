@@ -348,15 +348,72 @@ then
 	: #compdef ga=git
 fi
 
+# This is for older versions of git (<1.7.0) which didn't accept the --all parameter.
+# We could actually perform the same action with the old built-in `git remote update`, but that won't let us fetch tags and do pruning.
+# We use --all if git supports it, although it isn't significantly faster.
+git_fetch_all() {
+	if [[ $(git --version | awk '/git/ {print $3}') < 1.7 ]]
+	then
+		local remote
+		git remote |
+		while read remote
+		do
+			echo "Fetching ${remote}"
+			git fetch "${remote}" "$@"
+		done
+	else
+		git fetch --all "$@"
+	fi
+}
+#alias gf='git fetch -v'
+alias gf='git_fetch_all -v'
+alias gfa='git_fetch_all -v --tags --prune'
+# For faster fetches, specify the remote
+# "Git Fetch Upstream" and "Git Fetch Origin"
+alias gfu='git fetch -v'
+alias gfo='git fetch origin -v'
+
+alias gpl='git pull'
+alias gpll='git pull'
+
+#alias gps='git push'
+alias gpsh='git push'
+# Git Push Origin
+alias gpo='verbosely git push origin "$(git_get_current_branch)"'
+# Git Push Upstream.  Disabled because:
+# - 'gpu' is ambiguous: Does it mean `git pull` or `git push` or `git push -u`?
+# - Anyway pushing to guessed or real upstream is what Git Push does normally.
+# - Conceptually, I believe we should pull from upstream, and push to downstream.
+#alias gpu='verbosely git push "$(git_guess_upstream_branch)"'
+# -u sets upstream tracking branch
+#alias gpu='verbosely git push -u'
+# --no-verify will skip running hooks, --force will override remote branch even if it is ahead of local branch
+alias gpshf='git push --force'
+alias gpshnv='git push --no-verify'
+alias gpshnvf='git push --no-verify --force'
+
+# I wanted to perform `git pull` and `git merge` with `git_autostashed` however they sometimes drop out unfinished, in which case the stash does not get popped as intended.
+alias gm='git merge'
+# Git Merge Origin (this branch)
+#alias gmo='verbosely git merge "$(git_guess_upstream_branch)"'
+alias gmo='verbosely git merge "origin/$(git_get_current_branch)"'
+alias gmm='verbosely git merge master'
+#alias gmu='verbosely git merge "upstream/$(git_get_current_branch)"'
+alias gmu='verbosely git merge "$(git_guess_upstream_branch)"'
+alias gmom='verbosely git merge origin/master'
+alias gmod='verbosely git merge origin/develop'
+alias gmum='verbosely git merge upstream/master'
+alias gmud='verbosely git merge upstream/develop'
+
+alias gmt='git mergetool'
+alias gma='git merge --abort'
+
 # Git pull --rebase will attempt to splice the new upstreams commits in before your unpushed commits.
 gpr_safe() {
 	local current_commit="$(git rev-parse HEAD)"
 	echo "Current commit before rebase (in case abort desired): ${current_commit}"
 	git pull --rebase=preserve
 }
-#alias gf='git fetch -v'
-alias gpl='git pull'
-alias gpll='git pull'
 #alias gpr='git pull --rebase=preserve'
 alias gpr='gpr_safe'
 alias gpp='gpr && git push'
@@ -409,58 +466,6 @@ alias gmrud='gmr upstream/develop'
 # Abort the rebase (like gra) but using the terminology we introduced above (grp and gmr)
 alias grpa='git rebase --abort'
 alias gmra='git rebase --abort'
-
-# This is for older versions of git (<1.7.0) which didn't accept the --all parameter.
-# We could actually perform the same action with the old built-in `git remote update`, but that won't let us fetch tags and do pruning.
-# We use --all if git supports it, although it isn't significantly faster.
-git_fetch_all() {
-	if [[ $(git --version | awk '/git/ {print $3}') < 1.7 ]]
-	then
-		local remote
-		git remote |
-		while read remote
-		do
-			echo "Fetching ${remote}"
-			git fetch "${remote}" "$@"
-		done
-	else
-		git fetch --all "$@"
-	fi
-}
-alias gf='git_fetch_all -v'
-alias gfa='git_fetch_all -v --tags --prune'
-
-#alias gps='git push'
-alias gpsh='git push'
-# Git Push Origin
-alias gpo='verbosely git push origin "$(git_get_current_branch)"'
-# Git Push Upstream.  Disabled because:
-# - 'gpu' is ambiguous: Does it mean `git pull` or `git push` or `git push -u`?
-# - Anyway pushing to guessed or real upstream is what Git Push does normally.
-# - Conceptually, I believe we should pull from upstream, and push to downstream.
-#alias gpu='verbosely git push "$(git_guess_upstream_branch)"'
-# -u sets upstream tracking branch
-#alias gpu='verbosely git push -u'
-# --no-verify will skip running hooks, --force will override remote branch even if it is ahead of local branch
-alias gpshf='git push --force'
-alias gpshnv='git push --no-verify'
-alias gpshnvf='git push --no-verify --force'
-
-# I wanted to perform `git pull` and `git merge` with `git_autostashed` however they sometimes drop out unfinished, in which case the stash does not get popped as intended.
-alias gm='git merge'
-# Git Merge Origin (this branch)
-#alias gmo='verbosely git merge "$(git_guess_upstream_branch)"'
-alias gmo='verbosely git merge "origin/$(git_get_current_branch)"'
-alias gmm='verbosely git merge master'
-#alias gmu='verbosely git merge "upstream/$(git_get_current_branch)"'
-alias gmu='verbosely git merge "$(git_guess_upstream_branch)"'
-alias gmom='verbosely git merge origin/master'
-alias gmod='verbosely git merge origin/develop'
-alias gmum='verbosely git merge upstream/master'
-alias gmud='verbosely git merge upstream/develop'
-
-alias gmt='git mergetool'
-alias gma='git merge --abort'
 
 alias gr='git reset'
 alias grh='gr --hard'
