@@ -662,7 +662,7 @@ alias gco='git checkout'
 # This can be handled by `git checkout -m` or by our own `gcos`
 alias gcom='gco -m'
 alias gcos='git_do_with_changes_stashed gco'
-# `git checkout -p [. | path]` allows us to select hunks to reset.  It's a lighter version of `git checkout -- <path>`
+# `git checkout -p [. | path]` allows us to select hunks to reset.  It is a fine-graned version of `git checkout -- <path>`
 alias gcop='git checkout -p'
 
 # After successfully doing a 'git checkout', also run the commands in the POST_GIT_CHECKOUT env var.
@@ -823,7 +823,7 @@ gsld() {
 # Use this to remove (reset) selected patches of uncommitted files.  Finer grained than `git reset` or `git checkout --` and also more convenient.
 # How does it work?  It stashes the few patches you select, and then drops the new commit from the stash.
 # This affects the working tree, and thus is different from `git reset -p` which affects the index.
-# Oh.  It is basically identical to the built-in `git checkout -p` (gcop).
+# Apart from leaving a dropped stash in the garbage, it has the same functionality to the built-in `git checkout -p` (gcop).
 git_kill_patch() {
 	gssp &&
 	git stash drop
