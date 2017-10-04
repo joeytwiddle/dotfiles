@@ -365,13 +365,12 @@ git_fetch_all() {
 		git fetch --all "$@"
 	fi
 }
-#alias gf='git fetch -v'
-alias gf='git_fetch_all -v'
-alias gfa='git_fetch_all -v --tags --prune'
-# For faster fetches, specify the remote
-# "Git Fetch Upstream" and "Git Fetch Origin"
-alias gfu='git fetch -v'
-alias gfo='git fetch origin -v'
+# Faster, because it only hits one remote
+alias gf='git fetch'
+alias gfo='git fetch origin'
+# Slower, but fetches from all the remotes
+#alias gfa='git_fetch_all'
+alias gfa='git_fetch_all --tags --prune'
 
 alias gpl='git pull'
 alias gpll='git pull'
