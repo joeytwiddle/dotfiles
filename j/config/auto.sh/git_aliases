@@ -816,6 +816,7 @@ gsld() {
 # This affects the working tree, and thus is different from `git reset -p` which affects the index.
 # Apart from leaving a dropped stash in the garbage, it has the same functionality to the built-in `git checkout -p` (gcop).
 git_kill_patch() {
+	# BUG: If there are no changes, gssp will immediately exit with code 0, and we will drop whatever unrelated stash is at the top of the stack!
 	gssp &&
 	git stash drop
 }
