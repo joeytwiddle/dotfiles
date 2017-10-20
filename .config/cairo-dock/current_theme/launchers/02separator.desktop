@@ -20,7 +20,7 @@ Icon=
 #X[Extra parameters]
 frame_extra=
 #f[0;100] Order you want for this launcher among the others:
-Order=24.5
+Order=5.5
 
 Icon Type=2
 Type=Separator
