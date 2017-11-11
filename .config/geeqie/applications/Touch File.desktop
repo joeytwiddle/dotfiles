@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=Touch File
+GenericName=Touch File
+Comment=Touch File
+Exec=touch %f
+TryExec=touch
+Terminal=false
+Type=Application
+Categories=Application;Graphics;
+
+# Desktop files that are usable only in Geeqie should be marked like this:
+Categories=X-Geeqie;
+OnlyShowIn=X-Geeqie;
+
+# Show in menu "File"
+X-Geeqie-Menu-Path=FileMenu/FileOpsSection
