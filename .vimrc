@@ -344,9 +344,13 @@ autocmd VimLeave * silent !stty ixon
 		endif
 	endfunction
 
-	"" To keep the netrw file listing open, open the first file with 'v' and subsequent files with 'P'
-	"" This option makes v open the file on the right rather than the left.
+	"" NOTE: To keep the netrw file listing open, open the first file with 'v' and subsequent files with 'P'
+	"" Default to tree view
+	let g:netrw_liststyle = 3
+	"" Make `v` open the file on the right rather than the left
 	let g:netrw_altv = 1
+	"" Make the split use more space for editor than for the tree
+	let g:netrw_winsize = 80
 
 
 	" if has("gui_kde")
