@@ -847,6 +847,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	let g:sparkup = {}
 	let g:sparkup.lhs_expand = '<C-]>'
 
+	" Or use Emmet itself
+	"call add(vamAddons,"github:mattn/emmet-vim")
+
 	" Interesting: source folder's vimrc file for different settings in specific projects
 	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
 	call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
