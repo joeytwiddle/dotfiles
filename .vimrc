@@ -1044,29 +1044,35 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	"call add(vamAddons, "github:koron/nyancat-vim")       " You might need this, but you probably won't
 
-	call add(vamAddons, "github:scrooloose/syntastic")    " Checks syntax as you are working.  Needs syntax checker for relevant language to be installed separately: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
-	" Options for Mac:
-	set statusline+=%#warningmsg#
-	set statusline+=%{SyntasticStatuslineFlag()}
-	set statusline+=%*
-	let g:syntastic_always_populate_loc_list = 1
-	let g:syntastic_auto_loc_list = 1
-	let g:syntastic_check_on_open = 1
-	let g:syntastic_check_on_wq = 0
-	" Options for Linux:
-	let g:syntastic_javascript_checkers = ['eslint']
-	let g:syntastic_always_populate_loc_list = 1
-	"let g:syntastic_check_on_open = 1
-	let g:syntastic_warning_symbol = '--'
-	"let g:syntastic_auto_jump = 2
-	"let g:syntastic_auto_loc_list = 1
-	"let g:syntastic_ignore_files = ['\m^/usr/include/', '\m\c\.h$']
-
-	" Syntastic supports a lot of languages, but it was never refactored to run linters asynchronously.
-	" Some alternatives to consider are:
-	" - https://github.com/w0rp/ale (async with Vim8 or Neovim)
-	
-	"call add(vamAddons, "github:w0rp/ale")
+	if v:version < 800
+		" Syntastic supports a lot of languages, but it was never refactored to run linters asynchronously.
+		call add(vamAddons, "github:scrooloose/syntastic")    " Checks syntax as you are working.  Needs syntax checker for relevant language to be installed separately: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
+		set statusline+=%#warningmsg#
+		set statusline+=%{SyntasticStatuslineFlag()}
+		set statusline+=%*
+		let g:syntastic_always_populate_loc_list = 1
+		"let g:syntastic_auto_loc_list = 1
+		"let g:syntastic_check_on_open = 1
+		"let g:syntastic_check_on_wq = 0
+		let g:syntastic_javascript_checkers = ['eslint']
+		"let g:syntastic_check_on_open = 1
+		let g:syntastic_warning_symbol = '--'
+		"let g:syntastic_auto_jump = 2
+		"let g:syntastic_auto_loc_list = 1
+		"let g:syntastic_ignore_files = ['\m^/usr/include/', '\m\c\.h$']
+	else
+		call add(vamAddons, "github:w0rp/ale")
+		let g:ale_echo_msg_format = '[%linter%] %severity%: %s (%code%)'
+		"let g:ale_set_quickfix = 1
+		let g:ale_set_loclist = 1
+		let g:ale_open_list = 1
+		"let g:ale_lint_on_text_changed = 'never'
+		"let g:ale_lint_delay = 1000
+		" If prettier or standard are installed, don't use them by default, just use the nearest .eslintrc
+		let g:ale_linters = {
+		\   'javascript': ['eslint'],
+		\}
+	endif
 
 	" https://github.com/bling/vim-airline
 	"call add(vamAddons, "github:bling/vim-airline")        " Cool statusline
