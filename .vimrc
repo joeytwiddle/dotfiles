@@ -296,6 +296,10 @@ autocmd VimLeave * silent !stty ixon
 	" I find these are better defaults given that I am often editing markdown.
 	set ts=4 sw=4 expandtab
 
+	" Links vim's unnamed register with the desktop's clipboard, no more "* needed!
+	" This seems like a nice idea, but it's actually not.  If you do `cw<Paste>` then the `cw` will have clobbered the desktop clipboard before you get the chance paste.
+	"set clipboard^=unnamed
+
 	" The default textwidth=0 will wrap to screen width, if screen width is <79.  This seems undesirable to me.  If we are wrapping, let's wrap to "the standard width" 80.
 	"set textwidth=79
 	" On second thought, being a significant whitespace nazi, I don't actually want auto-wrapping when I am typing.  Leaving it at 0 helps to achieve this.
@@ -1079,10 +1083,10 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	let g:airline_section_b = "[%{airline#util#wrap(airline#extensions#branch#get_head(),0)}]"
 	"let g:airline_section_x = "(%{airline#util#wrap(airline#parts#filetype(),0)})"
 	let g:airline_section_z = "%{GetSearchStatus()}%3P (%02c%{g:airline_symbols.linenr}%#__accent_bold#%l%#__restore__#) \#%02B"
-	let g:airline_left_sep  = "⡿⠋"
-	"let g:airline_right_sep = "⠙⢿"
+	"let g:airline_left_sep  = "⡿⠋"
+	"let g:airline_right_sep = "⣠⣾"
 	"let g:airline_left_sep  = "⣷⣄"
-	let g:airline_right_sep = "⣠⣾"
+	"let g:airline_right_sep = "⠙⢿"
 	"let g:airline_left_sep  = "║"
 	"let g:airline_left_sep  = "𝄛"
 	"let g:airline_left_sep  = "◆"
@@ -1098,18 +1102,31 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"let g:airline_right_sep = '<'
 	"let g:airline_left_sep  = '|'
 	"let g:airline_right_sep = '|'
+	"let g:airline_left_sep  = '|-'
+	"let g:airline_right_sep = '-|'
+	let g:airline_left_sep = '‖'
+	let g:airline_right_sep = '‖'
 	"let g:airline_left_sep  = '\'
 	"let g:airline_right_sep = '/'
+	"let g:airline_left_sep  = '⑉'
+	"let g:airline_right_sep = '⑊'
+	"let g:airline_left_sep  = "|"
+	"let g:airline_right_sep = "|"
 	"let g:airline_left_sep  = ""
 	"let g:airline_right_sep = ""
 	"let g:airline_powerline_fonts = 1
 	"set noshowmode
+	let g:airline_symbols = get(g:, 'airline_symbols', {})
+	let g:airline_symbols.branch = ''
 	"let g:airline#extensions#tabline#enabled = 1    # alernative to MBE - uses vim's built-in 'tabline'
 	let s:joeys_airline_theme_file = $HOME . "/.vim/autoload/airline/themes/joeys.vim"
 	if filereadable(s:joeys_airline_theme_file)
 		let g:airline_theme="joeys"
 	endif
 	" TODO: Airline whitespace option slows down Vim on large files, between every keystroke!  We should ensure it is never automatically enabled when we open a large file.
+	"silent! call airline#extensions#whitespace#disable()
+	" For now we just disable it entirely
+	let g:airline#extensions#whitespace#enabled = 0
 
 	call add(vamAddons, "github:Shougo/vimproc.vim")       " Used by unite for async; requires `make` after install!
 	call add(vamAddons, "github:Shougo/unite.vim")         " Buffer and file explorer, all in one plugin
@@ -1249,6 +1266,10 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:rickhowe/diffchar.vim")
 
 	"call add(vamAddons,"github:jpalardy/vim-slime")      " Paste commands from buffer to a REPL open in another screen window
+
+	" >>> For NeoVim only
+	
+	" Recommended as it can speed up other plugins: github:neomake/neomake
 
 	" }}}
 
