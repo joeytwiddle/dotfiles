@@ -202,6 +202,21 @@ function! s:GitCommitThis(...)
 
 endfunction
 
+function! g:IsScriptLoaded(scriptName)
+	redir => scripts
+		silent scriptnames
+	redir END
+	let matches = filter(split(scripts, '\n'), {idx, val -> match(val, '/' . a:scriptName . '.vim$') >= 0})
+	return len(matches) > 0
+endfunction
+
+" Interesting code that didn't work:
+"	let context = {'scriptName': a:scriptName}
+"	function! context.check(val)
+"		return stridx(val, self.scriptName) >= 0
+"	endfunction
+"	let matches = filter(split(scripts, '\n'), context.check)
+
 command! GCthis :call s:GitCommitThis(<q-args>)
 
 "command! -nargs=+ ET e $JPATH/tools/<args>
@@ -220,6 +235,8 @@ command! MaximizeVim set lines=999 columns=9999
 " For Mac OS X Opt-Cmd-Equals
 nnoremap <D-≠> :MaximizeVim<CR>
 
+" TODO: In a rebase we would probably prefer to turn diffing off for the top-right window, not the top-left window.
+"       (It it more useful to see the other person's diff instead of our diff.)
 command! GitMergeToolSetup set nodiff | wincmd k | set nodiff | wincmd j | wincmd = | let @/ = "<<<<<<" | normal! n
 " On Mac OS X the colours don't load like they should, so I load them manually:
 " I also visit the other two windows with `wincmd l` so that dim_inactive_windows.vim will remove its dimming.
