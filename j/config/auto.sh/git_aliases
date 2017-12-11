@@ -815,11 +815,19 @@ gsld() {
 # This affects the working tree, and thus is different from `git reset -p` which affects the index.
 # Apart from leaving a dropped stash in the garbage, it has the same functionality to the built-in `git checkout -p` (gcop).
 git_kill_patch() {
-	# BUG: If there are no changes, gssp will immediately exit with code 0, and we will drop whatever unrelated stash is at the top of the stack!
+	# If there are selections available, but none of them are selected, git stash -p will exit with code 1, so we know we don't need to drop.
+	# But if there are _no changes available_ to stash, git stash -p will immediately exit with code 0, and then we would proceed to drop whatever unrelated stash is at the top of the stack!
+	# To prevent that from happening, we abort early if there are no changes available to stash.
+	if ! git diff | grep . >/dev/null && ! git diff | grep . >/dev/null
+	then
+		echo "There are no changes to kill"
+		return
+	fi
+
 	gssp &&
 	git stash drop
 }
-alias gkp='git_kill_patch'
+#alias gkp='git_kill_patch'
 alias gssk='git_kill_patch'
 
 # Apply a stash even if there are uncommitted changes in some of the affected files
