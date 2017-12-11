@@ -130,8 +130,7 @@ syn match javascriptFunctionName /\(\<function\>\s*\)\@<=[A-Za-z0-9_$]*/ contain
 " Matching this ( didn't work on anonymous functions, although it can work if the javascriptFunctionName match stops one char earlier.  O_o
 "syn match javascriptFunctionArgs /(\zs[^)]*\ze)/ ...
 syn match javascriptFunctionArgs /\zs[^()]*\ze)/ contained containedin=javascriptFunctionDeclaration
-" Even if we don't clear it above, javascriptFunction's highlighting is lost, so we need to recreate it.  (Actually I think it may be a bug in the pangloss-joeytwiddle hybrid syntax, because most functions are highlighted as jsFunction but a few (top-level) functions are javascriptFunction.
-silent! hi link javascriptFunction Identifier
+
 " TODO: If we really want to match Sublime Text closely, then beware that properties get highlighted like function names too, but for anonymous functions only.
 "
 "   foo: function () { ... },
@@ -142,13 +141,17 @@ silent! hi link javascriptFunction Identifier
 
 " For pangloss's highlighting (make 'var' and 'function' cyan like they used to be)
 " This should give us close to what we had before pangloss!
-silent! hi link jsStorageClass Identifier
-silent! hi link jsFunction Identifier
-silent! hi link jsFuncName Normal
-silent! hi link jsFuncParens Normal
-silent! hi link jsFuncBraces Identifier
-silent! hi link jsParens Identifier
-silent! hi link jsBraces Identifier
+" TODO: These do not play well with gentlemary.  Move them into joeys_default colorscheme?
+if exists('*IsScriptLoaded') && IsScriptLoaded('pangloss')
+  silent! hi link javascriptFunction Identifier
+  silent! hi link jsStorageClass Identifier
+  silent! hi link jsFunction Identifier
+  silent! hi link jsFuncName Normal
+  silent! hi link jsFuncParens Normal
+  silent! hi link jsFuncBraces Identifier
+  silent! hi link jsParens Identifier
+  silent! hi link jsBraces Identifier
+endif
 
 " Then I started using isRuslan/vim-es6, with monokai
 
