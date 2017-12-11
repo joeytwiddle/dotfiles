@@ -1,0 +1,2 @@
+# Hide npm errors so you can see your real errors in npm scripts with npm -s or with
+loglevel=silent
