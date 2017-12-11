@@ -1,0 +1,1 @@
+alias nodemon='nice -n 12 nodemon'
