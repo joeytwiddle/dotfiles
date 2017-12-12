@@ -526,7 +526,9 @@ gitlog() {
 		git -c color.ui=always log "$@" |
 		#less -R +'/^(commit|diff).*' -X
 		# Needed when using --graph and -p
-		less -R +'/((^|\*[ |]*)commit .*|(^|\|{0,1} +)diff --(git|combined) .*)'
+		#less -R +'/((^|\*[ |]*)commit .*|(^|\|{0,1} +)diff --(git|combined) .*)'
+		# Don't highlight the entire line for diffs; makes commits stand out stronger
+		less -R +'/((^|\*[ |]*)commit .*|diff --(git|combined))'
 	else git log "$@"
 	fi
 	# BUG TODO: The --git may show as --combined when using gl -c, so change it for just -- after the pending merge.
