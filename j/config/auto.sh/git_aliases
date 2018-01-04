@@ -640,6 +640,8 @@ alias gllud='gll upstream/develop'
 alias gb='git branch'
 # Git Branch Force can be used to change the HEAD of a branch that is not the current branch
 alias gbf='git branch -f'
+# Git Branch Move (Rename)
+alias gbm='git branch -f'
 
 # Git View Branches (tree-like)
 alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
