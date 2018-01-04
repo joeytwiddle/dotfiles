@@ -1071,7 +1071,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		let g:ale_set_loclist = 1
 		let g:ale_open_list = 1
 		"let g:ale_lint_on_text_changed = 'never'
-		"let g:ale_lint_delay = 1000
+		" The default delay of 200 causes the error list to pop up when I am typing slowly.  It should wait for a significant pause.  (Or I could disable auto list popup.)
+		let g:ale_lint_delay = 800
 		" If prettier or standard are installed, don't use them by default, just use the nearest .eslintrc
 		let g:ale_linters = {
 		\   'javascript': ['eslint'],
