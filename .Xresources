@@ -1,13 +1,15 @@
 !! TODO: Merge with .my_x_settings
 
-!! .Xresources: new, faster, loaded into server's memory on startup (into the RESOURCE_MANAGER property), must use xrdb to reload it
+!! .Xresources: new, faster, loaded into server_s memory on startup (into the RESOURCE_MANAGER property), must use xrdb to reload it
 !! .Xdefaults: old, reloaded whenever an X app starts, but ignored if RESOURCE_MANAGER property is set
 
-!! Apply changes and test with:
+!! Apply changes so you can test them:
 !!   :! xrdb -remove; cat ~/.Xresources | grep -v '^[\!\#]' | xrdb -merge
+!! Or apparently this does the same:
+!!   :! cat ~/.Xresources | grep -v '^[\!\#]' | xrdb
 !! In Vim, you can copy the command with `0Wy$`, execute it with `:@0` and repeat it with `@:`.
-!! We strip comments because although `!!` is mandated, it can fail on lines containing odd `'`s
-!! Note: We need to escape \# and \! above so they will make it through Vim's :! and zsh
+!! We strip comments because although `!!` is mandated, it can fail on lines containing an odd number of apostrophes
+!! Note: We need to escape \# and \! above so they will make it through Vim_s :! and zsh
 !! For testing BD/UL: man xrdb ; top -n 3 (hit 'z' for color)
 
 ! Someone once recommended this:
@@ -46,11 +48,11 @@ xterm.*.font6: -*-terminus-bold-r-*-*-24-*-*-*-*-*-*-*
 ! Shows how to reconfigure keybinds, and where to find default settings (just list the files in xterm package).
 
 !XTerm.*.charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
-! This doesn't let me drag over spaces:
+! This doesn_t let me drag over spaces:
 !XTerm.*.on2Clicks: regex [[:alnum:]./_-~\+%@]+
 ! Select links with double click (procol optional to catch files too):
 !XTerm.*.on3Clicks: regex ([[:alpha:]]+://)?([[:alnum:]!#+,./=?@_~-]|(%[[:xdigit:]][[:xdigit:]]))+
-! The existing difficulty with double-click (with or without drag) is that I often don't want to cross ':'s except when I am trying to select a hyperlink, then I do.  It would be great if we could cross ':'s only when we can see it's a hyperlink, e.g. '://' or '(known_protocol)://'
+! The existing difficulty with double-click (with or without drag) is that I often don_t want to cross ':'s except when I am trying to select a hyperlink, then I do.  It would be great if we could cross ':'s only when we can see it_s a hyperlink, e.g. '://' or '(known_protocol)://'
 
 ! On Ctrl-Shift-O, open the currently highlighted link:
 !*XTerm.*.translations: #override Ctrl Shift <Key>o: exec-formatted("browse '%t'", PRIMARY)
@@ -67,8 +69,8 @@ xterm.*.font6: -*-terminus-bold-r-*-*-24-*-*-*-*-*-*-*
 !  Shift <Btn1Up>: exec-formatted("google-chrome '%t'", PRIMARY)
 
 ! Sometimes I want to paste from the CLIPBOARD, not PRIMARY.
-! Ctrl-Shift-C/V matches gnome-terminal's behaviour.
-! Meta-C/V matches Mac's behaviour.
+! Ctrl-Shift-C/V matches gnome-terminal_s behaviour.
+! Meta-C/V matches Mac_s behaviour.
 XTerm.*.translations: #override \n\
    Ctrl Shift <KeyPress> Insert: insert-selection(CLIPBOARD) \n\
    Ctrl Shift <KeyPress> v: insert-selection(CLIPBOARD) \n\
@@ -120,7 +122,7 @@ XTerm.*.printerCommand: xterm -T History -e sh -c 'less -r <&3' 3<&0
 !xterm.*.color13:     #ff00ff
 !xterm.*.color14:     #00ffff
 !xterm.*.color15:     #ffffff
-! I didn't much like this guy's colour scheme:
+! I didn_t much like this guy_s colour scheme:
 !xterm.*.color0:     rgb:00/00/00
 !xterm.*.color1:     rgb:d3/62/65
 !xterm.*.color2:     rgb:ae/ce/91
@@ -154,8 +156,8 @@ XTerm.*.printerCommand: xterm -T History -e sh -c 'less -r <&3' 3<&0
 !xterm.*.color13:    rgb:ff/00/ff
 !xterm.*.color14:    rgb:00/ff/ff
 !xterm.*.color15:    rgb:ff/ff/ff
-! Strangely I couldn't change my foreground color with foreground, 7, 15 or 255!
-! Oh, that's because I fixed them on the commandline with -bg and -fg
+! Strangely I could not change my foreground color with foreground, 7, 15 or 255!
+! Oh, that is because I fixed them on the commandline with -bg and -fg
 ! These are what Vim recommends.  But some of them (e.g. green) are significantly more dull than usual.
 !xterm.*.color0:			#000000
 !xterm.*.color1:			#c00000
