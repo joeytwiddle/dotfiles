@@ -32,8 +32,18 @@ let &statusline = substitute(&statusline, '%=', '%#StatusInfo#%{ \&paste ? "past
 let &statusline = substitute(&statusline, '%=', '%=%#StatusInfo#%{ get(b:,"auto_updated_ctags",0) ? "tags " : "" }%##', '')
 let &statusline = substitute(&statusline, '%=', '%=%#StatusInfo#%{ \&fileformat == "unix" ? "" : \&fileformat." " }%##', '')
 if exists('*GetSearchStatus')
-  let &statusline = substitute(&statusline, '%= ', '%=%{GetSearchStatus()}', '')
+  let &statusline = substitute(&statusline, '%=', '%=%{GetSearchStatus()}', '')
 endif
+
+" Show file encoding (unless it is utf-8) and bomb
+let &statusline = substitute(&statusline, '%=', '%=%{GetFileEncoding()}', '')
+
+function! GetFileEncoding()
+  let enc = &fenc ? &enc : &fenc
+  let enc = enc == 'utf-8' ? '' : enc
+  let bomb = exists("+bomb") && &bomb ? 'B' : ''
+  return enc . (enc && bomb ? ',' : '') . bomb . (enc || bomb ? ' ' : '')
+endfunction
 
 " This will look fine but won't change the appearance at all!
 "hi link StatusInfo StatusLineUnlit
