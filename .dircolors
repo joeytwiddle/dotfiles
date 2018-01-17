@@ -261,12 +261,16 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 # .sda 01;33 # Drawing (moved to images)
 *readme 01;33
 *README 01;33
+*CHANGELOG 01;33
 *INSTALL 01;33
+*license 01;33
 *LICENSE 01;33
 *FAQ 01;33
 *HELP 01;33
 *TODO 01;33
 .md 01;33   # markdown
+.mkd 01;33   # markdown
+.markdown 01;33   # markdown
 .nfo 01;33
 .NFO 01;33
 # patch failure: certainly deserves user attention!
@@ -330,6 +334,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .js 01;36
 .json 01;36
 .coffee 01;36
+.ts 01;36 # TypeScript
 # ...
 # .xsl 01;36
 .grm 01;36 # Joey's grammar
@@ -349,16 +354,20 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .hxml 01;36 # Haxe build-file?
 ## More languages:
 .lua 01;36
+.yml 01;36
 
 # Config files
 .config 01;36
 .conf 01;36
 .cfg 01;36
 *rc 01;36
-.cvsignore 01;36
-.gitignore 01;36
+*config 01;36
+# .cvsignore .gitignore .eslintignore ...
+*ignore 01;36
 .gitmodules 01;36
+.gitattributes 01;36
 .mf 01;36   # Java manifest file
+.gradle 01;36
 
 # Plain data ("output")
 .dat 00;36
