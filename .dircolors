@@ -307,13 +307,11 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .cc 01;36
 .cpp 01;36
 .C 01;36
-.s 01;36 # Assembler don't you know
+.s 01;36 # Assembler
 .java 01;36
 .jav 01;36
 .JAVA 01;36
 .JAV 01;36
-.jpp 01;36 # my java-macro files
-.spp 01;36 # jpp for assembly
 .hs 01;36
 .HS 01;36
 *Makefile 01;36
@@ -327,24 +325,33 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .cls 01;36
 .dsc 01;36
 .patch 00;36 # Patches; made a little darker because it's nice to distinguish them from code files
-# PHP (IMC)
+.py 01;36 # Python
+# PHP:
+.php 01;36
 .php3 01;36
+.php4 01;36
 .inc 01;36
-# DB:
-.sql 01;36
+# DB (but more often than not, this is data rather than code):
+.sql 00;36
 ## Web code: (html is in "Docs")
 .js 01;36
 .coffee 01;36
 .ts 01;36 # TypeScript
 .xsl 01;36
 .xslt 01;36
+.jsp 01;36
+.asp 01;36
+.aspx 01;36
 .grm 01;36 # Joey's grammar
 ## My Beeb code:
+.jpp 01;36 # my java-macro files
+.spp 01;36 # jpp for assembly
 .dim 01;36
 .dims 01;36
 .asm 01;36
 .macro 01;36
 .fns 01;36
+## More languages:
 .wxm 01;36 # Maxima
 .mc 01;36 # Maxima loadable
 .tm 01;36 # Maxima dump
