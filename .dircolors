@@ -84,27 +84,11 @@ STICKY_OTHER_WRITABLE 30;43 # dir that is sticky and other-writable (+t,o+w) (ye
 OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 #STICKY 37;44 # dir with the sticky bit set (+t) and not other-writable
 
-# List any file extensions like '.gz' or '.tar' that you would like ls
-# to colorize below. Put the extension, a space, and the color init string.
-# (and any comments you want to add after a '#')
-
-# If you use DOS-style suffixes, you may want to uncomment the following:
-#.cmd 01;32 # executables (bright green)
-#.exe 01;32
-#.com 01;32
-#.btm 01;32
-#.bat 01;32
-
-# document / image / audio / video
-# zip
-# executable / directory / link
-
 # red, bold?
 # Needs attention
 .sync 00;31;40
 
-# brown
-# archive/package/compressed
+# brown: zip/archive/package/compressed
 .gz  00;33
 .tar 00;33
 .tgz 00;33
@@ -127,9 +111,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .jnlp 00;33 # Java WebStart Launch file
 .dmg 00;33 # Mac disk image
 
-# magenta = Media
-# would of course be nice to distinguish video, raster, vector, audio
-# Images
+# magenta: Media files (image, audio, video)
 .jpg 01;35
 .Jpeg 01;35
 .jpeg 01;35
@@ -227,8 +209,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .sub 01;36
 .sbv 01;36
 
-# yellow
-# Documents (human readable) (and editing)
+# yellow: Documents (writted by humans and intended for reading by humans)
 .diff 01;33 # Despite being basically the same, I have given diffs and patches different colours!
 .sync 01;33
 .txt 01;33
@@ -296,8 +277,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 # I make it a slighly different colour, to distinguish machine-generated logs from human-written documents
 .log 00;33
 
-# cyan
-# Code / input for software
+# cyan: Code / input for software
 .sh 01;36
 .zsh 01;36
 .csh 01;36
@@ -363,7 +343,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 ## More languages:
 .lua 01;36
 
-# Config files
+# dark cyan: Config files
 .config 00;36
 .conf 00;36
 .cfg 00;36
@@ -379,7 +359,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .yml 00;36
 *yarn.lock 00;36
 
-# Plain data ("output")
+# cyan: Plain data ("output")
 .dat 00;36
 .data 00;36
 .results 00;36
@@ -395,7 +375,9 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .trace 00;36
 .strace 00;36
 .inf 00;36 # Meta-information for a DFS file
-# Data I want white! (Don't remember why, maybe to encourage rename!)
+
+# white: Data I want white! (Don't remember why, maybe to encourage rename / deletion)
+# Strictly speaking .out and .err are logs
 .out 00;37
 .err 00;37
 *tags 00;37 # ctags file (essentially a cache)
@@ -403,14 +385,12 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 # Don't work:
 #*tmp* 01;31
 
-# bright white Compiled files (I don't have a color for these!)
+# bright white: Compiled files (I don't have a color for these!)
 .o 01;37
 .so 01;37
 .swf 01;37
 
-# white
-# Redundant files: including old files, backups, tempfiles/swapfiles, and files
-# from legacy (DOS/Windows) or non-native (Amiga/Mac/Mobile) systems.
+# white: Redundant files: including old files, backups, tempfiles/swapfiles, and files from legacy (DOS/Windows) or non-native (Amiga/Mac/Mobile) systems.
 *tmp 00;37
 *core 00;37
 *~ 00;37
@@ -429,9 +409,16 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .swo 00;37
 .b4sr 00;37
 
-# red
-# This is for files with execute permission:
+# red: Executables
+# This is for files with the execute bit set
 EXEC 01;31
+# Compiled Java files
 .class 01;31
 .CLASS 01;31
+# DOS/Windows executables
+.cmd 01;31
+.exe 01;31
+.com 01;31
+.btm 01;31
+.bat 01;31
 
