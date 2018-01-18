@@ -334,7 +334,6 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .sql 01;36
 ## Web code: (html is in "Docs")
 .js 01;36
-.json 01;36
 .coffee 01;36
 .ts 01;36 # TypeScript
 # ...
@@ -356,20 +355,22 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .hxml 01;36 # Haxe build-file?
 ## More languages:
 .lua 01;36
-.yml 01;36
 
 # Config files
-.config 01;36
-.conf 01;36
-.cfg 01;36
-*rc 01;36
-*config 01;36
-# .cvsignore .gitignore .eslintignore ...
-*ignore 01;36
-.gitmodules 01;36
-.gitattributes 01;36
-.mf 01;36   # Java manifest file
-.gradle 01;36
+.config 00;36
+.conf 00;36
+.cfg 00;36
+*rc 00;36
+*config 00;36
+# .cvsignore .gitignore .eslintignore .npmignore ...
+*ignore 00;36
+.gitmodules 00;36
+.gitattributes 00;36
+.mf 00;36   # Java manifest file
+.gradle 00;36
+.json 00;36
+.yml 00;36
+*yarn.lock 00;36
 
 # Plain data ("output")
 .dat 00;36
