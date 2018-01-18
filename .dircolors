@@ -325,7 +325,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .bib 01;36
 .sty 01;36
 .cls 01;36
-.dsc 01;33
+.dsc 01;36
 .patch 00;36 # Patches; made a little darker because it's nice to distinguish them from code files
 # PHP (IMC)
 .php3 01;36
