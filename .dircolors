@@ -336,8 +336,8 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .js 01;36
 .coffee 01;36
 .ts 01;36 # TypeScript
-# ...
-# .xsl 01;36
+.xsl 01;36
+.xslt 01;36
 .grm 01;36 # Joey's grammar
 ## My Beeb code:
 .dim 01;36
@@ -378,7 +378,6 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .results 00;36
 .xml 00;36
 .dtd 00;36
-.xsl 00;36
 # Some data files I like to use:
 .cksum 00;36
 .find 00;36
