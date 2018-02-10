@@ -575,7 +575,6 @@ autocmd VimLeave * silent !stty ixon
 	" Add a few custom filetypes:
 	au BufRead,BufNewFile {*.shlib}              set ft=sh
 	au BufRead,BufNewFile {*.grm}                set ft=grm
-	au BufRead            {*/xchatlogs/*.log}    set ft=irclog readonly
 	" From web:
 	au BufRead,BufNewFile {/usr/share/X11/xkb/*} set ft=c
 	au BufRead,BufNewFile {*.md}                 set ft=markdown
