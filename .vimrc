@@ -4,21 +4,21 @@
 
 
 "" Vim 7.3 started making `w` jump over '.'s in a variety of languages, which I do not want.
-autocmd BufReadPost * setlocal iskeyword-=.
+autocmd BufReadPost,BufNewFile * setlocal iskeyword-=.
 " However I have come to accept that I do need '-' to be part of a word when dealing with CSS classes and IDs.
-autocmd BufReadPost *.{html,svg,xml,css,scss,less,stylus,js,coffee,erb,jade,blade} setlocal iskeyword+=-
+autocmd BufReadPost,BufNewFile *.{html,svg,xml,css,scss,less,stylus,js,coffee,erb,jade,blade} setlocal iskeyword+=-
 " Also $ can be part of a valid identifier in JS (in fact almost any unicode character can be!):
-autocmd BufReadPost *.{js,coffee} setlocal iskeyword+=$
+autocmd BufReadPost,BufNewFile *.{js,coffee} setlocal iskeyword+=$
 
 " In package.json files, I quite like packages with '-' in their name to be whole words.
-autocmd BufReadPost *.json setlocal iskeyword+=-
+autocmd BufReadPost,BufNewFile *.json setlocal iskeyword+=-
 
-autocmd BufReadPost *.js command! -buffer -range=% JSB let b:winview = winsaveview() |
+autocmd BufReadPost,BufNewFile *.js command! -buffer -range=% JSB let b:winview = winsaveview() |
     \ execute <line1> . "," . <line2> . "!js-beautify -f - -j -t -s " . &shiftwidth |
     \ call winrestview(b:winview)
 
 " I was getting error highlighting on valid braces in SCSS files, because minlines was defaulting to 10!  This should prevent that.
-autocmd BufReadPost *.{scss} syntax sync minlines=200
+autocmd BufReadPost,BufNewFile *.{scss} syntax sync minlines=200
 
 " If Vim can undo through file-reads, then I am happy for it to automatically reload any file that changes on disk, e.g. as a result of editing in a different editor, or from a git checkout.
 if exists('&undoreload')
@@ -553,17 +553,17 @@ autocmd VimLeave * silent !stty ixon
 	" formatoptions is local to buffer, and some builtin scripts (e.g. vim.vim) override any options we set here, so we set them on BufReadPost instead.
 	" +j only joined formatoptions in version 7.3.541.  v:version is not fine-grained enough to detect it.  We avoid potential errors in earlier versions of Vim by wrapping in try-catch.
 	" Although +=nl worked, for some reason -=ct did not, so I split them up into separate lines.
-	au BufReadPost * set formatoptions+=n   " Better indent numbered lists in comments
-	au BufReadPost * set formatoptions+=l   " Don't wrap lines that were already long
-	au BufReadPost * set formatoptions-=c   " Don't auto-wrap comments
-	au BufReadPost * set formatoptions-=t   " Don't auto-wrap in general
-	"au BufReadPost * set formatoptions+=o   " When hitting O or o on a comment line, start the new empty line with a comment.
+	au BufReadPost,BufNewFile * set formatoptions+=n   " Better indent numbered lists in comments
+	au BufReadPost,BufNewFile * set formatoptions+=l   " Don't wrap lines that were already long
+	au BufReadPost,BufNewFile * set formatoptions-=c   " Don't auto-wrap comments
+	au BufReadPost,BufNewFile * set formatoptions-=t   " Don't auto-wrap in general
+	"au BufReadPost,BufNewFile * set formatoptions+=o   " When hitting O or o on a comment line, start the new empty line with a comment.
 	" BUG: This was breaking joeyhighlight!
-	"au BufReadPost * try | set formatoptions+=j | catch e | endtry
+	"au BufReadPost,BufNewFile * try | set formatoptions+=j | catch e | endtry
 	" Workaround: Try it now; if it works then setup the autocmd
 	try
 		set formatoptions+=j
-		au BufReadPost * set formatoptions+=j
+		au BufReadPost,BufNewFile * set formatoptions+=j
 	catch e
 	endtry
 
@@ -573,11 +573,11 @@ autocmd VimLeave * silent !stty ixon
 	"end
 
 	" Add a few custom filetypes:
-	au BufRead,BufNewFile {*.shlib}              set ft=sh
-	au BufRead,BufNewFile {*.grm}                set ft=grm
+	au BufReadPost,BufNewFile {*.shlib}              set ft=sh
+	au BufReadPost,BufNewFile {*.grm}                set ft=grm
 	" From web:
-	au BufRead,BufNewFile {/usr/share/X11/xkb/*} set ft=c
-	au BufRead,BufNewFile {*.md}                 set ft=markdown
+	au BufReadPost,BufNewFile {/usr/share/X11/xkb/*} set ft=c
+	au BufReadPost,BufNewFile {*.md}                 set ft=markdown
 
 	" View (and save) rich document files in Vim:
 	"autocmd BufReadPost *.odt :%!odt2txt %
@@ -922,8 +922,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	let g:repmo_key = ";"
 	let g:repmo_revkey = ","
 
-	au BufRead,BufNewFile {*.json}               set ft=javascript
-	"au BufRead,BufNewFile {*.json}               set ft=json
+	au BufReadPost,BufNewFile {*.json}               set ft=javascript
+	"au BufReadPost,BufNewFile {*.json}               set ft=json
 	" vim-json provides syntax for json, and automatically assigns filetype:
 	"call add(vamAddons,"github:elzr/vim-json")
 	" Dependencies for sourcebeautify:
@@ -942,7 +942,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Curiously the documentation pops up in a Scratch window when I use <Tab> to complete a word, even if both of the above are set to off (defaults).
 	" I also manually installed this: https://github.com/Slava/tern-meteor
 	" When editing a JS or CS file, make K lookup documentation with Tern
-	autocmd BufReadPost *.{js,coffee} nnoremap <buffer> K :TernDoc<CR>
+	autocmd BufReadPost,BufNewFile *.{js,coffee} nnoremap <buffer> K :TernDoc<CR>
 
 	" Here is a minimal alternative to EasyMotion: https://github.com/vim-scripts/PreciseJump
 	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
