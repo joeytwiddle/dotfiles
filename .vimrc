@@ -1267,6 +1267,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	"call add(vamAddons,"github:jpalardy/vim-slime")      " Paste commands from buffer to a REPL open in another screen window
 
+	"call add(vamAddons,"github:Yggdroot/indentLine")     " Displays indent symbols even in files with spaces
+
 	" >>> For NeoVim only
 	
 	" Recommended as it can speed up other plugins: github:neomake/neomake
