@@ -1294,6 +1294,8 @@ alias gbsl='gbs -dM'
 #   export GBS_OPTIONS='-d -M'
 
 replace_ancestor_markers_with_colors() {
+	# BUG TODO: In bash 4.4.12(1)-release on Mac OS X (installed via homebrew) the following three lines cause the script to background itself!
+	#           Perhaps git config is attempting some I/O and breaking out because it is running inside a pipe
 	local current_branch_color="$(git config --get-color color.branch.current green)"
 	local local_branch_color="$(git config --get-color color.branch.local white)"
 	local ancestor_branch_color="$(git config --get-color color.branch.ancestor cyan)"
