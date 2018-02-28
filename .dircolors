@@ -357,9 +357,8 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .gradle 00;36
 .json 00;36
 .yml 00;36
-*yarn.lock 00;36
 
-# cyan: Plain data ("output")
+# dark cyan: Plain data ("output")
 .dat 00;36
 .data 00;36
 .results 00;36
@@ -375,6 +374,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .trace 00;36
 .strace 00;36
 .inf 00;36 # Meta-information for a DFS file
+.lock 00;36 # A lock file is a kind of data; it's certainly not "unknown"
 
 # white: Data I want white! (Don't remember why, maybe to encourage rename / deletion)
 # Strictly speaking .out and .err are logs
@@ -421,4 +421,9 @@ EXEC 01;31
 .com 01;31
 .btm 01;31
 .bat 01;31
+
+# Overrides for some full filenames with special meanings
+*package.json 01;36
+*package-lock.json 00;36
+*yarn.lock 00;36
 
