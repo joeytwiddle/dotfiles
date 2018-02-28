@@ -1,3 +1,5 @@
+## Apparently in bash you can hit CTRL-X CTRL-R to reload the inputrc without restarting the shell
+
 ## We could get rid of this file by passing -o options to zsh in jsh
 set show-all-if-ambiguous on
 # set print-completions-horizontally on
