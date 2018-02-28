@@ -1074,7 +1074,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		let g:ale_lint_delay = 800
 		" If prettier or standard are installed, don't use them by default, just use the nearest .eslintrc
 		let g:ale_linters = {
-		\   'javascript': ['eslint'],
+		\   'javascript': ['standard', 'eslint'],
 		\}
 	endif
 
