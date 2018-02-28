@@ -500,7 +500,8 @@ alias grll='glc -g'
 # This steps through commits and diffs:
 alias grlll='gitlog2 -search "^(diff|[a-z0-9]{7}) .*" -g -p'
 
-alias grem='git remote -v'
+# Be careful.  'grv' will call 'git remote' but 'gr' will call 'git reset'!
+alias grv='git remote -v'
 
 alias gt='git tag'
 
