@@ -12,7 +12,7 @@
       "name": "String",
       "scope": "string",
       "settings": {
-        "foreground": "#D4B87E"
+        "foreground": "#CCB385"
       }
     },
     {
@@ -165,7 +165,7 @@
       "name": "CSS ID",
       "scope": "entity.other.attribute-name.id",
       "settings": {
-        "foreground": "#D4B87E"
+        "foreground": "#CCB385"
       }
     },
     {

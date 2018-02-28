@@ -217,5 +217,45 @@ endfunction
 
 " Use CTRL-] for Tern if possible
 if s:FindFileAbove(".tern-project", ".")
-  noremap <buffer> <silent> <c-]> :TernDef<CR>
+  nnoremap <buffer> <silent> <c-]> :TernDef<CR>
+endif
+
+" Run eslint on the current file
+
+" Use CMD-SHIFT-L on Mac or CTRL-SHIFT-L on other systems
+" I wanted to map D-S-L but it didn't register (in MacVim gui mode)
+nnoremap <buffer> <silent> <D-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
+nnoremap <buffer> <silent> <C-S-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
+
+if !get(g:, 'EslintFix_is_reloading_file', 0)
+  function! s:EslintFixCurrentFile()
+    " TODO: We should cd to the file's folder, to make sure we are running its version of eslint.
+    let current_file = expand('%')
+
+    " TODO: If both standard and eslint are available as globals, perhaps we should check for a .eslintrc file to decide which one to use.
+    "       (For local installs, standard always pulls in eslint, but we could still do the file check.)
+    let lint_command="eslint --fix"
+    " We use [:-2] to strip the trailing newline
+    let npm_root = system("npm root")[:-2]
+    if npm_root != ''
+      if filereadable(npm_root . '/.bin/standard')
+        let lint_command="npx standard --fix"
+      elseif filereadable(npm_root . '/.bin/eslint')
+        let lint_command="npx eslint --fix"
+      endif
+    endif
+
+    noautocmd write
+    let output = system(lint_command . " " . shellescape(current_file))
+    if v:shell_error != 0
+      echo output
+    endif
+    " When we reload the file, it is likely this script will also be reloaded.
+    " That can cause an error: Cannot redefine function ... It is in use
+    " I wanted to use noautocmd but the file would end up loading with no syntax!
+    " So instead, we use a flag
+    let g:EslintFix_is_reloading_file = 1
+    silent edit
+    unlet g:EslintFix_is_reloading_file
+  endfunction
 endif

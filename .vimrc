@@ -4,21 +4,21 @@
 
 
 "" Vim 7.3 started making `w` jump over '.'s in a variety of languages, which I do not want.
-autocmd BufReadPost * setlocal iskeyword-=.
+autocmd BufReadPost,BufNewFile * setlocal iskeyword-=.
 " However I have come to accept that I do need '-' to be part of a word when dealing with CSS classes and IDs.
-autocmd BufReadPost *.{html,svg,xml,css,scss,less,stylus,js,coffee,erb,jade,blade} setlocal iskeyword+=-
+autocmd BufReadPost,BufNewFile *.{html,svg,xml,css,scss,less,stylus,js,coffee,erb,jade,blade} setlocal iskeyword+=-
 " Also $ can be part of a valid identifier in JS (in fact almost any unicode character can be!):
-autocmd BufReadPost *.{js,coffee} setlocal iskeyword+=$
+autocmd BufReadPost,BufNewFile *.{js,coffee} setlocal iskeyword+=$
 
 " In package.json files, I quite like packages with '-' in their name to be whole words.
-autocmd BufReadPost *.json setlocal iskeyword+=-
+autocmd BufReadPost,BufNewFile *.json setlocal iskeyword+=-
 
-autocmd BufReadPost *.js command! -buffer -range=% JSB let b:winview = winsaveview() |
+autocmd BufReadPost,BufNewFile *.js command! -buffer -range=% JSB let b:winview = winsaveview() |
     \ execute <line1> . "," . <line2> . "!js-beautify -f - -j -t -s " . &shiftwidth |
     \ call winrestview(b:winview)
 
 " I was getting error highlighting on valid braces in SCSS files, because minlines was defaulting to 10!  This should prevent that.
-autocmd BufReadPost *.{scss} syntax sync minlines=200
+autocmd BufReadPost,BufNewFile *.{scss} syntax sync minlines=200
 
 " If Vim can undo through file-reads, then I am happy for it to automatically reload any file that changes on disk, e.g. as a result of editing in a different editor, or from a git checkout.
 if exists('&undoreload')
@@ -296,6 +296,10 @@ autocmd VimLeave * silent !stty ixon
 	" I find these are better defaults given that I am often editing markdown.
 	set ts=4 sw=4 expandtab
 
+	" Links vim's unnamed register with the desktop's clipboard, no more "* needed!
+	" This seems like a nice idea, but it's actually not.  If you do `cw<Paste>` then the `cw` will have clobbered the desktop clipboard before you get the chance paste.
+	"set clipboard^=unnamed
+
 	" The default textwidth=0 will wrap to screen width, if screen width is <79.  This seems undesirable to me.  If we are wrapping, let's wrap to "the standard width" 80.
 	"set textwidth=79
 	" On second thought, being a significant whitespace nazi, I don't actually want auto-wrapping when I am typing.  Leaving it at 0 helps to achieve this.
@@ -344,9 +348,13 @@ autocmd VimLeave * silent !stty ixon
 		endif
 	endfunction
 
-	"" To keep the netrw file listing open, open the first file with 'v' and subsequent files with 'P'
-	"" This option makes v open the file on the right rather than the left.
+	"" NOTE: To keep the netrw file listing open, open the first file with 'v' and subsequent files with 'P'
+	"" Default to tree view
+	let g:netrw_liststyle = 3
+	"" Make `v` open the file on the right rather than the left
 	let g:netrw_altv = 1
+	"" Make the split use more space for editor than for the tree
+	let g:netrw_winsize = 80
 
 
 	" if has("gui_kde")
@@ -545,17 +553,17 @@ autocmd VimLeave * silent !stty ixon
 	" formatoptions is local to buffer, and some builtin scripts (e.g. vim.vim) override any options we set here, so we set them on BufReadPost instead.
 	" +j only joined formatoptions in version 7.3.541.  v:version is not fine-grained enough to detect it.  We avoid potential errors in earlier versions of Vim by wrapping in try-catch.
 	" Although +=nl worked, for some reason -=ct did not, so I split them up into separate lines.
-	au BufReadPost * set formatoptions+=n   " Better indent numbered lists in comments
-	au BufReadPost * set formatoptions+=l   " Don't wrap lines that were already long
-	au BufReadPost * set formatoptions-=c   " Don't auto-wrap comments
-	au BufReadPost * set formatoptions-=t   " Don't auto-wrap in general
-	"au BufReadPost * set formatoptions+=o   " When hitting O or o on a comment line, start the new empty line with a comment.
+	au BufReadPost,BufNewFile * set formatoptions+=n   " Better indent numbered lists in comments
+	au BufReadPost,BufNewFile * set formatoptions+=l   " Don't wrap lines that were already long
+	au BufReadPost,BufNewFile * set formatoptions-=c   " Don't auto-wrap comments
+	au BufReadPost,BufNewFile * set formatoptions-=t   " Don't auto-wrap in general
+	"au BufReadPost,BufNewFile * set formatoptions+=o   " When hitting O or o on a comment line, start the new empty line with a comment.
 	" BUG: This was breaking joeyhighlight!
-	"au BufReadPost * try | set formatoptions+=j | catch e | endtry
+	"au BufReadPost,BufNewFile * try | set formatoptions+=j | catch e | endtry
 	" Workaround: Try it now; if it works then setup the autocmd
 	try
 		set formatoptions+=j
-		au BufReadPost * set formatoptions+=j
+		au BufReadPost,BufNewFile * set formatoptions+=j
 	catch e
 	endtry
 
@@ -565,12 +573,11 @@ autocmd VimLeave * silent !stty ixon
 	"end
 
 	" Add a few custom filetypes:
-	au BufRead,BufNewFile {*.shlib}              set ft=sh
-	au BufRead,BufNewFile {*.grm}                set ft=grm
-	au BufRead            {*/xchatlogs/*.log}    set ft=irclog readonly
+	au BufReadPost,BufNewFile {*.shlib}              set ft=sh
+	au BufReadPost,BufNewFile {*.grm}                set ft=grm
 	" From web:
-	au BufRead,BufNewFile {/usr/share/X11/xkb/*} set ft=c
-	au BufRead,BufNewFile {*.md}                 set ft=markdown
+	au BufReadPost,BufNewFile {/usr/share/X11/xkb/*} set ft=c
+	au BufReadPost,BufNewFile {*.md}                 set ft=markdown
 
 	" View (and save) rich document files in Vim:
 	"autocmd BufReadPost *.odt :%!odt2txt %
@@ -845,6 +852,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	let g:sparkup = {}
 	let g:sparkup.lhs_expand = '<C-]>'
 
+	" Or use Emmet itself
+	"call add(vamAddons,"github:mattn/emmet-vim")
+
 	" Interesting: source folder's vimrc file for different settings in specific projects
 	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
 	call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
@@ -914,8 +924,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	let g:repmo_key = ";"
 	let g:repmo_revkey = ","
 
-	au BufRead,BufNewFile {*.json}               set ft=javascript
-	"au BufRead,BufNewFile {*.json}               set ft=json
+	au BufReadPost,BufNewFile {*.json}               set ft=javascript
+	"au BufReadPost,BufNewFile {*.json}               set ft=json
 	" vim-json provides syntax for json, and automatically assigns filetype:
 	"call add(vamAddons,"github:elzr/vim-json")
 	" Dependencies for sourcebeautify:
@@ -934,7 +944,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Curiously the documentation pops up in a Scratch window when I use <Tab> to complete a word, even if both of the above are set to off (defaults).
 	" I also manually installed this: https://github.com/Slava/tern-meteor
 	" When editing a JS or CS file, make K lookup documentation with Tern
-	autocmd BufReadPost *.{js,coffee} nnoremap <buffer> K :TernDoc<CR>
+	autocmd BufReadPost,BufNewFile *.{js,coffee} nnoremap <buffer> K :TernDoc<CR>
 
 	" Here is a minimal alternative to EasyMotion: https://github.com/vim-scripts/PreciseJump
 	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
@@ -1040,39 +1050,46 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	"call add(vamAddons, "github:koron/nyancat-vim")       " You might need this, but you probably won't
 
-	call add(vamAddons, "github:scrooloose/syntastic")    " Checks syntax as you are working.  Needs syntax checker for relevant language to be installed separately: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
-	" Options for Mac:
-	set statusline+=%#warningmsg#
-	set statusline+=%{SyntasticStatuslineFlag()}
-	set statusline+=%*
-	let g:syntastic_always_populate_loc_list = 1
-	let g:syntastic_auto_loc_list = 1
-	let g:syntastic_check_on_open = 1
-	let g:syntastic_check_on_wq = 0
-	" Options for Linux:
-	let g:syntastic_javascript_checkers = ['eslint']
-	let g:syntastic_always_populate_loc_list = 1
-	"let g:syntastic_check_on_open = 1
-	let g:syntastic_warning_symbol = '--'
-	"let g:syntastic_auto_jump = 2
-	"let g:syntastic_auto_loc_list = 1
-	"let g:syntastic_ignore_files = ['\m^/usr/include/', '\m\c\.h$']
-
-	" Syntastic supports a lot of languages, but it was never refactored to run linters asynchronously.
-	" Some alternatives to consider are:
-	" - https://github.com/w0rp/ale (async with Vim8 or Neovim)
-	
-	"call add(vamAddons, "github:w0rp/ale")
+	if v:version < 800
+		" Syntastic supports a lot of languages, but it was never refactored to run linters asynchronously.
+		call add(vamAddons, "github:scrooloose/syntastic")    " Checks syntax as you are working.  Needs syntax checker for relevant language to be installed separately: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
+		set statusline+=%#warningmsg#
+		set statusline+=%{SyntasticStatuslineFlag()}
+		set statusline+=%*
+		let g:syntastic_always_populate_loc_list = 1
+		"let g:syntastic_auto_loc_list = 1
+		"let g:syntastic_check_on_open = 1
+		"let g:syntastic_check_on_wq = 0
+		let g:syntastic_javascript_checkers = ['eslint']
+		"let g:syntastic_check_on_open = 1
+		let g:syntastic_warning_symbol = '--'
+		"let g:syntastic_auto_jump = 2
+		"let g:syntastic_auto_loc_list = 1
+		"let g:syntastic_ignore_files = ['\m^/usr/include/', '\m\c\.h$']
+	else
+		call add(vamAddons, "github:w0rp/ale")
+		let g:ale_echo_msg_format = '[%linter%] %severity%: %s (%code%)'
+		"let g:ale_set_quickfix = 1
+		let g:ale_set_loclist = 1
+		let g:ale_open_list = 1
+		"let g:ale_lint_on_text_changed = 'never'
+		" The default delay of 200 causes the error list to pop up when I am typing slowly.  It should wait for a significant pause.  (Or I could disable auto list popup.)
+		let g:ale_lint_delay = 800
+		" If prettier or standard are installed, don't use them by default, just use the nearest .eslintrc
+		let g:ale_linters = {
+		\   'javascript': ['standard', 'eslint'],
+		\}
+	endif
 
 	" https://github.com/bling/vim-airline
 	"call add(vamAddons, "github:bling/vim-airline")        " Cool statusline
 	let g:airline_section_b = "[%{airline#util#wrap(airline#extensions#branch#get_head(),0)}]"
 	"let g:airline_section_x = "(%{airline#util#wrap(airline#parts#filetype(),0)})"
 	let g:airline_section_z = "%{GetSearchStatus()}%3P (%02c%{g:airline_symbols.linenr}%#__accent_bold#%l%#__restore__#) \#%02B"
-	let g:airline_left_sep  = "⡿⠋"
-	"let g:airline_right_sep = "⠙⢿"
+	"let g:airline_left_sep  = "⡿⠋"
+	"let g:airline_right_sep = "⣠⣾"
 	"let g:airline_left_sep  = "⣷⣄"
-	let g:airline_right_sep = "⣠⣾"
+	"let g:airline_right_sep = "⠙⢿"
 	"let g:airline_left_sep  = "║"
 	"let g:airline_left_sep  = "𝄛"
 	"let g:airline_left_sep  = "◆"
@@ -1088,18 +1105,31 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"let g:airline_right_sep = '<'
 	"let g:airline_left_sep  = '|'
 	"let g:airline_right_sep = '|'
+	"let g:airline_left_sep  = '|-'
+	"let g:airline_right_sep = '-|'
+	let g:airline_left_sep = '‖'
+	let g:airline_right_sep = '‖'
 	"let g:airline_left_sep  = '\'
 	"let g:airline_right_sep = '/'
+	"let g:airline_left_sep  = '⑉'
+	"let g:airline_right_sep = '⑊'
+	"let g:airline_left_sep  = "|"
+	"let g:airline_right_sep = "|"
 	"let g:airline_left_sep  = ""
 	"let g:airline_right_sep = ""
 	"let g:airline_powerline_fonts = 1
 	"set noshowmode
+	let g:airline_symbols = get(g:, 'airline_symbols', {})
+	let g:airline_symbols.branch = ''
 	"let g:airline#extensions#tabline#enabled = 1    # alernative to MBE - uses vim's built-in 'tabline'
 	let s:joeys_airline_theme_file = $HOME . "/.vim/autoload/airline/themes/joeys.vim"
 	if filereadable(s:joeys_airline_theme_file)
 		let g:airline_theme="joeys"
 	endif
 	" TODO: Airline whitespace option slows down Vim on large files, between every keystroke!  We should ensure it is never automatically enabled when we open a large file.
+	"silent! call airline#extensions#whitespace#disable()
+	" For now we just disable it entirely
+	let g:airline#extensions#whitespace#enabled = 0
 
 	call add(vamAddons, "github:Shougo/vimproc.vim")       " Used by unite for async; requires `make` after install!
 	call add(vamAddons, "github:Shougo/unite.vim")         " Buffer and file explorer, all in one plugin
@@ -1239,6 +1269,12 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:rickhowe/diffchar.vim")
 
 	"call add(vamAddons,"github:jpalardy/vim-slime")      " Paste commands from buffer to a REPL open in another screen window
+
+	"call add(vamAddons,"github:Yggdroot/indentLine")     " Displays indent symbols even in files with spaces
+
+	" >>> For NeoVim only
+	
+	" Recommended as it can speed up other plugins: github:neomake/neomake
 
 	" }}}
 

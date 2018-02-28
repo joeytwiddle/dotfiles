@@ -560,7 +560,8 @@ nnoremap <C-]> g<C-]>
 "                            or failing that, try the same search with Grep.
 
 " Execute the line under the cursor in ex
-nnoremap <Leader>e :execute getline(".")<CR>
+"nnoremap <Leader>e :execute getline(".")<CR>
+nnoremap <Leader>e :execute substitute(getline("."), '^[ \t"]*', '', '')<CR>
 " I would quite like a version that could work on multiple lines (from a visual selection).
 " Execute line from clipboard in ex.  But which clipboard?  Let's display them and let the user choose.
 nnoremap <Leader>E :registers " + *<CR>:execute @
@@ -1038,6 +1039,8 @@ nnoremap <D-]> <C-I>
 " These do not work for me.  They have a default action of moving between tabs.
 "nnoremap <D-S-[> :bp<CR>
 "nnoremap <D-S-]> :bn<CR>
+" Should really be on Cmd-Shift-O
+nnoremap <D-O> <C-U>:AsyncFinger<CR>
 
 " Training:
 " Unfortunately this message is immediately made invisible by the -- INSERT -- message.

@@ -365,13 +365,12 @@ git_fetch_all() {
 		git fetch --all "$@"
 	fi
 }
-#alias gf='git fetch -v'
-alias gf='git_fetch_all -v'
-alias gfa='git_fetch_all -v --tags --prune'
-# For faster fetches, specify the remote
-# "Git Fetch Upstream" and "Git Fetch Origin"
-alias gfu='git fetch -v'
-alias gfo='git fetch origin -v'
+# Faster, because it only hits one remote
+alias gf='git fetch'
+alias gfo='git fetch origin'
+# Slower, but fetches from all the remotes
+#alias gfa='git_fetch_all'
+alias gfa='git_fetch_all --tags --prune'
 
 alias gpl='git pull'
 alias gpll='git pull'
@@ -508,7 +507,8 @@ alias grll='glc -g'
 # This steps through commits and diffs:
 alias grlll='gitlog2 -search "^(diff|[a-z0-9]{7}) .*" -g -p'
 
-alias grem='git remote -v'
+# Be careful.  'grv' will call 'git remote' but 'gr' will call 'git reset'!
+alias grv='git remote -v'
 
 alias gt='git tag'
 
@@ -534,7 +534,9 @@ gitlog() {
 		git -c color.ui=always log "$@" |
 		#less -R +'/^(commit|diff).*' -X
 		# Needed when using --graph and -p
-		less -R +'/((^|\*[ |]*)commit .*|(^|\|{0,1} +)diff --(git|combined) .*)'
+		#less -R +'/((^|\*[ |]*)commit .*|(^|\|{0,1} +)diff --(git|combined) .*)'
+		# Don't highlight the entire line for diffs; makes commits stand out stronger
+		less -R +'/((^|\*[ |]*)commit .*|diff --(git|combined))'
 	else git log "$@"
 	fi
 	# BUG TODO: The --git may show as --combined when using gl -c, so change it for just -- after the pending merge.
@@ -646,6 +648,8 @@ alias gllud='gll upstream/develop'
 alias gb='git branch'
 # Git Branch Force can be used to change the HEAD of a branch that is not the current branch
 alias gbf='git branch -f'
+# Git Branch Move (Rename)
+alias gbm='git branch -m'
 
 # Git View Branches (tree-like)
 alias gvb='git log --oneline --decorate --graph --simplify-by-decoration'
@@ -825,10 +829,19 @@ gsld() {
 # This affects the working tree, and thus is different from `git reset -p` which affects the index.
 # Apart from leaving a dropped stash in the garbage, it has the same functionality to the built-in `git checkout -p` (gcop).
 git_kill_patch() {
+	# If there are selections available, but none of them are selected, git stash -p will exit with code 1, so we know we don't need to drop.
+	# But if there are _no changes available_ to stash, git stash -p will immediately exit with code 0, and then we would proceed to drop whatever unrelated stash is at the top of the stack!
+	# To prevent that from happening, we abort early if there are no changes available to stash.
+	if ! git diff | grep . >/dev/null && ! git diff | grep . >/dev/null
+	then
+		echo "There are no changes to kill"
+		return
+	fi
+
 	gssp &&
 	git stash drop
 }
-alias gkp='git_kill_patch'
+#alias gkp='git_kill_patch'
 alias gssk='git_kill_patch'
 
 # Apply a stash even if there are uncommitted changes in some of the affected files
@@ -1290,6 +1303,8 @@ alias gbsl='gbs -dM'
 #   export GBS_OPTIONS='-d -M'
 
 replace_ancestor_markers_with_colors() {
+	# BUG TODO: In bash 4.4.12(1)-release on Mac OS X (installed via homebrew) the following three lines cause the script to background itself!
+	#           Perhaps git config is attempting some I/O and breaking out because it is running inside a pipe
 	local current_branch_color="$(git config --get-color color.branch.current green)"
 	local local_branch_color="$(git config --get-color color.branch.local white)"
 	local ancestor_branch_color="$(git config --get-color color.branch.ancestor cyan)"

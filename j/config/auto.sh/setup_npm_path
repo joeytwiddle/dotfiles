@@ -160,6 +160,17 @@ else
 	nodestatus() {
 		nodewhatsup
 	}
+	yarnwhatsup() {
+		if ! which yarn >/dev/null
+		then
+			echo "Yarn is not installed (or at least, not on the PATH)"
+			return
+		fi
+		echo "Yarn binary:        $(which yarn)"
+		echo "Yarn binary (real): $(realpath "$(which yarn)")"
+		echo "Yarn global:        $(yarn global dir)"
+		echo "Yarn bin folder:    $(yarn global bin)"
+	}
 
 fi
 

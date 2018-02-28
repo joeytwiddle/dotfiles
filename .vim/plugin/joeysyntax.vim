@@ -62,8 +62,8 @@ function! Joeysyntax()
 
 	" Hmm the highlighting is working ok for me in shellscripts, if i run :Joeysyntax, but this vimscript looks weird
 
-	:syntax match jXmlBits /\(<\|>\)[[:alpha:]]*/
-	:highlight jXmlBits ctermfg=red term=bold
+	":syntax match jXmlBits /\(<\|>\)[[:alpha:]]*/
+	":highlight jXmlBits ctermfg=red term=bold
 
 	if &filetype == "log" || substitute(bufname("%"), '.*\.', '', '') == "log"
 		"" Log4j:
