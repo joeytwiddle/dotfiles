@@ -1,7 +1,7 @@
 [app] (name=xv) (class=MPlayer)
   [Deco]	{NORMAL}
   [Sticky]	{no}
-  [Layer]	{6}
+  [Layer]	{2}
   [Close]	{yes}
 [end]
 [app] (name=gl) (class=MPlayer)
@@ -62,8 +62,8 @@
  [app] (title=Error Console)
  [app] (title=Browser Console)
  [app] (title=Console - .*)
-  [Dimensions]	{91% 44%}
-  [Position]	(UPPERLEFT)	{9% 56%}
+  [Dimensions]	{52% 53%}
+  [Position]	(UPPERLEFT)	{32% 35%}
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
@@ -125,8 +125,8 @@
   [Position]	(UPPERLEFT)	{520 92}
 [end]
 [transient] (name=google-chrome) (class=Google-chrome)
-  [Dimensions]	{69% 86%}
-  [Position]	(UPPERLEFT)	{15% 4%}
+  [Dimensions]	{69% 99%}
+  [Position]	(UPPERLEFT)	{10% 3%}
   [Close]	{yes}
 [end]
 [app] (name=Global) (class=Firefox) (role=console)
