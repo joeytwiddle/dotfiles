@@ -42,7 +42,13 @@ if [ -z "$JPATH" ]
 then
 	echo "[fb-startup] Loading jsh before starting Fluxbox" >&2
 	export JPATH="$HOME/j"
-	. "$JPATH"/startj
+	# We used to run startj.
+	#. "$JPATH"/startj
+	# But startj sources some aliases and functions intended for the user shell, and these might contain advanced bash/zsh syntax.
+	# This startup script is often running dash instead of bash or zsh.  As a result, advanced jsh syntax can cause startup to fail!
+	# (A specific example is the use of array_var=($(...)) in git_aliases, which dash complains it cannot parse, even if the line is never reached.)
+	# Anyway there is no need to load settings for the user shell, so we can use startj-simple, and avoid those errors in future.
+	. "$JPATH"/startj-simple
 fi
 
 
@@ -94,7 +100,7 @@ fi
 	# Recommended on the web:
 	#compton -CcfF -I-.015 -O-.03 -D4 -t-5 -l-5 -r4.2 -o.75 -m.82 &
 	#
-	# Use the config file
+	# Use the config file ~/.config/compton.conf
 	compton &
 
 	echo "[fb-startup] Starting apps" >&2
@@ -106,12 +112,27 @@ fi
 
 	sleep 1
 
-	lxpanel &
+	#lxpanel &
 	#/opt/trinity/bin/kicker &
+	# I like cairo-dock but it has a horrible bug: When it is hidden, I cannot click on other windows anywhere within the rectangle that cairo was occupying.  It seems there is an invisible rectangle there intercepting my clicks.
+	#cairo-dock &
 	# If we wait a bit longer, the nm-applet will be placed in the lxpanel instead of the Flubbox panel.
 	#sleep 2
 
 	nm-applet &
+
+	sleep 1
+
+	# More applets
+	# Volume control (from gnome-control-center package)
+	gnome-sound-applet &
+	# Volume control (from kmix package)
+	#kmix &
+
+	sleep 1
+
+	# Launcher
+	albert &
 
 	sleep 1
 
