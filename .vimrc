@@ -1277,6 +1277,13 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	
 	" Recommended as it can speed up other plugins: github:neomake/neomake
 
+	call add(vamAddons,"github:joeytwiddle/quickr-preview.vim")
+	let g:quickr_preview_keymaps = 0
+	autocmd BufReadPost quickfix nmap <buffer> p <plug>(quickr_preview)
+	let g:quickr_preview_line_hl = "Search"
+	let g:quickr_preview_right = 1
+	" Alternatively, try one of these keybinds instead: https://github.com/svermeulen/vim-quickfix-custom
+
 	" }}}
 
 	" >>> My Plugins from the Cloud (modified versions of other plugins) {{{
