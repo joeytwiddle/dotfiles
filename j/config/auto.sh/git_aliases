@@ -285,17 +285,22 @@ alias gau='ga -u'
 alias gaa='gau'
 #alias gc='git commit'
 alias gc='git commit -v'
-# I never use this, so disabled it.
-#alias gcm='gc -m'
 alias gca='gc --amend'
 # Amend last commit without the editor prompt
 #alias gcaq='EDITOR=true gca'
 # Oh there is already an option for that!
 alias gcane='gca --no-edit'
+# gc -m but without needing quotes
+gcm() {
+	gc -m "$*"
+}
+gcam() {
+	gca -m "$*"
+}
 # gcam could mean -m with --amend or with -a
 # With --amend is more of a timesaver, and more consistent with gca.  But it is more dangerous if used accidentally!
 #alias gcam='gc --amend -m'
-#alias gcam='gc -a -m'
+alias gcAm='gc -a -m'
 # In reality, I rarely use gcam, so I just disabled it.
 alias gci='git commit --interactive'
 # -p "patch" allows us to choose which hunks to add or commit
@@ -814,6 +819,7 @@ gsld() {
 		less -R +'/(^commit .*|^diff .*)'
 	)
 }
+alias gsdrop='git stash drop'
 
 # Use this to remove (reset) selected patches of uncommitted files.  Finer grained than `git reset` or `git checkout --` and also more convenient.
 # How does it work?  It stashes the few patches you select, and then drops the new commit from the stash.
