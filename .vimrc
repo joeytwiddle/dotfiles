@@ -1243,6 +1243,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Allow us to modify syntax highlighting for specified lines in a file
 	" Use [range]:SyntaxIgnore and [range]:SyntaxInclude [filetype]
 	" Can also be configured to automatically detect start-end of regions and set syntax for them
+	" Ingo is a required dependency
+	call add(vamAddons,"ingo-library")
 	call add(vamAddons,"SyntaxRange")
 
 	" Use :NarrowRegion or <Leader>nr to edit the selected lines in a scratch buffer
