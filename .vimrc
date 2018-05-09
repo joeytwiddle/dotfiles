@@ -71,7 +71,9 @@ autocmd VimLeave * silent !stty ixon
 	"let g:miniBufExplMapWindowNavArrows = 1  " Use versions in joeykeymap.vim instead.
 	let g:miniBufExplUseSingleClick = 1
 	" let g:miniBufExplShowUnlistedBuffers = 0
-	" let g:miniBufExplShowOtherBuffers = 1
+	"" Hide the Location List (which ALE brings up)
+	"" If we find a better way to detect the Location List buffer, we could turn this back to 1
+	let g:miniBufExplShowOtherBuffers = 0
 	" let g:miniBufExplorerDebugLevel = 995
 
 	" >>> For taglist.vim {{{
