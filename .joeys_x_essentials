@@ -77,6 +77,10 @@ fi
 synclient VertTwoFingerScroll=1     # Ubuntu gave me default 1
 synclient HorizTwoFingerScroll=1    # Ubuntu gave me default 0
 
+# Chrome respects the synclient touchpad scrolling direction set below.
+# Firefox and xterm respect it, but also multiply it by whatever mousewheel setting you set with xmodmap.
+# As a result, swapping the mousewheel directions will make Chrome act differently from all other apps!
+
 # "Natural Scrolling" direction for OSX victims.  Applies to mousewheel and touchpad (edge and two-finger scrolling)
 # Sensitivity is also set here.
 synclient VertScrollDelta=-40
@@ -127,10 +131,11 @@ synclient PalmDetect=1
 killall -u "$USER" syndaemon 2>/dev/null
 syndaemon -d -i 0.8s -K -R -t
 
-# Reverse the normal direction of the mouse scrollwheel
-#echo "pointer = 1 2 3 5 4 6 7 8 9 10 11 12" | xmodmap -
-# Set the normal direction of the mouse scrollwheel
+# Set the normal direction of the mouse scrollwheel ("normal" direction)
 echo "pointer = 1 2 3 4 5 6 7 8 9 10 11 12" | xmodmap -
+# Reverse the normal direction of the mouse scrollwheel ("natural" direction)
+#echo "pointer = 1 2 3 5 4 6 7 8 9 10 11 12" | xmodmap -
+# But beware, this will make Chrome and Firefox act differently on the touchpad!  So it is not recommended.
 
 # You could also put settings like this into ~/.Xmodmap
 # When using gnome-settings-daemon or gnome-screensaver, these get loaded again whenever the screen is unlocked (or the machine unsuspends).  (Here "or" means "I don't know which".)
@@ -185,7 +190,11 @@ xset r rate 250 60
 # Tomato with touchpad using focaltech-dkms driver, feeling lazy (but this is too fast for mouse!):
 #xset m 20/10 0
 # Tomato with USB mouse:
-xset m 14/10 0
+#xset m 14/10 0
+# Tomato trackpad, make me reach and sometimes lift a finger.
+# But the advantage with this is (hopefully) more accurate positioning at low speeds.
+xset m 8/10 0
+# I am using threshold 0 because no matter what I set it to, it doesn't seem to have any effect.
 
 ## Got problems with characters displaying as squares [] ?
 xset fp- unix/:7100     ## xfstt on ubuntu
@@ -214,7 +223,7 @@ if [ -d "$HOME/Dropbox" ] && ! pgrep -u $UID dropbox >/dev/null
 then
 	(
 		sleep 20
-		dropbox start
+		nice ionice dropbox start
 	) &
 fi
 
@@ -222,13 +231,13 @@ fi
 #setxkbmap -option terminate:ctrl_alt_bksp
 
 ## Pre-cache files which I am likely to use soon
-false && (
-	folders_to_cache=".vim* /usr/share/vim .config/google-chrome .mozilla/firefox/Joey j/tools"
+true && (
+	folders_to_cache=".vim* /usr/share/vim" # .config/google-chrome .mozilla/firefox/Joey j/tools"
 	packages_to_cache="google-chrome-stable firefox"
 
 	nicely_do="nice -n 15 ionice -c 3"
 	sleep 10
-	$nicely_do tar ch $folders_to_cache >/dev/null
+	$nicely_do tar ch --exclude=.git --exclude=sessions $folders_to_cache >/dev/null
 
 	## Simple, but does not recurse through dependent packages
 	## DISABLED for now because it wasn't really helping me.  I was just waiting for it to finish!
