@@ -169,7 +169,31 @@ autocmd VimLeave * silent !stty ixon
 	" General exclude folders:
 	let g:Grep_Default_Filelist .= " --exclude-dir=CVS --exclude-dir=.git --exclude-dir=bin --exclude-dir=build"
 	" General exclude files:
-	let g:Grep_Default_Filelist .= " --exclude=tags --exclude=\'.*.sw?\' --exclude=\\*.min.js --exclude=\\*.min.css --exclude=\'*.log\'"
+	let g:Grep_Default_Filelist .= " --exclude=tags --exclude=\'.*\\.sw?\' --exclude=\\*.min.js --exclude=\\*.min.css --exclude=\'*.log\'"
+	" General exclude non-text files:
+	" grep skips binary files by default, with the -I flag.  However it has to read the first few bytes of them, to guess if they are binary or not.
+	" If there are a lot of those files, that can still cause a slowdown.  So skipping them by extension is faster.
+	" Realistically we can probably remove the larger filetypes from this list.
+	" I experimented {for,a,while} (with|patterns) but I could not \(find\|any\|way\) to use them, so we have one per line.
+	let g:Grep_Default_Filelist .= " --exclude=\'*.jpg\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.png\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.gif\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.wav\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.mp3\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.ogg\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.m4a\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.mp4\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.avi\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.mkv\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.zip\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.tar\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.tgz\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.bz2\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.gz\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.rar\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.7z\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.deb\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.rpm\'"
 	" Javascript:
 	let g:Grep_Default_Filelist .= " --exclude-dir=node_modules --exclude-dir=dist --exclude=bundle.js"
 	let g:Grep_Default_Filelist .= " --exclude=.tags --exclude=.tags_sorted_by_file"   " Tags files built by CTags plugin for Sublime Text
@@ -195,6 +219,12 @@ autocmd VimLeave * silent !stty ixon
 	let g:Grep_Default_Filelist .= " --exclude-dir=deploy_TMP"
 	" For MCan:
 	let g:Grep_Default_Filelist .= " --exclude-dir=private"
+	" Sourcemaps
+	let g:Grep_Default_Filelist .= " --exclude=\'.*.map\'"
+	" Non-code folders in WordPress
+	let g:Grep_Default_Filelist .= " --exclude-dir=wp-content/uploads"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.mo\'"
+	let g:Grep_Default_Filelist .= " --exclude=\'*.po\'"
 
 	let g:ConqueTerm_Color = 1
 	" let g:ConqueTerm_CloseOnEnd = 1
