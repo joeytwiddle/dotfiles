@@ -809,6 +809,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"let g:MYR_PrevMap = '\<C-p>'
 
 	" call add(vamAddons,'github:michaelficarra/vim-coffee-script')   " Coffeescript syntax
+	" call add(vamAddons,'github:kchmck/vim-coffee-script") " An alternative: syntax, indenting, compiling, and more
 	"call add(vamAddons,"github:paradigm/SkyBison")          " Immediate feedback on the cmdline.  I never use this, Tab-completion is pretty fine for me.
 	call add(vamAddons,"github:joeytwiddle/vim-diff-traffic-lights-colors")
 	"call add(vamAddons,"github:gokcehan/vim-yacom")      " Toggle comments with <Leader>c.  I never got around to trying it.
@@ -863,9 +864,10 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" - jtratner's interpreted them as italics even when GitHub did not!
 	" plasticboy's has no such issue.
 	" Maybe it is better to be warned, for general flavours of markdown.  But many of the popular ones are being kind to intra-word and lone _s now.
-	call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
-	let g:vim_markdown_folding_disabled=1
-	silent! hi link mkdCode Preproc
+	" Now disabled in favour of whatever polyglot gives us
+	"call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
+	"let g:vim_markdown_folding_disabled=1
+	"silent! hi link mkdCode Preproc
 
 	" This will start a new browser window for realtime markdown preview: https://github.com/vim-scripts/instant-markdown.vim
 
@@ -921,13 +923,16 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Conceals ""s until we are focused on them:
 	"call add(vamAddons,"github:elzr/vim-json")
 	" ES6 syntax highlighting and UltiSnips snippets
-	call add(vamAddons,"github:isRuslan/vim-es6")
+	"call add(vamAddons,"github:isRuslan/vim-es6")
 	" JSX syntax highlighting
 	call add(vamAddons,"github:mxw/vim-jsx")
 	" This will turn all ft=javascript files into ft=javascript.jsx, which might be nice for syntax highlighting, but not for ctags!
 	"let g:jsx_ext_required = 0
 	" Linter: https://github.com/ruanyl/vim-fixmyjs
 	"call add(vamAddons,"github:ruanyl/vim-fixmyjs")
+	" For a good while, isRuslan offered more than pangloss
+	" But the last time I checked, pangloss was more suitable for gentlemary than isRuslan was.
+	" Anyway, right now we are using what polyglot provides.
 
 	" Switch between single-line and multi-line statement using gS or gJ.
 	" Supports a bunch of languages.
@@ -939,12 +944,14 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" More options and can handle promise chains: https://github.com/millermedeiros/esformatter
 
 	" For Meteor development
-	call add(vamAddons,"github:mustache/vim-mustache-handlebars")
-	let g:mustache_abbreviations = 1
-	call add(vamAddons,"github:slava/vim-spacebars")
+	" (One or both of these conflict with django-plus)
+	" Now disabled.  I used to run both at the same time, but either one of them triggers css-color too often
+	" I believe polyglot is now loading handlebars for us anyway
+	"call add(vamAddons,"github:mustache/vim-mustache-handlebars")
+	"let g:mustache_abbreviations = 1
+	"call add(vamAddons,"github:slava/vim-spacebars")
 	"call add(vamAddons,"github:leafgarland/typescript-vim")
 	" Actually does much more than syntax highlighting but that's overkill for me
-	"call add(vamAddons,"github:kchmck/vim-coffee-script")
 	"call add(vamAddons,"github:hdima/python-syntax")
 
 	"call add(vamAddons,"github:groenewege/vim-less")
