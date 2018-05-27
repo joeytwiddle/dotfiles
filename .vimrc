@@ -1262,6 +1262,30 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	                                                        " leo is based on primary colors; it is a bit strong.  version 1 .0 here: http://www.vim.org/scripts/script.php?script_id=2156
 	" Multi-target (editors) color scheme generator: https://github.com/daylerees/colour-schemes
 
+	" Rules I want to load after every colorscheme
+	augroup Joeys_After_Colorscheme
+		autocmd!
+		autocmd ColorScheme * highlight SpecialKey ctermfg=239 guifg=#4c4c4c
+		autocmd ColorScheme * highlight Comment ctermfg=242 gui=none guifg=#777777
+		" This restores my preferred statusline and MiniBufExplorer colors
+		autocmd ColorScheme * so ~/.vim/mac_colors.vim
+	augroup END
+	"
+	" TODO: Turn this into a plugin that automatically finds and sources post-colorscheme settings?
+	"     globpath(&runtimepath, "after/colors/all.vim", 0, 1)
+	"     globpath(&runtimepath, "after/colors/%colorscheme%.vim", 0, 1)
+	" Oh but wait: that's not what I need.  I want my own custom rules that run after a specific *syntax* plugin is chosen.
+	" E.g. I need different things for isRuslan or pangloss.  Or ... is it a combination that I need?
+
+	" Vim is not very good at switching colorscheme, there are lots of problems.
+	" This plugin can help with some of them:
+	"call add(vamAddons,"github:xolox/vim-colorscheme-switcher")
+	" This addon provides an important missing command for that plugin: :SwitchToColorScheme
+	"call add(vamAddons,"github:Taverius/vim-colorscheme-manager")
+
+	" }}}
+
+
 	call add(vamAddons,"github:coderifous/textobj-word-column.vim") " vic to select whole column
 
 	call add(vamAddons,"github:kana/vim-textobj-user")   " Dependency for...
