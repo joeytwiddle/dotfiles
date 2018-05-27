@@ -246,8 +246,8 @@
 
 [diff]
 	# When showing diffs, present renames as renames, with a similarity index.  You will not see the lines of code which were moved.
-	# However it also reports daft things like: "Binary files /dev/null and b/example/image.png differ"
-	#renames = true
+	# However it does report added or removed binaries in a rather odd way: "Binary files /dev/null and b/example/image.png differ"
+	renames = true
 
 [format]
 	# Simple:
