@@ -126,7 +126,7 @@
 [end]
 [transient] (name=google-chrome) (class=Google-chrome)
   [Dimensions]	{69% 99%}
-  [Position]	(UPPERLEFT)	{10% 3%}
+  [Position]	(UPPERLEFT)	{0% 0%}
   [Close]	{yes}
 [end]
 [app] (name=Global) (class=Firefox) (role=console)
