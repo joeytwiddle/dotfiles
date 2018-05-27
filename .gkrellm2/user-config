@@ -1,5 +1,11 @@
 ### GKrellM user config.  Auto written, do not edit (usually) ###
 ### Version 2.3.5 ###
+#
+# To clear out old transient virtual interfaces (e.g. those created by Docker):
+#
+#     :g/net enables veth/d
+#     :g/net chart_config veth/d
+#
 enable_hostname 0
 hostname_short 0
 enable_sysname 1
@@ -14,7 +20,7 @@ below 0
 track_gtk_theme_name 0
 default_track_theme "Default"
 save_position 0
-chart_width 160
+chart_width 200
 update_HZ 1
 allow_multiple_instances 0
 float_factor 1000
