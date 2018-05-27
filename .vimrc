@@ -367,7 +367,7 @@ autocmd VimLeave * silent !stty ixon
 	"" It will only make things worse.  :p
 
 	"" Show working folder, filename, path to file, and server name
-	set titlestring=%{ShortenIfNeeded(fnamemodify(getcwd(),':~'))}\ (\ \ \ %t\ \ \ )\ %<%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.:h'))}
+	" set titlestring=%{ShortenIfNeeded(fnamemodify(getcwd(),':~'))}\ (\ \ \ %t\ \ \ )\ %<%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.:h'))}
 	" \ \ \ %{v:servername}
 	function! ShortenIfNeeded(_path)
 		let path = a:_path
@@ -379,6 +379,10 @@ autocmd VimLeave * silent !stty ixon
 			return path
 		endif
 	endfunction
+	"" Show working folder name only, and the filename
+	" set titlestring=%{fnamemodify(getcwd(),':t')}\ %<(%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.'))})
+	"" The last two parts of the working folder's path
+	set titlestring=%{fnamemodify(getcwd(),':s+.*/\\([^/]*/[^/]*\\)+\\1+g')}/\ %<(%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.'))})
 
 	"" NOTE: To keep the netrw file listing open, open the first file with 'v' and subsequent files with 'P'
 	"" Default to tree view
