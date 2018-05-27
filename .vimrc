@@ -615,6 +615,9 @@ autocmd VimLeave * silent !stty ixon
 	au BufReadPost,BufNewFile {/usr/share/X11/xkb/*} set ft=c
 	au BufReadPost,BufNewFile {*.md}                 set ft=markdown
 
+	" Do not use a swapfile when editing files in Dropbox
+	autocmd BufNewFile,BufRead {$HOME/Dropbox/*} setlocal noswapfile | let b:NoSwapSuck_NoSwapfile = 1
+
 	" View (and save) rich document files in Vim:
 	"autocmd BufReadPost *.odt :%!odt2txt %
 	autocmd BufReadPost  *.docx :%!pandoc -f docx     -t markdown | set readonly
@@ -755,6 +758,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	" >>> Plugins from the Cloud {{{
 
+	"" A nice searchable plugin repository: https://vimawesome.com/
+
 	"" TODO: All these plugins increase vim's startup time.
 	"" This is not just about Vim processing the scripts, a significant cost is the traversal of all the filesystem folders for the following plugins.  (To demonstrate this, try opening vim twice in a row - only the first time is slow!)
 	"" Tactics:
@@ -830,8 +835,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
 	" Note that g:asyncfinder_ignore_dirs should be kept in sync with g:Grep_Default_Filelist above.
-	let g:asyncfinder_ignore_dirs = "['*.AppleDouble*', '*.DS_Store*', '.git', '*.hg*', '*.bzr*', 'CVS', '.svn', 'node_modules', 'dist', 'tmp', './public/assets', '*/.meteor/local/*', 'deploy_TMP', 'private']"
-	",'pikto'
+	let g:asyncfinder_ignore_dirs = "['.AppleDouble', '.DS_Store', '.git', '.hg', '.bzr', 'CVS', '.svn', 'node_modules', 'dist', 'tmp', './public/assets', '*/.meteor/local/*', 'deploy_TMP', 'private', '.ccache']"
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
 
@@ -1100,7 +1104,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		"let g:syntastic_auto_loc_list = 1
 		"let g:syntastic_check_on_open = 1
 		"let g:syntastic_check_on_wq = 0
-		let g:syntastic_javascript_checkers = ['eslint']
+		let g:syntastic_javascript_checkers = ['standard']
 		"let g:syntastic_check_on_open = 1
 		let g:syntastic_warning_symbol = '--'
 		"let g:syntastic_auto_jump = 2
@@ -1119,6 +1123,10 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		let g:ale_linters = {
 		\   'javascript': ['standard', 'eslint'],
 		\}
+		"let g:ale_linters = {
+		"\   'javascript': ['eslint', 'flow', 'jscs', 'jshint', 'standard', 'xo'],
+		"\}
+		" Use :ALEInfo to see which linters are available and which are being used
 	endif
 
 	" https://github.com/bling/vim-airline
@@ -1222,10 +1230,15 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:dahu/vimple")             " ...
 	"call add(vamAddons,"github:dahu/VimFindsMe")         " Edit args, edit options containing lists, cd into relevant folders
 
+
+	" >>> Plugins related to colors and colorschemes {{{
+
 	call add(vamAddons,"github:ap/vim-css-color")        " Colour the backgrounds of colour codes in CSS and Vim files
 
 	" Some colorschemes:
 	call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
+	"call add(vamAddons,"github:lifepillar/vim-solarized8") " Simplified, with fewer bugs
+	call add(vamAddons,"github:davidkariuki/sexy-railscasts-256-theme") " Nice colors
 	"call add(vamAddons,"github:shawncplus/skittles_berry") " Cute and colorful
 	" Molokai (Monokai) was originally a theme for Text Mate, and is the default theme for Sublime Text
 	call add(vamAddons,"github:sickill/vim-monokai")     " Forces t_Co=256, appears more faithful to Sublime
@@ -1291,6 +1304,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Use :NarrowRegion or <Leader>nr to edit the selected lines in a scratch buffer
 	" Can be useful to restrict a file-wide operation to only those lines.
 	call add(vamAddons,"NrrwRgn")
+
+	call add(vamAddons,"github:tweekmonster/django-plus.vim")
 
 	" Diff sometimes presents a mess instead of detecting that some lines has moved in the file.  Run `:EnhancedDiff histogram` or `:PatienceDiff` and it might fix it!
 	if v:version >= 704
@@ -1382,4 +1397,4 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 endif
 
 
-" vim: foldmethod=marker foldenable colorcolumn=57
+" vim: foldmethod=marker foldenable colorcolumn=57 textwidth=0
