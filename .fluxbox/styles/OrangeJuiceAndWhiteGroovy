@@ -141,7 +141,7 @@ toolbar.iconbar.focused.borderColor:	#aaaaaa
 # toolbar.iconbar.focused:	sunken gradient vertical
 # toolbar.iconbar.focused.color:	#667780
 # toolbar.iconbar.focused.colorTo:	#99aab0
-toolbar.iconbar.focused.textColor:	#dddddd
+toolbar.iconbar.focused.textColor:	#ffffff
 toolbar.iconbar.focused.justify:	center
 
 # toolbar.iconbar.focused:	sunken gradient vertical
@@ -158,7 +158,7 @@ toolbar.iconbar.unfocused:	raised gradient vertical
 # toolbar.iconbar.unfocused.colorTo:	#005588
 toolbar.iconbar.unfocused.color:	#009900
 toolbar.iconbar.unfocused.colorTo:	#006600
-toolbar.iconbar.unfocused.textColor:	#white
+toolbar.iconbar.unfocused.textColor:	#eeeeee
 toolbar.iconbar.unfocused.justify:	center
 
 ############################################################## WINDOW #########
@@ -220,7 +220,7 @@ window.label.focus.color:	#aa8800
 # window.label.focus:	raised gradient vertical
 # window.label.focus.color:	#cc8833
 # window.label.focus.colorTo:	#996655
-window.label.focus.textColor:	white
+window.label.focus.textColor:	#ffffff
 window.label.unfocus:	raised gradient vertical
 window.label.unfocus.color:	#008800
 window.label.unfocus.colorTo:	#005500

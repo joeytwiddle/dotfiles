@@ -131,7 +131,7 @@ toolbar.iconbar.unfocused.borderColor:	#336633
 toolbar.iconbar.unfocused:	raised gradient vertical
 toolbar.iconbar.unfocused.color:	#448833
 toolbar.iconbar.unfocused.colorTo:	#446633
-toolbar.iconbar.unfocused.textColor:	#eeeecc
+toolbar.iconbar.unfocused.textColor:	#eeeeee
 toolbar.iconbar.unfocused.justify:	center
 
 ############################################################## WINDOW #########
@@ -159,7 +159,7 @@ window.title.unfocus.colorTo:	#446633
 window.label.unfocus:	gradient vertical
 window.label.unfocus.color:	#448833
 window.label.unfocus.colorTo:	#446633
-window.label.unfocus.textColor:	#eeeecc
+window.label.unfocus.textColor:	#eeeeee
 
 window.button.focus:	raised gradient
 window.button.focus.color:	#5c5c5c
