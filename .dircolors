@@ -249,6 +249,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 *HELP 01;33
 *TODO 01;33
 .md 01;33   # markdown
+.MD 01;33   # markdown
 .mkd 01;33   # markdown
 .markdown 01;33   # markdown
 .nfo 01;33
@@ -410,7 +411,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .b4sr 00;37
 
 # red: Executables
-# This is for files with the execute bit set
+# This is for files with execute permission, or that are intended for execution
 EXEC 01;31
 # Compiled Java files
 .class 01;31
