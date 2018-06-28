@@ -283,7 +283,7 @@ gd() {
 # Git Diff Words (also uses -w to ignore whitespace aka indentation)
 alias gdw='git diff -w --word-diff=color'
 # Git Diff Files
-alias gdf='git diff --stat'
+alias gdf='git diff --stat="$COLUMNS"'
 # Git Diff Staged / Cached (see which one I use most ... I used gdc!)
 #alias gds='gdc'
 alias gdc='gd --cached'
@@ -541,7 +541,7 @@ alias glsl=gitls
 # Unfortunately whilst this provides the feature, git disables colors:
 #   gl | less +"/^commit.*" -r
 # Oh, fixed it.  Since this make paging commits very fast, now adding --stat
-#alias gl='git -c color.ui=always log -U2 -p -m --stat | less -R "+/^commit.*"'
+#alias gl='git -c color.ui=always log -U2 -p -m --stat="$COLUMNS" | less -R "+/^commit.*"'
 gitlog() {
 	# Show color if not piping.  Skip to next file or commit on 'n'.
 	if [ -t 1 ]
@@ -571,7 +571,7 @@ gitlog() {
 # I rarely want to use glp directly; I prefer glg because it customizes the color of the commit message.
 # OK so I recently had to track down some code which had been deleted/lost during a merge.  I was using git log <filename>.  The *only* way which worked was -c; -cc or neither would not display this line!  So -c all the way... at least for that case!  If -c causes duplicate information to be displayed, perhaps we should use it at the same time as not showing branches.
 # The --stat option sometimes abbreviates the filenames it displays.  If you need the whole path, use --numstat instead.
-alias glp='gitlog -p -U2 --stat'
+alias glp='gitlog -p -U2 --stat="$COLUMNS"'
 # Here --stat show a quick summary of changed files, before actually showing the diffs.  I rather enjoy this when using 'gl' as it lets me decide from the top of each commit whether there are any files I am interested in, and if not I can happily skip straight to the next commit.  In other situations, e.g. when I am planning to read all the details, --stat is just chaff.
 # "Git Log Grey" - Like 'gl' except we present my favourite colors
 # This is quite close to: git log --decorate -U2 -p -m --stat
@@ -624,15 +624,15 @@ fi
 alias gllnm='gll --no-merges'
 # Git Log Long No Graph
 alias gllng='glc'
-alias glls='gll --stat'
+alias glls='gll --stat="$COLUMNS"'
 
 # "Git Log Word-diffed" - It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
 alias glw='gl --word-diff=color'
 # "Git Log Stats/Summary" - Just file stats, no diffs.  BUG: Not grey, because glg uses glp which does -p (diffs)!
 # Deprecated in favour of gls=gitls.  Use glf for this instead.
-#alias gls='gitlog --stat'
+#alias gls='gitlog --stat="$COLUMNS"'
 # "Git Log Files" - Compressed version of "Git Log Stats"
-#alias glf='glc --stat'
+#alias glf='glc --stat="$COLUMNS"'
 # New version allows easy n/N searching.  Could be merged with gitlog.
 gitlog2() {
 	local search
@@ -644,7 +644,7 @@ gitlog2() {
 	glc --color=always "$@" | less -R +"/$search"
 	#glc "$@"
 }
-alias glf='gitlog2 -search "^[^ ]+" --stat'
+alias glf='gitlog2 -search "^[^ ]+" --stat="$COLUMNS"'
 # With glf, we can walk commmits with /^[^ ]+
 # Just commit info, one per line
 # Git Log Files Porcelain: does not abbreviate filenames, shows numbers instead of '+'s and '-'s
