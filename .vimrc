@@ -1361,7 +1361,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	let g:quickr_preview_keymaps = 0
 	autocmd BufReadPost quickfix nmap <buffer> p <plug>(quickr_preview)
 	let g:quickr_preview_line_hl = "Search"
-	let g:quickr_preview_right = 1
+	"let g:quickr_preview_position = 'below'
+	let g:quickr_preview_position = 'right'
 	" Alternatively, try one of these keybinds instead: https://github.com/svermeulen/vim-quickfix-custom
 
 	" }}}

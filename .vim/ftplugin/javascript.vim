@@ -225,7 +225,8 @@ endif
 " Use CMD-SHIFT-L on Mac or CTRL-SHIFT-L on other systems
 " I wanted to map D-S-L but it didn't register (in MacVim gui mode)
 nnoremap <buffer> <silent> <D-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
-nnoremap <buffer> <silent> <C-S-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
+" BUG: This fires on CTRL-L which already has a useful meaning.
+"nnoremap <buffer> <silent> <C-S-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
 
 if !get(g:, 'EslintFix_is_reloading_file', 0)
   function! s:EslintFixCurrentFile()

@@ -9,4 +9,6 @@ if !empty(globpath(&rtp, 'autoload/SyntaxRange.vim'))
   " But this only works if we source it ourselves, after the buffer has loaded
   " Is there perhaps something during file load that overwrites/breaks it?
   call SyntaxRange#Include('^```js$', '^```$', 'javascript', 'String')
+  " This one the same
+  call SyntaxRange#Include('^```html$', '^```$', 'html', 'String')
 endif

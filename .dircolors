@@ -358,6 +358,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .gradle 00;36
 .json 00;36
 .yml 00;36
+.yaml 00;36
 
 # dark cyan: Plain data ("output")
 .dat 00;36

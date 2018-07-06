@@ -318,6 +318,7 @@ alias gci='git commit --interactive'
 alias gap='ga -p'
 # This is better used for git cherry-pick, as that is a greater saving, and I use it more often.
 #alias gcp='gc -p'
+alias gcnv='git commit --no-verify'
 
 # Perform git commit --fixup and do the rebase immediately
 git_commit_immediate_fixup() {
@@ -407,7 +408,8 @@ alias gpo='verbosely git push origin "$(git_get_current_branch)"'
 #alias gpu='verbosely git push "$(git_guess_upstream_branch)"'
 # -u sets upstream tracking branch
 #alias gpu='verbosely git push -u'
-# --no-verify will skip running hooks, --force will override remote branch even if it is ahead of local branch
+# --force will override remote branch even if it is ahead of local branch
+# --no-verify will skip running hooks
 alias gpshf='git push --force'
 alias gpshnv='git push --no-verify'
 alias gpshnvf='git push --no-verify --force'
