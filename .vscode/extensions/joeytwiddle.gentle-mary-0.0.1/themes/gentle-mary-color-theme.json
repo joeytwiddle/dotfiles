@@ -69,7 +69,7 @@
     },
     {
       "name": "Type",
-      "scope": "support.type",
+      "scope": "support.type, support.class, entity.name.tag",
       "settings": {
         "foreground": "#A576A0"
       }
@@ -179,8 +179,7 @@
       "name": "HTML tag outer",
       "scope": "meta.tag, punctuation.definition.tag",
       "settings": {
-        "foreground": "#AF4A67",
-        "fontStyle": "bold"
+        "foreground": "#AF4A67"
       }
     },
     {
