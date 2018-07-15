@@ -19,19 +19,19 @@
       "name": "Boolean",
       "scope": "constant.language.boolean",
       "settings": {
-        "foreground": "#CCCCCC"
+        "foreground": "#88CCCC"
       }
     },
     {
       "name": "Number",
       "scope": "constant.numeric",
       "settings": {
-        "foreground": "#CCCCCC"
+        "foreground": "#88CCCC"
       }
     },
     {
       "name": "Identifier",
-      "scope": "variable, support.variable, support.class, support.constant, meta.definition.variable entity.name.function",
+      "scope": "variable, support.variable, support.class, support.constant, meta.definition.variable, entity.name.function",
       "settings": {
         "foreground": "#CCCCCC"
       }
@@ -42,6 +42,13 @@
       "settings": {
         "foreground": "#AF4A67",
         "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Brackets",
+      "scope": "meta.brace",
+      "settings": {
+        "foreground": "#CCCCCC"
       }
     },
     {
@@ -69,7 +76,7 @@
     },
     {
       "name": "Type",
-      "scope": "support.type, support.class, entity.name.tag",
+      "scope": "support.type, support.class",
       "settings": {
         "foreground": "#A576A0"
       }
@@ -92,27 +99,26 @@
       "name": "Class",
       "scope": "entity.name.type.class",
       "settings": {
-        "foreground": "#3DA676",
-        "fontStyle": "underline"
+        "foreground": "#3DA676"
       }
     },
     {
       "name": "Class variable",
-      "scope": "variable.object.property",
+      "scope": "variable.object.property, variable.other.property",
       "settings": {
         "foreground": "#4B95DC"
       }
     },
     {
       "name": "Class method",
-      "scope": "meta.definition.method entity.name.function",
+      "scope": "meta.definition.method",
       "settings": {
-        "foreground": "#4B95DC"
+        "foreground": "#3DA676"
       }
     },
     {
       "name": "Function definition",
-      "scope": "meta.function entity.name.function",
+      "scope": "meta.function, entity.name.function",
       "settings": {
         "foreground": "#3DA676"
       }
@@ -123,6 +129,13 @@
       "settings": {
         "foreground": "#AF4A67",
         "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "JavaScript semicolon",
+      "scope": "punctuation.terminator.statement.js",
+      "settings": {
+        "foreground": "#8A8A8A"
       }
     },
     {
@@ -165,7 +178,7 @@
       "name": "CSS ID",
       "scope": "entity.other.attribute-name.id",
       "settings": {
-        "foreground": "#CCB385"
+        "foreground": "#3DA676"
       }
     },
     {
@@ -179,14 +192,14 @@
       "name": "HTML tag outer",
       "scope": "meta.tag, punctuation.definition.tag",
       "settings": {
-        "foreground": "#AF4A67"
+        "foreground": "#A576A0"
       }
     },
     {
       "name": "HTML tag inner",
       "scope": "entity.name.tag",
       "settings": {
-        "foreground": "#CCCCCC"
+        "foreground": "#A576A0"
       }
     },
     {
@@ -194,6 +207,34 @@
       "scope": "entity.other.attribute-name",
       "settings": {
         "foreground": "#3DA676"
+      }
+    },
+    {
+      "name": "HTML tag attribute punctuation",
+      "scope": "meta.tag.any, meta.tag.inline.any",
+      "settings": {
+        "foreground": "#CCCCCC"
+      }
+    },
+    {
+      "name": "HTML tag attribute punctuation (special cases)",
+      "scope": "meta.tag.metadata.script.html, meta.tag.structure.any.html",
+      "settings": {
+        "foreground": "#CCCCCC"
+      }
+    },
+    {
+      "name": "JSX tag attribute punctuation",
+      "scope": "meta.tag.attribute keyword.operator.assignment",
+      "settings": {
+        "foreground": "#CCCCCC"
+      }
+    },
+    {
+      "name": "JSX tag attribute curly brackets",
+      "scope": "punctuation.section.embedded",
+      "settings": {
+        "foreground": "#CCCCCC"
       }
     },
     {
@@ -262,8 +303,7 @@
       "name": "C# class",
       "scope": "source.cs meta.class.identifier storage.type",
       "settings": {
-        "foreground": "#3DA676",
-        "fontStyle": "underline"
+        "foreground": "#3DA676"
       }
     },
     {
