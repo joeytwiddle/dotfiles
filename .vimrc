@@ -1255,6 +1255,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:AlessandroYorba/Despacio") " Very brown, coffee focus
 	"call add(vamAddons,"github:tyrannicaltoucan/vim-quantum") " Based on the Material Design palette
 	"call add(vamAddons,"github:YorickPeterse/happy_hacking.vim") " Fairly gentle, brown and browny-greens
+	"call add(vamAddons,"github:tyrannicaltoucan/vim-quantum") " Nice range of colours
+	"call add(vamAddons,"github:kaicataldo/material.vim") " Fork of quantum with brighter colours.  Similar to Atom's One Dark, but not quite the same
+	"call add(vamAddons,"github:Heorhiy/VisualStudioDark.vim") " Similar to VSCode's default, but not an exact match
 	"call add(vamAddons,"github:")
 
 	"call add(vamAddons,"github:flazz/vim-colorschemes")  " A large collection, includes codeschool
