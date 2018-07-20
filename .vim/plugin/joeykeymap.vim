@@ -531,7 +531,7 @@ nnoremap <silent> S :echohl ErrorMsg <Bar> echo "NOT SAVED!  Press Z to save." <
 " Finally we could go for Ctrl-s which is safe given that I know Ctrl-q.  The difficulty here it ensuring it is executed when vim is started by other programs, e.g. git merge or visudo.
 " OK I have now added this in my .vimrc: :silent !stty -ixon
 " Perhaps that should be moved to here, since this depends on that, and that is only used for this.
-nnoremap <C-s> :w<Enter>
+nnoremap <C-s> :wa<Enter>
 " Similarly I cannot map Ctrl-q
 "nnoremap Q :qa<Enter>
 " OK this is safer, my MBE settings will require it be hit twice.  And also it can be used to close a window.
@@ -539,10 +539,10 @@ nnoremap <C-s> :w<Enter>
 " NOTE: If you really do want to use C-s and C-q then do this before loading vim:
 "   stty -ixon
 " Save for MacVim on normal Mac save key.
-" Not needed because MacVim sets this by default!
-"if $_system_name == 'OSX'
-"	nmap <d-s> <C-s>
-"endif
+" (This changes the default Cmd-S behaviour, which is to save only the current buffer.)
+if $_system_name == 'OSX'
+	nmap <d-s> <C-s>
+endif
 
 " Normally ZZ quits only the current window, and quits Vim if it was the last window.
 " But the builtin ZZ gets confused by MiniBufExplorer.
