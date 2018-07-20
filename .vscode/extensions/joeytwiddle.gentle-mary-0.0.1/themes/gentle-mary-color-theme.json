@@ -4,7 +4,8 @@
     {
       "name": "Global settings",
       "settings": {
-        "background": "#102626",
+        "OLD_background": "#102626",
+        "background": "#2B2B2B",
         "foreground": "#CCCCCC"
       }
     },
@@ -224,6 +225,13 @@
       }
     },
     {
+      "name": "HTML content",
+      "scope": "text.html.basic, meta.jsx.children.js",
+      "settings": {
+        "foreground": "#CCCCCC"
+      }
+    },
+    {
       "name": "JSX tag attribute punctuation",
       "scope": "meta.tag.attribute keyword.operator.assignment",
       "settings": {
@@ -347,13 +355,6 @@
       "settings": {
         "foreground": "#CCCCCC"
       }
-    },
-    {
-      "name": "Global settings",
-      "settings": {
-        "background": "#102626",
-        "foreground": "#CCCCCC"
-      }
     }
   ],
   "colors": {
@@ -376,7 +377,8 @@
     "editorGroupHeader.tabsBackground": "#132d2d",
     "tab.border": "#00000033",
     "tab.inactiveBackground": "#163535",
-    "editor.background": "#102626",
+    "editor.OLD_background": "#102626",
+    "editor.background": "#2B2B2B",
     "editor.foreground": "#CCCCCC",
     "editorLineNumber.foreground": "#FFFFFF4d",
     "editor.lineHighlightBackground": "#FFFFFF0a",
