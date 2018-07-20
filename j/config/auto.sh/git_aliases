@@ -337,7 +337,7 @@ git_commit_immediate_fixup() {
 	commit_to_amend="$(git rev-parse "${commit_to_amend}")" || return
 
 	echo ">> Committing"
-	git commit --fixup "${commit_to_amend}" || return
+	git commit --no-verify --fixup "${commit_to_amend}" || return
 
 	echo ">> Performing rebase"
 	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
