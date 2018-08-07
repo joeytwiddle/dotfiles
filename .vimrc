@@ -35,18 +35,18 @@ endif
 " Also mildly related, Vim now has persistent_undo feature, which can be enabled by setting 'undofile'
 
 " This makes it possible to leave Insert mode more quickly when pressing Escape.
-" Although it may mess with other plugins that use timeoutlen.
+" Although it does mess with other plugins that use timeoutlen, such as Emmet.
 " A better solution might be to get more familiar with my Esc shortcut on £ (Shift-3), although that isn't an option on US keyboards.
 " Another keybind that some people like to use for <Esc> is <Ctrl-[>.  In fact that works by default!
 " TODO: If gui is not running, then we should add this setup to the autocommand GUIEnter.  (Probably need to put the setup into a function.)
-if ! has('gui_running')
-    set ttimeoutlen=10
-    augroup FastEscape
-        autocmd!
-        au InsertEnter * set timeoutlen=0
-        au InsertLeave * set timeoutlen=1000
-    augroup END
-endif
+"if ! has('gui_running')
+"    set ttimeoutlen=10
+"    augroup FastEscape
+"        autocmd!
+"        au InsertEnter * set timeoutlen=0
+"        au InsertLeave * set timeoutlen=1000
+"    augroup END
+"endif
 
 
 
@@ -225,6 +225,8 @@ autocmd VimLeave * silent !stty ixon
 	let g:Grep_Default_Filelist .= " --exclude-dir=wp-content/uploads"
 	let g:Grep_Default_Filelist .= " --exclude=\'*.mo\'"
 	let g:Grep_Default_Filelist .= " --exclude=\'*.po\'"
+	" For Dwitter:
+	let g:Grep_Default_Filelist .= " --exclude-dir=venv"
 
 	let g:ConqueTerm_Color = 1
 	" let g:ConqueTerm_CloseOnEnd = 1
@@ -420,9 +422,14 @@ autocmd VimLeave * silent !stty ixon
 		else
 			let g:os = "other"
 		endif
-		" If we can't trust 'has()' then this is an alernative for Unixes:
+		" If we can't trust 'has()' then this is an alternative for Unixes:
 		" Possible results: "Darwin", "Linux"
 		"let g:os = substitute(system('uname'), '\n', '', '')
+	endif
+
+
+	if g:os == "Linux" && system('which open_in_current_browser >/dev/null && echo found') == 'found'
+		let g:netrw_browsex_viewer = 'open_in_current_browser'
 	endif
 
 
@@ -753,8 +760,15 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 " >>> Addons (the neat way) {{{
 
+	" At present we are using: https://github.com/MarcWeber/vim-addon-manager.git
+	" If you want to switch to an alternative manager, Plug looks quite powerful.
+	" Here we see Plug can activate only when a certain filetype is opened: https://github.com/ap/vim-css-color/issues/79#issuecomment-372142928
+
 	" Note that vim-addon-manager clones shallow git history, which is faster and saves disk space, but can make a mess of merges.
 	" To expand a repository to full history, simply: git fetch --depth=999999
+	" Git seems to be better at managing merges from shallow clones now.
+
+	" TODO: In my next reincarnation, I might try using vim-plug: https://github.com/junegunn/vim-plug#on-demand-loading-of-plugins
 
 	" >>> Plugins from the Cloud {{{
 
@@ -777,7 +791,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	" call add(vamAddons,"vim-haxe")                       " Haxe syntax
 	" call add(vamAddons,'github:jdonaldson/vim-haxe')     " Haxe syntax
-	call add(vamAddons,'github:jdonaldson/vaxe')           " Haxe syntax (preferred)
+	" call add(vamAddons,'github:jdonaldson/vaxe')           " Haxe syntax (preferred)
 
 	" call add(vamAddons,'github:derekwyatt/vim-scala')      " Scala syntax and more
 	" call add(vamAddons,'/stuff/joey/projects/scala/scala-dist-vim') " Older but does not load this way!
@@ -816,10 +830,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" call add(vamAddons,'github:michaelficarra/vim-coffee-script')   " Coffeescript syntax
 	" call add(vamAddons,'github:kchmck/vim-coffee-script") " An alternative: syntax, indenting, compiling, and more
 	"call add(vamAddons,"github:paradigm/SkyBison")          " Immediate feedback on the cmdline.  I never use this, Tab-completion is pretty fine for me.
-	call add(vamAddons,"github:joeytwiddle/vim-diff-traffic-lights-colors")
 	"call add(vamAddons,"github:gokcehan/vim-yacom")      " Toggle comments with <Leader>c.  I never got around to trying it.
-	call add(vamAddons,"github:tpope/vim-commentary")    " Toggle comments with gc[motion] or gcc for the current line  Supports multiple languages via commentstring.
-	call add(vamAddons,"github:digitaltoad/vim-jade")    " Jade syntax
+	"call add(vamAddons,"github:digitaltoad/vim-jade")    " Jade/Pug syntax
 	"call add(vamAddons,"github:FredKSchott/CoVim")       " Collaborative editing with vim!
 	" call add(vamAddons,"github:Raimondi/YAIFA")          " Indent Finder
 	call add(vamAddons,"github:vim-scripts/yaifa.vim")   " Indent Finder
@@ -835,7 +847,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
 	" Note that g:asyncfinder_ignore_dirs should be kept in sync with g:Grep_Default_Filelist above.
-	let g:asyncfinder_ignore_dirs = "['.AppleDouble', '.DS_Store', '.git', '.hg', '.bzr', 'CVS', '.svn', 'node_modules', 'dist', 'tmp', './public/assets', '*/.meteor/local/*', 'deploy_TMP', 'private', '.ccache']"
+	let g:asyncfinder_ignore_dirs = "['.AppleDouble', '.DS_Store', '.git', '.hg', '.bzr', 'CVS', '.svn', 'node_modules', 'dist', 'tmp', './public/assets', '*/.meteor/local/*', 'deploy_TMP', 'private', '.ccache', 'venv']"
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
 
@@ -850,8 +862,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"let g:gitgutter_diff_args = '-w "master@{1 week ago}"'
 	"call add(vamAddons,"github:mhinz/vim-signify")       " Similar but supports more VCSs!  BUT was pretty slow on some files, and completely locking up vim on some others (e.g.: j/tools/wine and ~/.vim/ftplugin/sh.vim).  Even turning it off with :SignifyToggle took ages!
 	"call add(vamAddons,"github:chrisbra/changesPlugin")  " Another gutter plugin to indicate buffer edits (not git).  Requires Vim8
-	call add(vamAddons,"github:terryma/vim-expand-region")   " Grow the visual block easily
-	call add(vamAddons,"github:vim-scripts/ScreenShot")  " Take HTML screenshots of your Vim
+	"call add(vamAddons,"github:terryma/vim-expand-region")   " Grow the visual block easily
+	"call add(vamAddons,"github:vim-scripts/ScreenShot")  " Take HTML screenshots of your Vim
 	call add(vamAddons,"github:tpope/vim-repeat")        " Helps `.` to work with plugins (including fanfingtastic)
 	call add(vamAddons,"github:dahu/vim-fanfingtastic")  " multi-line f,t,F,T - works well for me.
 	"call add(vamAddons,"github:chrisbra/improvedft")     " Another one to try
@@ -887,13 +899,17 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"let g:sparkupMappingInsertModeOnly = 1
 
 	" A different implementation, by chrisgeo.  Default key is <C-e>
-	call add(vamAddons,"sparkup")
-	" Note that these configs will break rstacruz's sparkup!
-	let g:sparkup = {}
-	let g:sparkup.lhs_expand = '<C-]>'
+	"call add(vamAddons,"sparkup")
+	"" Note that these configs will break rstacruz's sparkup!
+	"let g:sparkup = {}
+	"let g:sparkup.lhs_expand = '<C-]>'
 
 	" Or use Emmet itself
-	"call add(vamAddons,"github:mattn/emmet-vim")
+	" Press `<C-y>,` to expand the shortcut under the cursor
+	" Example syntax: ul>(li>.foo>a.menu-item[data-toggle=menu]{Text here})*5
+	call add(vamAddons,"github:mattn/emmet-vim")
+	"let g:user_emmet_leader_key='<C-y>'
+	"let g:user_emmet_mode='i'   " Only in insert mode
 
 	" Interesting: source folder's vimrc file for different settings in specific projects
 	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
@@ -929,7 +945,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" ES6 syntax highlighting and UltiSnips snippets
 	"call add(vamAddons,"github:isRuslan/vim-es6")
 	" JSX syntax highlighting
-	call add(vamAddons,"github:mxw/vim-jsx")
+	"call add(vamAddons,"github:mxw/vim-jsx")
 	" This will turn all ft=javascript files into ft=javascript.jsx, which might be nice for syntax highlighting, but not for ctags!
 	"let g:jsx_ext_required = 0
 	" Linter: https://github.com/ruanyl/vim-fixmyjs
@@ -937,6 +953,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" For a good while, isRuslan offered more than pangloss
 	" But the last time I checked, pangloss was more suitable for gentlemary than isRuslan was.
 	" Anyway, right now we are using what polyglot provides.
+	call add(vamAddons,"github:styled-components/vim-styled-components")
 
 	" Switch between single-line and multi-line statement using gS or gJ.
 	" Supports a bunch of languages.
@@ -1072,7 +1089,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:felixr/vim-multiedit")      " Edit multiple selections live (mark words with ,w then edit all with ,i or ,a)
 	"call add(vamAddons,"github:hlissner/vim-multiedit")    " Edit multiple selections v2 (mark words with \mm then edit all with \M or \C) - but this was not doing live updates for me
 	"call add(vamAddons,"github:vim-scripts/vim-multiedit") " Older clone of hlissner's
-	call add(vamAddons,"github:osyo-manga/vim-over")       " Specifically just for previewing search/replace - works well.
+	"call add(vamAddons,"github:osyo-manga/vim-over")       " Specifically just for previewing search/replace - works well.
 
 	""call add(vamAddons,"github:terryma/vim-multiple-cursors")    " Looks promising
 	""call add(vamAddons,"github:kris89/vim-multiple-cursors")     " More recently maintained
@@ -1094,7 +1111,10 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	"call add(vamAddons, "github:koron/nyancat-vim")       " You might need this, but you probably won't
 
-	if v:version < 800
+	let linter = v:version < 800 ? 'syntastic' : 'ale'
+	"let linter = 'coala'
+
+	if linter == 'syntastic'
 		" Syntastic supports a lot of languages, but it was never refactored to run linters asynchronously.
 		call add(vamAddons, "github:scrooloose/syntastic")    " Checks syntax as you are working.  Needs syntax checker for relevant language to be installed separately: https://github.com/scrooloose/syntastic/wiki/Syntax-Checkers
 		set statusline+=%#warningmsg#
@@ -1110,12 +1130,13 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		"let g:syntastic_auto_jump = 2
 		"let g:syntastic_auto_loc_list = 1
 		"let g:syntastic_ignore_files = ['\m^/usr/include/', '\m\c\.h$']
-	else
+	endif
+	if linter == 'ale'
 		call add(vamAddons, "github:w0rp/ale")
 		let g:ale_echo_msg_format = '[%linter%] %severity%: %s (%code%)'
 		"let g:ale_set_quickfix = 1
 		let g:ale_set_loclist = 1
-		let g:ale_open_list = 1
+		let g:ale_open_list = 0
 		"let g:ale_lint_on_text_changed = 'never'
 		" The default delay of 200 causes the error list to pop up when I am typing slowly.  It should wait for a significant pause.  (Or I could disable auto list popup.)
 		let g:ale_lint_delay = 800
@@ -1127,6 +1148,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		"\   'javascript': ['eslint', 'flow', 'jscs', 'jshint', 'standard', 'xo'],
 		"\}
 		" Use :ALEInfo to see which linters are available and which are being used
+	endif
+	if linter == 'coala'
+		call add(vamAddons, "github:coala/coala-vim")
 	endif
 
 	" https://github.com/bling/vim-airline
@@ -1178,6 +1202,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"silent! call airline#extensions#whitespace#disable()
 	" For now we just disable it entirely
 	let g:airline#extensions#whitespace#enabled = 0
+
+	" Alternative to Airline:
+	"call add(vamAddons, "github:itchyny/lightline.vim")
 
 	call add(vamAddons, "github:Shougo/vimproc.vim")       " Used by unite for async; requires `make` after install!
 	call add(vamAddons, "github:Shougo/unite.vim")         " Buffer and file explorer, all in one plugin
@@ -1236,7 +1263,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	call add(vamAddons,"github:ap/vim-css-color")        " Colour the backgrounds of colour codes in CSS and Vim files
 
 	" Some colorschemes:
-	call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
+	"call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
 	"call add(vamAddons,"github:lifepillar/vim-solarized8") " Simplified, with fewer bugs
 	call add(vamAddons,"github:davidkariuki/sexy-railscasts-256-theme") " Nice colors
 	"call add(vamAddons,"github:shawncplus/skittles_berry") " Cute and colorful
@@ -1289,14 +1316,14 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" }}}
 
 
-	call add(vamAddons,"github:coderifous/textobj-word-column.vim") " vic to select whole column
+	"call add(vamAddons,"github:coderifous/textobj-word-column.vim") " vic to select whole column
 
-	call add(vamAddons,"github:kana/vim-textobj-user")   " Dependency for...
-	call add(vamAddons,"github:kana/vim-textobj-function") " vif and vaf to select in and around function
+	"call add(vamAddons,"github:kana/vim-textobj-user")   " Dependency for...
+	"call add(vamAddons,"github:kana/vim-textobj-function") " vif and vaf to select in and around function
 
 	"call add(vamAddons,"github:henrik/vim-indexed-search") " Show search progress
 
-	call add(vamAddons,"github:itchyny/vim-qfedit")      " Allows you to edit the quickfix list.
+	"call add(vamAddons,"github:itchyny/vim-qfedit")      " Allows you to edit the quickfix list.
 
 	" :AnsiEsc interprets any ANSI escape sequences in the current file, conceals them, and uses them for highlighting
 	" Beware that vimpager exposes its own version of AnsiEsc !
@@ -1306,7 +1333,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	call add(vamAddons, 'github:sheerun/vim-polyglot')   " Syntax and ftplugins for various languages
 
-	call add(vamAddons, 'github:dag/vim-fish')           " Friendly interactive shell support
+	"call add(vamAddons, 'github:dag/vim-fish')           " Friendly interactive shell support
 	" There is also a different syntax-only plugin: https://github.com/vim-scripts/fish-syntax
 
 	"call add(vamAddons, 'github:tpope/vim-scriptease')   " Assist with vim scripting
@@ -1319,6 +1346,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Comment toggle on gcc, works in embedded languages
 	call add(vamAddons,"github:tomtom/tcomment_vim")
 	" Another comment toggle on gcc, set commentstring for unsupported languages
+	" Toggle comments with gc[motion] or gcc for the current line  Supports multiple languages via commentstring.
 	"call add(vamAddons,"github:tpope/vim-commentary")
 
 	" Allow us to modify syntax highlighting for specified lines in a file
@@ -1330,7 +1358,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	" Use :NarrowRegion or <Leader>nr to edit the selected lines in a scratch buffer
 	" Can be useful to restrict a file-wide operation to only those lines.
-	call add(vamAddons,"NrrwRgn")
+	"call add(vamAddons,"NrrwRgn")
 
 	call add(vamAddons,"github:tweekmonster/django-plus.vim")
 
@@ -1368,6 +1396,11 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	let g:quickr_preview_position = 'right'
 	" Alternatively, try one of these keybinds instead: https://github.com/svermeulen/vim-quickfix-custom
 
+	" Recommended by https://medium.com/@huntie/10-essential-vim-plugins-for-2018-39957190b7a9
+	call add(vamAddons,"github:junegunn/fzf.vim")
+	call add(vamAddons,"github:tpope/vim-eunuch")
+	call add(vamAddons,"github:editorconfig/editorconfig-vim")
+
 	" }}}
 
 	" >>> My Plugins from the Cloud (modified versions of other plugins) {{{
@@ -1385,6 +1418,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" }}}
 
 	" >>> My Plugins from the Cloud (all by me!) {{{
+	call add(vamAddons,"github:joeytwiddle/vim-diff-traffic-lights-colors")
 	call add(vamAddons,"github:joeytwiddle/sexy_scroller.vim")   " Smooth animation when scrolling
 	"let g:SexyScroller_MaxTime = 200
 	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
