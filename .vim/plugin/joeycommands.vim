@@ -110,7 +110,9 @@ endif
 
 
 " Runs the given Ex command and pipes the output to the given shell command.
-" For example: :PipeToShell syn | grep 'Declaration'
+" Separate the two commands with a bar symbol: |
+" For example:
+"   :PipeCmd highlight | grep 'bold'
 " I considered other names: CmdOut, PipeToShell
 command! -nargs=+ -complete=command PipeCmd call s:PassVimCommandOutputToShellCommand(<q-args>)
 
@@ -140,6 +142,22 @@ function! s:PasteCommandOutput(line)
 		silent exe vim_cmd
 	redir END
 	normal "lp
+endfunction
+
+" Runs the given Ex command and copies/yanks the output into the unnamed register
+command! -nargs=+ -complete=command CmdToBuf call s:PasteCommandToBuffer(<q-args>)
+
+function! s:PasteCommandToBuffer(line)
+	let vim_cmd = a:line
+	" TODO: We could redir to a local variable, to avoid clobbering the 'l' register.
+	redir @l
+		silent exe vim_cmd
+	redir END
+	new
+	normal "lP
+	"setlocal nomodified
+	setlocal buftype=nofile
+	setlocal bufhidden=delete
 endfunction
 
 " Runs the given Ex command and copies/yanks the output into the unnamed register
@@ -179,26 +197,33 @@ endfunction
 command! New :new | wincmd p | wincmd c
 
 function! s:GitCommitThis(...)
-	let filenames = expand("%")
+	let filename = expand("%")
 
 	" TODO: Check if something is staged already.
-	" TODO: Allow user to supply other filenames?  Or supply quick commit message?
+	" TODO: Allow user to supply other filename?  Or supply quick commit message?
 
 	"let message = input("Commit message: ")
-	"exec "!git add " . filenames
+	"exec "!git add " . filename
 	"exec "!git commit -m '". shellescape(message).substitute(/ /,'\ ','g') ."'"
 
 	"let args = input(":!git commit ")
-	"exec "!git add " . filenames
+	"exec "!git add " . filename
 	"exec "!git commit ". args
 
-	" User supplies the closing '"'
-	let args = input(':!git ', 'commit -m ""')
-	silent exec "!git add " . filenames
-	exec '!git '. args
-
-	"silent! exec "!git add " . filenames
+	"silent! exec "!git add " . filename
 	"call feedkeys(':!git commit -m ""')
+
+	"let args = input(':!git ', 'commit -m ""')
+	"silent exec "!git add " . filename
+	"exec '!git '. args
+
+	call feedkeys("\<Left>")
+	let args = input(':!git ', 'commit -m ""')
+	let targetFile = resolve(filename)
+	let workingFolder = fnamemodify(targetFile, ":h")
+	let relativeFilename = fnamemodify(targetFile, ":t")
+	let cmd = "!cd " . shellescape(workingFolder) . " && git add " . shellescape(relativeFilename) . " && git " . args
+	exec cmd
 
 endfunction
 
@@ -217,6 +242,7 @@ endfunction
 "	endfunction
 "	let matches = filter(split(scripts, '\n'), context.check)
 
+command! GitCommitThis :call s:GitCommitThis(<q-args>)
 command! GCthis :call s:GitCommitThis(<q-args>)
 
 "command! -nargs=+ ET e $JPATH/tools/<args>
@@ -243,3 +269,6 @@ command! GitMergeToolSetup set nodiff | wincmd k | set nodiff | wincmd j | wincm
 command! GitMergeToolSetup exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | set nodiff | wincmd k | set nodiff | wincmd l | wincmd l | wincmd j | wincmd = | let @/ = "<<<<<<" | normal! n
 " If I use `set lines` to maximize the window, then it takes ages, and the windows end up the wrong size, and `wincmd =` doesn't fix them all (possibly due to other plugins)
 "command! GitMergeToolSetup set lines=999 columns=9999 | exec ":source ~/.vim/colors_for_elvin_monokai.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | set nodiff | wincmd k | set nodiff | wincmd p | redraw | wincmd = | let @/ = "<<<<<<" | normal! n
+
+" Use grep with fuzzyfinder.  By <igemnace>
+command! -bang -nargs=* FZFGrep call fzf#vim#grep('grep -R -n '.shellescape(<q-args>), 0, <bang>0)
