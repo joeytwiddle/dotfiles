@@ -71,6 +71,8 @@ endfunction
 function! s:GetFocusedFile()
 	"let fname = expand("<CWORD>")
 	let fname = getline('.')
+	" Strip branch art in case netrw is in tree mode
+	let fname = substitute(fname, '^\(| \)*', '', '')
 	let fullPath = b:netrw_curdir . "/" . fname
 	return fullPath
 endfunction
