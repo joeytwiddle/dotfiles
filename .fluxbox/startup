@@ -31,6 +31,8 @@
 # Change your keymap:
 # xmodmap ~/.Xmodmap
 
+# An example startup file: https://github.com/postmodern/dotfiles/blob/master/.fluxbox/startup
+
 
 #set -x
 #exec 1> ~/jsh.log
@@ -131,11 +133,6 @@ fi
 
 	sleep 1
 
-	# Launcher
-	albert &
-
-	sleep 1
-
 	(
 		# If I try to do this too early, there is no ibus running to replace!
 		sleep 5
@@ -179,6 +176,11 @@ fi
 	sleep 20
 	killall -u "$USER" gnome-screensaver
 	xscreensaver -no-splash &
+
+	sleep 30
+
+	# Launcher
+	albert &
 
 ) &
 
