@@ -21,7 +21,12 @@ inoremap <buffer> {<CR> {<CR><CR>}<Up><Esc>cc
 " We use :silent! in case escaping '"' to '\"' fails because there are no '"'s in the expression.
 " ISSUES: Clobbers clipboard (easily fixed)
 "         :s clobbers search (@/) so we may want to store and restore it.
-vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_[<C-R>=expand('%:t')<Enter>] <C-R>":_QUOTE_<Esc>:silent! s/"/\\"/g <Bar> s/_QUOTE_/"/g<CR>A, <C-R>");<Esc>
+let foundSemicolon = search('; *$', 'nw') > 0
+if foundSemicolon
+  vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_[<C-R>=expand('%:t')<Enter>] <C-R>":_QUOTE_<Esc>:silent! s/"/\\"/g <Bar> s/_QUOTE_/"/g<CR>A, <C-R>");<Esc>
+else
+  vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_[<C-R>=expand('%:t')<Enter>] <C-R>":_QUOTE_<Esc>:silent! s/'/\\'/g <Bar> s/_QUOTE_/'/g<CR>A, <C-R>")<Esc>
+endif
 " viW is *sometimes* preferable, e.g. to catch 'obj.prop[i]' but more often than not it grabs too much, e.g. it catches 'obj.prop[i]);'
 nmap <buffer> <Leader>log viw<Leader>log
 nmap <buffer> <Leader>Log viW<Leader>log
@@ -224,9 +229,13 @@ endif
 
 " Use CMD-SHIFT-L on Mac or CTRL-SHIFT-L on other systems
 " I wanted to map D-S-L but it didn't register (in MacVim gui mode)
-nnoremap <buffer> <silent> <D-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
 " BUG: This fires on CTRL-L which already has a useful meaning.
 "nnoremap <buffer> <silent> <C-S-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
+" But in my Linux xterm one of these triggers when I just prett <C-L> which is no good
+"nnoremap <buffer> <silent> <D-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
+"nnoremap <buffer> <silent> <C-S-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
+" Let's use this instead
+nnoremap <buffer> <silent> <Leader>lint :<C-U>call <SID>EslintFixCurrentFile()<CR>
 
 if !get(g:, 'EslintFix_is_reloading_file', 0)
   function! s:EslintFixCurrentFile()
