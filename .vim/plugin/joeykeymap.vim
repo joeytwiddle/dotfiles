@@ -549,6 +549,8 @@ endif
 " Our mapping here quits the entire Vim session when ZZ is used.
 " TODO: But perhaps I should just set MBE to close when it is the last buffer.
 nnoremap ZZ :wqa<Enter>
+" Similarly this closes the whole session, when it should only really close the current buffer.
+nnoremap ZQ :qa!<Enter>
 
 " If there is more than one matching tag, let the user choose.
 nnoremap <C-]> g<C-]>
@@ -559,9 +561,9 @@ nnoremap <C-]> g<C-]>
 "       E.g. for Javascript, we could search in current file for "function <cword>"
 "                            or failing that, try the same search with Grep.
 
-" Execute the line under the cursor in ex
+" Execute the line under the cursor in ex (after removing comments from the start of the line)
 "nnoremap <Leader>e :execute getline(".")<CR>
-nnoremap <Leader>e :execute substitute(getline("."), '^[ \t"]*', '', '')<CR>
+nnoremap <Leader>e :execute substitute(getline("."), '^[ \t"/#-]*', '', '')<CR>
 " I would quite like a version that could work on multiple lines (from a visual selection).
 " Execute line from clipboard in ex.  But which clipboard?  Let's display them and let the user choose.
 nnoremap <Leader>E :registers " + *<CR>:execute @
