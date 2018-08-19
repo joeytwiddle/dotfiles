@@ -32,8 +32,14 @@ else
 	#export PATH="$HOME/npm/bin:$PATH"
 
 	# So a friendlier way is to set the PREFIX var.  (Too bad they didn't call this NODE_PREFIX or NPM_PREFIX)
-	export PREFIX="$HOME/npm"
-	export PATH="$PREFIX/bin:$PATH"
+	#export PREFIX="$HOME/npm"
+	#export PATH="$PREFIX/bin:$PATH"
+
+	if [ -d "$HOME/.yarn/bin" ]
+	then
+		# Ideally we would add "$(yarn global bin)" but we might not have yarn on the path until after we have loaded node
+		export PATH="$HOME/.yarn/bin:$PATH"
+	fi
 
 	# The code below assumes that we have nvm installed.
 
@@ -98,7 +104,9 @@ else
 		unalias npm 2>/dev/null
 
 		#export PREFIX="$HOME/.nvm/versions/node/v5.3.0"
-		export PREFIX="$HOME/.nvm/versions/node/v6.2.2"
+		#export PREFIX="$HOME/.nvm/versions/node/v6.2.2"
+		#export PREFIX="$HOME/.nvm/versions/node/v8.2.1"
+		export PREFIX="$HOME/.nvm/versions/node/v8.9.3"
 		export PATH="$PREFIX/bin:$PATH"
 		unset NODE_PATH
 		unset PREFIX
@@ -155,7 +163,8 @@ else
 		#if [ -d "${node_modules_folder}" ]
 		#then echo "Modules:   $node_modules_folder"
 		#fi
-		echo "npm root:  $('npm' root -g)"
+		# This might be useful/interesting BUT it is very slow, so I am disabling it for now.
+		#echo "npm root:  $('npm' root -g)"
 	}
 	nodestatus() {
 		nodewhatsup
