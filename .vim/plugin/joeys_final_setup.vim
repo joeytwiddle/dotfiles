@@ -52,7 +52,8 @@ function! s:JoeysFinalSetup()
 	if ! &diff
 		"source ~/.vim/colors_for_elvin_monokai.vim
 		source ~/.vim/colors_for_elvin_gentlemary.vim
-		" On second thought, my diff colours don't look good with that theme, so we will just use the theme-supplied diff colors.
+
+		" My diff colours don't look good with monokai, so we will just use the theme-supplied diff colors.
 		"source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin/traffic_lights_diff.vim
 	endif
 

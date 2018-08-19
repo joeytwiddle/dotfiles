@@ -6,7 +6,10 @@ endif
 augroup Joeyhighlight
 	au!
 	" My rules used to get overwritten by default vim scripts
-	" Not any more bitches!
+	" This tries to reload them
+	" But actually I only want to do this when on my primary colorscheme, not on all colorschemes.
+	" At present, they disable this augroup (which might explain why returning to my colorscheme does not feel 100%)
+	" TODO: Move these things to where they should be.  I.e. move them into my own colorscheme, joey-primary.vim
 	autocmd BufReadPost * :Joeyhighlight
 augroup END
 
