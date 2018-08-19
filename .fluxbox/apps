@@ -58,24 +58,30 @@
  [app] (title=Untitled)
  [app] (title=chrome://devtools/devtools.html)
  [app] (title=Developer Tools.*)
+ [app] (title=DevTools - .*)
  [app] (title=chrome-devtools://.*)
  [app] (title=Error Console)
  [app] (title=Browser Console)
  [app] (title=Console - .*)
-  [Dimensions]	{52% 53%}
-  [Position]	(UPPERLEFT)	{32% 35%}
+  [Dimensions]	{69% 56%}
+  [Position]	(UPPERLEFT)	{31% 44%}
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
+ [app] (name=x-www-browser)
+ [app] (name=X-www-browser)
  [app] (name=Navigator)
+ [app] (name=Firefox)
+ [app] (name=chrome)
  [app] (name=google-chrome)
  [app] (name=Google-chrome)
- [app] (name=x-www-browser)
+ [app] (class=Google-chrome)
  [app] (name=chromium-browser)
  [app] (name=chromium-browser.real)
+ [app] (class=chromium-browser)
+ [app] (class=Chromium-browser)
  [app] (name=konqueror)
- [app] (name=chrome)
- [app] (name=X-www-browser)
+  [Workspace]	{4}
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
@@ -113,7 +119,7 @@
 [end]
 [app] (name=ktorrent) (class=Ktorrent) (role=MainWindow#1)
   [Workspace]	{5}
-  [Dimensions]	{84% 98%}
+  [Dimensions]	{83% 98%}
   [Position]	(UPPERLEFT)	{0% 0%}
   [Close]	{yes}
 [end]
@@ -125,8 +131,8 @@
   [Position]	(UPPERLEFT)	{520 92}
 [end]
 [transient] (name=google-chrome) (class=Google-chrome)
-  [Dimensions]	{69% 99%}
-  [Position]	(UPPERLEFT)	{0% 0%}
+  [Dimensions]	{72% 98%}
+  [Position]	(UPPERLEFT)	{14% 0%}
   [Close]	{yes}
 [end]
 [app] (name=Global) (class=Firefox) (role=console)
