@@ -209,7 +209,7 @@ function! s:ConsiderCreatingSwapfile(...)
   endif
 
   let about_to_be_modified = a:0 ? a:1 : 0
-  if !&swapfile && ( &modified || about_to_be_modified )
+  if !&swapfile && ( &modified || about_to_be_modified ) && !s:SwapfileDisableForCurrentBuffer()
     if g:NoSwapSuck_Debug | echo "Setting swapfile" | endif
     setlocal swapfile
   endif
@@ -221,5 +221,9 @@ function! s:SetSwapfileToCheck()
   endif
 
   set swapfile
+endfunction
+
+function! s:SwapfileDisableForCurrentBuffer()
+  return get(b:, 'NoSwapSuck_NoSwapfile', 0)
 endfunction
 
