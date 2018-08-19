@@ -1,5 +1,9 @@
 " Simple tool for renaming a word (e.g. a variable or function name)
 
+" See also: https://vi.stackexchange.com/questions/13689/is-there-a-better-method-for-find-and-replace-in-vim
+" There is a one-liner there which does pretty much the same as our ReplaceInThisBuffer command:
+"nnoremap <Leader>r :%s/\<<C-r><C-w>\>//g<left><left>
+
 " DONE: Escape search word for regexp, for special chars like '^', '$', '[', ']', '\'
 " TODO: Check the replacement word is unique (not already present in the buffer)
 
