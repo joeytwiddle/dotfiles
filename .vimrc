@@ -200,7 +200,7 @@ autocmd VimLeave * silent !stty ixon
 	let g:Grep_Default_Filelist .= " --exclude=\'*.deb\'"
 	let g:Grep_Default_Filelist .= " --exclude=\'*.rpm\'"
 	" Javascript:
-	let g:Grep_Default_Filelist .= " --exclude-dir=node_modules --exclude-dir=dist --exclude=bundle.js"
+	let g:Grep_Default_Filelist .= " --exclude-dir=node_modules --exclude-dir=\'node_modules*\' --exclude-dir=dist --exclude=bundle.js"
 	let g:Grep_Default_Filelist .= " --exclude=.tags --exclude=.tags_sorted_by_file"   " Tags files built by CTags plugin for Sublime Text
 	" For Haxe:
 	let g:Grep_Default_Filelist .= " --exclude-dir=_build"
@@ -264,7 +264,7 @@ autocmd VimLeave * silent !stty ixon
 
 	let g:ctrlp_map = '<c-t>'
 	let g:ctrlp_custom_ignore = {
-		\ 'dir':  '\v[\/](CVS|\.git|\.hg|\.svn|node_modules)$',
+		\ 'dir':  '\v[\/](CVS|\.git|\.hg|\.svn|node_modules|node_modules.*)$',
 		\ 'file': '\v\.(exe|so|dll)$'
 	\ }
 		"\ 'file': '\..*\.sw.$',
@@ -852,7 +852,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
 	" Note that g:asyncfinder_ignore_dirs should be kept in sync with g:Grep_Default_Filelist above.
-	let g:asyncfinder_ignore_dirs = "['.AppleDouble', '.DS_Store', '.git', '.hg', '.bzr', 'CVS', '.svn', 'node_modules', 'dist', 'tmp', './public/assets', '*/.meteor/local/*', 'deploy_TMP', 'private', '.ccache', 'venv']"
+	let g:asyncfinder_ignore_dirs = "['.AppleDouble', '.DS_Store', '.git', '.hg', '.bzr', 'CVS', '.svn', 'node_modules', 'node_modules*', 'dist', 'tmp', './public/assets', '*/.meteor/local/*', 'deploy_TMP', 'private', '.ccache', 'venv']"
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
 
