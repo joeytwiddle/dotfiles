@@ -420,6 +420,7 @@ alias gpshnvf='git push --no-verify --force'
 
 # I wanted to perform `git pull` and `git merge` with `git_autostashed` however they sometimes drop out unfinished, in which case the stash does not get popped as intended.
 alias gm='git merge'
+alias gmne='git merge --no-edit'
 # Git Merge Origin (this branch)
 #alias gmo='verbosely git merge "$(git_guess_upstream_branch)"'
 alias gmo='verbosely git merge "origin/$(git_get_current_branch)"'
