@@ -516,6 +516,7 @@ Mod1 KP_9 :ExecCommand /home/joey/j/jsh nextsong
 #XF86AudioNext :ExecCommand /home/joey/j/jsh nextsong
 Mod1 KP_Delete :ExecCommand xmms -s
 Mod1 KP_5     :ExecCommand whatsplaying
+Mod1 slash    :ExecCommand whatsplaying
 Mod4 slash    :ExecCommand whatsplaying
 Control Mod1 slash    :ExecCommand whatsplaying
 ## Neither of these worked:
