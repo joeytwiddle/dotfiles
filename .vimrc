@@ -1,5 +1,10 @@
 
 
+" With many separate plugin folder but a slow HDD, vim may start up slowly.
+" To speed it up, we can keep all the relevant files in the disk cache (in memory) by loading vim in the background now and then.
+" Add this line to your cronjob to trigger vim to load and then close itself every 30 minutes.
+" */30 *  *   *   6    yes "" | nice ionice vim -c ":qa!" >/dev/null 2>&1
+
 " :so ~/.vim/joey/joey.vim
 
 
