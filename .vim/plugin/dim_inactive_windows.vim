@@ -15,6 +15,8 @@ if !exists('+colorcolumn')
   finish
 endif
 
+let g:DimInactiveWindowsEnabled = get(g:, 'DimInactiveWindowsEnabled', 1)
+
 "highlight InactiveWindowsDefault ctermbg=black guibg=#203838
 "highlight InactiveWindowsDefault ctermbg=black guibg=#445555 guifg=#999999
 highlight InactiveWindowsDefault ctermbg=black guibg=#334444
@@ -50,7 +52,7 @@ function! s:DimInactiveWindows()
       let dim = 0
     endif
 
-    if dim
+    if dim && g:DimInactiveWindowsEnabled
       " We used to use winwidth(i) by default, only the max (256) if &wrap was set.
       " But in fact even without &wrap, the buffer may be scrolled to the right.
       " In that case, we could start the range higher and end it higher.
