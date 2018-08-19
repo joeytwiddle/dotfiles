@@ -1399,7 +1399,9 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
 
           " Only show modifiable buffers (The idea is that we don't 
           " want to show Explorers)
-          if (g:miniBufExplShowOtherBuffers || (getbufvar(l:i, '&modifiable') == 1 && BufName != '-MiniBufExplorer-'))
+          "if (g:miniBufExplShowOtherBuffers || (getbufvar(l:i, '&modifiable') == 1 && BufName != '-MiniBufExplorer-'))
+          " The problem with that is, :bnext and :bprev will still visit these buffers, so hiding them is confusing!
+          if (g:miniBufExplShowOtherBuffers || BufName != '-MiniBufExplorer-')
           "" BUG: :bn and :bp visit modifiable buffers, so until I can prevent
           "" that, I want them displayed in the list, otherwise the list is
           "" confusing!
