@@ -176,6 +176,38 @@
 	branch-by-date = for-each-ref --sort=committerdate refs/remotes --format="%(authordate:short)%09%(objectname:short)%09%1B[0;33m%(refname:short)%1B[m%09"
 	unstage = reset --
 
+	# Add config to pull all PRs
+	# From: https://gist.github.com/piscisaureus/3342247#gistcomment-868560
+	pull-prs          = config --add remote.origin.fetch   '+refs/pull/*/head:refs/remotes/origin/pr/*'
+	pull-prs-upstream = config --add remote.upstream.fetch '+refs/pull/*/head:refs/remotes/upstream/pr/*'
+	# Note that the line that gets added should actually be moved *above* the default fetch line
+	# If not, `git pull --prune` will prune the PR branches, which you probably don't want
+	# This shell function can do that: https://github.com/jasoncodes/dotfiles/blob/a29509902cb839b6aaf26d2d5409d66199b86d1d/shell/aliases/git.sh#L93-L110
+	# We could do it in one line like this.
+	# But actually this is NOT a good style.  It relies on the unset happening after the read, which is not guaranteed!
+	#   git config --get-all remote.origin.fetch   | reverse | ( git config --unset-all remote.origin.fetch   ; while read X; do git config --add remote.origin.fetch   "$X"; done )
+	#   git config --get-all remote.upstream.fetch | reverse | ( git config --unset-all remote.upstream.fetch ; while read X; do git config --add remote.upstream.fetch "$X"; done )
+
+	# Grab the patch for one PR and apply it directly to working files (needs editing)
+	# From: https://gist.github.com/piscisaureus/3342247#gistcomment-897339
+	patch-pr = echo "git checkout master curl https://github.com/project/repo/pulls/3.patch | git am"
+
+	# From: https://gist.github.com/gnarf/5406589
+	# Fetch and checkout one specific PR: git pr 314
+	#pr   = "!f() { git fetch -fu ${2:-$(git remote |grep ^upstream || echo origin)} refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
+	# Same for bitbucket/stash remotes
+	#spr  = "!f() { git fetch -fu ${2:-$(git remote |grep ^upstream || echo origin)} refs/pull-requests/$1/from:pr/$1 && git checkout pr/$1; }; f"
+	# Remove all pulled PRs
+	pr-clean = "!git for-each-ref refs/heads/pr/* --format='%(refname)' | while read ref ; do branch=${ref#refs/heads/} ; git branch -D $branch ; done"
+
+	# Modified version of gnarf's by andreineculau
+	# Usage:
+	#   git pr 314
+	#   git pr 314 upstream
+	pr = !git fetch -fu ${2:-origin} refs/pull/$1/head:pr/$1 && :
+
+	# Alternatives:
+	# https://github.com/splitbrain/git-pull-request
 
 
 
