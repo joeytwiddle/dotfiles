@@ -199,6 +199,36 @@ See Tim Pope's 'scriptease' for some friendly wrappers for verbose.
 
 
 
+=== Profiling Startup ===
+
+https://stackoverflow.com/questions/1687799/profiling-vim-startup-time
+
+    vim --startuptime /tmp/vim-profile.log
+
+
+=== Profiling Runtime ===
+
+To start profiling:
+
+    :profile start ~/vimprofile.out
+    :profile file *
+    :profile func *
+
+You can also:
+
+    :profile pause
+    :prfile continue
+
+The output file will only be written when you quit Vim.
+
+
+=== Debugging Runtime ===
+
+    :set verbosfile=/tmp/vim-log.out
+    :set verbose=15
+
+
+
 Stop leaving Insert mode to paste from clipboard:
 
   <Esc>"+p
@@ -270,3 +300,6 @@ Undo and other commands to get out of bad situations:
   zb         Scroll so cursor is at bottom
 
 
+
+<m_ben> sec^nd: for autocompletion, take a look at YouCompleteMe. it's a pain in the ass to set it up but once it's running it works pretty well
+<m_ben> if you want a more lightweight completion 'plugin', there's µcomplete or VimCompletesMe
