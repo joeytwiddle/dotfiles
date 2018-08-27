@@ -140,13 +140,17 @@ nmap [1;5C <C-W>l
 " Ooops.  <Tab> and <C-I> are indistinguishable.  And I use <C-I>.  How sad!
 " We might be able to apply them only in GUI mode, but that would probably just make me sad out of GUI mode.
 " Let's do this like unimpaired does
-nmap ]w <C-w><Down>
-nmap [w <C-w><Up>
-"nmap ]w <C-w>w
-"nmap [w <C-w>W
-nmap ]W <C-w><Right>
-nmap [W <C-w><Left>
-" Wow that is so much better than <Ctrl-Down> or <Ctrl-W><Down>!  Although only a minor improvement over <Ctrl-W>j.
+" We don't use nnoremap because we want navigation_enhancer.vim to work as usual
+"nmap ]w <C-w><Down>
+"nmap [w <C-w><Up>
+"nmap ]W <C-w><Right>
+"nmap [W <C-w><Left>
+nmap ]w <C-w>w
+nmap [w <C-w>W
+nmap ]W <C-w><Down>
+nmap [W <C-w><Up>
+nmap <C-w>[ <C-w><Left>
+nmap <C-w>] <C-w><Right>
 
 
 
