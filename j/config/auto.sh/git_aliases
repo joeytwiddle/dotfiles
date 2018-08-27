@@ -63,7 +63,9 @@
 #
 #   gssp allows you to select (y/n) which changes to stash, leaving the others.
 #
-#   gssk lets you select (y/n) which changes to destroy (kill).
+#   gssk My preferred way to drop unwanted changes (e.g. console logs after a
+#        bug was fixed)
+#        Lets you select (y/n) which changes to destroy (kill).
 #        It actually does gssp but then drops the stash afterwards.
 #        As a result it is recoverable (e.g. using git-list-dropped-stashes).
 #        So it is a less dangerous version of git reset --hard (grh).
