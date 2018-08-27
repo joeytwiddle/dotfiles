@@ -1,9 +1,10 @@
+scriptencoding utf-8
 
-
-" With many separate plugin folder but a slow HDD, vim may start up slowly.
+" With many separate plugin folders but a slow HDD, vim may start up slowly.
 " To speed it up, we can keep all the relevant files in the disk cache (in memory) by loading vim in the background now and then.
 " Add this line to your cronjob to trigger vim to load and then close itself every 30 minutes.
 " */30 *  *   *   6    yes "" | nice ionice vim -c ":qa!" >/dev/null 2>&1
+
 
 " :so ~/.vim/joey/joey.vim
 
@@ -1466,6 +1467,26 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		"endwhile
 
 	endif
+
+	" Detect large files or files with long lines, and disable this module with :call css_color#disable()
+	augroup DisableSomePluginsForLargeFiles
+		autocmd!
+		autocmd BufReadPost * if line2byte(line("$") + 1) > 1024 * 1024 && exists(':ALEDisableBuffer') | echo "Disabling ALE for this large buffer" | ALEDisableBuffer | endif
+		" Trying to disable it in during loading didn't work, because css_color continues to init after this runs!
+		"autocmd BufReadPost * if line2byte(line("$") + 1) > 1024 * 1024 && exists('*css_color#disable') | echo "Disabling css_color for this large buffer" | let b:css_color_off = 1 | endif
+		autocmd CursorHold *
+		  \   if exists('*css_color#disable') && get(b:, 'done_css_color_check', 0) == 0
+		  \ |   let b:done_css_color_check = 1
+		  \ |   if line2byte(line("$") + 1) > 1024 * 1024
+		  \ |     silent! call css_color#disable()
+		  \ |     echo "Disabled css_color for this large buffer"
+		  \ |   endif
+		  \ | endif
+	augroup END
+
+	command CSSColorToggle call css_color#toggle() | echo "CSS Color is now " . (b:css_color_off ? 'disabled' : 'enabled')
+
+	command ProfileVim profile start /tmp/vimprofile.out | profile file * | profile func * | echo 'Test, optionally do `:profile pause`, then quit vim, then read the bottom of /tmp/vimprofile.out'
 
 " }}}
 
