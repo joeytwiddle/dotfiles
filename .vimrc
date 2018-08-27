@@ -806,6 +806,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" call add(vamAddons,"VOoM")                           " Another outliner
 	" call add(vamAddons,'github:xolox/vim-easytags')      " Runs ctags automatic for you, to update them
 	"call add(vamAddons,'github:ervandew/supertab')         " Seems a lot like another_tabcompletion.vim but the list appears backwards! =/
+	call add(vamAddons,'github:joeytwiddle/vim-foist')     " Complete a partial line, by looking for the longest match in history
+	                                                       " If they are not taken, we could use <C-X><C-P> for a partial line and <C-X><C-S> for a sentence
 
 	" asyncfinder wants python 2 (aka python), UltiSnips wants python3.
 	" So let's try:
@@ -949,7 +951,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:elzr/vim-json")
 	" ES6 syntax highlighting and UltiSnips snippets
 	"call add(vamAddons,"github:isRuslan/vim-es6")
-	" JSX syntax highlighting
+	" JSX syntax highlighting (disabled now polyglot is providing highlighting)
 	"call add(vamAddons,"github:mxw/vim-jsx")
 	" This will turn all ft=javascript files into ft=javascript.jsx, which might be nice for syntax highlighting, but not for ctags!
 	"let g:jsx_ext_required = 0
@@ -1271,6 +1273,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
 	"call add(vamAddons,"github:lifepillar/vim-solarized8") " Simplified, with fewer bugs
 	call add(vamAddons,"github:davidkariuki/sexy-railscasts-256-theme") " Nice colors
+	" CodePen uses a theme a bit like sexy-railscasts.  We can use some of CodePen's extra colours by adding:
+	"hi jsFuncCall guifg=#aa88aa
+	"hi link jsFuncArgs Constant
 	"call add(vamAddons,"github:shawncplus/skittles_berry") " Cute and colorful
 	" Molokai (Monokai) was originally a theme for Text Mate, and is the default theme for Sublime Text
 	call add(vamAddons,"github:sickill/vim-monokai")     " Forces t_Co=256, appears more faithful to Sublime
@@ -1281,21 +1286,24 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:Lokaltog/vim-distinguished") " Understated, a bit more earthy/dirty compared to codeschool
 	"call add(vamAddons,"github:Slava/vim-colors-tomorrow") " Solarized options but with tomorrow theme
 	"call add(vamAddons,"github:romainl/Apprentice")      "  A colorscheme as subtle, gentle and pleasant as its creator isn't.  Like Solarized and codeschool, I find it a bit too subtle.
-	call add(vamAddons,"git:https://gitlab.com/davidogg/vim-dichromatic.git") " A dark colorscheme for color blind vimmers
+	"call add(vamAddons,"git:https://gitlab.com/davidogg/vim-dichromatic.git") " A dark colorscheme for color blind vimmers (white background = broken?)
 	"call add(vamAddons,"github:jacoborus/tender.vim")    " Nice and gentle, could be good for presentations
 	"call add(vamAddons,"github:raphamorim/lucario")      " Note sure about the rusty red.  Available for lots of apps!  https://github.com/raphamorim/lucario
 	"call add(vamAddons,"github:AlessandroYorba/Despacio") " Very brown, coffee focus
-	"call add(vamAddons,"github:tyrannicaltoucan/vim-quantum") " Based on the Material Design palette
-	"call add(vamAddons,"github:YorickPeterse/happy_hacking.vim") " Fairly gentle, brown and browny-greens
-	"call add(vamAddons,"github:tyrannicaltoucan/vim-quantum") " Nice range of colours
-	"call add(vamAddons,"github:kaicataldo/material.vim") " Fork of quantum with brighter colours.  Similar to Atom's One Dark, but not quite the same
-	"call add(vamAddons,"github:Heorhiy/VisualStudioDark.vim") " Similar to VSCode's default, but not an exact match
+	call add(vamAddons,"github:chriskempson/vim-tomorrow-theme") " For Tomorrow-Night or Tomorrow-Night-Eighties (brighter).  This is no longer updated; it has moved into base16 (see below)
+	call add(vamAddons,"github:YorickPeterse/happy_hacking.vim") " Rich browny-red, yellow and greens
+	call add(vamAddons,"github:tyrannicaltoucan/vim-quantum") " Nice range of colours, based on the Material Design palette.  reactjs docs uses something like this.
+	call add(vamAddons,"github:kaicataldo/material.vim") " Fork of quantum with brighter colours.  Similar to Atom's One Dark, but not quite the same
+	"call add(vamAddons,"github:Heorhiy/VisualStudioDark.vim") " Similar to VSCode's "Dark (Visual Studio), with some minor differences
+	call add(vamAddons,"github:tomasiser/vim-code-dark") " Similar to VSCode's "Dark+ (default)"
 	"call add(vamAddons,"github:")
 
 	"call add(vamAddons,"github:flazz/vim-colorschemes")  " A large collection, includes codeschool
 	"call add(vamAddons,"github:rodnaph/vim-color-schemes") " A collection, includes leo
 	                                                        " leo is based on primary colors; it is a bit strong.  version 1 .0 here: http://www.vim.org/scripts/script.php?script_id=2156
 	" Multi-target (editors) color scheme generator: https://github.com/daylerees/colour-schemes
+	" Base16 is an architecture for building themes.  I think it might also support multiple editors.
+	"call add(vamAddons,"github:chriskempson/base16-vim")
 
 	" Rules I want to load after every colorscheme
 	augroup Joeys_After_Colorscheme
