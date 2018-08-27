@@ -159,39 +159,56 @@ XTerm.*.printerCommand: xterm -T History -e sh -c 'less -r <&3' 3<&0
 ! Strangely I could not change my foreground color with foreground, 7, 15 or 255!
 ! Oh, that is because I fixed them on the commandline with -bg and -fg
 ! These are what Vim recommends.  But some of them (e.g. green) are significantly more dull than usual.
-!xterm.*.color0:			#000000
-!xterm.*.color1:			#c00000
-!xterm.*.color2:			#008000
-!xterm.*.color3:			#808000
-!xterm.*.color4:			#0000c0
-!xterm.*.color5:			#c000c0
-!xterm.*.color6:			#008080
-!xterm.*.color7:			#c0c0c0
-!xterm.*.color8:			#808080
-!xterm.*.color9:			#ff6060
-!xterm.*.color10:			#00ff00
-!xterm.*.color11:			#ffff00
-!xterm.*.color12:			#8080ff
-!xterm.*.color13:			#ff40ff
-!xterm.*.color14:			#00ffff
-!xterm.*.color15:			#ffffff
+!xterm.*.color0:     #000000
+!xterm.*.color1:     #c00000
+!xterm.*.color2:     #008000
+!xterm.*.color3:     #808000
+!xterm.*.color4:     #0000c0
+!xterm.*.color5:     #c000c0
+!xterm.*.color6:     #008080
+!xterm.*.color7:     #c0c0c0
+!xterm.*.color8:     #808080
+!xterm.*.color9:     #ff6060
+!xterm.*.color10:    #00ff00
+!xterm.*.color11:    #ffff00
+!xterm.*.color12:    #8080ff
+!xterm.*.color13:    #ff40ff
+!xterm.*.color14:    #00ffff
+!xterm.*.color15:    #ffffff
+! My color theme based on Argonaut for iTerm2 (the first time I copied it, I made everything too dull)
+!xterm.*.color0:     #232323
+!xterm.*.color1:     #c50020
+!xterm.*.color2:     #3ca91e
+!xterm.*.color3:     #bb8417
+!xterm.*.color4:     #1561d3
+!xterm.*.color5:     #8742a6
+!xterm.*.color6:     #1fb2ae
+!xterm.*.color7:     #d5d5d5
+!xterm.*.color8:     #555555
+!xterm.*.color9:     #fc283f
+!xterm.*.color10:    #57e252
+!xterm.*.color11:    #fec444
+!xterm.*.color12:    #0092ff
+!xterm.*.color13:    #c05eeb
+!xterm.*.color14:    #3ad7bc
+!xterm.*.color15:    #ffffff
 ! My color theme based on Argonaut for iTerm2
-xterm.*.color0:			#232323
-xterm.*.color1:			#c50020
-xterm.*.color2:			#3ca91e
-xterm.*.color3:			#bb8417
-xterm.*.color4:			#1561d3
-xterm.*.color5:			#8742a6
-xterm.*.color6:			#1fb2ae
-xterm.*.color7:			#d5d5d5
-xterm.*.color8:			#555555
-xterm.*.color9:			#fc283f
-xterm.*.color10:			#57e252
-xterm.*.color11:			#fec444
-xterm.*.color12:			#0092ff
-xterm.*.color13:			#c05eeb
-xterm.*.color14:			#3ad7bc
-xterm.*.color15:			#ffffff
+xterm.*.color0:     #2e2e2e
+xterm.*.color1:     #d21e29
+xterm.*.color2:     #47b427
+xterm.*.color3:     #c8951b
+xterm.*.color4:     #1678dc
+xterm.*.color5:     #9b5bb5
+xterm.*.color6:     #1abebc
+xterm.*.color7:     #dddddd
+xterm.*.color8:     #686868
+xterm.*.color9:     #ff4250
+xterm.*.color10:    #64e364
+xterm.*.color11:    #ffcd55
+xterm.*.color12:    #00a6ff
+xterm.*.color13:    #cd7bf0
+xterm.*.color14:    #41dcc8
+xterm.*.color15:    #ffffff
 
 !! For coloured man-pages:
 !! From: http://bugs.gentoo.org/184604
