@@ -59,17 +59,79 @@
 # set -x
 
 
-#cat $HOME/.my_x_settings 
-cat $HOME/.Xresources | grep -v "^#" | xrdb -merge
+if [ -f "$HOME/.Xresources" ]
+then cat $HOME/.Xresources | grep -v "^#" | xrdb -merge
+fi
 if [ -f "$HOME/.Xresources.local" ]
 then cat $HOME/.Xresources.local | grep -v "^#" | xrdb -merge
 fi
+
+## Keyboard
+
+## From fluxbox's xinitrc howto:
+# turn off screen blanking
+xset s off
+## Turn on energy star features (monitor still goes blank but wakes up for mplayer =) except under kde :-(
+if echo "$WinMan" | grep kde
+then xset -dpms
+else xset dpms 3600 3600 3600
+fi
+## Disable bell
+xset -b
+## Increase keyboard rate (delay, repeats-per-second)
+# xset r rate 400 50
+# xset r rate 280 90
+# xset r rate 270 65
+## This is fun for scrolling:
+# xset r rate 270 99
+## But to actually stop in the right place, we need something smaller:
+#xset r rate 270 65
+## I must be getting old; that's too fast for me now!
+#xset r rate 270 45
+## Fits nicely to framerate
+xset r rate 250 60
+
+# xmodmap /stuff/portablelinux/etc/X11/Xmodmap.hwiDeb &
+
+## Typing "special" characters
+#xmodmap -e "keysym Control_R = Multi_key"
+# Now you can do <Control_R> followed by ?? to get ¿
+# And here are all the other things you can do: /usr/share/X11/locale/en_US.UTF-8/Compose
+# I think this key is called "Composite" by Gnome.
+# There is another magic key too.  Alt_GR-1 to produce ¹
+
+## Re-enable Ctrl+Alt+Backspace to close X, since Gentoo removed it.
+#setxkbmap -option terminate:ctrl_alt_bksp
 
 # E.g. if you wanted to switch to GB keyboard layout, you could put the following in that file:
 #setxkbmap -print gb | xkbcomp - "$DISPLAY"
 if [ -f "$HOME"/.custom_keyboard_settings ]
 then . "$HOME"/.custom_keyboard_settings
 fi
+
+
+## Mouse acceleration
+## <acceleration> (scalar) <threshold> (pixels per update)
+## For more action, increase the former, or reduce the latter
+# xset m 2/3
+# xset m 2/3 3
+# xset m 4/5 3
+# Save wrists with fast acceleration (hwi, porridge)
+#xset m 12/5 10
+# Even faster:
+#xset m 20/5 5
+# For yas:
+#xset m 6/5 5
+# Tomato:
+#xset m 12/10 0
+# Tomato with touchpad using focaltech-dkms driver, feeling lazy (but this is too fast for mouse!):
+#xset m 20/10 0
+# Tomato with USB mouse:
+#xset m 14/10 0
+# Tomato trackpad, make me reach and sometimes lift a finger.
+# But the advantage with this is (hopefully) more accurate positioning at low speeds.
+xset m 8/10 0
+# I am using threshold 0 because no matter what I set it to, it doesn't seem to have any effect.
 
 # /usr/bin/synclient can be found in the xserver-xorg-input-synaptics package
 
@@ -127,7 +189,7 @@ synclient MaxSpeed=5.0
 synclient PalmDetect=1
 # If this doesn't work well enough, there are other options: https://wiki.archlinux.org/index.php/Touchpad_Synaptics#Disable_trackpad_while_typing
 
-# Disable keyboard taps when typing.
+# Disable trackpad taps when typing
 killall -u "$USER" syndaemon 2>/dev/null
 syndaemon -d -i 0.8s -K -R -t
 
@@ -150,77 +212,20 @@ then
 	xsetroot -cursor_name X_cursor
 fi
 
-## From fluxbox's xinitrc howto:
-# turn off screen blanking
-xset s off
-## Turn on energy star features (monitor still goes blank but wakes up for mplayer =) except under kde :-(
-if echo "$WinMan" | grep kde
-then xset -dpms
-else xset dpms 3600 3600 3600
-fi
-## Disable bell
-xset -b
-## Increase keyboard rate (delay, repeats-per-second)
-# xset r rate 400 50
-# xset r rate 280 90
-# xset r rate 270 65
-## This is fun for scrolling:
-# xset r rate 270 99
-## But to actually stop in the right place, we need something smaller:
-#xset r rate 270 65
-## I must be getting old; that's too fast for me now!
-#xset r rate 270 45
-## Fits nicely to framerate
-xset r rate 250 60
 
-## Mouse acceleration
-## <acceleration> (scalar) <threshold> (pixels per update)
-## For more action, increase the former, or reduce the latter
-# xset m 2/3
-# xset m 2/3 3
-# xset m 4/5 3
-# Save wrists with fast acceleration (hwi, porridge)
-#xset m 12/5 10
-# Even faster:
-#xset m 20/5 5
-# For yas:
-#xset m 6/5 5
-# Tomato:
-#xset m 12/10 0
-# Tomato with touchpad using focaltech-dkms driver, feeling lazy (but this is too fast for mouse!):
-#xset m 20/10 0
-# Tomato with USB mouse:
-#xset m 14/10 0
-# Tomato trackpad, make me reach and sometimes lift a finger.
-# But the advantage with this is (hopefully) more accurate positioning at low speeds.
-xset m 8/10 0
-# I am using threshold 0 because no matter what I set it to, it doesn't seem to have any effect.
-
+## Fonts
 ## Got problems with characters displaying as squares [] ?
 xset fp- unix/:7100     ## xfstt on ubuntu
 # xset fp+ unix/:7101   ## xfstt
+# [ -f /usr/lib/libgdkxft.so ] && export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libgdkxft.so
 
 ## Allow connections to X display from anywhere
 # xhost +
 
-# [ -f /usr/lib/libgdkxft.so ] && export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libgdkxft.so
-
-## Keyboard
-# xmodmap /stuff/portablelinux/etc/X11/Xmodmap.hwiDeb &
-
-## Typing "special" characters
-#xmodmap -e "keysym Control_R = Multi_key"
-# Now you can do <Control_R> followed by ?? to get ¿
-# And here are all the other things you can do: /usr/share/X11/locale/en_US.UTF-8/Compose
-# I think this key is called "Composite" by Gnome.
-# There is another magic key too.  Alt_GR-1 to produce ¹
 
 if [ -f "$HOME"/.custom_x_settings ]
 then . "$HOME"/.custom_x_settings
 fi
-
-## Re-enable Ctrl+Alt+Backspace to close X, since Gentoo removed it.
-#setxkbmap -option terminate:ctrl_alt_bksp
 
 # Launcher
 if which albert >/dev/null
