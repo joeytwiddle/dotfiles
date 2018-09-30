@@ -219,16 +219,21 @@ if [ -f "$HOME"/.custom_x_settings ]
 then . "$HOME"/.custom_x_settings
 fi
 
-if [ -d "$HOME/Dropbox" ] && ! pgrep -u $UID dropbox >/dev/null
-then
-	(
-		sleep 20
-		nice ionice dropbox start
-	) &
-fi
-
 ## Re-enable Ctrl+Alt+Backspace to close X, since Gentoo removed it.
 #setxkbmap -option terminate:ctrl_alt_bksp
+
+# Launcher
+if which albert >/dev/null
+then
+	albert &
+	sleep 20
+fi
+
+if [ -d "$HOME/Dropbox" ] && ! pgrep -u $UID dropbox >/dev/null
+then
+	nice ionice dropbox start &
+	sleep 20
+fi
 
 ## Pre-cache files which I am likely to use soon
 true && (
@@ -236,7 +241,6 @@ true && (
 	packages_to_cache="google-chrome-stable firefox"
 
 	nicely_do="nice -n 15 ionice -c 3"
-	sleep 10
 	$nicely_do tar ch --exclude=.git --exclude=sessions $folders_to_cache >/dev/null
 
 	## Simple, but does not recurse through dependent packages
@@ -249,4 +253,4 @@ true && (
 	#$nicely_do precache_files_from_package $packages_to_cache >/dev/null 2>&1
 
 	echo "Precaching completed" >&2
-) &
+)
