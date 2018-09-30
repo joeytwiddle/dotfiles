@@ -1,6 +1,5 @@
-# set +x
-## Animated intro, and/or set background:
-## We start this as early as possible, to hide the default background
+# Animated intro, and/or set background:
+# We start this as early as possible, to hide the default background
 (
 
 	animatedIntro=1
@@ -56,7 +55,6 @@
 	# randomwallpaper
 
 ) &
-# set -x
 
 
 if [ -f "$HOME/.Xresources" ]
@@ -66,41 +64,41 @@ if [ -f "$HOME/.Xresources.local" ]
 then cat $HOME/.Xresources.local | grep -v "^#" | xrdb -merge
 fi
 
-## Keyboard
+# Keyboard
 
-## From fluxbox's xinitrc howto:
-# turn off screen blanking
+# From fluxbox's xinitrc howto:
+# Turn off screen blanking
 xset s off
-## Turn on energy star features (monitor still goes blank but wakes up for mplayer =) except under kde :-(
+# Turn on energy star features (monitor still goes blank but wakes up for mplayer =) except under kde :-(
 if echo "$WinMan" | grep kde
 then xset -dpms
 else xset dpms 3600 3600 3600
 fi
-## Disable bell
+# Disable bell
 xset -b
-## Increase keyboard rate (delay, repeats-per-second)
-# xset r rate 400 50
-# xset r rate 280 90
-# xset r rate 270 65
-## This is fun for scrolling:
-# xset r rate 270 99
-## But to actually stop in the right place, we need something smaller:
+# Increase keyboard rate (delay, repeats-per-second)
+#xset r rate 400 50
+#xset r rate 280 90
 #xset r rate 270 65
-## I must be getting old; that's too fast for me now!
+# This is fun for scrolling:
+#xset r rate 270 99
+# But to actually stop in the right place, we need something smaller:
+#xset r rate 270 65
+# I must be getting old; that's too fast for me now!
 #xset r rate 270 45
-## Fits nicely to framerate
+# Fits nicely to framerate
 xset r rate 250 60
 
-# xmodmap /stuff/portablelinux/etc/X11/Xmodmap.hwiDeb &
+#xmodmap /stuff/portablelinux/etc/X11/Xmodmap.hwiDeb &
 
-## Typing "special" characters
+# Typing "special" characters
 #xmodmap -e "keysym Control_R = Multi_key"
 # Now you can do <Control_R> followed by ?? to get ¿
 # And here are all the other things you can do: /usr/share/X11/locale/en_US.UTF-8/Compose
 # I think this key is called "Composite" by Gnome.
 # There is another magic key too.  Alt_GR-1 to produce ¹
 
-## Re-enable Ctrl+Alt+Backspace to close X, since Gentoo removed it.
+# Re-enable Ctrl+Alt+Backspace to close X, since Gentoo removed it.
 #setxkbmap -option terminate:ctrl_alt_bksp
 
 # E.g. if you wanted to switch to GB keyboard layout, you could put the following in that file:
@@ -110,12 +108,12 @@ then . "$HOME"/.custom_keyboard_settings
 fi
 
 
-## Mouse acceleration
-## <acceleration> (scalar) <threshold> (pixels per update)
-## For more action, increase the former, or reduce the latter
-# xset m 2/3
-# xset m 2/3 3
-# xset m 4/5 3
+# Mouse acceleration
+# <acceleration> (scalar) <threshold> (pixels per update)
+# For more action, increase the former, or reduce the latter
+#xset m 2/3
+#xset m 2/3 3
+#xset m 4/5 3
 # Save wrists with fast acceleration (hwi, porridge)
 #xset m 12/5 10
 # Even faster:
@@ -213,14 +211,14 @@ then
 fi
 
 
-## Fonts
-## Got problems with characters displaying as squares [] ?
+# Fonts
+# Got problems with characters displaying as squares [] ?
 xset fp- unix/:7100     ## xfstt on ubuntu
-# xset fp+ unix/:7101   ## xfstt
-# [ -f /usr/lib/libgdkxft.so ] && export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libgdkxft.so
+#xset fp+ unix/:7101   ## xfstt
+#[ -f /usr/lib/libgdkxft.so ] && export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libgdkxft.so
 
-## Allow connections to X display from anywhere
-# xhost +
+# Allow connections to X display from anywhere
+#xhost +
 
 
 if [ -f "$HOME"/.custom_x_settings ]
@@ -240,7 +238,7 @@ then
 	sleep 20
 fi
 
-## Pre-cache files which I am likely to use soon
+# Pre-cache files which I am likely to use soon
 true && (
 	folders_to_cache=".vim* /usr/share/vim" # .config/google-chrome .mozilla/firefox/Joey j/tools"
 	packages_to_cache="google-chrome-stable firefox"
