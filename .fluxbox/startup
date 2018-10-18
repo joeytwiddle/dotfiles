@@ -75,7 +75,8 @@ fi
 	# I used to source (.) this but:
 	# - If it exits, then this script will stop executing and Fluxbox won't start!
 	# - We don't need it, because it doesn't export any VARS at the moment.
-	bash "$HOME"/.joeys_x_essentials
+	bash "$HOME"/.joeys_x_essentials &
+	sleep 1
 
 	# When I started this early, it ran but didn't operate.  Perhaps it needs Fluxbox to be established first.
 	killall compton >/dev/null 2>&1
@@ -176,11 +177,6 @@ fi
 	sleep 20
 	killall -u "$USER" gnome-screensaver
 	xscreensaver -no-splash &
-
-	sleep 30
-
-	# Launcher
-	albert &
 
 ) &
 
