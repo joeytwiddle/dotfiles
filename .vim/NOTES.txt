@@ -199,6 +199,13 @@ See Tim Pope's 'scriptease' for some friendly wrappers for verbose.
 
 
 
+=== Debugging ===
+
+You can capture a full log of a Vim session with `vim -V20/tmp/vim.log`.  Afterwards you can e.g. grep the log file for commands:
+
+    grep ":let g:netrw_list_hide" /tmp/vim.log
+
+
 === Profiling Startup ===
 
 https://stackoverflow.com/questions/1687799/profiling-vim-startup-time
