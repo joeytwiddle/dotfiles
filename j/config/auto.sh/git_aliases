@@ -335,15 +335,36 @@ git_commit_immediate_fixup() {
 		return
 	fi
 
+	# Occasionally rebase appears to lose commits.
+	# In order to learn more about it, and hopefully eventually avoid it, I need to detect when it has happened.
+	local do_extra_check=1
+
 	# We need a static commit ref, in case the commit is something relative like HEAD~
 	commit_to_amend="$(git rev-parse "${commit_to_amend}")" || return
 
 	echo ">> Committing"
 	git commit --no-verify --fixup "${commit_to_amend}" || return
+	[ -n "$do_extra_check" ] && gbf backup-before-fixup-rebase HEAD
 
 	echo ">> Performing rebase"
 	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
 	EDITOR=true git rebase -i --autosquash --autostash --preserve-merges "${commit_to_amend}~"
+
+	if [ -n "$do_extra_check" ]
+	then
+		changes="$(git diff HEAD backup-before-fixup-rebase | wc -l)"
+		if ! [ "$changes" = 0 ]
+		then
+			echo
+			echo "WARNING: The rebased repo does not match the pre-fixup repo.  Here is the diff:"
+			echo
+			git diff HEAD backup-before-fixup-rebase
+			echo
+			echo "You may restore by (stashing anything uncommitted and then) doing: git reset --hard backup-before-fixup-rebase"
+			echo
+			return 9
+		fi
+	fi
 }
 alias gcf='git_commit_immediate_fixup'
 
