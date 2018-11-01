@@ -533,7 +533,7 @@ alias gcpc='git cherry-pick --continue'
 alias gcpa='git cherry-pick --abort'
 
 #alias gri='git rebase -i'
-alias gri='git rebase --interactive --autosquash --autostash'
+alias gri='git rebase --interactive --autosquash --autostash --no-verify'
 # I used to include --preserve-merges here, but it started dropping commits during a rebase, so I think it's safer off!
 alias griu='gri @{u}'
 alias griom='gri origin/master'
@@ -1184,7 +1184,7 @@ git_branch_status() {
 
     local sorting=
 
-    usage="$(basename "$0") [-hamtMv] [<branch_name_regexp>] -- summarise status of branch(es)
+    usage="git_branch_status [-hamtMv] [<branch_name_regexp>] -- summarise status of branch(es)
 
 where:
     -h           show this help text
