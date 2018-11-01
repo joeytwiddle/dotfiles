@@ -85,3 +85,6 @@ nnoremap <silent> <Plug>Kwbd :<C-u>Kwbd<CR>
 command! CloseBuffer :Kwbd
 nnoremap :bdel :CloseBuffer
 
+" Eunuch's :Clocate makes it difficult to tab-complete :CloseBuffer
+" That has annoyed me enough, that I will simply remove :Clocate
+silent! delcommand Clocate
