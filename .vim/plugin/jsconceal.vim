@@ -24,6 +24,7 @@ function! s:JSConcealOn()
   syn match   jsNicePrototype  /\.prototype\./  conceal cchar=∷
   if level > 0
     syn keyword jsNiceFunction   function skipwhite conceal cchar=λ "𝒇𝑓𝐟𝐅𝑭𝗙𝗳
+    syn match jsNiceArrowFunction /=>/ containedin=jsArrowFunction conceal cchar=⇒
   endif
   if level > 3
     syn clear javascriptAssignVar
@@ -42,6 +43,7 @@ function! s:JSConcealOn()
     syn match   jsNiceKeyword    /\<Math\.PI\>/ conceal cchar=π
     syn match   jsNiceKeyword    /\<Math\.sqrt\>/ conceal cchar=√
     syn match   jsNiceOperator   /\<Infinity\>/ conceal cchar=∞
+    syn match   jsNiceTimes      /\*/ conceal cchar=×
   endif
   if level > 4
     syn keyword jsNiceVar        var   conceal cchar=𝒗 "⚫☼✪⚙𝒗𝐕𝑽𝗩𝐯𝘃☀⚪⚫●♰☪☾⚡☪♥♦♝☛♦⚹▶◀⧨◥▾□
