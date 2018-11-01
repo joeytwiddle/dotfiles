@@ -1262,6 +1262,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Open all menus with useful stuff (WIP?)
 	nmap <silent> <leader>j :Unite -silent -start-insert menu:all menu:git<CR>
 
+	" Shougo has stopped work on Unite and moved to Denite instead, for neovim and Vim8
+	"call add(vamAddons, "github:Shougo/denite.nvim")
+
 	"call add(vamAddons,"github:dahu/vimple")             " ...
 	"call add(vamAddons,"github:dahu/VimFindsMe")         " Edit args, edit options containing lists, cd into relevant folders
 
@@ -1269,6 +1272,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" >>> Plugins related to colors and colorschemes {{{
 
 	call add(vamAddons,"github:ap/vim-css-color")        " Colour the backgrounds of colour codes in CSS and Vim files
+	" You can also check out this alternative, which may or may not be faster: https://github.com/chrisbra/Colorizer
 
 	" Some colorschemes:
 	"call add(vamAddons,"github:altercation/vim-colors-solarized") " Popular
