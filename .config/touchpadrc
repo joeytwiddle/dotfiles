@@ -1,0 +1,12 @@
+[parameters]
+AccelFactor=0.18117028270874425
+CircScrollDelta=5.73
+CoastingFriction=60
+HorizScrollDelta=2.5
+InvertVertScroll=true
+MaxTapMove=3.8
+OneFingerTapButton=LeftButton
+Tapping=false
+ThreeFingerTapButton=MiddleButton
+TwoFingerTapButton=RightButton
+VertScrollDelta=2.4
