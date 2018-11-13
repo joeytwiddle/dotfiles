@@ -1,0 +1,17 @@
+[$Version]
+update_info=konsole.upd:2.9.0-global-options
+
+[Desktop Entry]
+DefaultProfile=Lucida Console.profile
+
+[Favorite Profiles]
+Favorites=Lucida Sans Typewriter.profile,Default.profile,Lucida Console.profile
+
+[MainWindow]
+Height 1080=627
+Height 768=375
+State=AAAA/wAAAAD9AAAAAAAAB4AAAAPvAAAABAAAAAQAAAAIAAAACPwAAAAA
+ToolBarsMovable=Disabled
+Width 1366=914
+Width 1920=1174
+Window-Maximized 1080x1920=true
