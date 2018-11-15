@@ -2,4 +2,4 @@
 KeyboardRepeating=0
 NumLock=2
 RepeatDelay=250
-RepeatRate=6
+RepeatRate=50
