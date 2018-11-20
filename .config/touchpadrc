@@ -2,16 +2,17 @@
 KeyboardActivityTimeoutMs=800
 
 [parameters]
-AccelFactor=0.06851042745822261
+AccelFactor=0.05
 CircScrollDelta=5.73
-CoastingFriction=65
+CoastingFriction=20
+CoastingSpeed=30
 HorizScrollDelta=1.8
 InvertVertScroll=true
-MaxSpeed=3.0330137155983965
+MaxSpeed=3.1
 MaxTapMove=3.8
-MinSpeed=1.091884937615423
+MinSpeed=1.2
 OneFingerTapButton=LeftButton
 Tapping=false
 ThreeFingerTapButton=MiddleButton
 TwoFingerTapButton=RightButton
-VertScrollDelta=1.6
+VertScrollDelta=3
