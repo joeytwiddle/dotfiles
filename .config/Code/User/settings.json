@@ -1,14 +1,21 @@
 // Place your settings in this file to overwrite the default settings
 {
     "git.ignoreLegacyWarning": true,
-    "editor.fontSize": "11.4",
-    "editor.fontFamily": "Lucida Console",
-    "editor.lineHeight": "13",
+    //"editor.fontSize": "11.4",
+    //"editor.fontFamily": "Lucida Console",
+    //"editor.lineHeight": "13",
+
     //"editor.fontSize": "13",
     //"editor.fontFamily": "Envy Code S12",
     //"editor.lineHeight": "15",
+
+    "editor.fontFamily": "'Lucida Console', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    "editor.fontSize": 11,
     "workbench.colorTheme": "Gentle Mary",
     "window.zoomLevel": 0,
+    "terminal.integrated.fontSize": 11,
+    "terminal.integrated.fontFamily": "'Lucida Sans Typewriter'",
+
     //"editor.renderWhitespace": "boundary",
 
     "files.autoSave": "onWindowChange",
