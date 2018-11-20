@@ -1,3 +1,6 @@
+[autodisable]
+KeyboardActivityTimeoutMs=800
+
 [parameters]
 AccelFactor=0.06851042745822261
 CircScrollDelta=5.73
