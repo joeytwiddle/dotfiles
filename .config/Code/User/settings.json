@@ -1,0 +1,32 @@
+// Place your settings in this file to overwrite the default settings
+{
+    "git.ignoreLegacyWarning": true,
+    "editor.fontSize": "11.4",
+    "editor.fontFamily": "Lucida Console",
+    "editor.lineHeight": "13",
+    //"editor.fontSize": "13",
+    //"editor.fontFamily": "Envy Code S12",
+    //"editor.lineHeight": "15",
+    "workbench.colorTheme": "Gentle Mary",
+    "window.zoomLevel": 0,
+    //"editor.renderWhitespace": "boundary",
+
+    "files.autoSave": "onWindowChange",
+
+    "editor.trimAutoWhitespace": true,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+
+    // I think disabling this makes the editor slightly faster, but I could be wrong!
+    "editor.minimap.enabled": true,
+
+    "editor.mouseWheelZoom": true,
+
+    // I think this enough to stop the CPU going to 100% for 5 minutes after populating node_modules folder
+    "files.watcherExclude": {
+        "/node_modules/": true
+    },
+
+    // === For plugins === //
+    "eslint.enable": true
+}
