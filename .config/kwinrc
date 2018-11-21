@@ -2,7 +2,16 @@
 update_info=kwin.upd:replace-scalein-with-scale
 
 [Compositing]
+AnimationSpeed=3
+Backend=OpenGL
+Enabled=true
+GLCore=true
+GLPreferBufferSwap=a
+GLTextureFilter=2
+HiddenPreviews=5
 OpenGLIsUnsafe=false
+WindowsBlockCompositing=true
+XRenderSmoothScale=false
 
 [Desktops]
 Number=12
@@ -11,6 +20,9 @@ Rows=4
 [Effect-CoverSwitch]
 TabBox=false
 TabBoxAlternative=false
+
+[Effect-DesktopGrid]
+PresentWindows=false
 
 [Effect-FlipSwitch]
 TabBox=false
@@ -28,7 +40,7 @@ CommandAllWheel=Nothing
 CommandInactiveTitlebar1=Activate and raise
 CommandInactiveTitlebar2=Start window tab drag
 CommandInactiveTitlebar3=Operations menu
-CommandTitlebarWheel=Switch to Window Tab to the Left/Right
+CommandTitlebarWheel=Raise/Lower
 CommandWindow1=Activate, raise and pass click
 CommandWindow2=Activate and pass click
 CommandWindow3=Activate and pass click
@@ -38,13 +50,17 @@ CommandWindowWheel=Scroll
 coverswitchEnabled=true
 cubeslideEnabled=false
 desktopchangeosdEnabled=false
+diminactiveEnabled=true
 flipswitchEnabled=true
 highlightwindowEnabled=true
 kwin4_effect_fadedesktopEnabled=false
 magiclampEnabled=true
 minimizeanimationEnabled=false
 slideEnabled=true
+snaphelperEnabled[$d]
+trackmouseEnabled[$d]
 windowgeometryEnabled=false
+wobblywindowsEnabled=true
 zoomEnabled=false
 
 [Script-desktopchangeosd]
@@ -68,9 +84,9 @@ SwitchingMode=0
 [TabBoxAlternative]
 ActivitiesMode=1
 ApplicationsMode=0
-DesktopMode=1
+DesktopMode=0
 HighlightWindows=true
-LayoutName=org.kde.breeze.desktop
+LayoutName=big_icons
 MinimizedMode=0
 MultiScreenMode=0
 ShowDesktopMode=0
