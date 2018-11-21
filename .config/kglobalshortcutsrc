@@ -4,6 +4,7 @@ switch-to-activity-5cc3f402-70a9-4ec6-9db9-69bf345c48e2=none,none,Switch to acti
 switch-to-activity-c2f501e1-94f3-4d15-9d39-b7ee10fba09f=none,none,Switch to activity "Task 3"
 switch-to-activity-cbe5de73-3c74-4db7-8df9-a51bb0566194=none,none,Switch to activity "Task 2"
 switch-to-activity-cc2bcb04-abe3-4ced-b019-aa190da49fed=none,none,Switch to activity "Default"
+switch-to-activity-eedc7299-7897-464b-88c2-1e1a9ea45e26=none,none,Switch to activity "Default"
 
 [KDE Keyboard Layout Switcher]
 Switch to Next Keyboard Layout=Ctrl+Alt+K,none,Switch to Next Keyboard Layout
@@ -17,7 +18,7 @@ _k_friendly_name=Accessibility
 Disable Touchpad=Touchpad Off,Touchpad Off,Disable Touchpad
 Enable Touchpad=Touchpad On,Touchpad On,Enable Touchpad
 Toggle Touchpad=Touchpad Toggle,Touchpad Toggle,Toggle Touchpad
-_k_friendly_name=KDE Daemon
+_k_friendly_name=System Settings
 
 [kded5]
 Show System Activity=Ctrl+Esc,Ctrl+Esc,Show System Activity
@@ -25,13 +26,14 @@ _k_friendly_name=KDE Daemon
 display=Display\tMeta+P,Display\tMeta+P,Switch Display
 
 [khotkeys]
-_k_friendly_name=KDE Daemon
-{4dbd4cee-e84d-43ab-8edc-9902e742e0bc}=Meta+Print,none,Take Active Window Screenshot
-{819a0088-ff20-469f-b718-c37ce6691687}=Meta+Shift+Print,none,Take Rectangular Region Screenshot
-{9a08e6e8-8af2-4c5d-be0c-ccd30afaa07d}=Ctrl+Alt+T,none,Launch Konsole
-{ab3844db-fc18-4ade-8971-b2c715b1592b}=Print,none,Start Screenshot Tool
+_k_friendly_name=System Settings
+{2d484174-017c-40f5-afcc-1462e8971c21}=Alt+$,none,Take Rectangular Region Screenshot
+{3f5b966e-75b9-4b87-a95f-473baf181d88}=Meta+X,none,Run Konsole
+{52481070-e07a-4dcd-911a-a11403c4ae13}=Ctrl+F9,none,Take Active Window Screenshot
+{a2bfe72b-e55a-42f2-8fd8-02a39ead9d05}=,none,Start Screenshot Tool
+{a800952a-80cc-445c-8337-b2dce201ba17}=Alt+F9,none,Take Full Screen Screenshot
 {d03619b6-9b3c-48cc-9d9c-a2aadb485550}=,none,Search
-{d105cd50-e3d9-45e5-8495-24a6954bd28a}=Shift+Print,none,Take Full Screen Screenshot
+{da263579-639a-48d6-9e12-44c1ff729e46}=,none,Launch Konsole
 
 [kmix]
 _k_friendly_name=Audio Volume
@@ -60,7 +62,7 @@ Activate Window Demanding Attention=Ctrl+Alt+A,Ctrl+Alt+A,Activate Window Demand
 Cube=Ctrl+F11,Ctrl+F11,Desktop Cube
 Cylinder=none,none,Desktop Cylinder
 Decrease Opacity=none,none,Decrease Opacity of Active Window by 5 %
-Expose=Ctrl+F9,Ctrl+F9,Toggle Present Windows (Current desktop)
+Expose=,Ctrl+F9,Toggle Present Windows (Current desktop)
 ExposeAll=Ctrl+F10\tLaunch (C),Ctrl+F10\tLaunch (C),Toggle Present Windows (All desktops)
 ExposeClass=Ctrl+F7,Ctrl+F7,Toggle Present Windows (Window class)
 FlipSwitchAll=none,none,Toggle Flip Switch (All desktops)
@@ -132,16 +134,16 @@ Walk Through Desktops (Reverse)=none,none,Walk Through Desktops (Reverse)
 Walk Through Window Tabs=none,none,Walk Through Window Tabs
 Walk Through Window Tabs (Reverse)=none,none,Walk Through Window Tabs (Reverse)
 Walk Through Windows=Alt+Tab,none,Walk Through Windows
-Walk Through Windows (Reverse)=Alt+Shift+Backtab,none,Walk Through Windows (Reverse)
-Walk Through Windows Alternative=none,none,Walk Through Windows Alternative
-Walk Through Windows Alternative (Reverse)=none,none,Walk Through Windows Alternative (Reverse)
-Walk Through Windows of Current Application=Alt+`,none,Walk Through Windows of Current Application
+Walk Through Windows (Reverse)=Alt+Shift+Tab,none,Walk Through Windows (Reverse)
+Walk Through Windows Alternative=Meta+Tab,none,Walk Through Windows Alternative
+Walk Through Windows Alternative (Reverse)=Meta+Shift+Tab,none,Walk Through Windows Alternative (Reverse)
+Walk Through Windows of Current Application=,none,Walk Through Windows of Current Application
 Walk Through Windows of Current Application (Reverse)=Alt+~,none,Walk Through Windows of Current Application (Reverse)
 Walk Through Windows of Current Application Alternative=none,none,Walk Through Windows of Current Application Alternative
 Walk Through Windows of Current Application Alternative (Reverse)=none,none,Walk Through Windows of Current Application Alternative (Reverse)
 Window Above Other Windows=none,none,Keep Window Above Others
 Window Below Other Windows=none,none,Keep Window Below Others
-Window Close=Alt+F4,Alt+F4,Close Window
+Window Close=Alt+F4\tMeta+Q,Alt+F4,Close Window
 Window Fullscreen=none,none,Make Window Fullscreen
 Window Grow Horizontal=none,none,Pack Grow Window Horizontally
 Window Grow Vertical=none,none,Pack Grow Window Vertically
@@ -151,8 +153,8 @@ Window Maximize Horizontal=Meta+H,none,Maximise Window Horizontally
 Window Maximize Vertical=Meta+V,none,Maximise Window Vertically
 Window Minimize=Meta+PgDown,Meta+PgDown,Minimise Window
 Window Move=none,none,Move Window
-Window No Border=none,none,Hide Window Border
-Window On All Desktops=none,none,Keep Window on All Desktops
+Window No Border=Meta+F,none,Hide Window Border
+Window On All Desktops=Meta+S,none,Keep Window on All Desktops
 Window One Desktop Down=none,none,Window One Desktop Down
 Window One Desktop Up=none,none,Window One Desktop Up
 Window One Desktop to the Left=none,none,Window One Desktop to the Left
@@ -207,6 +209,7 @@ Window to Screen 4=none,none,Window to Screen 4
 Window to Screen 5=none,none,Window to Screen 5
 Window to Screen 6=none,none,Window to Screen 6
 Window to Screen 7=none,none,Window to Screen 7
+WindowGeometry=Ctrl+Shift+F11,Ctrl+Shift+F11,Toggle window geometry display (effect only)
 _k_friendly_name=KWin
 view_actual_size=,Meta+0,Actual Size
 view_zoom_in=Meta+=,Meta+=,Zoom In
@@ -245,19 +248,20 @@ activate task manager entry 7=Meta+7,Meta+7,Activate Task Manager Entry 7
 activate task manager entry 8=Meta+8,Meta+8,Activate Task Manager Entry 8
 activate task manager entry 9=Meta+9,Meta+9,Activate Task Manager Entry 9
 activate widget 2=Alt+F1,none,Activate Application Launcher Widget
+activate widget 3=,none,Activate Application Launcher Widget
 clear-history=none,none,Clear Clipboard History
 clipboard_action=Ctrl+Alt+X,Ctrl+Alt+X,Enable Clipboard Actions
 cycleNextAction=none,none,Next History Item
 cyclePrevAction=none,none,Previous History Item
 edit_clipboard=none,none,Edit Contents...
-manage activities=Meta+Q,Meta+Q,Activities...
-next activity=Meta+Tab,none,Walk through activities
-previous activity=Meta+Shift+Tab,none,Walk through activities (Reverse)
+manage activities=,Meta+Q,Activities...
+next activity=,none,Walk through activities
+previous activity=,none,Walk through activities (Reverse)
 repeat_action=Ctrl+Alt+R,Ctrl+Alt+R,Manually Invoke Action on Current Clipboard
 show dashboard=Ctrl+F12,Ctrl+F12,Show Desktop
 show-barcode=none,none,Show Barcode...
 show-on-mouse-pos=none,none,Open Klipper at Mouse Position
-stop current activity=Meta+S,Meta+S,Stop Current Activity
+stop current activity=,Meta+S,Stop Current Activity
 
 [yakuake]
 _k_friendly_name=Yakuake
