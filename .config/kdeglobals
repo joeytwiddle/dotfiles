@@ -2,11 +2,13 @@
 update_info=filepicker.upd:filepicker-remove-old-previews-entry,fonts_global.upd:Fonts_Global,fonts_global_toolbar.upd:Fonts_Global_Toolbar
 
 [ColorEffects:Disabled]
+ChangeSelectionColor=
 Color=56,56,56
 ColorAmount=0
 ColorEffect=0
 ContrastAmount=0.65
 ContrastEffect=1
+Enable=
 IntensityAmount=0.1
 IntensityEffect=2
 
@@ -105,9 +107,13 @@ ForegroundNormal=35,38,39
 ForegroundPositive=39,174,96
 ForegroundVisited=127,140,141
 
+[DirSelect Dialog]
+DirSelectDialog Size=640,480
+History Items[$e]=file:$HOME/Downloads
+
 [General]
 ColorScheme=Breeze
-Name=Breeze
+Name=Breeze Dark
 XftHintStyle=hintmedium
 XftSubPixel=none
 dbfile=/home/joey/.mozilla/firefox/Joey/places.sqlite
@@ -119,12 +125,12 @@ smallestReadableFont=Noto Sans [GOOG],8,-1,5,50,0,0,0,0,0,Regular
 toolBarFont=Noto Sans [GOOG],10,-1,5,50,0,0,0,0,0,Regular
 
 [Icons]
-Theme=breeze
+Theme=breath
 
 [KDE]
-LookAndFeelPackage=org.kde.breeze.desktop
+LookAndFeelPackage=org.kde.breezedark.desktop
 contrast=4
-widgetStyle=breeze
+widgetStyle=Breeze
 
 [KFileDialog Settings]
 Automatically select filename extension=true
@@ -147,6 +153,10 @@ listViewIconSize=0
 
 [KShortcutsDialog Settings]
 Dialog Size=927,822
+
+[Shortcuts]
+Activate Next Tab=Ctrl+PgDown; Alt+}
+Activate Previous Tab=Ctrl+PgUp; Alt+{
 
 [WM]
 activeBackground=71,80,87
