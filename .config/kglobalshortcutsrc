@@ -8,7 +8,7 @@ switch-to-activity-eedc7299-7897-464b-88c2-1e1a9ea45e26=none,none,Switch to acti
 
 [KDE Keyboard Layout Switcher]
 Switch to Next Keyboard Layout=,none,Switch to Next Keyboard Layout
-_k_friendly_name=System Settings
+_k_friendly_name=KDE Daemon
 
 [kaccess]
 Toggle Screen Reader On and Off=Meta+Alt+S,Meta+Alt+S,Toggle Screen Reader On and Off
@@ -26,7 +26,7 @@ _k_friendly_name=KDE Daemon
 display=Display\tMeta+P,Display\tMeta+P,Switch Display
 
 [khotkeys]
-_k_friendly_name=System Settings
+_k_friendly_name=KDE Daemon
 {2d484174-017c-40f5-afcc-1462e8971c21}=Alt+$,none,Take Rectangular Region Screenshot
 {3f5b966e-75b9-4b87-a95f-473baf181d88}=Meta+X,none,Run Konsole
 {52481070-e07a-4dcd-911a-a11403c4ae13}=Ctrl+F9,none,Take Active Window Screenshot
@@ -88,10 +88,10 @@ Switch One Desktop Down=Ctrl+Alt+Down\tCtrl+Alt+J,none,Switch One Desktop Down
 Switch One Desktop Up=Ctrl+Alt+Up\tCtrl+Alt+K,none,Switch One Desktop Up
 Switch One Desktop to the Left=,none,Switch One Desktop to the Left
 Switch One Desktop to the Right=,none,Switch One Desktop to the Right
-Switch Window Down=Meta+Alt+Down,Meta+Alt+Down,Switch to Window Below
-Switch Window Left=Meta+Alt+Left,Meta+Alt+Left,Switch to Window to the Left
-Switch Window Right=Meta+Alt+Right,Meta+Alt+Right,Switch to Window to the Right
-Switch Window Up=Meta+Alt+Up,Meta+Alt+Up,Switch to Window Above
+Switch Window Down=Meta+A,Meta+Alt+Down,Switch to Window Below
+Switch Window Left=,Meta+Alt+Left,Switch to Window to the Left
+Switch Window Right=,Meta+Alt+Right,Switch to Window to the Right
+Switch Window Up=,Meta+Alt+Up,Switch to Window Above
 Switch to Desktop 1=Ctrl+F1,Ctrl+F1,Switch to Desktop 1
 Switch to Desktop 10=none,none,Switch to Desktop 10
 Switch to Desktop 11=none,none,Switch to Desktop 11
@@ -137,7 +137,7 @@ Walk Through Windows=Alt+Tab,none,Walk Through Windows
 Walk Through Windows (Reverse)=Alt+Shift+Tab,none,Walk Through Windows (Reverse)
 Walk Through Windows Alternative=Meta+Tab,none,Walk Through Windows Alternative
 Walk Through Windows Alternative (Reverse)=Meta+Shift+Tab,none,Walk Through Windows Alternative (Reverse)
-Walk Through Windows of Current Application=,none,Walk Through Windows of Current Application
+Walk Through Windows of Current Application=Alt+`,none,Walk Through Windows of Current Application
 Walk Through Windows of Current Application (Reverse)=Alt+~,none,Walk Through Windows of Current Application (Reverse)
 Walk Through Windows of Current Application Alternative=none,none,Walk Through Windows of Current Application Alternative
 Walk Through Windows of Current Application Alternative (Reverse)=none,none,Walk Through Windows of Current Application Alternative (Reverse)
@@ -147,7 +147,7 @@ Window Close=Alt+F4\tMeta+Q,Alt+F4,Close Window
 Window Fullscreen=none,none,Make Window Fullscreen
 Window Grow Horizontal=none,none,Pack Grow Window Horizontally
 Window Grow Vertical=none,none,Pack Grow Window Vertically
-Window Lower=Meta+A,none,Lower Window
+Window Lower=,none,Lower Window
 Window Maximize=Meta+PgUp\tMeta+Z,Meta+PgUp,Maximise Window
 Window Maximize Horizontal=Meta+H,none,Maximise Window Horizontally
 Window Maximize Vertical=Meta+V,none,Maximise Window Vertically
@@ -164,12 +164,12 @@ Window Pack Down=none,none,Pack Window Down
 Window Pack Left=none,none,Pack Window to the Left
 Window Pack Right=none,none,Pack Window to the Right
 Window Pack Up=none,none,Pack Window Up
-Window Quick Tile Bottom=Meta+Down,Meta+Down,Quick Tile Window to the Bottom
+Window Quick Tile Bottom=Meta+Alt+Down,Meta+Down,Quick Tile Window to the Bottom
 Window Quick Tile Bottom Left=none,none,Quick Tile Window to the Bottom Left
 Window Quick Tile Bottom Right=none,none,Quick Tile Window to the Bottom Right
-Window Quick Tile Left=Meta+Left,Meta+Left,Quick Tile Window to the Left
-Window Quick Tile Right=Meta+Right,Meta+Right,Quick Tile Window to the Right
-Window Quick Tile Top=Meta+Up,Meta+Up,Quick Tile Window to the Top
+Window Quick Tile Left=Meta+Alt+Left,Meta+Left,Quick Tile Window to the Left
+Window Quick Tile Right=Meta+Alt+Right,Meta+Right,Quick Tile Window to the Right
+Window Quick Tile Top=Meta+Alt+Up,Meta+Up,Quick Tile Window to the Top
 Window Quick Tile Top Left=none,none,Quick Tile Window to the Top Left
 Window Quick Tile Top Right=none,none,Quick Tile Window to the Top Right
 Window Raise=none,none,Raise Window
