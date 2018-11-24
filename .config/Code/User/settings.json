@@ -1,18 +1,22 @@
 // Place your settings in this file to overwrite the default settings
 {
     "git.ignoreLegacyWarning": true,
+
+    "workbench.colorTheme": "Gentle Mary",
+
+    "window.zoomLevel": -1,
+
     //"editor.fontSize": "11.4",
-    //"editor.fontFamily": "Lucida Console",
     //"editor.lineHeight": "13",
 
-    //"editor.fontSize": "13",
     //"editor.fontFamily": "Envy Code S12",
+    //"editor.fontSize": "13",
     //"editor.lineHeight": "15",
 
-    "editor.fontFamily": "'Lucida Console', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
-    "editor.fontSize": 11,
-    "workbench.colorTheme": "Gentle Mary",
-    "window.zoomLevel": 0,
+    "editor.fontFamily": "'Lucida Sans Typewriter', 'Lucida Console', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    "editor.fontSize": 12,
+    "editor.lineHeight": 14,
+
     "terminal.integrated.fontSize": 11,
     "terminal.integrated.fontFamily": "'Lucida Sans Typewriter'",
 
@@ -24,6 +28,7 @@
     "files.trimTrailingWhitespace": true,
     "files.insertFinalNewline": true,
 
+    "breadcrumbs.enabled": true,
     // I think disabling this makes the editor slightly faster, but I could be wrong!
     "editor.minimap.enabled": true,
 
@@ -31,9 +36,12 @@
 
     // I think this enough to stop the CPU going to 100% for 5 minutes after populating node_modules folder
     "files.watcherExclude": {
-        "/node_modules/": true
+        "**/node_modules/**": true
     },
 
+    "npm.enableScriptExplorer": true,
+
     // === For plugins === //
-    "eslint.enable": true
+    "eslint.enable": true,
+    "autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
 }
