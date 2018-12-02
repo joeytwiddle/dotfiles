@@ -146,9 +146,10 @@ Show Speedbar=true
 Show hidden files=false
 Sort by=Name
 Sort directories first=true
-Sort reversed=false
+Sort reversed=true
 Speedbar Width=106
-View Style=Simple
+View Style=Detail
+detailedViewIconSize=0
 listViewIconSize=0
 
 [KShortcutsDialog Settings]
