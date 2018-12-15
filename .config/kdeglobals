@@ -118,11 +118,11 @@ XftHintStyle=hintmedium
 XftSubPixel=none
 dbfile=/home/joey/.mozilla/firefox/Joey/places.sqlite
 fixed=Noto Sans Mono,9,-1,5,50,0,0,0,0,0,Regular
-font=Noto Sans [GOOG],10,-1,5,50,0,0,0,0,0,Regular
-menuFont=Noto Sans [GOOG],10,-1,5,50,0,0,0,0,0,Regular
+font=Liberation Sans,10,-1,5,50,0,0,0,0,0,Regular
+menuFont=Liberation Sans,10,-1,5,50,0,0,0,0,0,Regular
 shadeSortColumn=true
-smallestReadableFont=Noto Sans [GOOG],8,-1,5,50,0,0,0,0,0,Regular
-toolBarFont=Noto Sans [GOOG],10,-1,5,50,0,0,0,0,0,Regular
+smallestReadableFont=Liberation Sans,8,-1,5,50,0,0,0,0,0,Regular
+toolBarFont=Liberation Sans,10,-1,5,50,0,0,0,0,0,Regular
 
 [Icons]
 Theme=breath
@@ -162,7 +162,7 @@ Activate Previous Tab=Ctrl+PgUp; Alt+{
 [WM]
 activeBackground=71,80,87
 activeBlend=252,252,252
-activeFont=Noto Sans [GOOG],10,-1,5,50,0,0,0,0,0,Regular
+activeFont=Liberation Sans,10,-1,5,50,0,0,0,0,0,Regular
 activeForeground=252,252,252
 inactiveBackground=239,240,241
 inactiveBlend=75,71,67
