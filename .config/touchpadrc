@@ -17,4 +17,4 @@ OneFingerTapButton=LeftButton
 Tapping=false
 ThreeFingerTapButton=MiddleButton
 TwoFingerTapButton=RightButton
-VertScrollDelta=3
+VertScrollDelta=6

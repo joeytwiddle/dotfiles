@@ -128,9 +128,15 @@ toolBarFont=Liberation Sans,10,-1,5,50,0,0,0,0,0,Regular
 Theme=breath
 
 [KDE]
+DoubleClickInterval=400
 LookAndFeelPackage=org.kde.breezedark.desktop
+ShowIconsInMenuItems=true
+ShowIconsOnPushButtons=true
+StartDragDist=4
+StartDragTime=500
+WheelScrollLines=8
 contrast=4
-widgetStyle=Breeze
+widgetStyle=fusion
 
 [KFileDialog Settings]
 Automatically select filename extension=true
@@ -146,8 +152,8 @@ Show Speedbar=true
 Show hidden files=false
 Sort by=Name
 Sort directories first=true
-Sort reversed=true
-Speedbar Width=106
+Sort reversed=false
+Speedbar Width=128
 View Style=Detail
 detailedViewIconSize=0
 listViewIconSize=0
