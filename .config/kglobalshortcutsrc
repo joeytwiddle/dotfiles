@@ -18,7 +18,7 @@ _k_friendly_name=Accessibility
 Disable Touchpad=Touchpad Off,Touchpad Off,Disable Touchpad
 Enable Touchpad=Touchpad On,Touchpad On,Enable Touchpad
 Toggle Touchpad=Touchpad Toggle,Touchpad Toggle,Toggle Touchpad
-_k_friendly_name=System Settings
+_k_friendly_name=KDE Daemon
 
 [kded5]
 Show System Activity=Ctrl+Esc,Ctrl+Esc,Show System Activity
@@ -28,7 +28,7 @@ display=Display\tMeta+P,Display\tMeta+P,Switch Display
 [khotkeys]
 _k_friendly_name=KDE Daemon
 {2d484174-017c-40f5-afcc-1462e8971c21}=Alt+$,none,Take Rectangular Region Screenshot
-{3f5b966e-75b9-4b87-a95f-473baf181d88}=Meta+X,none,Run Konsole
+{3f5b966e-75b9-4b87-a95f-473baf181d88}=Meta+Shift+X,none,Run Konsole
 {52481070-e07a-4dcd-911a-a11403c4ae13}=Ctrl+F9,none,Take Active Window Screenshot
 {a2bfe72b-e55a-42f2-8fd8-02a39ead9d05}=,none,Start Screenshot Tool
 {a800952a-80cc-445c-8337-b2dce201ba17}=Alt+F9,none,Take Full Screen Screenshot
@@ -265,4 +265,4 @@ stop current activity=,Meta+S,Stop Current Activity
 
 [yakuake]
 _k_friendly_name=Yakuake
-toggle-window-state=F12,F12,Open/Retract Yakuake
+toggle-window-state=F12\tMeta+X,F12,Open/Retract Yakuake
