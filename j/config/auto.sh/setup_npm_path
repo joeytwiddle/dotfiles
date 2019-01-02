@@ -1,10 +1,16 @@
-# If we have nvm, then use the latest node
-# But disabled for now, because this slows down my shell startup
-if false && nvm --version >/dev/null
+# When I was using a slow HDD, each time I opened a new shell, nvm would significantly slow down the startup
+# To mitigate this, I made some aliases to load nvm later, when needed
+# This behaviour is now disabled by default, but can be enabled by setting JSH_LOAD_NVM_LATER=x
+
+#if nvm --version >/dev/null 2>&1
+if [ -z "$JSH_LOAD_NVM_LATER" ]
 then
 
-	unset PREFIX
-	nvm use node
+	#unset PREFIX
+	#nvm use node
+
+	# We shouldn't need to do anything.  Just use the nvm loaded in .bash_profile, as recommended.
+	:
 
 else
 
