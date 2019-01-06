@@ -1,0 +1,95 @@
+# Install: sxhkd and xautomation (for xte)
+# Start listening for these keys by running: sxhkd &
+
+# Reload this config
+alt + shift + r
+  killall -USR1 -u "$USER" sxhkd
+
+### Mac-like keybindings
+#
+# Caveats:
+#
+# Holding down a key will not repeat it.
+#
+# We assume it is the left Alt and Shift key being pressed.  If you use the
+# right Alt or Shift keys, these bindings will not release them properly.
+#
+# These keybindings don't work on all windows.  For example, Terminals often
+# need Ctrl-Shift-V to paste, not Ctrl-V
+#
+# Notes:
+#
+# As you can see, we restore the original modifier keys after clearing them.
+# That means a second stroke of the trigger key will trigger the action a
+# second time.  But DO NOT try to restore the original non-modifier key; that
+# will create an infinite loop!
+
+alt + c
+  xte "keyup c" "keyup Meta_L" "keydown Control_L" "key c" "keyup Control_L" "keydown Meta_L"
+
+alt + x
+  xte "keyup x" "keyup Meta_L" "keydown Control_L" "key x" "keyup Control_L" "keydown Meta_L"
+
+alt + v
+  xte "keyup v" "keyup Meta_L" "keydown Control_L" "key v" "keyup Control_L" "keydown Meta_L"
+
+alt + z
+  xte "keyup z" "keyup Meta_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Meta_L"
+
+alt + shift + z
+  xte "keyup z" "keyup Meta_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Meta_L"
+
+alt + t
+  xte "keyup t" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L"
+
+alt + shift + t
+  xte "keyup t" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L"
+
+alt + w
+  xte "keyup w" "keyup Meta_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Meta_L"
+
+alt + q
+  xte "keyup q" "key F4"
+
+alt + l
+  xte "keyup l" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L"
+
+alt + shift + braceleft
+  xte "keyup braceleft" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Prior" "keyup Control_L" "keydown Meta_L" "keydown Shift_L"
+alt + shift + braceright
+  xte "keyup braceright" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Next" "keyup Control_L" "keydown Meta_L" "keydown Shift_L"
+
+# Cmd-Left and Cmd-Right usually navigate back and forwards
+# These aren't working, I don't know why
+# If I put them before the `alt + shift + braceleft` definition, they block it from working.
+alt + braceleft
+  xte "keyup braceleft" "key Left"
+alt + braceright
+  xte "keyup braceleft" "key Right"
+
+## Keys used while editing text
+
+alt + Left
+  xte "keyup Meta_L" "keyup Left" "key Home" "keydown Meta_L"
+
+alt + Right
+  xte "keyup Meta_L" "keyup Right" "key End" "keydown Meta_L"
+
+super + Left
+  xte "keyup Super_L" "keyup Left" "keydown Control_L" "key Left" "keyup Control_L" "keydown Super_L"
+
+super + Right
+  xte "keyup Super_L" "keyup Right" "keydown Control_L" "key Right" "keyup Control_L" "keydown Super_L"
+
+alt + shift + Left
+  xte "keyup Meta_L" "keyup Left" "key Home" "keydown Meta_L"
+
+alt + shift + Right
+  xte "keyup Meta_L" "keyup Right" "key End" "keydown Meta_L"
+
+super + shift + Left
+  xte "keyup Super_L" "keyup Left" "keydown Control_L" "key Left" "keyup Control_L" "keydown Super_L"
+
+super + shift + Right
+  xte "keyup Super_L" "keyup Right" "keydown Control_L" "key Right" "keyup Control_L" "keydown Super_L"
+
