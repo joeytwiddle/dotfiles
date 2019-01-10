@@ -1,5 +1,8 @@
 # Install: sxhkd and xautomation (for xte)
 # Start listening for these keys by running: sxhkd &
+#
+# To automatically start it with X-windows on a systemd system, see here: https://wiki.archlinux.org/index.php/Sxhkd#Systemd_service_file
+# Alternatively, add `sxhkd &` to your ~/.xinitrc
 
 # Reload this config
 alt + shift + r
@@ -17,6 +20,9 @@ alt + shift + r
 # These keybindings don't work on all windows.  For example, Terminals often
 # need Ctrl-Shift-V to paste, not Ctrl-V
 #
+# All the keybinds work with Google Chrome, but with Firefox some of them don't
+# work.
+#
 # Notes:
 #
 # As you can see, we restore the original modifier keys after clearing them.
@@ -24,72 +30,149 @@ alt + shift + r
 # second time.  But DO NOT try to restore the original non-modifier key; that
 # will create an infinite loop!
 
-alt + c
-  xte "keyup c" "keyup Meta_L" "keydown Control_L" "key c" "keyup Control_L" "keydown Meta_L"
-
+# Cut, copy and paste
 alt + x
   xte "keyup x" "keyup Meta_L" "keydown Control_L" "key x" "keyup Control_L" "keydown Meta_L"
-
+alt + c
+  xte "keyup c" "keyup Meta_L" "keydown Control_L" "key c" "keyup Control_L" "keydown Meta_L"
 alt + v
   xte "keyup v" "keyup Meta_L" "keydown Control_L" "key v" "keyup Control_L" "keydown Meta_L"
 
+# Undo and redo
 alt + z
   xte "keyup z" "keyup Meta_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Meta_L"
-
 alt + shift + z
   xte "keyup z" "keyup Meta_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Meta_L"
 
+# New tab, and reopen closed tab
 alt + t
   xte "keyup t" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L"
-
 alt + shift + t
   xte "keyup t" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L"
 
+# New window
+alt + n
+  xte "keyup n" "keyup Meta_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Meta_L"
+
+# Private browsing in Chrome
+alt + shift + n
+  xte "keyup n" "keyup Meta_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Meta_L"
+
+# Private browsing in Firefox
+alt + shift + p
+  xte "keyup p" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L"
+
+# Close tab
 alt + w
   xte "keyup w" "keyup Meta_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Meta_L"
 
+# Close application
 alt + q
   xte "keyup q" "key F4"
 
+# Save
+alt + s
+  xte "keyup s" "keyup Meta_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Meta_L"
+
+# Focus location bar
 alt + l
   xte "keyup l" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L"
 
+# Select all text
+alt + a
+  xte "keyup a" "keyup Meta_L" "keydown Control_L" "key a" "keyup Control_L" "keydown Meta_L"
+
+# Print
+alt + p
+  xte "keyup p" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L"
+
+# Reload page
+alt + r
+  xte "keyup r" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L"
+
+# Reload without caching
+alt + shift + r
+  xte "keyup r" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L"
+
+# At this point it seems like I should just map the entire alphabet!
+# Here are all the letters I didn't cover above:
+alt + b
+  xte "keyup b" "keyup Meta_L" "keydown Control_L" "key b" "keyup Control_L" "keydown Meta_L"
+alt + d
+  xte "keyup d" "keyup Meta_L" "keydown Control_L" "key d" "keyup Control_L" "keydown Meta_L"
+alt + e
+  xte "keyup e" "keyup Meta_L" "keydown Control_L" "key e" "keyup Control_L" "keydown Meta_L"
+alt + f
+  xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L"
+alt + g
+  xte "keyup g" "keyup Meta_L" "keydown Control_L" "key g" "keyup Control_L" "keydown Meta_L"
+alt + h
+  xte "keyup h" "keyup Meta_L" "keydown Control_L" "key h" "keyup Control_L" "keydown Meta_L"
+alt + i
+  xte "keyup i" "keyup Meta_L" "keydown Control_L" "key i" "keyup Control_L" "keydown Meta_L"
+alt + j
+  xte "keyup j" "keyup Meta_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Meta_L"
+alt + k
+  xte "keyup k" "keyup Meta_L" "keydown Control_L" "key k" "keyup Control_L" "keydown Meta_L"
+alt + m
+  xte "keyup m" "keyup Meta_L" "keydown Control_L" "key m" "keyup Control_L" "keydown Meta_L"
+alt + u
+  xte "keyup u" "keyup Meta_L" "keydown Control_L" "key u" "keyup Control_L" "keydown Meta_L"
+alt + y
+  xte "keyup y" "keyup Meta_L" "keydown Control_L" "key y" "keyup Control_L" "keydown Meta_L"
+
+# Zoom in and out
+# Surprisingly the `alt + equal` mapping only works properly if I do `keyup plus`
+alt + equal
+  xte "keyup plus" "keyup Meta_L" "keydown Control_L" "key plus" "keyup Control_L" "keydown Meta_L"
+alt + minus
+  xte "keyup minus" "keyup Meta_L" "keydown Control_L" "key minus" "keyup Control_L" "keydown Meta_L"
+
+# Switch tab left/right
 alt + shift + braceleft
   xte "keyup braceleft" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Prior" "keyup Control_L" "keydown Meta_L" "keydown Shift_L"
 alt + shift + braceright
   xte "keyup braceright" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Next" "keyup Control_L" "keydown Meta_L" "keydown Shift_L"
 
-# Cmd-Left and Cmd-Right usually navigate back and forwards
-# These aren't working, I don't know why
-# If I put them before the `alt + shift + braceleft` definition, they block it from working.
-alt + braceleft
-  xte "keyup braceleft" "key Left"
-alt + braceright
-  xte "keyup braceleft" "key Right"
+# Go back/forward
+# Cmd-Left and Cmd-Right usually navigate back and forwards on Mac.
+# The equivalents on Linux are Alt+Left and Alt+Right.
+# But I am mapping Alt+Left and Alt+Right below, as editing motions.
+# Targetting them here would simply trigger those bindings!
+# If you disable the editing keybinds below, then you could enable these.
+#alt + bracketleft
+#  xte "keyup bracketleft" "key Left"
+#alt + bracketright
+#  xte "keyup bracketright" "key Right"
+
+# Fortunately I already happen to be using a userscript called More Keybinds in my browser,
+# which puts browser back on Control-Backspace and forward on Control-Enter.
+# So I can target those strokes instead.
+# https://openuserjs.org/scripts/joeytwiddle/More_Keybinds
+alt + bracketleft
+  xte "keyup bracketleft" "keyup Meta_L" "keydown Control_L" "key BackSpace" "keyup Control_L" "keydown Meta_L"
+alt + bracketright
+  xte "keyup bracketright" "keyup Meta_L" "keydown Control_L" "key Return" "keyup Control_L" "keydown Meta_L"
 
 ## Keys used while editing text
 
+# Move to home/end
 alt + Left
   xte "keyup Meta_L" "keyup Left" "key Home" "keydown Meta_L"
-
 alt + Right
   xte "keyup Meta_L" "keyup Right" "key End" "keydown Meta_L"
-
-super + Left
-  xte "keyup Super_L" "keyup Left" "keydown Control_L" "key Left" "keyup Control_L" "keydown Super_L"
-
-super + Right
-  xte "keyup Super_L" "keyup Right" "keydown Control_L" "key Right" "keyup Control_L" "keydown Super_L"
-
 alt + shift + Left
   xte "keyup Meta_L" "keyup Left" "key Home" "keydown Meta_L"
-
 alt + shift + Right
   xte "keyup Meta_L" "keyup Right" "key End" "keydown Meta_L"
 
+# Move one word
+super + Left
+  xte "keyup Super_L" "keyup Left" "keydown Control_L" "key Left" "keyup Control_L" "keydown Super_L"
+super + Right
+  xte "keyup Super_L" "keyup Right" "keydown Control_L" "key Right" "keyup Control_L" "keydown Super_L"
 super + shift + Left
   xte "keyup Super_L" "keyup Left" "keydown Control_L" "key Left" "keyup Control_L" "keydown Super_L"
-
 super + shift + Right
   xte "keyup Super_L" "keyup Right" "keydown Control_L" "key Right" "keyup Control_L" "keydown Super_L"
 
