@@ -157,10 +157,11 @@ alt + bracketright
 ## Keys used while editing text
 
 # Move to home/end
+# In the first two keybinds, I find it helps to send an _extra_ Alt press, to counteract the Alt press that the application receives when we release.
 alt + Left
-  xte "keyup Meta_L" "keyup Left" "key Home" "keydown Meta_L"
+  xte "keyup Meta_L" "keyup Left" "key Home" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + Right
-  xte "keyup Meta_L" "keyup Right" "key End" "keydown Meta_L"
+  xte "keyup Meta_L" "keyup Right" "key End" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + shift + Left
   xte "keyup Meta_L" "keyup Left" "key Home" "keydown Meta_L"
 alt + shift + Right
