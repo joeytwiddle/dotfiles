@@ -139,11 +139,11 @@ alt + minus
 # More complicated version which sends a different keystroke to Konsole applications (for my purposes Konsole listens for Ctrl-Shift-[/])
 # You can find an implementation of run_if_window_matches [here](https://github.com/baskerville/sxhkd/issues/123#issuecomment-453724972)
 alt + shift + braceleft
-  run_if_window_matches --not --class "konsole" -- xte "keyup braceleft" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Prior" "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
-  run_if_window_matches --class "konsole" -- xte "keyup braceleft" "keyup Meta_L" "keydown Control_L" "key bracketleft" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup braceleft"  "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Prior"        "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
+  run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup braceleft"  "keyup Meta_L"                 "keydown Control_L" "key bracketleft"  "keyup Control_L" "keydown Meta_L"
 alt + shift + braceright
-  run_if_window_matches --not --class "konsole" -- xte "keyup braceright" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Next" "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
-  run_if_window_matches --class "konsole" -- xte "keyup bracketright" "keyup Meta_L" "keydown Control_L" "key bracketright" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup braceright" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Next"         "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
+  run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup braceright" "keyup Meta_L"                 "keydown Control_L" "key bracketright" "keyup Control_L" "keydown Meta_L"
 
 # Go back/forward
 # Cmd-Left and Cmd-Right usually navigate back and forwards on Mac.
