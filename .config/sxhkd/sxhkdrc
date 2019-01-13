@@ -191,7 +191,7 @@ alt + shift + z
 # Zoom in and out
 # Surprisingly the `alt + equal` mapping only works properly if I do `keyup plus`
 alt + equal
-  xte "keyup plus" "keyup Meta_L" "keydown Control_L" "key plus" "keyup Control_L" "keydown Meta_L"
+  xte "keyup plus"  "keyup Meta_L" "keydown Control_L" "key plus"  "keyup Control_L" "keydown Meta_L"
 alt + minus
   xte "keyup minus" "keyup Meta_L" "keydown Control_L" "key minus" "keyup Control_L" "keydown Meta_L"
 
@@ -237,21 +237,21 @@ alt + bracketright
 # Move to home/end
 # In the first two keybinds, I find it helps to send an _extra_ Alt press, to counteract the Alt press that the application receives when we release.
 alt + Left
-  xte "keyup Meta_L" "keyup Left" "key Home" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup Meta_L" "keyup Left"  "key Home" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + Right
-  xte "keyup Meta_L" "keyup Right" "key End" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup Meta_L" "keyup Right" "key End"  "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + shift + Left
-  xte "keyup Meta_L" "keyup Left" "key Home" "keydown Meta_L"
+  xte "keyup Meta_L" "keyup Left"  "key Home" "keydown Meta_L"
 alt + shift + Right
-  xte "keyup Meta_L" "keyup Right" "key End" "keydown Meta_L"
+  xte "keyup Meta_L" "keyup Right" "key End"  "keydown Meta_L"
 
 # Move one word
 super + Left
-  xte "keyup Super_L" "keyup Left" "keydown Control_L" "key Left" "keyup Control_L" "keydown Super_L"
+  xte "keyup Super_L" "keyup Left"  "keydown Control_L" "key Left"  "keyup Control_L" "keydown Super_L"
 super + Right
   xte "keyup Super_L" "keyup Right" "keydown Control_L" "key Right" "keyup Control_L" "keydown Super_L"
 super + shift + Left
-  xte "keyup Super_L" "keyup Left" "keydown Control_L" "key Left" "keyup Control_L" "keydown Super_L"
+  xte "keyup Super_L" "keyup Left"  "keydown Control_L" "key Left"  "keyup Control_L" "keydown Super_L"
 super + shift + Right
   xte "keyup Super_L" "keyup Right" "keydown Control_L" "key Right" "keyup Control_L" "keydown Super_L"
 
