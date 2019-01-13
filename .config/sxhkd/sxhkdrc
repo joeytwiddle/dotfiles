@@ -111,6 +111,17 @@ alt + d
 alt + u
   xte "keyup u" "keyup Meta_L" "keydown Control_L" "key u" "keyup Control_L" "keydown Meta_L"
 
+# Toggle DevTools (Chrome)
+# This one hasn't been working for me
+#super + alt + j
+#  xte "keyup j" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key j" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L"
+
+# On Alt-click (feels like Cmd-click) perform Control-click (e.g. to open a link in a separate tab).
+# This works but it blocks Alt-hold-and-drag from doing its normal "move window".
+# So I have disabled it.
+#alt + @button1
+#  xte "keyup Meta_L" "mouseup 1" "keydown Control_L" "mouseclick 1" "keyup Control_L" "keydown Meta_L"
+
 # At this point it seems like I should just map the entire alphabet!
 # Here are all the letters I didn't cover above:
 alt + b
@@ -254,4 +265,3 @@ super + shift + Left
   xte "keyup Super_L" "keyup Left"  "keydown Control_L" "key Left"  "keyup Control_L" "keydown Super_L"
 super + shift + Right
   xte "keyup Super_L" "keyup Right" "keydown Control_L" "key Right" "keyup Control_L" "keydown Super_L"
-
