@@ -41,6 +41,12 @@ alt + v
   run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Meta_L" ; \
   run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
 
+# Failed attempt to paste into gvim
+#alt + v
+#  run_if_window_matches --not --class "(konsole|gnome-terminal|gvim)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches       --class "(gvim)"                        -- xte "keyup v" "keyup Meta_L" "key Escape" "key i" "keydown Control_L" "key r" "keyup Control_L" "key plus" "keyup Control_L" "keydown Meta_L" : \
+#  run_if_window_matches       --class "(konsole|gnome-terminal)"      -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+
 # Undo and redo
 alt + z
   xte "keyup z" "keyup Meta_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Meta_L"
@@ -265,3 +271,15 @@ super + shift + Left
   xte "keyup Super_L" "keyup Left"  "keydown Control_L" "key Left"  "keyup Control_L" "keydown Super_L"
 super + shift + Right
   xte "keyup Super_L" "keyup Right" "keydown Control_L" "key Right" "keyup Control_L" "keydown Super_L"
+
+# On MacBooks, Fn-Backspace performs Delete
+# On Linux, the same fingerstroke is at Ctrl-Backspace
+# So let's map Ctrl-Backspace to perform Delete
+control + BackSpace
+  xte "keyup BackSpace" "keyup Control_L" "key Delete" "keydown Control_L"
+
+# My keyboard has a Delete key where my fingers think Insert should be!
+# I never actually use Insert, but sometimes I want to use Shift-Insert.
+# Since I never use Shift-Delete, I can remap Shift-Delete to perform Shift-Insert.
+shift + Delete
+  xte "keyup Delete" "key Insert"
