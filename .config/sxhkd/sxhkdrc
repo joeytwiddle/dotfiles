@@ -36,8 +36,7 @@ alt + shift + r
 ### === Cut, copy and paste === ###
 
 alt + x
-  run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup x" "keyup Meta_L" "keydown Control_L"                   "key x"                 "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup x" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key x" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+  xte "keyup x" "keyup Meta_L" "keydown Control_L" "key x" "keyup Control_L" "keydown Meta_L"
 alt + c
   run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup c" "keyup Meta_L" "keydown Control_L"                   "key c"                 "keyup Control_L" "keydown Meta_L" ; \
   run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup c" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key c" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
