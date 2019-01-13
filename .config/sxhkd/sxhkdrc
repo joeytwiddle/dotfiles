@@ -1,27 +1,19 @@
+### Mac-like keybinds for linux
+#
 # Install: sxhkd and xautomation (for xte)
+# Grab: run_if_window_matches from here: https://github.com/baskerville/sxhkd/issues/123#issuecomment-453724972
 # Start listening for these keys by running: sxhkd &
 #
 # To automatically start it with X-windows on a systemd system, see here: https://wiki.archlinux.org/index.php/Sxhkd#Systemd_service_file
 # Alternatively, add `sxhkd &` to your ~/.xinitrc
 
-# Reload this config
-alt + shift + r
-  killall -USR1 -u "$USER" sxhkd
-
-### Mac-like keybindings
-#
 # Caveats:
 #
 # Holding down a key will not repeat it.
 #
-# We assume it is the left Alt and Shift key being pressed.  If you use the
-# right Alt or Shift keys, these bindings will not release them properly.
-#
-# These keybindings don't work on all windows.  For example, Terminals often
-# need Ctrl-Shift-V to paste, not Ctrl-V
-#
-# All the keybinds work with Google Chrome, but with Firefox some of them don't
-# work.
+# We assume it is the left Alt, Shift and Control keys being pressed.  If you
+# use the right Alt or Shift keys, these bindings will not release them
+# properly.
 #
 # Notes:
 #
@@ -30,7 +22,16 @@ alt + shift + r
 # second time.  But DO NOT try to restore the original non-modifier key; that
 # will create an infinite loop!
 
-# Cut, copy and paste
+
+
+# Reload this config
+alt + shift + r
+  killall -USR1 -u "$USER" sxhkd
+
+
+
+### === Cut, copy and paste === ###
+
 alt + x
   run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup x" "keyup Meta_L" "keydown Control_L"                   "key x"                 "keyup Control_L" "keydown Meta_L" ; \
   run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup x" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key x" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
@@ -46,6 +47,10 @@ alt + v
 #  run_if_window_matches --not --class "(konsole|gnome-terminal|gvim)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Meta_L" ; \
 #  run_if_window_matches       --class "(gvim)"                        -- xte "keyup v" "keyup Meta_L" "key Escape" "key i" "keydown Control_L" "key r" "keyup Control_L" "key plus" "keyup Control_L" "keydown Meta_L" : \
 #  run_if_window_matches       --class "(konsole|gnome-terminal)"      -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+
+
+
+### === Common keybinds for browsers and apps === ###
 
 # Undo and redo
 alt + z
@@ -212,6 +217,10 @@ alt + equal
 alt + minus
   xte "keyup minus" "keyup Meta_L" "keydown Control_L" "key minus" "keyup Control_L" "keydown Meta_L"
 
+
+
+### === Navigation === ###
+
 # Switch tab left/right
 # Simple version which catches Alt-Shift-[/] and sends Ctrl-PageUp/PageDown
 #alt + shift + braceleft
@@ -221,7 +230,6 @@ alt + minus
 
 # Switch tab left/right
 # More complicated version which sends a different keystroke to Konsole applications (for my purposes Konsole listens for Ctrl-Shift-[/])
-# You can find an implementation of run_if_window_matches [here](https://github.com/baskerville/sxhkd/issues/123#issuecomment-453724972)
 alt + shift + braceleft
   run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup braceleft"  "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Prior"        "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
   run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup braceleft"  "keyup Meta_L"                 "keydown Control_L" "key bracketleft"  "keyup Control_L" "keydown Meta_L"
@@ -249,7 +257,9 @@ alt + bracketleft
 alt + bracketright
   run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketright" "keyup Meta_L" "keydown Control_L" "key Return" "keyup Control_L" "keydown Meta_L"
 
-## Keys used while editing text
+
+
+### === Keys used while editing text === ###
 
 # Move to home/end
 # In the first two keybinds, I find it helps to send an _extra_ Alt press, to counteract the Alt press that the application receives when we release.
@@ -277,6 +287,10 @@ super + shift + Right
 # So let's map Ctrl-Backspace to perform Delete
 control + BackSpace
   xte "keyup BackSpace" "keyup Control_L" "key Delete" "keydown Control_L"
+
+
+
+### === Keybinds for me which you might want to disable === ###
 
 # My keyboard has a Delete key where my fingers think Insert should be!
 # I never actually use Insert, but sometimes I want to use Shift-Insert.
