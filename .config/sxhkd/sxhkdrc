@@ -21,6 +21,9 @@
 # That means a second stroke of the trigger key will trigger the action a
 # second time.  But DO NOT try to restore the original non-modifier key; that
 # will create an infinite loop!
+#
+# All the keybinds work with Google Chrome, but with Firefox some of them don't
+# work too well.  I believe Alt triggers the menu and that gets in the way.
 
 
 
