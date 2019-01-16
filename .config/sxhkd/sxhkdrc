@@ -22,6 +22,9 @@
 # second time.  But DO NOT try to restore the original non-modifier key; that
 # will create an infinite loop!
 #
+# It also means, if you press and release a stroke very quickly, before the
+# command has finished executing, then you may end up with a sticky modifier!
+#
 # All the keybinds work with Google Chrome, but with Firefox some of them don't
 # work too well.  I believe Alt triggers the menu and that gets in the way.
 
@@ -125,9 +128,12 @@ alt + u
   xte "keyup u" "keyup Meta_L" "keydown Control_L" "key u" "keyup Control_L" "keydown Meta_L"
 
 # Toggle DevTools (Chrome)
-# This one hasn't been working for me
+# This one hasn't been working for me (perhaps because my KDE intercepts it to position windows)
 #super + alt + j
 #  xte "keyup j" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key j" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L"
+# But this one works fine
+alt + super + i
+  xte "keyup i" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key i" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L"
 
 # On Alt-click (feels like Cmd-click) perform Control-click (e.g. to open a link in a separate tab).
 # This works but it blocks Alt-hold-and-drag from doing its normal "move window".
@@ -177,8 +183,11 @@ alt + shift + h
   xte "keyup h" "keyup Meta_L" "keydown Control_L" "key h" "keyup Control_L" "keydown Meta_L"
 alt + shift + i
   xte "keyup i" "keyup Meta_L" "keydown Control_L" "key i" "keyup Control_L" "keydown Meta_L"
+#alt + shift + j
+#  xte "keyup j" "keyup Meta_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Meta_L"
+# For Google Chrome, Cmd-Shift-J means "Open Downloads", which is Ctrl+J on Linux
 alt + shift + j
-  xte "keyup j" "keyup Meta_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Meta_L"
+  xte "keyup j" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Shift_L" "keydown Meta_L"
 alt + shift + k
   xte "keyup k" "keyup Meta_L" "keydown Control_L" "key k" "keyup Control_L" "keydown Meta_L"
 alt + shift + l
@@ -287,8 +296,9 @@ super + shift + Right
 # On MacBooks, Fn-Backspace performs Delete
 # On Linux, the same fingerstroke is at Ctrl-Backspace
 # So let's map Ctrl-Backspace to perform Delete
-control + BackSpace
-  xte "keyup BackSpace" "keyup Control_L" "key Delete" "keydown Control_L"
+# Disabled for now because I _do_ use Ctrl-Backspace.  I use it as "Go Back" in More Keybinds.
+#control + BackSpace
+#  xte "keyup BackSpace" "keyup Control_L" "key Delete" "keydown Control_L"
 
 
 
