@@ -57,21 +57,25 @@ alt + v
 
 ### === Common keybinds for browsers and apps === ###
 
+# Note that for alt-k strokes we send an extra "keydown Meta_L" "keyup Meta_L" both before and after the target stroke.
+# The reason for this is because those strokes open Firefox's menu, and repeating them forces the menu to close again, and the intended stroke to register.
+# They aren't strictly needed when Shift is held (that doesn't seem to trigger the menu)
+
 # Undo and redo
 alt + z
-  xte "keyup z" "keyup Meta_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Meta_L"
+  xte "keyup z" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + shift + z
-  xte "keyup z" "keyup Meta_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Meta_L"
+  xte "keyup z" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # New tab, and reopen closed tab
 alt + t
-  xte "keyup t" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L"
+  xte "keyup t" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + shift + t
   xte "keyup t" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L"
 
 # New window
 alt + n
-  xte "keyup n" "keyup Meta_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Meta_L"
+  xte "keyup n" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Private browsing in Chrome
 alt + shift + n
@@ -83,7 +87,7 @@ alt + shift + p
 
 # Close tab
 alt + w
-  xte "keyup w" "keyup Meta_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Meta_L"
+  xte "keyup w" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Close application
 alt + q
@@ -91,23 +95,23 @@ alt + q
 
 # Save
 alt + s
-  xte "keyup s" "keyup Meta_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Meta_L"
+  xte "keyup s" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Focus location bar
 alt + l
-  xte "keyup l" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L"
+  xte "keyup l" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Select all text
 alt + a
-  xte "keyup a" "keyup Meta_L" "keydown Control_L" "key a" "keyup Control_L" "keydown Meta_L"
+  xte "keyup a" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key a" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Print
 alt + p
-  xte "keyup p" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L"
+  xte "keyup p" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Reload page
 alt + r
-  xte "keyup r" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L"
+  xte "keyup r" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Reload without caching
 alt + shift + r
@@ -115,17 +119,17 @@ alt + shift + r
 
 # Find and repeat find
 alt + f
-  xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L"
+  xte "keyup f" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + g
-  xte "keyup g" "keyup Meta_L" "keydown Control_L" "key g" "keyup Control_L" "keydown Meta_L"
+  xte "keyup g" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key g" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Make bookmark
 alt + d
-  xte "keyup d" "keyup Meta_L" "keydown Control_L" "key d" "keyup Control_L" "keydown Meta_L"
+  xte "keyup d" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key d" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # View source
 alt + u
-  xte "keyup u" "keyup Meta_L" "keydown Control_L" "key u" "keyup Control_L" "keydown Meta_L"
+  xte "keyup u" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key u" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Toggle DevTools (Chrome)
 # This one hasn't been working for me (perhaps because my KDE intercepts it to position windows)
@@ -144,21 +148,21 @@ alt + super + i
 # At this point it seems like I should just map the entire alphabet!
 # Here are all the letters I didn't cover above:
 alt + b
-  xte "keyup b" "keyup Meta_L" "keydown Control_L" "key b" "keyup Control_L" "keydown Meta_L"
+  xte "keyup b" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key b" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + e
-  xte "keyup e" "keyup Meta_L" "keydown Control_L" "key e" "keyup Control_L" "keydown Meta_L"
+  xte "keyup e" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key e" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + h
-  xte "keyup h" "keyup Meta_L" "keydown Control_L" "key h" "keyup Control_L" "keydown Meta_L"
+  xte "keyup h" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key h" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + i
-  xte "keyup i" "keyup Meta_L" "keydown Control_L" "key i" "keyup Control_L" "keydown Meta_L"
+  xte "keyup i" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key i" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + j
-  xte "keyup j" "keyup Meta_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Meta_L"
+  xte "keyup j" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + k
-  xte "keyup k" "keyup Meta_L" "keydown Control_L" "key k" "keyup Control_L" "keydown Meta_L"
+  xte "keyup k" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key k" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + m
-  xte "keyup m" "keyup Meta_L" "keydown Control_L" "key m" "keyup Control_L" "keydown Meta_L"
+  xte "keyup m" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key m" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + y
-  xte "keyup y" "keyup Meta_L" "keydown Control_L" "key y" "keyup Control_L" "keydown Meta_L"
+  xte "keyup y" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key y" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Here we map Alt-Shift-key to Ctrl-Shift-key for the entire alphabet
 # This attempt to do all the keys in one bind did not work:
