@@ -45,12 +45,12 @@ alt + c
   run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup c" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key c" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
 alt + v
   run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Failed attempt to paste into gvim
 #alt + v
 #  run_if_window_matches --not --class "(konsole|gnome-terminal|gvim)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Meta_L" ; \
-#  run_if_window_matches       --class "(gvim)"                        -- xte "keyup v" "keyup Meta_L" "key Escape" "key i" "keydown Control_L" "key r" "keyup Control_L" "key plus" "keyup Control_L" "keydown Meta_L" : \
+#  run_if_window_matches       --class "(gvim)"                        -- xte "keyup v" "keyup Meta_L" "key Escape" "key i" "keydown Control_L" "key r" "keyup Control_L" "key plus" "keyup Control_L" "keydown Meta_L" ; \
 #  run_if_window_matches       --class "(konsole|gnome-terminal)"      -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
 
 
@@ -69,7 +69,8 @@ alt + shift + z
 
 # New tab, and reopen closed tab
 alt + t
-  xte "keyup t" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup t" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup t" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key t" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
 alt + shift + t
   xte "keyup t" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L"
 
@@ -87,7 +88,8 @@ alt + shift + p
 
 # Close tab
 alt + w
-  xte "keyup w" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup w" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup w" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key w" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
 
 # Close application
 alt + q
@@ -132,10 +134,9 @@ alt + u
   xte "keyup u" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key u" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Toggle DevTools (Chrome)
-# This one hasn't been working for me (perhaps because my KDE intercepts it to position windows)
-#super + alt + j
-#  xte "keyup j" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key j" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L"
-# But this one works fine
+# (This one doesn't work for me because I have it bound to position windows)
+alt + super + j
+  xte "keyup j" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key j" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L"
 alt + super + i
   xte "keyup i" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key i" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L"
 
