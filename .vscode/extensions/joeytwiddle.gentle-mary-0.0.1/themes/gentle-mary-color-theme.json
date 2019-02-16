@@ -249,15 +249,29 @@
       "name": "Markdown heading",
       "scope": "markup.heading",
       "settings": {
-        "foreground": "#AF4A67",
+        "foreground": "#3DA676",
         "fontStyle": "bold"
       }
     },
     {
-      "name": "Markdown link text",
-      "scope": "text.html.markdown meta.link.inline, meta.link.reference",
+      "name": "Markdown link title",
+      "scope": "string.other.link.title.markdown",
+      "settings": {
+        "foreground": "#A576A0"
+      }
+    },
+    {
+      "name": "Markdown link punctuation",
+      "scope": "punctuation.definition.string.begin.markdown, punctuation.definition.string.end.markdown, punctuation.definition.metadata.markdown",
       "settings": {
         "foreground": "#CCCCCC"
+      }
+    },
+    {
+      "name": "Markdown link url",
+      "scope": "text.html.markdown meta.link.inline, meta.link.reference",
+      "settings": {
+        "foreground": "#4B95DC"
       }
     },
     {
@@ -290,6 +304,22 @@
       "settings": {
         "foreground": "#CCCCCC",
         "fontStyle": "italic bold"
+      }
+    },
+    {
+      "name": "Markdown inline code",
+      "scope": "markup.inline.raw.string.markdown",
+      "settings": {
+        "background": "#000000",
+        "foreground": "#777777"
+      }
+    },
+    {
+      "name": "Markdown code block",
+      "scope": "markup.fenced_code.block.markdown",
+      "settings": {
+        "background": "#000000",
+        "foreground": "#777777"
       }
     },
     {
