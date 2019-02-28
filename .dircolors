@@ -148,6 +148,9 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .sgi 01;35
 .sunras 01;35
 .xwd 01;35
+.webp 01;35
+.ico 01;35
+.icns 01;35
 # Video
 .ram 01;35
 .rm 01;35
