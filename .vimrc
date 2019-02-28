@@ -1488,9 +1488,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		  \ | endif
 	augroup END
 
-	command CSSColorToggle call css_color#toggle() | echo "CSS Color is now " . (b:css_color_off ? 'disabled' : 'enabled')
+	command! CSSColorToggle call css_color#toggle() | echo "CSS Color is now " . (b:css_color_off ? 'disabled' : 'enabled')
 
-	command ProfileVim profile start /tmp/vimprofile.out | profile file * | profile func * | echo 'Test, optionally do `:profile pause`, then quit vim, then read the bottom of /tmp/vimprofile.out'
+	command! ProfileVim profile start /tmp/vimprofile.out | profile file * | profile func * | echo 'Test, optionally do `:profile pause`, then quit vim, then read the bottom of /tmp/vimprofile.out'
 
 " }}}
 
