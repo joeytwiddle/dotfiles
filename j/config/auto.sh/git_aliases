@@ -893,9 +893,15 @@ alias gssk='git_kill_patch'
 
 # Apply a stash even if there are uncommitted changes in some of the affected files
 git_stash_apply_merge() {
-	git commit -a -m 'TEMPORARY COMMIT' &&
-		git stash apply "$@" &&
-		git reset HEAD~
+	# joeytwiddle's technique
+	#git commit -a -m 'TEMPORARY COMMIT' &&
+	#git stash apply "$@" &&
+	#git reset HEAD~
+	# iFreilicht's technique:
+	local git_root_folder="$(git rev-parse --show-toplevel)"
+	git add -u "$git_root_folder" &&
+	git stash apply "$@" &&
+	git reset
 }
 alias gsam='git_stash_apply_merge'
 alias gsaf='git_stash_apply_merge'
