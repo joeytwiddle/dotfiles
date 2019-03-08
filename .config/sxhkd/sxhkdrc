@@ -228,10 +228,20 @@ alt + shift + z
 
 # Zoom in and out
 # Surprisingly the `alt + equal` mapping only works properly if I do `keyup plus`
+# For Vim, instead of Ctrl-(plus|minus) my bindings are (Shift-plus|minus)
 alt + equal
-  xte "keyup plus"  "keyup Meta_L" "keydown Control_L" "key plus"  "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "(vim|gvim)" -- xte "keyup plus"  "keyup Meta_L" "keydown Control_L" "key plus"  "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "(vim|gvim)" -- xte "keyup plus"  "keyup Meta_L" "keydown Shift_L"   "key plus"  "keyup Shift_L"   "keydown Meta_L"
 alt + minus
-  xte "keyup minus" "keyup Meta_L" "keydown Control_L" "key minus" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "(vim|gvim)" -- xte "keyup minus" "keyup Meta_L" "keydown Control_L" "key minus" "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "(vim|gvim)" -- xte "keyup minus" "keyup Meta_L"                     "key minus"                   "keydown Meta_L"
+alt + 0
+  run_if_window_matches --not --class "(vim|gvim)" -- xte "keyup 0"     "keyup Meta_L" "keydown Control_L" "key 0"     "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "(vim|gvim)" -- xte "keyup 0"     "keyup Meta_L"                     "str :ZoomReset" "key Return" "keydown Meta_L"
+
+# Open application preferences
+alt + comma
+  xte "keyup comma" "keyup Meta_L" "keydown Control_L" "key comma" "keyup Control_L" "keydown Meta_L"
 
 
 
@@ -314,3 +324,9 @@ super + shift + Right
 # Since I never use Shift-Delete, I can remap Shift-Delete to perform Shift-Insert.
 shift + Delete
   xte "keyup Delete" "key Insert"
+
+F11
+  volumedown
+
+F12
+  volumeup
