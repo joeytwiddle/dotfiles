@@ -344,23 +344,28 @@ git_commit_immediate_fixup() {
 
 	echo ">> Committing"
 	git commit --no-verify --fixup "${commit_to_amend}" || return
-	[ -n "$do_extra_check" ] && gbf backup-before-fixup-rebase HEAD
+	[ -n "$do_extra_check" ] && git branch --force BACKUP-BEFORE-FIXUP-REBASE HEAD
 
 	echo ">> Performing rebase"
 	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
 	EDITOR=true git rebase -i --autosquash --autostash --preserve-merges "${commit_to_amend}~"
 
-	if [ -n "$do_extra_check" ]
+	if [ -n "$do_extra_check" ] && ( [ -d "$git_dir/rebase-merge" ] || [ -d "$git_dir/rebase-apply" ] )
 	then
-		changes="$(git diff HEAD backup-before-fixup-rebase | wc -l)"
+		echo "We cannot check the rebase was identical because it has been paused part way" >&2
+		echo "But you can check yourself by running this when finished:" >&2
+		echo "    git diff BACKUP-BEFORE-FIXUP-REBASE HEAD"
+	elif [ -n "$do_extra_check" ]
+	then
+		changes="$(git diff HEAD BACKUP-BEFORE-FIXUP-REBASE | wc -l)"
 		if ! [ "$changes" = 0 ]
 		then
 			echo
 			echo "WARNING: The rebased repo does not match the pre-fixup repo.  Here is the diff:"
 			echo
-			git diff HEAD backup-before-fixup-rebase
+			git diff BACKUP-BEFORE-FIXUP-REBASE HEAD
 			echo
-			echo "You may restore by (stashing anything uncommitted and then) doing: git reset --hard backup-before-fixup-rebase"
+			echo "You may restore by (stashing anything uncommitted and then) doing: git reset --hard BACKUP-BEFORE-FIXUP-REBASE"
 			echo
 			return 9
 		fi
