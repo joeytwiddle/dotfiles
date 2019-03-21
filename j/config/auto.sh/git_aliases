@@ -1255,17 +1255,17 @@ where:
         #[ -z "$remote" ] && continue
         # This is an assumption I made for our project - that if a branch does not have an upstream set, then we should assume the upstream is a branch on 'origin' with the same name.
         # It could be avoided if we used --track when initially creating the local branch with git branch or git checkout.  Tracking can also be setup retrospectively with `git branch -u <remote_branch>` in Git > 1.8.0 or `git branch --set-upstream <local_branch> <remote_branch>` in Git > 1.7.0.
-				guessed_remote=""
+        guessed_remote=""
         if [ -z "$remote" ]
         then
-					  guessed_remote=" ?"
+           guessed_remote=" ?"
             # If no upstream has been set, assume a remote branch with the same name
             remote="origin/$local"
             if ! git branch --list -r "$remote" | grep . >/dev/null
             then
                 # No remote branch exists
                 remote=""
-								guessed_remote=""
+                guessed_remote=""
                 # But if this is the current branch, or we are in verbose mode, we might still like to display it anyway.
                 # However ahead/behind counts are meaningless without a remote.
                 if [ "$local" = "$current_branch" ] || [ -n "$verbose" ]
