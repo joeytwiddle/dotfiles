@@ -31,8 +31,8 @@
 
 
 # Reload this config
-alt + shift + r
-  killall -USR1 -u "$USER" sxhkd
+control + alt + shift + r
+  killall -USR1 -u "$USER" sxhkd ; echo 'sxhkd config reloaded'
 
 
 
