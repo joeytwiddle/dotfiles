@@ -146,6 +146,28 @@ alt + super + i
 
 
 
+### === VSCode === ###
+
+# Make VSCode on Linux respond like WebStorm on macOS
+# (I have done most of that using VSCode's own config)
+
+# Built-in formatting
+alt + shift + l
+  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup l" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup l" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key a" "key k" "key f" "keyup Control_L" "keydown Shift_L" "keydown Meta_L"
+
+# Formatting with prettier (in VSCode send Ctrl-Shift-Alt-P, my rebind of editor.action.formatDocument)
+alt + shift + p
+  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup p" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup p" "keydown Control_L" "key p" "keyup Control_L"
+
+# When opening a search, start it immediately.  (More useful if we had already selected a word.)
+alt + shift + f
+  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keyup Shift_L" "key Return" "keydown Shift_L" "keydown Meta_L"
+
+
+
 ### === Map Cmd to Ctrl for entire alphabet === ###
 
 # At this point it seems like I should just map the entire alphabet!
