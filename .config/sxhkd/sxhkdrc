@@ -136,7 +136,8 @@ alt + u
 # Toggle DevTools (Chrome)
 # (This one doesn't work for me because I have it bound to position windows)
 alt + super + j
-  xte "keyup j" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key j" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L"
+  run_if_window_matches       --class "(google-chrome|firefox)" -- xte "keyup j" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key j" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L" ; \
+  run_if_window_matches --not --class "(google-chrome|firefox)" -- put_current_xwindow bottom
 alt + super + i
   xte "keyup i" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key i" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L"
 
