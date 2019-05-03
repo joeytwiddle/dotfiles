@@ -119,7 +119,7 @@
     },
     {
       "name": "Function definition",
-      "scope": "meta.function, entity.name.function",
+      "scope": "entity.name.function",
       "settings": {
         "foreground": "#3DA676"
       }
@@ -133,10 +133,25 @@
       }
     },
     {
+      "name": "Operator",
+      "scope": "keyword.operator",
+      "settings": {
+        "foreground": "#CCCCCC",
+        "fontStyle": ""
+      }
+    },
+    {
       "name": "JavaScript semicolon",
-      "scope": "punctuation.terminator.statement.js",
+      "scope": "punctuation.terminator.statement",
       "settings": {
         "foreground": "#8A8A8A"
+      }
+    },
+    {
+      "name": "TypeScript type definition",
+      "scope": "keyword.operator.type.annotation.ts",
+      "settings": {
+        "foreground": "#CCCCCC"
       }
     },
     {
