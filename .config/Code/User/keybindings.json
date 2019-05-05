@@ -1,0 +1,177 @@
+// Place your key bindings in this file to overwrite the defaults
+[
+  // Navigation like WebStorm on Mac
+  { "key": "alt+shift+[", "command": "workbench.action.previousEditor" },
+  { "key": "alt+shift+]", "command": "workbench.action.nextEditor" },
+  { "key": "alt+[", "command": "workbench.action.navigateBack" },
+  { "key": "alt+]", "command": "workbench.action.navigateForward" },
+  { "key": "ctrl+alt+[", "command": "workbench.action.navigateBack" },
+  { "key": "ctrl+alt+]", "command": "workbench.action.navigateForward" },
+
+  // Text movement and selection like Mac (beginning/end of file not done)
+  { "key": "alt+right", "command": "cursorEnd", "when": "textInputFocus" },
+  {
+    "key": "alt+shift+right",
+    "command": "cursorEndSelect",
+    "when": "textInputFocus"
+  },
+  { "key": "alt+left", "command": "cursorHome", "when": "textInputFocus" },
+  {
+    "key": "alt+shift+left",
+    "command": "cursorHomeSelect",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "meta+right",
+    "command": "cursorWordEndRight",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "meta+shift+right",
+    "command": "cursorWordEndRightSelect",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "meta+left",
+    "command": "cursorWordStartLeft",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "meta+shift+left",
+    "command": "cursorWordStartLeftSelect",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "alt+shift+down",
+    "command": "editor.action.moveLinesDownAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+shift+up",
+    "command": "editor.action.moveLinesUpAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+
+  // More Mac-like binds using Cmd
+  {
+    "key": "alt+shift+f",
+    "command": "workbench.view.search",
+    "when": "!searchViewletVisible"
+  },
+  {
+    "key": "alt+backspace",
+    "command": "editor.action.deleteLines",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+shift+l",
+    "command": "editor.action.formatDocument",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+shift+p",
+    "command": "editor.action.formatDocument",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+alt+shift+p",
+    "command": "editor.action.formatDocument",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+z",
+    "command": "undo",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+shift+z",
+    "command": "redo",
+    "when": "textInputFocus && !editorReadonly"
+  },
+
+  // Text manipulation like Mac
+  // Note: There are a lot of definitions for ctrl+c, but we have only mirrored the main one so far.
+  {
+    "key": "alt+c",
+    "command": "editor.action.clipboardCopyAction",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "alt+x",
+    "command": "editor.action.clipboardCutAction",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+v",
+    "command": "editor.action.clipboardPasteAction",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "alt+/",
+    "command": "editor.action.commentLine",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+
+  // Walk through search results with Alt-Up/Down (VSCode default is F4, Shift-F4)
+  {
+    "key": "alt+down",
+    "command": "goToNextReferenceFromEmbeddedEditor",
+    "when": "inReferenceSearchEditor"
+  },
+  {
+    "key": "alt+up",
+    "command": "goToPreviousReferenceFromEmbeddedEditor",
+    "when": "inReferenceSearchEditor"
+  },
+  {
+    "key": "alt+down",
+    "command": "search.action.focusNextSearchResult",
+    "when": "hasSearchResult"
+  },
+  {
+    "key": "alt+up",
+    "command": "search.action.focusPreviousSearchResult",
+    "when": "hasSearchResult"
+  },
+  {
+    "key": "alt+down",
+    "command": "goToNextReference",
+    "when": "referenceSearchVisible"
+  },
+  {
+    "key": "alt+up",
+    "command": "goToPreviousReference",
+    "when": "referenceSearchVisible"
+  },
+
+  {
+    "key": "ctrl+g",
+    "command": "editor.action.nextMatchFindAction",
+    "when": "editorFocus"
+  },
+  {
+    "key": "ctrl+shift+g",
+    "command": "editor.action.previousMatchFindAction",
+    "when": "editorFocus"
+  },
+  { "key": "ctrl+l", "command": "workbench.action.gotoLine" },
+  {
+    "key": "ctrl+backspace",
+    "command": "deleteRight",
+    "when": "textInputFocus && !editorReadonly"
+  },
+
+  { "key": "ctrl+=", "command": "editor.action.fontZoomIn" },
+  { "key": "ctrl+-", "command": "editor.action.fontZoomOut" },
+  { "key": "ctrl+0", "command": "editor.action.fontZoomReset" },
+  { "key": "ctrl+shift+=", "command": "workbench.action.zoomIn" },
+  { "key": "ctrl+shift+-", "command": "workbench.action.zoomOut" },
+  { "key": "ctrl+shift+0", "command": "workbench.action.zoomReset" }
+
+  /*
+  {
+    "key": "alt+z",
+    "command": "workbench.action.maximizeEditor"
+  },
+  */
+]
