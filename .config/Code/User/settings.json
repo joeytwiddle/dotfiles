@@ -17,7 +17,7 @@
     "editor.fontSize": 12,
     "editor.lineHeight": 14,
 
-    "terminal.integrated.fontSize": 11,
+    "terminal.integrated.fontSize": 13,
     "terminal.integrated.fontFamily": "'Lucida Sans Typewriter'",
 
     //"editor.renderWhitespace": "boundary",
@@ -40,6 +40,13 @@
     },
 
     "npm.enableScriptExplorer": true,
+
+    // Let snippets take priority over other things in the suggestions list
+    // See: https://github.com/Microsoft/vscode/issues/10565#issuecomment-317319434
+    // Specifically I needed this for TypeScript, where a deprecated alias and two imports were suggested before my 'log' snippet
+    "editor.snippetSuggestions": "top",
+
+    //"editor.occurrencesHighlight": false,
 
     // === For plugins === //
     "eslint.enable": true,
