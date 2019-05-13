@@ -551,7 +551,7 @@ autocmd VimLeave * silent !stty ixon
 			:set guifont=Menlo\ Regular:h11
 			" Manually installed fonts...
 			" Better check we are on a known machine first
-			if $SHORTHOST == "Sinonets-MacBook-Pro-4"
+			if $SHORTHOST == "sinonets-MacBook-Pro"
 				" Lucida Sans Typewriter is finer and cleaner than Menlo:
 				:set guifont=Lucida\ Sans\ Typewriter\ Regular:h11
 				" Lucida console is fat again, but a bit too squat in GVim
@@ -824,6 +824,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	let g:UltiSnipsUsePythonVersion = 2
 	"call add(vamAddons,'UltiSnips')                        " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
 	call add(vamAddons,'github:joeytwiddle/ultisnips')     " Fix that restores my usual Tab-completion.
+
+	call add(vamAddons,'github:bootleq/LargeFile')       " Disable some things when loading a huge file
 
 	" call add(vamAddons,'github:troydm/easybuffer.vim')
 	" call add(vamAddons,'github:chrisbra/NrrwRgn')
