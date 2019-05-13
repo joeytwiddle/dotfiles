@@ -150,6 +150,7 @@ function! Joeyhighlight()
 	highlight PreProc ctermfg=magenta cterm=bold guifg=magenta gui=bold
 
 	" Java
+	if 0
 	" It appears to ignore the contains, otherwise I could use start=/^/ =)
 	"syntax region javaClassLine start=/class / end=/{/ contains=javaClassDecl
 	highlight link javaClassLine javaClassDecl
@@ -163,6 +164,7 @@ function! Joeyhighlight()
 	highlight Number ctermfg=LightBlue guifg=LightBlue
 	" To bring first sentence of Java comments in line with Comments.
 	highlight Special ctermfg=Magenta guifg=#d080d0
+	endif
 
 	" Shellscript
 	"highlight link shDeref shVariable
@@ -377,6 +379,9 @@ function! Joeyhighlight()
 	hi link netrwClassify treeDirSlash
 	hi link netrwExe treeExecFile
 
+	hi link AsyncFinderDir TreeLnk
+	hi AsyncFinderFile ctermfg=darkgreen guifg=#00bb00
+	"hi AsyncFinderFileName ctermfg=white guifg=white
 
 
 	hi TabLine ctermbg=blue ctermfg=cyan cterm=none guibg=blue guifg=cyan gui=none
