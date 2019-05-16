@@ -1,0 +1,43 @@
+{
+    "workbench.colorTheme": "Gentle Mary",
+    "window.zoomLevel": 0,
+    "editor.fontFamily": "Lucida Console, Lucida Sans Typewriter, Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontSize": 11.3,
+    "editor.lineHeight": 14,
+    "files.autoSave": "onWindowChange",
+    "files.insertFinalNewline": true,
+    "breadcrumbs.enabled": true,
+
+    "editor.formatOnPaste": true,
+
+    "todo-tree.defaultHighlight": {
+        "icon": "alert",
+        "type": "text",
+        "foreground": "orange",
+        // "background": "white",
+        "opacity": 50,
+        "iconColour": "blue"
+    },
+    "todo-tree.tags": [
+        "TODO",
+        "@todo",
+        "FIXME",
+        "@fixme",
+        "BUG",
+        "@bug",
+        "CONSIDER",
+        "@consider"
+    ],
+    /*
+    "todo-tree.customHighlight": {
+        "TODO": {
+            "icon": "check",
+            "type": "line"
+        },
+        "FIXME": {
+            "foreground": "black",
+            "iconColour": "yellow"
+        }
+    }
+    */
+}

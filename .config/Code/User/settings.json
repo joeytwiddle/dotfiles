@@ -51,4 +51,6 @@
     // === For plugins === //
     "eslint.enable": true,
     "autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
+
+    "editor.formatOnPaste": true,
 }
