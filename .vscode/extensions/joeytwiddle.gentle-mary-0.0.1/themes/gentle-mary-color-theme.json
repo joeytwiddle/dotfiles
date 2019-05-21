@@ -622,10 +622,12 @@
     //"panel.dropBackground": "#ffffff1f",
     //"panelTitle.activeForeground": "#e7e7e7",
     //"peekViewEditor.matchHighlightBackground": "#ff8f0099",
+    "peekViewEditor.matchHighlightBackground": "#006600aa",
     //"peekViewEditorGutter.background": "#0c1e1e",
     //"peekViewResult.fileForeground": "#ffffff",
     //"peekViewResult.lineForeground": "#bbbbbb",
     //"peekViewResult.matchHighlightBackground": "#ea5c004d",
+    "peekViewResult.matchHighlightBackground": "#006600aa",
     //"peekViewResult.selectionBackground": "#3399ff33",
     //"peekViewResult.selectionForeground": "#ffffff",
     //"peekViewTitleDescription.foreground": "#ccccccb3",
@@ -720,4 +722,7 @@
     //"titleBar.inactiveForeground": "#cccccc99",
     //"widget.shadow": "#000000"
   }
+  // Temporarily remove alpha and comments, so we can see the colours with CSSColor plugin
+  // %s/"#\(......\)\(..\)"/"#\1"
+  // %s/ [/][/]"/ "/
 }
