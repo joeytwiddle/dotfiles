@@ -47,6 +47,13 @@
       }
     },
     {
+      "name": "General punctuation",
+      "scope": "punctuation.separator.key-value.js, punctuation.definition.block.js",
+      "settings": {
+        "foreground": "#CCCCCC"
+      }
+    },
+    {
       "name": "Function call",
       "scope": "entity.name.function, support.function",
       "settings": {
