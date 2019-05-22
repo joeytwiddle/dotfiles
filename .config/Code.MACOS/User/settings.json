@@ -10,6 +10,8 @@
 
     "editor.formatOnPaste": true,
 
+    "search.location": "panel",
+
     "todo-tree.defaultHighlight": {
         "icon": "alert",
         "type": "text",
