@@ -9,7 +9,7 @@ do
   if [ -d .git ]
   then
     echo "> $dir"
-    git pull
+    git pull --ff-only
     echo
   fi
   cd ..
