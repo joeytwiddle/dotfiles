@@ -12,6 +12,9 @@
 
     "search.location": "panel",
 
+    "gitlens.codeLens.enabled": false,
+    "gitlens.currentLine.enabled": false,
+
     "todo-tree.defaultHighlight": {
         "icon": "alert",
         "type": "text",
@@ -42,4 +45,7 @@
         }
     }
     */
+
+    "trailing-spaces.deleteModifiedLinesOnly": true,
+    "trailing-spaces.highlightCurrentLine": false,
 }
