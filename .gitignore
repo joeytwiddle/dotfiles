@@ -1,7 +1,29 @@
 CVS/
-.vim-addon-manager/*/
-!.vim-addon-manager/vim-addon-manager*/
-.vim/.netrwhist
-.vim/sessions/*
+/.vim-addon-manager/*/
+!/.vim-addon-manager/vim-addon-manager*/
+/.vim/.netrwhist
+/.vim/sessions/*
 .csearchindex
-.gkrellm2/data
+/.gkrellm2/data
+Cache/
+CachedData/
+GPUCache/
+
+# I moved .config and .local into rc_files
+# Although I probably should have moved the things I wanted, one by one
+# If you are wondering what all the untracked files are, you can list all untracked files (instead of just untracked folders) with:
+#     git status -uall | more
+
+/.config/google-chrome*/
+/.config/chromium-browser*/
+/.config/chromium*/
+/.config/*-nativefier-*/
+/.config/smplayer/file_settings/
+/.local/bin/
+/.local/lib/mypy/
+/.local/lib/python*/site-packages/
+/.local/share/baloo/
+/.local/share/icons/
+/.local/share/ktorrent/
+/.local/share/teamviewer*/
+/.vscode/extensions/
