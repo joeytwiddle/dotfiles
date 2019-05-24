@@ -76,6 +76,10 @@ else xset dpms 3600 3600 3600
 fi
 # Disable bell
 xset -b
+
+
+### Keyboard
+
 # Increase keyboard rate (delay, repeats-per-second)
 #xset r rate 400 50
 #xset r rate 280 90
@@ -107,89 +111,114 @@ if [ -f "$HOME"/.custom_keyboard_settings ]
 then . "$HOME"/.custom_keyboard_settings
 fi
 
+if command -v sxhkd >/dev/null
+then sxhkd &
+fi
 
-# Mouse acceleration
-# <acceleration> (scalar) <threshold> (pixels per update)
-# For more action, increase the former, or reduce the latter
-#xset m 2/3
-#xset m 2/3 3
-#xset m 4/5 3
-# Save wrists with fast acceleration (hwi, porridge)
-#xset m 12/5 10
-# Even faster:
-#xset m 20/5 5
-# For yas:
-#xset m 6/5 5
-# Tomato:
-#xset m 12/10 0
-# Tomato with touchpad using focaltech-dkms driver, feeling lazy (but this is too fast for mouse!):
-#xset m 20/10 0
-# Tomato with USB mouse:
-#xset m 14/10 0
-# Tomato trackpad, make me reach and sometimes lift a finger.
-# But the advantage with this is (hopefully) more accurate positioning at low speeds.
-xset m 8/10 0
-# I am using threshold 0 because no matter what I set it to, it doesn't seem to have any effect.
+
+
+## Mouse
+
+set_mouse_speed=yes
+apply_trackpad_settings=yes
+if pgrep -u "$USER" plasmashell >/dev/null
+then
+	unset set_mouse_speed
+	unset apply_trackpad_settings
+fi
+
+if [ -n "$set_mouse_speed" ]
+then
+	# Mouse acceleration
+	# <acceleration> (scalar) <threshold> (pixels per update)
+	# For more action, increase the former, or reduce the latter
+	#xset m 2/3
+	#xset m 2/3 3
+	#xset m 4/5 3
+	# Save wrists with fast acceleration (hwi, porridge)
+	#xset m 12/5 10
+	# Even faster:
+	#xset m 20/5 5
+	# For yas:
+	#xset m 6/5 5
+	# Tomato:
+	#xset m 12/10 0
+	# Tomato with touchpad using focaltech-dkms driver, feeling lazy (but this is too fast for mouse!):
+	#xset m 20/10 0
+	# Tomato with USB mouse:
+	#xset m 14/10 0
+	# Tomato trackpad, make me reach and sometimes lift a finger.
+	# But the advantage with this is (hopefully) more accurate positioning at low speeds.
+	xset m 8/10 0
+	# I am using threshold 0 because no matter what I set it to, it doesn't seem to have any effect.
+fi
+
+
+
+### Trackpad
 
 # /usr/bin/synclient can be found in the xserver-xorg-input-synaptics package
 
-# If for some reason your OS didn't already enable multi-touch scrolling for you:
-synclient VertTwoFingerScroll=1     # Ubuntu gave me default 1
-synclient HorizTwoFingerScroll=1    # Ubuntu gave me default 0
+if [ -n "$apply_trackpad_settings" ]
+then
+	# If for some reason your OS didn't already enable multi-touch scrolling for you:
+	synclient VertTwoFingerScroll=1     # Ubuntu gave me default 1
+	synclient HorizTwoFingerScroll=1    # Ubuntu gave me default 0
 
-# Chrome respects the synclient touchpad scrolling direction set below.
-# Firefox and xterm respect it, but also multiply it by whatever mousewheel setting you set with xmodmap.
-# As a result, swapping the mousewheel directions will make Chrome act differently from all other apps!
+	# Chrome respects the synclient touchpad scrolling direction set below.
+	# Firefox and xterm respect it, but also multiply it by whatever mousewheel setting you set with xmodmap.
+	# As a result, swapping the mousewheel directions will make Chrome act differently from all other apps!
 
-# "Natural Scrolling" direction for OSX victims.  Applies to mousewheel and touchpad (edge and two-finger scrolling)
-# Sensitivity is also set here.
-synclient VertScrollDelta=-40
-synclient HorizScrollDelta=-80
+	# "Natural Scrolling" direction for OSX victims.  Applies to mousewheel and touchpad (edge and two-finger scrolling)
+	# Sensitivity is also set here.
+	synclient VertScrollDelta=-40
+	synclient HorizScrollDelta=-80
 
-# Disable scrolling when you drag on the edge of the touchpad
-synclient VertEdgeScroll=0
-synclient HorizEdgeScroll=0
+	# Disable scrolling when you drag on the edge of the touchpad
+	synclient VertEdgeScroll=0
+	synclient HorizEdgeScroll=0
 
-# My touchpad is too sensitive.  To prevent accidental clicks when thumb grazes it, increase the threshold.  (Default was 30.)
-# I'm not convinced this has any effect.  I can still click easily with value 50000000000!
-#synclient FingerHigh=50
+	# My touchpad is too sensitive.  To prevent accidental clicks when thumb grazes it, increase the threshold.  (Default was 30.)
+	# I'm not convinced this has any effect.  I can still click easily with value 50000000000!
+	#synclient FingerHigh=50
 
-# Defaults on my system:
-#synclient AccelFactor=0.0678887
-#synclient MinSpeed=1
-#synclient MaxSpeed=1.75
+	# Defaults on my system:
+	#synclient AccelFactor=0.0678887
+	#synclient MinSpeed=1
+	#synclient MaxSpeed=1.75
 
-# Increase speed of touchpad without affecting mouse
-# Make it really high, so I don't have to move my fingers so much (but I will have to move them fast)
+	# Increase speed of touchpad without affecting mouse
+	# Make it really high, so I don't have to move my fingers so much (but I will have to move them fast)
 
-#synclient MinSpeed=1.2
-#synclient AccelFactor=0.0678887
-#synclient MaxSpeed=10.0
+	#synclient MinSpeed=1.2
+	#synclient AccelFactor=0.0678887
+	#synclient MaxSpeed=10.0
 
-synclient MinSpeed=0.75
-#synclient AccelFactor=0.1
-#synclient MaxSpeed=4.0
+	synclient MinSpeed=0.75
+	#synclient AccelFactor=0.1
+	#synclient MaxSpeed=4.0
 
-synclient AccelFactor=0.15
-synclient MaxSpeed=5.0
+	synclient AccelFactor=0.15
+	synclient MaxSpeed=5.0
 
-# Bottom-right of touchpad is right-click
-#synclient SoftButtonAreas="50% 0 82% 0 0 0 0 0"
-# Bottom-right of touchpad is right-click, and bottom-middle is middle click
-#synclient SoftButtonAreas="60% 0 82% 0 40% 59% 82% 0"
+	# Bottom-right of touchpad is right-click
+	#synclient SoftButtonAreas="50% 0 82% 0 0 0 0 0"
+	# Bottom-right of touchpad is right-click, and bottom-middle is middle click
+	#synclient SoftButtonAreas="60% 0 82% 0 40% 59% 82% 0"
 
-# To avoid accidentally tapping while typing, we can enable palm detection, which rejects all touches which are wider than the given PalmMinWidth.
-# Defaults:
-#   synclient PalmDetect=0
-#   synclient PalmMinWidth=10
-#   synclient PalmMinZ=200
-# My settings:
-synclient PalmDetect=1
-# If this doesn't work well enough, there are other options: https://wiki.archlinux.org/index.php/Touchpad_Synaptics#Disable_trackpad_while_typing
+	# To avoid accidentally tapping while typing, we can enable palm detection, which rejects all touches which are wider than the given PalmMinWidth.
+	# Defaults:
+	#   synclient PalmDetect=0
+	#   synclient PalmMinWidth=10
+	#   synclient PalmMinZ=200
+	# My settings:
+	synclient PalmDetect=1
+	# If this doesn't work well enough, there are other options: https://wiki.archlinux.org/index.php/Touchpad_Synaptics#Disable_trackpad_while_typing
 
-# Disable trackpad taps when typing
-killall -u "$USER" syndaemon 2>/dev/null
-syndaemon -d -i 0.8s -K -R -t
+	# Disable trackpad taps when typing
+	killall -u "$USER" syndaemon 2>/dev/null
+	syndaemon -d -i 0.8s -K -R -t
+fi
 
 # Set the normal direction of the mouse scrollwheel ("normal" direction)
 echo "pointer = 1 2 3 4 5 6 7 8 9 10 11 12" | xmodmap -
@@ -226,15 +255,19 @@ then . "$HOME"/.custom_x_settings
 fi
 
 # Launcher
-if which albert >/dev/null
+if command -v albert >/dev/null
 then
 	albert &
 	sleep 20
 fi
 
+# Give some times for the DE to start dropbox itself.  (E.g. KDE was starting it because it had been open the last time I logged out.)
+sleep 5
 if [ -d "$HOME/Dropbox" ] && ! pgrep -u $UID dropbox >/dev/null
 then
-	nice ionice dropbox start &
+	echo "Starting mounted-dropbox" >&2
+	#HOME=/mnt/dropbox.joey nice ionice dropbox start &
+	mounted-dropbox start &
 	sleep 20
 fi
 
