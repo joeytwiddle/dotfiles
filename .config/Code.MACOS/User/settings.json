@@ -49,4 +49,11 @@
 
     "trailing-spaces.deleteModifiedLinesOnly": true,
     "trailing-spaces.highlightCurrentLine": false,
+
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
 }
