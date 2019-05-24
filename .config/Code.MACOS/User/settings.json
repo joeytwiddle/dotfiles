@@ -8,7 +8,8 @@
     "files.insertFinalNewline": true,
     "breadcrumbs.enabled": true,
 
-    "editor.formatOnPaste": true,
+    // Oh no this can be terrible.  It may reformat the entire file after a tiny paste, and it sometimes does it wrong!  (Even when prettier is enabled!)
+    //"editor.formatOnPaste": true,
 
     "search.location": "panel",
 
