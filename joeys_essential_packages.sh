@@ -1,6 +1,15 @@
 #!/bin/bash
+#set -e
 
 # For automated installation, pass -yq
+
+# Options {{{
+do_apt_install_even_if_packages_are_missing=
+install_python_packages=
+install_latest_mongodb=
+install_yarn=
+install_node_packages=
+# }}}
 
 # Functions {{{
 
@@ -12,6 +21,8 @@ install_package() {
 
 add_repository() {
   local ppa_repo="$1"
+  echo "Not adding PPA $ppa_repo"
+  return 1
   . /etc/lsb-release
   local apt_sources_file="$(echo "${ppa_repo}" | tr '/.' '-_')-${DISTRIB_CODENAME}.list"
   local apt_sources_path="/etc/apt/sources.list.d/${apt_sources_file}"
@@ -25,11 +36,40 @@ add_repository() {
   fi
 }
 
+has_exe() {
+  command -v "$@" >/dev/null
+}
+
+# pip2 on Ubuntu 14.01 did not need this.  It automatically checks if a package is installed, and simply reports "Requirement already satisfied" if it is.
+# But that was not the case on my Linux Mint's pip3
+python_package_is_installed() {
+  pip3 list | grep -v "^Package *Version$" | grep -v "^-*$" | cut -d ' ' -f 1 | grep -xF "$1" >/dev/null
+}
+pip_install() {
+  if [ -z "$install_python_packages" ]
+  then
+    echo "Skipping python package $1"
+    return
+  fi
+  if python_package_is_installed "$1"
+  then echo "Python package $1 is already installed"
+  else pip3 install --user "$1"
+  fi
+}
+
 # }}}
+
+
+# Python is needed for some of the below to work
+if has_exe python3 && has_exe pip3
+then : # ok
+else sudo apt-get install python3 python3-pip python3-setuptools
+fi
 
 
 # Desktop {{{
 
+install_package xterm
 install_package fluxbox
 install_package wmctrl xdotool xosd-bin
 install_package xfonts-75dpi xfonts-100dpi
@@ -58,6 +98,9 @@ install_package openssh-server screen tmux xtightvncviewer x11vnc tightvncserver
 
 # More desktop apps
 
+# Copy between shell and clipboard
+install_package xclip
+
 install_package dict-wn
 install_package dict-moby-thesaurus
 
@@ -69,11 +112,14 @@ install_package gimp inkscape
 #install_package krita
 
 # MPlayer which can play h265
-add_repository mc3man/mplayer-test
+#add_repository mc3man/mplayer-test
 install_package mplayer
 
+install_package smplayer
+
 # Audio tools (for randommp3)
-install_package mp3gain vorbisgain
+install_package vorbisgain normalize-audio
+# TOFIND: mp3gain
 
 # Ubuntu recommends installing mailtools in order to get the 'mail' command.
 # It installs postfix.
@@ -82,7 +128,7 @@ install_package mp3gain vorbisgain
 # Both postfix and exim open a dpkg config dialog.
 install_package exim4
 
-install_package wine
+install_package wine-stable
 
 install_package compton
 # An advanced panel, like Mac OS X's
@@ -106,7 +152,7 @@ install_package xfce4-appfinder
 
 # Albert is the nicest launcher I found so far.  QT based.
 add_repository nilarimogard/webupd8
-add_repository flexiondotorg/albert
+add_repository flexiondotorg/albert &&
 # Or from the official author: https://software.opensuse.org/download.html?project=home:manuelschneid3r&package=albert
 install_package albert
 
@@ -156,8 +202,10 @@ install_package faac gpac x264 mencoder
 # However ffmpeg is back in 15.04!
 
 # Download videos/playlists from YouTube and other sites
-add_repository nilarimogard/webupd8
-install_package youtube-dl
+#add_repository nilarimogard/webupd8
+#install_package youtube-dl
+# More up-to-date
+pip_install youtube-dl
 
 # }}}
 
@@ -220,7 +268,7 @@ install_package devscripts build-essential
 
 # Development {{{
 
-install_package git-core ccache sshfs encfs unison lftp
+install_package git ccache sshfs encfs unison lftp
 # 'git-core' is transitioning to 'git'
 # 20th century revision control
 install_package rcs
@@ -249,8 +297,22 @@ install_package default-jdk
 install_package libnss3-tools
 
 # Include pip, python package manager
-#install_package python-pip
 #install_package python-dev
+#install_package python-pip
+# We can then upgrade to the latest pip
+# But this way IS NOT RECOMMENDED if you don't have permission to write to /usr/local
+# If you try that, you might end up with the error: cannot import module 'name'
+# That can be fixed by doing: python -m pip uninstall pip
+#                         or: sudo python3 -m pip uninstall pip
+#pip3 install --upgrade pip
+
+# Includes things needed for development
+#install_package golang
+# Just the executable
+install_package golang-go
+
+# Linter for HTML
+pip_install proselint
 
 # }}}
 
@@ -370,7 +432,6 @@ install_package wine1.8
 add_repository alessandro-strada/ppa
 install_package google-drive-ocamlfuse
 
-install_latest_mongodb=true
 if [ -n "$install_latest_mongodb" ]
 then
   # Derived from here: http://docs.mongodb.org/master/tutorial/install-mongodb-on-ubuntu/
@@ -430,7 +491,14 @@ fi
 
 [ -n "$added_repo" ] && sudo apt-get update
 
-sudo apt-get -V install $packages_to_install "$@"
+if [ -n "$do_apt_install_even_if_packages_are_missing" ]
+then
+  for package in $packages_to_install
+  do sudo apt-get -V -y install $package "$@"
+  done
+else
+  sudo apt-get -V install $packages_to_install "$@"
+fi
 
 #grep --line-buffered -v "is already the newest version.$"
 
@@ -439,53 +507,82 @@ sudo apt-get -V install $packages_to_install "$@"
 
 
 # Other package managers
-#if which pip >/dev/null
-#then
-#  sudo pip install vim-vint
-#fi
-
-if which npm >/dev/null
+if which pip3 >/dev/null
 then
-  # TODO: We might want to change this to install just yarn, and then install all the globals via yarn.
-  install_global_npm_packages_lazily() {
-    # Alternatives: https://stackoverflow.com/questions/30667239/is-it-possible-to-install-npm-package-only-if-it-has-not-been-already-installed
-    local node_root="$(npm root -g)"
-    local to_install=""
-    for package_name
-    do
-      if [ -d "$node_root/$package_name" ]
-      then echo "Already installed: $package_name"
-      else to_install="$to_install $package_name"
-      fi
-    done
-    if [ -n "$to_install" ]
-    then npm install -g ${to_install}
-    fi
-  }
-
-  install_global_npm_packages_lazily yarn nodemon js-beautify tldr coffee-script
-  # The following should really be installed into the project they are used by
-  #install_global_npm_packages_lazily eslint standard babel-cli mocha coffee-script browserify
+  #sudo pip install vim-vint
+  pip_install vim-vint
 fi
+
+# TODO: We might want to change this to install just yarn, and then install all the globals via yarn.
+install_global_npm_packages_lazily() {
+  # Alternatives: https://stackoverflow.com/questions/30667239/is-it-possible-to-install-npm-package-only-if-it-has-not-been-already-installed
+  local node_root="$(npm root -g)"
+  local to_install=""
+  for package_name
+  do
+    if [ -d "$node_root/$package_name" ]
+    then echo "Already installed: $package_name"
+    else to_install="$to_install $package_name"
+    fi
+  done
+  if [ -n "$to_install" ]
+  then npm install -g ${to_install}
+  fi
+}
+
+# Install yarn (requires Node >= 4.0)
+if [ -n "$install_yarn" ]
+then
+  #install_global_npm_packages_lazily yarn
+  curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
+fi
+
+install_node_packages() {
+  if [ -z "$install_node_packages" ]
+  then
+    echo "Skipping node packages $*"
+    return
+  fi
+  if which node >/dev/null
+  then
+    # With npm
+    install_global_npm_packages_lazily "$@"
+
+    # With yarn
+    # (Not recommended if you are often switching node version with npm)
+    #if ! which yarn >/dev/null
+    #then
+    #  echo "[WARNING] Could not find yarn, so could not install: $*" >&2
+    #  return
+    #fi
+    #yarn global add "$@"
+  fi
+}
+
+install_node_packages nodemon js-beautify tldr coffee-script json-fix nativefier
+# The following should really be installed into the project they are used by
+#install_global_npm_packages_lazily eslint standard babel-cli mocha browserify
 
 # bro has a bit more detail than tldr, and uses colours, albeit horrible ones
 #gem install bropages
 
+if which go >/dev/null
+then
+  :
+  # Display wiki pages on the terminal.  I wanted just a short summary but this presents the entire first section.
+  #if ! which wiki >/dev/null
+  #then
+  #  echo "Installing go package: github.com/walle/wiki/cmd/wiki"
+  #  go get github.com/walle/wiki/cmd/wiki
+  #fi
+fi
 
 
-# I don't think we need this.  pip3 automatically checks if a package is installed, and simply reports "Requirement already satisfied" if it is.
-#python_package_is_installed() {
-#  pip3 list | grep -v "^Package *Version$" | grep -v "^-*$" | cut -d ' ' -f 1 | grep -xF "$1" >/dev/null
-#}
-#pip3_install_if_not() {
-#  if ! python_package_is_installed "$1"
-#  then pip3 install --user "$1"
-#  fi
-#}
-pip3 install --user coala-bears
+
+#pip_install coala-bears
 # When I last installed coala-quickstart, it needed libxslt1-dev (it probably didn't need libxml2-dev)
 # Dependencies: apt-get install libxml2-dev libxslt1-dev
-pip3 install --user coala-quickstart
+#pip_install coala-quickstart
 
 
 # vim: foldmethod=marker foldlevel=0 fdc=2 number relativenumber
