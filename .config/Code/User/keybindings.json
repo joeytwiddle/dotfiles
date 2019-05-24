@@ -166,8 +166,15 @@
   { "key": "ctrl+0", "command": "editor.action.fontZoomReset" },
   { "key": "ctrl+shift+=", "command": "workbench.action.zoomIn" },
   { "key": "ctrl+shift+-", "command": "workbench.action.zoomOut" },
-  { "key": "ctrl+shift+0", "command": "workbench.action.zoomReset" }
-
+  {
+    "key": "ctrl+shift+0",
+    "command": "workbench.action.zoomReset"
+  },
+  {
+    "key": "meta+up",
+    "command": "editor.action.addSelectionToNextFindMatch",
+    "when": "editorFocus"
+  },
   /*
   {
     "key": "alt+z",

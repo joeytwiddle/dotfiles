@@ -4,7 +4,7 @@
 
     "workbench.colorTheme": "Gentle Mary",
 
-    "window.zoomLevel": -1,
+    "window.zoomLevel": -0.8,
 
     //"editor.fontSize": "11.4",
     //"editor.lineHeight": "13",
@@ -48,9 +48,26 @@
 
     //"editor.occurrencesHighlight": false,
 
+    "workbench.colorCustomizations": {
+        "editorWarning.foreground": "#dd8800",
+
+    },
+
+    "errorLens.errorColor": "#ff00001c",
+    "errorLens.errorTextColor": "#888888ff",
+    "errorLens.warningColor": "#ff880012",
+    "errorLens.warningTextColor": "#888888ff",
+    "errorLens.infoColor": "#0000ff00",
+    "errorLens.infoTextColor": "#555555ff",
+    "errorLens.hintColor": "#00ffff00",
+    "errorLens.hintTextColor": "#555555ff",
+    // "errorLens.fontStyle": "normal",
+
     // === For plugins === //
     "eslint.enable": true,
     "autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
 
-    "editor.formatOnPaste": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
 }
