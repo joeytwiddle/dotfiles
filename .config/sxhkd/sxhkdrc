@@ -148,15 +148,19 @@ alt + super + i
 
 ### === VSCode === ###
 
-# Make VSCode on Linux respond like WebStorm on macOS
-# (I have done most of that using VSCode's own config)
+# Make VSCode on Linux respond like WebStorm on macOS.  (Although I have already done most of that using VSCode's own config.)
 
-# Built-in formatting
+# Format file (by selecting everything then running Format Selection)
+#alt + shift + l
+#  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup l" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup l" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key a" "key k" "key f" "keyup Control_L" "keydown Shift_L" "keydown Meta_L"
+
+# Format with prettier (in VSCode send Ctrl-Shift-Alt-P, my rebind for editor.action.formatDocument)
 alt + shift + l
   run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup l" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup l" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key a" "key k" "key f" "keyup Control_L" "keydown Shift_L" "keydown Meta_L"
+  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup l" "keydown Control_L" "key l" "keyup Control_L"
 
-# Formatting with prettier (in VSCode send Ctrl-Shift-Alt-P, my rebind of editor.action.formatDocument)
+# Format with prettier (in VSCode send Ctrl-Shift-Alt-P, my rebind for editor.action.formatDocument)
 alt + shift + p
   run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup p" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L" ; \
   run_if_window_matches       --class "(code|code-oss)" -- xte "keyup p" "keydown Control_L" "key p" "keyup Control_L"
@@ -305,10 +309,14 @@ alt + shift + braceright
 # which puts browser back on Control-Backspace and forward on Control-Enter.
 # So I can target those strokes instead.
 # https://openuserjs.org/scripts/joeytwiddle/More_Keybinds
+# BUG: I cannot pass alt + bracketleft down to apps which actually understand it!
+# So for VSCode I added ctrl+alt+shift bracketleft/right keybinds, so I can activate them here
 alt + bracketleft
-  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketleft" "keyup Meta_L" "keydown Control_L" "key BackSpace" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketleft" "keyup Meta_L" "keydown Control_L" "key BackSpace" "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches --class "(code|code-oss)"         -- xte "keyup bracketleft" "keydown Control_L" "key bracketleft" "keyup Control_L"
 alt + bracketright
-  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketright" "keyup Meta_L" "keydown Control_L" "key Return" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketright" "keyup Meta_L" "keydown Control_L" "key Return" "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches --class "(code|code-oss)"         -- xte "keyup bracketright" "keydown Control_L" "key bracketright" "keyup Control_L"
 
 
 
