@@ -201,15 +201,15 @@ autocmd VimLeave * silent !stty ixon
 	let g:Grep_Default_Filelist .= " --exclude=\'*.deb\'"
 	let g:Grep_Default_Filelist .= " --exclude=\'*.rpm\'"
 	" Javascript:
-	let g:Grep_Default_Filelist .= " --exclude-dir=node_modules --exclude-dir=\'node_modules*\' --exclude-dir=dist --exclude=bundle.js"
-	let g:Grep_Default_Filelist .= " --exclude=.tags --exclude=.tags_sorted_by_file"   " Tags files built by CTags plugin for Sublime Text
-	" For Haxe:
-	let g:Grep_Default_Filelist .= " --exclude-dir=_build"
+	let g:Grep_Default_Filelist .= " --exclude-dir=node_modules --exclude-dir=\'node_modules*\'"
+	let g:Grep_Default_Filelist .= " --exclude-dir=dist --exclude-dir=build --exclude-dir=.build --exclude-dir=_build"
+	let g:Grep_Default_Filelist .= " --exclude-dir=coverage --exclude=bundle.js"
+	" Tags files built by ctags, and by CTags plugin for Sublime Text
+	let g:Grep_Default_Filelist .= " --exclude=.tags --exclude=.tags_sorted_by_file"
 	" For ~/.vim/sessions:
 	let g:Grep_Default_Filelist .= " --exclude-dir=sessions"
-	" For Piktochart:
-	let g:Grep_Default_Filelist .= " --exclude-dir=tmp"     " Assets compiled by Ruby
-	"let g:Grep_Default_Filelist .= " --exclude-dir=pikto"   " Code for old version
+	" Assets compiled by Ruby
+	let g:Grep_Default_Filelist .= " --exclude-dir=tmp"
 	" This was not working on my Mac - using (BSD grep) 2.5.1-FreeBSD
 	"let g:Grep_Default_Filelist .= " --exclude-dir=public/assets"   " Precompiled assets (e.g. images)
 	" However this works fine there!
@@ -418,23 +418,25 @@ autocmd VimLeave * silent !stty ixon
 
 	" Before choosing which font to use, we need to know which OS we are running on.
 	" See: http://vi.stackexchange.com/questions/2572/detect-os-in-vimscript
-	if !exists('g:os')
+	" We stopped using g:os because later VAM sets g:os using a different method.
+	" (It appears to set the first X it can find for which has(X) responds positively.)
+	if !exists('s:operating_system')
 		if has('mac') || has('macunix')
-			let g:os = "Darwin"
+			let s:operating_system = "Darwin"
 		elseif has('win16') || has('win95') || has('win32') || has('win64')
-			let g:os = "Windows"
+			let s:operating_system = "Windows"
 		elseif has('unix')
-			let g:os = "Linux"
+			let s:operating_system = "Linux"
 		else
-			let g:os = "other"
+			let s:operating_system = "other"
 		endif
 		" If we can't trust 'has()' then this is an alternative for Unixes:
 		" Possible results: "Darwin", "Linux"
-		"let g:os = substitute(system('uname'), '\n', '', '')
+		"let s:operating_system = substitute(system('uname'), '\n', '', '')
 	endif
 
 
-	if g:os == "Linux" && system('which open_in_current_browser >/dev/null && echo found') == 'found'
+	if s:operating_system ==# 'Linux' && system('which open_in_current_browser >/dev/null && echo -n found') ==# 'found'
 		let g:netrw_browsex_viewer = 'open_in_current_browser'
 	endif
 
@@ -483,7 +485,7 @@ autocmd VimLeave * silent !stty ixon
 
 	"" In Vim 800 on Mac OS X, if I was in GVim (Mac Vim) and loaded this file, and tried to select a font that did not exist on the system, then I got interrupted by an error message.
 
-	if exists("&guifont") && g:os == "Linux"
+	if exists("&guifont") && s:operating_system == "Linux"
 		if $SHORTHOST == "pod"
 			"" Most Linux offer Mono but it's a little tall
 			" :set guifont=Monospace\ 8
@@ -530,6 +532,8 @@ autocmd VimLeave * silent !stty ixon
 				" However Lucida Console 6 is still clearer and smaller!
 				":set guifont=Envy\ Code\ S11\ 8
 			endif
+		elseif $SHORTHOST == "tomato" || $SHORTHOST == "dumpling"
+			:set guifont=Lucida\ Console\ 9
 		else
 			"" A good default for all Linux systems?
 			" :set guifont=Lucida\ Console\ 8
@@ -543,8 +547,8 @@ autocmd VimLeave * silent !stty ixon
 		"" Also with screen fonts, you have the option of using LucidaTypewriter, like Console but with sharp edges.  The only problem is that at size 8 its bold is weak: the chars are very slightly wider but no thicker.  At size 10 it is quite passable.
 		" :set guifont=LucidaTypewriter\ Medium\ 8
 	endif
-	if exists("&guifont") && g:os != "Linux"
-		if g:os == "Darwin"
+	if exists("&guifont") && s:operating_system != "Linux"
+		if s:operating_system == "Darwin"
 			" Popular default for many Mac editors, "the Comic Sans of monospaced fonts" @codinghorror
 			":set guifont=Monaco:h11
 			" But I prefer the shorter fatter one.  Less elegant.
@@ -559,7 +563,7 @@ autocmd VimLeave * silent !stty ixon
 				" On Mac, S11 and S12 are both quite short, but Squat is just about right.
 				":silent! :set guifont=Envy\ Code\ Squat:h13
 			endif
-		elseif g:os == "Windows"
+		elseif s:operating_system == "Windows"
 			:set guifont=LucidaTypewriter\ 8
 		endif
 	endif
@@ -844,7 +848,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:digitaltoad/vim-jade")    " Jade/Pug syntax
 	"call add(vamAddons,"github:FredKSchott/CoVim")       " Collaborative editing with vim!
 	" call add(vamAddons,"github:Raimondi/YAIFA")          " Indent Finder
-	call add(vamAddons,"github:vim-scripts/yaifa.vim")   " Indent Finder
+	"call add(vamAddons,"github:vim-scripts/yaifa.vim")   " Indent Finder
+	call add(vamAddons,"github:joeytwiddle/YAIFA")   " Indent Finder
 	" call add(vamAddons,"github:vim-scripts/vtreeexplorer.vim")   " File Manager (I have this in plugin/ already)
 	" call add(vamAddons,"github:kien/ctrlp.vim")          " Quick file finder (I mapped it to Ctrl-T).  Docs: http://kien.github.io/ctrlp.vim/
 	call add(vamAddons,"github:guns/xterm-color-table.vim")   " Useful for picking colours
@@ -857,7 +862,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	nnoremap <silent> <C-a> :if exists("g:RepeatLast_Enabled") && g:RepeatLast_Enabled <Bar> :normal q<Enter> <Bar> :endif <Bar> :AsyncFinder<Enter>
 	let g:asyncfinder_initial_pattern = '**'
 	" Note that g:asyncfinder_ignore_dirs should be kept in sync with g:Grep_Default_Filelist above.
-	let g:asyncfinder_ignore_dirs = "['.AppleDouble', '.DS_Store', '.git', '.hg', '.bzr', 'CVS', '.svn', 'node_modules', 'node_modules*', 'dist', 'tmp', './public/assets', '*/.meteor/local/*', 'deploy_TMP', 'private', '.ccache', 'venv']"
+	let g:asyncfinder_ignore_dirs = "['.AppleDouble', '.DS_Store', '.git', '.hg', '.bzr', 'CVS', '.svn', 'node_modules', 'node_modules*', 'dist', 'build', 'tmp', './public/assets', '*/.meteor/local/*', 'deploy_TMP', 'private', '.ccache', 'venv']"
 	" I thought this builtin might be a nice simple alternative but I could not get it to find deep and shallow files (** loses the head dir, */** misses shallow files):
 	"nmap <C-a> :find *
 
@@ -870,6 +875,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"   let &statusline = substitute(&statusline, '%#[A-Za-z]*#', '', 'g')
 	call add(vamAddons,"github:airblade/vim-gitgutter")  " Git meta-info about each line (in left-hand signs column (the gutter), or the background color of each line)
 	"let g:gitgutter_diff_args = '-w "master@{1 week ago}"'
+	" Jump between changed hunks
+	nmap ]g <Plug>GitGutterNextHunk
+	nmap [g <Plug>GitGutterPrevHunk
 	"call add(vamAddons,"github:mhinz/vim-signify")       " Similar but supports more VCSs!  BUT was pretty slow on some files, and completely locking up vim on some others (e.g.: j/tools/wine and ~/.vim/ftplugin/sh.vim).  Even turning it off with :SignifyToggle took ages!
 	"call add(vamAddons,"github:chrisbra/changesPlugin")  " Another gutter plugin to indicate buffer edits (not git).  Requires Vim8
 	"call add(vamAddons,"github:terryma/vim-expand-region")   " Grow the visual block easily
@@ -922,8 +930,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"let g:user_emmet_mode='i'   " Only in insert mode
 
 	" Interesting: source folder's vimrc file for different settings in specific projects
+	" I rarely use this, and it slows me down more often than I use it (when it prompts to load my rc_files/.vimrc)
 	" http://www.vim.org/scripts/script.php?script_id=727#local_vimrc.vim
-	call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
+	"call add(vamAddons,"github:MarcWeber/vim-addon-local-vimrc")   " Create .local-vimrc settings per-project
 	" An alternative is ".lvimrc":
 	" http://www.vim.org/scripts/script.php?script_id=441
 
@@ -1302,7 +1311,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	call add(vamAddons,"github:tyrannicaltoucan/vim-quantum") " Nice range of colours, based on the Material Design palette.  reactjs docs uses something like this.
 	call add(vamAddons,"github:kaicataldo/material.vim") " Fork of quantum with brighter colours.  Similar to Atom's One Dark, but not quite the same
 	"call add(vamAddons,"github:Heorhiy/VisualStudioDark.vim") " Similar to VSCode's "Dark (Visual Studio), with some minor differences
-	call add(vamAddons,"github:tomasiser/vim-code-dark") " Similar to VSCode's "Dark+ (default)"
+	call add(vamAddons,"github:tomasiser/vim-code-dark") " codedark: Similar to VSCode's "Dark+ (default)"
 	"call add(vamAddons,"github:")
 
 	"call add(vamAddons,"github:flazz/vim-colorschemes")  " A large collection, includes codeschool
@@ -1347,7 +1356,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	" :AnsiEsc interprets any ANSI escape sequences in the current file, conceals them, and uses them for highlighting
 	" Beware that vimpager exposes its own version of AnsiEsc !
-	"call add(vamAddons,"github:powerman/vim-plugin-AnsiEsc")
+	call add(vamAddons,"github:powerman/vim-plugin-AnsiEsc")
 	" Includes executables vimpager and vimcat (which pretty-print files using Vim's syntax highlighting!)
 	call add(vamAddons,"github:rkitover/vimpager")
 
@@ -1359,7 +1368,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons, 'github:tpope/vim-scriptease')   " Assist with vim scripting
 
 	" Minimap made from Braille dots
-	"call add(vamAddons,"github:severin-lemaignan/vim-minimap")
+	call add(vamAddons,"github:severin-lemaignan/vim-minimap")
 	" Minimap in a new Vim instance with tiny font size
 	"call add(vamAddons,"github:koron/minimap-vim")
 
