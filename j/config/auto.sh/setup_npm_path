@@ -120,7 +120,7 @@ else
 		#export NVM_PATH="$PREFIX/lib/node"
 		#export NVM_BIN="$PREFIX/bin"
 
-		nodewhatsup
+		#nodewhatsup
 	}
 	# These two don't necessarily use the system node
 	# They just use whichever node + npm are currently on the PATH.
@@ -186,6 +186,8 @@ else
 		echo "Yarn global:        $(yarn global dir)"
 		echo "Yarn bin folder:    $(yarn global bin)"
 	}
+
+	nvmusemagic
 
 fi
 
