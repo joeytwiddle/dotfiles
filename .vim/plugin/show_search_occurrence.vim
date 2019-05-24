@@ -17,7 +17,7 @@
 " If the current file is larger than the threshold (in bytes), then do not
 " display the summary.  This can prevent sluggishness when working on large
 " files.
-let g:ShowSearchOccurrences_MaxBufferSize = get(g:, 'ShowSearchOccurrences_MaxBufferSize', 200000)
+let g:ShowSearchOccurrences_MaxBufferSize = get(g:, 'ShowSearchOccurrences_MaxBufferSize', 400000)
 
 let g:ShowSearchOccurrences_InCmdLine = get(g:, 'ShowSearchOccurrences_InCmdLine', 1)
 
