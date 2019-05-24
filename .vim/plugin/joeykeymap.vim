@@ -38,10 +38,11 @@ autocmd BufReadPost quickfix nnoremap <buffer> <silent> <C-PageUp> :colder<CR>:c
 "nnoremap [gc :colder<CR>
 "nnoremap ]gc :cnewer<CR>
 " Make use of above keybinds to restore the title
-nmap [gc :cope<CR><C-PageUp><C-w>p
-nmap ]gc :cope<CR><C-PageDown><C-w>p
 nmap [C :cope<CR><C-PageUp><C-w>p
 nmap ]C :cope<CR><C-PageDown><C-w>p
+" Disabled because I want [g ]g to cycle through git gutter changes (set in .vimrc)
+"nmap [gc :cope<CR><C-PageUp><C-w>p
+"nmap ]gc :cope<CR><C-PageDown><C-w>p
 " The return to previous window does not make much sense if we were already in the quickfix window!
 
 "" Sometimes I want to re-arrange the order of the buffers in my list.  After
@@ -851,10 +852,10 @@ nnoremap \cR :call <SID>ShowRegisterSummary()<CR>
 "command! -n=1 -complete=help SearchHelp help | ...
 "command! -n=1 -complete=help SearchHelp new | ...
 command! -n=1 -complete=help SearchHelp 99wincmd j | wincmd s | execute "grep! -i <args> $VIMRUNTIME/doc/ -r" | botright copen
-" I want to pretend there is a builting command :searchhelp which I will probably seek using :sea<Tab>
-nnoremap :sea<Tab> :SearchHelp<Space>
-nnoremap :sea<Space> :SearchHelp<Space>
-nmap :sea<Up> :SearchHelp<Space><Up>
+" I want to pretend there is a builtin command :searchhelp which I will probably seek using :sea<Tab>
+"nnoremap :sea<Tab> :SearchHelp<Space>
+"nnoremap :sea<Space> :SearchHelp<Space>
+"nmap :sea<Up> :SearchHelp<Space><Up>
 
 " Always open the quickfix window after :grep
 "autocmd QuickFixCmdPost *grep* cwindow
@@ -1065,3 +1066,16 @@ nnoremap <D-O> <C-U>:AsyncFinger<CR>
 "nnoremap <Leader>play :execute "!xterm -e mplayer " . shellescape(getline(".")) . " &"<CR><CR>
 nnoremap <Leader>play :execute "!xterm -e env EQ=widebass ~/j/tools/mplayer " . shellescape(getline(".")) . " &"<CR><CR>
 nnoremap <Leader>del :execute "!del " . shellescape(getline(".")) . " ; sleep 1"<CR><CR>
+
+" Emulate Mac keys on Linux (GVim on Manjaro with KDE 5)
+" Alt-V like Cmd-V
+nmap ö "+P
+imap ö +
+" Alt-C like Cmd-C
+vmap ã "+y
+" Alt-X like Cmd-X
+vmap ø "+d
+" Alt-Z like Cmd-Z
+nmap ú u
+" Alt-Shift-Z like Cmd-Shift-Z
+nmap Ú <C-R>

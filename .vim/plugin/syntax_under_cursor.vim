@@ -11,6 +11,9 @@
 
 nnoremap <F10>   :call <SID>ShowSyntaxUnderCursor()<CR>
 nnoremap <S-F10> :call <SID>ShowSyntaxUnderCursor()<CR>
+" Under Mac I have to press Fn-Shift-10thFnKey to get Shift-F10
+" The same finger stroke on Linux is this:
+nnoremap <C-S-F10> :call <SID>ShowSyntaxUnderCursor()<CR>
 
 command! ShowSyntaxUnderCursor call s:ShowSyntaxUnderCursor()
 
