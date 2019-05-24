@@ -19,11 +19,13 @@
 !xterm.vt100.font: -*-clean-medium-r-*-*-16-*-*-*-*-*-*-*
 !xterm.vt100.font: -*-clean-bold-r-*-*-16-*-*-*-*-*-*-*
 !! On Ubuntu, vt100 was not working, but * did:
-!xterm.*.font: -*-terminus-bold-r-*-*-16-*-*-*-*-*-*-*
+xterm.*.font: -*-terminus-bold-r-*-*-14-*-*-*-*-*-*-*
 !xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
 !xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
-xterm.*.font: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
+!xterm.*.font: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
 !xterm.*.font: -*-lucidatypewriter-medium-*-*-*-13-*-*-*-*-*-*-*
+!xterm.*.font: -*-lucidatypewriter-medium-*-*-*-15-*-*-*-*-*-*-*
+!xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-120-*-*-m-*-iso8859-1
 xterm.*.background: #000000
 xterm.*.foreground: #ffffff
 xterm.*.cursorColor: #ffdd44
@@ -36,12 +38,23 @@ xterm.*.fastScroll: true
 ! XTerm.*.faceName: Liberation Mono
 !xterm.*.faceSize2: 11
 !! 1=unreadable, 2=tiny, 3=small, 4=medium, 5=large, 7=huge
-xterm.*.font2: -*-lucidatypewriter-medium-*-*-*-9-*-*-*-*-*-*-*
-xterm.*.font3: -*-lucidatypewriter-medium-*-*-*-10-*-*-*-*-*-*-*
-xterm.*.font4: -*-lucidatypewriter-medium-*-*-*-13-*-*-*-*-*-*-*
-xterm.*.font5: -*-lucidatypewriter-medium-*-*-*-15-*-*-*-*-*-*-*
+!xterm.*.font2: -*-lucidatypewriter-medium-*-*-*-9-*-*-*-*-*-*-*
+!xterm.*.font3: -*-lucidatypewriter-medium-*-*-*-10-*-*-*-*-*-*-*
+!xterm.*.font4: -*-lucidatypewriter-medium-*-*-*-13-*-*-*-*-*-*-*
+!xterm.*.font5: -*-lucidatypewriter-medium-*-*-*-15-*-*-*-*-*-*-*
+!xterm.*.font2: -b&h-lucidatypewriter-medium-r-normal-*-*-60-*-*-m-*-iso8859-1
+!xterm.*.font3: -b&h-lucidatypewriter-medium-r-normal-*-*-70-*-*-m-*-iso8859-1
+!xterm.*.font4: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
+!xterm.*.font5: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
 !xterm.*.font6: -*-lucidatypewriter-medium-*-*-*-17-*-*-*-*-*-*-*
-xterm.*.font6: -*-terminus-bold-r-*-*-24-*-*-*-*-*-*-*
+!xterm.*.font6: -*-terminus-bold-r-*-*-24-*-*-*-*-*-*-*
+xterm.*.font1: -*-clean-medium-r-*-*-6-*-*-*-*-*-*-*
+xterm.*.font2: -*-clean-medium-r-*-*-10-*-*-*-*-*-*-*
+xterm.*.font3: -*-clean-bold-r-*-*-14-*-*-*-*-*-*-*
+xterm.*.font3: -*-terminus-bold-r-*-*-12-*-*-*-*-*-*-*
+xterm.*.font4: -*-terminus-bold-r-*-*-18-*-*-*-*-*-*-*
+xterm.*.font5: -*-terminus-bold-r-*-*-24-*-*-*-*-*-*-*
+xterm.*.font6: -*-terminus-bold-r-*-*-32-*-*-*-*-*-*-*
 !xterm.vt100.font3
 
 ! http://lukas.zapletalovi.com/2013/07/hidden-gems-of-xterm.html
