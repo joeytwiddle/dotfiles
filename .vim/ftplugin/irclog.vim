@@ -1,2 +1,3 @@
-setlocal ts=38
+setlocal tabstop=38
 setlocal nowrap
+let b:yaifa_disabled = 1
