@@ -40,6 +40,15 @@
       }
     },
     {
+      // This is a departure from the WebStorm theme
+      "name": "Keyword",
+      "scope": "variable.language.this",
+      "settings": {
+        "foreground": "#A576A0",
+        "fontStyle": "bold"
+      }
+    },
+    {
       "name": "Brackets",
       "scope": "meta.brace",
       "settings": {
