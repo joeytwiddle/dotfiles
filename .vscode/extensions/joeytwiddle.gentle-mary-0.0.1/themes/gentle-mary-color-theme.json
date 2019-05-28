@@ -57,7 +57,7 @@
     },
     {
       "name": "General punctuation",
-      "scope": "punctuation.separator.key-value.js, punctuation.definition.block.js",
+      "scope": "punctuation.separator.key-value.js, punctuation.definition.block",
       "settings": {
         "foreground": "#CCCCCC"
       }
@@ -257,7 +257,7 @@
       }
     },
     {
-      "name": "JSX tag attribute punctuation",
+      "name": "JSX tag attribute equals",
       "scope": "meta.tag.attribute keyword.operator.assignment",
       "settings": {
         "foreground": "#CCCCCC"
@@ -268,6 +268,8 @@
       "scope": "punctuation.section.embedded",
       "settings": {
         "foreground": "#CCCCCC"
+        //"foreground": "#888888",
+        //"fontStyle": "bold"
       }
     },
     {
