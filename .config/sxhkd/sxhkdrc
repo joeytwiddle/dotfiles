@@ -1,10 +1,27 @@
 ### Mac-like keybinds for linux
+
+# # Installation
 #
-# Install: sxhkd and xautomation (for xte)
-# Grab: run_if_window_matches from here: https://github.com/baskerville/sxhkd/issues/123#issuecomment-453724972
-# Start listening for these keys by running: sxhkd &
+# Install `sxhkd` and `xautomation` (for the xte executable)
+#
+# Grab `run_if_window_matches` from here: https://github.com/baskerville/sxhkd/issues/123#issuecomment-453724972
+#
+# Add this to your `~/.bashrc`:
+#
+#     export SXHKD_TERMINALS_EREGEXP="(konsole|gnome-terminal|hyper)"
+#
+# Maybe add your favourite terminal too.  Cmd-C/V will send Ctrl-Shift-C/V to these windows.
+#
+# Load your new .bashrc:
+#
+#     source ~/.bashrc
+#
+# Start listening for these keys by running:
+#
+#     sxhkd &
 #
 # To automatically start it with X-windows on a systemd system, see here: https://wiki.archlinux.org/index.php/Sxhkd#Systemd_service_file
+#
 # Alternatively, add `sxhkd &` to your ~/.xinitrc
 
 # Caveats:
@@ -41,17 +58,17 @@ control + alt + shift + r
 alt + x
   xte "keyup x" "keyup Meta_L" "keydown Control_L" "key x" "keyup Control_L" "keydown Meta_L"
 alt + c
-  run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup c" "keyup Meta_L" "keydown Control_L"                   "key c"                 "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup c" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key c" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup c" "keyup Meta_L" "keydown Control_L"                   "key c"                 "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup c" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key c" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
 alt + v
-  run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup v" "keyup Meta_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Failed attempt to paste into gvim
 #alt + v
-#  run_if_window_matches --not --class "(konsole|gnome-terminal|gvim)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches --not --class "($SXHKD_TERMINALS_EREGEXP|gvim)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Meta_L" ; \
 #  run_if_window_matches       --class "(gvim)"                        -- xte "keyup v" "keyup Meta_L" "key Escape" "key i" "keydown Control_L" "key r" "keyup Control_L" "key plus" "keyup Control_L" "keydown Meta_L" ; \
-#  run_if_window_matches       --class "(konsole|gnome-terminal)"      -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+#  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP"      -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
 
 
 
@@ -76,8 +93,8 @@ alt + comma
 
 # Close tab
 alt + w
-  run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup w" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup w" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key w" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup w" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup w" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key w" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
 
 # Close application
 alt + q
@@ -93,8 +110,8 @@ alt + q
 
 # New tab, and reopen closed tab
 alt + t
-  run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup t" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup t" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key t" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup t" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup t" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key t" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
 alt + shift + t
   xte "keyup t" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L"
 
@@ -288,11 +305,11 @@ alt + shift + z
 # Switch tab left/right
 # More complicated version which sends a different keystroke to Konsole applications (for my purposes Konsole listens for Ctrl-Shift-[/])
 alt + shift + braceleft
-  run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup braceleft"  "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Prior"        "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
-  run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup braceleft"  "keyup Meta_L"                 "keydown Control_L" "key bracketleft"  "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceleft"  "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Prior"        "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceleft"  "keyup Meta_L"                 "keydown Control_L" "key bracketleft"  "keyup Control_L" "keydown Meta_L"
 alt + shift + braceright
-  run_if_window_matches --not --class "(konsole|gnome-terminal)" -- xte "keyup braceright" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Next"         "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
-  run_if_window_matches       --class "(konsole|gnome-terminal)" -- xte "keyup braceright" "keyup Meta_L"                 "keydown Control_L" "key bracketright" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceright" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Next"         "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceright" "keyup Meta_L"                 "keydown Control_L" "key bracketright" "keyup Control_L" "keydown Meta_L"
 
 # Go back/forward
 # Cmd-Left and Cmd-Right usually navigate back and forwards on Mac.
