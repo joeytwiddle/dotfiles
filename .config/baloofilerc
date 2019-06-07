@@ -1,0 +1,10 @@
+[Basic Settings]
+Indexing-Enabled=true
+
+[General]
+dbVersion=2
+exclude filters=*.fasta,*.tmp,*.la,CMakeTmp,node_modules,*.pyo,*.gb,autom4te,*.vm*,*.pc,ui_*.h,.uic,*.qmlc,*.o,.bzr,*.fna,_darcs,CTestTestfile.cmake,*.swap,.npm,CMakeTmpQmake,*.pyc,.xsession-errors*,core-dumps,.yarn,.pch,*.aux,*.qrc,__pycache__,confstat,*.elc,*.ini,.histfile.*,*.class,*.a,*.loT,lost+found,*.omf,moc_*.cpp,conftest,*.m4,*.po,CMakeCache.txt,nbproject,.hg,.git,cmake_install.cmake,*.db,Makefile.am,*.nvram,*~,*.orig,.yarn-cache,*.map,node_packages,*.faa,lzo,*.rej,CMakeFiles,*.lo,*.rcore,*.gbff,*.gmo,qrc_*.cpp,*.jsc,po,config.status,*.part,*.moc,.svn,litmain.sh,.moc,libtool,*.csproj,.obj,*.init,*.fq,*.fastq,confdefs.h,CVS,*.so
+exclude filters version=4
+exclude folders[$e]=$HOME/Downloads/,$HOME/.cache/
+first run=false
+only basic indexing=true
