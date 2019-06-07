@@ -2,14 +2,20 @@
     "workbench.colorTheme": "Gentle Mary",
     "window.zoomLevel": 0,
     "editor.fontFamily": "Lucida Console, Lucida Sans Typewriter, Menlo, Monaco, 'Courier New', monospace",
-    "editor.fontSize": 11.3,
+    // Looks a lot like WebStorm
+    "editor.fontSize": 11,
     "editor.lineHeight": 14,
+    // Slightly larger (I prefer)
+    // "editor.fontSize": 11.3,
+    // "editor.lineHeight": 14,
     "files.autoSave": "onWindowChange",
     "files.insertFinalNewline": true,
     "breadcrumbs.enabled": true,
 
     // Oh no this can be terrible.  It may reformat the entire file after a tiny paste, and it sometimes does it wrong!  (Even when prettier is enabled!)
     //"editor.formatOnPaste": true,
+    // This was running on some files I wasn't editing.
+    //"editor.formatOnSave": true,
 
     "search.location": "panel",
 
@@ -47,6 +53,11 @@
     }
     */
 
+    // Let snippets take priority over other things in the suggestions list
+    // See: https://github.com/Microsoft/vscode/issues/10565#issuecomment-317319434
+    // Specifically I needed this for TypeScript, where a deprecated alias and two imports were suggested before my 'log' snippet
+    "editor.snippetSuggestions": "top",
+
     "trailing-spaces.deleteModifiedLinesOnly": true,
     "trailing-spaces.highlightCurrentLine": false,
 
@@ -54,6 +65,9 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
 }
