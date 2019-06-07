@@ -421,6 +421,7 @@ autocmd VimLeave * silent !stty ixon
 	" We stopped using g:os because later VAM sets g:os using a different method.
 	" (It appears to set the first X it can find for which has(X) responds positively.)
 	if !exists('s:operating_system')
+		" This doesn't work for the default /usr/bin/vim on macOS, but I don't need to detect that
 		if has('mac') || has('macunix')
 			let s:operating_system = "Darwin"
 		elseif has('win16') || has('win95') || has('win32') || has('win64')
@@ -830,6 +831,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	call add(vamAddons,'github:joeytwiddle/ultisnips')     " Fix that restores my usual Tab-completion.
 
 	call add(vamAddons,'github:bootleq/LargeFile')       " Disable some things when loading a huge file
+
+	" call add(vamAddons,'github:neoclide/coc.nvim')       " Intellisense engine for vim8 & neovim
 
 	" call add(vamAddons,'github:troydm/easybuffer.vim')
 	" call add(vamAddons,'github:chrisbra/NrrwRgn')
