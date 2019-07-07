@@ -109,9 +109,48 @@ endif
 
 
 
+" Runs the given Ex command and copies/yanks the output into the unnamed register
+command! -nargs=+ -complete=command CopyCmd call s:CopyCommandOutput(<q-args>)
+
+function! s:CopyCommandOutput(line)
+	let vim_cmd = a:line
+	redir @"
+		silent exe vim_cmd
+	redir END
+endfunction
+
+" Runs the given Ex command and pastes the output
+command! -nargs=+ -complete=command PasteCmd call s:PasteCommandOutput(<q-args>)
+
+function! s:PasteCommandOutput(line)
+	let vim_cmd = a:line
+	" TODO: We could redir to a local variable, to avoid clobbering the 'l' register.
+	redir @l
+		silent exe vim_cmd
+	redir END
+	normal "lp
+endfunction
+
+" Runs the given Ex command and copies/yanks the output into a new buffer
+command! -nargs=+ -complete=command CmdToBuf call s:PasteCommandToBuffer(<q-args>)
+
+function! s:PasteCommandToBuffer(line)
+	let vim_cmd = a:line
+	" TODO: We could redir to a local variable, to avoid clobbering the 'l' register.
+	redir @l
+		silent exe vim_cmd
+	redir END
+	new
+	normal "lP
+	"setlocal nomodified
+	setlocal buftype=nofile
+	setlocal bufhidden=delete
+endfunction
+
 " Runs the given Ex command and pipes the output to the given shell command.
 " Separate the two commands with a bar symbol: |
 " For example:
+"   :PipeCmd version | grep --color python"
 "   :PipeCmd highlight | grep 'bold'
 " I considered other names: CmdOut, PipeToShell
 command! -nargs=+ -complete=command PipeCmd call s:PassVimCommandOutputToShellCommand(<q-args>)
@@ -132,43 +171,7 @@ function! s:PassVimCommandOutputToShellCommand(line)
 	exe "bwipeout"
 endfunction
 
-" Runs the given Ex command and pastes the output
-command! -nargs=+ -complete=command PasteCmd call s:PasteCommandOutput(<q-args>)
 
-function! s:PasteCommandOutput(line)
-	let vim_cmd = a:line
-	" TODO: We could redir to a local variable, to avoid clobbering the 'l' register.
-	redir @l
-		silent exe vim_cmd
-	redir END
-	normal "lp
-endfunction
-
-" Runs the given Ex command and copies/yanks the output into the unnamed register
-command! -nargs=+ -complete=command CmdToBuf call s:PasteCommandToBuffer(<q-args>)
-
-function! s:PasteCommandToBuffer(line)
-	let vim_cmd = a:line
-	" TODO: We could redir to a local variable, to avoid clobbering the 'l' register.
-	redir @l
-		silent exe vim_cmd
-	redir END
-	new
-	normal "lP
-	"setlocal nomodified
-	setlocal buftype=nofile
-	setlocal bufhidden=delete
-endfunction
-
-" Runs the given Ex command and copies/yanks the output into the unnamed register
-command! -nargs=+ -complete=command CopyCmd call s:CopyCommandOutput(<q-args>)
-
-function! s:CopyCommandOutput(line)
-	let vim_cmd = a:line
-	redir @"
-		silent exe vim_cmd
-	redir END
-endfunction
 
 " I don't find this particularly useful for CSS files, but it is a nice example of advanced :g usage!
 command! SortCSS :g#\({\n\)\@<=#.,/}/sort
