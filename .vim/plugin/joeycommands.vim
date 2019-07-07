@@ -275,3 +275,10 @@ command! GitMergeToolSetup exec ":source ~/.vim/colors_for_elvin_gentlemary.vim"
 
 " Use grep with fuzzyfinder.  By <igemnace>
 command! -bang -nargs=* FZFGrep call fzf#vim#grep('grep -R -n '.shellescape(<q-args>), 0, <bang>0)
+
+" It occasionally happens that you can not enter blockwise-visual mode because both Ctrl-V and Ctrl-Q are being intercepted by the terminal app or the desktop.
+" To work around that if it occurs, we define a command `:VB` to enter blockwise-visual mode, in fact a full set of commands for consistency.
+command! Visual      normal! v
+command! VisualLine  normal! V
+command! VisualBlock normal! <C-v>
+command! VB          normal! <C-v>
