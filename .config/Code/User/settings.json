@@ -34,6 +34,8 @@
 
     "editor.mouseWheelZoom": true,
 
+    "search.location": "panel",
+
     // I think this enough to stop the CPU going to 100% for 5 minutes after populating node_modules folder
     "files.watcherExclude": {
         "**/node_modules/**": true
@@ -50,24 +52,41 @@
 
     "workbench.colorCustomizations": {
         "editorWarning.foreground": "#dd8800",
-
+        //"breadcrumb.foreground": "#888888",
     },
 
-    "errorLens.errorColor": "#ff00001c",
-    "errorLens.errorTextColor": "#888888ff",
-    "errorLens.warningColor": "#ff880012",
-    "errorLens.warningTextColor": "#888888ff",
+    //"errorLens.errorColor": "#ff00001c",
+    //"errorLens.warningColor": "#ff880012",
+    //"errorLens.infoColor": "#0000ff00",
+    //"errorLens.hintColor": "#00ffff00",
+    "errorLens.errorColor": "#ff000000",
+    "errorLens.warningColor": "#ff880000",
     "errorLens.infoColor": "#0000ff00",
-    "errorLens.infoTextColor": "#555555ff",
     "errorLens.hintColor": "#00ffff00",
+    "errorLens.errorTextColor": "#888888ff",
+    "errorLens.warningTextColor": "#888888ff",
+    "errorLens.infoTextColor": "#555555ff",
     "errorLens.hintTextColor": "#555555ff",
-    // "errorLens.fontStyle": "normal",
+    //"errorLens.errorTextColor": "#88888800",
+    //"errorLens.warningTextColor": "#88888800",
+    //"errorLens.infoTextColor": "#55555500",
+    //"errorLens.hintTextColor": "#55555500",
+    //"errorLens.fontStyle": "normal",
 
     // === For plugins === //
     "eslint.enable": true,
-    "autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
+    // Is this too heavy?
+    //"autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
 
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "gitlens.currentLine.enabled": false,
+    "gitlens.hovers.currentLine.over": "line",
+    "gitlens.codeLens.enabled": false,
+
+    //"javascript.implicitProjectConfig.checkJs": true,
 }
