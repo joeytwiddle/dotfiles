@@ -44,6 +44,46 @@
     background: linear-gradient(#fff6, #fff5) !important;
 }
 
+/* Tab top border roundness */
+#TabsToolbar .tabs-newtab-button,
+#TabsToolbar .tabbrowser-tab,
+#TabsToolbar .tabbrowser-tab .tab-stack,
+#TabsToolbar .tabbrowser-tab .tab-background,
+#TabsToolbar .tabbrowser-tab .tab-content {
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    /* Remove the black border on either side of the tab */
+    --tabs-border-color: #0000 !important;
+    border: none !important;
+}
+/* I would like to do this to unselected tab too, but I would need to find and remove the black line between then first. */
+#TabsToolbar .tabbrowser-tab[selected] .tab-stack {
+    margin-top: 2px !important;
+    border: 1px solid #0004 !important;
+    border-bottom: none !important;
+}
+/* The line that runs along the bottom of unselected tabs should match the selected tab's border */
+/*
+:root {
+    --tabs-navbar-shadow-size: 1px !important;
+}
+#navigator-toolbox {
+    --tabs-border-color: #0004 !important;
+}
+*/
+/* Remove colored line above each tab, because it extends outside the rounded edge */
+#TabsToolbar .tabbrowser-tab .tab-line {
+    visibility: hidden;
+    /*
+    position: absolute;
+    top: 4px;
+    left: 5px;
+    right: 5px;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    */
+}
+
 /* Joey's styles for TreeStyleTabs */
 /* These do make a difference, but a little opacity is still inherited, and the shadow still appears on the text (in Metal theme). */
 /* Note that they will not appear in the inspector because they are not applied when using chrome://browser/content/browser.xul */
