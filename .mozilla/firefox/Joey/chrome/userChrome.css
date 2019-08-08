@@ -3,26 +3,31 @@
  */
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); /* set default namespace to XUL */
 
-/*Added to re-enable min tab width=0 in Firefox-4 */
+/* Re-enable min tab width=0 in Firefox-4 */
+/* In about:config I set browser.tabs.tabMinWidth with some success, but it doesn't seem to work lower than 32px. */
+/* Note: May appear in inspector as: --tab-min-width: 50px; */
 /*
 .tabbrowser-tab:not([pinned]) {
     min-width: 1px !important;
 }
 */
-
 /* Actually the recommended selector is: */
 /*
 .tabbrowser-tab[fadein]:not([pinned]) {
     min-width: 240px !important;
 }
 */
-
 /* Just enough for favicons? */
-/*
 .tabbrowser-tab[fadein]:not([pinned]) {
-    min-width: 35px !important;
+    min-width: 32px !important;
 }
-*/
+.tabbrowser-tab[fadein]:not([pinned])[selected] {
+    min-width: 180px !important;
+}
+/* Centralise the favicon on the small tabs */
+.tabbrowser-tab[fadein]:not([pinned]):not([selected]) .tab-content {
+    padding: 0 0px 0 7px !important;
+}
 
 /* This surrounds the location bar and the bookmarks toolbar */
 /*
