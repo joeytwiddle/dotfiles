@@ -29,18 +29,20 @@
     padding: 0 0px 0 7px !important;
 }
 
-/* This surrounds the location bar and the bookmarks toolbar */
+/* This surrounds the menu, tabs, location bar and bookmarks toolbar */
 /*
 #navigator-toolbox {
     border: 1px solid black !important;
 }
 */
-/* Bookmarks Bar */
-/*
-#PersonalToolbar {
-    border: 1px !important;
+/* Give the toolbars a raised 3D look */
+/* The selected tab itself is #fff6 */
+#nav-bar {
+    background: linear-gradient(#fff8, #fff6) !important;
 }
-*/
+#PersonalToolbar {
+    background: linear-gradient(#fff6, #fff5) !important;
+}
 
 /* Joey's styles for TreeStyleTabs */
 /* These do make a difference, but a little opacity is still inherited, and the shadow still appears on the text (in Metal theme). */
