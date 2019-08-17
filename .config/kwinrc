@@ -39,6 +39,11 @@ BorderActivate=9
 BorderActivateAll=7
 BorderActivateClass=9
 
+[Effect-Wobbly]
+AdvancedMode=true
+ResizeWobble=false
+Stiffness=5
+
 [ElectricBorders]
 Bottom=None
 BottomLeft=None
@@ -110,7 +115,7 @@ ActivitiesMode=1
 ApplicationsMode=0
 DesktopMode=0
 HighlightWindows=true
-LayoutName=big_icons
+LayoutName=compact
 MinimizedMode=0
 MultiScreenMode=0
 ShowDesktopMode=0
@@ -152,7 +157,7 @@ TitlebarDoubleClickCommand=Maximize
 WindowSnapZone=10
 
 [org.kde.kdecoration2]
-BorderSize=Normal
+BorderSize=Tiny
 ButtonsOnLeft=MSL
 ButtonsOnRight=HIAX
 CloseOnDoubleClickOnMenu=true
