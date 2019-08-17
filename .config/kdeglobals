@@ -112,8 +112,9 @@ DirSelectDialog Size=640,480
 History Items[$e]=file:$HOME/Downloads
 
 [General]
-ColorScheme=Breeze
-Name=Breeze Dark
+ColorScheme=Breath with dark titlebars
+Name[en_GB]=Breeze
+Name=Breeze
 XftHintStyle=hintmedium
 XftSubPixel=none
 dbfile=/home/joey/.mozilla/firefox/Joey/places.sqlite
@@ -125,11 +126,11 @@ smallestReadableFont=Liberation Sans,8,-1,5,50,0,0,0,0,0,Regular
 toolBarFont=Liberation Sans,10,-1,5,50,0,0,0,0,0,Regular
 
 [Icons]
-Theme=breath
+Theme=breeze
 
 [KDE]
 DoubleClickInterval=400
-LookAndFeelPackage=org.kde.breezedark.desktop
+LookAndFeelPackage=org.kde.breeze.desktop
 ShowIconsInMenuItems=true
 ShowIconsOnPushButtons=true
 StartDragDist=4
