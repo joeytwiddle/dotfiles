@@ -876,10 +876,12 @@ gsld() {
 }
 alias gsdrop='git stash drop'
 
-# Use this to remove (reset) selected patches of uncommitted files.  Finer grained than `git reset` or `git checkout --` and also more convenient.
-# How does it work?  It stashes the few patches you select, and then drops the new commit from the stash.
+# Use this to remove (reset) selected patches of uncommitted code.  Finer grained than `git reset` or `git checkout --` and also interactive.
+# Answer "yes" to the hunks you want to remove/kill.
+# How does it work?  It stashes the few patches you select, and then drops that new stash from the stash list.
 # This affects the working tree, and thus is different from `git reset -p` which affects the index.
 # Apart from leaving a dropped stash in the garbage, it has the same functionality to the built-in `git checkout -p` (gcop).
+# Because the stash is dropped from the list, it is difficult to recover in case of an accident, but possible using `git-list-dropped-stashes` to search for the recently dropped commit.
 git_kill_patch() {
 	# If there are selections available, but none of them are selected, git stash -p will exit with code 1, so we know we don't need to drop.
 	# But if there are _no changes available_ to stash, git stash -p will immediately exit with code 0, and then we would proceed to drop whatever unrelated stash is at the top of the stack!
@@ -894,6 +896,7 @@ git_kill_patch() {
 	git stash drop
 }
 #alias gkp='git_kill_patch'
+# I remember it as Git Stash Save Kill
 alias gssk='git_kill_patch'
 
 # Apply a stash even if there are uncommitted changes in some of the affected files
