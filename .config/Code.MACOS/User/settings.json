@@ -1,3 +1,4 @@
+// vim: filetype=javascript
 {
     "workbench.colorTheme": "Gentle Mary",
     "window.zoomLevel": 0,
@@ -17,6 +18,7 @@
     // This was running on some files I wasn't editing.
     //"editor.formatOnSave": true,
 
+    // Open searches below the editor, not in the sidebar
     "search.location": "panel",
 
     "gitlens.codeLens.enabled": false,
@@ -70,4 +72,11 @@
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
+    "gitlens.blame.compact": false,
+    "workbench.colorCustomizations": {
+        "editorUnnecessaryCode.opacity": "#00000080",
+    },
+
+    // Use TypeScript to check JSDocs in Javascript files
+    //"javascript.implicitProjectConfig.checkJs": true,
 }
