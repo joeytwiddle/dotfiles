@@ -1,3 +1,6 @@
+/* The page chrome://browser/content/browser.xul is useful for discovering Firefox's IDs and classnames. */
+/* But that page might not apply the CSS we set below, making it difficult to preview our changes.  (It used to, but it's not doing it in 2019.) */
+
 /*
  * Do not remove the @namespace line -- it's required for correct functioning
  */
@@ -17,42 +20,29 @@
     min-width: 240px !important;
 }
 */
-/* Just enough for favicons? */
+/* Small tabs, just enough for favicons */
 .tabbrowser-tab[fadein]:not([pinned]) {
     min-width: 32px !important;
-}
-.tabbrowser-tab[fadein]:not([pinned])[selected] {
-    min-width: 180px !important;
 }
 /* Centralise the favicon on the small tabs */
 .tabbrowser-tab[fadein]:not([pinned]):not([selected]) .tab-content {
     padding: 0 0px 0 7px !important;
 }
-
-/* This surrounds the menu, tabs, location bar and bookmarks toolbar */
-/*
-#navigator-toolbox {
-    border: 1px solid black !important;
-}
-*/
-/* Give the toolbars a raised 3D look */
-/* The selected tab itself is #fff6 */
-#nav-bar {
-    background: linear-gradient(#fff8, #fff6) !important;
-}
-#PersonalToolbar {
-    background: linear-gradient(#fff6, #fff5) !important;
+/* Make the selected tab wide, so we can read its title */
+.tabbrowser-tab[fadein]:not([pinned])[selected] {
+    min-width: 180px !important;
 }
 
 /* Tab top border roundness */
-#TabsToolbar .tabs-newtab-button,
-#TabsToolbar .tabbrowser-tab,
-#TabsToolbar .tabbrowser-tab .tab-stack,
-#TabsToolbar .tabbrowser-tab .tab-background,
-#TabsToolbar .tabbrowser-tab .tab-content {
+#TabsToolbar .tabbrowser-tab[selected],
+#TabsToolbar .tabbrowser-tab[selected] .tab-stack,
+#TabsToolbar .tabbrowser-tab[selected] .tab-background,
+#TabsToolbar .tabbrowser-tab[selected] .tab-content {
     border-top-left-radius: 10px !important;
     border-top-right-radius: 10px !important;
-    /* Remove the black border on either side of the tab */
+}
+#TabsToolbar .tabbrowser-tab {
+    /* Remove the black border on either side of the selected tab */
     --tabs-border-color: #0000 !important;
     border: none !important;
 }
@@ -84,9 +74,113 @@
     */
 }
 
+/* Make the location bar rounded */
+#urlbar {
+    border-radius: 999px !important;
+}
+
+/* Make the location bar background look 3d sunken, using innner shadow */
+/* Note that this overrides the external shadow the box gets when hovered: 0 1px 6px rgba(0,0,0,.1); */
+#urlbar {
+    /* box-shadow: inset 0 1px 4px #0005 !important; */
+    box-shadow: inset 0 1px 10px #00000027 !important;
+}
+
+/* When hovering over the close tab icon, make it clearer */
+.close-icon:hover {
+    /* background: #aaa7; */
+    /* background: #9996; */
+    /* background: #0003; */
+    background: #f33;
+    /* background: rgba(12, 12, 13, 0.1); */
+    /* fill: rgb(41, 47, 52); */
+    color: white !important;
+    border-radius: 6px;
+    /* When the sound icon is showing, it touches the close button.  Let's prevent that. */
+    margin-left: 2px;
+}
+/* and for symmetry, colour the open tab button too */
+toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):not([checked]):not([open]):not(:active):hover > .toolbarbutton-icon {
+    background-color: #3b3 !important;
+    color: white !important;
+}
+
+/* This surrounds the menu, tabs, location bar and bookmarks toolbar */
+/*
+#navigator-toolbox {
+    border: 1px solid black !important;
+}
+*/
+/* Give the toolbars a raised 3D look */
+/* The selected tab itself is #fff6 */
+.tabbrowser-tab[selected] .tab-background {
+    /* This is what I want to do, but it leaks an ugly bottom line from the background. */
+    /* background: linear-gradient(#fff4 0%, #fff6 15%, #fff6 85%, #fff8 100%) !important; */
+    /* We must overwrite the background completely, not with alpha. */
+    /* background: linear-gradient(#e4996b 0%, #e9ad88 100%) !important; */
+}
+#nav-bar {
+    background: linear-gradient(#fff6, #fff4) !important;
+    /* background: linear-gradient(180deg, #fff6 0%, #fff8 5%, #fff6 100%) !important; */
+}
+#PersonalToolbar {
+    background: linear-gradient(#fff4, #fff3) !important;
+}
+
+/* Attempt to make the back button a little 3D.  Did not work well with my orange theme. */
+/*
+#back-button .toolbarbutton-icon {
+    box-shadow: inset 0px -1px 4px #0004;
+}
+*/
+
+/* Make the currently selected tab and toolbars lighter than the rest of the UI */
+/* I wanted to use light grey, but to do that I would need to set the icons and text to black */
+/*
+.tabbrowser-tab[selected] .tab-background,
+#nav-bar,
+#PersonalToolbar {
+    background: #eee !important;
+    background: #eaaf8a !important;
+}
+*/
+
+/* Light background but curved */
+/*
+.tabbrowser-tab[selected] .tab-background {
+    background: linear-gradient(hsl(23, 70%, 77%), hsl(23, 70%, 77%)) !important;
+}
+#nav-bar {
+    background: linear-gradient(hsl(23, 70%, 77%), hsl(23, 70%, 70%)) !important;
+}
+#PersonalToolbar {
+    background: linear-gradient(hsl(23, 70%, 70%), hsl(23, 70%, 65%)) !important;
+}
+*/
+
+/* Light background but curved */
+/*
+.tabbrowser-tab[selected] .tab-background {
+    background: linear-gradient(hsl(23, 70%, 72%), hsl(23, 70%, 72%)) !important;
+}
+#nav-bar {
+    padding: 4px 0 !important;
+}
+#PersonalToolbar {
+    padding: 4px 0 !important;
+}
+*/
+
+/* Make the toolbars less cramped */
+#nav-bar {
+    padding: 4px 1px 1px !important;
+}
+#PersonalToolbar {
+    padding: 1px 1px 6px !important;
+}
+
 /* Joey's styles for TreeStyleTabs */
 /* These do make a difference, but a little opacity is still inherited, and the shadow still appears on the text (in Metal theme). */
-/* Note that they will not appear in the inspector because they are not applied when using chrome://browser/content/browser.xul */
 /* This one is probably not needed. */
 .treestyletab-tabbar-toolbar {
     opacity: 1.0 !important;
