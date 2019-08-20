@@ -313,6 +313,8 @@ install_package golang-go
 
 # Linter for HTML
 pip_install proselint
+# Linter for Python
+pip_install wemake-python-styleguide
 
 # }}}
 
