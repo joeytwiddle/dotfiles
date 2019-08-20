@@ -269,7 +269,7 @@ nnoremap <D-≠> :MaximizeVim<CR>
 command! GitMergeToolSetup set nodiff | wincmd k | set nodiff | wincmd j | wincmd = | let @/ = "<<<<<<" | normal! n
 " On Mac OS X the colours don't load like they should, so I load them manually:
 " I also visit the other two windows with `wincmd l` so that dim_inactive_windows.vim will remove its dimming.
-command! GitMergeToolSetup exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | set nodiff | wincmd k | set nodiff | wincmd l | wincmd l | wincmd j | wincmd = | let @/ = "<<<<<<" | normal! n
+command! GitMergeToolSetup exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | set nodiff | wincmd k | set nodiff | wincmd l | wincmd l | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
 " If I use `set lines` to maximize the window, then it takes ages, and the windows end up the wrong size, and `wincmd =` doesn't fix them all (possibly due to other plugins)
 "command! GitMergeToolSetup set lines=999 columns=9999 | exec ":source ~/.vim/colors_for_elvin_monokai.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | set nodiff | wincmd k | set nodiff | wincmd p | redraw | wincmd = | let @/ = "<<<<<<" | normal! n
 
