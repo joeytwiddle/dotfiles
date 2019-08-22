@@ -30,7 +30,10 @@
 }
 /* Make the selected tab wide, so we can read its title */
 .tabbrowser-tab[fadein]:not([pinned])[selected] {
-    min-width: 180px !important;
+    min-width: 220px !important;
+    /* The max-width is applied when there are few tabs, but as soon as they start scrolling, they shrink. */
+    max-width: 300px !important;
+    width: auto !important;
 }
 
 /* Tab top border roundness */
@@ -51,6 +54,22 @@
     margin-top: 2px !important;
     border: 1px solid #0004 !important;
     border-bottom: none !important;
+    box-shadow: 0 8px 8px #0006 !important;
+    /* margin-left: 4px !important; */
+    /* margin-right: 4px !important; */
+}
+/* Give the selected tab some more horizontal whitespace */
+#TabsToolbar .tabbrowser-tab[selected] .tab-stack .tab-content {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+/* And give all the tabs some more vertical whitespace */
+.tab-content {
+    min-height: 36px !important;
+}
+.tab-label-container {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
 }
 /* The line that runs along the bottom of unselected tabs should match the selected tab's border */
 /*
@@ -83,7 +102,9 @@
 /* Note that this overrides the external shadow the box gets when hovered: 0 1px 6px rgba(0,0,0,.1); */
 #urlbar {
     /* box-shadow: inset 0 1px 4px #0005 !important; */
-    box-shadow: inset 0 1px 10px #00000027 !important;
+    /* box-shadow: inset 0 1px 8px #0000002c !important; */
+    /* box-shadow: inset 0 1px 10px #00000027 !important; */
+    box-shadow: inset 0 1px 20px #00000027 !important;
 }
 
 /* When hovering over the close tab icon, make it clearer */
