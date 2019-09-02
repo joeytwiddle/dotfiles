@@ -1,0 +1,63 @@
+#alias dis='docker images'
+alias dimgs='docker images'
+alias dps='docker ps'
+alias dpsa='docker ps -a'
+#alias dcls='docker container list'
+#alias dclsa='docker container list -a'
+
+alias dstop='docker stop'
+alias dstart='docker start'
+alias drestart='docker restart'
+
+#alias dirm='docker image rm'
+alias drmi='docker rmi'
+#alias dcrm='docker container rm'
+alias drm='docker rm'
+alias drmf='docker rm -f'
+
+alias dlgs='docker logs'
+alias dlgsf='docker logs --follow'
+
+alias dcleanup='echo "To clean up caches, run: dspf" ; echo "To destroy everything except running containers, run: dspa"'
+alias dspf='docker system prune -f'
+alias dspa='docker system prune --all'
+
+alias dtop='docker top'
+dtopall() {
+	for cid in $(docker ps -q)
+	do docker top "$cid" | drop 1 | prepend_each_line "$cid\t"
+	done
+}
+
+# Debug Docker Image
+ddi() {
+	docker run --rm -it "$1" /bin/bash
+}
+# Debug Latest Docker Image
+dldi() {
+	ddi "$(get_latest_docker_image_id)"
+}
+
+# Debug Docker Container
+ddc() {
+	local container_id="$1"
+
+	if [ "$(docker inspect -f "{{.State.Running}}" "$container_id")" = "false" ]
+	then
+		echo "Container $container_id is not running, so starting it now"
+		docker start "$container_id"
+	fi
+
+	docker exec -it "$container_id" /bin/bash
+}
+# Debug Latest Docker Container
+dldc() {
+	ddc "$(get_latest_docker_container_id)"
+}
+
+get_latest_docker_container_id() {
+	docker ps --latest -q --no-trunc
+}
+get_latest_docker_image_id() {
+	docker images -q --no-trunc | head -n 1
+}
