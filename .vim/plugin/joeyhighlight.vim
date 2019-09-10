@@ -361,8 +361,12 @@ function! Joeyhighlight()
 	"" Colors for file/folder explorers, trying to match jsh dark theme:
 
 	" VTreeExplorer (vtreeexplorer.vim, :VSTreeExplore)
-	hi Directory ctermfg=green cterm=none guifg=#00ff00 gui=none
-	hi TreeLnk ctermfg=green cterm=bold guifg=#00ff00 gui=bold
+	"hi Directory ctermfg=green cterm=none guifg=#00ff00 gui=none
+	"hi TreeLnk ctermfg=green cterm=bold guifg=#00ff00 gui=bold
+
+	" Jargo color scheme
+	hi Directory ctermfg=green cterm=none guifg=#47b427 gui=none
+	hi TreeLnk ctermfg=green cterm=bold guifg=#64e364 gui=bold
 
 	" NERD Tree (NERD_tree.vim, :NERDTree)
 	hi link treeDirSlash Directory
@@ -371,7 +375,8 @@ function! Joeyhighlight()
 	hi link treeOpenable Normal
 	hi link treeClosable Normal
 	hi link treeLink TreeLnk
-	hi treeExecFile ctermfg=red cterm=bold guifg=red gui=bold
+	"hi treeExecFile ctermfg=red cterm=bold guifg=red gui=bold
+	hi treeExecFile ctermfg=red cterm=bold guifg=#ff4250 gui=bold
 
 	" netrw (bundled netrwPlugin.vim, :vert split +:Explore)
 	hi link netrwSymLink TreeLnk
@@ -379,9 +384,18 @@ function! Joeyhighlight()
 	hi link netrwClassify treeDirSlash
 	hi link netrwExe treeExecFile
 
-	hi link AsyncFinderDir TreeLnk
-	hi AsyncFinderFile ctermfg=darkgreen guifg=#00bb00
-	"hi AsyncFinderFileName ctermfg=white guifg=white
+	"hi link AsyncFinderDir TreeLnk
+	"hi AsyncFinderFile ctermfg=darkgreen guifg=#00bb00
+	hi clear AsyncFinderFile
+	hi link AsyncFinderDir Directory
+	hi link AsyncFinderFile Directory
+	hi AsyncFinderFileName ctermfg=white guifg=white
+	hi AsyncGrepFileName ctermfg=cyan guifg=#1abebc
+	hi AsyncGrepLine ctermfg=white guifg=white
+	" I prefer to highlight the ':'s too
+	syntax match AsyncGrepLine /:\d\+:/ containedin=AsyncGrepFilenameAndNumber
+	hi link AsyncFinderPattern Normal
+	hi link AsyncGrepPattern Normal
 
 
 	hi TabLine ctermbg=blue ctermfg=cyan cterm=none guibg=blue guifg=cyan gui=none
