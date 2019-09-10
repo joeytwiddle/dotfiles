@@ -282,3 +282,6 @@ command! Visual      normal! v
 command! VisualLine  normal! V
 command! VisualBlock normal! <C-v>
 command! VB          normal! <C-v>
+
+"command! ALEList let g:ale_set_quickfix = 1 | e | copen
+command! ALEList lopen | echo "Use ]l and [l to walk through reports"
