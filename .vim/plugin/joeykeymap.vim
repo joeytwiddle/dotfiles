@@ -597,7 +597,11 @@ function! s:SetupKeysForGrep()
 	"nnoremap <D-F> :Grep<CR><C-U>\<<cword>\>
 	" No fun to clobber clipboard with cword if you were trying to search for what was in the clipboard before!
 	"nnoremap <D-F> :let @+ = expand('<cword>')<CR>:Grep<CR><C-U>\<\><Left><Left>
-	nnoremap <D-F> :Grep<CR>
+	" This was good:
+	"nnoremap <D-F> :Grep<CR>
+	" But trying this now:
+	nnoremap <D-F> :AsyncGrepBottom<CR>
+	nnoremap <C-S-F> :AsyncGrepBottom<CR>
 endfunction
 
 function! s:SetupKeysForCSearch()
@@ -1051,7 +1055,7 @@ nnoremap <D-]> <C-I>
 "nnoremap <D-S-[> :bp<CR>
 "nnoremap <D-S-]> :bn<CR>
 " Should really be on Cmd-Shift-O
-nnoremap <D-O> <C-U>:AsyncFinger<CR>
+nnoremap <D-O> <C-U>:AsyncFinder<CR>
 
 " Training:
 " Unfortunately this message is immediately made invisible by the -- INSERT -- message.
