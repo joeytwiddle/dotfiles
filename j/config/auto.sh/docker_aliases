@@ -2,12 +2,16 @@
 alias dimgs='docker images'
 alias dps='docker ps'
 alias dpsa='docker ps -a'
+alias dpsas='docker ps -a --size'
 #alias dcls='docker container list'
 #alias dclsa='docker container list -a'
 
-alias dstop='docker stop'
+alias drun='docker run'
+alias dexec='docker exec'
 alias dstart='docker start'
 alias drestart='docker restart'
+alias dstop='docker stop'
+alias dkill='docker kill'
 
 #alias dirm='docker image rm'
 alias drmi='docker rmi'
@@ -15,14 +19,22 @@ alias drmi='docker rmi'
 alias drm='docker rm'
 alias drmf='docker rm -f'
 
-alias dlgs='docker logs'
-alias dlgsf='docker logs --follow'
+alias dlogs='docker logs'
+alias dlogsf='docker logs --follow'
+alias dlogl='docker logs "$(get_latest_docker_container_id)"'
+alias dloglf='docker logs --follow "$(get_latest_docker_container_id)"'
 
-alias dcleanup='echo "To clean up caches, run: dspf" ; echo "To destroy everything except running containers, run: dspa"'
+alias dcleanup='echo ; echo "To clean up caches and stopped containers, run: dspf (relatively safe, but you will lose logs for stopped containers)" ; echo ; echo "To DESTROY EVERYTHING except running containers and their images, run: dspa (DANGEROUS!)" ; echo'
 alias dspf='docker system prune -f'
 alias dspa='docker system prune --all'
 
+alias dci='docker container inspect'
+alias dcd='docker container diff'
+
+alias dcp='docker cp'
+
 alias dtop='docker top'
+alias dtopl='docker top $(get_latest_docker_container_id)'
 dtopall() {
 	for cid in $(docker ps -q)
 	do docker top "$cid" | drop 1 | prepend_each_line "$cid\t"
@@ -37,6 +49,8 @@ ddi() {
 dldi() {
 	ddi "$(get_latest_docker_image_id)"
 }
+# Docker Debug Latest Image
+alias ddli='dldi'
 
 # Debug Docker Container
 ddc() {
@@ -54,6 +68,8 @@ ddc() {
 dldc() {
 	ddc "$(get_latest_docker_container_id)"
 }
+# Docker Debug Latest Container
+alias ddlc='dldc'
 
 get_latest_docker_container_id() {
 	docker ps --latest -q --no-trunc
