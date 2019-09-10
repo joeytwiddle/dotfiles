@@ -446,4 +446,6 @@ EXEC 01;31
 *package.json 01;36
 *package-lock.json 00;36
 *yarn.lock 00;36
+*Dockerfile 01;36
+.Dockerfile 01;36
 
