@@ -79,7 +79,7 @@ autocmd VimLeave * silent !stty ixon
 	" let g:miniBufExplShowUnlistedBuffers = 0
 	"" Hide the Location List (which ALE brings up)
 	"" If we find a better way to detect the Location List buffer, we could turn this back to 1
-	let g:miniBufExplShowOtherBuffers = 0
+	let g:miniBufExplShowOtherBuffers = 1
 	" let g:miniBufExplorerDebugLevel = 995
 
 	" >>> For taglist.vim {{{
@@ -399,6 +399,10 @@ autocmd VimLeave * silent !stty ixon
 	let g:netrw_altv = 1
 	"" Make the split use more space for editor than for the tree
 	let g:netrw_winsize = 80
+	"" When hitting enter, open the file in the previous window instead of the current (or split)
+	let g:netrw_browse_split = 4
+	"" When first opening the preview/previous window, use a vertical split
+	let g:netrw_preview = 1
 
 
 	" if has("gui_kde")
@@ -1344,6 +1348,10 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:xolox/vim-colorscheme-switcher")
 	" This addon provides an important missing command for that plugin: :SwitchToColorScheme
 	"call add(vamAddons,"github:Taverius/vim-colorscheme-manager")
+
+	" Automatically reload plugins while you are editing them
+	"call add(vamAddons,"github:xolox/vim-misc")
+	"call add(vamAddons,"github:xolox/vim-reload")
 
 	" }}}
 
