@@ -2,10 +2,10 @@
 update_info=konsole.upd:2.9.0-global-options
 
 [Desktop Entry]
-DefaultProfile=Lucida Sans Typewriter Jargo.profile
+DefaultProfile=Lucida Console Jargo.profile
 
 [Favorite Profiles]
-Favorites=EnvyCode Maia.profile,EnvyCode Jargo.profile,Lucida Console Jargo.profile,Noto Jargo.profile,Lucida Sans Typewriter Maia.profile,Lucida Sans Typewriter Jargo.profile,Noto Maia (Original).profile,Lucida Console Maia.profile
+Favorites=EnvyCode Jargo.profile,EnvyCode Maia.profile,Lucida Console Maia.profile,Lucida Sans Typewriter Jargo.profile,Noto Maia (Original).profile,Noto Jargo.profile,Lucida Sans Typewriter Maia.profile,White Background.profile,Lucida Console Jargo.profile
 
 [MainWindow]
 Height 1080=627
