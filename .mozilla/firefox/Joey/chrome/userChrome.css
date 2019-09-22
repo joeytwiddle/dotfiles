@@ -7,8 +7,8 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); /* set default namespace to XUL */
 
 /* Re-enable min tab width=0 in Firefox-4 */
-/* In about:config I set browser.tabs.tabMinWidth with some success, but it doesn't seem to work lower than 32px. */
-/* Note: May appear in inspector as: --tab-min-width: 50px; */
+/* In about:config I set browser.tabs.tabMinWidth with some success, but that doesn't seem to work lower than 40px. */
+/* Adjusting it with CSS below works for any width on Linux, but has no affect on macOS. */
 /*
 .tabbrowser-tab:not([pinned]) {
     min-width: 1px !important;
@@ -24,6 +24,11 @@
 .tabbrowser-tab[fadein] {
     min-width: 32px !important;
 }
+/*
+:root {
+    --tab-min-width: 32px !important;
+}
+*/
 /* Centralise the favicon on the small tabs */
 .tabbrowser-tab[fadein]:not([selected]) .tab-content {
     /* This looks bad for large tabs! */
@@ -64,7 +69,8 @@
 }
 /* Add a shadow to the left and right of the selected tab */
 #TabsToolbar .tabbrowser-tab[selected] .tab-stack {
-    box-shadow: 0 4px 8px #0006 !important;
+    /* box-shadow: 0 4px 8px #0006 !important; */
+    box-shadow: 0 2px 4px #0006 !important;
     /* Push the nearby tabs aside a bit, so they don't appear in the shadow */
     /* margin-left: 2px !important; */
     /* margin-right: 2px !important; */
@@ -76,7 +82,7 @@
     --tabs-navbar-shadow-size: 0.5px !important;
 }
 #navigator-toolbox {
-    --tabs-border-color: #fff8 !important;
+    --tabs-border-color: #fff7 !important;
 }
 /*
 #nav-bar:not([tabs-hidden="true"]) {
@@ -93,8 +99,10 @@
 /* The selected tab's border should match the --tabs-border-color, */
 /* although it may need different alpha due to different background. */
 #TabsToolbar .tabbrowser-tab[selected] .tab-content {
-    border: 1px solid #fff4 !important;
-    border-top: 1px solid #fff7 !important;
+    /* border: 1px solid #fff4 !important; */
+    /* border-top: 1px solid #fff7 !important; */
+    border: 2px solid #fff4 !important;
+    border-top: 2px solid #fff7 !important;
     border-bottom: none !important;
 }
 
@@ -135,7 +143,12 @@
     /* box-shadow: inset 0 1px 4px #0005 !important; */
     /* box-shadow: inset 0 1px 8px #0000002c !important; */
     /* box-shadow: inset 0 1px 10px #00000027 !important; */
-    box-shadow: inset 0 1px 20px #00000027 !important;
+    /* box-shadow: inset 0 2px 8px #00000033 !important; */
+    box-shadow: inset 0 1px 10px #0000002d !important;
+}
+#urlbar[focused="true"] {
+    /* box-shadow: none !important; */
+    border: 1px solid #0008 !important;
 }
 
 /* When hovering over the close tab icon, make it clearer */
@@ -171,13 +184,17 @@ toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):n
     /* We must overwrite the background completely, not with alpha. */
     /* background: linear-gradient(#e4996b 0%, #e9ad88 100%) !important; */
     /* background: linear-gradient(#de8249 0%, #e39666 100%) !important; */
+    background: linear-gradient(hsl(23, 69%, 68%), hsl(23, 69%, 65%)) !important;
+    /* background: linear-gradient(hsl(23, 69%, 58%) 0%, hsl(23, 69%, 58%) 50%, hsl(23, 69%, 65%) 100%) !important; */
 }
 #nav-bar {
     background: linear-gradient(#fff6, #fff4) !important;
+    background: linear-gradient(hsl(23, 69%, 65%), hsl(23, 69%, 61%)) !important;
     /* background: linear-gradient(180deg, #fff6 0%, #fff8 5%, #fff6 100%) !important; */
 }
 #PersonalToolbar {
     background: linear-gradient(#fff4, #fff3) !important;
+    background: linear-gradient(hsl(23, 69%, 61%), hsl(23, 69%, 58%)) !important;
 }
 
 /* Attempt to make the back button a little 3D.  Did not work well with my orange theme. */
