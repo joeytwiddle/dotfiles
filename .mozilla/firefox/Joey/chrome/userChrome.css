@@ -1,10 +1,17 @@
-/* The page chrome://browser/content/browser.xul is useful for discovering Firefox's IDs and classnames. */
+/* To use userChrome.css in modern Firefox, you may need to go to about:firefox and set `toolkit.legacyUserProfileCustomizations.stylesheets` to true. */
+/* Save this profile in <your_profile_folder>/chrome/userChrome.css */
+
+/* When editing this file, the page chrome://browser/content/browser.xul is useful for discovering Firefox's IDs and classnames. */
 /* But that page might not apply the CSS we set below, making it difficult to preview our changes.  (It used to, but it's not doing it in 2019.) */
 
 /*
- * Do not remove the @namespace line -- it's required for correct functioning
+ * Do not remove this @namespace line -- it's required for correct functioning
  */
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); /* set default namespace to XUL */
+
+
+
+/* === Narrower tabs === */
 
 /* Re-enable min tab width=0 in Firefox-4 */
 /* In about:config I set browser.tabs.tabMinWidth with some success, but that doesn't seem to work lower than 40px. */
@@ -49,6 +56,13 @@
     max-width: 300px !important;
     width: auto !important;
 }
+
+
+
+/* === Rounded tabs, and tab lighting === */
+
+/* This rounds the top of the tabs, but it doesn't flange the bottom. */
+/* That is possible though, using SVGs: https://github.com/wilfredwee/photon-australis */
 
 /* Tab top border roundness */
 #TabsToolbar .tabbrowser-tab[selected],
@@ -132,6 +146,8 @@
     padding-right: 4px !important;
 }
 
+
+
 /* Make the location bar rounded */
 #urlbar {
     border-radius: 999px !important;
@@ -151,7 +167,9 @@
     border: 1px solid #0008 !important;
 }
 
-/* When hovering over the close tab icon, make it clearer */
+
+
+/* Make close tab button red on hover */
 .close-icon:hover {
     /* background: #aaa7; */
     /* background: #9996; */
@@ -164,18 +182,14 @@
     /* When the sound icon is showing, it touches the close button.  Let's prevent that. */
     margin-left: 4px;
 }
-/* and for symmetry, colour the open tab button too */
+/* Make new tab button green on hover */
 toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):not([checked]):not([open]):not(:active):hover > .toolbarbutton-icon {
     background-color: #3b3 !important;
     color: white !important;
 }
 
-/* This surrounds the menu, tabs, location bar and bookmarks toolbar */
-/*
-#navigator-toolbox {
-    border: 1px solid black !important;
-}
-*/
+
+
 /* Give the toolbars a raised 3D look */
 /* The selected tab itself is #fff6 */
 .tabbrowser-tab[selected] .tab-background {
@@ -196,11 +210,10 @@ toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):n
     background: linear-gradient(#fff4, #fff3) !important;
     background: linear-gradient(hsl(23, 69%, 61%), hsl(23, 69%, 58%)) !important;
 }
-
-/* Attempt to make the back button a little 3D.  Did not work well with my orange theme. */
+/* This surrounds the menu, tabs, location bar and bookmarks toolbar */
 /*
-#back-button .toolbarbutton-icon {
-    box-shadow: inset 0px -1px 4px #0004;
+#navigator-toolbox {
+    border: 1px solid black !important;
 }
 */
 
@@ -250,6 +263,17 @@ toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):n
     padding-top: 1px !important;
     padding-bottom: 6px !important;
 }
+
+
+
+/* Attempt to make the back button a little 3D.  Did not work well with my orange theme. */
+/*
+#back-button .toolbarbutton-icon {
+    box-shadow: inset 0px -1px 4px #0004;
+}
+*/
+
+
 
 /* Joey's styles for TreeStyleTabs */
 /* These do make a difference, but a little opacity is still inherited, and the shadow still appears on the text (in Metal theme). */
