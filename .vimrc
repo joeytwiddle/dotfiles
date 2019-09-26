@@ -399,10 +399,17 @@ autocmd VimLeave * silent !stty ixon
 	let g:netrw_altv = 1
 	"" Make the split use more space for editor than for the tree
 	let g:netrw_winsize = 80
+
+	"" I have disabled the following settings because:
+	""
+	"" 1. When using MinBufExplorer, we always get a horizontal split, not the vertical split we wanted.
+	"" 2. Sometimes I just want to open one file, so I really do want to open it in the current pane.
+	"" 3. These settings won't help me to learn how to use vanilla Vim.
+	""
 	"" When hitting enter, open the file in the previous window instead of the current (or split)
-	let g:netrw_browse_split = 4
+	" let g:netrw_browse_split = 4
 	"" When first opening the preview/previous window, use a vertical split
-	let g:netrw_preview = 1
+	" let g:netrw_preview = 1
 
 
 	" if has("gui_kde")
