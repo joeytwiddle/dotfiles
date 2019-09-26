@@ -1,3 +1,8 @@
+alias dbuild='docker build'
+alias dsearch='docker search'
+alias dpull='docker pull'
+alias dpush='docker push'
+
 #alias dis='docker images'
 alias dimgs='docker images'
 alias dps='docker ps'
@@ -6,18 +11,27 @@ alias dpsas='docker ps -a --size'
 #alias dcls='docker container list'
 #alias dclsa='docker container list -a'
 
+alias dcreate='docker build'
 alias drun='docker run'
 alias dexec='docker exec'
 alias dstart='docker start'
 alias drestart='docker restart'
 alias dstop='docker stop'
 alias dkill='docker kill'
+alias dinspect='docker inspect'
 
 #alias dirm='docker image rm'
 alias drmi='docker rmi'
-#alias dcrm='docker container rm'
+alias dcrm='docker container rm'
 alias drm='docker rm'
 alias drmf='docker rm -f'
+
+# Stop and remove a container (kinder but slower than drmf)
+dstoprm() {
+	dstop "$*"
+	drm "$*"
+}
+alias ddestroy=dstoprm
 
 alias dlogs='docker logs'
 alias dlogsf='docker logs --follow'
@@ -33,6 +47,7 @@ alias dcd='docker container diff'
 
 alias dcp='docker cp'
 
+alias dstats='docker stats'
 alias dtop='docker top'
 alias dtopl='docker top $(get_latest_docker_container_id)'
 dtopall() {
@@ -77,3 +92,10 @@ get_latest_docker_container_id() {
 get_latest_docker_image_id() {
 	docker images -q --no-trunc | head -n 1
 }
+
+
+
+# Docker Compose
+
+alias dcu='docker compose up'
+alias dcps='docker compose ps'
