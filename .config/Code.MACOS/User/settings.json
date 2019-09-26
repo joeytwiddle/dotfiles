@@ -32,7 +32,7 @@
         "opacity": 50,
         "iconColour": "blue"
     },
-    "todo-tree.tags": [
+    "todo-tree.general.tags": [
         "TODO",
         "@todo",
         "FIXME",
