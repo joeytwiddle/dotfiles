@@ -1,0 +1,97 @@
+[Containments][56][General]
+AppletOrder=57;58;59;60;61;63
+
+[Containments][62][General]
+extraItems=org.kde.plasma.clipboard,org.kde.plasma.notifications,org.kde.plasma.mediacontroller,org.kde.plasma.bluetooth,org.kde.kdeconnect,org.kde.plasma.keyboardindicator,org.kde.plasma.volume,org.kde.plasma.networkmanagement,org.kde.plasma.printmanager,org.kde.plasma.battery,org.kde.plasma.devicenotifier
+knownItems=org.kde.plasma.clipboard,org.kde.plasma.notifications,org.kde.plasma.mediacontroller,org.kde.plasma.bluetooth,org.kde.kdeconnect,org.kde.plasma.keyboardindicator,org.kde.plasma.volume,org.kde.plasma.networkmanagement,org.kde.plasma.printmanager,org.kde.plasma.battery,org.kde.plasma.devicenotifier
+
+[Containments][75][General]
+AppletOrder=76;77;78;79;81
+
+[Containments][80][General]
+extraItems=org.kde.plasma.clipboard,org.kde.plasma.notifications,org.kde.plasma.mediacontroller,org.kde.plasma.bluetooth,org.kde.kdeconnect,org.kde.plasma.keyboardindicator,org.kde.plasma.volume,org.kde.plasma.networkmanagement,org.kde.plasma.printmanager,org.kde.plasma.battery,org.kde.plasma.devicenotifier
+knownItems=org.kde.plasma.clipboard,org.kde.plasma.notifications,org.kde.plasma.mediacontroller,org.kde.plasma.bluetooth,org.kde.kdeconnect,org.kde.plasma.keyboardindicator,org.kde.plasma.volume,org.kde.plasma.networkmanagement,org.kde.plasma.printmanager,org.kde.plasma.battery,org.kde.plasma.devicenotifier
+
+[Containments][94][General]
+AppletOrder=95
+
+[DownloadDialog Settings]
+Height 1080=547
+Width 1920=1136
+
+[KPropertiesDialog]
+Height 1080=489
+Width 1920=543
+
+[Open-with settings]
+CompletionMode=1
+History=sys,Dolphi,chrome,sett
+
+[PlasmaRunnerManager]
+LaunchCounts=3 services_org.kde.konsole.desktop,1 services_firefox.desktop,1 services_htop.desktop,1 services_org.kde.ksysguard.desktop,1 baloosearch_/home/joey/Downloads/KTorrent_Working/Terminator Genisys (2015),1 services_nvidia-settings.desktop,1 services_systemsettings.desktop,1 services_devinfo.desktop,1 services_octopi.desktop
+pluginWhiteList=services,desktopsessions,PowerDevil
+
+[PlasmaTransientsConfig]
+PreloadWeight=0
+
+[PlasmaViews][Panel 2]
+panelVisibility=0
+
+[PlasmaViews][Panel 2][Horizontal1024]
+thickness=30
+
+[PlasmaViews][Panel 2][Horizontal1280]
+thickness=30
+
+[PlasmaViews][Panel 2][Horizontal1368]
+thickness=30
+
+[PlasmaViews][Panel 2][Horizontal1400]
+thickness=30
+
+[PlasmaViews][Panel 2][Horizontal1600]
+thickness=30
+
+[PlasmaViews][Panel 2][Horizontal1920]
+thickness=32
+
+[PlasmaViews][Panel 2][Horizontal640]
+thickness=30
+
+[PlasmaViews][Panel 2][Horizontal800]
+thickness=30
+
+[PlasmaViews][Panel 2][Vertical1080]
+thickness=230
+
+[PlasmaViews][Panel 2][Vertical480]
+thickness=30
+
+[PlasmaViews][Panel 2][Vertical600]
+thickness=30
+
+[PlasmaViews][Panel 56][Horizontal1920]
+thickness=44
+
+[PlasmaViews][Panel 75][Vertical1080]
+thickness=40
+
+[PlasmaViews][Panel 94][Horizontal1920]
+thickness=30
+
+[PlasmaViews][Panel 96]
+alignment=132
+panelVisibility=1
+
+[PlasmaViews][Panel 96][Horizontal1920]
+maxLength=1784
+minLength=506
+offset=0
+thickness=108
+
+[ScreenConnectors]
+0=eDP1
+1=DP1
+
+[Updates]
+performed=/usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/obsolete_kickoffrc.js
