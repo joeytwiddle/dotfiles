@@ -50,7 +50,7 @@ mute=Volume Mute,Volume Mute,Mute
 
 [krunner]
 _k_friendly_name=Run Command
-run command=Alt+Space\tAlt+F2\tSearch,Alt+Space,Run Command
+run command=Meta+Space\tAlt+F2\tSearch,Alt+Space,Run Command
 run command on clipboard contents=Alt+Shift+F2,Alt+Shift+F2,Run Command on clipboard contents
 
 [ksmserver]
@@ -251,8 +251,11 @@ activate task manager entry 6=Meta+6,Meta+6,Activate Task Manager Entry 6
 activate task manager entry 7=Meta+7,Meta+7,Activate Task Manager Entry 7
 activate task manager entry 8=Meta+8,Meta+8,Activate Task Manager Entry 8
 activate task manager entry 9=Meta+9,Meta+9,Activate Task Manager Entry 9
-activate widget 2=Alt+F1,none,Activate Application Launcher Widget
-activate widget 3=,none,Activate Application Launcher Widget
+activate widget 2=none,none,Activate Application Launcher Widget
+activate widget 3=Alt+F1,none,Activate Application Launcher Widget
+activate widget 35=none,none,Activate CPU Load Monitor Widget
+activate widget 45=none,none,Activate Hard Disk I/O Monitor Widget
+activate widget 54=Alt+Space,none,Activate Application Dashboard Widget
 clear-history=none,none,Clear Clipboard History
 clipboard_action=Ctrl+Alt+X,Ctrl+Alt+X,Enable Clipboard Actions
 cycleNextAction=none,none,Next History Item
