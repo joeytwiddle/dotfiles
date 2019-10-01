@@ -2,8 +2,14 @@
 Description=Application settings for gkrellm
 clientmachine=localhost
 clientmachinematch=0
+desktop=-1
+desktoprule=3
+skippager=true
+skippagerrule=3
 skipswitcher=true
 skipswitcherrule=3
+skiptaskbar=true
+skiptaskbarrule=3
 wmclass=gkrellm
 wmclasscomplete=false
 wmclassmatch=1
