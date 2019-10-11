@@ -12,6 +12,8 @@
     "files.autoSave": "onWindowChange",
     "files.insertFinalNewline": true,
     "breadcrumbs.enabled": true,
+    // Clearer tree structure (default 8)
+    "workbench.tree.indent": 18,
 
     // Oh no this can be terrible.  It may reformat the entire file after a tiny paste, and it sometimes does it wrong!  (Even when prettier is enabled!)
     //"editor.formatOnPaste": true,
@@ -24,7 +26,7 @@
     "gitlens.codeLens.enabled": false,
     "gitlens.currentLine.enabled": false,
 
-    "todo-tree.defaultHighlight": {
+    "todo-tree.highlights.defaultHighlight": {
         "icon": "alert",
         "type": "text",
         "foreground": "orange",
@@ -79,4 +81,5 @@
 
     // Use TypeScript to check JSDocs in Javascript files
     //"javascript.implicitProjectConfig.checkJs": true,
+    // For more on that: https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/
 }
