@@ -160,6 +160,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .mp4 01;35
 .avi 01;35
 .mov 01;35
+.qt 01;35
 .wmv 01;35
 .ogm 01;35
 .flv 01;35
@@ -174,6 +175,8 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .wav 01;35
 .raw 01;35
 .au 01;35
+.mid 01;35
+.midi 01;35
 .mod 01;35
 .it 01;35
 .mp3 01;35
@@ -199,6 +202,8 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .sda 01;35
 # Windows metafile format
 .wmf 01;35
+# Flash
+.swf 01;35
 # Fonts
 .fon 01;35
 .FON 01;35
@@ -238,6 +243,8 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .jade 01;33
 .blade 01;33
 .css 01;33
+.sass 01;33
+.less 01;33
 .dvi 01;33
 .pdf 01;33
 .sdw 01;33 # StarOffice Document
@@ -291,6 +298,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .zsh 01;36
 .csh 01;36
 .bash 01;36
+.pl 01;36
 .c 01;36
 .h 01;36
 .cc 01;36
@@ -319,20 +327,31 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .php 01;36
 .php3 01;36
 .php4 01;36
+.phtml 01;36
 .inc 01;36
-# DB (more often than not this is a DB of data rather than a script of code):
+# DB (more often than not this is a DB of data rather than a script of code)
 .sql 00;36
-## Web code: (html is in "Docs")
+## Web code (html is in "Docs")
 .js 01;36
 .coffee 01;36
-.ts 01;36 # TypeScript
+.ts 01;36
+.jsx 01;36
+.tsx 01;36
+.vue 01;36
+## Server side web
 .xsl 01;36
 .xslt 01;36
 .jsp 01;36
+.jspx 01;36
+.wss 01;36
 .asp 01;36
 .aspx 01;36
-.grm 01;36 # Joey's grammar
-## My Beeb code:
+.rb 01;36 # Ruby
+.erb 01;36 # Ruby template
+.yaws 01;36 # Erlang
+# Joey's grammar
+.grm 01;36
+## Joey's Beeb code
 .jpp 01;36 # my java-macro files
 .spp 01;36 # jpp for assembly
 .dim 01;36
@@ -343,7 +362,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 ## More languages:
 .wxm 01;36 # Maxima
 .mc 01;36 # Maxima loadable
-.tm 01;36 # Maxima dump
+.tm 00;36 # Maxima dump
 ## Haxe:
 .hx 01;36 # Haxe source
 .hxp 01;36 # Haxe project
@@ -372,12 +391,17 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 # iTunes SQL database/library
 .itdb 00;36
 .itl 00;36
+# Windows files
+.sys 00;36
+.pif 00;36
 
 # dark cyan: Plain data ("output")
+# We could use white for these instead
 .dat 00;36
 .data 00;36
 .results 00;36
 .xml 00;36
+.rss 00;36
 .dtd 00;36
 # Some data files I like to use:
 .cksum 00;36
@@ -404,18 +428,12 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 # bright white: Compiled files (I don't have a color for these!)
 .o 01;37
 .so 01;37
-.swf 01;37
 
 # white: Redundant files: including old files, backups, tempfiles/swapfiles, and files from legacy (DOS/Windows) or non-native (Amiga/Mac/Mobile) systems.
 *tmp 00;37
 *core 00;37
 *~ 00;37
-## TODO: consider undeprecating legacy OS files?
-*.bat 00;37
-*.com 00;37
-*.exe 00;37
-*.sys 00;37
-*.pif 00;37
+# Backups and swapfiles
 .bak 00;37
 .BAK 00;37
 .old 00;37
