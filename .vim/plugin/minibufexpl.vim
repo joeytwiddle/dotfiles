@@ -811,6 +811,10 @@ function! <SID>StartExplorer(sticky, delBufNum)
       syn match MBEChanged            '|* [^|]*-*+ |*'
       syn match MBEVisibleChanged     '|* [^|]*\*+ |*'
 
+      "syn match MBEFolder '^[^\]]*/\]\ze '
+      "syn match MBEFolder '^[^|]*/\ze |'
+      syn match MBEFolder '^[^|]*\ze |'
+
       " Note that MBEVisibleChanged really means MBEFocusedChanged
       " whilst MBEChanged covers changed buffers which are visible or not
       " visible (just not the focused one).
@@ -838,7 +842,7 @@ function! <SID>StartExplorer(sticky, delBufNum)
 
     " Define highlights only if they have not been created yet, or if they were cleared somehow.
     "if !exists("g:did_minibufexplorer_syntax_inits")
-    if !HlExists("MBENormal")
+    if !HlExists("MBEFolder")
       let g:did_minibufexplorer_syntax_inits = 1
       " highlight MBEGap            ctermfg=white ctermbg=magenta guibg=magenta
       " highlight MBEGap            term=none cterm=none ctermbg=black ctermfg=grey guibg=black guifg=grey
@@ -864,6 +868,8 @@ function! <SID>StartExplorer(sticky, delBufNum)
       hi MBEVisibleNormal term=reverse ctermbg=cyan ctermfg=blue cterm=none guibg=cyan guifg=blue gui=none
       " hi StatusLineNC ctermfg=blue
       " highlight MBEVisibleChanged term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=black guibg=yellow guifg=black
+
+      hi link MBEFolder Directory
 
       " FIXED:
       " There seems no point making MBEVisibleChanged differ from
@@ -1472,6 +1478,20 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
 
   " let l:fileNames = substitute(l:fileNames,' *$','','')
   let l:line = ''
+
+  if get(g:, 'miniBufExplShowSession', 1)
+    if len(get(v:, 'servername', '')) > 0 && match(v:servername, '^VIM[0-9]*') == -1
+      let l:line .= '(' . v:servername . ') '
+    endif
+  endif
+
+  if get(g:, 'miniBufExplShowFolder', 1)
+    "let l:cwd = substitute(fnamemodify(getcwd(), ':~'), '/$', '', '')
+    let l:cwd = fnamemodify(getcwd(), ':~:s+.*/\([^/]*/[^/]*/[^/]*\)+\1+g') . '/'
+    "let l:cwd = fnamemodify(getcwd(), ':~:t')
+    let l:line .= l:cwd . ' '
+    " See MBEFolder for highlighting
+  endif
 
   if get(g:, 'miniBufExplShowMenu', 0)
     if exists('g:vloaded_tree_explorer') || exists('g:loaded_nerd_tree') || exists('g:loaded_netrwPlugin') || exists("loaded_winfileexplorer")
