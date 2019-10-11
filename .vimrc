@@ -390,7 +390,9 @@ autocmd VimLeave * silent !stty ixon
 	"" Show working folder name only, and the filename
 	" set titlestring=%{fnamemodify(getcwd(),':t')}\ %<(%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.'))})
 	"" The last two parts of the working folder's path
-	set titlestring=%{fnamemodify(getcwd(),':s+.*/\\([^/]*/[^/]*\\)+\\1+g')}/\ %<(%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.'))})
+	"set titlestring=%{fnamemodify(getcwd(),':s+.*/\\([^/]*/[^/]*\\)+\\1+g')}/\ %<(%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.'))})
+	set titlestring=[%{fnamemodify(getcwd(),':s+.*/\\([^/]*/[^/]*\\)+\\1+g')}]\ %<%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.'))}
+    " \ %{get(v:,'servername','')?'\ ['.v:servername.']':''}
 
 	"" NOTE: To keep the netrw file listing open, open the first file with 'v' and subsequent files with 'P'
 	"" Default to tree view
@@ -1500,6 +1502,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		"endwhile
 
 	endif
+
+	" Apparently many of the popular plugin managers are slow, so Plug or Dein are recommended: https://stackoverflow.com/a/54121000/99777
 
 	" Detect large files or files with long lines, and disable this module with :call css_color#disable()
 	augroup DisableSomePluginsForLargeFiles
