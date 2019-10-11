@@ -71,6 +71,7 @@ endfunction
 augroup DimInactiveWindows
   au!
   au WinEnter * call s:DimInactiveWindows()
+  au BufEnter * call s:DimInactiveWindows()
   au WinEnter * set cursorline
   au WinLeave * set nocursorline
 augroup END
