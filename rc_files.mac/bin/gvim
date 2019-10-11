@@ -1,1 +1,20 @@
-/Applications/MacVim.app/Contents/bin/gvim
+#!/usr/bin/env bash
+
+exe="/Applications/MacVim.app/Contents/bin/gvim"
+
+[ -n "$SESSION" ] && VIM_SERVER_NAME="$SESSION"
+
+# If SEP is not specified, then default to reusing a common session
+[ -z "$VIM_SERVER_NAME" ] && [ -z "$SEPARATE" ] && [ -z "$SEP" ] && VIM_SERVER_NAME="shared-vim"
+
+if [ -n "$VIM_SERVER_NAME" ]
+then
+    if vim --serverlist | grep -iFx "$VIM_SERVER_NAME" >/dev/null
+    then remote="--remote"
+    else remote=""
+    fi
+
+    "$exe" --servername "$VIM_SERVER_NAME" $remote "$@" &
+else
+    "$exe" "$@" &
+fi
