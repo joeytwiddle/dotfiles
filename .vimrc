@@ -1344,11 +1344,22 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Rules I want to load after every colorscheme
 	augroup Joeys_After_Colorscheme
 		autocmd!
-		autocmd ColorScheme * highlight SpecialKey ctermfg=239 guifg=#4c4c4c
-		autocmd ColorScheme * highlight Comment ctermfg=242 gui=none guifg=#777777
-		" This restores my preferred statusline and MiniBufExplorer colors
-		autocmd ColorScheme * so ~/.vim/mac_colors.vim
+		autocmd ColorScheme * call g:Joeys_After_Colorscheme()
 	augroup END
+	"
+	function! g:Joeys_After_Colorscheme()
+		highlight SpecialKey ctermfg=239 guifg=#4c4c4c
+		highlight Comment ctermfg=242 gui=none guifg=#777777
+		" This restores my preferred statusline and MiniBufExplorer colors
+		so ~/.vim/mac_colors.vim
+		" Various plugins lose their highlighting.  Let's restore them here:
+		if exists(':AirlineRefresh')
+			AirlineRefresh
+		endif
+		if exists('*lightline#enable')
+			call lightline#enable()
+		endif
+	endfunction
 	"
 	" TODO: Turn this into a plugin that automatically finds and sources post-colorscheme settings?
 	"     globpath(&runtimepath, "after/colors/all.vim", 0, 1)
