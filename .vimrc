@@ -79,6 +79,7 @@ autocmd VimLeave * silent !stty ixon
 	" let g:miniBufExplShowUnlistedBuffers = 0
 	"" Hide the Location List (which ALE brings up)
 	"" If we find a better way to detect the Location List buffer, we could turn this back to 1
+	"" I have turned this back on because it's needed to show unnamed buffers I create with :new
 	let g:miniBufExplShowOtherBuffers = 1
 	" let g:miniBufExplorerDebugLevel = 995
 
@@ -1188,7 +1189,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		call add(vamAddons, "github:coala/coala-vim")
 	endif
 
-	" https://github.com/bling/vim-airline
+	" Airline https://github.com/bling/vim-airline
 	"call add(vamAddons, "github:bling/vim-airline")        " Cool statusline
 	let g:airline_section_b = "[%{airline#util#wrap(airline#extensions#branch#get_head(),0)}]"
 	"let g:airline_section_x = "(%{airline#util#wrap(airline#parts#filetype(),0)})"
@@ -1240,6 +1241,9 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	" Alternative to Airline:
 	"call add(vamAddons, "github:itchyny/lightline.vim")
+	"let g:lightline = { 'colorscheme': 'Tomorrow_Night_Blue' }
+	" To switch colorscheme:
+	" :let g:lightline.colorscheme = 'Tomorrow' | call lightline#init() | call lightline#update()
 
 	call add(vamAddons, "github:Shougo/vimproc.vim")       " Used by unite for async; requires `make` after install!
 	call add(vamAddons, "github:Shougo/unite.vim")         " Buffer and file explorer, all in one plugin
@@ -1361,6 +1365,16 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Automatically reload plugins while you are editing them
 	"call add(vamAddons,"github:xolox/vim-misc")
 	"call add(vamAddons,"github:xolox/vim-reload")
+
+	" Autocompletion plugins
+	""set pyxversion=3
+	"call add(vamAddons,'github:Shougo/deoplete.nvim')
+	"if !has('nvim')
+	"	call add(vamAddons,'github:roxma/nvim-yarp')
+	"	" See: https://github.com/roxma/vim-hug-neovim-rpc#requirements
+	"	call add(vamAddons,'github:roxma/vim-hug-neovim-rpc')
+	"endif
+	"let g:deoplete#enable_at_startup = 1
 
 	" }}}
 
