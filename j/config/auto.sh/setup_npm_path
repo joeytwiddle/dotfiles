@@ -154,8 +154,8 @@ else
 	nodewhatsup() {
 		echo "nvm current: $(nvm current)"
 		echo "PREFIX:    $PREFIX"
-		echo "node:      $(which node)"
-		echo "npm:       $(which npm)"
+		echo "node:      $(which node 2>/dev/null)"
+		echo "npm:       $(which npm 2>/dev/null)"
 		echo "NVM_PATH:  $NVM_PATH"
 		echo "NVM_BIN:   $NVM_BIN"
 		echo "NODE_PATH: $NODE_PATH"
@@ -176,13 +176,13 @@ else
 		nodewhatsup
 	}
 	yarnwhatsup() {
-		if ! which yarn >/dev/null
+		if ! which yarn >/dev/null 2>&1
 		then
 			echo "Yarn is not installed (or at least, not on the PATH)"
 			return
 		fi
-		echo "Yarn binary:        $(which yarn)"
-		echo "Yarn binary (real): $(realpath "$(which yarn)")"
+		echo "Yarn binary:        $(which yarn 2>/dev/null)"
+		echo "Yarn binary (real): $(realpath "$(which yarn 2>/dev/null)") 2>/dev/null"
 		echo "Yarn global:        $(yarn global dir)"
 		echo "Yarn bin folder:    $(yarn global bin)"
 	}

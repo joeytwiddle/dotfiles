@@ -3,7 +3,7 @@
 export PATH="/usr/lib/ccache:$PATH"
 
 # This tells tools like npm/gyp to use ccache's binary
-if which ccache >/dev/null
+if which ccache >/dev/null 2>&1
 then
 	export CC="ccache gcc"
 	export CXX="ccache g++"
