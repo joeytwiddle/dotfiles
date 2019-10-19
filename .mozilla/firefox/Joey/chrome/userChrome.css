@@ -69,8 +69,8 @@
 #TabsToolbar .tabbrowser-tab[selected] .tab-stack,
 #TabsToolbar .tabbrowser-tab[selected] .tab-background,
 #TabsToolbar .tabbrowser-tab[selected] .tab-content {
-    border-top-left-radius: 12px !important;
-    border-top-right-radius: 12px !important;
+    border-top-left-radius: 6px !important;
+    border-top-right-radius: 6px !important;
 }
 #TabsToolbar .tabbrowser-tab {
     /* Remove the black border on either side of the selected tab */
@@ -91,6 +91,7 @@
 }
 
 /* The line that runs along the bottom of unselected tabs */
+/* or you could say it runs along the top of the toolbar. */
 /* It used to be dark, we can can make it light to look raised */
 :root {
     --tabs-navbar-shadow-size: 0.5px !important;
@@ -113,10 +114,10 @@
 /* The selected tab's border should match the --tabs-border-color, */
 /* although it may need different alpha due to different background. */
 #TabsToolbar .tabbrowser-tab[selected] .tab-content {
-    /* border: 1px solid #fff4 !important; */
-    /* border-top: 1px solid #fff7 !important; */
-    border: 2px solid #fff4 !important;
-    border-top: 2px solid #fff7 !important;
+    border: 1px solid #fff4 !important;
+    border-top: 1px solid #fff7 !important;
+    /* border: 2px solid #fff4 !important; */
+    /* border-top: 2px solid #fff7 !important; */
     border-bottom: none !important;
 }
 
@@ -134,8 +135,8 @@
 }
 /* Give the selected tab some more horizontal whitespace */
 #TabsToolbar .tabbrowser-tab[selected] .tab-stack .tab-content {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
 }
 /* And give all the tabs some more vertical whitespace */
 .tab-content {
@@ -178,7 +179,8 @@
     /* background: rgba(12, 12, 13, 0.1); */
     /* fill: rgb(41, 47, 52); */
     color: white !important;
-    border-radius: 6px;
+    /* border-radius: 6px; */
+    border-radius: 999px;
     /* When the sound icon is showing, it touches the close button.  Let's prevent that. */
     margin-left: 4px;
 }
@@ -186,6 +188,7 @@
 toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):not([checked]):not([open]):not(:active):hover > .toolbarbutton-icon {
     background-color: #3b3 !important;
     color: white !important;
+    border-radius: 999px;
 }
 
 
@@ -198,8 +201,8 @@ toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):n
     /* We must overwrite the background completely, not with alpha. */
     /* background: linear-gradient(#e4996b 0%, #e9ad88 100%) !important; */
     /* background: linear-gradient(#de8249 0%, #e39666 100%) !important; */
-    background: linear-gradient(hsl(23, 69%, 68%), hsl(23, 69%, 65%)) !important;
-    /* background: linear-gradient(hsl(23, 69%, 58%) 0%, hsl(23, 69%, 58%) 50%, hsl(23, 69%, 65%) 100%) !important; */
+    /* background: linear-gradient(hsl(23, 69%, 68%), hsl(23, 69%, 65%)) !important; */
+    background: linear-gradient(hsl(23, 69%, 60%) 0%, hsl(23, 69%, 60%) 50%, hsl(23, 69%, 65%) 100%) !important;
 }
 #nav-bar {
     background: linear-gradient(#fff6, #fff4) !important;
