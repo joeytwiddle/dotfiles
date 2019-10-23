@@ -327,11 +327,40 @@ alias gap='ga -p'
 #alias gcp='gc -p'
 
 # Perform git commit --fixup and do the rebase immediately
+#
+# For example, to patch the third previous commit with a small bugfix:
+#
+#     git add -p file_with_minor_fix.c
+#
+#     gcf HEAD~~
+#
 git_commit_immediate_fixup() {
 	local commit_to_amend="$1"
 	if [ -z "$commit_to_amend" ]
 	then
-		echo "You must provide a commit to fixup!"
+		echo "You must provide a target commit!"
+		return
+	fi
+
+	# We need a static commit ref, in case the commit is something relative like HEAD~
+	commit_to_amend="$(git rev-parse "${commit_to_amend}")" || return
+
+	echo ">> Committing"
+	git commit --no-verify --fixup "${commit_to_amend}" || return
+
+	echo ">> Performing rebase"
+	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
+	EDITOR=true git rebase -i --autosquash --autostash --preserve-merges "${commit_to_amend}~"
+}
+alias gcf='git_commit_immediate_fixup'
+
+# The version above is the nice simple one for you to use.
+# This version is what Joey is using to debug issues.
+git_commit_immediate_fixup_DEBUG_VERSION() {
+	local commit_to_amend="$1"
+	if [ -z "$commit_to_amend" ]
+	then
+		echo "You must provide a target commit!"
 		return
 	fi
 
@@ -371,7 +400,8 @@ git_commit_immediate_fixup() {
 		fi
 	fi
 }
-alias gcf='git_commit_immediate_fixup'
+unalias gcf
+alias gcf='git_commit_immediate_fixup_DEBUG_VERSION'
 
 # Performs gap but offers the files in most-recently-modified order.
 # This is useful if you have made a few changes tangential to your current task, and now want to "pop" them off into a commit.
