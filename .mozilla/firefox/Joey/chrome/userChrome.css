@@ -1,7 +1,9 @@
 /* To use userChrome.css in modern Firefox, you may need to go to about:firefox and set `toolkit.legacyUserProfileCustomizations.stylesheets` to true. */
-/* Save this profile in <your_profile_folder>/chrome/userChrome.css */
+/* Save this profile in `<your_profile_folder>/chrome/userChrome.css` (you may need to create the chrome folder if it does not already exist) */
 
-/* When editing this file, the page chrome://browser/content/browser.xul is useful for discovering Firefox's IDs and classnames. */
+/* For more information on userChrome.css, you may refer to this website: https://www.userchrome.org/ */
+
+/* When editing this file, the page chrome://browser/content/browser.xhtml is useful for discovering Firefox's IDs and classnames. */
 /* But that page might not apply the CSS we set below, making it difficult to preview our changes.  (It used to, but it's not doing it in 2019.) */
 
 /*
@@ -188,8 +190,18 @@
 toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):not([checked]):not([open]):not(:active):hover > .toolbarbutton-icon {
     background-color: #3b3 !important;
     color: white !important;
-    border-radius: 999px;
+    /* This has no effect: */
+    /* border-radius: 999px; */
+    /* But this works: */
+    --toolbarbutton-border-radius: 999px;
 }
+/* We could in fact round all buttons on all toolbars. */
+/* (We might want to get more specific, to avoid rounding bookmarks. */
+/*
+:root {
+    --toolbarbutton-border-radius: 999px !important;
+}
+*/
 
 
 
@@ -259,12 +271,18 @@ toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):n
 
 /* Make the toolbars less cramped */
 #nav-bar {
-    padding: 4px 1px 1px !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
 }
 #PersonalToolbar {
     /* padding: 1px 1px 6px !important; */
-    padding-top: 1px !important;
-    padding-bottom: 6px !important;
+    padding-top: 0px !important;
+    padding-bottom: 4px !important;
+    /* Greater indentation on this toolbar helps to de-emphasise it */
+    padding-left: 5px !important;
+    padding-right: 5px !important;
 }
 
 
