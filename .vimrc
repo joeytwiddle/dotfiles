@@ -165,11 +165,6 @@ autocmd VimLeave * silent !stty ixon
 		let g:treeExplNoList = 1
 	" }}}
 
-	" let g:NERDTreeMinimalUI=1
-	"" Firstly this fixes the bug of Vim starting with MBE focused (or not focused)
-	"" Secondly I don't want it to hijack netrw anyway!
-	let g:NERDTreeHijackNetrw = 0
-
 	let g:Grep_OpenQuickfixWindow = 1
 	let g:Grep_Default_Filelist = ". -r -I"
 	" Note that g:Grep_Default_Filelist should be kept in sync with g:asyncfinder_ignore_dirs below.
@@ -866,7 +861,15 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" call add(vamAddons,"github:Raimondi/YAIFA")          " Indent Finder
 	"call add(vamAddons,"github:vim-scripts/yaifa.vim")   " Indent Finder
 	call add(vamAddons,"github:joeytwiddle/YAIFA")   " Indent Finder
+
 	" call add(vamAddons,"github:vim-scripts/vtreeexplorer.vim")   " File Manager (I have this in plugin/ already)
+
+	call add(vamAddons,"github:scrooloose/nerdtree")
+	"let g:NERDTreeMinimalUI=1
+	" This fixes the bug of Vim starting with MBE focused (or not focused)
+	" But also I don't want it to hijack netrw anyway!
+	let g:NERDTreeHijackNetrw = 0
+
 	" call add(vamAddons,"github:kien/ctrlp.vim")          " Quick file finder (I mapped it to Ctrl-T).  Docs: http://kien.github.io/ctrlp.vim/
 	call add(vamAddons,"github:guns/xterm-color-table.vim")   " Useful for picking colours
 
