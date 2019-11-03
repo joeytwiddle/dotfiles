@@ -1196,20 +1196,20 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	let g:airline_section_b = "[%{airline#util#wrap(airline#extensions#branch#get_head(),0)}]"
 	"let g:airline_section_x = "(%{airline#util#wrap(airline#parts#filetype(),0)})"
 	let g:airline_section_z = "%{GetSearchStatus()}%3P (%02c%{g:airline_symbols.linenr}%#__accent_bold#%l%#__restore__#) \#%02B"
-	"let g:airline_left_sep  = "⡿⠋"
-	"let g:airline_right_sep = "⣠⣾"
-	"let g:airline_left_sep  = "⣷⣄"
-	"let g:airline_right_sep = "⠙⢿"
-	"let g:airline_left_sep  = "║"
-	"let g:airline_left_sep  = "𝄛"
-	"let g:airline_left_sep  = "◆"
-	"let g:airline_left_sep  = "╳"
-	"let g:airline_left_sep  = "▶"
-	"let g:airline_right_sep = "◀"
-	"let g:airline_left_sep  = "╱"
-	"let g:airline_right_sep = "╲"
-	"let g:airline_left_sep  = "◤"
-	"let g:airline_right_sep = "◥"
+	"let g:airline_left_sep  = '⡿⠋'
+	"let g:airline_right_sep = '⣠⣾'
+	"let g:airline_left_sep  = '⣷⣄'
+	"let g:airline_right_sep = '⠙⢿'
+	"let g:airline_left_sep  = '║'
+	"let g:airline_left_sep  = '𝄛'
+	"let g:airline_left_sep  = '◆'
+	"let g:airline_left_sep  = '╳'
+	"let g:airline_left_sep  = '▶'
+	"let g:airline_right_sep = '◀'
+	"let g:airline_left_sep  = '╱'
+	"let g:airline_right_sep = '╲'
+	"let g:airline_left_sep  = '◤'
+	"let g:airline_right_sep = '◥'
 	" None of the above worked on Ubuntu 12.04's Lucida Console under Fluxbox.
 	"let g:airline_left_sep  = '>'
 	"let g:airline_right_sep = '<'
@@ -1217,14 +1217,17 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"let g:airline_right_sep = '|'
 	"let g:airline_left_sep  = '|-'
 	"let g:airline_right_sep = '-|'
-	let g:airline_left_sep = '‖'
-	let g:airline_right_sep = '‖'
 	"let g:airline_left_sep  = '\'
 	"let g:airline_right_sep = '/'
 	"let g:airline_left_sep  = '⑉'
 	"let g:airline_right_sep = '⑊'
-	"let g:airline_left_sep  = "|"
-	"let g:airline_right_sep = "|"
+	"let g:airline_left_sep  = '|'
+	"let g:airline_right_sep = '|'
+	"let g:airline_left_sep = '‖'
+	"let g:airline_right_sep = '‖'
+	" Powerline when using NerdFont
+	let g:airline_left_sep  = ""
+	let g:airline_right_sep = ""
 	"let g:airline_left_sep  = ""
 	"let g:airline_right_sep = ""
 	"let g:airline_powerline_fonts = 1
@@ -1506,6 +1509,11 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	call add(vamAddons,"github:joeytwiddle/git_shade.vim") " Colors lines in different intensities according to their age in git's history
 	call add(vamAddons,"github:joeytwiddle/RepeatLast.vim") " Easily repeat groups of previous actions
 	" }}}
+
+	" Devicons introduce some filetype icons to NERDTree, Airline, etc.
+	" Requires https://github.com/ryanoasis/nerd-fonts
+	" Should be loaded last
+	call add(vamAddons,"github:ryanoasis/vim-devicons")
 
 	if filereadable($HOME."/.vimrc.local")
 		source $HOME/.vimrc.local
