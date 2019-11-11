@@ -481,7 +481,18 @@
       "settings": {
         "foreground": "#b267e6"
       }
-    }
+    },
+    // Highlight where a variable is defined
+    // (I actually want to do this for variable assignments too, but I found reads were indistinguishable from writes)
+    /*
+    {
+      "name": "Variable definition",
+      "scope": "meta.definition.variable.js variable.other.readwrite.js, meta.definition.variable.js variable.other.constant.js",
+      "settings": {
+        "foreground": "#e4e4e4"
+      }
+    },
+    */
   ],
   "colors": {
     "activityBar.background": "#333333",
