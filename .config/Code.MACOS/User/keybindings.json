@@ -1,6 +1,31 @@
 // Place your key bindings in this file to override the defaults
 [
     // Toggle between terminal and editor focus
-    { "key": "ctrl+`", "command": "workbench.action.terminal.focus"},
-    { "key": "ctrl+`", "command": "workbench.action.focusActiveEditorGroup", "when": "terminalFocus"}
+    { "key": "ctrl+`", "command": "workbench.action.terminal.focus" },
+    { "key": "ctrl+`", "command": "workbench.action.focusActiveEditorGroup", "when": "terminalFocus" },
+
+    {
+        "key": "ctrl+shift+PageUp",
+        "command": "moveActiveEditor",
+        "args": {
+            "to": "left",
+        }
+    },
+    {
+        "key": "ctrl+shift+PageDown",
+        "command": "moveActiveEditor",
+        "args": {
+            "to": "right",
+        }
+    },
+
+    // Requires macro defined in settings.json
+    {
+        "key": "cmd+/",
+        "command": "macros.commentLineAndMoveDown",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+
+    { "key": "ctrl+n", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
+    { "key": "ctrl+p", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
 ]
