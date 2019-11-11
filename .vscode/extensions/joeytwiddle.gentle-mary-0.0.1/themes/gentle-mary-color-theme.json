@@ -422,6 +422,43 @@
       }
     },
     {
+      "name": "shell builtin",
+      "scope": "source.shell support.function.builtin.shell",
+      "settings": {
+        "foreground": "#AF4A67"
+      }
+    },
+    // The following shell colours were written for Jeff Hyklin's "Better Shell Syntax" not the default syntax scopes (which were limited in October 2019)
+    // Although even this fails to highlight variable expansion inside strings, and option arguments after a \ line escape.
+    {
+      "name": "shell command",
+      "scope": "source.shell entity.name.command.shell",
+      "settings": {
+        "foreground": "#3DA676"
+      }
+    },
+    {
+      "name": "shell argument",
+      "scope": "source.shell string.unquoted.argument.shell",
+      "settings": {
+        "foreground": "#CCCCCC"
+      }
+    },
+    {
+      "name": "shell option",
+      "scope": "source.shell constant.other.option.shell",
+      "settings": {
+        "foreground": "#4B95DC"
+      }
+    },
+    {
+      "name": "shell variable",
+      "scope": "source.shell variable.other.assignment.shell, source.shell variable.other.normal.shell",
+      "settings": {
+        "foreground": "#88CCCC"
+      }
+    },
+    {
       "scope": "token.info-token",
       "settings": {
         "foreground": "#6796e6"
