@@ -143,6 +143,14 @@
       }
     },
     {
+      "name": "Template expression interpolation",
+      "scope": "punctuation.definition.template-expression.*.*, punctuation.definition.template-expression",
+      "settings": {
+        "foreground": "#AF4A67",
+        "fontStyle": "bold"
+      }
+    },
+    {
       "name": "Operator",
       "scope": "keyword.operator",
       "settings": {
