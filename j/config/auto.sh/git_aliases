@@ -366,6 +366,7 @@ git_commit_immediate_fixup_DEBUG_VERSION() {
 
 	# Occasionally rebase appears to lose commits.
 	# In order to learn more about it, and hopefully eventually avoid it, I need to detect when it has happened.
+	# We may be able to avoid it by using --no-fork-point (https://stackoverflow.com/a/1628584/99777)
 	local do_extra_check=1
 
 	# We need a static commit ref, in case the commit is something relative like HEAD~
@@ -1044,25 +1045,25 @@ gbd() {
 	tail -n "${count}" |
 	while read refname rest
 	do
+		local local="${refname}"
 
-        local local="${refname}"
-        ## NOTE: This code is cloned from gbs.  Can we refactor it out?
-        if [ "$local" = "$current_branch" ]
-        then preBranch="* "
-        else
-            preBranch=". "
-            if [ -n "$showancestors" ]
-            then
-                local_branch_commit_hash="$(git rev-parse --verify "$local")"
-                common_commit_between_branch_and_current="$(git merge-base "$local" "$current_branch")"
-                if [ "$common_commit_between_branch_and_current" = "$local_branch_commit_hash" ]
-                then preBranch="| "
-                else preBranch="/ "
-                fi
-                # I considered using "+" and "-" instead, but these are harder to visually distinguish from "*" and each other.
-                # Another alternative I tried was "~" and "x", but again the "*" is easily lost there.
-            fi
-        fi
+		## NOTE: This code is cloned from gbs.  Can we refactor it out?
+		if [ "$local" = "$current_branch" ]
+		then preBranch="* "
+		else
+			preBranch=". "
+			if [ -n "$showancestors" ]
+			then
+				local_branch_commit_hash="$(git rev-parse --verify "$local")"
+				common_commit_between_branch_and_current="$(git merge-base "$local" "$current_branch")"
+				if [ "$common_commit_between_branch_and_current" = "$local_branch_commit_hash" ]
+				then preBranch="| "
+				else preBranch="/ "
+				fi
+			# I considered using "+" and "-" instead, but these are harder to visually distinguish from "*" and each other.
+			# Another alternative I tried was "~" and "x", but again the "*" is easily lost there.
+			fi
+		fi
 
 		echo "${preBranch}${refname} ${rest}"
 	done |
