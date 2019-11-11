@@ -15,6 +15,10 @@
     // Clearer tree structure (default 8)
     "workbench.tree.indent": 18,
 
+    "terminal.integrated.fontSize": 11,
+    "terminal.integrated.fontWeightBold": "normal",
+    "terminal.integrated.lineHeight": 1.1,
+
     // Oh no this can be terrible.  It may reformat the entire file after a tiny paste, and it sometimes does it wrong!  (Even when prettier is enabled!)
     //"editor.formatOnPaste": true,
     // This was running on some files I wasn't editing.
@@ -23,8 +27,47 @@
     // Open searches below the editor, not in the sidebar
     "search.location": "panel",
 
+    // Let snippets take priority over other things in the suggestions list
+    // See: https://github.com/Microsoft/vscode/issues/10565#issuecomment-317319434
+    // Specifically I needed this for TypeScript, where a deprecated alias and two imports were suggested before my 'log' snippet
+    // But this sucks when I want to see the props on a component I am trying to use.
+    //"editor.snippetSuggestions": "top",
+
+    //"workbench.editor.enablePreview": false,
+    //"workbench.editor.enablePreviewFromQuickOpen": false,
+
+    // Make unused variables strongly greyed out
+    "workbench.colorCustomizations": {
+        "editorUnnecessaryCode.opacity": "#00000080",
+    },
+
+    // Use TypeScript to check JSDocs in Javascript files
+    //"javascript.implicitProjectConfig.checkJs": true,
+    // For more on that: https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/
+
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+
+
+    // === Settings for plugins === //
+
     "gitlens.codeLens.enabled": false,
     "gitlens.currentLine.enabled": false,
+    //"gitlens.blame.compact": false,
+
+    "trailing-spaces.deleteModifiedLinesOnly": true,
+    "trailing-spaces.highlightCurrentLine": false,
 
     "todo-tree.highlights.defaultHighlight": {
         "icon": "alert",
@@ -57,29 +100,11 @@
     }
     */
 
-    // Let snippets take priority over other things in the suggestions list
-    // See: https://github.com/Microsoft/vscode/issues/10565#issuecomment-317319434
-    // Specifically I needed this for TypeScript, where a deprecated alias and two imports were suggested before my 'log' snippet
-    "editor.snippetSuggestions": "top",
-
-    "trailing-spaces.deleteModifiedLinesOnly": true,
-    "trailing-spaces.highlightCurrentLine": false,
-
-    "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "gitlens.blame.compact": false,
-    "workbench.colorCustomizations": {
-        "editorUnnecessaryCode.opacity": "#00000080",
+    // Requires plugin
+    "macros": {
+        "commentLineAndMoveDown": ["editor.action.commentLine", "cursorDown"],
     },
 
-    // Use TypeScript to check JSDocs in Javascript files
-    //"javascript.implicitProjectConfig.checkJs": true,
-    // For more on that: https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/
+    // Auto close HTML/JSX tag when typing </
+    "auto-close-tag.SublimeText3Mode": true,
 }
