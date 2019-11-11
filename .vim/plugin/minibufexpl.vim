@@ -1487,7 +1487,10 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
 
   if get(g:, 'miniBufExplShowFolder', 1)
     "let l:cwd = substitute(fnamemodify(getcwd(), ':~'), '/$', '', '')
-    let l:cwd = fnamemodify(getcwd(), ':~:s+.*/\([^/]*/[^/]*/[^/]*\)+\1+g') . '/'
+    " Three parts
+    "let l:cwd = fnamemodify(getcwd(), ':~:s+.*/\([^/]*/[^/]*/[^/]*\)+\1+g') . '/'
+    " Two parts
+    let l:cwd = fnamemodify(getcwd(), ':~:s+.*/\([^/]*/[^/]*\)+\1+g') . '/'
     "let l:cwd = fnamemodify(getcwd(), ':~:t')
     let l:line .= l:cwd . ' '
     " See MBEFolder for highlighting
