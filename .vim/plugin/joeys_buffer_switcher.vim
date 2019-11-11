@@ -123,6 +123,10 @@ function! JoeysBufferSwitch()
   let i = 1   " bufname says: Number zero is the alternate buffer for the current window.
   while i <= bufCount
     let bufName = bufname(i)
+    " Optional.  Not sure if we need this.  Currently we treat open buffers according to the path they were opened with.
+    "let bufName = resolve(expand(bufName))
+    " I often open files with `:e ./filename` but if we strip that leading `./` we can avoid duplicate buffer/file entries
+    let bufName = substitute(bufName, '^\.\/', '', '')
     " TODO: Some buffers need to be ignored e.g. if they are closed (no longer visible)
     if bufexists(i) && buflisted(i) && bufName != ""
       " Special case: exact match means we return it as the only match!
