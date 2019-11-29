@@ -451,6 +451,8 @@
         "foreground": "#4B95DC"
       }
     },
+    // This wasn't working on variables declared as locals.  Better to not use it than have only some variables highlighted.
+    /*
     {
       "name": "shell variable",
       "scope": "source.shell variable.other.assignment.shell, source.shell variable.other.normal.shell",
@@ -458,6 +460,7 @@
         "foreground": "#88CCCC"
       }
     },
+    */
     {
       "scope": "token.info-token",
       "settings": {
@@ -495,6 +498,11 @@
     */
   ],
   "colors": {
+    "activityBar.activeBackground": "#cccccc17",
+    //"activityBar.activeBorder": "#ffffff",
+    //"activityBar.activeBorder": "#cccccc",
+    "activityBar.activeBorder": "#aaaaaa",
+    //"activityBar.activeBorder": "#00000000",
     "activityBar.background": "#333333",
     "activityBar.dropBackground": "#cccccc80",
     "activityBarBadge.background": "#ff9944",
@@ -751,6 +759,7 @@
     //"tab.activeBackground": "#333333",
     "tab.activeBackground": "#cccccc17",
     //"tab.activeBorder": "#ff9944",
+    //"tab.activeBorder": "#777777",
     "tab.activeForeground": "#eeeeee",
     //"tab.activeModifiedBorder": "#3399cc",
     "tab.border": "#00000033",
