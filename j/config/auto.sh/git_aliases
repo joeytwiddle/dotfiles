@@ -388,8 +388,9 @@ git_commit_immediate_fixup_DEBUG_VERSION() {
 	elif [ -n "$do_extra_check" ]
 	then
 		changes="$(git diff HEAD BACKUP-BEFORE-FIXUP-REBASE | wc -l)"
-		if ! [ "$changes" = 0 ]
-		then
+		if [ "$changes" = 0 ]
+		then git branch -D BACKUP-BEFORE-FIXUP-REBASE
+		else
 			echo
 			echo "WARNING: The rebased repo does not match the pre-fixup repo.  Here is the diff:"
 			echo
@@ -476,6 +477,16 @@ alias gpo='verbosely git push origin "$(git_get_current_branch)"'
 alias gpshf='git push --force'
 alias gpshnv='git push --no-verify'
 alias gpshnvf='git push --no-verify --force'
+
+# This is just a reminder how to fix an occasional problem when trying to push (from a non-current local branch?) to a non-existent remote branch
+#
+# The problem shows up as:
+#
+#     error: unable to push to unqualified destination: master
+#     The destination refspec neither matches an existing ref on the remote nor
+#     begins with refs/, and we are unable to guess a prefix based on the source ref.
+#
+alias gpshharder='echo "Try: git push origin <local_branch>:refs/heads/<remote_branch>"'
 
 # I wanted to perform `git pull` and `git merge` with `git_autostashed` however they sometimes drop out unfinished, in which case the stash does not get popped as intended.
 alias gm='git merge'
@@ -729,6 +740,10 @@ alias gllum='gll upstream/master'
 alias gllud='gll upstream/develop'
 
 alias gb='git branch'
+# Shows latest commit on each branch (although I prefer my gbd for this)
+alias gbv='git branch -v'
+# Also shows upstream tracking branch (if any)
+alias gbvv='git branch -vv'
 # Git Branch Force can be used to change the HEAD of a branch that is not the current branch
 alias gbf='git branch -f'
 # Git Branch Move (Rename)
