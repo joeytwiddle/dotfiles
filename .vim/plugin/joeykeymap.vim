@@ -599,9 +599,12 @@ function! s:SetupKeysForGrep()
 	"nnoremap <D-F> :let @+ = expand('<cword>')<CR>:Grep<CR><C-U>\<\><Left><Left>
 	" This was good:
 	"nnoremap <D-F> :Grep<CR>
-	" But trying this now:
-	nnoremap <D-F> :AsyncGrepBottom<CR>
-	nnoremap <C-S-F> :AsyncGrepBottom<CR>
+	" Using asyncfinder
+	"nnoremap <D-F> :AsyncGrepBottom<CR>
+	"nnoremap <C-S-F> :AsyncGrepBottom<CR>
+	" Using Ripgrep with FZF
+	nnoremap <D-F> :Rg<CR>
+	nnoremap <C-S-F> :Rg<CR>
 endfunction
 
 function! s:SetupKeysForCSearch()
@@ -1070,6 +1073,16 @@ nnoremap <D-O> <C-U>:AsyncFinder<CR>
 "nnoremap <Leader>play :execute "!xterm -e mplayer " . shellescape(getline(".")) . " &"<CR><CR>
 nnoremap <Leader>play :execute "!xterm -e env EQ=widebass ~/j/tools/mplayer " . shellescape(getline(".")) . " &"<CR><CR>
 nnoremap <Leader>del :execute "!del " . shellescape(getline(".")) . " ; sleep 1"<CR><CR>
+
+" FZF Fuzzy Finder
+" For file and buffer finders, I would quite like to use: let g:fzf_layout = { 'window': '10split' }
+" But for search I would like to use: let g:fzf_layout = { 'down': '~50%' }
+nnoremap <C-P> :Buffers<CR>
+" This interferes with my own [count]<C-E>
+"nnoremap <C-E> :FZF<CR>
+"nnoremap <Leader>o :FZF<CR>
+" Override Asyncfinder
+nnoremap <C-A> :FZF<CR>
 
 " Emulate Mac keys on Linux (GVim on Manjaro with KDE 5)
 " Alt-V like Cmd-V

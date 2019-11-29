@@ -273,8 +273,12 @@ command! GitMergeToolSetup exec ":source ~/.vim/colors_for_elvin_gentlemary.vim"
 " If I use `set lines` to maximize the window, then it takes ages, and the windows end up the wrong size, and `wincmd =` doesn't fix them all (possibly due to other plugins)
 "command! GitMergeToolSetup set lines=999 columns=9999 | exec ":source ~/.vim/colors_for_elvin_monokai.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | set nodiff | wincmd k | set nodiff | wincmd p | redraw | wincmd = | let @/ = "<<<<<<" | normal! n
 
-" Use grep with fuzzyfinder.  By <igemnace>
+" Use grep with fuzzyfinder
+" By <igemnace>
 command! -bang -nargs=* FZFGrep call fzf#vim#grep('grep -R -n '.shellescape(<q-args>), 0, <bang>0)
+" Recommended by the README
+command! -bang -nargs=* GGrep call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
+" But if you have ag or ripgrep installed, you we can just use :Ag or :Rg
 
 " It occasionally happens that you can not enter blockwise-visual mode because both Ctrl-V and Ctrl-Q are being intercepted by the terminal app or the desktop.
 " To work around that if it occurs, we define a command `:VB` to enter blockwise-visual mode, in fact a full set of commands for consistency.

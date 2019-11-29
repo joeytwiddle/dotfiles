@@ -1471,9 +1471,14 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" Alternatively, try one of these keybinds instead: https://github.com/svermeulen/vim-quickfix-custom
 
 	" Recommended by https://medium.com/@huntie/10-essential-vim-plugins-for-2018-39957190b7a9
-	call add(vamAddons,"github:junegunn/fzf.vim")
 	call add(vamAddons,"github:tpope/vim-eunuch")
 	call add(vamAddons,"github:editorconfig/editorconfig-vim")
+
+	" FZF requires some extra setup on your local environment: https://github.com/junegunn/fzf.vim#installation
+	if has('mac') || has('macunix')
+		call add(vamAddons,{'activate_this_rtp': '/usr/local/opt/fzf'})
+	endif
+	call add(vamAddons,"github:junegunn/fzf.vim")
 
 	" }}}
 
