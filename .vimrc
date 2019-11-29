@@ -788,6 +788,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" At present we are using: https://github.com/MarcWeber/vim-addon-manager.git
 	" If you want to switch to an alternative manager, Plug looks quite powerful.
 	" Here we see Plug can activate only when a certain filetype is opened: https://github.com/ap/vim-css-color/issues/79#issuecomment-372142928
+	" But lazy loading is now possible with vim-add-manager too!  https://github.com/MarcWeber/vim-addon-manager#lazily-loading-plugins--tag-plugins-by-topic--pass-dictionaries-for-adding-arbitrary-options
 
 	" Note that vim-addon-manager clones shallow git history, which is faster and saves disk space, but can make a mess of merges.
 	" To expand a repository to full history, simply: git fetch --depth=999999
@@ -845,8 +846,6 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	call add(vamAddons,'github:joeytwiddle/ultisnips')     " Fix that restores my usual Tab-completion.
 
 	call add(vamAddons,'github:bootleq/LargeFile')       " Disable some things when loading a huge file
-
-	" call add(vamAddons,'github:neoclide/coc.nvim')       " Intellisense engine for vim8 & neovim
 
 	" call add(vamAddons,'github:troydm/easybuffer.vim')
 	" call add(vamAddons,'github:chrisbra/NrrwRgn')
@@ -1378,6 +1377,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:xolox/vim-reload")
 
 	" Autocompletion plugins
+	"call add(vamAddons,'github:neoclide/coc.nvim')       " Intellisense engine for vim8 & neovim (seems to be very popular)
 	""set pyxversion=3
 	"call add(vamAddons,'github:Shougo/deoplete.nvim')
 	"if !has('nvim')
