@@ -1077,12 +1077,24 @@ nnoremap <Leader>del :execute "!del " . shellescape(getline(".")) . " ; sleep 1"
 " FZF Fuzzy Finder
 " For file and buffer finders, I would quite like to use: let g:fzf_layout = { 'window': '10split' }
 " But for search I would like to use: let g:fzf_layout = { 'down': '~50%' }
-nnoremap <C-P> :Buffers<CR>
+"nnoremap <silent> <C-P> :Buffers<CR>
+nnoremap <silent> <C-P> :let g:fzf_layout = { 'window': '10split' }<CR>:Buffers<CR>
+nnoremap <silent> <M-P> :let g:fzf_layout = { 'window': '10split' }<CR>:Buffers<CR>
 " This interferes with my own [count]<C-E>
-"nnoremap <C-E> :FZF<CR>
-"nnoremap <Leader>o :FZF<CR>
+"nnoremap <silent> <C-E> :FZF<CR>
+"nnoremap <silent> <Leader>o :Files<CR>
 " Override Asyncfinder
-nnoremap <C-A> :FZF<CR>
+nnoremap <silent> <C-A> :let g:fzf_layout = { 'window': '10split' }<CR>:Files<CR>
+" When opening the Files finders, put the prompt at the top (reverse layout)
+command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': ['--layout=reverse']}, <bang>0)
+" And for buffers with <C-B> we will put the prompt at the top
+nnoremap <silent> <C-B> :let g:fzf_layout = { 'window': '10split' }<CR>:call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
+" But for buffers with <C-P> I like it reversed, so we can hit <C-P> <C-P> <C-P> like in WebStorm
+" Break out of FZF when pressing Escape
+augroup FZF
+	autocmd!
+	autocmd FileType fzf inoremap <buffer> <Esc> <C-C><C-C>
+augroup END
 
 " Emulate Mac keys on Linux (GVim on Manjaro with KDE 5)
 " Alt-V like Cmd-V
