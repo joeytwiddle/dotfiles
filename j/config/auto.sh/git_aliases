@@ -350,7 +350,7 @@ git_commit_immediate_fixup() {
 
 	echo ">> Performing rebase"
 	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
-	EDITOR=true git rebase -i --autosquash --autostash --preserve-merges "${commit_to_amend}~"
+	EDITOR=true git rebase -i --autosquash --autostash --preserve-merges --no-fork-point "${commit_to_amend}~"
 }
 alias gcf='git_commit_immediate_fixup'
 
@@ -378,7 +378,7 @@ git_commit_immediate_fixup_DEBUG_VERSION() {
 
 	echo ">> Performing rebase"
 	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
-	EDITOR=true git rebase -i --autosquash --autostash --preserve-merges "${commit_to_amend}~"
+	EDITOR=true git rebase -i --autosquash --autostash --preserve-merges --no-fork-point "${commit_to_amend}~"
 
 	if [ -n "$do_extra_check" ] && ( [ -d "$git_dir/rebase-merge" ] || [ -d "$git_dir/rebase-apply" ] )
 	then
