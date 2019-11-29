@@ -44,6 +44,15 @@
     // Use TypeScript to check JSDocs in Javascript files
     //"javascript.implicitProjectConfig.checkJs": true,
     // For more on that: https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/
+    "typescript.updateImportsOnFileMove.enabled": "always",
+
+    // Tell the eslint plugin to also check TypeScript files
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
 
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -99,6 +108,44 @@
         }
     }
     */
+
+    // For VSCodeVim
+    // Docs: https://github.com/VSCodeVim/Vim
+    //"vim.easymotion": true,
+    //"vim.sneak": true, // Didn't make any difference to <kbd>f</kbd> when I tried it.  Oh is it supposed to be two char?
+    //"vim.incsearch": true,
+    //"vim.useSystemClipboard": true,
+    //"vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+    "vim.ignorecase": false,
+    "vim.smartcase": false,
+    "vim.highlightedyank.enable": true,
+    "vim.normalModeKeyBindingsNonRecursive": [
+        { "before": [ "C-L" ], "commands": [ ":nohlsearch" ], "after": [ "S-Esc" ] },
+        // I found my fingers reaching for this when I first started using Vim mode.  Not sure if they do now so much.
+        // But it's actually more powerful than Cmd-S on macOS, because that only saves the current file.
+        { "before": [ "C-S" ], "commands": [ "workbench.action.files.saveAll" ] },
+        { "before": [ "[", " " ], "after": [ "O", "<Esc>" ] },
+        { "before": [ "]", " " ], "after": [ "o", "<Esc>" ] },
+        { "before": [ "[", "b" ], "commands": [ "workbench.action.previousEditor" ] },
+        { "before": [ "]", "b" ], "commands": [ "workbench.action.nextEditor" ] },
+        { "before": [ "[", "w" ], "commands": [ "workbench.action.focusPreviousGroup" ] },
+        { "before": [ "]", "w" ], "commands": [ "workbench.action.focusNextGroup" ] },
+        { "before": [ "C-W", "s" ], "commands": [ "workbench.action.splitEditorDown" ] },
+        { "before": [ "C-W", "S" ], "commands": [ "workbench.action.splitEditorRight" ] },
+        { "before": [ "C-W", "c" ], "commands": [ "workbench.action.closeGroup" ] },
+        //{ "before": [ "g", "x" ], "commands": [ "workbench.action.url.openUrl" ] },
+        { "before": [ "C-U" ], "commands": [ "workbench.action.openPreviousRecentlyUsedEditor" ] },
+        { "before": [ "C-J" ], "commands": [ "scrollLineDown", "scrollLineDown" ] },
+        { "before": [ "C-K" ], "commands": [ "scrollLineUp", "scrollLineUp" ] },
+        { "before": [ "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "editor.action.startFindReplaceAction" ] },
+    ],
+
+    // For ZenTabs (which doesn't seem to be working)
+    //"workbench.editor.enablePreviewFromQuickOpen": false,
+    //"workbench.editor.enablePreview": false,
+    "zentabs.maximumOpenedTabs": 8,
+    "zentabs.applyLimitFor": "editorGroup",
 
     // Requires plugin
     "macros": {

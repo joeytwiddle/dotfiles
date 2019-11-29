@@ -28,4 +28,14 @@
 
     { "key": "ctrl+n", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
     { "key": "ctrl+p", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
+
+    // When using Vim plugin
+    // Note that "textInputFocus" seems to apply to both Insert and Normal mode
+    //{ "key": "ctrl+s", "command": "workbench.action.files.saveAll", "when": "textInputFocus" },
+    //{ "key": "ctrl+k", "command": "scrollLineUp", "when": "textInputFocus" },
+    //{ "key": "ctrl+j", "command": "scrollLineDown", "when": "textInputFocus" },
+    // But we can't define mode-specific keybinds here, because they apply to all modes.
+    // Instead see "vim.normalModeKeyBindingsNonRecursive" in settings.json
+    // { "key": "[ space", "command": "editor.action.insertLineBefore", "when": "editorTextFocus && !editorReadonly" },
+    // { "key": "] space", "command": "editor.action.insertLineAfter", "when": "editorTextFocus && !editorReadonly" },
 ]
