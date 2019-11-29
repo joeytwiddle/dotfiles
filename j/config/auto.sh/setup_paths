@@ -1,23 +1,29 @@
-export PATH="$HOME/bin:$PATH"
 #export PATH="/usr/local/node/bin:$PATH"
 
-# On a Mac / BSD system/usr/local/opt/coreutils/libexec/gnubin, load GNU core utils onto the PATH:
+# On a Mac / BSD system, load GNU core utils onto the PATH.
 # This might be unwise.  Some of the scripts we run might be expecting BSD tools, not GNU tools!
+# But I haven't actually had any trouble with it after 3 years of working this way.
+#
 # After brew install coreutils
+#
 gnucorefolder=/usr/local/opt/coreutils/libexec/gnubin
 if [ -d "$gnucorefolder" ]
 then
 	PATH="$gnucorefolder:$PATH"
 	MANPATH="$gnucorefolder/../gnuman:$MANPATH"
 fi
+#
 # After brew install gnu-sed
+#
 gnusedfolder=/usr/local/opt/gnu-sed/libexec/gnubin
 if [ -d "$gnusedfolder" ]
 then
 	PATH="$gnusedfolder:$PATH"
 	MANPATH="$gnusedfolder/../gnuman:$MANPATH"
 fi
-# After brew install findutils.  This contains GNU xargs
+#
+# After brew install findutils.  This contains GNU xargs, find, locate and updatedb
+#
 gnufindfolder=/usr/local/opt/findutils/libexec/gnubin
 if [ -d "$gnufindfolder" ]
 then
@@ -30,6 +36,12 @@ fi
 #PATH=$(brew --prefix gnu-sed)/libexec/gnubin:$PATH
 #PATH=$(brew --prefix findutils)/libexec/gnubin:$PATH
 
-# Similarly, let's promote /usr/local/bin over the defaults
+# Similarly, let's promote other Homebrew executables over the defaults
 PATH="/usr/local/bin:$PATH"
 
+# Python path
+for pyver in "$HOME"/Library/Python/*
+do export PATH="$pyver/bin:$PATH"
+done
+
+export PATH="$HOME/bin:$PATH"
