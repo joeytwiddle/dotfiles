@@ -26,6 +26,8 @@
         "when": "editorTextFocus && !editorReadonly"
     },
 
+    { "key": "ctrl+s", "command": "workbench.action.files.saveAll" },
+
     { "key": "ctrl+n", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
     { "key": "ctrl+p", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
 

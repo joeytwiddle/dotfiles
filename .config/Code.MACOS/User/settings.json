@@ -111,6 +111,7 @@
 
     // For VSCodeVim
     // Docs: https://github.com/VSCodeVim/Vim
+    // Default keybinds: https://github.com/VSCodeVim/Vim/blob/master/ROADMAP.md
     //"vim.easymotion": true,
     //"vim.sneak": true, // Didn't make any difference to <kbd>f</kbd> when I tried it.  Oh is it supposed to be two char?
     //"vim.incsearch": true,
@@ -121,14 +122,23 @@
     "vim.smartcase": false,
     "vim.highlightedyank.enable": true,
     "vim.normalModeKeyBindingsNonRecursive": [
+        { "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
+        { "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ] },
         { "before": [ "C-L" ], "commands": [ ":nohlsearch" ], "after": [ "S-Esc" ] },
-        // I found my fingers reaching for this when I first started using Vim mode.  Not sure if they do now so much.
-        // But it's actually more powerful than Cmd-S on macOS, because that only saves the current file.
-        { "before": [ "C-S" ], "commands": [ "workbench.action.files.saveAll" ] },
+        // Ctrl-S: I use this in Vim to save all
+        // That is actually more powerful than Cmd-S in VSCode, because that only saves the current file.
+        // Neither of these worked for me:
+        //{ "before": [ "C-S" ], "commands": [ "workbench.action.files.saveAll" ] },
+        //{ "before": [ "C-S" ], "commands": [ ":wa" ] },
+        // But I put a C-S keybinding in keybindings.json, and that one worked.
         { "before": [ "[", " " ], "after": [ "O", "<Esc>" ] },
         { "before": [ "]", " " ], "after": [ "o", "<Esc>" ] },
         { "before": [ "[", "b" ], "commands": [ "workbench.action.previousEditor" ] },
         { "before": [ "]", "b" ], "commands": [ "workbench.action.nextEditor" ] },
+        { "before": [ "[", "q" ], "commands": [ "search.action.focusPreviousSearchResult" ], "when": "hasSearchResult" },
+        { "before": [ "]", "q" ], "commands": [ "search.action.focusNextSearchResult" ], "when": "hasSearchResult" },
+        { "before": [ "[", "l" ], "commands": [ "editor.action.marker.prevInFiles" ], "when": "editorTextFocus && !editorReadonly" },
+        { "before": [ "]", "l" ], "commands": [ "editor.action.marker.nextInFiles" ], "when": "editorTextFocus && !editorReadonly" },
         { "before": [ "[", "w" ], "commands": [ "workbench.action.focusPreviousGroup" ] },
         { "before": [ "]", "w" ], "commands": [ "workbench.action.focusNextGroup" ] },
         { "before": [ "C-W", "s" ], "commands": [ "workbench.action.splitEditorDown" ] },
@@ -138,7 +148,19 @@
         { "before": [ "C-U" ], "commands": [ "workbench.action.openPreviousRecentlyUsedEditor" ] },
         { "before": [ "C-J" ], "commands": [ "scrollLineDown", "scrollLineDown" ] },
         { "before": [ "C-K" ], "commands": [ "scrollLineUp", "scrollLineUp" ] },
+        { "before": [ "<Leader>", "w" ], "commands": [ "editor.action.toggleWordWrap" ] },
         { "before": [ "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "editor.action.startFindReplaceAction" ] },
+        { "before": [ "<Leader>", "R" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "workbench.action.replaceInFiles" ] },
+        { "before": [ "<Leader>", "s" ], "commands": [ "editor.action.rename" ], "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly" },
+        // Not working:
+        //{ "before": [ "C-}" ], "commands": [ "editor.action.goToImplementation" ] },
+        //{ "before": [ "C-S-]" ], "commands": [ "editor.action.goToImplementation" ] },
+        { "before": [ "g", "u" ], "commands": [ "editor.action.goToImplementation" ] },
+        { "before": [ "g", "U" ], "commands": [ "editor.action.goToImplementation" ] },
+        { "before": [ "g", "b" ], "commands": [ "editor.action.goToImplementation" ] },
+        { "before": [ "g", "H" ], "commands": [ "editor.action.showDefinitionPreviewHover" ] },
+        { "before": [ "<Leader>", "a" ], "commands": [ "gitlens.toggleLineBlame" ] },
+        { "before": [ "<Leader>", "A" ], "commands": [ "gitlens.toggleFileBlame" ] },
     ],
 
     // For ZenTabs (which doesn't seem to be working)
