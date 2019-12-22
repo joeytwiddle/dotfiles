@@ -1,4 +1,5 @@
 // Place your settings in this file to overwrite the default settings
+// vim: filetype=javascript
 {
     "git.ignoreLegacyWarning": true,
 
@@ -17,8 +18,14 @@
     "editor.fontSize": 12,
     "editor.lineHeight": 14,
 
+    // Linux
     "terminal.integrated.fontSize": 13,
     "terminal.integrated.fontFamily": "'Lucida Sans Typewriter'",
+
+    // macOS
+    //"terminal.integrated.fontSize": 11,
+    //"terminal.integrated.fontWeightBold": "normal",
+    //"terminal.integrated.lineHeight": 1.1,
 
     //"editor.renderWhitespace": "boundary",
 
@@ -34,6 +41,15 @@
 
     "editor.mouseWheelZoom": true,
 
+    // Clearer tree structure (default 8)
+    "workbench.tree.indent": 18,
+
+    // Oh no this can be terrible.  It may reformat the entire file after a tiny paste, and it sometimes does it wrong!  (Even when prettier is enabled!)
+    //"editor.formatOnPaste": true,
+    // This was running on some files I wasn't editing.
+    //"editor.formatOnSave": true,
+
+    // Open searches below the editor, not in the sidebar
     "search.location": "panel",
 
     // I think this enough to stop the CPU going to 100% for 5 minutes after populating node_modules folder
@@ -46,14 +62,36 @@
     // Let snippets take priority over other things in the suggestions list
     // See: https://github.com/Microsoft/vscode/issues/10565#issuecomment-317319434
     // Specifically I needed this for TypeScript, where a deprecated alias and two imports were suggested before my 'log' snippet
-    "editor.snippetSuggestions": "top",
+    // But this sucks when I want to see the props on a component I am trying to use.
+    //"editor.snippetSuggestions": "top",
+
+    //"workbench.editor.enablePreview": false,
+    //"workbench.editor.enablePreviewFromQuickOpen": false,
 
     //"editor.occurrencesHighlight": false,
 
+    // Make unused variables strongly greyed out
     "workbench.colorCustomizations": {
+        // These work, but only the backgrounds not the foregrounds
+        // If we don't set them, then the theme can set them
+        //"editor.selectionBackground": "#153",
+        //"editor.selectionForeground": "#ffffff",
+        //"editor.selectionHighlightBackground": "#449059",
+        //"editor.selectionHighlightForeground": "#ffffff",
+
         "editorWarning.foreground": "#dd8800",
         //"breadcrumb.foreground": "#888888",
+
+        "editorUnnecessaryCode.opacity": "#00000080",
     },
+
+    // It's probably better to enable these settings in the .vscode folder local to each workspace/project
+    // Use TypeScript to check JSDocs in Javascript files
+    //"javascript.implicitProjectConfig.checkJs": true,
+    // For more on that: https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/
+    //"javascript.implicitProjectConfig.experimentalDecorators": false,
+
+    "typescript.updateImportsOnFileMove.enabled": "always",
 
     //"errorLens.errorBackground": "#ff00001c",
     //"errorLens.warningBackground": "#ff880012",
@@ -75,19 +113,144 @@
     //"errorLens.fontStyleItalic": false,
 
     // === For plugins === //
-    "eslint.enable": true,
+    //"eslint.enable": true,
     // Is this too heavy?
     //"autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
+    // Tell the eslint plugin to also check TypeScript files
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
 
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[typescriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "gitlens.currentLine.enabled": false,
-    "gitlens.hovers.currentLine.over": "line",
-    "gitlens.codeLens.enabled": false,
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
 
-    //"javascript.implicitProjectConfig.checkJs": true,
+
+
+    // === Settings for plugins === //
+
+    "gitlens.codeLens.enabled": false,
+    "gitlens.currentLine.enabled": false,
+    //"gitlens.hovers.currentLine.over": "line",
+    //"gitlens.blame.compact": false,
+
+    "trailing-spaces.deleteModifiedLinesOnly": true,
+    "trailing-spaces.highlightCurrentLine": false,
+
+    "todo-tree.highlights.defaultHighlight": {
+        "icon": "alert",
+        "type": "text",
+        "foreground": "orange",
+        // "background": "white",
+        "opacity": 50,
+        "iconColour": "blue"
+    },
+    "todo-tree.general.tags": [
+        "TODO",
+        "@todo",
+        "FIXME",
+        "@fixme",
+        "BUG",
+        "@bug",
+        "CONSIDER",
+        "@consider"
+    ],
+    /*
+    "todo-tree.customHighlight": {
+        "TODO": {
+            "icon": "check",
+            "type": "line"
+        },
+        "FIXME": {
+            "foreground": "black",
+            "iconColour": "yellow"
+        }
+    }
+    */
+
+    // For VSCodeVim
+    // Docs: https://github.com/VSCodeVim/Vim
+    // Default keybinds: https://github.com/VSCodeVim/Vim/blob/master/ROADMAP.md
+    //"vim.easymotion": true,
+    //"vim.sneak": true, // Didn't make any difference to <kbd>f</kbd> when I tried it.  Oh is it supposed to be two char?
+    //"vim.incsearch": true,
+    //"vim.useSystemClipboard": true,
+    //"vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+    "vim.ignorecase": false,
+    "vim.smartcase": false,
+    "vim.highlightedyank.enable": true,
+    "vim.normalModeKeyBindingsNonRecursive": [
+        { "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
+        { "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ] },
+        { "before": [ "C-L" ], "commands": [ ":nohlsearch" ], "after": [ "S-Esc" ] },
+        // Ctrl-S: I use this in Vim to save all
+        // That is actually more powerful than Cmd-S in VSCode, because that only saves the current file.
+        // Neither of these worked for me:
+        //{ "before": [ "C-S" ], "commands": [ "workbench.action.files.saveAll" ] },
+        //{ "before": [ "C-S" ], "commands": [ ":wa" ] },
+        // But I put a C-S keybinding in keybindings.json, and that one worked.
+        { "before": [ "[", " " ], "after": [ "O", "<Esc>" ] },
+        { "before": [ "]", " " ], "after": [ "o", "<Esc>" ] },
+        { "before": [ "[", "b" ], "commands": [ "workbench.action.previousEditor" ] },
+        { "before": [ "]", "b" ], "commands": [ "workbench.action.nextEditor" ] },
+        { "before": [ "[", "q" ], "commands": [ "search.action.focusPreviousSearchResult" ], "when": "hasSearchResult" },
+        { "before": [ "]", "q" ], "commands": [ "search.action.focusNextSearchResult" ], "when": "hasSearchResult" },
+        { "before": [ "[", "l" ], "commands": [ "editor.action.marker.prevInFiles" ], "when": "editorTextFocus && !editorReadonly" },
+        { "before": [ "]", "l" ], "commands": [ "editor.action.marker.nextInFiles" ], "when": "editorTextFocus && !editorReadonly" },
+        { "before": [ "[", "w" ], "commands": [ "workbench.action.focusPreviousGroup" ] },
+        { "before": [ "]", "w" ], "commands": [ "workbench.action.focusNextGroup" ] },
+        { "before": [ "C-W", "s" ], "commands": [ "workbench.action.splitEditorDown" ] },
+        { "before": [ "C-W", "S" ], "commands": [ "workbench.action.splitEditorRight" ] },
+        { "before": [ "C-W", "c" ], "commands": [ "workbench.action.closeGroup" ] },
+        //{ "before": [ "g", "x" ], "commands": [ "workbench.action.url.openUrl" ] },
+        { "before": [ "C-U" ], "commands": [ "workbench.action.openPreviousRecentlyUsedEditor" ] },
+        { "before": [ "C-J" ], "commands": [ "scrollLineDown", "scrollLineDown" ] },
+        { "before": [ "C-K" ], "commands": [ "scrollLineUp", "scrollLineUp" ] },
+        { "before": [ "<Leader>", "w" ], "commands": [ "editor.action.toggleWordWrap" ] },
+        { "before": [ "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "editor.action.startFindReplaceAction" ] },
+        { "before": [ "<Leader>", "R" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "workbench.action.replaceInFiles" ] },
+        { "before": [ "<Leader>", "s" ], "commands": [ "editor.action.rename" ], "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly" },
+        //{ "before": [ "C-]" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
+        //{ "before": [ "g", "d" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
+        //{ "before": [ "g", "D" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
+        // Not working:
+        //{ "before": [ "C-}" ], "commands": [ "editor.action.goToImplementation" ] },
+        //{ "before": [ "C-S-]" ], "commands": [ "editor.action.goToImplementation" ] },
+        { "before": [ "g", "u" ], "commands": [ "editor.action.goToImplementation" ] },
+        { "before": [ "g", "U" ], "commands": [ "editor.action.goToImplementation" ] },
+        { "before": [ "g", "b" ], "commands": [ "editor.action.goToImplementation" ] },
+        { "before": [ "g", "H" ], "commands": [ "editor.action.showDefinitionPreviewHover" ] },
+        { "before": [ "<Leader>", "a" ], "commands": [ "gitlens.toggleLineBlame" ] },
+        { "before": [ "<Leader>", "A" ], "commands": [ "gitlens.toggleFileBlame" ] },
+    ],
+
+    // For ZenTabs (which doesn't seem to be working)
+    //"workbench.editor.enablePreviewFromQuickOpen": false,
+    //"workbench.editor.enablePreview": false,
+    "zentabs.maximumOpenedTabs": 8,
+    "zentabs.applyLimitFor": "editorGroup",
+
+    // Requires plugin
+    "macros": {
+        "commentLineAndMoveDown": ["editor.action.commentLine", "cursorDown"],
+    },
+
+    // Auto close HTML/JSX tag when typing </
+    "auto-close-tag.SublimeText3Mode": true,
 }
