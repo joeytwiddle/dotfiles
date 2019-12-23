@@ -11,6 +11,12 @@
 "delete the buffer; keep windows; create a scratch buffer if no buffers left
 function! s:Kwbd(kwbdStage)
   if(a:kwbdStage == 1)
+    if(&modified)
+      let answer = confirm("This buffer has been modified.  Are you sure you want to delete it?", "&Yes\n&No", 2)
+      if(answer != 1)
+        return
+      endif
+    endif
     if(!buflisted(winbufnr(0)))
       bd!
       return
@@ -51,7 +57,8 @@ function! s:Kwbd(kwbdStage)
     if(!s:buflistedLeft)
       set buflisted
       set bufhidden=delete
-      set buftype=nofile
+      "set buftype=nofile
+      set buftype=
       setlocal noswapfile
     endif
   else
@@ -66,11 +73,14 @@ function! s:Kwbd(kwbdStage)
   endif
 endfunction
 
-command! Kwbd call <SID>Kwbd(1)
+command! Kwbd call s:Kwbd(1)
 nnoremap <silent> <Plug>Kwbd :<C-u>Kwbd<CR>
 
 " Create a mapping (e.g. in your .vimrc) like this:
-"nmap <C-W>! <Plug>Kwbd
+nmap <C-W>! <Plug>Kwbd
+nmap <C-W>d <Plug>Kwbd
+nmap <C-W><C-D> <Plug>Kwbd
+nnoremap <Leader>bd :CloseBuffer<CR>
 
 "" A name I found more memorable:
 " command! Bdel call <SID>Kwbd(1)
@@ -83,7 +93,7 @@ nnoremap <silent> <Plug>Kwbd :<C-u>Kwbd<CR>
 " nnoremap :bdel :Bclose
 " command! CloseBuffer call <SID>Kwbd(1)
 command! CloseBuffer :Kwbd
-nnoremap :bdel :CloseBuffer
+cnoremap bdel CloseBuffer
 
 " Eunuch's :Clocate makes it difficult to tab-complete :CloseBuffer
 " That has annoyed me enough, that I will simply remove :Clocate
