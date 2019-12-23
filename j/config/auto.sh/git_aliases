@@ -1552,4 +1552,23 @@ git_list_submodule_urls() {
 # with this (for bash)
 #complete -W '$(git for-each-ref --format="%(refname:short)" | grep -v origin/HEAD)' -o bashdefault -o default gco
 
+git_cd_to_toplevel() {
+	local git_root_folder
+	git_root_folder="$(git rev-parse --show-toplevel)" &&
+	cd "${git_root_folder}"
+}
+# Wait and see which of these I end up using, then remove the others
+alias gcdtl='git_cd_to_toplevel'
+alias cdgtl='git_cd_to_toplevel'
+alias cdgitroot='git_cd_to_toplevel'
+alias cdgr='git_cd_to_toplevel'
+alias cd_gitroot='git_cd_to_toplevel'
+alias cd_git_toplevel='git_cd_to_toplevel'
+
+alias gclean='git clean'
+alias gcleani='git clean -i'
+alias gcleanuntracked='git clean -di'
+alias gcleanignored='git clean -dXi'
+alias gcleanall='git clean -dxi'
+
 # vim: ft=sh
