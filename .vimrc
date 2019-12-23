@@ -236,6 +236,7 @@ autocmd VimLeave * silent !stty ixon
 	" let g:ConqueTerm_CloseOnSuccess = 1
 	let g:ConqueTerm_InsertOnEnter = 1
 	let g:ConqueTerm_ReadUnfocused = 1   " I fear this may be preventing me from leaving the window!
+	" Instead of ConqueTerm, split-term is quite popular (although it might only work in nvim)
 
 	let g:yaifa_max_lines = 400   " taglist.vim needs at least 100, minibufexpl.vim needs 312!
 
@@ -387,7 +388,8 @@ autocmd VimLeave * silent !stty ixon
 	" set titlestring=%{fnamemodify(getcwd(),':t')}\ %<(%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.'))})
 	"" The last two parts of the working folder's path
 	"set titlestring=%{fnamemodify(getcwd(),':s+.*/\\([^/]*/[^/]*\\)+\\1+g')}/\ %<(%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.'))})
-	set titlestring=[%{fnamemodify(getcwd(),':s+.*/\\([^/]*/[^/]*\\)+\\1+g')}]\ %<%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.'))}
+	"set titlestring=[%{fnamemodify(getcwd(),':s+.*/\\([^/]*/[^/]*\\)+\\1+g')}]\ %<%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.'))}
+	set titlestring=%<%{ShortenIfNeeded(fnamemodify(bufname('%'),':p:~:.'))}\ —\ %{ShortenIfNeeded(fnamemodify(getcwd(),':s+.*/\\([^/]*/[^/]*\\)+\\1+g'))}
     " \ %{get(v:,'servername','')?'\ ['.v:servername.']':''}
 
 	"" NOTE: To keep the netrw file listing open, open the first file with 'v' and subsequent files with 'P'
@@ -1407,6 +1409,10 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	" :AnsiEsc interprets any ANSI escape sequences in the current file, conceals them, and uses them for highlighting
 	" Beware that vimpager exposes its own version of AnsiEsc !
+	" There are also some forks:
+	" - https://github.com/kaylynb/AnsiEsc
+	" - https://github.com/my-vim-plugin-mirrors/AnsiEscPlugin
+	" Although last I checked, neither of those forks could handle a colour code, followed later by a bold code.  (We always end up with bold white, instead of bold colour.)
 	call add(vamAddons,"github:powerman/vim-plugin-AnsiEsc")
 	" Includes executables vimpager and vimcat (which pretty-print files using Vim's syntax highlighting!)
 	call add(vamAddons,"github:rkitover/vimpager")
