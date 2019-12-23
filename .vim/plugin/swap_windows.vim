@@ -68,12 +68,12 @@ endfunction
 noremap <silent> <leader>mw :call MarkWindowSwap()<CR>
 noremap <silent> <leader>pw :call DoWindowSwap()<CR>
 " Then I tried: Mark Window, Swap Windows
-noremap <silent> <leader>sw :call DoWindowSwap()<CR>
+"noremap <silent> <leader>sw :call DoWindowSwap()<CR>
 " Then I settled on: Copy Window, Paste Window
 noremap <silent> <leader>cw :call MarkWindowSwap()<CR>
-" New idea: Start on one on of the windows.  Click on the other with the mouse and do \sw
-noremap <silent> <leader>sw :call MarkWindowSwap()<CR>
-noremap <silent> <leader>sw :call MarkWindowSwap()<CR>
+" New idea: Start on one on of the windows.  Click on the other with the mouse and do \swapwin or :SwapWindows
+noremap <silent> <leader>swapwin :call MarkWindowSwap()<CR>:wincmd p<CR>:call DoWindowSwap()<CR>
+command SwapWindows call MarkWindowSwap() | :wincmd p | :call DoWindowSwap()
 
 " \SW \WI "swap window with"
 noremap <silent> <leader>SW :call MarkWindowSwap()<CR>
