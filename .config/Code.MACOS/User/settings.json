@@ -11,7 +11,10 @@
     "editor.fontFamily": "Lucida Console, Lucida Sans Typewriter, Menlo, Monaco, 'Courier New', monospace",
     // Looks a lot like WebStorm
     "editor.fontSize": 11,
-    "editor.lineHeight": 14,
+    //"editor.lineHeight": 14,
+    "editor.lineHeight": 13,
+    // Slightly larger
+    //"editor.fontSize": 11.3,
 
     // For Linux
     //"editor.fontFamily": "Envy Code S12",
