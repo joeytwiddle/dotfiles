@@ -46,6 +46,9 @@ endfunction
 
 """"""""""""""""""""""""""""""" Jrefactor """""""""""""""""""""""""""""""
 
+" Type `:Jrefactor foo` to replace all occurrences of the word under the
+" cursor with the new word `foo`.
+
 " PLEASE NOTE that Jrefactor is now deprecated in favour of \r and \R in replace.vim
 
 command! -nargs=1 Jrefactor call Jrefactor(<f-args>)
