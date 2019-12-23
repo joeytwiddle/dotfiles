@@ -1,6 +1,9 @@
 # By default fzf does not ignore node_modules.
 # But if we ask it to use ag or rg, they will respect .gitignore which might be good enough.
 
+# Do en axact match by default.  To do a fuzzy match, prefix your search with `'`
+export FZF_DEFAULT_OPTS="--exact"
+
 if which rg > /dev/null 2>&1
 then export FZF_DEFAULT_COMMAND='rg --files --hidden'
 elif which ag > /dev/null 2>&1
