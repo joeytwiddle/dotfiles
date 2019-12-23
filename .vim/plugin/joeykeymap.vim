@@ -496,7 +496,7 @@ nnoremap <Leader>p :set invpaste<CR>:set paste?<CR>
 " Alternatively, try the builtin ]p which pastes at the current level of indentation!
 
 " Toggle (and display) diff settings
-nmap <Leader>d :set fdc=0 invdiff diff?<CR>:let &l:scrollbind = &l:diff<CR>
+nmap <Leader>d :set fdc=0 foldmethod=diff invdiff diff?<CR>:let &l:scrollbind = &l:diff<CR>
 
 " Fold everything in the buffer except lines which match the current search pattern (or at second level, the line on either side)
 "nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
