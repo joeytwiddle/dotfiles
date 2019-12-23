@@ -268,6 +268,7 @@
         { "before": [ "C-W", "s" ], "commands": [ "workbench.action.splitEditorDown" ] },
         { "before": [ "C-W", "S" ], "commands": [ "workbench.action.splitEditorRight" ] },
         { "before": [ "C-W", "c" ], "commands": [ "workbench.action.closeGroup" ] },
+        { "before": [ "<Leader>", "b", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
         // This just opens a VSCode prompt for a URL, it doesn't actually open the hovered URL in a browser, which is what we want
         //{ "before": [ "g", "x" ], "commands": [ "workbench.action.url.openUrl" ] },
         { "before": [ "C-U" ], "commands": [ "workbench.action.openPreviousRecentlyUsedEditor" ] },
