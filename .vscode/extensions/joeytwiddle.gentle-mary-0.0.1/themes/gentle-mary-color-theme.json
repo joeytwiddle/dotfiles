@@ -31,6 +31,17 @@
         "foreground": "#CCCCCC"
       }
     },
+    /*
+    {
+      "name": "Identifier",
+      "scope": "variable.parameter, variable.other.readwrite",
+      "settings": {
+        //"foreground": "#ee9933"
+        //"foreground": "#dd8866"
+        "foreground": "#88eeee"
+      }
+    },
+    */
     {
       "name": "Keyword",
       "scope": "keyword, modifier, variable.language.this, support.type.object, constant.language",
