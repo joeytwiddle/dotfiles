@@ -1420,6 +1420,9 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
             " Get filename & Remove []'s & ()'s
             let l:shortBufName = fnamemodify(l:BufName, ":t")                  
             let l:shortBufName = substitute(l:shortBufName, '[][()]', '', 'g') 
+            if l:shortBufName == ''
+              let l:shortBufName = '[Scratch]'
+            endif
             " let l:tab = '['.l:i.':'.l:shortBufName.']'
             " let l:tab = '['.l:shortBufName.']'
             if g:miniBufExplShowBufNums
