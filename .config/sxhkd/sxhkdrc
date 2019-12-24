@@ -148,7 +148,7 @@ alt + u
   xte "keyup u" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key u" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
 # Toggle DevTools (Chrome)
-# (This one doesn't work for me because I have it bound to position windows)
+# But I also use this to position windows
 alt + super + j
   run_if_window_matches       --class "(google-chrome|firefox)" -- xte "keyup j" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key j" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L" ; \
   run_if_window_matches --not --class "(google-chrome|firefox)" -- put_current_xwindow bottom
@@ -178,9 +178,10 @@ alt + shift + l
   run_if_window_matches       --class "(code|code-oss)" -- xte "keyup l" "keydown Control_L" "key l" "keyup Control_L"
 
 # Format with prettier (in VSCode send Ctrl-Shift-Alt-P, my rebind for editor.action.formatDocument)
-alt + shift + p
-  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup p" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup p" "keydown Control_L" "key p" "keyup Control_L"
+# Disabled now because I want it to perform quickOpenNavigatePreviousInFilePicker
+#alt + shift + p
+#  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup p" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup p" "keydown Control_L" "key p" "keyup Control_L"
 
 # When opening a search, start it immediately.  (More useful if we had already selected a word.)
 alt + shift + f
@@ -210,15 +211,17 @@ alt + h
   xte "keyup h" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key h" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + i
   xte "keyup i" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key i" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
-alt + j
-  xte "keyup j" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+# Although this is used in web browsers, I need to keep it clear for VSCode, to distinguish Ctrl-J (scroll down) from Alt-J (toggle panel)
+#alt + j
+#  xte "keyup j" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + k
   xte "keyup k" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key k" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + m
   xte "keyup m" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key m" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 # Print
-alt + p
-  xte "keyup p" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+# Although this is used in various apps, I need to keep it clear for VSCode
+#alt + p
+#  xte "keyup p" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 # Save
 alt + s
   xte "keyup s" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"

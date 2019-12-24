@@ -1,38 +1,42 @@
 // Place your settings in this file to overwrite the default settings
 // vim: filetype=javascript
 {
-    "git.ignoreLegacyWarning": true,
+    //"git.ignoreLegacyWarning": true,
 
     "workbench.colorTheme": "Gentle Mary",
 
-    "window.zoomLevel": -0.8,
+    "window.zoomLevel": -0.5,
 
+    // For macOS
+    //"editor.fontFamily": "Lucida Console, Lucida Sans Typewriter, Menlo, Monaco, 'Courier New', monospace",
+    // Looks a lot like WebStorm
     //"editor.fontSize": "11.4",
     //"editor.lineHeight": "13",
 
+    // For Linux
     //"editor.fontFamily": "Envy Code S12",
     //"editor.fontSize": "13",
     //"editor.lineHeight": "15",
 
+    // For Linux
     "editor.fontFamily": "'Lucida Sans Typewriter', 'Lucida Console', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
     "editor.fontSize": 12,
     "editor.lineHeight": 14,
 
-    // Linux
+    // For Linux
     "terminal.integrated.fontSize": 13,
     "terminal.integrated.fontFamily": "'Lucida Sans Typewriter'",
-
-    // macOS
+    // For macOS
     //"terminal.integrated.fontSize": 11,
-    //"terminal.integrated.fontWeightBold": "normal",
     //"terminal.integrated.lineHeight": 1.1,
+    //"terminal.integrated.fontWeightBold": "normal",
 
     //"editor.renderWhitespace": "boundary",
 
     "files.autoSave": "onWindowChange",
 
-    "editor.trimAutoWhitespace": true,
-    "files.trimTrailingWhitespace": true,
+    //"editor.trimAutoWhitespace": true,
+    //"files.trimTrailingWhitespace": true,
     "files.insertFinalNewline": true,
 
     "breadcrumbs.enabled": true,
@@ -43,6 +47,11 @@
 
     // Clearer tree structure (default 8)
     "workbench.tree.indent": 18,
+
+    // On startup, open all windows that were open in previous session
+    "window.restoreWindows": "all",
+    // Allows quitting with unsaved changes.  Changes will be restored on startup.
+    //"files.hotExit": "onExit"
 
     // Oh no this can be terrible.  It may reformat the entire file after a tiny paste, and it sometimes does it wrong!  (Even when prettier is enabled!)
     //"editor.formatOnPaste": true,
@@ -87,12 +96,51 @@
 
     // It's probably better to enable these settings in the .vscode folder local to each workspace/project
     // Use TypeScript to check JSDocs in Javascript files
-    //"javascript.implicitProjectConfig.checkJs": true,
+    "javascript.implicitProjectConfig.checkJs": true,
     // For more on that: https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/
     //"javascript.implicitProjectConfig.experimentalDecorators": false,
 
     "typescript.updateImportsOnFileMove.enabled": "always",
 
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+
+
+    // === Settings for plugins === //
+
+    // For ESLint
+    //"eslint.enable": true,
+    // Is this too heavy?
+    //"autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
+    // Tell the eslint plugin to also check TypeScript files
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+
+    // For steoates.autoimport
+    //"autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
+
+    // For Error Lens
     //"errorLens.errorBackground": "#ff00001c",
     //"errorLens.warningBackground": "#ff880012",
     //"errorLens.infoBackground": "#0000ff00",
@@ -112,50 +160,21 @@
     //"errorLens.fontWeight": 200,
     //"errorLens.fontStyleItalic": false,
 
-    // === For plugins === //
-    //"eslint.enable": true,
-    // Is this too heavy?
-    //"autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
-    // Tell the eslint plugin to also check TypeScript files
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact"
-    ],
-
-    "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[html]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[jsonc]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-
-
-
-    // === Settings for plugins === //
-
+    // For GitLens
     "gitlens.codeLens.enabled": false,
     "gitlens.currentLine.enabled": false,
     //"gitlens.hovers.currentLine.over": "line",
     //"gitlens.blame.compact": false,
 
+    // For Trailing Spaces
     "trailing-spaces.deleteModifiedLinesOnly": true,
     "trailing-spaces.highlightCurrentLine": false,
 
+    // For TodoTree
     "todo-tree.highlights.defaultHighlight": {
         "icon": "alert",
         "type": "text",
-        "foreground": "orange",
+        "foreground": "#dd8800",
         // "background": "white",
         "opacity": 50,
         "iconColour": "blue"
@@ -171,16 +190,42 @@
         "@consider"
     ],
     /*
-    "todo-tree.customHighlight": {
+    "todo-tree.highlights.customHighlight": {
         "TODO": {
             "icon": "check",
-            "type": "line"
+            "type": "line",
+            "foreground": "#dd8800",
         },
         "FIXME": {
             "foreground": "black",
-            "iconColour": "yellow"
-        }
-    }
+            "iconColour": "yellow",
+        },
+    },
+    */
+
+    // For TODO Highlight
+    /*
+    "todohighlight.keywords": [
+        "TODO",
+        "@todo",
+        "FIXME",
+        "@fixme",
+        "BUG",
+        "@bug",
+        "CONSIDER",
+        "@consider"
+    ],
+    "todohighlight.defaultStyle": {
+        //"color": "red",
+        //"backgroundColor": "#ffab00",
+        //"overviewRulerColor": "#ffab00",
+        "backgroundColor": "none",
+        "color": "#dd8800",
+        "cursor": "pointer",
+        "border": "1px solid #eee",
+        "borderRadius": "2px",
+        "isWholeLine": false,
+    },
     */
 
     // For VSCodeVim
@@ -198,7 +243,10 @@
     "vim.normalModeKeyBindingsNonRecursive": [
         { "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
         { "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ] },
-        { "before": [ "C-L" ], "commands": [ ":nohlsearch" ], "after": [ "S-Esc" ] },
+        // As well as clearing the highlight, we also want Ctrl-L to hide any current popups
+        // We tried "after": [ "S-Esc" ] and [ "S-Escape" ] but they didn't work.
+        // So instead we list the commands directly (but there are many!)
+        { "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen" ] },
         // Ctrl-S: I use this in Vim to save all
         // That is actually more powerful than Cmd-S in VSCode, because that only saves the current file.
         // Neither of these worked for me:
@@ -211,46 +259,70 @@
         { "before": [ "]", "b" ], "commands": [ "workbench.action.nextEditor" ] },
         { "before": [ "[", "q" ], "commands": [ "search.action.focusPreviousSearchResult" ], "when": "hasSearchResult" },
         { "before": [ "]", "q" ], "commands": [ "search.action.focusNextSearchResult" ], "when": "hasSearchResult" },
-        { "before": [ "[", "l" ], "commands": [ "editor.action.marker.prevInFiles" ], "when": "editorTextFocus && !editorReadonly" },
-        { "before": [ "]", "l" ], "commands": [ "editor.action.marker.nextInFiles" ], "when": "editorTextFocus && !editorReadonly" },
+        { "before": [ "[", "l" ], "commands": [ "editor.action.marker.prevInFiles" ], "when": "editorTextFocus" },
+        { "before": [ "]", "l" ], "commands": [ "editor.action.marker.nextInFiles" ], "when": "editorTextFocus" },
+        { "before": [ "[", "g" ], "commands": [ "workbench.action.editor.previousChange" ], "when": "editorTextFocus" },
+        { "before": [ "]", "g" ], "commands": [ "workbench.action.editor.nextChange" ], "when": "editorTextFocus" },
         { "before": [ "[", "w" ], "commands": [ "workbench.action.focusPreviousGroup" ] },
         { "before": [ "]", "w" ], "commands": [ "workbench.action.focusNextGroup" ] },
         { "before": [ "C-W", "s" ], "commands": [ "workbench.action.splitEditorDown" ] },
         { "before": [ "C-W", "S" ], "commands": [ "workbench.action.splitEditorRight" ] },
         { "before": [ "C-W", "c" ], "commands": [ "workbench.action.closeGroup" ] },
+        // This just opens a VSCode prompt for a URL, it doesn't actually open the hovered URL in a browser, which is what we want
         //{ "before": [ "g", "x" ], "commands": [ "workbench.action.url.openUrl" ] },
         { "before": [ "C-U" ], "commands": [ "workbench.action.openPreviousRecentlyUsedEditor" ] },
         { "before": [ "C-J" ], "commands": [ "scrollLineDown", "scrollLineDown" ] },
         { "before": [ "C-K" ], "commands": [ "scrollLineUp", "scrollLineUp" ] },
+        // For Linux
+        { "before": [ "C-S-J" ], "commands": [ "workbench.action.togglePanel" ] },
+        { "before": [ "<Leader>", "j" ], "commands": [ "workbench.action.togglePanel" ] },
         { "before": [ "<Leader>", "w" ], "commands": [ "editor.action.toggleWordWrap" ] },
         { "before": [ "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "editor.action.startFindReplaceAction" ] },
-        { "before": [ "<Leader>", "R" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "workbench.action.replaceInFiles" ] },
-        { "before": [ "<Leader>", "s" ], "commands": [ "editor.action.rename" ], "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly" },
+        { "before": [ "<Leader>", "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "workbench.action.replaceInFiles" ] },
+        { "before": [ "<Leader>", "R" ], "commands": [ "editor.action.rename" ], "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly" },
+        { "before": [ "<Leader>", "s" ], "commands": [ "workbench.action.openRecent" ] },
+        // We might want to move these into keybindings.json, so they work on all windows
+        { "before": [ "<Leader>", "b", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
+        { "before": [ "C-W", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
+        { "before": [ "C-B", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
+        // revealDefinition works more often than goToImplementation
         //{ "before": [ "C-]" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
-        //{ "before": [ "g", "d" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
-        //{ "before": [ "g", "D" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
-        // Not working:
-        //{ "before": [ "C-}" ], "commands": [ "editor.action.goToImplementation" ] },
-        //{ "before": [ "C-S-]" ], "commands": [ "editor.action.goToImplementation" ] },
-        { "before": [ "g", "u" ], "commands": [ "editor.action.goToImplementation" ] },
-        { "before": [ "g", "U" ], "commands": [ "editor.action.goToImplementation" ] },
-        { "before": [ "g", "b" ], "commands": [ "editor.action.goToImplementation" ] },
+        { "before": [ "g", "d" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
+        { "before": [ "g", "D" ], "commands": [ "editor.action.goToImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !isInEmbeddedEditor" },
+        { "before": [ "g", "u" ], "commands": [ "editor.action.goToReferences",  ], "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
+        { "before": [ "g", "U" ], "commands": [ "editor.action.goToReferences" ], "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
         { "before": [ "g", "H" ], "commands": [ "editor.action.showDefinitionPreviewHover" ] },
         { "before": [ "<Leader>", "a" ], "commands": [ "gitlens.toggleLineBlame" ] },
         { "before": [ "<Leader>", "A" ], "commands": [ "gitlens.toggleFileBlame" ] },
+        { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "i", "w", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
+        { "before": [ "<Leader>", "L", "o", "g" ], "after": [ "\"", "l", "y", "i", "W", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+        // For Linux: If we hit paste (Ctrl-V) when something is selected, replace the selection with the clipboard
+        { "before": [ "C-V" ], "after": [ "s", "C-R", "+", "Esc" ] },
+    ],
+    "vim.insertModeKeyBindingsNonRecursive": [
+        // Unfortunately the = command can also affect other lines which are not highlighted.  Better not.
+        //{ "before": [ "}" ], "after": [ "}", "<Esc>", "v", "a", "}", "=", "g", "v", "<Esc>" ], "when": "editTextFocus && !editorReadonly" },
     ],
 
-    // For ZenTabs (which doesn't seem to be working)
+    // For ZenTabs
     //"workbench.editor.enablePreviewFromQuickOpen": false,
     //"workbench.editor.enablePreview": false,
     "zentabs.maximumOpenedTabs": 8,
     "zentabs.applyLimitFor": "editorGroup",
 
-    // Requires plugin
+    // For macros
+    // We can execute these macros from keybindings.json
     "macros": {
         "commentLineAndMoveDown": ["editor.action.commentLine", "cursorDown"],
     },
 
-    // Auto close HTML/JSX tag when typing </
+    // For Auto Close Tag
+    // This will auto close tag when just typing </
+    // See also bundled settings "*.autoClosingTags"
+    // This adds support for JSX/TSX which do not have bundled support
     "auto-close-tag.SublimeText3Mode": true,
+    "auto-close-tag.enableAutoCloseTag": false,
+    "editor.autoClosingBrackets": "never",
 }

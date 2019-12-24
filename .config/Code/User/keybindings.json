@@ -1,4 +1,4 @@
-// Place your key bindings in this file to overwrite the defaults
+// Place your key bindings in this file to override the defaults
 [
   // Navigation like WebStorm on Mac
   { "key": "alt+shift+[", "command": "workbench.action.previousEditor" },
@@ -89,6 +89,7 @@
     "when": "textInputFocus && !editorReadonly"
   },
 
+  /*
   // Text manipulation like Mac
   // Note: There are a lot of definitions for ctrl+c, but we have only mirrored the main one so far.
   {
@@ -165,6 +166,7 @@
     "command": "editor.action.joinLines",
     "when": "editorFocus"
   },
+  */
 
   { "key": "ctrl+=", "command": "editor.action.fontZoomIn" },
   { "key": "ctrl+-", "command": "editor.action.fontZoomOut" },
@@ -184,12 +186,23 @@
   },
   */
 
+  { "key": "alt+w", "command": "workbench.action.closeWindow", "when": "!editorIsOpen && !multipleEditorGroups" },
+
   /* To match macOS keybinds */
-  {
-    "key": "meta+shift-f",
-    "command": "editor.action.formatDocument",
-    "when": "editorTextFocus && !editorReadonly"
-  },
+  { "key": "meta+shift-f", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
+  { "key": "meta+shift+o", "command": "editor.action.organizeImports", "when": "editorTextFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/" },
+  { "key": "alt-j", "command": "workbench.action.togglePanel" },
+  { "key": "alt-p", "command": "workbench.action.quickOpen" },
+  { "key": "alt+p", "command": "workbench.action.quickOpenNavigateNextInFilePicker", "when": "inFilesPicker && inQuickOpen" },
+  { "key": "alt+shift+p", "command": "workbench.action.quickOpenNavigatePreviousInFilePicker", "when": "inFilesPicker && inQuickOpen" },
+  { "key": "alt+shift+p", "command": "workbench.action.showCommands" },
+  // To train me to stop trying to use Ctrl-P
+  { "key": "ctrl+p", "command": "-workbench.action.quickOpen" },
+
+    { "key": "ctrl+s", "command": "workbench.action.files.saveAll" },
+
+    { "key": "ctrl+n", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
+    { "key": "ctrl+p", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
 
   /* Cycle zoom (requires Settings Cycler plugin) */
   /* I use this because I like -0.5 on my Linux, but Ctrl-Plus/Minus round to integers */

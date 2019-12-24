@@ -1,7 +1,10 @@
 // Place your settings in this file to overwrite the default settings
 // vim: filetype=javascript
 {
+    //"git.ignoreLegacyWarning": true,
+
     "workbench.colorTheme": "Gentle Mary",
+
     "window.zoomLevel": 0,
 
     // For macOS
@@ -9,8 +12,15 @@
     // Looks a lot like WebStorm
     "editor.fontSize": 11,
     "editor.lineHeight": 14,
-    // Slightly larger
-    //"editor.fontSize": 11.3,
+
+    // For Linux
+    //"editor.fontFamily": "Envy Code S12",
+    //"editor.fontSize": "13",
+    //"editor.lineHeight": "15",
+
+    // For Linux
+    //"editor.fontFamily": "'Lucida Sans Typewriter', 'Lucida Console', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    //"editor.fontSize": 12,
     //"editor.lineHeight": 14,
 
     // For Linux
@@ -51,6 +61,13 @@
     // Open searches below the editor, not in the sidebar
     "search.location": "panel",
 
+    // I think this enough to stop the CPU going to 100% for 5 minutes after populating node_modules folder
+    //"files.watcherExclude": {
+    //    "**/node_modules/**": true
+    //},
+
+    "npm.enableScriptExplorer": true,
+
     // Let snippets take priority over other things in the suggestions list
     // See: https://github.com/Microsoft/vscode/issues/10565#issuecomment-317319434
     // Specifically I needed this for TypeScript, where a deprecated alias and two imports were suggested before my 'log' snippet
@@ -82,12 +99,6 @@
     //"javascript.implicitProjectConfig.checkJs": true,
     // For more on that: https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/
     //"javascript.implicitProjectConfig.experimentalDecorators": false,
-
-    // These built-in feature will auto create the end tag after we type the start tag: <button>|</button>
-    // I find it often unhelpful, e.g. if I am trying to put <div>...</div> around existing markup, so I disable it
-    "html.autoClosingTags": false,
-    "javascript.autoClosingTags": false,
-    "typescript.autoClosingTags": false,
 
     "typescript.updateImportsOnFileMove.enabled": "always",
 
@@ -229,8 +240,10 @@
     "vim.normalModeKeyBindingsNonRecursive": [
         { "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
         { "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ] },
-        // Shift-Escape is intended to clear any popups which are visible
-        { "before": [ "C-L" ], "commands": [ ":nohlsearch" ], "after": [ "S-Esc" ] },
+        // As well as clearing the highlight, we also want Ctrl-L to hide any current popups
+        // We tried "after": [ "S-Esc" ] and [ "S-Escape" ] but they didn't work.
+        // So instead we list the commands directly (but there are many!)
+        { "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen" ] },
         // Ctrl-S: I use this in Vim to save all
         // That is actually more powerful than Cmd-S in VSCode, because that only saves the current file.
         // Neither of these worked for me:
@@ -257,11 +270,18 @@
         { "before": [ "C-U" ], "commands": [ "workbench.action.openPreviousRecentlyUsedEditor" ] },
         { "before": [ "C-J" ], "commands": [ "scrollLineDown", "scrollLineDown" ] },
         { "before": [ "C-K" ], "commands": [ "scrollLineUp", "scrollLineUp" ] },
+        // For Linux
+        { "before": [ "C-S-J" ], "commands": [ "workbench.action.togglePanel" ] },
+        { "before": [ "<Leader>", "j" ], "commands": [ "workbench.action.togglePanel" ] },
         { "before": [ "<Leader>", "w" ], "commands": [ "editor.action.toggleWordWrap" ] },
         { "before": [ "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "editor.action.startFindReplaceAction" ] },
         { "before": [ "<Leader>", "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "workbench.action.replaceInFiles" ] },
         { "before": [ "<Leader>", "R" ], "commands": [ "editor.action.rename" ], "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly" },
         { "before": [ "<Leader>", "s" ], "commands": [ "workbench.action.openRecent" ] },
+        // We might want to move these into keybindings.json, so they work on all windows
+        { "before": [ "<Leader>", "b", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
+        { "before": [ "C-W", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
+        { "before": [ "C-B", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
         // revealDefinition works more often than goToImplementation
         //{ "before": [ "C-]" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
         { "before": [ "g", "d" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
@@ -273,6 +293,10 @@
         { "before": [ "<Leader>", "A" ], "commands": [ "gitlens.toggleFileBlame" ] },
         { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "i", "w", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
         { "before": [ "<Leader>", "L", "o", "g" ], "after": [ "\"", "l", "y", "i", "W", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+        // For Linux: If we hit paste (Ctrl-V) when something is selected, replace the selection with the clipboard
+        { "before": [ "C-V" ], "after": [ "s", "C-R", "+", "Esc" ] },
     ],
     "vim.insertModeKeyBindingsNonRecursive": [
         // Unfortunately the = command can also affect other lines which are not highlighted.  Better not.
