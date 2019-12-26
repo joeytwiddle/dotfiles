@@ -11,10 +11,13 @@
     "editor.fontFamily": "Lucida Console, Lucida Sans Typewriter, Menlo, Monaco, 'Courier New', monospace",
     // Looks a lot like WebStorm
     "editor.fontSize": 11,
+    //"editor.fontSize": 11.4,
     //"editor.lineHeight": 14,
     "editor.lineHeight": 13,
-    // Slightly larger
-    //"editor.fontSize": 11.3,
+
+    "vim.easymotionMarkerFontFamily": "Lucida Console, Lucida Sans Typewriter, Menlo, Monaco, 'Courier New', monospace",
+    "vim.easymotionMarkerFontSize": "11",
+    "vim.easymotionMarkerYOffset": -1,
 
     // For Linux
     //"editor.fontFamily": "Envy Code S12",
@@ -26,17 +29,17 @@
     //"editor.fontSize": 12,
     //"editor.lineHeight": 14,
 
-    "vim.easymotionMarkerFontFamily": "Lucida Console, Lucida Sans Typewriter, Menlo, Monaco, 'Courier New', monospace",
-    "vim.easymotionMarkerFontSize": "11",
-    "vim.easymotionMarkerYOffset": -1,
+    //"vim.easymotionMarkerFontFamily": "'Lucida Sans Typewriter', 'Lucida Console', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    //"vim.easymotionMarkerFontSize": "12",
+    //"vim.easymotionMarkerYOffset": -1,
 
-    // For Linux
-    //"terminal.integrated.fontSize": 13,
-    //"terminal.integrated.fontFamily": "'Lucida Sans Typewriter'",
     // For macOS
     "terminal.integrated.fontSize": 11,
     "terminal.integrated.lineHeight": 1.2,
     //"terminal.integrated.fontWeightBold": "normal",
+    // For Linux
+    //"terminal.integrated.fontSize": 13,
+    //"terminal.integrated.fontFamily": "'Lucida Sans Typewriter'",
 
     //"editor.renderWhitespace": "boundary",
 
@@ -143,6 +146,9 @@
         "typescript",
         "typescriptreact"
     ],
+
+    // For steoates.autoimport
+    //"autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
 
     // For Error Lens
     //"errorLens.errorBackground": "#ff00001c",

@@ -10,8 +10,14 @@
     // For macOS
     //"editor.fontFamily": "Lucida Console, Lucida Sans Typewriter, Menlo, Monaco, 'Courier New', monospace",
     // Looks a lot like WebStorm
+    //"editor.fontSize": 11,
     //"editor.fontSize": "11.4",
-    //"editor.lineHeight": "13",
+    //"editor.lineHeight": 14,
+    //"editor.lineHeight": 13,
+
+    //"vim.easymotionMarkerFontFamily": "Lucida Console, Lucida Sans Typewriter, Menlo, Monaco, 'Courier New', monospace",
+    //"vim.easymotionMarkerFontSize": "11",
+    //"vim.easymotionMarkerYOffset": -1,
 
     // For Linux
     //"editor.fontFamily": "Envy Code S12",
@@ -23,13 +29,17 @@
     "editor.fontSize": 12,
     "editor.lineHeight": 14,
 
-    // For Linux
-    "terminal.integrated.fontSize": 13,
-    "terminal.integrated.fontFamily": "'Lucida Sans Typewriter'",
+    "vim.easymotionMarkerFontFamily": "'Lucida Sans Typewriter', 'Lucida Console', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    "vim.easymotionMarkerFontSize": "12",
+    "vim.easymotionMarkerYOffset": -1,
+
     // For macOS
     //"terminal.integrated.fontSize": 11,
     //"terminal.integrated.lineHeight": 1.1,
     //"terminal.integrated.fontWeightBold": "normal",
+    // For Linux
+    "terminal.integrated.fontSize": 13,
+    "terminal.integrated.fontFamily": "'Lucida Sans Typewriter'",
 
     //"editor.renderWhitespace": "boundary",
 
@@ -231,7 +241,7 @@
     // For VSCodeVim
     // Docs: https://github.com/VSCodeVim/Vim
     // Default keybinds: https://github.com/VSCodeVim/Vim/blob/master/ROADMAP.md
-    //"vim.easymotion": true,
+    "vim.easymotion": true,
     //"vim.sneak": true, // Didn't make any difference to <kbd>f</kbd> when I tried it.  Oh is it supposed to be two char?
     //"vim.incsearch": true,
     //"vim.useSystemClipboard": true,
@@ -268,6 +278,7 @@
         { "before": [ "C-W", "s" ], "commands": [ "workbench.action.splitEditorDown" ] },
         { "before": [ "C-W", "S" ], "commands": [ "workbench.action.splitEditorRight" ] },
         { "before": [ "C-W", "c" ], "commands": [ "workbench.action.closeGroup" ] },
+        { "before": [ "<Leader>", "b", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
         // This just opens a VSCode prompt for a URL, it doesn't actually open the hovered URL in a browser, which is what we want
         //{ "before": [ "g", "x" ], "commands": [ "workbench.action.url.openUrl" ] },
         { "before": [ "C-U" ], "commands": [ "workbench.action.openPreviousRecentlyUsedEditor" ] },
@@ -296,6 +307,10 @@
         { "before": [ "<Leader>", "A" ], "commands": [ "gitlens.toggleFileBlame" ] },
         { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "i", "w", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
         { "before": [ "<Leader>", "L", "o", "g" ], "after": [ "\"", "l", "y", "i", "W", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
+        // EasyMotion search character
+        { "before": [ "C-D" ], "after": [ "leader", "leader", "s" ] },
+        // EasyMotion start of word
+        { "before": [ "C-G"] , "after": [ "leader", "leader", "leader", "b", "d", "w" ] },
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
         // For Linux: If we hit paste (Ctrl-V) when something is selected, replace the selection with the clipboard
@@ -305,6 +320,10 @@
         // Unfortunately the = command can also affect other lines which are not highlighted.  Better not.
         //{ "before": [ "}" ], "after": [ "}", "<Esc>", "v", "a", "}", "=", "g", "v", "<Esc>" ], "when": "editTextFocus && !editorReadonly" },
     ],
+
+    "vim.easymotionMarkerBackgroundColor": "#000",
+    "vim.easymotionMarkerForegroundColorOneChar": "#ff0000",
+    "vim.easymotionMarkerForegroundColorTwoChar": "#ffb400",
 
     // For ZenTabs
     //"workbench.editor.enablePreviewFromQuickOpen": false,
