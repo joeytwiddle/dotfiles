@@ -321,6 +321,9 @@
         //{ "before": [ "}" ], "after": [ "}", "<Esc>", "v", "a", "}", "=", "g", "v", "<Esc>" ], "when": "editTextFocus && !editorReadonly" },
     ],
 
+    "vim.searchHighlightColor": "#0044bbaa",
+    "vim.searchHighlightTextColor": "#ffffff",
+
     "vim.easymotionMarkerBackgroundColor": "#000",
     "vim.easymotionMarkerForegroundColorOneChar": "#ff0000",
     "vim.easymotionMarkerForegroundColorTwoChar": "#ffb400",
