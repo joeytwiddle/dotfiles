@@ -195,11 +195,20 @@
   { "key": "alt-p", "command": "workbench.action.quickOpen" },
   { "key": "alt+p", "command": "workbench.action.quickOpenNavigateNextInFilePicker", "when": "inFilesPicker && inQuickOpen" },
   { "key": "alt+shift+p", "command": "workbench.action.quickOpenNavigatePreviousInFilePicker", "when": "inFilesPicker && inQuickOpen" },
-  { "key": "alt+shift+p", "command": "workbench.action.showCommands" },
+  { "key": "alt+shift+p", "command": "workbench.action.showCommands", "when": "!inFilesPicker || !inQuickOpen" },
   // To train me to stop trying to use Ctrl-P
   { "key": "ctrl+p", "command": "-workbench.action.quickOpen" },
 
-    { "key": "ctrl+s", "command": "workbench.action.files.saveAll" },
+  // On Linux ctrl+shift+e should trigger "workbench.view.explorer" but GTK might hijack it for a new emoji feature.
+  // If you want it back, you may try to disable GTK's hijacking: https://github.com/microsoft/vscode/issues/48480
+
+  { "key": "alt+s", "command": "workbench.action.files.save" },
+  { "key": "ctrl+s", "command": "workbench.action.files.saveAll" },
+
+  { "key": "alt+shift+f", "command": "workbench.action.findInFiles" },
+
+  //{ "key": "ctrl+n", "command": "!extension.vim_ctrl+n", "when": "editorTextFocus && vim.active && vim.use<C-n> && !inDebugRepl || vim.active && vim.use<C-n> && !inDebugRepl && vim.mode == 'CommandlineInProgress' || vim.active && vim.use<C-n> && !inDebugRepl && vim.mode == 'SearchInProgressMode'" },
+  //{ "key": "ctrl+p", "command": "!extension.vim_ctrl+p", "when": "suggestWidgetVisible && vim.active && vim.use<C-p> && !inDebugRepl || vim.active && vim.use<C-p> && !inDebugRepl && vim.mode == 'CommandlineInProgress' || vim.active && vim.use<C-p> && !inDebugRepl && vim.mode == 'SearchInProgressMode'" },
 
     { "key": "ctrl+n", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
     { "key": "ctrl+p", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },

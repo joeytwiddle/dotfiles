@@ -271,11 +271,8 @@
         // We tried "after": [ "S-Esc" ] and [ "S-Escape" ] but they didn't work.
         // So instead we list the commands directly (but there are many!)
         { "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen" ] },
-        // Ctrl-S: I use this in Vim to save all
-        // That is actually more powerful than Cmd-S in VSCode, because that only saves the current file.
-        // Neither of these worked for me:
-        //{ "before": [ "C-S" ], "commands": [ "workbench.action.files.saveAll" ] },
-        //{ "before": [ "C-S" ], "commands": [ ":wa" ] },
+        // We save the current file in order to pin it.  We save all files, because that's what I really want Ctrl-S to do
+        { "before": [ "<C-S>" ] , "commands": [ "workbench.action.files.save", "workbench.action.files.saveAll", "workbench.action.focusActiveEditorGroup" ] },
         // But I put a C-S keybinding in keybindings.json, and that one worked.
         { "before": [ "[", " " ], "after": [ "O", "<Esc>" ] },
         { "before": [ "]", " " ], "after": [ "o", "<Esc>" ] },
@@ -306,6 +303,9 @@
         { "before": [ "<Leader>", "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "workbench.action.replaceInFiles" ] },
         { "before": [ "<Leader>", "R" ], "commands": [ "editor.action.rename" ], "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly" },
         { "before": [ "<Leader>", "s" ], "commands": [ "workbench.action.openRecent" ] },
+        { "before": [ "<Leader>", "/" ], "commands": [ "workbench.action.findInFiles" ] },
+        { "before": [ "<Leader>", "*" ] , "after": [ "v", "i", "w" ], "commands": [ "workbench.action.findInFiles" ] },
+        { "before": [ "<Leader>", "f" ] , "after": [ "v", "i", "w" ], "commands": [ "workbench.action.findInFiles" ] },
         // We might want to move these into keybindings.json, so they work on all windows
         { "before": [ "<Leader>", "b", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
         { "before": [ "C-W", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
