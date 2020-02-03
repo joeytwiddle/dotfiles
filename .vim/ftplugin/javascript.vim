@@ -42,8 +42,12 @@ vnoremap <buffer> <Leader>V sunnamedVar<Esc>Ovar unnamedVar = <Esc>pa;<Esc>
 vnoremap if <Esc>?\<function\>\s*[A-Za-z0-9_$]*\s*(<CR>v/{<CR>%o
 
 " Like WebStorm, when closing a block, indent all the lines inbetween
-" DISABLED because currently = does not indent function callbacks correctly when they come after a `).then(`
-"inoremap <buffer> } }<Esc>mzv%=g'za
+" Note that this will also act on '}'s in strings.  It might be inconvenient.
+" Note that it also clobbers mark 'z'
+" Previously DISABLED because it was not indenting function callbacks correctly when they come after a `).then(`
+inoremap <buffer> } }<Esc>mzv%=g`za
+" BUG: If we are in the middle of the line (e.g. interpolating inside a template string) returning to the original mark position will be wrong, if the line has changed indentation (that situation is quite rare).  To fix that:
+" TODO: We should only do this if the } is at the end of the current line, or perhaps at the beginning of the current line (ignoring whitespace indentation).
 
 
 
