@@ -156,14 +156,9 @@ nmap <C-w>] <C-w><Right>
 
 
 "" Step through quickfix list (errors/search results) with Ctrl+N/P (or ]c [c with unimpaired)
-:nnoremap <C-n> :cnext<Enter>
-:nnoremap <C-p> :cprev<Enter>
-"" =/- get overriden by fold keymaps :P
-" :nnoremap = :cnext<Enter>
-" :nnoremap - :cprev<Enter>
-"" +/_ (Shift equivalent) also get overridden
-" :nnoremap + :cnext<Enter>
-" :nnoremap _ :cprev<Enter>
+nnoremap <C-n> :cnext<Enter>
+nnoremap <C-p> :cprev<Enter>
+"" But we will override <C-p> later, so you may need to use [q and ]q instead
 
 "" Navigate wrapped lines in screen space using arrows
 nnoremap <Up> gk
@@ -460,9 +455,10 @@ nnoremap <C-E> :<C-U>JoeysBufferSwitch<Enter>
 "" Select by name with completion or file without (joeys_buffer_switcher.vim)
 "nnoremap <Leader>e :JoeysBufferSwitch<Enter>
 "" Select buffer from list (bufexplorer.vim)
-nnoremap <C-B> :BufExplorer<Enter>
+nnoremap <Leader>b :BufExplorer<Enter>
+nnoremap <Leader>bb :BufExplorer<Enter>
 "" Select from persistent list of most-recently-used files (mru.vim)
-nnoremap <Leader>b :MRU<Enter>
+"nnoremap <Leader>bb :MRU<Enter>
 "" Some more alternative buffer switchers:
 "" :EasyBuffer (easybuffer.vim)
 
@@ -907,9 +903,16 @@ nnoremap [= :exec "resize ".(&lines - 20)<CR>:exec "vert resize ".(&columns - (b
 " The -31 is for when TagList is open with width 30.
 " TODO: But what about when the file browser is open too?!
 
-" TESTING: Search for similarly-named files using AsyncFinder
+" Search for similarly-named files using AsyncFinder
 nmap <Leader>a :let @n = expand("%:t:r")<CR><C-a><C-r>n.
-
+" Search for similarly-named files using fzf
+" (need to use feedkeys because <C-R> doesn't work in the fzf window)
+"nmap <Leader>rel :let @n = expand("%:t:r")<CR>:call feedkeys(@n)<CR>:Files<CR>
+"nmap <Leader>a :let @n = expand("%:t:r")<CR>:call feedkeys(@n . '.', 't')<CR>:Files<CR>
+"nmap <Leader>a :let @n = substitute(expand("%:t"), '[.].*', '', '')<CR>:call feedkeys(@n . '.', 't')<CR>:Files<CR>
+nmap <Leader>a :let @n = substitute(expand("%:t"), '[.].*', '', '')<CR>:call feedkeys(@n . '.', 't')<CR><C-a>
+" An alias.  Which will I remember?
+nmap <Leader>rel <Leader>a
 
 
 " Tools for Visual Mode
@@ -1075,20 +1078,21 @@ nnoremap <Leader>play :execute "!xterm -e env EQ=widebass ~/j/tools/mplayer " . 
 nnoremap <Leader>del :execute "!del " . shellescape(getline(".")) . " ; sleep 1"<CR><CR>
 
 " FZF Fuzzy Finder
-" For file and buffer finders, I would quite like to use: let g:fzf_layout = { 'window': '10split' }
+" For file and buffer finders, I would quite like to use: let g:fzf_layout = { 'window': '30split' }
 " But for search I would like to use: let g:fzf_layout = { 'down': '~50%' }
-"nnoremap <silent> <C-P> :Buffers<CR>
-nnoremap <silent> <C-P> :let g:fzf_layout = { 'window': '10split' }<CR>:Buffers<CR>
-nnoremap <silent> <M-P> :let g:fzf_layout = { 'window': '10split' }<CR>:Buffers<CR>
+" Like VSCode (but this overrides my usual C-N/P for navigating search results)
+" We put the results upside-down so that a repeat press of Ctrl-P will navigate to the next result (similar to VSCode)
+"nnoremap <silent> <C-P> :let g:fzf_layout = { 'window': '30split' }<CR>:Buffers<CR>
+"nnoremap <silent> <M-P> :let g:fzf_layout = { 'window': '30split' }<CR>:Buffers<CR>
 " This interferes with my own [count]<C-E>
 "nnoremap <silent> <C-E> :FZF<CR>
 "nnoremap <silent> <Leader>o :Files<CR>
 " Override Asyncfinder
-nnoremap <silent> <C-A> :let g:fzf_layout = { 'window': '10split' }<CR>:Files<CR>
+nnoremap <silent> <C-A> :let g:fzf_layout = { 'window': '30split' }<CR>:Files<CR>
 " When opening the Files finders, put the prompt at the top (reverse layout)
 command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': ['--layout=reverse']}, <bang>0)
 " And for buffers with <C-B> we will put the prompt at the top
-nnoremap <silent> <C-B> :let g:fzf_layout = { 'window': '10split' }<CR>:call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
+nnoremap <silent> <C-B> :let g:fzf_layout = { 'window': '30split' }<CR>:call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
 " But for buffers with <C-P> I like it reversed, so we can hit <C-P> <C-P> <C-P> like in WebStorm
 " Break out of FZF when pressing Escape
 augroup FZF
