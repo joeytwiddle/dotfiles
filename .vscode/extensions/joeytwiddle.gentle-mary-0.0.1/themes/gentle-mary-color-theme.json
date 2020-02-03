@@ -332,7 +332,6 @@
       "name": "Markdown italic",
       "scope": "markup.italic",
       "settings": {
-        "foreground": "#CCCCCC",
         "fontStyle": "italic"
       }
     },
@@ -340,7 +339,6 @@
       "name": "Markdown bold",
       "scope": "markup.bold",
       "settings": {
-        "foreground": "#CCCCCC",
         "fontStyle": "bold"
       }
     },
@@ -348,7 +346,6 @@
       "name": "Markdown bold italic",
       "scope": "markup.bold markup.italic, markup.italic markup.bold",
       "settings": {
-        "foreground": "#CCCCCC",
         "fontStyle": "italic bold"
       }
     },
@@ -366,6 +363,13 @@
       "settings": {
         "background": "#000000",
         "foreground": "#777777"
+      }
+    },
+    {
+      "name": "Markdown inset quote",
+      "scope": "markup.quote.markdown",
+      "settings": {
+        "foreground": "#CCB385"
       }
     },
     {
