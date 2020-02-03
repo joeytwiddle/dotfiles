@@ -486,7 +486,7 @@ alias gpshnvf='git push --no-verify --force'
 #     The destination refspec neither matches an existing ref on the remote nor
 #     begins with refs/, and we are unable to guess a prefix based on the source ref.
 #
-alias gpshharder='echo "Try: git push origin <local_branch>:refs/heads/<remote_branch>"'
+alias gpshharder='echo "Try: git push -u <remote> <local_branch>:refs/heads/<remote_branch>"'
 
 # I wanted to perform `git pull` and `git merge` with `git_autostashed` however they sometimes drop out unfinished, in which case the stash does not get popped as intended.
 alias gm='git merge'
