@@ -911,6 +911,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:dahu/vimple")             " Get the buffers as a list
 	"call add(vamAddons,"github:Raimondi/vim-buffalo")    " Buffer switcher - requires vimple
 	call add(vamAddons,"surround")                        " Change dict(mykey) to dict[mykey] with cs([ delete with ds( or create with csw[ or ysiw[ or viwS[
+	call add(vamAddons,"vim-indent-object")                        " Change dict(mykey) to dict[mykey] with cs([ delete with ds( or create with csw[ or ysiw[ or viwS[
 
 	"call add(vamAddons,"github:tpope/vim-markdown")       " More recent version of the syntax file bundled with Vim.
 	"call add(vamAddons,"github:jtratner/vim-flavored-markdown")   " Provides syntax highlighting on recognised blocks
@@ -1096,13 +1097,21 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" I am happy using Vim's default / but EasyMotion has one too.  (It only searches the screen though, and there is no equivalent ?)
 	"map  / <Plug>(easymotion-flash-sn)
 	"omap / <Plug>(easymotion-flash-tn)
-	" When I must type two chars, I want it to be clear which is the first one I must type!
-	" This is useful when using (easymotion-jumptoanywhere)
-	highlight EasyMotionTarget        cterm=bold ctermbg=0 ctermfg=green  gui=bold guifg=green
-	highlight EasyMotionTarget2First  cterm=bold ctermbg=0 ctermfg=yellow gui=bold guifg=yellow
-	highlight EasyMotionTarget2Second cterm=bold ctermbg=0 ctermfg=blue   gui=bold guifg=blue
-	" The default green move highlight made it hard to see where my cursor was.  Something darker contrasts better.
-	highlight EasyMotionMoveHL  ctermbg=darkblue guibg=darkblue
+	function s:InitEasyMotionHighlights()
+		" When I must type two chars, I want it to be clear which is the first one I must type!
+		" This is useful when using (easymotion-jumptoanywhere)
+		"highlight EasyMotionTarget        cterm=bold ctermbg=0 ctermfg=green  gui=bold guifg=green
+		highlight EasyMotionTarget        cterm=bold ctermbg=0 ctermfg=red    gui=bold guifg=red
+		highlight EasyMotionTarget2First  cterm=bold ctermbg=0 ctermfg=yellow gui=bold guifg=yellow
+		highlight EasyMotionTarget2Second cterm=bold ctermbg=0 ctermfg=blue   gui=bold guifg=blue
+		" The default green move highlight made it hard to see where my cursor was.  Something darker contrasts better.
+		"hi link EasyMotionMoveHL EasyMotionTarget
+		"highlight EasyMotionMoveHL ctermbg=darkblue guibg=darkblue
+		"hi EasyMotionMoveHL ctermfg=green guifg=#00ff00
+		"hi EasyMotionMoveHL ctermfg=106 guifg=#7fbf00
+		hi EasyMotionMoveHL ctermfg=yellow guifg=#ffff00
+	endfunction
+	call s:InitEasyMotionHighlights()
 	" Default: All standard QWERTY keys, prefer 'f' 'j' and ';' for grouping.
 	"let g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfj;'
 	" Home row keys only, again with the keys which are easiest to type last.
@@ -1366,6 +1375,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		if exists('*lightline#enable')
 			call lightline#enable()
 		endif
+		call s:InitEasyMotionHighlights()
 	endfunction
 	"
 	" TODO: Turn this into a plugin that automatically finds and sources post-colorscheme settings?
@@ -1491,6 +1501,19 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		call add(vamAddons,{'activate_this_rtp': '/usr/local/opt/fzf'})
 	endif
 	call add(vamAddons,"github:junegunn/fzf.vim")
+	" CTRL-A CTRL-Q to select all and build quickfix list
+	" From: https://github.com/junegunn/fzf.vim/issues/185#issuecomment-322120216
+	function! s:build_quickfix_list(lines)
+		call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+		copen
+		cc
+	endfunction
+	let g:fzf_action = {
+		\ 'ctrl-q': function('s:build_quickfix_list'),
+		\ 'ctrl-t': 'tab split',
+		\ 'ctrl-x': 'split',
+		\ 'ctrl-v': 'vsplit' }
+	let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
 
 	" }}}
 
