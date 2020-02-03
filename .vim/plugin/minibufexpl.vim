@@ -1421,7 +1421,8 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
             let l:shortBufName = fnamemodify(l:BufName, ":t")                  
             let l:shortBufName = substitute(l:shortBufName, '[][()]', '', 'g') 
             if l:shortBufName == ''
-              let l:shortBufName = '[Scratch]'
+              let l:bufType = getbufvar(l:i, '&buftype')
+              let l:shortBufName = len(bufType) ? '[' . bufType . ']' : '[Scratch]'
             endif
             " let l:tab = '['.l:i.':'.l:shortBufName.']'
             " let l:tab = '['.l:shortBufName.']'
