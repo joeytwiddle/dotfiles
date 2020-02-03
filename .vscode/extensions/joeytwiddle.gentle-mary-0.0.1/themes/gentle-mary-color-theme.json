@@ -513,7 +513,7 @@
     */
   ],
   "colors": {
-    //"activityBar.activeBackground": "#cccccc17",
+    "activityBar.activeBackground": "#cccccc12",
     //"activityBar.activeBorder": "#ffffff",
     //"activityBar.activeBorder": "#cccccc",
     "activityBar.activeBorder": "#aaaaaa",
@@ -566,8 +566,9 @@
     "pickerGroup.border": "#ffffff1a",
     "sideBar.background": "#333333",
     "sideBarSectionHeader.background": "#333333",
-    "sideBarSectionHeader.foreground": "#bbbbbb",
+    "sideBarSectionHeader.foreground": "#cccccc",
     "statusBar.background": "#333333",
+    "sideBarSectionHeader.border": "#3c3c3c",
     //"statusBar.debuggingBackground": "#cccccc",
     //"statusBar.debuggingForeground": "#ffffffcc",
     "statusBar.foreground": "#ffffffbb",
@@ -596,12 +597,16 @@
     //"editor.findMatchBackground": "#515c6a",
     //"editor.findMatchHighlightBackground": "#ea5c0055",
     //"editor.findRangeHighlightBackground": "#3a3d4166",
+    // For the active search result
     "editor.findMatchBackground": "#0044bbaa",
-    "editor.findMatchBorder": "#ffff44ff",
+    "editor.findMatchBorder": "#ffff00ff",
+    // For the other seach results
+    // I turned off the border because it made code difficult to read, and I don't know any way to turn off the highlighting without actually clearing the search.
     "editor.findMatchHighlightBackground": "#0044bbaa",
-    "editor.findMatchHighlightBorder": "#ffff00bb",
+    "editor.findMatchHighlightBorder": "#ffff0000",
+    // I don't know what this is, so I'm giving it a strong highlight until I meet it
     "editor.findRangeHighlightBackground": "#8800bb",
-    "editor.findRangeHighlightBorder": "#ffff00bb",
+    "editor.findRangeHighlightBorder": "#ff0000ff",
     //"editor.focusedStackFrameHighlightBackground": "#7abd7a4d",
     //"editor.hoverHighlightBackground": "#264f7840",
     //"editor.hoverHighlightBackground": "#006600",
