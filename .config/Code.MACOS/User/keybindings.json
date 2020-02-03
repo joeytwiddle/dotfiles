@@ -4,32 +4,21 @@
     { "key": "ctrl+`", "command": "workbench.action.terminal.focus" },
     { "key": "ctrl+`", "command": "workbench.action.focusActiveEditorGroup", "when": "terminalFocus" },
 
-    {
-        "key": "ctrl+shift+PageUp",
-        "command": "moveActiveEditor",
-        "args": {
-            "to": "left",
-        }
-    },
-    {
-        "key": "ctrl+shift+PageDown",
-        "command": "moveActiveEditor",
-        "args": {
-            "to": "right",
-        }
-    },
+    { "key": "cmd+=", "command": "editor.action.fontZoomIn" },
+    { "key": "cmd+-", "command": "editor.action.fontZoomOut" },
+
+    { "key": "ctrl+shift+PageUp", "command": "moveActiveEditor", "args": { "to": "left" } },
+    { "key": "ctrl+shift+PageDown", "command": "moveActiveEditor", "args": { "to": "right" } },
 
     // Requires macro defined in settings.json
-    {
-        "key": "cmd+/",
-        "command": "macros.commentLineAndMoveDown",
-        "when": "editorTextFocus && !editorReadonly"
-    },
+    { "key": "cmd+/", "command": "macros.commentLineAndMoveDown", "when": "editorTextFocus && !editorReadonly" },
 
     { "key": "ctrl+s", "command": "workbench.action.files.saveAll" },
 
-    { "key": "ctrl+n", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
-    { "key": "ctrl+p", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
+    //{ "key": "ctrl+n", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
+    //{ "key": "ctrl+p", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
+    { "key": "cmd+alt+down", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
+    { "key": "cmd+alt+up", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
 
     // When using Vim plugin
     // Note that "textInputFocus" seems to apply to both Insert and Normal mode
