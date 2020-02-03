@@ -53,7 +53,8 @@
     // I think disabling this makes the editor slightly faster, but I could be wrong!
     "editor.minimap.enabled": true,
 
-    "editor.mouseWheelZoom": true,
+    // Enable on Linux, disable on macOS (because it triggers accidentally if I press Cmd while a touchpad scroll is decaying)
+    //"editor.mouseWheelZoom": true,
 
     // Clearer tree structure (default 8)
     "workbench.tree.indent": 18,
@@ -69,7 +70,7 @@
     //"editor.formatOnSave": true,
 
     // Open searches below the editor, not in the sidebar
-    "search.location": "panel",
+    //"search.location": "panel",
 
     // I think this enough to stop the CPU going to 100% for 5 minutes after populating node_modules folder
     //"files.watcherExclude": {
@@ -89,7 +90,6 @@
 
     //"editor.occurrencesHighlight": false,
 
-    // Make unused variables strongly greyed out
     "workbench.colorCustomizations": {
         // These work, but only the backgrounds not the foregrounds
         // If we don't set them, then the theme can set them
@@ -101,7 +101,25 @@
         "editorWarning.foreground": "#dd8800",
         //"breadcrumb.foreground": "#888888",
 
+        // Make unused variables strongly greyed out
         "editorUnnecessaryCode.opacity": "#00000080",
+
+        // Testing for theme
+        // For the active search result
+        "editor.findMatchBackground": "#0044bbaa",
+        "editor.findMatchBorder": "#ffff00ff",
+        // For the other seach results
+        // I turned off the border because it made code difficult to read, and I don't know any way to turn off the highlighting without actually clearing the search.
+        "editor.findMatchHighlightBackground": "#0044bbaa",
+        "editor.findMatchHighlightBorder": "#ffff0000",
+        // I don't know what this is, so I'm giving it a strong highlight until I meet it
+        "editor.findRangeHighlightBackground": "#8800bb",
+        "editor.findRangeHighlightBorder": "#ff0000ff",
+
+        "[Gentle Mary]": {
+            "sideBarSectionHeader.foreground": "#cccccc",
+            "sideBarSectionHeader.border": "#3c3c3c",
+        },
     },
 
     // It's probably better to enable these settings in the .vscode folder local to each workspace/project
@@ -179,6 +197,8 @@
     // For Trailing Spaces
     "trailing-spaces.deleteModifiedLinesOnly": true,
     "trailing-spaces.highlightCurrentLine": false,
+    //"trailing-spaces.backgroundColor": "#552222",
+    //"trailing-spaces.borderColor": "#552222",
 
     // For TodoTree
     "todo-tree.highlights.defaultHighlight": {
@@ -311,10 +331,12 @@
         { "before": [ "C-D" ], "after": [ "leader", "leader", "s" ] },
         // EasyMotion start of word
         { "before": [ "C-G"] , "after": [ "leader", "leader", "leader", "b", "d", "w" ] },
+        { "before": [ "<Leader>", "f" ] , "after": [ "v", "i", "w" ], "commands": [ "workbench.action.findInFiles" ] },
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
         // For Linux: If we hit paste (Ctrl-V) when something is selected, replace the selection with the clipboard
         { "before": [ "C-V" ], "after": [ "s", "C-R", "+", "Esc" ] },
+        { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
     ],
     "vim.insertModeKeyBindingsNonRecursive": [
         // Unfortunately the = command can also affect other lines which are not highlighted.  Better not.
@@ -339,6 +361,17 @@
     "macros": {
         "commentLineAndMoveDown": ["editor.action.commentLine", "cursorDown"],
     },
+
+    // https://medium.com/hack-visual-studio-code/toggle-any-setting-in-vs-code-using-keyboard-shortcut-arguments-cdb5ddc56955
+    "settings.cycle": [
+        {
+            "setting": "search.location",
+            "values": [
+                "panel",
+                "sidebar"
+            ]
+        }
+    ],
 
     // For Auto Close Tag
     // This will auto close tag when just typing </
