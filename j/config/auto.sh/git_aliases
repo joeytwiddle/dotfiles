@@ -242,9 +242,11 @@ git_status_plus() {
 		#diff "$previous_stats_file" "$current_stats_file" |
 		#grep '^>'
 
-		cursereset="$(cursenorm)"
-		cursenormal="$(cursecyan)"
-		cursehighlight="$(curseyellow;cursebold)"
+		local cursereset="$(cursenorm)"
+		local cursenormal="$(cursecyan)"
+		local cursehighlight="$(curseyellow;cursebold)"
+
+		local path_prefix="$(git rev-parse --show-prefix)"
 
 		# CONSIDER TODO: The below is very inefficient.  Instead of all these greps, can we sort them and do a one-way diff?
 		cat "$current_stats_file" |
@@ -252,13 +254,16 @@ git_status_plus() {
 		head -n 1000 |
 		while read size date file
 		do
-			curseon="$cursenormal"
-			# We should really convert at least $file to a regexp.
-			# Ah, -F -x can do that for us.
+			local curseon="$cursenormal"
+			# If we haven't seen this file before, or it has changed size/date since last time, then we highlight it
 			if ! grep -F -x "$size $date $file" "$previous_stats_file" >/dev/null 2>&1
 			then curseon="$cursehighlight"
 			fi
-			echo "#       ${curseon}${file}${cursereset}"
+			# Find the file path relative to current path
+			# This only works for files underneath the current path
+			#local relfile="$(printf "%s\n" "$file" | sed "s+^$path_prefix++")"
+			local relfile="${file#$path_prefix}"
+			echo "#       ${curseon}${relfile}${cursereset}"
 		done
 
 		'cp' -f "$current_stats_file" "$previous_stats_file" 2>/dev/null
