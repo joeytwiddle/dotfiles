@@ -680,7 +680,10 @@ alias glm='glg -m --first-parent'
 
 # "Git Log Clear" - Single lines, no graph.  Shows more info than: git log --pretty=oneline
 # If you want to use this with --stat and --graph then it should have a %n at the end.  But this will make --graph show blank lines even when run without --stat.  Since glf does not use --graph, we don't really need this.
-alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
+#alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
+alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ad)%Creset" --date=relative'
+#alias glct='glc --date=local'
+alias glct='git log --pretty=format:"%C(yellow bold)%h%C(reset) %C(cyan)%ad%C(reset)%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an%Creset" --date=local'
 
 # "Git Log Long" - One per line, with graph
 #alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'   # Does not show committer's name or age of commit
@@ -689,6 +692,7 @@ alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset)
 #alias gll='git log --graph --pretty=format:"%C(yellow)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
 # Problem: When used with --graph, glc should end in %n.  But we don't want the %n when --graph is not used (e.g. in glf below)!  I don't personally want the %n, but --graph always draws a |\n straight after the formatted text, so it looks messy without it.
 alias gll='glc --graph'
+alias gllt='glct --graph'
 # "Git Log Long Minus merges"
 # This lists the merge commits themselves, but does not list any of the commits that were brought in by the merge.  This is useful if you have merged things into the current branch, but you are only interested in the commits that were actually made on the current branch.
 # When using this, it can be nice to clearly distinguish merges from raw commits.  If your merge commit messages are pure, you can search /Merge.* or cleaner /Merge.* into [^ ]*
