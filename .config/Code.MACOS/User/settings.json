@@ -90,6 +90,7 @@
 
     //"editor.occurrencesHighlight": false,
 
+    // Make unused variables strongly greyed out
     "workbench.colorCustomizations": {
         // These work, but only the backgrounds not the foregrounds
         // If we don't set them, then the theme can set them
@@ -101,7 +102,6 @@
         "editorWarning.foreground": "#dd8800",
         //"breadcrumb.foreground": "#888888",
 
-        // Make unused variables strongly greyed out
         "editorUnnecessaryCode.opacity": "#00000080",
 
         // Testing for theme
@@ -127,6 +127,17 @@
     //"javascript.implicitProjectConfig.checkJs": true,
     // For more on that: https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/
     //"javascript.implicitProjectConfig.experimentalDecorators": false,
+
+    // Default: languageDefined
+    "editor.autoClosingBrackets": "never",
+
+    // These built-in feature will auto create the end tag after we type the start tag: <button>|</button>
+    // I find it often unhelpful, e.g. if I am trying to put <div>...</div> around existing markup, so I disable it
+    "html.autoClosingTags": false,
+    "javascript.autoClosingTags": false,
+    "typescript.autoClosingTags": false,
+
+    "html.mirrorCursorOnMatchingTag": true,
 
     "typescript.updateImportsOnFileMove.enabled": "always",
 
@@ -377,7 +388,8 @@
     // This will auto close tag when just typing </
     // See also bundled settings "*.autoClosingTags"
     // This adds support for JSX/TSX which do not have bundled support
+    // Unfortunately the plugin tends to cause my editor to freeze up, so disabled for now
+    // (Or it might be Auto Rename Tag that causes it, but I think it's actually this)
     "auto-close-tag.SublimeText3Mode": true,
     "auto-close-tag.enableAutoCloseTag": false,
-    "editor.autoClosingBrackets": "never",
 }

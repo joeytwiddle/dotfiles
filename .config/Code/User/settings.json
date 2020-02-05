@@ -53,6 +53,7 @@
     // I think disabling this makes the editor slightly faster, but I could be wrong!
     "editor.minimap.enabled": true,
 
+    // Enable on Linux, disable on macOS (because it triggers accidentally if I press Cmd while a touchpad scroll is decaying)
     "editor.mouseWheelZoom": true,
 
     // Clearer tree structure (default 8)
@@ -109,6 +110,17 @@
     "javascript.implicitProjectConfig.checkJs": true,
     // For more on that: https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/
     //"javascript.implicitProjectConfig.experimentalDecorators": false,
+
+    // Default: languageDefined
+    "editor.autoClosingBrackets": "never",
+
+    // These built-in feature will auto create the end tag after we type the start tag: <button>|</button>
+    // I find it often unhelpful, e.g. if I am trying to put <div>...</div> around existing markup, so I disable it
+    "html.autoClosingTags": false,
+    "javascript.autoClosingTags": false,
+    "typescript.autoClosingTags": false,
+
+    "html.mirrorCursorOnMatchingTag": true,
 
     "typescript.updateImportsOnFileMove.enabled": "always",
 
@@ -179,6 +191,8 @@
     // For Trailing Spaces
     "trailing-spaces.deleteModifiedLinesOnly": true,
     "trailing-spaces.highlightCurrentLine": false,
+    //"trailing-spaces.backgroundColor": "#552222",
+    //"trailing-spaces.borderColor": "#552222",
 
     // For TodoTree
     "todo-tree.highlights.defaultHighlight": {
@@ -311,10 +325,12 @@
         { "before": [ "C-D" ], "after": [ "leader", "leader", "s" ] },
         // EasyMotion start of word
         { "before": [ "C-G"] , "after": [ "leader", "leader", "leader", "b", "d", "w" ] },
+        { "before": [ "<Leader>", "f" ] , "after": [ "v", "i", "w" ], "commands": [ "workbench.action.findInFiles" ] },
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
         // For Linux: If we hit paste (Ctrl-V) when something is selected, replace the selection with the clipboard
         { "before": [ "C-V" ], "after": [ "s", "C-R", "+", "Esc" ] },
+        { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
     ],
     "vim.insertModeKeyBindingsNonRecursive": [
         // Unfortunately the = command can also affect other lines which are not highlighted.  Better not.
@@ -340,11 +356,23 @@
         "commentLineAndMoveDown": ["editor.action.commentLine", "cursorDown"],
     },
 
+    // https://medium.com/hack-visual-studio-code/toggle-any-setting-in-vs-code-using-keyboard-shortcut-arguments-cdb5ddc56955
+    "settings.cycle": [
+        {
+            "setting": "search.location",
+            "values": [
+                "panel",
+                "sidebar"
+            ]
+        }
+    ],
+
     // For Auto Close Tag
     // This will auto close tag when just typing </
     // See also bundled settings "*.autoClosingTags"
     // This adds support for JSX/TSX which do not have bundled support
+    // Unfortunately the plugin tends to cause my editor to freeze up, so disabled for now
+    // (Or it might be Auto Rename Tag that causes it, but I think it's actually this)
     "auto-close-tag.SublimeText3Mode": true,
     "auto-close-tag.enableAutoCloseTag": false,
-    "editor.autoClosingBrackets": "never",
 }
