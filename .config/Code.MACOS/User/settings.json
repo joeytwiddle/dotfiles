@@ -53,6 +53,10 @@
     // I think disabling this makes the editor slightly faster, but I could be wrong!
     "editor.minimap.enabled": true,
 
+    // Remember the previous text when opening Cmd-P or Cmd-Shift-P
+    "workbench.quickOpen.preserveInput": true,
+    "workbench.commandPalette.preserveInput": true,
+
     // Enable on Linux, disable on macOS (because it triggers accidentally if I press Cmd while a touchpad scroll is decaying)
     //"editor.mouseWheelZoom": true,
 
@@ -137,7 +141,7 @@
     "javascript.autoClosingTags": false,
     "typescript.autoClosingTags": false,
 
-    "html.mirrorCursorOnMatchingTag": true,
+    //"html.mirrorCursorOnMatchingTag": true,
 
     "typescript.updateImportsOnFileMove.enabled": "always",
 
@@ -330,8 +334,10 @@
         // revealDefinition works more often than goToImplementation
         //{ "before": [ "C-]" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
         { "before": [ "g", "d" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
-        { "before": [ "g", "D" ], "commands": [ "editor.action.goToImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !isInEmbeddedEditor" },
-        { "before": [ "g", "u" ], "commands": [ "editor.action.goToReferences",  ], "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
+        //{ "before": [ "g", "D" ], "commands": [ "editor.action.goToImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !isInEmbeddedEditor" },
+        //{ "before": [ "g", "D" ], "after": [ "*", "g", "g", "n" ] },
+        { "before": [ "g", "D" ], "after": [ "*", "g", "g", "n", "n", "N" ] },
+        { "before": [ "g", "u" ], "commands": [ "editor.action.goToReferences" ], "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
         { "before": [ "g", "U" ], "commands": [ "editor.action.goToReferences" ], "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
         { "before": [ "g", "H" ], "commands": [ "editor.action.showDefinitionPreviewHover" ] },
         { "before": [ "<Leader>", "a" ], "commands": [ "gitlens.toggleLineBlame" ] },
