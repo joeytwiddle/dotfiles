@@ -37,6 +37,9 @@
 :root {
     --tab-min-width: 32px !important;
 }
+:root {
+    --toolbar-button-border-radius: 999px !important;
+}
 */
 /* Centralise the favicon on the small tabs */
 .tabbrowser-tab[fadein]:not([selected]) .tab-content {
@@ -71,8 +74,8 @@
 #TabsToolbar .tabbrowser-tab[selected] .tab-stack,
 #TabsToolbar .tabbrowser-tab[selected] .tab-background,
 #TabsToolbar .tabbrowser-tab[selected] .tab-content {
-    border-top-left-radius: 6px !important;
-    border-top-right-radius: 6px !important;
+    border-top-left-radius: 7px !important;
+    border-top-right-radius: 7px !important;
 }
 #TabsToolbar .tabbrowser-tab {
     /* Remove the black border on either side of the selected tab */
@@ -141,8 +144,9 @@
     padding-right: 10px !important;
 }
 /* And give all the tabs some more vertical whitespace */
+/* Old way */
 .tab-content {
-    min-height: 36px !important;
+    min-height: 40px !important;
 }
 .tab-label-container {
     padding-left: 4px !important;
@@ -152,22 +156,52 @@
 
 
 /* Make the location bar rounded */
-#urlbar {
-    border-radius: 999px !important;
+#nav-bar {
+    height: 48px !important;
 }
-
+#urlbar {
+    /* --urlbar-toolbar-height: 48px !important; */
+}
+toolbaritem#urlbar-container {
+    /* --urlbar-container-height: 48px !important; */
+    min-height: 48px !important;
+}
+#urlbar {
+    /* Default is 30px */
+    /* --urlbar-height: 32px !important; */
+    --urlbar-height: 32px !important;
+}
+#urlbar:not(.megabar), #urlbar.megabar > #urlbar-background, #searchbar, #urlbar-input-container {
+    border-radius: 16px !important;
+}
+#urlbar-input-container {
+    /* Subtly make the url box raised up a bit from the toolbar background */
+    /* box-shadow: 0 1px 1px #0004 !important; */
+    box-shadow: 0 0 3px #0002 !important;
+}
+#urlbar #urlbar-input-container {
+    padding: 0 4px;
+}
 /* Make the location bar background look 3d sunken, using innner shadow */
 /* Note that this overrides the external shadow the box gets when hovered: 0 1px 6px rgba(0,0,0,.1); */
-#urlbar {
+/* Old way */
+#urlbar:not(.megabar), #urlbar.megabar {
     /* box-shadow: inset 0 1px 4px #0005 !important; */
     /* box-shadow: inset 0 1px 8px #0000002c !important; */
     /* box-shadow: inset 0 1px 10px #00000027 !important; */
     /* box-shadow: inset 0 2px 8px #00000033 !important; */
-    box-shadow: inset 0 1px 10px #0000002d !important;
+    /* box-shadow: inset 0 1px 10px #0000002d !important; */
 }
-#urlbar[focused="true"] {
+/* New way */
+#urlbar-background {
+    /* box-shadow: inset 0 1px 10px #0000002d !important; */
+    /* box-shadow: inset 0 0 12px #0000002f !important; */
+    /* box-shadow: inset 0 0 6px #00000044 !important; */
+    box-shadow: inset 0 0 8px #00000033 !important;
+}
+#urlbar:not(.megabar)[focused="true"], #urlbar.megabar[focused="true"] {
     /* box-shadow: none !important; */
-    border: 1px solid #0008 !important;
+    /* border: 1px solid #0008 !important; */
 }
 
 
@@ -205,26 +239,39 @@ toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):n
 
 
 
+/* This conflicted with the location bar in a weird way.  The selected text (or autocompleted text) would appear green-on-white instead of white-on-green as expected. */
 /* Give the toolbars a raised 3D look */
-/* The selected tab itself is #fff6 */
+/*
+/-* The selected tab itself is #fff6 *-/
 .tabbrowser-tab[selected] .tab-background {
-    /* Unfortunately if we try to modify the background with alpha, it leaks an ugly bottom line. */
-    /* background: linear-gradient(#fff4 0%, #fff6 15%, #fff6 85%, #fff8 100%) !important; */
-    /* We must overwrite the background completely, not with alpha. */
-    /* background: linear-gradient(#e4996b 0%, #e9ad88 100%) !important; */
-    /* background: linear-gradient(#de8249 0%, #e39666 100%) !important; */
-    /* background: linear-gradient(hsl(23, 69%, 68%), hsl(23, 69%, 65%)) !important; */
+    /-* Unfortunately if we try to modify the background with alpha, it leaks an ugly bottom line. *-/
+    /-* background: linear-gradient(#fff4 0%, #fff6 15%, #fff6 85%, #fff8 100%) !important; *-/
+    /-* We must overwrite the background completely, not with alpha. *-/
+    /-* background: linear-gradient(#e4996b 0%, #e9ad88 100%) !important; *-/
+    /-* background: linear-gradient(#de8249 0%, #e39666 100%) !important; *-/
+    /-* background: linear-gradient(hsl(23, 69%, 68%), hsl(23, 69%, 65%)) !important; *-/
     background: linear-gradient(hsl(23, 69%, 60%) 0%, hsl(23, 69%, 60%) 50%, hsl(23, 69%, 65%) 100%) !important;
 }
-#nav-bar {
+/-* This background was affecting the selected text when editing a URL *-/
+/-* The not() fixes that, by disabling our background when the URL is being edited.  But that change it ugly. *-/
+/-* #nav-bar { *-/
+#nav-bar:not([urlbar-exceeds-toolbar-bounds=true]) {
     background: linear-gradient(#fff6, #fff4) !important;
     background: linear-gradient(hsl(23, 69%, 65%), hsl(23, 69%, 61%)) !important;
-    /* background: linear-gradient(180deg, #fff6 0%, #fff8 5%, #fff6 100%) !important; */
+    /-* background: linear-gradient(180deg, #fff6 0%, #fff8 5%, #fff6 100%) !important; *-/
 }
 #PersonalToolbar {
     background: linear-gradient(#fff4, #fff3) !important;
     background: linear-gradient(hsl(23, 69%, 61%), hsl(23, 69%, 58%)) !important;
 }
+*/
+/* Similar effect, but not quite (Firefox still lightens some parts, the the tab and toolbar do not merge smoothly) */
+/*
+#navigator-toolbox {
+    background: linear-gradient(hsl(23, 69%, 55%), hsl(23, 99%, 40%));
+}
+*/
+
 /* This surrounds the menu, tabs, location bar and bookmarks toolbar */
 /*
 #navigator-toolbox {
@@ -271,15 +318,19 @@ toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):n
 
 /* Make the toolbars less cramped */
 #nav-bar {
-    padding-top: 2px !important;
-    padding-bottom: 2px !important;
+    /* If you increase top/bottom padding, you should also increase PersonalToolbar's bottom padding, but leave its top at 0 */
+    /* This approach no longer works.  We just set the toolbar height instead. */
+    /*
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
     padding-left: 2px !important;
     padding-right: 2px !important;
+    */
 }
 #PersonalToolbar {
     /* padding: 1px 1px 6px !important; */
     padding-top: 0px !important;
-    padding-bottom: 4px !important;
+    padding-bottom: 8px !important;
     /* Greater indentation on this toolbar helps to de-emphasise it */
     padding-left: 5px !important;
     padding-right: 5px !important;
@@ -293,6 +344,15 @@ toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):n
     box-shadow: inset 0px -1px 4px #0004;
 }
 */
+
+/* By default, text on the toolbar has a shadow offset down and right.  This doesn't look beautiful.  Let's fix that. */
+/* #navigator-toolbox *:-moz-lwtheme-brighttext { */
+#tabbrowser-tabs .tab-content *:-moz-lwtheme-brighttext {
+    text-shadow: 0 0 1.5px #000e !important;
+}
+#PlacesToolbarItems > .bookmark-item:-moz-lwtheme-brighttext {
+    text-shadow: 0 0 1.5px #000e !important;
+}
 
 
 
