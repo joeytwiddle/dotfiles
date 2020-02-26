@@ -20,6 +20,13 @@
     { "key": "cmd+alt+down", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
     { "key": "cmd+alt+up", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
 
+    // Cmd-Shift-O behaviour is 'Go to Symbol in File...'
+    { "key": "ctrl+cmd+shift+o", "command": "outline.focus", "when": "editorTextFocus" },
+    // Better not enable this escape keybinding.  It breaks Vim's escape keybinding!
+    //{ "key": "escape", "command": "workbench.action.focusPreviousGroup", "when": "outline.active" },
+    // We don't really need this; Cmd-Left or Ctrl-Left can collapse the entire outline tree
+    //{ "key": "cmd+shift+o", "command": "list.collapseAll", "when": "outline.active" },
+
     // When using Vim plugin
     // Note that "textInputFocus" seems to apply to both Insert and Normal mode
     //{ "key": "ctrl+s", "command": "workbench.action.files.saveAll", "when": "textInputFocus" },

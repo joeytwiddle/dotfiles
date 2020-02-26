@@ -54,7 +54,7 @@
     "editor.minimap.enabled": true,
 
     // Remember the previous text when opening Cmd-P or Cmd-Shift-P
-    "workbench.quickOpen.preserveInput": true,
+    //"workbench.quickOpen.preserveInput": true,
     "workbench.commandPalette.preserveInput": true,
 
     // Enable on Linux, disable on macOS (because it triggers accidentally if I press Cmd while a touchpad scroll is decaying)
@@ -282,8 +282,9 @@
     //"vim.useSystemClipboard": true,
     //"vim.useCtrlKeys": true,
     "vim.hlsearch": true,
-    "vim.ignorecase": false,
-    "vim.smartcase": false,
+    // These are true by default
+    //"vim.ignorecase": false,
+    //"vim.smartcase": false,
     "vim.highlightedyank.enable": true,
     "vim.normalModeKeyBindingsNonRecursive": [
         { "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
