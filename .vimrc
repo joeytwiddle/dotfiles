@@ -347,6 +347,9 @@ autocmd VimLeave * silent !stty ixon
 	" :!echo "keycode 14 = BackSpace" | loadkeys
 	"" All from the manual: :h :fixdel
 
+	" Make searches case-sensitive only if they contain an uppercase character
+	set ignorecase smartcase
+
 	"" See help for 'statusline' and %{eval_expr}
 	" :set titlestring=[VIM]\ %m\ %F
 	"" Had to use BufEnter to act after other plugins using BufEnter!
