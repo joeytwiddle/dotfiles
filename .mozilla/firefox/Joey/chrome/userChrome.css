@@ -345,13 +345,11 @@ toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):n
 }
 */
 
-/* By default, text on the toolbar has a shadow offset down and right.  This doesn't look beautiful.  Let's fix that. */
-/* #navigator-toolbox *:-moz-lwtheme-brighttext { */
-#tabbrowser-tabs .tab-content *:-moz-lwtheme-brighttext {
-    text-shadow: 0 0 1.5px #000e !important;
-}
+/* By default, text on the toolbar has a heavy shadow offset down and right.  This doesn't look beautiful.  Let's fix that. */
+#tabbrowser-tabs .tab-content *:-moz-lwtheme-brighttext,
 #PlacesToolbarItems > .bookmark-item:-moz-lwtheme-brighttext {
-    text-shadow: 0 0 1.5px #000e !important;
+    /* text-shadow: 0 0 1px #0009 !important; */
+    text-shadow: 0 0 2px #000a !important;
 }
 
 
