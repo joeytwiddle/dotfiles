@@ -263,7 +263,8 @@ git_status_plus() {
 			# This only works for files underneath the current path
 			#local relfile="$(printf "%s\n" "$file" | sed "s+^$path_prefix++")"
 			local relfile="${file#$path_prefix}"
-			echo "#       ${curseon}${relfile}${cursereset}"
+			# If relfile is "" then presumably it was the current folder "."
+			echo "#       ${curseon}${relfile:-.}${cursereset}"
 		done
 
 		'cp' -f "$current_stats_file" "$previous_stats_file" 2>/dev/null
