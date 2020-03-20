@@ -184,9 +184,10 @@ alt + shift + l
 #  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup p" "keydown Control_L" "key p" "keyup Control_L"
 
 # When opening a search, start it immediately.  (More useful if we had already selected a word.)
-alt + shift + f
-  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keyup Shift_L" "key Return" "keydown Shift_L" "keydown Meta_L"
+# VSCode now does this itself
+#alt + shift + f
+#  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keyup Shift_L" "key Return" "keydown Shift_L" "keydown Meta_L"
 
 
 
@@ -223,8 +224,9 @@ alt + m
 #alt + p
 #  xte "keyup p" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 # Save
-alt + s
-  xte "keyup s" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+# Not playing nicely with VSCode, in any combination
+#alt + s
+#  xte "keyup s" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 # Redo (sometimes)
 alt + y
   xte "keyup y" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key y" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
@@ -247,6 +249,7 @@ alt + shift + d
   xte "keyup d" "keyup Meta_L" "keydown Control_L" "key d" "keyup Control_L" "keydown Meta_L"
 alt + shift + e
   xte "keyup e" "keyup Meta_L" "keydown Control_L" "key e" "keyup Control_L" "keydown Meta_L"
+# I like to use this in VSCode but the keybind gets sticky.  So now VSCode watched for the keybind itself.
 #alt + shift + f
 #  xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L"
 alt + shift + g
@@ -366,9 +369,9 @@ super + shift + Right
 # On MacBooks, Fn-Backspace performs Delete
 # On Linux, the same fingerstroke is at Ctrl-Backspace
 # So let's map Ctrl-Backspace to perform Delete
-# Disabled for now because I _do_ use Ctrl-Backspace.  I use it as "Go Back" in More Keybinds.
-#control + BackSpace
-#  xte "keyup BackSpace" "keyup Control_L" "key Delete" "keydown Control_L"
+# I do like to use Ctrl-Backspace as "Go Back" in More Keybinds, but now I have made that trigger on Delete too.
+control + BackSpace
+  xte "keyup BackSpace" "keyup Control_L" "key Delete" "keydown Control_L"
 
 
 
