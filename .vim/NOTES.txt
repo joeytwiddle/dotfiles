@@ -1,151 +1,201 @@
-== Advanced and useful vim stuff ==
+# Advanced and useful vim stuff
 
 When diffing two files:
-  ]c   go to next difference
-  [c   go to previous difference
-  do   obtain lines for current difference from other file
-  dp   put lines in current difference into other file
-[The last two are nice of you are in the left-hand window, as O and P indicate
+
+```
+]c   go to next difference
+[c   go to previous difference
+do   obtain lines for current difference from other file
+dp   put lines in current difference into other file
+```
+
+[The last two are nice of you are in the left-hand window, as `O` and `P` indicate
 the direction of movement of text (on a QWERTY keyboard).]
 
 Editing a privileged file but realise when saving you are not root?
-  :w !sudo tee %
-  (here :w ! writes to stdin of the command, and % evaluates to a filename)
+
+```
+:w !sudo tee %
+(here :w ! writes to stdin of the command, and % evaluates to a filename)
+```
 
 If you made some deletes and you want an earlier delete, they are stored in the numbered registers, so...
 
-  "3p   will paste the yanked text 3 steps back
+```
+"3p   will paste the yanked text 3 steps back
+```
 
-Before doing that, you can use :reg to see the list of registers.
+Before doing that, you can use `:reg` to see the list of registers.
 
+```
 g;   go to position of last change
 g,   go to position of next change
 mx   create mark x
 g'x  jump to mark x
      (use capital X for global, lower-case is buffer-local)
 '.   go to last edited line (similar to g; but without steps)
+```
 
 In Insert mode:
 
-  Ctrl-O lets you do ONE normal command (that's what I need for gvim -y!)
+- `Ctrl-O` lets you do ONE normal command (that's what I need for `gvim -y`!)
 
-  Ctrl-A inserts the last insert again (in normal mode that is in register ".)
+- `Ctrl-A` inserts the last insert again (in normal mode that is in register `"`.)
 
-  Ctrl-Y inserts the char from the cell above the cursor (copy line above)
+- `Ctrl-Y` inserts the char from the cell above the cursor (copy line above)
 
-Execute a register as a command using @
+Execute a register as a command using `@`
 
-  so @0 or @1 or @""
+```
+so @0 or @1 or @""
+```
 
-@: is a shortcut for the last : command you ran
+`@:` is a shortcut for the last `:` command you ran
 
-Whilst n is the repeater for * or #, ; is the repeater for f t F and T.
+Whilst `n` is the repeater for `*` or `#`, `;` is the repeater for `f` `t` `F` and `T`.
 
 Lost code by breaking your undo history?  Recover with:
-  :earlier 1m
-  :later 10s
+
+```
+:earlier 1m
+:later 10s
+```
+
 Alternatively:
-  :u1 | u   go to initial state
-  :earlier 1f   go to state at previous file-save
+
+```
+:u1 | u       go to initial state
+:earlier 1f   go to state at previous file-save
+```
 
 Delete and yank current word, with "in" or "around":
 
-  diw   delete current word
-  d3iw  delete two words: current and next
-  d5iw  delete current and next two words (even numbers delete the gaps between words)
-  ci"   change text between quotes
-  ci(   change text within parens
-  vi{   select text within curly brackets
-  vib   select text within parents or curlies ("block") depending
-  viB   again curlies ("larger block") depending
-  da(   delete text including ("around") parens
-  cit   change tag
+```
+diw   delete current word
+d3iw  delete two words: current and next
+d5iw  delete current and next two words (even numbers delete the gaps between words)
+ci"   change text between quotes
+ci(   change text within parens
+vi{   select text within curly brackets
+vib   select text within parents or curlies ("block") depending
+viB   again curlies ("larger block") depending
+da(   delete text including ("around") parens
+cit   change tag
+```
 
-  For more: :help text-objects
+For more: `:help text-objects`
 
-gF open file under cursor
+`gF` open file under cursor
 
-gD jump to definition
+`gD` jump to definition
 
 Paste contents of register from Insert mode (or on Cmdline):
 
-  <C-r>r     where r is the register
+```
+<C-r>r     where r is the register
+```
 
 Also:
 
-  :echo @r   Print register r, using its variable
+```
+:echo @r   Print register r, using its variable
 
-  @/         is the search register
+@/         is the search register
+```
 
 Read input from a command.
 
-  :r!date     inserts a new line
-  :.!date     clobbers the current line
+```
+:r!date     inserts a new line
+:.!date     clobbers the current line
+```
 
 Uppercase the word under the cursor:
 
-   viwU
-   vi(U      or everything inside the parentheses
-
-
+```
+viwU
+vi(U      or everything inside the parentheses
+```
 
 Yank matching:
 
-  :g/var/y A     yanks all lines in buffer matching var into register a
+```
+:g/var/y A     yanks all lines in buffer matching var into register a
 
+```
 
 Debug where setting was set:
-  :verbose set cindent?
+
+```
+:verbose set cindent?
+```
 
 To see if a key mapping has been overriden:
-  :verbose nmap \
 
-Edit file under cursor is gf in case Ctrl-] doesn't work.
+```
+:verbose nmap \
+```
+
+Edit file under cursor is `gf` in case `Ctrl-]` doesn't work.
 
 Change directory to current folder:
-  :cd %:h
-  or
-  :set autochdir
 
-gv if you want your last visual back
+```
+:cd %:h
+or
+:set autochdir
+```
+
+`gv` if you want your last visual back
 
 Handy buffer switcher:
-  nnoremap <C-B> :ls<CR>:b<space>
+
+```
+nnoremap <C-B> :ls<CR>:b<space>
+```
 
 
 
-Switch to buffer 3 quickly with: 3<Ctrl-^>
+Switch to buffer 3 quickly with: `3<Ctrl-^>`
 
 
 
-Text via external shell/system commands (e.g. grep, awk, perl):
+Text via external shell/system commands (e.g. `grep`, `awk`, `perl`):
 
 To insert something useful (in this case the date).
 
-  v!date
+```
+v!date
+```
 
 To filter the current file through an external program:
 
-  :%!sort -k 3
+```
+:%!sort -k 3
 
-  :%!grep -v "/mnt/sdb1/"
+:%!grep -v "/mnt/sdb1/"
+```
 
 Hex / binary editor:
 
-  :%!xxd
-  :%!xxd -r
+```
+:%!xxd
+:%!xxd -r
+```
 
-  (Note that vim should be run in -b binary mode.)
+(Note that vim should be run in `-b` binary mode.)
 
 
 
-== Vim Scripting ==
+## Vim Scripting
 
-=== Debugging ===
+### Debugging
 
 Some bugs are caused by incompatible settings or plugins.  To start a vanilla Vim without them:
 
-    vim -N -u NONE -U NONE --noplugin
+```
+vim -N -u NONE -U NONE --noplugin
+```
 
 The `-N` option (nocompatible) means things like `<Up>` will work in command mode.
 
@@ -155,158 +205,203 @@ When debugging vim scripts, `:scriptnames` can be useful to show what has loaded
 
 To discover when a mapping or autocmd or option was last set, use `:verbose`:
 
-    verbose map [key]
-    verbose autocmd [group] [event]
-    verbose set [{option}?]
+```
+verbose map [key]
+verbose autocmd [group] [event]
+verbose set [{option}?]
+```
 
 Logging can give you lots of information:
 
-  vim -V9testlog
+```
+vim -V9testlog
+```
 
 Alternatively, if you want to turn this heavy logging on/off at runtime:
 
-    function! ToggleVerbose()
-        if !&verbose
-            set verbosefile=~/vim.log
-            set verbose=15
-        else
-            set verbose=0
-            set verbosefile=
-        endif
-    endfunction
+```
+function! ToggleVerbose()
+    if !&verbose
+        set verbosefile=~/vim.log
+        set verbose=15
+    else
+        set verbose=0
+        set verbosefile=
+    endif
+endfunction
+```
 
 Unfortunately the writing of the logfile is buffered, so you don't get a very realtime view if you try to watch it with `tail -f`.  But with the following mapping, you can force the logfile to update by hitting `<Ctrl-L>`:
 
-    :nmap <C-L> :set verbosefile=<CR>:set verbosefile=~/vim.log<CR>
+```
+:nmap <C-L> :set verbosefile=<CR>:set verbosefile=~/vim.log<CR>
+```
 
-We could also try to force a write on CursorMoved/CursorHold/... autocommands.
+We could also try to force a write on `CursorMoved/CursorHold/...` autocommands.
 
 I found the flat format of the logfile a little hard to follow, so I indented each function call like this (using jsh):
 
-    cat /tmp/vim.log | indent_on_regexp "^calling function " "^function.*return" | more
+```
+cat /tmp/vim.log | indent_on_regexp "^calling function " "^function.*return" | more
+```
 
 That's logging.  If you want a step by step debugger:
 
-    vim -D ...
+```
+vim -D ...
+```
 
 But wait.  What about:
 
-    :breakadd
+```
+:breakadd
+```
 
 I need to experiment with that, so I can document it.
 
-See Tim Pope's 'scriptease' for some friendly wrappers for verbose.
+See Tim Pope's [`scriptease`](https://github.com/tpope/vim-scriptease) for some friendly commands for common tasks scripters need.
 
 
 
-=== Debugging ===
+### Debugging
 
 You can capture a full log of a Vim session with `vim -V20/tmp/vim.log`.  Afterwards you can e.g. grep the log file for commands:
 
-    grep ":let g:netrw_list_hide" /tmp/vim.log
+```
+grep ":let g:netrw_list_hide" /tmp/vim.log
+```
 
 
-=== Profiling Startup ===
+### Profiling Startup
 
 https://stackoverflow.com/questions/1687799/profiling-vim-startup-time
 
-    vim --startuptime /tmp/vim-profile.log
+```
+vim --startuptime /tmp/vim-profile.log
+```
 
 
-=== Profiling Runtime ===
+### Profiling Runtime
 
 To start profiling:
 
-    :profile start ~/vimprofile.out
-    :profile file *
-    :profile func *
+```
+:profile start ~/vimprofile.out
+:profile file *
+:profile func *
+```
 
 You can also:
 
-    :profile pause
-    :prfile continue
+```
+:profile pause
+:prfile continue
+```
 
 The output file will only be written when you quit Vim.
 
 
-=== Debugging Runtime ===
+### Debugging Runtime
 
-    :set verbosfile=/tmp/vim-log.out
-    :set verbose=15
+```
+:set verbosfile=/tmp/vim-log.out
+:set verbose=15
+```
 
 
 
 Stop leaving Insert mode to paste from clipboard:
 
-  <Esc>"+p
+```
+<Esc>"+p
+```
 
 Stay in Insert mode and do it faster:
 
-  <Ctrl-R>+
+```
+<Ctrl-R>+
+```
 
 Rather than :set ignorecase to do a case-insensitive search, just drop \c at the beginning of your search expression!
 
 To copy the line under the cursor (into register k) then execute it as an ex command:
 
-  "kyy
-  :@k<Enter>
+```
+"kyy
+:@k<Enter>
+```
 
 or:
 
-  yyq:p<Enter>
+```
+yyq:p<Enter>
+```
 
 
 
-== More Tips ==
+## More Tips
 
 http://rayninfo.co.uk/vimtips.html
 
 
 
-== Basic stuff (for new Vim users) ==
+## Basic stuff (for new Vim users)
 
 Undo and other commands to get out of bad situations:
 
-  u           undo
-  Ctrl-r      redo
+```
+u           undo
+Ctrl-r      redo
 
-  Ctrl-o      go back (when you have changed file and want the old one)
-  Ctrl-i      go forward
+Ctrl-o      go back (when you have changed file and want the old one)
+Ctrl-i      go forward
 
-  Ctrl-w c    close window (when you have split open a new window and don't want it)
-  or :q
-
-
-== Completion ==
-
-  Ctrl-n           word completion forwards
-  Ctrl-p           word completion backwards (more often what you want)
-  Ctrl-x Ctrl-]    tag completion (from ctags)
-  Ctrl-x Ctrl-n    context-aware completion (keep hitting it to pull in words from earlier sentences)
-  Ctrl-x Ctrl-o    language-aware completion
-  Ctrl-x Ctrl-l    line completion
+Ctrl-w c    close window (when you have split open a new window and don't want it)
+or :q
+```
 
 
-== Motions ==
+## Completion
 
-  [count]G         to line [count] inclusive
-                   use with 'c' or 'd' to clear lots of lines
-                   easier when 'number' is enabled!
+```
+Ctrl-n           word completion forwards
+Ctrl-p           word completion backwards (more often what you want)
+Ctrl-x Ctrl-]    tag completion (from ctags)
+Ctrl-x Ctrl-n    context-aware completion (keep hitting it to pull in words from earlier sentences)
+Ctrl-x Ctrl-o    language-aware completion
+Ctrl-x Ctrl-l    line completion
+```
 
-== Jumps ==
-
-  Ctrl-o           go back one jump
-  Ctrl-i           go forward one jump
-  Ctrl-t           go back one tag jump
-                   (a good alternative to my custom Ctrl-u)
-
-== Scrolling ==
-
-  zt         Scroll so cursor is at top
-  zz         Scroll so cursor is in middle
-  zb         Scroll so cursor is at bottom
-
-
+### Recommended plugins for completion
 
 <m_ben> sec^nd: for autocompletion, take a look at YouCompleteMe. it's a pain in the ass to set it up but once it's running it works pretty well
+
 <m_ben> if you want a more lightweight completion 'plugin', there's µcomplete or VimCompletesMe
+
+## Motions
+
+```
+[count]G         to line [count] inclusive
+                 use with 'c' or 'd' to clear lots of lines
+                 easier when 'number' is enabled!
+```
+
+## Jumps
+
+```
+Ctrl-o           go back one jump
+Ctrl-i           go forward one jump
+Ctrl-t           go back one tag jump
+                 (a good alternative to my custom Ctrl-u)
+```
+
+## Scrolling
+
+```
+zt         Scroll so cursor is at top
+zz         Scroll so cursor is in middle
+zb         Scroll so cursor is at bottom
+```
+
+
+
