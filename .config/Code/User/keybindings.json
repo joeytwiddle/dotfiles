@@ -63,6 +63,8 @@
     "command": "editor.action.deleteLines",
     "when": "textInputFocus && !editorReadonly"
   },
+  // I am now using the default (Opt-Shift-F on Mac, Ctrl-Shift-I on Linux)
+  /*
   {
     "key": "alt+shift+l",
     "command": "editor.action.formatDocument",
@@ -78,6 +80,7 @@
     "command": "editor.action.formatDocument",
     "when": "editorTextFocus && !editorReadonly"
   },
+  */
   {
     "key": "alt+z",
     "command": "undo",
@@ -186,6 +189,8 @@
   },
   */
 
+  { "key": "ctrl+shift+\\", "command": "workbench.action.splitEditorOrthogonal" },
+
   { "key": "alt+w", "command": "workbench.action.closeWindow", "when": "!editorIsOpen && !multipleEditorGroups" },
 
   /* To match macOS keybinds */
@@ -196,6 +201,7 @@
   { "key": "alt+p", "command": "workbench.action.quickOpenNavigateNextInFilePicker", "when": "inFilesPicker && inQuickOpen" },
   { "key": "alt+shift+p", "command": "workbench.action.quickOpenNavigatePreviousInFilePicker", "when": "inFilesPicker && inQuickOpen" },
   { "key": "alt+shift+p", "command": "workbench.action.showCommands", "when": "!inFilesPicker || !inQuickOpen" },
+  { "key": "alt+shift+e", "command": "workbench.view.explorer" },
   // To train me to stop trying to use Ctrl-P
   { "key": "ctrl+p", "command": "-workbench.action.quickOpen" },
 
@@ -205,13 +211,27 @@
   { "key": "alt+s", "command": "workbench.action.files.save" },
   { "key": "ctrl+s", "command": "workbench.action.files.saveAll" },
 
+  // Disable this default, because Ctrl-W means something different in Vim mode
+  { "key": "ctrl+w", "command": "-workbench.action.closeWindow", "when": "!editorIsOpen && !multipleEditorGroups" },
+  { "key": "ctrl+w", "command": "-workbench.action.closeGroup", "when": "activeEditorGroupEmpty && multipleEditorGroups" },
+
   { "key": "alt+shift+f", "command": "workbench.action.findInFiles" },
 
   //{ "key": "ctrl+n", "command": "!extension.vim_ctrl+n", "when": "editorTextFocus && vim.active && vim.use<C-n> && !inDebugRepl || vim.active && vim.use<C-n> && !inDebugRepl && vim.mode == 'CommandlineInProgress' || vim.active && vim.use<C-n> && !inDebugRepl && vim.mode == 'SearchInProgressMode'" },
   //{ "key": "ctrl+p", "command": "!extension.vim_ctrl+p", "when": "suggestWidgetVisible && vim.active && vim.use<C-p> && !inDebugRepl || vim.active && vim.use<C-p> && !inDebugRepl && vim.mode == 'CommandlineInProgress' || vim.active && vim.use<C-p> && !inDebugRepl && vim.mode == 'SearchInProgressMode'" },
 
-    { "key": "ctrl+n", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
-    { "key": "ctrl+p", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
+    //{ "key": "ctrl+n", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
+    //{ "key": "ctrl+p", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
+
+    { "key": "alt+meta+down", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
+    { "key": "alt+meta+up", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
+
+    // When focused on search, get back to editor by pressing Escape
+    { "key": "escape", "command": "workbench.action.focusActiveEditorGroup", "when": "searchInputBoxFocus" },
+    // One of the popups is difficult to get rid of.  Well it's possible with Shift-Escape (or Shift-Escape via Ctrl-L) but I just want Escape to remove it.
+    // I'm not sure which popup it is exactly, because there are a lot bound to Shift-Escape.  (So it might not be the suggestionWidget at all.)
+    // This attempt was problematic because, when autocomplete menu is focused, usually <Escape> will also break out of Vim's INSERT mode.  With this keybinding enabled, <Escape> closes the autocomplete menu, but it didn't leave INSERT mode.
+    //{ "key": "escape", "command": "hideSuggestWidget", "when": "suggestWidgetVisible && textInputFocus" },
 
   /* Cycle zoom (requires Settings Cycler plugin) */
   /* I use this because I like -0.5 on my Linux, but Ctrl-Plus/Minus round to integers */
