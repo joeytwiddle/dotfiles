@@ -33,6 +33,11 @@ endfunction
 function! s:update_file_managers()
   " Check if current window contains a modifiable file, with a filename, and we're not in vimdiff
   if &modifiable && strlen(expand('%')) > 0 && !&diff
+    " We cannot switch out of the `q:` window, so we had better not try
+    if bufname('%') ==# '[Command Line]'
+      return
+    endif
+
     let s:original_window = winnr()
     let filename = expand('%:t')
 
