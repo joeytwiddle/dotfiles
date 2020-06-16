@@ -12,6 +12,11 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); /* set default namespace to XUL */
 
 
+/* Disable Arial (because it looks a bit crappy on my Linux */
+/* Unfortunately these tricks didn't work for me. */
+/* @font-face { font-family: 'Arial'; src: local('FreeSans'); } */
+/* @font-face { font-family: 'Arial'; src: local('Liberation Sans'); } */
+
 
 /* === Narrower tabs === */
 
