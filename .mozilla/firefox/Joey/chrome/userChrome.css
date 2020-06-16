@@ -151,7 +151,8 @@
 /* And give all the tabs some more vertical whitespace */
 /* Old way */
 .tab-content {
-    min-height: 40px !important;
+    /* min-height: 40px !important; */
+    min-height: 38px !important;
 }
 .tab-label-container {
     padding-left: 4px !important;
@@ -162,21 +163,27 @@
 
 /* Make the location bar rounded */
 #nav-bar {
-    height: 48px !important;
+    /* height: 48px !important; */
+    /* height: 44px !important; */
 }
 #urlbar {
     /* --urlbar-toolbar-height: 48px !important; */
 }
 toolbaritem#urlbar-container {
     /* --urlbar-container-height: 48px !important; */
-    min-height: 48px !important;
+    /* min-height: 48px !important; */
 }
 #urlbar {
     /* Default is 30px */
     /* --urlbar-height: 32px !important; */
     --urlbar-height: 32px !important;
 }
-#urlbar:not(.megabar), #urlbar.megabar > #urlbar-background, #searchbar, #urlbar-input-container {
+#urlbar-container, #search-container {
+    /* The spacing above and below the urlbar (default 3px but effectively 4 or 5px because of nav-bar height) */
+    padding-block: 5px !important;
+}
+/* #urlbar:not(.megabar), #urlbar.megabar > #urlbar-background, #searchbar, #urlbar-input-container { */
+#urlbar, #urlbar-background, #searchbar, #urlbar-input-container {
     border-radius: 16px !important;
 }
 #urlbar-input-container {
@@ -202,7 +209,8 @@ toolbaritem#urlbar-container {
     /* box-shadow: inset 0 1px 10px #0000002d !important; */
     /* box-shadow: inset 0 0 12px #0000002f !important; */
     /* box-shadow: inset 0 0 6px #00000044 !important; */
-    box-shadow: inset 0 0 8px #00000033 !important;
+    /* box-shadow: inset 0 0 8px #00000033 !important; */
+    box-shadow: inset 0 0 10px #00000026 !important;
 }
 #urlbar:not(.megabar)[focused="true"], #urlbar.megabar[focused="true"] {
     /* box-shadow: none !important; */
@@ -335,7 +343,7 @@ toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):n
 #PersonalToolbar {
     /* padding: 1px 1px 6px !important; */
     padding-top: 0px !important;
-    padding-bottom: 8px !important;
+    padding-bottom: 4px !important;
     /* Greater indentation on this toolbar helps to de-emphasise it */
     padding-left: 5px !important;
     padding-right: 5px !important;
