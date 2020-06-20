@@ -81,7 +81,13 @@
     //    "**/node_modules/**": true
     //},
 
+    // Avoid getting unwanted autocompletes when typing '(' or '.'
+    "editor.acceptSuggestionOnCommitCharacter": false,
+
     "npm.enableScriptExplorer": true,
+
+    // Don't insert a space after comment chars
+    "editor.comments.insertSpace": false,
 
     // Let snippets take priority over other things in the suggestions list
     // See: https://github.com/Microsoft/vscode/issues/10565#issuecomment-317319434
@@ -103,10 +109,34 @@
         //"editor.selectionHighlightBackground": "#449059",
         //"editor.selectionHighlightForeground": "#ffffff",
 
-        "editorWarning.foreground": "#dd8800",
+        //"editorWarning.foreground": "#dd8800",
+        "editorWarning.foreground": "#ffdd0099",
+        "editorError.foreground": "#ff4444",
         //"breadcrumb.foreground": "#888888",
 
         "editorUnnecessaryCode.opacity": "#00000080",
+
+        // For usernamehw.errorlens
+        //"errorLens.errorBackground": "#ff00001c",
+        //"errorLens.warningBackground": "#ff880012",
+        //"errorLens.infoBackground": "#0000ff00",
+        //"errorLens.hintBackground": "#00ffff00",
+        "errorLens.errorBackground": "#ff000000",
+        "errorLens.warningBackground": "#ff880000",
+        "errorLens.infoBackground": "#0000ff00",
+        "errorLens.hintBackground": "#00ffff00",
+        //"errorLens.errorForeground": "#888888ff",
+        "errorLens.errorForeground": "#ff888855",
+        "errorLens.warningForeground": "#555555ff",
+        //"errorLens.warningForeground": "#ffdd2222",
+        "errorLens.infoForeground": "#555555ff",
+        "errorLens.hintForeground": "#555555ff",
+        //"errorLens.errorForeground": "#88888800",
+        //"errorLens.warningForeground": "#88888800",
+        //"errorLens.infoForeground": "#55555500",
+        //"errorLens.hintForeground": "#55555500",
+        //"errorLens.fontWeight": 200,
+        //"errorLens.fontStyleItalic": false,
 
         // Testing for theme
         // For the active search result
@@ -148,6 +178,9 @@
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -184,6 +217,7 @@
     //"autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
 
     // For Error Lens
+    /*
     //"errorLens.errorBackground": "#ff00001c",
     //"errorLens.warningBackground": "#ff880012",
     //"errorLens.infoBackground": "#0000ff00",
@@ -202,6 +236,7 @@
     //"errorLens.hintForeground": "#55555500",
     //"errorLens.fontWeight": 200,
     //"errorLens.fontStyleItalic": false,
+    */
 
     // For GitLens
     "gitlens.codeLens.enabled": false,
