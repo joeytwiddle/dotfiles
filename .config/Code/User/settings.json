@@ -5,7 +5,7 @@
 
     "workbench.colorTheme": "Gentle Mary",
 
-    "window.zoomLevel": -0.5,
+    "window.zoomLevel": -0.8,
 
     // For macOS
     //"editor.fontFamily": "Lucida Console, Lucida Sans Typewriter, Menlo, Monaco, 'Courier New', monospace",
@@ -25,7 +25,10 @@
     //"editor.lineHeight": "15",
 
     // For Linux
-    "editor.fontFamily": "'Lucida Sans Typewriter', 'Lucida Console', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    // Hasklug is ok, but we kept having issues with incorrect rendering width (which could be resolved by cycling font sizes)
+    // Oh Lucida Sans Typewriter has that problem too!
+    // 'Hasklug Joey Mono',
+    "editor.fontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
     "editor.fontSize": 12,
     "editor.lineHeight": 14,
 
@@ -39,7 +42,7 @@
     //"terminal.integrated.fontWeightBold": "normal",
     // For Linux
     "terminal.integrated.fontSize": 13,
-    "terminal.integrated.fontFamily": "'Lucida Sans Typewriter'",
+    "terminal.integrated.fontFamily": "'Lucida Sans Typewriter', 'Lucida Console', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
 
     //"editor.renderWhitespace": "boundary",
 
@@ -57,7 +60,7 @@
     "editor.mouseWheelZoom": true,
 
     // Clearer tree structure (default 8)
-    "workbench.tree.indent": 18,
+    "workbench.tree.indent": 14,
 
     // On startup, open all windows that were open in previous session
     "window.restoreWindows": "all",
@@ -70,14 +73,20 @@
     //"editor.formatOnSave": true,
 
     // Open searches below the editor, not in the sidebar
-    "search.location": "panel",
+    //"search.location": "panel",
 
     // I think this enough to stop the CPU going to 100% for 5 minutes after populating node_modules folder
     "files.watcherExclude": {
         "**/node_modules/**": true
     },
 
+    // Avoid getting unwanted autocompletes when typing '(' or '.'
+    "editor.acceptSuggestionOnCommitCharacter": false,
+
     "npm.enableScriptExplorer": true,
+
+    // Don't insert a space after comment chars
+    "editor.comments.insertSpace": false,
 
     // Let snippets take priority over other things in the suggestions list
     // See: https://github.com/Microsoft/vscode/issues/10565#issuecomment-317319434
@@ -90,7 +99,6 @@
 
     //"editor.occurrencesHighlight": false,
 
-    // Make unused variables strongly greyed out
     "workbench.colorCustomizations": {
         // These work, but only the backgrounds not the foregrounds
         // If we don't set them, then the theme can set them
@@ -99,10 +107,64 @@
         //"editor.selectionHighlightBackground": "#449059",
         //"editor.selectionHighlightForeground": "#ffffff",
 
-        "editorWarning.foreground": "#dd8800",
+        //"editorWarning.foreground": "#dd8800",
+        "editorWarning.foreground": "#ffdd0099",
+        "editorError.foreground": "#ff4444",
         //"breadcrumb.foreground": "#888888",
 
         "editorUnnecessaryCode.opacity": "#00000080",
+
+        // For usernamehw.errorlens
+        //"errorLens.errorBackground": "#ff00001c",
+        //"errorLens.warningBackground": "#ff880012",
+        //"errorLens.infoBackground": "#0000ff00",
+        //"errorLens.hintBackground": "#00ffff00",
+        "errorLens.errorBackground": "#ff000000",
+        "errorLens.warningBackground": "#ff880000",
+        "errorLens.infoBackground": "#0000ff00",
+        "errorLens.hintBackground": "#00ffff00",
+        //"errorLens.errorForeground": "#888888ff",
+        "errorLens.errorForeground": "#ff888855",
+        "errorLens.warningForeground": "#555555ff",
+        //"errorLens.warningForeground": "#ffdd2222",
+        "errorLens.infoForeground": "#555555ff",
+        "errorLens.hintForeground": "#555555ff",
+        //"errorLens.errorForeground": "#88888800",
+        //"errorLens.warningForeground": "#88888800",
+        //"errorLens.infoForeground": "#55555500",
+        //"errorLens.hintForeground": "#55555500",
+        //"errorLens.fontWeight": 200,
+        //"errorLens.fontStyleItalic": false,
+
+        //"editorGutter.background": "#303030",
+        //"editor.background": "#1c2426",
+
+        //"scrollbarSlider.background": "#88888844",
+
+        "list.activeSelectionBackground": "#0000002a",
+        "list.inactiveSelectionBackground": "#0000002a",
+        //"list.dropBackground": "#0000002a",
+        //"list.focusBackground": "#0000002a",
+        "list.focusForeground": "#fff",
+
+        // If you want to play with syntax highlighting customisations, they go here:
+        "textMateRules": [
+            //{ "name": "String", "scope": "string", "settings": { "fontStyle": "", "foreground": "#E6DB74" } },
+            {
+                "scope": "meta.path.search",
+                "settings": {
+                    "foreground": "#ffffff",
+                    //"foreground": "#88CCCC",
+                    "fontStyle": "bold"
+                }
+            },
+            {
+                "scope": "meta.resultLinePrefix.lineNumber.search",
+                "settings": {
+                    "foreground": "#777777"
+                }
+            }
+        ]
     },
 
     // It's probably better to enable these settings in the .vscode folder local to each workspace/project
@@ -120,11 +182,15 @@
     "javascript.autoClosingTags": false,
     "typescript.autoClosingTags": false,
 
-    "html.mirrorCursorOnMatchingTag": true,
+    // Deprecated: "html.mirrorCursorOnMatchingTag": true,
+    "editor.renameOnType": true,
 
     "typescript.updateImportsOnFileMove.enabled": "always",
 
     "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[typescript]": {
@@ -142,8 +208,6 @@
     "[jsonc]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-
-
 
     // === Settings for plugins === //
 
@@ -163,6 +227,7 @@
     //"autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
 
     // For Error Lens
+    /*
     //"errorLens.errorBackground": "#ff00001c",
     //"errorLens.warningBackground": "#ff880012",
     //"errorLens.infoBackground": "#0000ff00",
@@ -181,6 +246,7 @@
     //"errorLens.hintForeground": "#55555500",
     //"errorLens.fontWeight": 200,
     //"errorLens.fontStyleItalic": false,
+    */
 
     // For GitLens
     "gitlens.codeLens.enabled": false,
@@ -272,7 +338,9 @@
         // So instead we list the commands directly (but there are many!)
         { "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen" ] },
         // We save the current file in order to pin it.  We save all files, because that's what I really want Ctrl-S to do
-        { "before": [ "<C-S>" ] , "commands": [ "workbench.action.files.save", "workbench.action.files.saveAll", "workbench.action.focusActiveEditorGroup" ] },
+        { "before": [ "<C-S>" ], "commands": [ "workbench.action.files.save", "workbench.action.files.saveAll", "workbench.action.focusActiveEditorGroup" ] },
+        // Select all
+        { "before": [ "C-A" ], "after": [ "g", "g", "V", "G" ] },
         // But I put a C-S keybinding in keybindings.json, and that one worked.
         { "before": [ "[", " " ], "after": [ "O", "<Esc>" ] },
         { "before": [ "]", " " ], "after": [ "o", "<Esc>" ] },
@@ -317,6 +385,9 @@
         { "before": [ "g", "u" ], "commands": [ "editor.action.goToReferences",  ], "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
         { "before": [ "g", "U" ], "commands": [ "editor.action.goToReferences" ], "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
         { "before": [ "g", "H" ], "commands": [ "editor.action.showDefinitionPreviewHover" ] },
+        { "before": [ "g", "Leader", "h" ], "commands": [ "editor.action.peekDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
+        { "before": [ "g", "Leader", "H" ], "commands": [ "editor.action.peekImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
+        { "before": [ "g", "Leader", "Leader", "h" ], "commands": [ "editor.action.peekTypeDefinition" ] },
         { "before": [ "<Leader>", "a" ], "commands": [ "gitlens.toggleLineBlame" ] },
         { "before": [ "<Leader>", "A" ], "commands": [ "gitlens.toggleFileBlame" ] },
         { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "i", "w", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
@@ -326,6 +397,10 @@
         // EasyMotion start of word
         { "before": [ "C-G"] , "after": [ "leader", "leader", "leader", "b", "d", "w" ] },
         { "before": [ "<Leader>", "f" ] , "after": [ "v", "i", "w" ], "commands": [ "workbench.action.findInFiles" ] },
+        // Not working (no better with "Equal" or "Equals")
+        //{ "before": [ "=", "=" ] , "commands": [ "editor.action.formatDocument" ], "when": "editorTextFocus && !editorReadonly" },
+        //{ "before": [ "C-J"] , "commands": [ "workbench.action.focusActiveEditorGroup" ] },
+        // Previously: "workbench.action.togglePanel" but this only works when the panel opens below the editor
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
         // For Linux: If we hit paste (Ctrl-V) when something is selected, replace the selection with the clipboard
@@ -359,10 +434,14 @@
     // https://medium.com/hack-visual-studio-code/toggle-any-setting-in-vs-code-using-keyboard-shortcut-arguments-cdb5ddc56955
     "settings.cycle": [
         {
-            "setting": "search.location",
+            "id": "search.location",
             "values": [
-                "panel",
-                "sidebar"
+                {
+                    "search.location": "panel"
+                },
+                {
+                    "search.location": "sidebar"
+                }
             ]
         }
     ],
@@ -375,4 +454,5 @@
     // (Or it might be Auto Rename Tag that causes it, but I think it's actually this)
     "auto-close-tag.SublimeText3Mode": true,
     "auto-close-tag.enableAutoCloseTag": false,
+    "todo-tree.tree.showScanModeButton": false,
 }
