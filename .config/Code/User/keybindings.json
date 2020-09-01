@@ -202,18 +202,23 @@
   { "key": "alt+shift+p", "command": "workbench.action.quickOpenNavigatePreviousInFilePicker", "when": "inFilesPicker && inQuickOpen" },
   { "key": "alt+shift+p", "command": "workbench.action.showCommands", "when": "!inFilesPicker || !inQuickOpen" },
   { "key": "alt+shift+e", "command": "workbench.view.explorer" },
-  // To train me to stop trying to use Ctrl-P
+  { "key": "escape", "command": "workbench.action.focusActiveEditorGroup", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
+  // To train me to use Cmd-P / Alt-P instead of Ctrl-P
   { "key": "ctrl+p", "command": "-workbench.action.quickOpen" },
 
   // On Linux ctrl+shift+e should trigger "workbench.view.explorer" but GTK might hijack it for a new emoji feature.
   // If you want it back, you may try to disable GTK's hijacking: https://github.com/microsoft/vscode/issues/48480
 
-  { "key": "alt+s", "command": "workbench.action.files.save" },
+  //{ "key": "alt+s", "command": "workbench.action.files.save" },
+  { "key": "alt+s", "command": "workbench.action.files.saveAll" },
   { "key": "ctrl+s", "command": "workbench.action.files.saveAll" },
 
   // Disable this default, because Ctrl-W means something different in Vim mode
   { "key": "ctrl+w", "command": "-workbench.action.closeWindow", "when": "!editorIsOpen && !multipleEditorGroups" },
   { "key": "ctrl+w", "command": "-workbench.action.closeGroup", "when": "activeEditorGroupEmpty && multipleEditorGroups" },
+  { "key": "ctrl+w", "command": "-workbench.action.closeActiveEditor", "when": "editorFocus" },
+  /* Enable it only when there is one window pane (no splits) */
+  { "key": "ctrl+w", "command": "workbench.action.closeActiveEditor", "when": "editorFocus && !multipleEditorGroups" },
 
   { "key": "alt+shift+f", "command": "workbench.action.findInFiles" },
 
@@ -223,10 +228,18 @@
     //{ "key": "ctrl+n", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
     //{ "key": "ctrl+p", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
 
-    { "key": "alt+meta+down", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
-    { "key": "alt+meta+up", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
+    { "key": "alt+meta+down", "command": "references-view.next", "when": "reference-list.hasResult" },
+    { "key": "alt+meta+up", "command": "references-view.prev", "when": "reference-list.hasResult" },
+    { "key": "alt+meta+down", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult || inSearchEditor" },
+    { "key": "alt+meta+up", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult || inSearchEditor" },
+    // If multiple "when"s match, VSCode seems to prefer the later one, i.e. search above.
+    // So if I really want references instead of search results, I'll hold down shift.
+    { "key": "shift+alt+meta+down", "command": "references-view.next", "when": "reference-list.hasResult" },
+    { "key": "shift+alt+meta+up", "command": "references-view.prev", "when": "reference-list.hasResult" },
 
     // When focused on search, get back to editor by pressing Escape
+    // I couldn't find a "when" for when the references results are focused, so I would like to enable this always.
+    // But if I use an empty "when" then I cannot escape from Vim's insert mode.
     { "key": "escape", "command": "workbench.action.focusActiveEditorGroup", "when": "searchInputBoxFocus" },
     // One of the popups is difficult to get rid of.  Well it's possible with Shift-Escape (or Shift-Escape via Ctrl-L) but I just want Escape to remove it.
     // I'm not sure which popup it is exactly, because there are a lot bound to Shift-Escape.  (So it might not be the suggestionWidget at all.)
@@ -244,18 +257,23 @@
       "overrideWorkspaceSettings": true,
       "values": [
         {
-          "window.zoomLevel": -0.5
-        },
-        {
+          //"window.zoomLevel": -0.5
           "window.zoomLevel": -0.8
         },
         {
-          "window.zoomLevel": 0
+          //"window.zoomLevel": -0.8
+          "window.zoomLevel": -1
+        },
+        {
+          //"window.zoomLevel": 0
+          "window.zoomLevel": -0.5
         }
       ]
     }
   },
 
-  { "key": "ctrl+e", "command": "workbench.action.showEditorsInActiveGroup"
-  }
+  { "key": "ctrl+e", "command": "workbench.action.showEditorsInActiveGroup" },
+
+  { "key": "ctrl+PageUp", "command": "workbench.action.terminal.focusPrevious", "when": "terminalFocus" },
+  { "key": "ctrl+PageDown", "command": "workbench.action.terminal.focusNext", "when": "terminalFocus" },
 ]
