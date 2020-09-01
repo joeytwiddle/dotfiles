@@ -115,7 +115,7 @@ function! Joeysyntax()
 	hi naffComment ctermfg=darkblue guifg=#666666 gui=none
 	if &t_Co >= 256
 		"hi naffComment ctermfg=18    " very dark blue
-		hi naffComment ctermfg=239   guifg=#333 " pretty dark grey
+		hi naffComment ctermfg=239   guifg=#333333 " pretty dark grey
 	endif
 	hi link notNaffComment Comment
 	"" For concealing, we can add to naffComment:
@@ -123,7 +123,6 @@ function! Joeysyntax()
 	"" and then:
 	" :setlocal conceallevel=2
 
-	" OH DUDE YOU JUST WROTE THIS ABOVE!
 	" My new rule is that '// stuff' means human comment, '//stuff' means commented code.
 	":syntax match codeComment +^\s*\(#\|"\|//\|##\|""\|////\)[^ ]*+
 	"contains=confTodo contains=shTodo
