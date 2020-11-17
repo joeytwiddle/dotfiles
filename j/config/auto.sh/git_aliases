@@ -685,6 +685,7 @@ alias glm='glg -m --first-parent'
 alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ad)%Creset" --date=relative'
 #alias glct='glc --date=local'
 alias glct='git log --pretty=format:"%C(yellow bold)%h%C(reset) %C(cyan)%ad%C(reset)%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an%Creset" --date=local'
+alias glctt='git log --pretty=format:"%C(yellow bold)%h%C(reset) %C(cyan)%ad / %cd%C(reset)%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an%Creset" --date=local'
 
 # "Git Log Long" - One per line, with graph
 #alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'   # Does not show committer's name or age of commit
@@ -694,6 +695,7 @@ alias glct='git log --pretty=format:"%C(yellow bold)%h%C(reset) %C(cyan)%ad%C(re
 # Problem: When used with --graph, glc should end in %n.  But we don't want the %n when --graph is not used (e.g. in glf below)!  I don't personally want the %n, but --graph always draws a |\n straight after the formatted text, so it looks messy without it.
 alias gll='glc --graph'
 alias gllt='glct --graph'
+alias glltt='glctt --graph'
 # "Git Log Long Minus merges"
 # This lists the merge commits themselves, but does not list any of the commits that were brought in by the merge.  This is useful if you have merged things into the current branch, but you are only interested in the commits that were actually made on the current branch.
 # When using this, it can be nice to clearly distinguish merges from raw commits.  If your merge commit messages are pure, you can search /Merge.* or cleaner /Merge.* into [^ ]*
@@ -1224,7 +1226,8 @@ gdv() {
 
 git_branch_status() {
     # Original: https://gist.github.com/Mark-Booth/5058384
-    # This version by Joeytwiddle
+    # Active: https://github.com/bill-auger/git-branch-status
+    # This version by joeytwiddle was forked from the original
     # Similar functionality can be had from: git branch -vv | highlight -bold '\<behind\> [0-9]*' red | highlight -bold '\<ahead\> [0-9]*' green
 
     # Displays your git branches with a summary of how many commits ahead or behind the local is from its remote branch.
