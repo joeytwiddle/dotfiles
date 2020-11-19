@@ -1,5 +1,6 @@
 // Place your settings in this file to overwrite the default settings
 // vim: filetype=javascript
+// prettier-ignore
 {
     //"git.ignoreLegacyWarning": true,
 
@@ -100,7 +101,35 @@
     // See: https://github.com/Microsoft/vscode/issues/10565#issuecomment-317319434
     // Specifically I needed this for TypeScript, where a deprecated alias and two imports were suggested before my 'log' snippet
     // But this sucks when I want to see the props on a component I am trying to use.
+    // And now I'm using \log in vim mode
     //"editor.snippetSuggestions": "top",
+
+    // Controls if quick suggestions should show up while typing
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": false
+    },
+
+    // Intellisense settings, from https://code.visualstudio.com/docs/editor/intellisense#_customizing-intellisense
+    // Controls whether suggestions should be accepted on commit characters. For example, in JavaScript, the semi-colon (`;`) can be a commit character that accepts a suggestion and types that character.
+    //"editor.acceptSuggestionOnCommitCharacter": true,
+    // Controls if suggestions should be accepted on 'Enter' - in addition to 'Tab'. Helps to avoid ambiguity between inserting new lines or accepting suggestions. The value 'smart' means only accept a suggestion with Enter when it makes a textual change
+    //"editor.acceptSuggestionOnEnter": "on",
+    // Controls the delay in ms after which quick suggestions will show up.
+    //"editor.quickSuggestionsDelay": 10,
+    // Controls if suggestions should automatically show up when typing trigger characters
+    //"editor.suggestOnTriggerCharacters": true,
+    // Controls if pressing tab inserts the best suggestion and if tab cycles through other suggestions
+    //"editor.tabCompletion": "off",
+    // Controls whether sorting favours words that appear close to the cursor
+    //"editor.suggest.localityBonus": true,
+    // Controls how suggestions are pre-selected when showing the suggest list
+    //"editor.suggestSelection": "recentlyUsed",
+    // Enable word based suggestions
+    //"editor.wordBasedSuggestions": true,
+    // Enable parameter hints
+    //"editor.parameterHints.enabled": true,
 
     //"workbench.editor.enablePreview": false,
     //"workbench.editor.enablePreviewFromQuickOpen": false,
@@ -184,6 +213,9 @@
     "javascript.implicitProjectConfig.checkJs": true,
     // For more on that: https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/
     //"javascript.implicitProjectConfig.experimentalDecorators": false,
+    // Scan entire project for problems (not just open files) https://stackoverflow.com/q/55201424/99777
+    // (Heavy on CPU, didn't really help me)
+    //"typescript.tsserver.experimental.enableProjectDiagnostics": true,
 
     // Default: languageDefined
     "editor.autoClosingBrackets": "never",
@@ -343,6 +375,10 @@
     "vim.smartcase": false,
     "vim.highlightedyank.enable": true,
     "vim.normalModeKeyBindingsNonRecursive": [
+        // VSCode's undo has some issues: namely that it is not atomic - it sometimes affects multiple lines (could include a line off-screen!)
+        // So let's use VSCode's built-in undo for now
+        { "before": ["u"], "commands": ["undo"] },
+        { "before": ["C-R"], "commands": ["redo"] },
         { "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
         { "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ] },
         // As well as clearing the highlight, we also want Ctrl-L to hide any current popups
@@ -394,8 +430,8 @@
         { "before": [ "C-B", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
         // revealDefinition works more often than goToImplementation
         //{ "before": [ "C-]" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
-        { "before": [ "g", "d" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
-        { "before": [ "g", "D" ], "commands": [ "editor.action.goToImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !isInEmbeddedEditor" },
+        { "before": [ "g", "d" ], "commands": [ "editor.action.goToImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !isInEmbeddedEditor" },
+        { "before": [ "g", "D" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
         { "before": [ "g", "I" ], "commands": [ "references-view.findImplementations" ], "when": "editorHasReferenceProvider" },
         { "before": [ "g", "u" ], "commands": [ "editor.action.goToReferences" ], "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
         { "before": [ "g", "U" ], "commands": [ "references-view.find" ], "when": "editorHasReferenceProvider" },
