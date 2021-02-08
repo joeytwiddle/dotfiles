@@ -187,15 +187,17 @@
         //"list.dropBackground": "#0000002a",
         //"list.focusBackground": "#0000002a",
         "list.focusForeground": "#fff",
+    },
 
+    "editor.tokenColorCustomizations": {
         // If you want to play with syntax highlighting customisations, they go here:
         "textMateRules": [
             //{ "name": "String", "scope": "string", "settings": { "fontStyle": "", "foreground": "#E6DB74" } },
             {
                 "scope": "meta.path.search",
                 "settings": {
-                    "foreground": "#ffffff",
-                    //"foreground": "#88CCCC",
+                    //"foreground": "#ffffff",
+                    "foreground": "#88CCCC",
                     "fontStyle": "bold"
                 }
             },
@@ -204,13 +206,14 @@
                 "settings": {
                     "foreground": "#777777"
                 }
-            }
+            },
         ]
     },
 
     // It's probably better to enable these settings in the .vscode folder local to each workspace/project
     // Use TypeScript to check JSDocs in Javascript files
-    "javascript.implicitProjectConfig.checkJs": true,
+    // Old: "javascript.implicitProjectConfig.checkJs": true,
+    "js/ts.implicitProjectConfig.checkJs": true,
     // For more on that: https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/
     //"javascript.implicitProjectConfig.experimentalDecorators": false,
     // Scan entire project for problems (not just open files) https://stackoverflow.com/q/55201424/99777
@@ -227,8 +230,10 @@
     "typescript.autoClosingTags": false,
 
     // Deprecated: "html.mirrorCursorOnMatchingTag": true,
-    "editor.renameOnType": true,
+    // Old: "editor.renameOnType": true,
+    "editor.linkedEditing": true,
 
+    "javascript.updateImportsOnFileMove.enabled": "always",
     "typescript.updateImportsOnFileMove.enabled": "always",
 
     "[javascript]": {
@@ -297,6 +302,9 @@
     "gitlens.currentLine.enabled": false,
     //"gitlens.hovers.currentLine.over": "line",
     //"gitlens.blame.compact": false,
+    "gitlens.heatmap.toggleMode": "window",
+    "gitlens.heatmap.hotColor": "#f6a60a",
+    "gitlens.heatmap.coldColor": "#0a62f6",
 
     // For Trailing Spaces
     "trailing-spaces.deleteModifiedLinesOnly": true,
@@ -305,6 +313,7 @@
     //"trailing-spaces.borderColor": "#552222",
 
     // For TodoTree
+    "todo-tree.tree.showScanModeButton": false,
     "todo-tree.highlights.defaultHighlight": {
         "icon": "alert",
         "type": "text",
@@ -453,11 +462,15 @@
         //{ "before": [ "C-J" ] , "commands": [ "workbench.action.focusActiveEditorGroup" ] },
         // Previously: "workbench.action.togglePanel" but this only works when the panel opens below the editor
         { "before": [ "C-T" ], "commands": [ "workbench.action.showAllSymbols" ] },
+
+        // For quick git work
+        { "before": [ "<Leader>", "g", "c", "o" ], "commands": [ "git.checkout" ] },
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
         // For Linux: If we hit paste (Ctrl-V) when something is selected, replace the selection with the clipboard
         { "before": [ "C-V" ], "after": [ "s", "C-R", "+", "Esc" ] },
         { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
+        { "before": [ "<Leader>", "*" ], "commands": [ "workbench.action.findInFiles" ] },
     ],
     "vim.insertModeKeyBindingsNonRecursive": [
         // Unfortunately the = command can also affect other lines which are not highlighted.  Better not.
@@ -506,5 +519,4 @@
     // (Or it might be Auto Rename Tag that causes it, but I think it's actually this)
     "auto-close-tag.SublimeText3Mode": true,
     "auto-close-tag.enableAutoCloseTag": false,
-    "todo-tree.tree.showScanModeButton": false,
 }

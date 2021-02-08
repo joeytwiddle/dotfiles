@@ -96,7 +96,7 @@
   { "key": "ctrl+w", "command": "-workbench.action.closeGroup", "when": "activeEditorGroupEmpty && multipleEditorGroups" },
   { "key": "ctrl+w", "command": "-workbench.action.closeActiveEditor", "when": "editorFocus" },
   /* Enable it only when there is one window pane (no splits) */
-  { "key": "ctrl+w", "command": "workbench.action.closeActiveEditor", "when": "editorFocus && !multipleEditorGroups" },
+  //{ "key": "ctrl+w", "command": "workbench.action.closeActiveEditor", "when": "editorFocus && !multipleEditorGroups" },
 
   { "key": "alt+shift+f", "command": "workbench.action.findInFiles" },
 
