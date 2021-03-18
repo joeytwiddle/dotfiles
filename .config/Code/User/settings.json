@@ -31,6 +31,8 @@
     // 'Hasklug Joey Mono',
     "editor.fontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
     "editor.fontSize": 12,
+    //"editor.fontFamily": "'sans'",
+    //"editor.fontSize": 12.7,
     "editor.lineHeight": 14,
 
     "vim.easymotionMarkerFontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
@@ -66,10 +68,14 @@
     // Limit the number of editors to keep open
     "workbench.editor.limit.enabled": true,
     "workbench.editor.limit.perEditorGroup": true,
-    "workbench.editor.limit.value": 9,
+    "workbench.editor.limit.value": 8,
+    "workbench.editor.wrapTabs": false,
 
-    // Clearer tree structure (default 8)
-    "workbench.tree.indent": 14,
+    // Displays extra info (like 'M' or 'U' or a number) in the tab if the file has uncommitted changes
+    "workbench.editor.decorations.badges": true,
+
+    // I find it easier to see the tree structure with a wider indent (default 8)
+    "workbench.tree.indent": 20,
 
     // On startup, open all windows that were open in previous session
     "window.restoreWindows": "all",
@@ -92,7 +98,8 @@
     // Avoid getting unwanted autocompletes when typing '(' or '.'
     "editor.acceptSuggestionOnCommitCharacter": false,
 
-    "npm.enableScriptExplorer": true,
+    // No longer a setting.  Now toggled in the sidebar Views menu.
+    //"npm.enableScriptExplorer": true,
 
     // Don't insert a space after comment chars
     "editor.comments.insertSpace": false,
@@ -258,6 +265,9 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
 
+    // Python (just trying this out; it might be too strong)
+    "python.analysis.typeCheckingMode": "strict",
+
     // === Settings for plugins === //
 
     // For ESLint
@@ -396,23 +406,33 @@
         { "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen" ] },
         // We save the current file in order to pin it.  We save all files, because that's what I really want Ctrl-S to do
         { "before": [ "<C-S>" ], "commands": [ "workbench.action.files.save", "workbench.action.files.saveAll", "workbench.action.focusActiveEditorGroup" ] },
+        // I also put a C-S keybinding in keybindings.json, and that one worked well.
         // Select all
         { "before": [ "C-A" ], "after": [ "g", "g", "V", "G" ] },
-        // But I put a C-S keybinding in keybindings.json, and that one worked.
+        // vim-unnimpaired https://github.com/tpope/vim-unimpaired/blob/master/doc/unimpaired.txt
         { "before": [ "[", " " ], "after": [ "O", "<Esc>" ] },
         { "before": [ "]", " " ], "after": [ "o", "<Esc>" ] },
         { "before": [ "[", "b" ], "commands": [ "workbench.action.previousEditor" ] },
         { "before": [ "]", "b" ], "commands": [ "workbench.action.nextEditor" ] },
-        { "before": [ "[", "q" ], "commands": [ "search.action.focusPreviousSearchResult" ], "when": "hasSearchResult" },
-        { "before": [ "]", "q" ], "commands": [ "search.action.focusNextSearchResult" ], "when": "hasSearchResult" },
-        { "before": [ "[", "r" ], "commands": [ "references-view.prev" ], "when": "reference-list.hasResult" },
-        { "before": [ "]", "r" ], "commands": [ "references-view.next" ], "when": "reference-list.hasResult" },
         { "before": [ "[", "l" ], "commands": [ "editor.action.marker.prevInFiles" ], "when": "editorTextFocus" },
         { "before": [ "]", "l" ], "commands": [ "editor.action.marker.nextInFiles" ], "when": "editorTextFocus" },
-        { "before": [ "[", "g" ], "commands": [ "workbench.action.editor.previousChange" ], "when": "editorTextFocus" },
-        { "before": [ "]", "g" ], "commands": [ "workbench.action.editor.nextChange" ], "when": "editorTextFocus" },
+        { "before": [ "[", "q" ], "commands": [ "search.action.focusPreviousSearchResult" ], "when": "hasSearchResult" },
+        { "before": [ "]", "q" ], "commands": [ "search.action.focusNextSearchResult" ], "when": "hasSearchResult" },
+        { "before": [ "[", "f" ], "commands": [ "workbench.view.explorer", "list.focusUp", "explorer.openAndPassFocus" ] },
+        { "before": [ "]", "f" ], "commands": [ "workbench.view.explorer", "list.focusDown", "explorer.openAndPassFocus" ] },
+        { "before": [ "]", "e" ], "commands": [ "editor.action.moveLinesDownAction" ], "when": "editorTextFocus" },
+        { "before": [ "[", "e" ], "commands": [ "editor.action.moveLinesUpAction" ], "when": "editorTextFocus" },
+        { "before": [ "[", "g" ], "commands": [ "workbench.action.editor.previousChange" ] },
+        { "before": [ "]", "g" ], "commands": [ "workbench.action.editor.nextChange" ] },
+        { "before": [ "]", "c" ], "commands": [ "editor.action.dirtydiff.next" ] },
+        { "before": [ "[", "c" ], "commands": [ "editor.action.dirtydiff.previous" ] },
+        { "before": [ "]", "c" ], "commands": [ "workbench.action.compareEditor.nextChange" ] },
+        { "before": [ "[", "c" ], "commands": [ "workbench.action.compareEditor.previousChange" ] },
+        { "before": [ "[", "r" ], "commands": [ "references-view.prev" ], "when": "reference-list.hasResult" },
+        { "before": [ "]", "r" ], "commands": [ "references-view.next" ], "when": "reference-list.hasResult" },
         { "before": [ "[", "w" ], "commands": [ "workbench.action.focusPreviousGroup" ] },
         { "before": [ "]", "w" ], "commands": [ "workbench.action.focusNextGroup" ] },
+        //
         { "before": [ "C-W", "s" ], "commands": [ "workbench.action.splitEditorDown" ] },
         { "before": [ "C-W", "S" ], "commands": [ "workbench.action.splitEditorRight" ] },
         { "before": [ "C-W", "c" ], "commands": [ "workbench.action.closeGroup" ] },
@@ -471,6 +491,10 @@
         { "before": [ "C-V" ], "after": [ "s", "C-R", "+", "Esc" ] },
         { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
         { "before": [ "<Leader>", "*" ], "commands": [ "workbench.action.findInFiles" ] },
+        // vim-unimpaired
+        { "before": [ "]", "e" ], "commands": [ "editor.action.moveLinesDownAction" ] },
+        { "before": [ "[", "e" ], "commands": [ "editor.action.moveLinesUpAction" ] },
+        //
     ],
     "vim.insertModeKeyBindingsNonRecursive": [
         // Unfortunately the = command can also affect other lines which are not highlighted.  Better not.
@@ -517,6 +541,20 @@
     // This adds support for JSX/TSX which do not have bundled support
     // Unfortunately the plugin tends to cause my editor to freeze up, so disabled for now
     // (Or it might be Auto Rename Tag that causes it, but I think it's actually this)
+    // I think these features are now available natively in VSCode, e.g. "linked editing".
     "auto-close-tag.SublimeText3Mode": true,
     "auto-close-tag.enableAutoCloseTag": false,
+
+    "files.exclude": {
+        // These appeared when I started working in Java (and installed the recommended Java plugins)
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+
+    // VSCode keeps adding these.  I'm not sure what to do with them, so I'll just commit them for now.
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+
 }
