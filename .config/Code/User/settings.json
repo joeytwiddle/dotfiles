@@ -394,21 +394,20 @@
     "vim.smartcase": false,
     "vim.highlightedyank.enable": true,
     "vim.normalModeKeyBindingsNonRecursive": [
-        // VSCode's undo has some issues: namely that it is not atomic - it sometimes affects multiple lines (could include a line off-screen!)
+        // VSCode's undo has some issues: namely that it is not atomic - it sometimes affects multiple lines (which could include a line off-screen!)
         // So let's use VSCode's built-in undo for now
-        { "before": ["u"], "commands": ["undo"] },
-        { "before": ["C-R"], "commands": ["redo"] },
+        { "before": [ "u" ], "commands": ["undo"] },
+        { "before": [ "C-R" ], "commands": ["redo"] },
+        // Other Vim keystrokes that weren't working for me in Vim-VSCode
         { "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
         { "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ] },
-        // As well as clearing the highlight, we also want Ctrl-L to hide any current popups
-        // We tried "after": [ "S-Esc" ] and [ "S-Escape" ] but they didn't work.
-        // So instead we list the commands directly (but there are many!)
-        { "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen" ] },
-        // We save the current file in order to pin it.  We save all files, because that's what I really want Ctrl-S to do
-        { "before": [ "<C-S>" ], "commands": [ "workbench.action.files.save", "workbench.action.files.saveAll", "workbench.action.focusActiveEditorGroup" ] },
-        // I also put a C-S keybinding in keybindings.json, and that one worked well.
-        // Select all
-        { "before": [ "C-A" ], "after": [ "g", "g", "V", "G" ] },
+        { "before": [ "C-W", "c" ], "commands": [ "workbench.action.closeGroup" ] },
+        { "before": [ "C-W", "s" ], "commands": [ "workbench.action.splitEditorDown" ] },
+        { "before": [ "C-W", "S" ], "commands": [ "workbench.action.splitEditorRight" ] },
+        { "before": [ "C-T" ], "commands": [ "workbench.action.showAllSymbols" ] },
+        // Not working (no better with "Equal" or "Equals")
+        //{ "before": [ "=", "=" ] , "commands": [ "editor.action.formatDocument" ], "when": "editorTextFocus && !editorReadonly" },
+
         // vim-unnimpaired https://github.com/tpope/vim-unimpaired/blob/master/doc/unimpaired.txt
         { "before": [ "[", " " ], "after": [ "O", "<Esc>" ] },
         { "before": [ "]", " " ], "after": [ "o", "<Esc>" ] },
@@ -432,35 +431,12 @@
         { "before": [ "]", "r" ], "commands": [ "references-view.next" ], "when": "reference-list.hasResult" },
         { "before": [ "[", "w" ], "commands": [ "workbench.action.focusPreviousGroup" ] },
         { "before": [ "]", "w" ], "commands": [ "workbench.action.focusNextGroup" ] },
-        //
-        { "before": [ "C-W", "s" ], "commands": [ "workbench.action.splitEditorDown" ] },
-        { "before": [ "C-W", "S" ], "commands": [ "workbench.action.splitEditorRight" ] },
-        { "before": [ "C-W", "c" ], "commands": [ "workbench.action.closeGroup" ] },
-        { "before": [ "<Leader>", "b", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
-        // This just opens a VSCode prompt for a URL, it doesn't actually open the hovered URL in a browser, which is what we want
-        //{ "before": [ "g", "x" ], "commands": [ "workbench.action.url.openUrl" ] },
-        { "before": [ "C-U" ], "commands": [ "workbench.action.openPreviousRecentlyUsedEditor" ] },
-        { "before": [ "C-J" ], "commands": [ "scrollLineDown", "scrollLineDown" ] },
-        { "before": [ "C-K" ], "commands": [ "scrollLineUp", "scrollLineUp" ] },
-        // For Linux
-        { "before": [ "C-S-J" ], "commands": [ "workbench.action.togglePanel" ] },
-        { "before": [ "<Leader>", "j" ], "commands": [ "workbench.action.togglePanel" ] },
-        { "before": [ "<Leader>", "w" ], "commands": [ "editor.action.toggleWordWrap" ] },
-        { "before": [ "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "editor.action.startFindReplaceAction" ] },
-        { "before": [ "<Leader>", "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "workbench.action.replaceInFiles" ] },
-        { "before": [ "<Leader>", "R" ], "commands": [ "editor.action.rename" ], "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly" },
-        { "before": [ "<Leader>", "s" ], "commands": [ "workbench.action.openRecent" ] },
-        { "before": [ "<Leader>", "/" ], "commands": [ "workbench.action.findInFiles" ] },
-        { "before": [ "<Leader>", "*" ], "after": [ "v", "i", "w" ], "commands": [ "workbench.action.findInFiles" ] },
-        { "before": [ "<Leader>", "f" ], "after": [ "v", "i", "w" ], "commands": [ "workbench.action.findInFiles" ] },
-        // We might want to move these into keybindings.json, so they work on all windows
-        { "before": [ "<Leader>", "b", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
-        { "before": [ "C-W", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
-        { "before": [ "C-B", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
-        // revealDefinition works more often than goToImplementation
+
+        // Navigation (mostly custom)
+        // revealDefinition may work more often than goToImplementation
         //{ "before": [ "C-]" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
-        { "before": [ "g", "d" ], "commands": [ "editor.action.goToImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !isInEmbeddedEditor" },
-        { "before": [ "g", "D" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
+        { "before": [ "g", "d" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
+        { "before": [ "g", "D" ], "commands": [ "editor.action.goToImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !isInEmbeddedEditor" },
         { "before": [ "g", "I" ], "commands": [ "references-view.findImplementations" ], "when": "editorHasReferenceProvider" },
         { "before": [ "g", "u" ], "commands": [ "editor.action.goToReferences" ], "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
         { "before": [ "g", "U" ], "commands": [ "references-view.find" ], "when": "editorHasReferenceProvider" },
@@ -468,33 +444,64 @@
         { "before": [ "g", "Leader", "h" ], "commands": [ "editor.action.peekDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
         { "before": [ "g", "Leader", "H" ], "commands": [ "editor.action.peekImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
         { "before": [ "g", "Leader", "Leader", "h" ], "commands": [ "editor.action.peekTypeDefinition" ] },
-        { "before": [ "<Leader>", "a" ], "commands": [ "gitlens.toggleLineBlame" ] },
-        { "before": [ "<Leader>", "A" ], "commands": [ "gitlens.toggleFileBlame" ] },
-        { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "i", "w", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
-        { "before": [ "<Leader>", "L", "o", "g" ], "after": [ "\"", "l", "y", "i", "W", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
+
+        // My custom keys
+        // As well as clearing the highlight, we also want Ctrl-L to hide any current popups
+        // We tried "after": [ "S-Esc" ] and [ "S-Escape" ] but they didn't work.
+        // So instead we list the commands directly (but there are many!)
+        { "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen" ] },
+        // We save the current file in order to pin it.  We save all files, because that's what I really want Ctrl-S to do
+        { "before": [ "<C-S>" ], "commands": [ "workbench.action.files.save", "workbench.action.files.saveAll", "workbench.action.focusActiveEditorGroup" ] },
+        // I also put a C-S keybinding in keybindings.json, and that one worked well.
+        // Select all
+        { "before": [ "C-A" ], "after": [ "g", "g", "V", "G" ] },
+        { "before": [ "C-J" ], "commands": [ "scrollLineDown", "scrollLineDown" ] },
+        { "before": [ "C-K" ], "commands": [ "scrollLineUp", "scrollLineUp" ] },
+        { "before": [ "<Leader>", "b", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
+        // This just opens a VSCode prompt for a URL, it doesn't actually open the hovered URL in a browser, which is what we want
+        //{ "before": [ "g", "x" ], "commands": [ "workbench.action.url.openUrl" ] },
+        { "before": [ "C-U" ], "commands": [ "workbench.action.openPreviousRecentlyUsedEditor" ] },
+        // For Linux
+        { "before": [ "C-S-J" ], "commands": [ "workbench.action.togglePanel" ] },
+        //{ "before": [ "C-S-J" ] , "commands": [ "workbench.action.focusActiveEditorGroup" ] },
         // EasyMotion search character
         { "before": [ "C-D" ], "after": [ "leader", "leader", "s" ] },
         // EasyMotion start of word
         { "before": [ "C-G" ], "after": [ "leader", "leader", "leader", "b", "d", "w" ] },
-        { "before": [ "<Leader>", "f" ], "after": [ "v", "i", "w" ], "commands": [ "workbench.action.findInFiles" ] },
-        // Not working (no better with "Equal" or "Equals")
-        //{ "before": [ "=", "=" ] , "commands": [ "editor.action.formatDocument" ], "when": "editorTextFocus && !editorReadonly" },
-        //{ "before": [ "C-J" ] , "commands": [ "workbench.action.focusActiveEditorGroup" ] },
+        { "before": [ "C-W", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
+        { "before": [ "C-B", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
+
+        // My custom leader keybinds
         // Previously: "workbench.action.togglePanel" but this only works when the panel opens below the editor
-        { "before": [ "C-T" ], "commands": [ "workbench.action.showAllSymbols" ] },
+        { "before": [ "<Leader>", "/" ], "commands": [ "workbench.action.findInFiles" ] },
+        { "before": [ "<Leader>", "*" ], "after": [ "v", "i", "w" ], "commands": [ "workbench.action.findInFiles" ] },
+        { "before": [ "<Leader>", "R" ], "commands": [ "editor.action.rename" ], "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly" },
+        { "before": [ "<Leader>", "w" ], "commands": [ "editor.action.toggleWordWrap" ] },
+        { "before": [ "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "editor.action.startFindReplaceAction" ] },
+        { "before": [ "<Leader>", "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "workbench.action.replaceInFiles" ] },
+        { "before": [ "<Leader>", "a" ], "commands": [ "gitlens.toggleLineBlame" ] },
+        { "before": [ "<Leader>", "A" ], "commands": [ "gitlens.toggleFileBlame" ] },
+
+        { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "i", "w", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
+        { "before": [ "<Leader>", "L", "o", "g" ], "after": [ "\"", "l", "y", "i", "W", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
 
         // For quick git work
         { "before": [ "<Leader>", "g", "c", "o" ], "commands": [ "git.checkout" ] },
+
+        // We might want to move these into keybindings.json, so they work on all windows
+        { "before": [ "<Leader>", "j" ], "commands": [ "workbench.action.togglePanel" ] },
+        { "before": [ "<Leader>", "b", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
+        { "before": [ "<Leader>", "s" ], "commands": [ "workbench.action.openRecent" ] },
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
         // For Linux: If we hit paste (Ctrl-V) when something is selected, replace the selection with the clipboard
         { "before": [ "C-V" ], "after": [ "s", "C-R", "+", "Esc" ] },
-        { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
-        { "before": [ "<Leader>", "*" ], "commands": [ "workbench.action.findInFiles" ] },
         // vim-unimpaired
         { "before": [ "]", "e" ], "commands": [ "editor.action.moveLinesDownAction" ] },
         { "before": [ "[", "e" ], "commands": [ "editor.action.moveLinesUpAction" ] },
         //
+        { "before": [ "<Leader>", "*" ], "commands": [ "workbench.action.findInFiles" ] },
+        { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
     ],
     "vim.insertModeKeyBindingsNonRecursive": [
         // Unfortunately the = command can also affect other lines which are not highlighted.  Better not.
