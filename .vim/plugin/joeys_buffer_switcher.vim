@@ -81,7 +81,7 @@ function! JoeysBufferSwitch()
     " endif
   endif " else we will probably print the whole list later
 
-  let searchExpr = '\V' . searchStr
+  let searchExpr = '\c\V' . searchStr
 
   " DONE: If we can find a visible window displaying that buffer, switch to
   " the window instead of loading the buffer in the current window.
@@ -130,7 +130,7 @@ function! JoeysBufferSwitch()
     " TODO: Some buffers need to be ignored e.g. if they are closed (no longer visible)
     if bufexists(i) && buflisted(i) && bufName != ""
       " Special case: exact match means we return it as the only match!
-      if bufName == searchStr
+      if bufName =~ searchStr
         "echo "Found exact match: ".i.": ".bufName
         " Does not work: sometimes it's a closed buffer, so :<i>b fails!
         let foundExactBuffer = i
@@ -209,7 +209,7 @@ function! CompleteBuffersAndFiles(ArgLead, CmdLine, CursorPos)
     endif
   endfor
 
-  let bufSearchExpr = '\V' . a:ArgLead
+  let bufSearchExpr = '\c\V' . a:ArgLead
   let buffers = []
   let bufCount = bufnr('$')
   let i=0
