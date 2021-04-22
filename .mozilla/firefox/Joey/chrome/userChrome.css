@@ -4,7 +4,12 @@
 /* For more information on userChrome.css, you may refer to this website: https://www.userchrome.org/ */
 
 /* When editing this file, the page chrome://browser/content/browser.xhtml is useful for discovering Firefox's IDs and classnames. */
+/* To use the inspector on that page, you'll need to "Enable browser chrome and add-on debugging toolboxes" https://www.reddit.com/r/FirefoxCSS/comments/73dvty/tutorial_how_to_create_and_livedebug_userchromecss/ */
+/* And since 2020 you should open the DevTools before navigating to the chrome URL. */
 /* But that page might not apply the CSS we set below, making it difficult to preview our changes.  (It used to, but it's not doing it in 2019.) */
+/* It can also be useful to search the source code: https://github.com/mozilla/gecko-dev/search?q=tab-close-button */
+
+/* You can get some inspiration for styling here: https://www.reddit.com/r/FirefoxCSS/ */
 
 /*
  * Do not remove this @namespace line -- it's required for correct functioning
@@ -16,6 +21,10 @@
 /* Unfortunately these tricks didn't work for me. */
 /* @font-face { font-family: 'Arial'; src: local('FreeSans'); } */
 /* @font-face { font-family: 'Arial'; src: local('Liberation Sans'); } */
+/* This is what Google Fonts recommends, but even this didn't work */
+/* @font-face { font-family: 'Arial'; src: url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap'); } */
+/* Although it didn't work when I tried it in page scope either, on a Google Search results page: */
+/* downloadable font: rejected by sanitizer (font-family: "Arial" style:normal weight:400 stretch:100 src index:0) source: https://fonts.googleapis.com/css2?family=Open+Sans&display=swap */
 
 
 /* === Narrower tabs === */
@@ -79,8 +88,8 @@
 #TabsToolbar .tabbrowser-tab[selected] .tab-stack,
 #TabsToolbar .tabbrowser-tab[selected] .tab-background,
 #TabsToolbar .tabbrowser-tab[selected] .tab-content {
-    border-top-left-radius: 7px !important;
-    border-top-right-radius: 7px !important;
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
 }
 #TabsToolbar .tabbrowser-tab {
     /* Remove the black border on either side of the selected tab */
@@ -149,7 +158,7 @@
     padding-right: 10px !important;
 }
 /* And give all the tabs some more vertical whitespace */
-/* Old way */
+/* This increases the height of the entire row */
 .tab-content {
     /* min-height: 40px !important; */
     min-height: 38px !important;
@@ -180,7 +189,7 @@ toolbaritem#urlbar-container {
 }
 #urlbar-container, #search-container {
     /* The spacing above and below the urlbar (default 3px but effectively 4 or 5px because of nav-bar height) */
-    padding-block: 5px !important;
+    padding-block: 6px !important;
 }
 /* #urlbar:not(.megabar), #urlbar.megabar > #urlbar-background, #searchbar, #urlbar-input-container { */
 #urlbar, #urlbar-background, #searchbar, #urlbar-input-container {
@@ -220,16 +229,17 @@ toolbaritem#urlbar-container {
 
 
 /* Make close tab button red on hover */
-.close-icon:hover {
+/* .close-icon:hover { */
+.tab-close-button[fadein]:hover {
     /* background: #aaa7; */
     /* background: #9996; */
     /* background: #0003; */
-    background: #f33;
+    background-color: #f33 !important;
     /* background: rgba(12, 12, 13, 0.1); */
     /* fill: rgb(41, 47, 52); */
     color: white !important;
     /* border-radius: 6px; */
-    border-radius: 999px;
+    border-radius: 999px !important;
     /* When the sound icon is showing, it touches the close button.  Let's prevent that. */
     margin-left: 4px;
 }
