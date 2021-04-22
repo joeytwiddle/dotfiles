@@ -91,14 +91,24 @@
     border-top-left-radius: 8px !important;
     border-top-right-radius: 8px !important;
 }
+#TabsToolbar .tab-background {
+    /* Compensate for the floating tab pills in 2021 */
+    margin-bottom: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    margin-top: 0 !important;
+}
 #TabsToolbar .tabbrowser-tab {
     /* Remove the black border on either side of the selected tab */
     --tabs-border-color: #0000 !important;
     border: none !important;
 }
 /* The roundness looks better if there is a little gap above it */
+/* Note that Firefox's new design prefers a margin above the .tab-background rather than the .tab-stack, but our CSS was largely based around .tab-stack so we are sticking that way for now. */
 #TabsToolbar .tabbrowser-tab .tab-stack {
-    margin-top: 2px !important;
+    margin-top: 3px !important;
 }
 /* Add a shadow to the left and right of the selected tab */
 #TabsToolbar .tabbrowser-tab[selected] .tab-stack {
@@ -230,6 +240,10 @@ toolbaritem#urlbar-container {
 
 /* Make close tab button red on hover */
 /* .close-icon:hover { */
+.tab-close-button {
+    /* The new design has made it quite small.  Make it slightly larger. */
+    transform: scale(1.1);
+}
 .tab-close-button[fadein]:hover {
     /* background: #aaa7; */
     /* background: #9996; */
