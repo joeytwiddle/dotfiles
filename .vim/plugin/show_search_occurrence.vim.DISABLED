@@ -1,3 +1,5 @@
+" Disabled because since Vim 8.1.1270 we can do this with :set shortmess-=S
+"
 " When performing a search, displays "(n/m)" in the statusbar to indicate the
 " index of the current line within the list of matching lines in the buffer.
 "
