@@ -30,7 +30,8 @@ function! s:OpenSessionViewer()
 	" TODO: We should set these back to the original values, after opening netrw
 	let g:netrw_sort_by = "time"
 	let g:netrw_sort_direction = "r"
-	let g:netrw_liststyle = 0
+	let g:netrw_liststyle = 1
+	let g:netrw_maxfilenamelen = 48
 	" Open netrw:
 	edit ~/.vim/sessions/
 
@@ -75,7 +76,12 @@ function! s:GetFocusedFile()
 	let fname = getline('.')
 	" Strip branch art in case netrw is in tree mode
 	let fname = substitute(fname, '^\([|│] \)*', '', '')
+	" Strip date from the right hand side, in case netrw is in listmode 1
+	let fname = substitute(fname, '\.vim *[0-9]*.*', '.vim', '')
 	let fullPath = b:netrw_curdir . "/" . fname
+	if !filereadable(fullPath)
+		echo "Could not find file: " . fullPath
+	endif
 	return fullPath
 endfunction
 
