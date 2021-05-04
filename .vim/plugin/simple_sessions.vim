@@ -27,8 +27,10 @@ function! s:OpenSessionViewer()
 	let s:old_cmdheight = &ch
 
 	" Set netrw to show recent files at top
+	" TODO: We should set these back to the original values, after opening netrw
 	let g:netrw_sort_by = "time"
 	let g:netrw_sort_direction = "r"
+	let g:netrw_liststyle = 0
 	" Open netrw:
 	edit ~/.vim/sessions/
 
