@@ -1,13 +1,13 @@
 " simple_sessions - Auto-save sessions on exit, and simple session loader.
 " by joeytwiddle
 "
-" The loader uses NetRW for selection manager.
+" The loader uses NetRW to selection the session.
 "
 " When loading a session, ONLY the buffer/argument list and the working
 " directory are changed.  The session vim script is NOT sourced.  (This avoids
 " problems with broken plugin windows when sourcing a vim session.)
 "
-" Existing buffers remain open, so you may union multiple sessions.
+" Existing buffers remain open, so you may combine multiple sessions.
 
 " Will automatically save the current session whenever you quit vim.
 if !exists("g:simple_sessions_autosave")
@@ -19,7 +19,13 @@ if !exists("g:simple_sessions_folder")
 	let g:simple_sessions_folder = $HOME . "/.vim/sessions"
 endif
 
-:command! Sopen :call s:OpenSessionViewer()
+" Small sessions won't be saved, only sessions with at least this many buffers
+" (This actually uses the total number of buffers opened during the session, not the number open at present.)
+if !exists("g:simple_sessions_min_buffers")
+	let g:simple_sessions_min_buffers = 3
+endif
+
+command! Sopen :call s:OpenSessionViewer()
 
 au VimLeavePre * call s:OnQuitSaveSession()
 
@@ -55,6 +61,9 @@ endfunction
 
 function! s:OnQuitSaveSession()
 	if g:simple_sessions_autosave
+		if bufnr('$') < g:simple_sessions_min_buffers
+			return
+		endif
 		"let sessionName = split($PWD,'/')[-1]
 		" The session name is made from the last TWO parts of the cwd path.
 		" We change '/' to '#' but then need to escape '#' delimeter or it gets expanded to "-MiniBufExplorer-"!
