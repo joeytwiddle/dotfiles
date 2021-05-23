@@ -274,6 +274,22 @@ toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):n
 }
 */
 
+/* I kept clicking on the toggle sound icon accidentally when I was just trying to switch to a tab. */
+/* I tried to make it clearer when we are focused on the toggle sound icon. */
+/* But none of these CSS rules do anything. */
+/*
+.tab-icon-sound[fadein]:hover {
+    background-color: #f008 !important;
+}
+image.tab-icon-sound {
+    pointer-events: none !important;
+    display: none !important;
+}
+.tab-icon-sound {
+    width: 0 !important;
+    height: 0 !important;
+}
+*/
 
 
 /* This conflicted with the location bar in a weird way.  The selected text (or autocompleted text) would appear green-on-white instead of white-on-green as expected. */
