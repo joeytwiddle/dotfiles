@@ -101,7 +101,7 @@ session.configVersion:	13
 session.appsFile:	~/.fluxbox/apps
 session.tabPadding:	0
 session.useMod1:	true
-session.menuFile:	~/.fluxbox/joeysmenu
+session.menuFile:	~/.fluxbox/menu
 session.colorsPerChannel:	4
 session.numLayers:	13
 session.slitlistFile:	/home/joey/.fluxbox/slitlist
