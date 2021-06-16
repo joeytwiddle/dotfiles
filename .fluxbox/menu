@@ -14,107 +14,129 @@
 # - To prevent any other app from overwriting your menu
 #   you can change the menu name in ~/.fluxbox/init to:
 #     session.menuFile: ~/.fluxbox/my-menu
-[begin] (Fluxbox-git)
+[begin] (Fluxbox)
 [encoding] {UTF-8}
-      [exec] (xterm) {xterm}
-      [exec] (firefox) {firefox}
-      [exec]   (Run) {fbrun }
+      [exec] (konsole) {konsole} 
+      [exec] (firefox) {firefox} 
+      [exec]   (Run) {fbrun} 
 [submenu] (Terminals)
-      [exec]   (xterm) {xterm}
+      [exec]   (xterm) {xterm} 
+      [exec]   (konsole) {konsole} 
 [end]
 [submenu] (Net)
 [submenu] (Browsers)
-      [exec]   (firefox) {firefox}
-      [exec]   (galeon) {galeon}
-      [exec]   (netscape) {netscape}
-      [exec]   (vncviewer) {vncviewer}
-      [exec]   (links-graphic) {links -driver x fluxbox.org}
-      [exec]   (konqueror) {kfmclient openProfile webbrowsing}
-      [exec]   (links) {xterm -e links fluxbox.org}
-      [exec]   (lynx) {xterm -e lynx fluxbox.org}
-[end]
-[submenu] (IM)
-      [exec]   (gaim) {gaim}
+      [exec]   (chromium) {chromium} 
+      [exec]   (firefox) {firefox} 
+      [exec]   (google-chrome) {google-chrome} 
+      [exec]   (galeon) {galeon} 
+      [exec]   (netscape) {netscape} 
+      [exec]   (vncviewer) {vncviewer} 
+      [exec]   (links-graphic) {links -driver x fluxbox.org} 
+      [exec]   (konqueror) {kfmclient openProfile webbrowsing} 
+      [exec]   (links) {konsole -e links fluxbox.org} 
+      [exec]   (lynx) {konsole -e lynx fluxbox.org} 
 [end]
 [submenu] (Mail)
-      [exec]   (evolution) {evolution}
-      [exec]   (thunderbird) {thunderbird}
-      [exec]   (mutt) {xterm -e mutt}
+      [exec]   (evolution) {evolution} 
+      [exec]   (thunderbird) {thunderbird} 
+      [exec]   (mutt) {konsole -e mutt} 
 [end]
 [submenu] (IRC)
-      [exec]   (xchat) {xchat}
+      [exec]   (konversation) {konversation} 
+      [exec]   (skype) {skype} 
+      [exec]   (ninja) {konsole -e ninja} 
 [end]
-[submenu] (P2P)
-      [exec]   (azureus) {azureus}
+[submenu] (FTP)
+      [exec]   (ftp) {konsole -e ftp} 
 [end]
 [end]
 [submenu] (Editors)
-      [exec]   (gvim) {gvim}
-      [exec]   (vim) {xterm -e vim}
-      [exec]   (vi) {xterm -e vi}
+      [exec]   (gvim) {gvim} 
+      [exec]   (kate) {kate} 
+      [exec]   (evim) {evim} 
+      [exec]   (nano) {konsole -e nano} 
+      [exec]   (vim) {konsole -e vim} 
+      [exec]   (vi) {konsole -e vi} 
+[end]
+[submenu] (Education)
+      [exec]   (gnuplot) {konsole -e gnuplot} 
 [end]
 [submenu] (File utils)
-      [exec] (konqueror) {kfmclient openProfile filemanagement}
+      [exec] (konqueror) {kfmclient openProfile filemanagement} 
+      [exec] (nautilus) {nautilus --no-desktop --browser} 
 [end]
 [submenu] (Multimedia)
 [submenu] (Graphics)
-      [exec]   (gqview) {gqview}
-      [exec]   (xscreensaver-demo) {xscreensaver-demo}
+      [exec]   (gimp) {gimp} 
+      [exec]   (inkscape) {inkscape} 
+      [exec]   (gqview) {gqview} 
+      [exec]   (xscreensaver-demo) {xscreensaver-demo} 
+      [exec] (Mesa gears) {gears} 
+      [exec] (Mesa morph) {morph3d} 
+      [exec] (Mesa reflect) {reflect} 
 [end]
 [submenu] (Audio)
-      [exec]   (aumix) {aumix}
-      [exec]   (alsamixer) {xterm -e alsamixer}
+      [exec]   (alsamixer) {konsole -e alsamixer} 
 [end]
 [submenu] (Video)
-      [exec]   (xgdb) {xgdb}
+      [exec]   (xgdb) {xgdb} 
+      [exec]   (vlc) {vlc} 
 [end]
 [submenu] (X-utils)
-      [exec]   (xfontsel) {xfontsel}
-      [exec]   (xclock) {xclock}
-      [exec] (Reload .Xdefaults) {xrdb -load $HOME/.Xdefaults}
+      [exec]   (xfontsel) {xfontsel} 
+      [exec]   (gkrellm) {gkrellm} 
+      [exec] (Reload .Xdefaults) {xrdb -load $HOME/.Xdefaults} 
 [end]
 [end]
 [submenu] (Office)
-      [exec]   (xclock) {xclock}
-      [exec]   (evolution) {evolution}
-      [exec]   (xpdf) {xpdf}
-      [exec]   (gv) {gv}
+      [exec]   (kcalc) {kcalc} 
+      [exec]   (evolution) {evolution} 
+      [exec] (Open Office)      {soffice} 
+      [exec]   (xpdf) {xpdf} 
+      [exec]   (gv) {gv} 
 [end]
 [submenu] (Games)
-      [exec] (Enemy Territory) {et}
-      [exec] (Unreal Tournament) {ut}
+      [exec]   (dosbox) {dosbox} 
+      [exec] (Enemy Territory) {et} 
+      [exec] (Unreal Tournament) {ut} 
 [end]
 [submenu] (System Tools)
-      [exec]   (top) {xterm -e top}
+[submenu] (Burning)
+      [exec]   (k3b) {k3b} 
+[end]
+      [exec]   (top) {konsole -e top} 
+      [exec]   (htop) {konsole -e htop} 
+      [exec]   (iotop) {konsole -e iotop} 
+      [exec]   (powertop) {konsole -e powertop} 
 [end]
 [submenu] (Fluxbox menu)
-      [config] (Configure)
+      [config] (Configure) 
 [submenu] (System Styles) {Choose a style...}
-      [stylesdir] (/home/joey/gentoo/share/fluxbox/styles)
+      [stylesdir] (/usr/share/fluxbox/styles) 
 [end]
 [submenu] (User Styles) {Choose a style...}
-      [stylesdir] (~/.fluxbox/styles)
+      [stylesdir] (~/.fluxbox/styles) 
 [end]
-      [workspaces] (Workspace List)
+      [workspaces] (Workspace List) 
 [submenu] (Tools)
-      [exec] (Window name) {xprop WM_CLASS|cut -d \" -f 2|xmessage -file - -center}
-      [exec] (Screenshot - JPG) {import screenshot.jpg && display -resize 50% screenshot.jpg}
-      [exec] (Screenshot - PNG) {import screenshot.png && display -resize 50% screenshot.png}
-      [exec] (Run) {fbrun }
-      [exec] (Regen Menu) {fluxbox-generate_menu }
+      [exec] (Window name) {xprop WM_CLASS|cut -d \" -f 2|xmessage -file - -center} 
+      [exec] (Screenshot - JPG) {import screenshot.jpg && display -resize 50% screenshot.jpg} 
+      [exec] (Screenshot - PNG) {import screenshot.png && display -resize 50% screenshot.png} 
+      [exec] (Run) {fbrun} 
+      [exec] (Regen Menu) {fluxbox-generate_menu} 
 [end]
 [submenu] (Window Managers)
-      [restart] (twm) {twm}
-      [restart] (ion) {ion}
-      [restart] (gnome) {startgnome}
+      [restart] (mwm) {mwm} 
+      [restart] (twm) {twm} 
+      [restart] (gnome) {startgnome} 
 [end]
-      [exec] (Lock screen) {xscreensaver-command -lock}
-      [commanddialog] (Fluxbox Command)
-      [reconfig] (Reload config)
-      [restart] (Restart)
-      [exec] (About) {(fluxbox -v; fluxbox -info | sed 1d) | xmessage -file - -center}
-      [separator]
-      [exit] (Exit)
+      [exec] (Lock screen) {xscreensaver-command -lock} 
+      [commanddialog] (Fluxbox Command) 
+      [reconfig] (Reload config) 
+      [restart] (Restart) 
+      [exec] (About) {(fluxbox -v; fluxbox -info | sed 1d) | xmessage -file - -center} 
+      [separator] 
+      [exit] (Exit) 
 [end]
 [endencoding]
 [end]
