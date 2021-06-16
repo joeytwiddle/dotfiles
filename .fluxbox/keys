@@ -122,7 +122,7 @@ Mod1 Control e :NextWindow {groups} (Title=.* \(  .*  \) .*)
 # Cycle through terminals (which don't have editors inside them)
 Mod1 Control t :NextWindow {groups} (Name=xterm) (Title!=.* \(  .*  \) .*)
 # Cycle through web browsers
-Mod1 Control w :NextWindow {groups} (Name=google-chrome)
+Mod1 Control b :NextWindow {groups} (Name=google-chrome)
 
 #Mod1 Escape :ExecCommand {skippy-xd}
 
@@ -336,6 +336,10 @@ Control Mod1 Left :PrevWorkspace
 Control Mod1 Right :NextWorkspace
 Control Mod1 Up :PrevWorkspace 3
 Control Mod1 Down :NextWorkspace 3
+Control Mod1 A :PrevWorkspace
+Control Mod1 D :NextWorkspace
+Control Mod1 W :PrevWorkspace 3
+Control Mod1 S :NextWorkspace 3
 Shift Mod4 Left :TakeToPrevWorkspace
 Shift Mod4 Right :TakeToNextWorkspace
 Shift Mod4 Up :TakeToPrevWorkspace 3
@@ -614,7 +618,8 @@ Mod1 Mod4 Shift Up :MoveUp +25
 Mod1 Mod4 Shift Down :MoveUp -25
 
 ## Basic tiling - really sucks with kicker panels or gkrellm running.
-Control Mod1 a :ToggleCmd {ArrangeWindows (Stuck=no)} {ArrangeWindowsHorizontal (Stuck=no)} {ArrangeWindowsVertical (Stuck=no)}
+## Oh apparently now gkrellm is ignored, which is good.
+Control Mod1 T :ToggleCmd {ArrangeWindows (Stuck=no)} {ArrangeWindowsHorizontal (Stuck=no)} {ArrangeWindowsVertical (Stuck=no)}
 
 
 
