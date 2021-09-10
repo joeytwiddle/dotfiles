@@ -292,3 +292,6 @@ command! VB          normal! <C-v>
 
 "command! ALEList let g:ale_set_quickfix = 1 | e | copen
 command! ALEList lopen | echo "Use ]l and [l to walk through reports"
+
+" Originally in ftplugin/sh.vim but I sometimes need this before Vim has detected the file is a shellscript!
+command! Shebang normal ggO#!/usr/bin/env bash<CR>set -e<CR><Esc><C-O>

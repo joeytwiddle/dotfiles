@@ -1,7 +1,5 @@
 setlocal iskeyword-=.
 
-command! Shebang normal ggO#!/usr/bin/env bash<Esc><C-O>
-
 " Add a log command for the currently selected expression:
 "vnoremap <buffer> <Leader>log yoecho "[log] <C-R>": $<C-R>""<Esc>
 
