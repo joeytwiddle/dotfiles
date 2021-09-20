@@ -13,23 +13,23 @@ endfunction
 
 " Search for word under cursor and replace with prompted input in this buffer, or in all open buffers
 function! s:Replace(in_all_buffers, whole_word, search, ...)
-   let iab = a:in_all_buffers ? "in all buffers " : ""
+   let iab = a:in_all_buffers ? 'in all buffers ' : ''
    let escaped_search = s:escape_for_regexp(a:search)
    if a:whole_word
       let escaped_search = '\<' . escaped_search . '\>'
    endif
-   if exists("a:4")
+   if exists('a:4')
       let replacement = a:4
    else
       let suggested_replacement = escape(a:search, '\')
-      let replacement = input("Replace " . iab . escaped_search . " with: ", suggested_replacement)
+      let replacement = input('Replace ' . iab . escaped_search . ' with: ', suggested_replacement)
    endif
    let escaped_replacement = escape(replacement, '/')
    if a:in_all_buffers
       exec 'bufdo! %s/' . escaped_search . '/' . escaped_replacement . '/gec'
       " Flag 'e' continues if no changes were made in one of the buffers, or if an error occurred.
    else
-      exec "%s/" . escaped_search . "/" . escaped_replacement . "/gc"
+      exec '%s/' . escaped_search . '/' . escaped_replacement . '/gc'
    endif
 endfun
 
@@ -49,11 +49,11 @@ function! s:GetVisualSelection()
    return pat
 endfun
 
-nnoremap <silent> \r :call <SID>Replace(0,1,expand("<cword>"))<CR>
-vnoremap <silent> \r :<C-U>call <SID>Replace(0,0,<SID>GetVisualSelection())<CR>
-command! -nargs=* ReplaceInThisBuffer call <SID>Replace(0,1,expand("<cword>"),<q-args>)
+nnoremap <silent> \r :call <SID>Replace(0, 1, expand("<cword>"))<CR>
+vnoremap <silent> \r :<C-U>call <SID>Replace(0, 0, <SID>GetVisualSelection())<CR>
+command! -nargs=* ReplaceInThisBuffer call <SID>Replace(0, 1, expand("<cword>"), <q-args>)
 
-nnoremap <silent> \R :call <SID>Replace(1,1,expand("<cword>"))<CR>
-vnoremap <silent> \R :<C-U>call <SID>Replace(1,0,<SID>GetVisualSelection())<CR>
-command! -nargs=* ReplaceInAllBuffers call <SID>Replace(1,1,expand("<cword>"),<q-args>)
+nnoremap <silent> \R :call <SID>Replace(1, 1, expand("<cword>"))<CR>
+vnoremap <silent> \R :<C-U>call <SID>Replace(1, 0, <SID>GetVisualSelection())<CR>
+command! -nargs=* ReplaceInAllBuffers call <SID>Replace(1, 1, expand("<cword>"), <q-args>)
 
