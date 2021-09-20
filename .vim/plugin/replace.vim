@@ -7,10 +7,14 @@
 " DONE: Escape search word for regexp, for special chars like '^', '$', '[', ']', '\'
 " TODO: Check the replacement word is unique (not already present in the buffer)
 
+function! s:escape_for_regexp(str)
+  return escape(a:str, '^$.*?/\[]')
+endfunction
+
 " Search for word under cursor and replace with prompted input in this buffer, or in all open buffers
 function! s:Replace(in_all_buffers, whole_word, search, ...)
    let iab = a:in_all_buffers ? "in all buffers " : ""
-   let escaped_search = escape(a:search, '^$.*?/\[]')
+   let escaped_search = s:escape_for_regexp(a:search)
    if a:whole_word
       let escaped_search = '\<' . escaped_search . '\>'
    endif
