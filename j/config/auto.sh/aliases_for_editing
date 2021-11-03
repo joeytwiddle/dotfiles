@@ -1,0 +1,40 @@
+# Make it easier to find and edit some of my common files
+#
+# With bash aliases, we can expand them (to get tab completion):
+#
+#     echeat<Alt-Ctrl-E>
+#
+#     ejconf<Alt-Ctrl-E>
+#
+# With zsh, we get tab completion without exansion:
+#
+#     ejconf <part_of_filename><Tab>
+
+if [ -n "$BASH_VERSION" ]
+then
+	# Better we just stick with the aliases
+	# (These can also be used with zsh, if we wish)
+	alias echeat='cd ~/Dropbox/cheatsheets && e ~/Dropbox/cheatsheets/'
+	alias ejconf='cd ~/j/config/auto.sh/ && e ~/j/config/auto.sh/'
+
+	# Problem: Doing cd also changes the shell's cwd
+	#bind '"echeat":"cd ~/Dropbox/cheatsheets && e ~/Dropbox/cheatsheets/"'
+	#bind '"ejconf":"cd ~/j/config/auto.sh/ && e ~/j/config/auto.sh/"'
+	# This works ok
+	#bind '"echeat":"e ~/Dropbox/cheatsheets/"'
+	#bind '"ejconf":"e ~/j/config/auto.sh/"'
+	# But a big disadvantage with binds, is that the first char ('e') may take some time to appear, if we try to type it just on its own
+elif [ -n "$ZSH_VERSION" ]
+then
+	#bindkey -s echeat "cd ~/Dropbox/cheatsheets && e ~/Dropbox/cheatsheets/"
+	#bindkey -s ejconf "cd ~/j/config/auto.sh/ && e ~/j/config/auto.sh/"
+	# But neater to use functions and compdef for completion
+	echeat() {
+		e ~/Dropbox/cheatsheets/"$1"
+	}
+	compdef '_files -W ~/Dropbox/cheatsheets/' echeat
+	ejconf() {
+		e ~/j/config/auto.sh/"$1"
+	}
+	compdef '_files -W ~/j/config/auto.sh/' ejconf
+fi
