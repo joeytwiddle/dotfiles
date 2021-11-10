@@ -3,11 +3,15 @@
 # Requires fe (my fzf fuzzy edit function)
 
 echeat() {
-	cd ~/Dropbox/cheatsheets
-	fe "$@"
+	(
+		cd ~/Dropbox/cheatsheets
+		fe "$@"
+	)
 }
 
 ejconf() {
-	cd ~/j/config/auto.sh
-	fe "$@"
+	(
+		cd ~/j/config/auto.sh
+		fe "$@"
+	)
 }
