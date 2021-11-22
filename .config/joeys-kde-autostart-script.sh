@@ -24,11 +24,12 @@ sxhkd > /tmp/sxhkd.$USER.out 2>&1 &
 #
 # Note: You may need to add Special Application Settings, so that these start on the desired desktop
 (
-    sleep 30
+    sleep 20
 
     #google-chrome &
     #sleep 60
 
+    sleep 120
     code &
     sleep 20
 ) &
