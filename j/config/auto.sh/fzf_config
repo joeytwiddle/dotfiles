@@ -1,6 +1,13 @@
 # By default fzf does not ignore node_modules.
 # But if we ask it to use ag or rg, they will respect .gitignore which might be good enough.
 
+# This is a variable name I invented, for use within this script
+export FZF_EDITOR="${EDITOR:-vim}"
+
+if command -v smartvim >/dev/null 2>&1
+then export FZF_EDITOR="smartvim"
+fi
+
 # Do en axact match by default.  To do a fuzzy match, prefix your search with `'`
 export FZF_DEFAULT_OPTS="--exact"
 
@@ -18,7 +25,7 @@ fi
 fe() {
   local files
   IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+  [[ -n "$files" ]] && "$FZF_EDITOR" "${files[@]}"
 }
 
 # Modified version where you can press
@@ -30,7 +37,7 @@ fo() {
   key=$(head -1 <<< "$out")
   file=$(head -2 <<< "$out" | tail -1)
   if [ -n "$file" ]; then
-    [ "$key" = ctrl-o ] && open "$file" || ${EDITOR:-vim} "$file"
+    [ "$key" = ctrl-o ] && open "$file" || "$FZF_EDITOR" "$file"
   fi
 }
 
@@ -50,3 +57,18 @@ fda() {
   local dir
   dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
 }
+
+# fcd - fuzzy cd from anywhere
+# ex: fcd <parts_of_filename>...
+# With some code from https://superuser.com/a/875314/52910
+fcd() {
+  local dir
+
+  dir="$(/usr/bin/locate -0 -b -A "$@" | xargs -0 -I {} bash -c '[ -d "{}" ] && echo "{}"' | fzf -0 -1)"
+
+  if [[ -n "$dir" ]]
+  then cd "$dir"
+  fi
+}
+# Change Directory Globally
+alias cdg=fcd
