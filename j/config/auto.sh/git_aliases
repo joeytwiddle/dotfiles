@@ -216,7 +216,9 @@ git_status_plus() {
 		# Unfortunately we need to do this now, and not after the sort-by-date.
 		# The best solution for the user is to use git ignore properly.
 		# The slowness of this process should encourage that!
-		# CONSIDER: The following while loop could be replaced by a call to xargs.
+		# DONE: The following while loop could be replaced by a call to xargs.
+		# `git status --porcelain` surrounds filenames containing special characters (including spaces) in quotes.  This will remove those quotes, since we don't need them.  However it doesn't unescape any of the characters that `git status --porcelain` escapes.  Both v1 and v2 do this.
+		sed 's+^"\(.*\)"$+\1+' |
 		head -n 20000 |
 		(
 			cd "$git_root_folder"
@@ -622,9 +624,10 @@ alias grv='git remote -v'
 alias gt='git tag'
 
 alias fgc=friendlygitcommit
-alias lg=gitls
 alias gls=gitls
 alias glsl=gitls
+
+alias lg=lazygit
 
 #alias gp='git preview'   # This was defined in my .gitconfig as: git diff --stat HEAD..FETCH_HEAD
 #alias gw='git whatsnew'
@@ -1010,12 +1013,13 @@ git_clone_friendly() {
 		#local folder="$(printf "%s\n" "$1" | sed 's+/$++' | grep -o "[^/]*/[^/]*$" | tr '/' '.')"
 		# repo
 		local folder="$(printf "%s\n" "$1" | sed 's+/$++' | grep -o "[^/]*$")"
-		git clone "$url" "$folder" &&
+		git clone --recurse-submodules "$url" "$folder" &&
 		cd "$folder"
 	fi
 }
 #alias gcl='git_clone_friendly'
-alias gcl='git clone'
+#alias gcl='git clone'
+alias gcl='verbosely git clone --recurse-submodules'
 
 # Git Auto Commit, or Git Add Commit, or Git Add and Commit
 gac() {
