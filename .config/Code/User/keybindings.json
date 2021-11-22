@@ -124,6 +124,10 @@
   // This attempt was problematic because, when autocomplete menu is focused, usually <Escape> will also break out of Vim's INSERT mode.  With this keybinding enabled, <Escape> closes the autocomplete menu, but it didn't leave INSERT mode.
   //{ "key": "escape", "command": "hideSuggestWidget", "when": "suggestWidgetVisible && textInputFocus" },
 
+  // Using VSCodeVim, when focused on the explorer/sidebar I would often try to use `Ctrl-W Right` to get back to the editor.
+  // But in VSCode, Ctrl+W closes the current editor!  So I made this mapping to intercept that.
+  { "key": "ctrl+w Right", "command": "workbench.action.focusActiveEditorGroup", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
+
   /* Cycle zoom (requires Settings Cycler plugin) */
   /* I use this because I like -0.5 on my Linux, but Ctrl-Plus/Minus round to integers */
   {
@@ -154,4 +158,10 @@
 
   { "key": "ctrl+PageUp", "command": "workbench.action.terminal.focusPrevious", "when": "terminalFocus" },
   { "key": "ctrl+PageDown", "command": "workbench.action.terminal.focusNext", "when": "terminalFocus" },
+
+  { "key": "ctrl+alt+shift+l", "command": "editor.action.formatDocument.multiple" },
+  {
+    "key": "ctrl+alt+shift+l",
+    "command": "eslint.executeAutofix"
+  }
 ]
