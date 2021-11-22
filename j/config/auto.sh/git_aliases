@@ -88,7 +88,7 @@
 #
 #   gmt is a shortcut for git mergetool
 #
-#   gmr as mentioned earlier does git rebase --preserve-merges
+#   gmr as mentioned earlier does git rebase --rebase-merges
 #       You should only use this on branches you have not yet shared with others.
 #
 # Less used shortcuts:
@@ -355,8 +355,9 @@ git_commit_immediate_fixup() {
 	git commit --no-verify --fixup "${commit_to_amend}" || return
 
 	echo ">> Performing rebase"
+	# If --rebase-merges is not working, you may need to use the older --preserve-merges
 	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
-	EDITOR=true git rebase -i --autosquash --autostash --preserve-merges --no-fork-point "${commit_to_amend}~"
+	EDITOR=true git rebase -i --autosquash --autostash --rebase-merges --no-fork-point "${commit_to_amend}~"
 }
 alias gcf='git_commit_immediate_fixup'
 
@@ -383,8 +384,9 @@ git_commit_immediate_fixup_DEBUG_VERSION() {
 	[ -n "$do_extra_check" ] && git branch --force BACKUP-BEFORE-FIXUP-REBASE HEAD
 
 	echo ">> Performing rebase"
+	# If --rebase-merges is not working, you may need to use the older --preserve-merges
 	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
-	EDITOR=true git rebase -i --autosquash --autostash --preserve-merges --no-fork-point "${commit_to_amend}~"
+	EDITOR=true git rebase -i --autosquash --autostash --rebase-merges --no-fork-point "${commit_to_amend}~"
 
 	if [ -n "$do_extra_check" ] && ( [ -d "$git_dir/rebase-merge" ] || [ -d "$git_dir/rebase-apply" ] )
 	then
@@ -558,9 +560,9 @@ grp_safe() {
 	echo "Current commit before rebase (in case abort desired): ${current_commit}"
 	echo
 
-	git rebase --preserve-merges --autostash "${other_branch}" "$@"
+	git rebase --rebase-merges --autostash "${other_branch}" "$@"
 }
-#alias grp='git rebase --preserve-merges "$(git_guess_upstream_branch)"'
+#alias grp='git rebase --rebase-merges "$(git_guess_upstream_branch)"'
 alias grp='grp_safe'
 # Git Merge Rebase (mnemonic)
 alias gmr='grp_safe'
@@ -594,7 +596,7 @@ alias gcpa='git cherry-pick --abort'
 
 #alias gri='git rebase -i'
 alias gri='git rebase --interactive --autosquash --autostash --no-verify'
-# I used to include --preserve-merges here, but it started dropping commits during a rebase, so I think it's safer off!
+# I used to include --rebase-merges here, but it started dropping commits during a rebase, so I think it's safer off!
 alias griu='gri @{u}'
 alias griom='gri origin/master'
 alias griomn='gri origin/main'
