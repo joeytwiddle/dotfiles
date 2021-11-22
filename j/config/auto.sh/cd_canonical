@@ -12,7 +12,9 @@
 # The cdc alias will source this script before running the function.
 # That will allow us to add new heuristics here, and immediately use them by just typing `cdc`.
 unalias cdc 2>/dev/null
-alias cdc=". \"$JPATH/config/auto.sh/cd_canonical\" && cd_canonical"
+#alias cdc=". \"$JPATH/config/auto.sh/cd_canonical\" && cd_canonical"
+# We don't need to call it from the alias, because it calls itself when we source it.
+alias cdc=". \"$JPATH/config/auto.sh/cd_canonical\""
 
 cd_canonical() {
 	if ! command -v realpath >/dev/null 2>&1
@@ -24,14 +26,19 @@ cd_canonical() {
 	local without_proj_subdir="$(printf "%s" "$PWD" | sed 's+/\(SYNC/\|\)projects\(\|\.[^/]*\)/[^/]*/+/+')"
 	local with_short_proj="$(printf "%s" "$PWD" | sed 's+/SYNC/projects\(\|\.[^/]*\)/+/projects/+')"
 	local without_sync="$(printf "%s" "$PWD" | sed 's+/SYNC/+/+')"
+	local without_rc_files="$(printf "%s" "$PWD" | sed 's+/SYNC/rc_files/+/+')"
 	local without_src_keep="$(printf "%s" "$PWD" | sed 's+/SYNC/src.KEEP/+/src/+')"
+	local in_stuff_ut="$(printf "%s" "$PWD" | sed 's+/home/HWI_BACKUPS/hwi_huge/big/ut/+/stuff/ut/+')"
 
 	cdc_try "${HOME}/${folder_name}" && return 0
+	cdc_try "${HOME}/debugging" && return 0
 	cdc_try "$without_proj" && return 0
 	cdc_try "$without_proj_subdir" && return 0
 	cdc_try "$with_short_proj" && return 0
-	cdc_try "$without_sync" && return 0
+	cdc_try "$without_rc_files" && return 0
 	cdc_try "$without_src_keep" && return 0
+	cdc_try "$without_sync" && return 0
+	cdc_try "$in_stuff_ut" && return 0
 }
 
 cdc_try() {
@@ -39,7 +46,7 @@ cdc_try() {
 	then
 		#echo "-> $1"
 		echo "$PWD -> $1"
-		cd "$1" || return 2
+		'cd' "$1" || return 2
 		return 0
 	fi
 	return 1
