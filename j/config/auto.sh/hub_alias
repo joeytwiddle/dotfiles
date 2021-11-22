@@ -8,7 +8,8 @@
 
 # We check for alias-compatible shells
 # In fact dash can handle 'alias' too, but posh cannot.
-if ( [ -n "$BASH" ] || [ -n "$ZSH_NAME" ] ) && which hub >/dev/null 2>&1
+# Disabled for now because I never used it
+if false && ( [ -n "$BASH" ] || [ -n "$ZSH_NAME" ] ) && which hub >/dev/null 2>&1
 then
 	eval $(hub alias -s)
 
