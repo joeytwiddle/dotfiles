@@ -25,12 +25,16 @@ function! s:Replace(in_all_buffers, whole_word, search, ...)
       let replacement = input('Replace ' . iab . escaped_search . ' with: ', suggested_replacement)
    endif
    let escaped_replacement = escape(replacement, '/')
+   let start_buffer = bufnr('%')
+   let saved_view = winsaveview()
    if a:in_all_buffers
       exec 'bufdo! %s/' . escaped_search . '/' . escaped_replacement . '/gec'
       " Flag 'e' continues if no changes were made in one of the buffers, or if an error occurred.
    else
       exec '%s/' . escaped_search . '/' . escaped_replacement . '/gc'
    endif
+   exec start_buffer . 'buffer'
+   call winrestview(saved_view)
 endfun
 
 " Adapted from http://vim.wikia.com/wiki/Search_for_visually_selected_text
