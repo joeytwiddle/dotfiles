@@ -236,6 +236,11 @@ toolbaritem#urlbar-container {
     /* border: 1px solid #0008 !important; */
 }
 
+/* Firefox Developer Edition 2021/12/08: Remove the white border around the current tab */
+.tab-background:is([selected], [multiselected]):-moz-lwtheme {
+    border: none !important;
+}
+
 
 
 /* Make close tab button red on hover */
