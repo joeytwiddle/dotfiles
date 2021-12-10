@@ -82,10 +82,37 @@
     },
     {
       "name": "Storage",
-      "scope": "storage.type, storage.modifier",
+      "scope": "storage.type",
       "settings": {
         "foreground": "#AF4A67",
+        //"foreground": "#A576A0",
         "fontStyle": "bold"
+      }
+    },
+    // storage.type.function.ts, meta.function.ts
+    {
+      "name": "Function keyword",
+      "scope": "storage.type.function",
+      "settings": {
+        "foreground": "#A576A0"
+        //"fontStyle": "bold"
+      }
+    },
+    // E.g. async static final
+    // meta.function.ts
+    // storage.modifier.async.ts
+    {
+      "name": "Function meta",
+      "scope": "storage.modifier",
+      "settings": {
+        "foreground": "#A576A0"
+      }
+    },
+    {
+      "name": "Export / import",
+      "scope": "keyword.control.export, meta.import",
+      "settings": {
+        "foreground": "#AF4A67"
       }
     },
     {
@@ -98,9 +125,16 @@
     },
     {
       "name": "Type",
-      "scope": "support.type, support.class",
+      "scope": "support.type",
       "settings": {
         "foreground": "#A576A0"
+      }
+    },
+    {
+      "name": "Global",
+      "scope": "support.class, support.constant",
+      "settings": {
+        "foreground": "#CCCCCC"
       }
     },
     {
@@ -213,23 +247,31 @@
       }
     },
     {
+      "name": "CSS tag",
+      "scope": "entity.name.tag.css",
+      "settings": {
+        "foreground": "#AF4A67"
+      }
+    },
+    {
       "name": "CSS class",
       "scope": "entity.other.attribute-name.class",
       "settings": {
-        "foreground": "#CCCCCC"
+        "foreground": "#3DA676"
       }
     },
     {
       "name": "CSS ID",
       "scope": "entity.other.attribute-name.id",
       "settings": {
-        "foreground": "#3DA676"
+        "foreground": "#CCCCCC"
       }
     },
     {
-      "name": "CSS tag",
-      "scope": "source.css entity.name.tag",
+      "name": "CSS property",
+      "scope": "support.type.property-name.css",
       "settings": {
+        //"foreground": "#4B95DC"
         "foreground": "#A576A0"
       }
     },
@@ -286,8 +328,10 @@
       "name": "JSX tag attribute curly brackets",
       "scope": "punctuation.section.embedded",
       "settings": {
+        "foreground": "#EEEEEE"
         //"foreground": "#CCCCCC"
-        "foreground": "#999999",
+        //"foreground": "#999999"
+        //"foreground": "#AF4A67"
         //"fontStyle": "bold"
       }
     },
@@ -500,6 +544,46 @@
         "foreground": "#b267e6"
       }
     },
+
+    /* 2021 tweaks */
+    {
+      "name": "JSX component",
+      "scope": "support.class.component",
+      "settings": {
+        "foreground": "#3DA676"
+      }
+    },
+    {
+      "name": "JSX attribute",
+      "scope": "entity.other.attribute-name",
+      "settings": {
+        "foreground": "#4B95DC"
+      }
+    },
+    {
+      "name": "HTML tag outer",
+      "scope": "punctuation.definition.tag",
+      "settings": {
+        "foreground": "#999999"
+      }
+    },
+
+    // When we open the search results in an editor
+    {
+      "scope": "meta.path.search",
+      "settings": {
+        "foreground": "#ffffff",
+        //"foreground": "#88CCCC",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "scope": "meta.resultLinePrefix.lineNumber.search",
+      "settings": {
+        "foreground": "#777777"
+      }
+    }
+
     // Highlight where a variable is defined
     // (I actually want to do this for variable assignments too, but I found reads were indistinguishable from writes)
     /*
@@ -513,32 +597,37 @@
     */
   ],
   "colors": {
+    // Main interface: #2c2e2e
+    // Gutter: #272929
+    // Editor background: #272929
+    // Input boxes: #212323
+    //
     "activityBar.activeBackground": "#cccccc12",
     //"activityBar.activeBorder": "#ffffff",
     //"activityBar.activeBorder": "#cccccc",
     "activityBar.activeBorder": "#aaaaaa",
     //"activityBar.activeBorder": "#00000000",
-    "activityBar.background": "#333333",
+    "activityBar.background": "#2c2e2e",
     //"activityBar.foreground": "#ffffff",
     //"activityBar.inactiveForeground": "#ffffff99",
     "activityBar.dropBackground": "#cccccc80",
     //"activityBarBadge.background": "#ff9944",
     "activityBarBadge.background": "#3DA676",
     "activityBarBadge.foreground": "#000000",
-    "debugToolBar.background": "#333333",
-    "dropdown.background": "#222222",
-    "editor.background": "#2d2d2d",
+    "debugToolBar.background": "#2c2e2e",
+    "dropdown.background": "#212323",
+    "editor.background": "#272929",
     "editor.foreground": "#cccccc",
     "editor.lineHighlightBackground": "#88888815",
     "editor.rangeHighlightBackground": "#ffffff0d",
     "editorGroup.dropBackground": "#cccccc80",
-    "editorGroupHeader.tabsBackground": "#333333",
-    "editorHoverWidget.background": "#333333",
-    "editorMarkerNavigation.background": "#333333",
-    "editorWidget.background": "#333333",
+    "editorGroupHeader.tabsBackground": "#2c2e2e",
+    "editorHoverWidget.background": "#2c2e2e",
+    "editorMarkerNavigation.background": "#2c2e2e",
+    "editorWidget.background": "#2c2e2e",
     "focusBorder": "#cccccc",
     "foreground": "#aaaaaa",
-    "input.background": "#222222",
+    "input.background": "#212323",
     "input.foreground": "#cccccc",
     "inputOption.activeBorder": "#cccccc",
     //"list.activeSelectionBackground": "#3333cc55",
@@ -556,35 +645,35 @@
     "list.inactiveSelectionBackground": "#cccccc17",
     "list.inactiveSelectionForeground": "#eeeeee",
     //"list.inactiveSelectionForeground": "#ffffff",
-    "panel.background": "#333333",
+    "panel.background": "#2c2e2e",
     "panel.border": "#ffffff1a",
     "panelTitle.activeBorder": "#cccccc80",
     "panelTitle.inactiveForeground": "#cccccc80",
     "peekView.border": "#cccccc",
-    "peekViewEditor.background": "#333333",
-    "peekViewResult.background": "#333333",
+    "peekViewEditor.background": "#2c2e2e",
+    "peekViewResult.background": "#2c2e2e",
     "peekViewTitle.background": "#424242",
     "pickerGroup.border": "#ffffff1a",
-    "sideBar.background": "#333333",
-    "sideBarSectionHeader.background": "#333333",
+    "sideBar.background": "#2c2e2e",
+    "sideBarSectionHeader.background": "#2c2e2e",
     "sideBarSectionHeader.foreground": "#cccccc",
-    "statusBar.background": "#333333",
+    "statusBar.background": "#2c2e2e",
     "sideBarSectionHeader.border": "#3c3c3c",
     //"statusBar.debuggingBackground": "#cccccc",
     //"statusBar.debuggingForeground": "#ffffffcc",
     "statusBar.foreground": "#ffffffbb",
-    "statusBar.noFolderBackground": "#333333",
+    "statusBar.noFolderBackground": "#2c2e2e",
     "statusBar.noFolderForeground": "#ffffffbb",
     "statusBarItem.activeBackground": "#cccccc80",
     "statusBarItem.hoverBackground": "#ffffff1a",
     //"badge.background": "#4d4d4d",
     //"badge.foreground": "#ffffff",
     //"breadcrumb.activeSelectionForeground": "#e0e0e0",
-    "breadcrumb.background": "#333333",
+    "breadcrumb.background": "#2c2e2e",
     //"breadcrumb.focusForeground": "#e0e0e0",
     //"breadcrumb.foreground": "#cccccccc",
-    "breadcrumb.foreground": "#777777",
-    //"breadcrumbPicker.background": "#333333",
+    "breadcrumb.foreground": "#aaaaaa",
+    //"breadcrumbPicker.background": "#2c2e2e",
     //"button.background": "#0e639c",
     //"button.foreground": "#ffffff",
     //"button.hoverBackground": "#1177bb",
@@ -593,14 +682,14 @@
     //"descriptionForeground": "#ccccccb3",
     //"diffEditor.insertedTextBackground": "#9bb95533",
     //"diffEditor.removedTextBackground": "#ff000033",
-    //"dropdown.border": "#222222",
+    //"dropdown.border": "#242424",
     //"dropdown.foreground": "#f0f0f0",
     //"editor.findMatchBackground": "#515c6a",
     //"editor.findMatchHighlightBackground": "#ea5c0055",
     //"editor.findRangeHighlightBackground": "#3a3d4166",
     // For the active search result
     "editor.findMatchBackground": "#0044bbaa",
-    "editor.findMatchBorder": "#ffff00ff",
+    "editor.findMatchBorder": "#ffff00dd",
     // For the other seach results
     // I turned off the border because it made code difficult to read, and I don't know any way to turn off the highlighting without actually clearing the search.
     "editor.findMatchHighlightBackground": "#0044bbaa",
@@ -651,16 +740,18 @@
     //"editorCursor.foreground": "#aeafad",
     //"editorError.foreground": "#ea4646",
     //"editorGroup.border": "#444444",
-    //"editorGroupHeader.noTabsBackground": "#333333",
+    //"editorGroupHeader.noTabsBackground": "#2c2e2e",
     //"editorGutter.addedBackground": "#587c0c",
-    "editorGutter.background": "#2d2d2d",
-    //"editorGutter.background": "#333333",
+    //"editorGutter.background": "#2c2e2e",
+    //"editorGutter.background": "#2c2e2e",
+    // Put it somewhere in the middle (it's useful to see where the line starts, but I don't like the gutter being heavy)
+    "editorGutter.background": "#272929",
     //"editorGutter.commentRangeForeground": "#c5c5c5",
     //"editorGutter.deletedBackground": "#94151b",
     //"editorGutter.modifiedBackground": "#0c7d9d",
     //"editorHint.foreground": "#eeeeeeb3",
     //"editorHoverWidget.border": "#454545",
-    //"editorHoverWidget.statusBarBackground": "#333333",
+    //"editorHoverWidget.statusBarBackground": "#2c2e2e",
     //"editorIndentGuide.activeBackground": "#e3e4e229",
     //"editorIndentGuide.background": "#e3e4e229",
     //"editorInfo.foreground": "#008000",
@@ -687,9 +778,9 @@
     //"editorOverviewRuler.warningForeground": "#128812b3",
     //"editorOverviewRuler.wordHighlightForeground": "#a0a0a0cc",
     //"editorOverviewRuler.wordHighlightStrongForeground": "#c0a0c0cc",
-    //"editorPane.background": "#333333",
+    //"editorPane.background": "#2c2e2e",
     //"editorRuler.foreground": "#5a5a5a",
-    //"editorSuggestWidget.background": "#333333",
+    //"editorSuggestWidget.background": "#2c2e2e",
     //"editorSuggestWidget.border": "#454545",
     //"editorSuggestWidget.foreground": "#cccccc",
     //"editorSuggestWidget.highlightForeground": "#0097fb",
@@ -726,7 +817,7 @@
     //"listFilterWidget.background": "#653723",
     //"listFilterWidget.noMatchesOutline": "#be1100",
     //"listFilterWidget.outline": "#00000000",
-    //"menu.background": "#222222",
+    //"menu.background": "#242424",
     //"menu.foreground": "#f0f0f0",
     //"menu.selectionBackground": "#cccccc44",
     //"menu.selectionForeground": "#eeeeee",
@@ -739,10 +830,10 @@
     //"merge.currentHeaderBackground": "#40c8ae80",
     //"merge.incomingContentBackground": "#40a6ff33",
     //"merge.incomingHeaderBackground": "#40a6ff80",
-    //"notificationCenterHeader.background": "#333333",
+    //"notificationCenterHeader.background": "#2c2e2e",
     //"notificationLink.foreground": "#3794ff",
-    //"notifications.background": "#333333",
-    //"notifications.border": "#333333",
+    //"notifications.background": "#2c2e2e",
+    //"notifications.border": "#2c2e2e",
     //"panel.dropBackground": "#ffffff1f",
     //"panelTitle.activeForeground": "#e7e7e7",
     //"peekViewEditor.matchHighlightBackground": "#ff8f0099",
@@ -762,32 +853,32 @@
     //"scrollbarSlider.activeBackground": "#bfbfbf66",
     "scrollbarSlider.background": "#88888826",
     //"scrollbarSlider.hoverBackground": "#646464b3",
-    //"settings.checkboxBackground": "#222222",
-    //"settings.checkboxBorder": "#222222",
+    //"settings.checkboxBackground": "#242424",
+    //"settings.checkboxBorder": "#242424",
     //"settings.checkboxForeground": "#f0f0f0",
-    //"settings.dropdownBackground": "#222222",
-    //"settings.dropdownBorder": "#222222",
+    //"settings.dropdownBackground": "#242424",
+    //"settings.dropdownBorder": "#242424",
     //"settings.dropdownForeground": "#f0f0f0",
     //"settings.dropdownListBorder": "#454545",
     //"settings.headerForeground": "#e7e7e7",
     //"settings.modifiedItemIndicator": "#0c7d9d",
-    //"settings.numberInputBackground": "#222222",
+    //"settings.numberInputBackground": "#242424",
     //"settings.numberInputForeground": "#cccccc",
-    //"settings.textInputBackground": "#222222",
+    //"settings.textInputBackground": "#242424",
     //"settings.textInputForeground": "#cccccc",
     //"sideBar.dropBackground": "#ffffff1f",
     //"statusBarItem.hostBackground": "#388a34",
     //"statusBarItem.prominentBackground": "#388a34",
     //"statusBarItem.prominentHoverBackground": "#369432",
-    //"tab.activeBackground": "#333333",
+    //"tab.activeBackground": "#2c2e2e",
     "tab.activeBackground": "#cccccc17",
     //"tab.activeBorder": "#ff9944",
     //"tab.activeBorder": "#777777",
     "tab.activeForeground": "#eeeeee",
     //"tab.activeModifiedBorder": "#3399cc",
-    "tab.border": "#00000033",
+    "tab.border": "#00000044",
     "tab.inactiveForeground": "#888888",
-    "tab.inactiveBackground": "#333333",
+    "tab.inactiveBackground": "#2c2e2e",
     //"tab.inactiveModifiedBorder": "#3399cc80",
     //"tab.unfocusedActiveForeground": "#ffffff80",
     //"tab.unfocusedActiveModifiedBorder": "#3399cc80",
@@ -809,7 +900,7 @@
     //"terminal.ansiRed": "#cd3131",
     //"terminal.ansiWhite": "#e5e5e5",
     //"terminal.ansiYellow": "#e5e510",
-    //"terminal.background": "#282828",
+    //"terminal.background": "#2c2e2e",
     //"terminal.border": "#ffffff1a",
     //"terminal.foreground": "#cccccc",
     //"terminal.selectionBackground": "#ffffff40",
@@ -841,14 +932,15 @@
     //"textPreformat.foreground": "#d7ba7d",
     //"textSeparator.foreground": "#ffffff2e",
     //"titleBar.activeBackground": "#0c1e1e",
-    "titleBar.activeBackground": "#333333",
+    "titleBar.activeBackground": "#2c2e2e",
     //"titleBar.activeForeground": "#cccccc",
     //"titleBar.inactiveBackground": "#0c1e1e99",
-    "titleBar.inactiveBackground": "#333333",
+    "titleBar.inactiveBackground": "#2c2e2e"
     //"titleBar.inactiveForeground": "#cccccc99",
     //"widget.shadow": "#000000"
   }
   // Temporarily remove alpha and comments, so we can see the colours with CSSColor plugin
   // %s/"#\(......\)\(..\)"/"#\1"
   // %s/ [/][/]"/ "/
+  // vim: ft=javascript
 }
