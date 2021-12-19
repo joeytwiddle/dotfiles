@@ -175,13 +175,17 @@ You can get some inspiration for styling here: https://www.reddit.com/r/FirefoxC
 /* This increases the height of the entire row */
 .tab-content {
     /* min-height: 40px !important; */
-    min-height: 38px !important;
+    /* min-height: 38px !important; */
 }
 .tab-label-container {
     padding-left: 4px !important;
     padding-right: 4px !important;
 }
-
+#tabbrowser-tabs, #tabbrowser-arrowscrollbox, #tabbrowser-tabs[positionpinnedtabs] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[pinned] {
+    /* Default: 38px */
+    /* min-height: var(--tab-min-height); */
+    height: 24px !important;
+}
 
 
 /* Make the location bar rounded */
