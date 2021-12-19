@@ -249,11 +249,23 @@ toolbaritem#urlbar-container {
     border: none !important;
 }
 
-/* Sometimes this outline was appearing around the urlbar.  You can make it appear by using Tab to get out of the urlbar and back again.  It actually affects all focusable elements, not just the urlbar.  But that's the only place that it bothered me. */
+/* Sometimes this outline was appearing around the urlbar.  You can make it appear by using Tab to get out of the urlbar and back in again.  It actually affects all focusable elements, not just the urlbar.  But the urlbar was the only place that it bothered me. */
 :root:-moz-lwtheme-brighttext {
     /* I guess this colour was provided by my OS theme (Manjaro KDE Breeze) */
-  /* --focus-outline-color: #00DDFF; */
-  --focus-outline-color: #000000;
+    /* --focus-outline-color: #00DDFF; */
+    /* But changing it didn't change anything */
+    /* --focus-outline-color: #000000 !important; */
+    /* This might work.  I didn't try it.  But it probably won't, because it references the one above! */
+    /* --toolbar-field-focus-border-color: #000000 !important; */
+}
+#urlbar[focused="true"]:not([suppress-focus-border]) > #urlbar-background, #searchbar:focus-within {
+    /* Defaults:
+    outline: var(--focus-outline);
+    outline-offset: calc(var(--focus-outline-width) * -1);
+    outline-color: var(--toolbar-field-focus-border-color);
+    border-color: transparent;
+    */
+    outline: none !important;
 }
 
 
