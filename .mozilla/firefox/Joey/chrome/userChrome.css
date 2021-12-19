@@ -117,7 +117,8 @@ You can get some inspiration for styling here: https://www.reddit.com/r/FirefoxC
 /* Add a shadow to the left and right of the selected tab */
 #TabsToolbar .tabbrowser-tab[selected] .tab-stack {
     /* box-shadow: 0 4px 8px #0006 !important; */
-    box-shadow: 0 2px 4px #0006 !important;
+    /* box-shadow: 0 2px 4px #0006 !important; */
+    box-shadow: 0 2px 2px #0006 !important;
     /* Push the nearby tabs aside a bit, so they don't appear in the shadow */
     /* margin-left: 2px !important; */
     /* margin-right: 2px !important; */
