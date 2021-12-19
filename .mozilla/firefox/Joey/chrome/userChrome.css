@@ -249,6 +249,12 @@ toolbaritem#urlbar-container {
     border: none !important;
 }
 
+/* Sometimes this outline was appearing around the urlbar.  You can make it appear by using Tab to get out of the urlbar and back again.  It actually affects all focusable elements, not just the urlbar.  But that's the only place that it bothered me. */
+:root:-moz-lwtheme-brighttext {
+    /* I guess this colour was provided by my OS theme (Manjaro KDE Breeze) */
+  /* --focus-outline-color: #00DDFF; */
+  --focus-outline-color: #000000;
+}
 
 
 /* Make close tab button red on hover */
