@@ -113,7 +113,7 @@ You can get some inspiration for styling here: https://www.reddit.com/r/FirefoxC
 /* The roundness looks better if there is a little gap above it */
 /* Note that Firefox's new design prefers a margin above the .tab-background rather than the .tab-stack, but our CSS was largely based around .tab-stack so we are sticking that way for now. */
 #TabsToolbar .tabbrowser-tab .tab-stack {
-    margin-top: 3px !important;
+    /* margin-top: 3px !important; */
 }
 /* Add a shadow to the left and right of the selected tab */
 #TabsToolbar .tabbrowser-tab[selected] .tab-stack {
@@ -186,7 +186,8 @@ You can get some inspiration for styling here: https://www.reddit.com/r/FirefoxC
 #tabbrowser-tabs, #tabbrowser-arrowscrollbox, #tabbrowser-tabs[positionpinnedtabs] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[pinned] {
     /* Default: 38px */
     /* min-height: var(--tab-min-height); */
-    height: 24px !important;
+    /* height: 24px !important; */
+    /* height: 20px !important; */
 }
 
 
