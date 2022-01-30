@@ -49,7 +49,8 @@ You can get some inspiration for styling here: https://www.reddit.com/r/FirefoxC
 */
 /* Small tabs, just enough for favicons */
 .tabbrowser-tab[fadein] {
-    min-width: 32px !important;
+    /* min-width: 32px !important; */
+    min-width: 28px !important;
 }
 /*
 :root {
