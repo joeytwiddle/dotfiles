@@ -206,11 +206,19 @@ toolbaritem#urlbar-container {
 #urlbar {
     /* Default is 30px */
     /* --urlbar-height: 32px !important; */
-    --urlbar-height: 32px !important;
+    /* --urlbar-height: 32px !important; */
+    /* --urlbar-height: 24px !important; */
 }
+/* Default 8px and ??px */
+/*
+:root {
+    --toolbarbutton-inner-padding: 1px !important;
+    --toolbarbutton-outer-padding: 1px !important;
+}
+*/
 #urlbar-container, #search-container {
     /* The spacing above and below the urlbar (default 3px but effectively 4 or 5px because of nav-bar height) */
-    padding-block: 6px !important;
+    /* padding-block: 6px !important; */
 }
 /* #urlbar:not(.megabar), #urlbar.megabar > #urlbar-background, #searchbar, #urlbar-input-container { */
 #urlbar, #urlbar-background, #searchbar, #urlbar-input-container {
