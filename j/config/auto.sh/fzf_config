@@ -41,15 +41,23 @@ fo() {
   fi
 }
 
-# fd - cd to selected directory
+# fd - cd to selected subdirectory
 fd() {
   local dir
-  dir=$(find ${1:-.} \
-             -type d \
-             -path '*/\.*' -prune \
-             -o -name 'node_modules' -prune \
-             -o -print 2> /dev/null | fzf +m) &&
-  cd "$dir"
+  dir="$(
+    find ${1:-.} -mindepth 1 -type d \
+      '(' \
+        -path '*/\.*' -prune \
+        -o -name 'node_modules' -prune \
+        -o -print \
+      ')' \
+      2>/dev/null |
+    fzf +m
+  )"
+
+  if [[ -n "$dir" ]]
+  then cd "$dir"
+  fi
 }
 
 # fda - including hidden directories
