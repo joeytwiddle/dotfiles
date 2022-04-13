@@ -58,17 +58,25 @@ fda() {
   dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
 }
 
+# "CD Local" is where my mind went
+alias cdl=fda
+
 # fcd - fuzzy cd from anywhere
 # ex: fcd <parts_of_filename>...
 # With some code from https://superuser.com/a/875314/52910
 fcd() {
   local dir
 
-  dir="$(/usr/bin/locate -0 -b -A "$@" | xargs -0 -I {} bash -c '[ -d "{}" ] && echo "{}"' | fzf -0 -1)"
+  #dir="$(/usr/bin/locate -0 -b -A "$@" | xargs -0 -I {} bash -c '[ -d "{}" ] && echo "{}"' | fzf -0 -1)"
+  # Simplified and case-insensitive
+  dir="$(/usr/bin/locate -b -A "$@" -i | dirsonly | fzf -0 -1 -i)"
 
   if [[ -n "$dir" ]]
   then cd "$dir"
   fi
 }
 # Change Directory Globally
-alias cdg=fcd
+#alias cdg=fcd
+# But "CD Fuzzy" is where my mind went
+#alias cdf=fcd
+# Let's just try to use fcd
