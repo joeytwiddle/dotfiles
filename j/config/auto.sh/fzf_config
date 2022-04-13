@@ -17,6 +17,16 @@ elif which ag > /dev/null 2>&1
 then export FZF_DEFAULT_COMMAND='ag -p ~/.gitignore -g ""'
 fi
 
+export FZF_FILE_PREVIEW_COMMAND="cat {}"
+if which bat >/dev/null 2>&1
+then FZF_FILE_PREVIEW_COMMAND="bat -f {}"
+fi
+
+export FZF_DIRECTORY_PREVIEW_COMMAND="echo {}/; echo; ls -lartFh --color=always {}/"
+#if which gitls >/dev/null 2>&1
+#then FZF_DIRECTORY_PREVIEW_COMMAND="echo {}/; echo; gitls"
+#fi
+
 # End config, start aliases
 
 # fe [FUZZY PATTERN] - Open the selected file with the default editor
@@ -24,7 +34,7 @@ fi
 #   - Exit if there's no match (--exit-0)
 fe() {
   local files
-  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  IFS=$'\n' files=($(fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --query="$1" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && "$FZF_EDITOR" "${files[@]}"
 }
 
@@ -33,11 +43,11 @@ fe() {
 #   - CTRL-E or Enter key to open with the $EDITOR
 fo() {
   local out file key
-  IFS=$'\n' out=("$(fzf-tmux --query="$1" --exit-0 --expect=ctrl-o,ctrl-e)")
+  IFS=$'\n' out=("$(fzf-tmux --query="$1" --exit-0 --expect=ctrl-o,ctrl-e --preview="$FZF_FILE_PREVIEW_COMMAND")")
   key=$(head -1 <<< "$out")
   file=$(head -2 <<< "$out" | tail -1)
-  if [ -n "$file" ]; then
-    [ "$key" = ctrl-o ] && open "$file" || "$FZF_EDITOR" "$file"
+  if [ -n "$file" ]
+  then [ "$key" = ctrl-o ] && open "$file" || "$FZF_EDITOR" "$file"
   fi
 }
 
@@ -52,18 +62,12 @@ fd() {
         -o -print \
       ')' \
       2>/dev/null |
-    fzf +m
+    fzf --preview="$FZF_DIRECTORY_PREVIEW_COMMAND" +m
   )"
 
   if [[ -n "$dir" ]]
   then cd "$dir"
   fi
-}
-
-# fda - including hidden directories
-fda() {
-  local dir
-  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
 }
 
 # "CD Local" is where my mind went
@@ -77,7 +81,7 @@ fcd() {
 
   #dir="$(/usr/bin/locate -0 -b -A "$@" | xargs -0 -I {} bash -c '[ -d "{}" ] && echo "{}"' | fzf -0 -1)"
   # Simplified and case-insensitive
-  dir="$(/usr/bin/locate -b -A "$@" -i | dirsonly | fzf -0 -1 -i)"
+  dir="$(/usr/bin/locate -b -A "$@" -i | dirsonly | fzf --preview="$FZF_DIRECTORY_PREVIEW_COMMAND" -0 -1 -i)"
 
   if [[ -n "$dir" ]]
   then cd "$dir"
