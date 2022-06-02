@@ -431,6 +431,10 @@ image.tab-icon-sound {
     padding-right: 5px !important;
 }
 
+/* June 2022: Remove the white border from the active tab */
+#TabsToolbar .tab-background[selected] {
+    outline: none !important;
+}
 
 
 /* Attempt to make the back button a little 3D.  Did not work well with my orange theme. */
