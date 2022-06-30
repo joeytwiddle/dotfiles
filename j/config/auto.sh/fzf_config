@@ -124,3 +124,8 @@ frgi() {
     verbosely "$FZF_EDITOR" +"$lineno" "$filename"
   fi
 }
+
+# Fuzzy Git Checkout
+fgco() {
+  git branch | fzf | xargs git checkout
+}
