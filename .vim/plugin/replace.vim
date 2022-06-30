@@ -8,7 +8,7 @@
 " TODO: Check the replacement word is unique (not already present in the buffer)
 
 function! s:escape_for_regexp(str)
-  return escape(a:str, '^$.*?/\[]')
+  return escape(a:str, '^$.*?/\[]~')
 endfunction
 
 " Search for word under cursor and replace with prompted input in this buffer, or in all open buffers

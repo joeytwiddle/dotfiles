@@ -17,7 +17,7 @@ function! s:get_nerdtree_window()
 endfunction
 
 function! s:escape_for_regexp(str)
-  return escape(a:str, '^$.*?/\[]')
+  return escape(a:str, '^$.*?/\[]~')
 endfunction
 
 function! s:escape_filename_for_regexp(filename)
