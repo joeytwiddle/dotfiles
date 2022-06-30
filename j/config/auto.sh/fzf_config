@@ -56,6 +56,17 @@ fo() {
   fi
 }
 
+# Fuzzy Edit Global
+# Like fe but gets the files from a global locate
+feg() {
+  local files
+  IFS=$'\n' files=($(locate -b -i "$@" | filesonly | fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --multi --select-1 --exit-0))
+  [[ -n "$files" ]] && "$FZF_EDITOR" "${files[@]}"
+}
+# But I probably type 'e' first, before deciding I need to do a global search
+alias eglobal='feg'
+alias elocate='feg'
+
 # fd - cd to selected subdirectory
 fd() {
   local dir
