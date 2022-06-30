@@ -120,7 +120,9 @@ frgi() {
   local _
   if [[ -n "$result" ]]
   then
-    IFS=':' read filename lineno _ <<< "$result"
+    IFS=':' read -r filename lineno _ <<< "$result"
+    # Vim can accept line-number with +99
+    # But if your editor cannot, then you had better remove the + argument
     verbosely "$FZF_EDITOR" +"$lineno" "$filename"
   fi
 }
@@ -129,20 +131,19 @@ alias rgif=frgi
 # Fuzzy Git Checkout
 fgco() {
   #git branch | fzf --no-sort --tac --query="$1" | xargs git checkout
-  #git_branch_most_recent_last | fzf --no-sort --tac --query="$1" | xargs git checkout
 
   local result
-  result="$(git_branch_most_recent_last | fzf --no-sort --tac --query="$1")"
+  result="$(git_branch_most_recent_last_with_info | fzf --no-sort --tac --query="$1")"
 
   local branch
   local _
   if [[ -n "$result" ]]
   then
-    IFS=' ' read branch _ <<< "$result"
+    IFS=' ' read -r branch _ <<< "$result"
     git checkout "$branch"
   fi
 }
-git_branch_most_recent_last() {
+git_branch_most_recent_last_with_info() {
   #git for-each-ref --sort=committerdate refs/heads --format="%(refname:short)"
   git for-each-ref --sort=committerdate refs/heads --format="%(refname:short) %(committerdate:relative) (%(authorname)) - %(subject)" | columnise-clever -ignore '[^ ]* *[^ ]* *[^ ]*'
 }
