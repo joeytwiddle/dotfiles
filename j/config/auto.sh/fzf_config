@@ -109,3 +109,18 @@ alias cdg=fcdglobal
 # But "CD Fuzzy" is where my mind went
 #alias cdf=fcdglobal
 # Let's just try to use fcd
+
+# Fuzzy Ripgrep Ignoring-case
+frgi() {
+  local result
+  IFS=$'\n' result="$(rg -i --line-number "$@" | cat | fzf-tmux --no-sort --tac --delimiter=: --nth=2..)"
+
+  local filename
+  local lineno
+  local _
+  if [[ -n "$result" ]]
+  then
+    IFS=':' read filename lineno _ <<< "$result"
+    verbosely "$FZF_EDITOR" +"$lineno" "$filename"
+  fi
+}
