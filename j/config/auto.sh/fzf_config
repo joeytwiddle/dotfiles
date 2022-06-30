@@ -124,8 +124,26 @@ frgi() {
     verbosely "$FZF_EDITOR" +"$lineno" "$filename"
   fi
 }
+alias rgif=frgi
 
 # Fuzzy Git Checkout
 fgco() {
-  git branch | fzf | xargs git checkout
+  #git branch | fzf --no-sort --tac --query="$1" | xargs git checkout
+  #git_branch_most_recent_last | fzf --no-sort --tac --query="$1" | xargs git checkout
+
+  local result
+  result="$(git_branch_most_recent_last | fzf --no-sort --tac --query="$1")"
+
+  local branch
+  local _
+  if [[ -n "$result" ]]
+  then
+    IFS=' ' read branch _ <<< "$result"
+    git checkout "$branch"
+  fi
 }
+git_branch_most_recent_last() {
+  #git for-each-ref --sort=committerdate refs/heads --format="%(refname:short)"
+  git for-each-ref --sort=committerdate refs/heads --format="%(refname:short) %(committerdate:relative) (%(authorname)) - %(subject)" | columnise-clever -ignore '[^ ]* *[^ ]* *[^ ]*'
+}
+alias gcof=fgco
