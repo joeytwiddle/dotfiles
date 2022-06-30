@@ -19,7 +19,12 @@ fi
 
 export FZF_FILE_PREVIEW_COMMAND="cat {}"
 if which bat >/dev/null 2>&1
-then FZF_FILE_PREVIEW_COMMAND="bat -f {}"
+#then FZF_FILE_PREVIEW_COMMAND="bat -f --style='header,header-filename,header-filesize,changes,grid' {}"
+#then FZF_FILE_PREVIEW_COMMAND="file {} | highlight -bold '^[^:]*' white; echo \"\$(filesize {}) bytes\"; echo; bat -f --style='plain' {}"
+then FZF_FILE_PREVIEW_COMMAND="file {} | highlight ':.*' grey; echo \"\$(filesize {}) bytes\"; echo; bat -f --style='plain' {}"
+fi
+if which show_file_contents >/dev/null 2>&1
+then FZF_FILE_PREVIEW_COMMAND="file {} | highlight ':.*' grey; echo \"\$(filesize {}) bytes\"; echo; show_file_contents {}"
 fi
 
 export FZF_DIRECTORY_PREVIEW_COMMAND="echo {}/; echo; ls -lartFh --color=always {}/"
