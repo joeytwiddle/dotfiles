@@ -67,8 +67,8 @@ feg() {
 alias eglobal='feg'
 alias elocate='feg'
 
-# fd - cd to selected subdirectory
-fd() {
+# fcd - fuzzy cd to selected subdirectory
+fcdlocal() {
   local dir
   dir="$(
     find ${1:-.} -mindepth 1 -type d \
@@ -85,14 +85,14 @@ fd() {
   then cd "$dir"
   fi
 }
-
+alias fcd=fcdlocal
 # "CD Local" is where my mind went
-alias cdl=fda
+alias cdl=fcdlocal
 
 # fcd - fuzzy cd from anywhere
 # ex: fcd <parts_of_filename>...
 # With some code from https://superuser.com/a/875314/52910
-fcd() {
+fcdglobal() {
   local dir
 
   #dir="$(/usr/bin/locate -0 -b -A "$@" | xargs -0 -I {} bash -c '[ -d "{}" ] && echo "{}"' | fzf -0 -1)"
@@ -103,8 +103,9 @@ fcd() {
   then cd "$dir"
   fi
 }
+alias fcdg=fcdglobal
 # Change Directory Globally
-#alias cdg=fcd
+alias cdg=fcdglobal
 # But "CD Fuzzy" is where my mind went
-#alias cdf=fcd
+#alias cdf=fcdglobal
 # Let's just try to use fcd
