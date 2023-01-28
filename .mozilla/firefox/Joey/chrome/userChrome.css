@@ -48,13 +48,12 @@ You can get some inspiration for styling here: https://www.reddit.com/r/FirefoxC
 }
 */
 /* Small tabs, just enough for favicons */
-.tabbrowser-tab[fadein] {
-    /* This is as narrow as I can make the tabs, without messing things up */
-    min-width: 36px !important;
-    /* If I make the tabs this narrow, then the favicons of normal unpinned tabs appear off-center. */
-    /* But if I use padding rules below to try to centralise the favicons, that works but screw up the pinned tabs! See SCREWS_UP_PINNED_TABS */
-    /* If I could apply the padding rules to the unpinned tabs only, that would probably work fine. */
-    /* min-width: 28px !important; */
+.tabbrowser-tab[fadein]:not([pinned]) {
+    /* This is as narrow as I can make the tabs, without too much risk of messing things up */
+    /* min-width: 36px !important; */
+    /* I like to have them this narrow, but it requires some fixes elsewhere, to centralise the favicons. */
+    /* And we need to be careful, because these fixes can mess up pinned tabs. */
+    min-width: 28px !important;
 }
 /*
 :root {
@@ -65,12 +64,11 @@ You can get some inspiration for styling here: https://www.reddit.com/r/FirefoxC
 }
 */
 /* Centralise the favicon on the small tabs */
-.tabbrowser-tab[fadein]:not([selected]) .tab-content {
+.tabbrowser-tab[fadein]:not([selected]):not([pinned]) .tab-content {
     /* This looks bad for large tabs! */
     /* padding: 0 0px 0 7px !important; */
     /* So instead we put margins on the elements inside the content */
-    /* SCREWS_UP_PINNED_TABS */
-    /* padding: 0 !important; */
+    padding: 0 4px !important;
 }
 .tabbrowser-tab[fadein]:not([selected]) .tab-icon-image {
     margin-left: 7px !important;
