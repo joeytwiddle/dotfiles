@@ -110,8 +110,12 @@ It can also be useful to search the source code: https://github.com/mozilla/geck
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
     margin-top: 0 !important;
-    /* BUG: Reducing the top and bottom margins does not leave much space for the green dot that appears on pinned tabs with pending messages. */
-    /* Unfortunately any margin we do add will separate the tab from the toolbar, which we do not want. */
+}
+/* Reducing the top and bottom margins above does not leave much space for the green dot that appears on pinned tabs with pending notifications (which Firefox detects when their title changes). */
+/* But we can move that dot down a bit */
+.tabbrowser-tab:is([image], [pinned]) > .tab-stack > .tab-content[attention]:not([selected="true"]), .tabbrowser-tab > .tab-stack > .tab-content[pinned][titlechanged]:not([selected="true"]), #firefox-view-button[attention] {
+    background-image: radial-gradient(circle, var(--tab-attention-icon-color), var(--tab-attention-icon-color) 2px, transparent 2px) !important;
+    background-position: center bottom calc(2.5px + var(--tabs-navbar-shadow-size)) !important;
 }
 #TabsToolbar .tabbrowser-tab {
     /* Remove the black border on either side of the selected tab */
