@@ -110,6 +110,8 @@ It can also be useful to search the source code: https://github.com/mozilla/geck
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
     margin-top: 0 !important;
+    /* BUG: Reducing the top and bottom margins does not leave much space for the green dot that appears on pinned tabs with pending messages. */
+    /* Unfortunately any margin we do add will separate the tab from the toolbar, which we do not want. */
 }
 #TabsToolbar .tabbrowser-tab {
     /* Remove the black border on either side of the selected tab */
@@ -456,6 +458,24 @@ image.tab-icon-sound {
 #PlacesToolbarItems > .bookmark-item:-moz-lwtheme-brighttext {
     /* text-shadow: 0 0 1px #0009 !important; */
     text-shadow: 0 0 2px #000a !important;
+}
+
+
+
+/* Some fixes for pinned tabs */
+
+/* Remove the unwanted shadow below the selected pinned tab */
+.tabbrowser-tab {
+    overflow-clip-margin: 0 !important;
+}
+/* #TabsToolbar #firefox-view-button[open] > .toolbarbutton-icon, #tabbrowser-tabs:not([noshadowfortests]) .tab-background:is([selected], [multiselected]) {
+    box-shadow: none !important;
+} */
+
+/* Make pinned tabs stand out from normal tabs, by darkening their background a little */
+/* (This does not apply to the selected pinned tab */
+.tabbrowser-tab[pinned] {
+    background: #0003 !important;
 }
 
 
