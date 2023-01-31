@@ -428,6 +428,11 @@ endif
 " 0 = size to fit all buffers, otherwise the value is number of lines for
 " buffer. [Depreciated use g:miniBufExplMaxSize]
 "
+" Joey: Although this is quite a nice feature, it needs improvement: It needs
+" to scroll up/down so that the currently focused buffername is always in
+" view. For this reason, I currently prefer to use g:miniBufExplWrap = 0
+"
+"
 if !exists('g:miniBufExplMaxHeight')
   let g:miniBufExplMaxHeight = 0
 endif 
@@ -470,6 +475,15 @@ endif
 "
 if !exists('g:miniBufExplVSplit')
   let g:miniBufExplVSplit = 0
+endif
+
+" }}}
+" Wrap the window? {{{
+" Enabling this will mean your explorer will only ever use 1 line, but it will
+" scroll left and right to keep your current tab in view.
+"
+if !exists('g:miniBufExplWinWrap')
+  let g:miniBufExplWinWrap = 1
 endif
 
 " }}}
@@ -776,6 +790,12 @@ function! <SID>StartExplorer(sticky, delBufNum)
   " them off for the MBE window
   setlocal foldcolumn=0
   setlocal nonumber
+
+  if g:miniBufExplWinWrap
+    setlocal wrap
+  else
+    setlocal nowrap
+  endif
 
   if has("syntax")
 
