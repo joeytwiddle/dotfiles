@@ -23,9 +23,11 @@ inoremap <buffer> {<CR> {<CR><CR>}<Up><Esc>cc
 "         :s clobbers search (@/) so we may want to store and restore it.
 let foundSemicolon = search('; *$', 'nw') > 0
 if foundSemicolon
-  vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_[<C-R>=expand('%:t')<Enter>] <C-R>":_QUOTE_<Esc>:silent! s/"/\\"/g <Bar> s/_QUOTE_/"/g<CR>A, <C-R>");<Esc>
+  "vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_[<C-R>=expand('%:t')<Enter>] <C-R>":_QUOTE_<Esc>:silent! s/"/\\"/g <Bar> s/_QUOTE_/"/g<CR>A, <C-R>");<Esc>
+  vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_<C-R>":_QUOTE_<Esc>:silent! s/"/\\"/g <Bar> s/_QUOTE_/"/g<CR>A, <C-R>");<Esc>
 else
-  vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_[<C-R>=expand('%:t')<Enter>] <C-R>":_QUOTE_<Esc>:silent! s/'/\\'/g <Bar> s/_QUOTE_/'/g<CR>A, <C-R>")<Esc>
+  "vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_[<C-R>=expand('%:t')<Enter>] <C-R>":_QUOTE_<Esc>:silent! s/'/\\'/g <Bar> s/_QUOTE_/'/g<CR>A, <C-R>")<Esc>
+  vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_<C-R>":_QUOTE_<Esc>:silent! s/'/\\'/g <Bar> s/_QUOTE_/'/g<CR>A, <C-R>")<Esc>
 endif
 " viW is *sometimes* preferable, e.g. to catch 'obj.prop[i]' but more often than not it grabs too much, e.g. it catches 'obj.prop[i]);'
 nmap <buffer> <Leader>log viw<Leader>log
@@ -38,8 +40,8 @@ nmap <buffer> <Leader>F Vip<Leader>F
 vnoremap <buffer> <Leader>V sunnamedVar<Esc>Ovar unnamedVar = <Esc>pa;<Esc>
 
 " Select entire function from visual mode ("v in function")
-"vnoremap if <Esc>?^\s*function<CR>v/{<CR>%o
-vnoremap if <Esc>?\<function\>\s*[A-Za-z0-9_$]*\s*(<CR>v/{<CR>%o
+"vnoremap af <Esc>?^\s*function<CR>v/{<CR>%o
+vnoremap af <Esc>?\<function\>\s*[A-Za-z0-9_$]*\s*(<CR>v/{<CR>%o
 
 " Like WebStorm, when closing a block, indent all the lines inbetween
 " Note that this will also act on '}'s in strings.  It might be inconvenient.
@@ -178,19 +180,21 @@ endfunction
 function! s:LoadNodeModule()
   let cfile = expand("<cfile>")
   let fname = cfile
+  " See: https://www.npmjs.com/package/common-js-file-extensions
+  let extensions = ['', '.js', '.jsx', '.mjs', '.ts', '.tsx', '.json', '.es', '.es6']
   if !filereadable(fname)
-    let fname = s:SeekFile([expand("%:h"), '.', './node_modules'], ['', '.js'], cfile)
+    let fname = s:SeekFile([expand("%:h"), '.', './node_modules'], extensions, cfile)
     " Node looks in <package>/index.js first
     if !filereadable(fname)
-      let fname = s:SeekFile(['./node_modules/' . cfile . '/'], ['', '.js'], 'index.js')
+      let fname = s:SeekFile(['./node_modules/' . cfile . '/'], extensions, 'index')
     endif
     " But <package>/main.js is quite a common location
     if !filereadable(fname)
-      let fname = s:SeekFile(['./node_modules/' . cfile . '/'], ['', '.js'], 'main.js')
+      let fname = s:SeekFile(['./node_modules/' . cfile . '/'], extensions, 'main')
     endif
     " And <package>/lib/index.js is quite a common location
     if !filereadable(fname)
-      let fname = s:SeekFile(['./node_modules/' . cfile . '/lib'], ['', '.js'], 'index.js')
+      let fname = s:SeekFile(['./node_modules/' . cfile . '/lib'], extensions, 'index')
     endif
     " TODO: In fact the entry point file location is configurable in package.json.
     " We could try to extract it: node --eval 'fs=require("fs");data=JSON.parse(fs.readFileSync("./package.json"));console.log(data.bin)'
