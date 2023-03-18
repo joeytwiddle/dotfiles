@@ -51,8 +51,8 @@
 	" :set listchars=tab:\|\ ,trail:$
 	" :set listchars=tab:\\_,trail:$
 	" :set listchars=tab:\|-,trail:$
-	" :set listchars=tab:\>-,trail:$
-	:set listchars=tab:>-,trail:$,precedes:<,extends:>
+	" :set listchars=tab:>-,trail:$
+	:set listchars=tab:\|\ ,trail:$,precedes:<,extends:>
 	" :set listchars+=precedes:<,extends:>
 
 	"" showbreak defines how wrapped lines are indented when wrap is on.
