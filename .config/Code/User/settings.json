@@ -2,42 +2,17 @@
 // vim: filetype=javascript
 // prettier-ignore
 {
-    //"git.ignoreLegacyWarning": true,
-
-    "workbench.colorTheme": "Gentle Mary",
-
-    "window.zoomLevel": -0.8,
-
-    // For macOS
-    //"editor.fontFamily": "Lucida Console, Lucida Sans Typewriter, Menlo, Monaco, 'Courier New', monospace",
-    // Looks a lot like WebStorm
-    //"editor.fontSize": 11,
-    //"editor.fontSize": "11.4",
-    //"editor.lineHeight": 14,
-    //"editor.lineHeight": 13,
-
-    //"vim.easymotionMarkerFontFamily": "Lucida Console, Lucida Sans Typewriter, Menlo, Monaco, 'Courier New', monospace",
-    //"vim.easymotionMarkerFontSize": "11",
-    //"vim.easymotionMarkerYOffset": -1,
-
-    // For Linux
-    //"editor.fontFamily": "Envy Code S12",
-    //"editor.fontSize": "13",
-    //"editor.lineHeight": "15",
-
-    // For Linux
-    // Hasklug is ok, but we kept having issues with incorrect rendering width (which could be resolved by cycling font sizes)
-    // Oh Lucida Sans Typewriter has that problem too!
-    // 'Hasklug Joey Mono',
     "editor.fontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    //"editor.fontFamily": "'Hasklug Nerd Font', 'JetBrains Mono'",
     "editor.fontSize": 12,
+    //"editor.fontWeight": 500,
     //"editor.fontFamily": "'sans'",
     //"editor.fontSize": 12.7,
     "editor.lineHeight": 14,
 
-    "vim.easymotionMarkerFontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
-    "vim.easymotionMarkerFontSize": "12",
-    "vim.easymotionMarkerYOffset": -1,
+    //"vim.easymotionMarkerFontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    //"vim.easymotionMarkerFontSize": "12",
+    //"vim.easymotionMarkerYOffset": -1,
 
     // For macOS
     //"terminal.integrated.fontSize": 11,
@@ -68,14 +43,15 @@
     // Limit the number of editors to keep open
     "workbench.editor.limit.enabled": true,
     "workbench.editor.limit.perEditorGroup": true,
-    "workbench.editor.limit.value": 8,
-    "workbench.editor.wrapTabs": false,
+    "workbench.editor.limit.value": 11,
+    "workbench.editor.wrapTabs": true,
 
     // Displays extra info (like 'M' or 'U' or a number) in the tab if the file has uncommitted changes
     "workbench.editor.decorations.badges": true,
 
     // I find it easier to see the tree structure with a wider indent (default 8)
-    "workbench.tree.indent": 20,
+    "workbench.tree.indent": 12,
+    //"workbench.tree.indent": 20,
 
     // On startup, open all windows that were open in previous session
     "window.restoreWindows": "all",
@@ -118,6 +94,12 @@
         "strings": false
     },
 
+    // Emmet abbreviations were getting in the way of more useful suggestions
+    // We can use this to move them down the list
+    // Although it will of course affect all other types of snippets too
+    "emmet.showSuggestionsAsSnippets": true,
+    "editor.snippetSuggestions": "bottom",
+
     // Intellisense settings, from https://code.visualstudio.com/docs/editor/intellisense#_customizing-intellisense
     // Controls whether suggestions should be accepted on commit characters. For example, in JavaScript, the semi-colon (`;`) can be a commit character that accepts a suggestion and types that character.
     //"editor.acceptSuggestionOnCommitCharacter": true,
@@ -128,7 +110,7 @@
     // Controls if suggestions should automatically show up when typing trigger characters
     //"editor.suggestOnTriggerCharacters": true,
     // Controls if pressing tab inserts the best suggestion and if tab cycles through other suggestions
-    //"editor.tabCompletion": "off",
+    "editor.tabCompletion": "on",
     // Controls whether sorting favours words that appear close to the cursor
     //"editor.suggest.localityBonus": true,
     // Controls how suggestions are pre-selected when showing the suggest list
@@ -151,6 +133,24 @@
         //"editor.selectionHighlightBackground": "#449059",
         //"editor.selectionHighlightForeground": "#ffffff",
 
+        // Highlights all/other occurrences of the word under the cursor
+        //"editor.wordHighlightBackground": "#006600aa",
+        //"editor.wordHighlightStrongBackground": "#006600aa",
+        //"editor.wordHighlightBorder": "#006600ff",
+        //"editor.wordHighlightStrongBorder": "#006600ff",
+
+        // For the active search result
+        "editor.findMatchBackground": "#0044bbaa",
+        "editor.findMatchBorder": "#ffff00dd",
+        // For the other seach results
+        // I turned off the border because it made code difficult to read, and I don't know any way to turn off the highlighting without actually clearing the search.
+        "editor.findMatchHighlightBackground": "#0044bbaa",
+        "editor.findMatchHighlightBorder": "#ffff0000",
+
+        // Looking for these ... !
+        "editor.findRangeHighlightBackground": "#00ff00",
+        "editor.findRangeHighlightBorder": "#ff00ff",
+
         //"editorWarning.foreground": "#dd8800",
         "editorWarning.foreground": "#ffdd0099",
         "editorError.foreground": "#ff4444",
@@ -161,6 +161,13 @@
 
         // Make folded (collapsed) lines clear, Vim style
         "editor.foldBackground": "#0000ff80",
+
+        //"editorBracketMatch.border": "#00000000",
+        //"editorBracketMatch.background": "#111111",
+        "editorBracketMatch.border": "#00000000",
+        "editorBracketMatch.background": "#0000ffbb",
+        //"editorBracketMatch.border": "#0000ffff",
+        //"editorBracketMatch.background": "#00000000",
 
         // For usernamehw.errorlens
         //"errorLens.errorBackground": "#ff00001c",
@@ -174,7 +181,7 @@
         //"errorLens.errorForeground": "#888888ff",
         "errorLens.errorForeground": "#ff888855",
         "errorLens.warningForeground": "#555555ff",
-        //"errorLens.warningForeground": "#ffdd2222",
+        //"errorLens.warningForeground": "#ffaa0055",
         "errorLens.infoForeground": "#555555ff",
         "errorLens.hintForeground": "#555555ff",
         //"errorLens.errorForeground": "#88888800",
@@ -187,7 +194,9 @@
         //"editorGutter.background": "#303030",
         //"editor.background": "#1c2426",
 
-        //"scrollbarSlider.background": "#88888844",
+        "scrollbarSlider.background": "#88888866",
+        "scrollbarSlider.hoverBackground": "#88888888",
+        "scrollbarSlider.activeBackground": "#88888888",
 
         "list.activeSelectionBackground": "#0000002a",
         "list.inactiveSelectionBackground": "#0000002a",
@@ -218,21 +227,20 @@
     },
 
     // It's probably better to enable these settings in the .vscode folder local to each workspace/project
+    // In fact, the best way is to add `@ts-check` to all JS files.
     // Use TypeScript to check JSDocs in Javascript files
     // Old: "javascript.implicitProjectConfig.checkJs": true,
-    "js/ts.implicitProjectConfig.checkJs": true,
+    // New:
+    // Disabled for now, to reduce CPU gobbling
+    //"js/ts.implicitProjectConfig.checkJs": true,
     // For more on that: https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/
     //"javascript.implicitProjectConfig.experimentalDecorators": false,
     // Scan entire project for problems (not just open files) https://stackoverflow.com/q/55201424/99777
-    // (Heavy on CPU, didn't really help me)
-    //"typescript.tsserver.experimental.enableProjectDiagnostics": true,
+    // This is heavy on CPU, but on some projects, it may give you an early warning about errors
+    "typescript.tsserver.experimental.enableProjectDiagnostics": true,
 
     // Default: languageDefined
     "editor.autoClosingBrackets": "never",
-
-    // These built-in feature will auto create the end tag after we type the start tag: <button>|</button>
-    // I find it often unhelpful, e.g. if I am trying to put <div>...</div> around existing markup, so I disable it
-    "html.autoClosingTags": false,
     "javascript.autoClosingTags": false,
     "typescript.autoClosingTags": false,
 
@@ -242,6 +250,12 @@
 
     "javascript.updateImportsOnFileMove.enabled": "always",
     "typescript.updateImportsOnFileMove.enabled": "always",
+
+    "files.associations": {
+        "*.uc.jpp": "unrealscript",
+        "*.js.jpp": "javascript",
+        "*.spp*": "asm"
+    },
 
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -272,6 +286,10 @@
 
     // For ESLint
     //"eslint.enable": true,
+    //"eslint.debug": true,
+    //"eslint.run": "onSave",
+    "eslint.format.enable": true,
+    "eslint.lintTask.enable": true,
     // Is this too heavy?
     //"autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
     // Tell the eslint plugin to also check TypeScript files
@@ -330,7 +348,7 @@
         "foreground": "#dd8800",
         // "background": "white",
         "opacity": 50,
-        "iconColour": "blue"
+        "iconColour": "#25f"
     },
     "todo-tree.general.tags": [
         "TODO",
@@ -340,7 +358,9 @@
         "BUG",
         "@bug",
         "CONSIDER",
-        "@consider"
+        "@consider",
+        "[ ]",
+        "[x]"
     ],
     /*
     "todo-tree.highlights.customHighlight": {
@@ -355,6 +375,8 @@
         },
     },
     */
+    /* This was added by the plugin itself */
+    "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
 
     // For TODO Highlight
     /*
@@ -395,6 +417,7 @@
     "vim.highlightedyank.enable": true,
     "vim.normalModeKeyBindingsNonRecursive": [
         // VSCode's undo has some issues: namely that it is not atomic - it sometimes affects multiple lines (which could include a line off-screen!)
+        // Discussion here: https://github.com/VSCodeVim/Vim/issues/2007
         // So let's use VSCode's built-in undo for now
         { "before": [ "u" ], "commands": ["undo"] },
         { "before": [ "C-R" ], "commands": ["redo"] },
@@ -409,6 +432,7 @@
         //{ "before": [ "=", "=" ] , "commands": [ "editor.action.formatDocument" ], "when": "editorTextFocus && !editorReadonly" },
 
         // vim-unnimpaired https://github.com/tpope/vim-unimpaired/blob/master/doc/unimpaired.txt
+        // We are collecting some of these here: https://github.com/VSCodeVim/Vim/issues/3263
         { "before": [ "[", " " ], "after": [ "O", "<Esc>" ] },
         { "before": [ "]", " " ], "after": [ "o", "<Esc>" ] },
         { "before": [ "[", "b" ], "commands": [ "workbench.action.previousEditor" ] },
@@ -419,6 +443,8 @@
         { "before": [ "]", "q" ], "commands": [ "search.action.focusNextSearchResult" ], "when": "hasSearchResult" },
         { "before": [ "[", "f" ], "commands": [ "workbench.view.explorer", "list.focusUp", "explorer.openAndPassFocus" ] },
         { "before": [ "]", "f" ], "commands": [ "workbench.view.explorer", "list.focusDown", "explorer.openAndPassFocus" ] },
+        { "before": [ "[", "[", "f" ], "commands": [ "workbench.view.explorer", "list.focusUp", "list.focusUp", "explorer.openAndPassFocus" ] },
+        { "before": [ "]", "]", "f" ], "commands": [ "workbench.view.explorer", "list.focusDown", "list.focusDown", "explorer.openAndPassFocus" ] },
         { "before": [ "]", "e" ], "commands": [ "editor.action.moveLinesDownAction" ], "when": "editorTextFocus" },
         { "before": [ "[", "e" ], "commands": [ "editor.action.moveLinesUpAction" ], "when": "editorTextFocus" },
         { "before": [ "[", "g" ], "commands": [ "workbench.action.editor.previousChange" ] },
@@ -436,7 +462,8 @@
         // revealDefinition may work more often than goToImplementation
         //{ "before": [ "C-]" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
         { "before": [ "g", "d" ], "commands": [ "editor.action.revealDefinition" ], "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor" },
-        { "before": [ "g", "D" ], "commands": [ "editor.action.goToImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !isInEmbeddedEditor" },
+        //{ "before": [ "g", "D" ], "commands": [ "editor.action.goToImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !isInEmbeddedEditor" },
+        { "before": [ "g", "D" ], "after": [ "*", "g", "g", "n" ] },
         { "before": [ "g", "I" ], "commands": [ "references-view.findImplementations" ], "when": "editorHasReferenceProvider" },
         { "before": [ "g", "u" ], "commands": [ "editor.action.goToReferences" ], "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
         { "before": [ "g", "U" ], "commands": [ "references-view.find" ], "when": "editorHasReferenceProvider" },
@@ -445,11 +472,20 @@
         { "before": [ "g", "Leader", "H" ], "commands": [ "editor.action.peekImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
         { "before": [ "g", "Leader", "Leader", "h" ], "commands": [ "editor.action.peekTypeDefinition" ] },
 
+        // Things which surround plugin is supposed to do, but isn't doing
+        //{ "before": [ "c", "s", "w", "`" ], "after": [ "e", "b", "i", "`", "<Escape>", "e", "a", "`", "<Escape>" ] },
+        //{ "before": [ "c", "s", "w", "`" ], "after": [ "v", "i", "w", "S", "`" ] },
+        { "before": [ "c", "s", "w" ], "after": [ "v", "i", "w", "S" ] },
+        { "before": [ "c", "s", "W" ], "after": [ "v", "i", "W", "S" ] },
+
         // My custom keys
         // As well as clearing the highlight, we also want Ctrl-L to hide any current popups
         // We tried "after": [ "S-Esc" ] and [ "S-Escape" ] but they didn't work.
         // So instead we list the commands directly (but there are many!)
-        { "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen" ] },
+        // Since clearSearchResults focuses the search window, I call focusActiveEditorGroup afterwards
+        // To stop the highlighting of search text in the editor, "search.action.clearSearchResults" works, but it unhelpful if you later want to continue the search
+        // What does work is unfocusing the search sidebar, which we do here with: "workbench.view.explorer", "workbench.action.focusActiveEditorGroup"
+        { "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen", "workbench.view.explorer", "workbench.action.focusActiveEditorGroup" ] },
         // We save the current file in order to pin it.  We save all files, because that's what I really want Ctrl-S to do
         { "before": [ "<C-S>" ], "commands": [ "workbench.action.files.save", "workbench.action.files.saveAll", "workbench.action.focusActiveEditorGroup" ] },
         // I also put a C-S keybinding in keybindings.json, and that one worked well.
@@ -475,12 +511,14 @@
         // Previously: "workbench.action.togglePanel" but this only works when the panel opens below the editor
         { "before": [ "<Leader>", "/" ], "commands": [ "workbench.action.findInFiles" ] },
         { "before": [ "<Leader>", "*" ], "after": [ "v", "i", "w" ], "commands": [ "workbench.action.findInFiles" ] },
-        { "before": [ "<Leader>", "R" ], "commands": [ "editor.action.rename" ], "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly" },
+        { "before": [ "<Leader>", "r" ], "commands": [ "editor.action.rename" ], "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly" },
+        { "before": [ "<Leader>", "R" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "editor.action.startFindReplaceAction" ] },
         { "before": [ "<Leader>", "w" ], "commands": [ "editor.action.toggleWordWrap" ] },
-        { "before": [ "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "editor.action.startFindReplaceAction" ] },
         { "before": [ "<Leader>", "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "workbench.action.replaceInFiles" ] },
         { "before": [ "<Leader>", "a" ], "commands": [ "gitlens.toggleLineBlame" ] },
         { "before": [ "<Leader>", "A" ], "commands": [ "gitlens.toggleFileBlame" ] },
+        { "before": [ "<Leader>", "t" ], "commands": [ "workbench.action.gotoSymbol" ] },
+        { "before": [ "<Leader>", "f" ], "commands": [ "workbench.action.toggleSidebarVisibility" ] },
 
         { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "i", "w", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
         { "before": [ "<Leader>", "L", "o", "g" ], "after": [ "\"", "l", "y", "i", "W", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
@@ -513,7 +551,8 @@
 
     "vim.easymotionMarkerBackgroundColor": "#000",
     "vim.easymotionMarkerForegroundColorOneChar": "#ff0000",
-    "vim.easymotionMarkerForegroundColorTwoChar": "#ffb400",
+    "vim.easymotionMarkerForegroundColorTwoCharFirst": "#ffb400",
+    "vim.easymotionMarkerForegroundColorTwoCharSecond": "#ffb400",
 
     // For ZenTabs
     //"workbench.editor.enablePreviewFromQuickOpen": false,
@@ -563,5 +602,38 @@
     // VSCode keeps adding these.  I'm not sure what to do with them, so I'll just commit them for now.
     "editor.suggestSelection": "first",
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "editor.tabSize": 2,
+    "editor.cursorStyle": "line",
+    "editor.insertSpaces": false,
+    "editor.lineNumbers": "on",
+    "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
+    "editor.wordWrap": "off",
+    "workbench.colorTheme": "Gentle Mary",
 
+    // When using Ctrl-P to select a file, open with the same search that was used last time
+    // This isn't helpful if you also use Ctrl-P to cycle through recently focused files
+    //"workbench.quickOpen.preserveInput": true,
+
+    // Stop asking me if I want to update go tools, just do it
+    "go.toolsManagement.autoUpdate": true,
+    "editor.suggest.preview": true,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
+    "editor.cursorBlinking": "solid",
+    "debug.javascript.autoAttachFilter": "smart",
+    "gitlens.plusFeatures.enabled": false,
+    "html.autoCreateQuotes": false,
+    "html.autoClosingTags": false,
+    "errorLens.enabledDiagnosticLevels": [
+        "info",
+        "hint",
+        "warning",
+        "error"
+    ],
+    "trunk.trunkGrayOutNonBlockingIssues": false,
+    "window.zoomLevel": -0.8,
+    "errorLens.enabled": true,
+    // New Settings
+    //"editor.guides.bracketPairsHorizontal": false,
+    //"editor.guides.highlightActiveBracketPair": false,
 }
