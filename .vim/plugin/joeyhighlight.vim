@@ -76,6 +76,7 @@ function! Joeyhighlight()
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#660066 guifg=white
 	"" This is what I prefer, but I may have been using the above to ensure b/w terminals get reverse?
 	highlight Visual ctermbg=Magenta ctermfg=White cterm=bold gui=none guibg=#660066 guifg=white
+	"highlight Visual guifg=#449059 guifg=white
 	"" New orange!  (In GUI and hicolor term only)
 	"highlight Visual guibg=#ee9900 guifg=white
 	highlight Visual guibg=#cc7700 guifg=white
@@ -313,8 +314,14 @@ function! Joeyhighlight()
 	" Ubuntu's Vim made the PMenu look naff, so I filled out all the colors
 	"hi Pmenu ctermbg=magenta ctermfg=white cterm=bold guibg=#bb00bb guifg=white gui=bold
 	" I lightened the background for extra contrast, but it looked a bit faded, so I went back to full blue instead.
-	hi Pmenu ctermbg=blue ctermfg=white cterm=bold guibg=#0000ff guifg=#eeeeee gui=bold
-	hi Pmenusel ctermbg=black ctermfg=white cterm=bold guibg=#000066 guifg=white gui=bold
+	"hi Pmenu ctermbg=blue ctermfg=white cterm=bold guibg=#0000ff guifg=#eeeeee gui=bold
+	"hi Pmenusel ctermbg=black ctermfg=white cterm=bold guibg=#000066 guifg=white gui=bold
+	" Let's try in reverse now, with a brighter background on the current selection, and tweak a bit
+	hi Pmenu ctermbg=black ctermfg=white cterm=bold guibg=#000066 guifg=#cccccc gui=bold
+	hi Pmenusel ctermbg=blue ctermfg=white cterm=bold guibg=#0000ff guifg=#ffffff gui=bold
+	" Grey
+	"hi Pmenu ctermbg=238 ctermfg=white cterm=bold guibg=#444444 guifg=#cccccc gui=bold
+	"hi Pmenusel ctermbg=243 ctermfg=white cterm=bold guibg=#767676 guifg=#ffffff gui=bold
 
 	highlight CursorLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
 	" But if possible, I prefer it a dark green
