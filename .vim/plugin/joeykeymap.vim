@@ -45,6 +45,17 @@ nmap ]C :cope<CR><C-PageDown><C-w>p
 "nmap ]gc :cope<CR><C-PageDown><C-w>p
 " The return to previous window does not make much sense if we were already in the quickfix window!
 
+" In VSCode, [c and ]c work on diffs only, so we use [g and ]g to step through Git changes
+" To make [g and ]g work similarly in Vim, we just map them to [c and ]c (thanks to GitGutter)
+"nmap [g [c
+"nmap ]g ]c
+" Jump between changed hunks
+nmap ]g <Plug>(GitGutterNextHunk)
+nmap [g <Plug>(GitGutterPrevHunk)
+nmap ]c <Plug>(GitGutterNextHunk)
+nmap [c <Plug>(GitGutterPrevHunk)
+" Note: Polyglot will sometimes overwrite `[c` and `]c` to jump between Markdown headers
+
 "" Sometimes I want to re-arrange the order of the buffers in my list.  After
 "" years of nothing, I now at least found a way to push buffers to the end, by
 "" completely removing them first with bwipeout.
@@ -113,11 +124,12 @@ nmap Ob <C-W>j
 nmap Od <C-W>h
 nmap Oc <C-W>l
 
-"" For Linux console (and I think also xterm in Fluxbox on tomato's Ubuntu 12.04):
-nmap [A <C-W>k
-nmap [B <C-W>j
-nmap [D <C-W>h
-nmap [C <C-W>l
+"" For Linux console (and I think also xterm in Fluxbox on tomato's Ubuntu 12.04).
+"" But this was no good on my Manjaro.  It was capturing normal Left and Right arrows!
+"nmap [A <C-W>k
+"nmap [B <C-W>j
+"nmap [D <C-W>h
+"nmap [C <C-W>l
 
 "" Inside screen on pea:
 nmap [1;5A <C-W>k
@@ -146,7 +158,9 @@ nmap [1;5C <C-W>l
 "nmap [w <C-w><Up>
 "nmap ]W <C-w><Right>
 "nmap [W <C-w><Left>
-nmap ]w <C-w>w
+" This started acting weird in early 2020, but <C-w><C-w> works normally
+"nmap ]w <C-w>w
+nmap ]w <C-w><C-w>
 nmap [w <C-w>W
 nmap ]W <C-w><Down>
 nmap [W <C-w><Up>
@@ -224,7 +238,8 @@ vnoremap <C-J> 2<C-E>:<C-U>call g:SexyScroller_ScrollToCursor()<CR>gv
 "" Split windows "horizontally" (create a new one below) with Ctrl-W s (no need to define - this is a default!)
 "nnoremap <C-W>s :split<Enter>
 "" Split windows "vertically" (create a new one to the right) with Ctrl-W Shift-S (the default is Ctrl-W v)
-nnoremap <C-W>S :vsplit<Enter>
+"nnoremap <C-W>S :vsplit<Enter>
+nnoremap <silent> <C-W>S :echo "Press CTRL-W v for a vertical split"<CR>
 
 " Resize windows with Ctrl-NumPadPlus/Minus/Divide/Times:
 "" We now defer to the implementation in windows_remember_size.vim
@@ -317,6 +332,11 @@ nmap d0 d0x
 " Docs actually suggest this, to match with D and C
 map Y y$
 
+" Training better finger muscles
+silent cmap wq<CR> echo "What are you doing? Just press ZZ!"<CR>
+" This does not work in GVim 8.2, because it also catches CTRL-[ keystrokes!  It might work in neovim...
+"silent inoremap <Esc> <Esc>:echo "What are you doing? Press CTRL-[ instead!"<CR>:sleep 1<CR>a
+
 "" Various failed shortcuts for the 'follow link' command.
 " map <C-Enter> <C-]>
 " map <C-.> <C-]>
@@ -368,6 +388,7 @@ autocmd GUIEnter * cnoremap <c-Space> <Right>
 "inoremap <C-@> <C-X><C-O>
 " For general completion I like menu,preview
 " But for tern I prefer longest,menu,preview
+" But for CoC I prefer not to use longest
 "set completeopt+=longest
 " DONE: We could switch completeopts depending which completion mode I am about to run.
 inoremap <silent> <C-@> <c-r>=InsertOmniComplete("forward")<cr>
@@ -376,7 +397,7 @@ imap <C-Space> <C-@>
 " Already bound to Spotlight:
 "imap <D-Space> <C-@>
 function! InsertOmniComplete(direction)
-	set completeopt+=longest
+	"set completeopt+=longest
 	return "\<c-x>\<c-o>"
 endfunction
 
@@ -433,6 +454,12 @@ nmap     <silent> <C-L>     <C-L>:nohlsearch<CR>:match<CR>:diffupdate<CR>
 
 " Forgot to sudo when opening a root file?  No problem, just :w!!
 cmap w!! w !sudo tee % >/dev/null
+" With escaping
+cnoremap w!! w !sudo tee <C-R>=shellescape(@%)<CR> >/dev/null
+" Set nomodofied afterwards.  But has issues:
+" - Breaks out of shellescape if filename contains `"`
+" - Sets nomodified even if it failed (e.g. no such folder)
+"cnoremap w!! exec "normal w !sudo tee <C-R>=shellescape(@%)<CR> >/dev/null" <Bar> set nomodified
 
 
 
@@ -554,7 +581,8 @@ nnoremap ZZ :wqa<Enter>
 nnoremap ZQ :qa!<Enter>
 
 " If there is more than one matching tag, let the user choose.
-nnoremap <C-]> g<C-]>
+" This is useful to discover when there are multiple options, but annoying if this is often the case, and you usually just want the first one.
+"nnoremap <C-]> g<C-]>
 " Occasionally there are multiple results but all pointing to the same place; it still asks the user to choose.  :S
 " (I think this is when the file is open, then we get one tag from the 'tags' file, and one from Vim itself, or perhaps from TList.)
 " TODO: Would be nice if tags fail, to try gd or gD instead.
@@ -569,8 +597,12 @@ nnoremap <Leader>e :execute substitute(getline("."), '^[ \t"/#-]*', '', '')<CR>
 " Execute line from clipboard in ex.  But which clipboard?  Let's display them and let the user choose.
 nnoremap <Leader>E :registers " + *<CR>:execute @
 
+" In shell files, <Leader>x will promt to execute the line under the cursor
+autocmd FileType sh,markdown nmap <buffer> <Leader>x :!\<C-R>=substitute(getline("."), '^[ \t"/#-]*', '', '')<CR>
+
 " A simple search for the word under cursor
-"nnoremap <F4> :<C-U>grep "\<<cword>\>" . -r --exclude-dir=node_modules<CR><CR>:cwindow<CR>
+nnoremap <Leader><F3> :<C-U>copen<CR>:grep "\<<cword>\>" . -r --exclude-dir=node_modules
+nnoremap <Leader><F4> :<C-U>grep "\<<cword>\>" . -r --exclude-dir=node_modules<CR><CR>:cwindow<CR>
 
 " My more complex setup for searching, using my modified version of the grep.vim plugin.
 
@@ -707,6 +739,12 @@ vnoremap <C-c> "+y
 " Same when in Visual mode:
 vnoremap <C-a> <Esc>ggvG$
 
+" Global paste from clipboard, overwrites entire current file
+nnoremap "+GP ggVGd"+P
+" Global yank to clipboard, yanks entire file
+"nnoremap "+GY ggVG"+y
+nnoremap :%y +<CR>
+
 " Faster access to EasyMotion, assuming g:EasyMotion_leader_key == "<Leader><Leader>"
 "nmap <Leader>j <Leader><Leader>f
 "nmap <Leader>J <Leader><Leader>F
@@ -789,11 +827,16 @@ inoremap <S-Enter> <Esc>O
 "	autocmd CursorHold * set norelativenumber nocursorcolumn nocursorline
 "augroup END
 
-" When writing a :! shell command, the shortcut %<Tab> can be used to insert the current filename.  But the same does not work when writing a standard Ex : command!
-" This naughty workaround should make it work for both, BUT it will always append to the end of the line, regardless where on the line the cursor was.
-"cnoremap %<Tab> <Home>!<End>%<C-l><Home><Del><End>
+" When using :e or :!, the shortcut %<Tab> can be used to insert the current buffer's filename.  But it doesn't seem to work for all Ex commands.
+" This workaround should make it work for all Ex commands.
 " This one is better; it should insert at the cursor.
 cnoremap %<Tab> <C-r>%
+" Quick way to get the parent folder of the current file on the cmdline
+" We don't actually need this mapping.  Vim expand %:h by default.
+"cnoremap %:h<Tab> <C-r>=expand('%:h')<CR>/
+" These are to remind me what I really should be typing:
+cnoremap %h<Tab> %:h
+cnoremap %d<Tab> %:h
 
 " To get the current line under the cursor as a command line argument
 cnoremap $_<Tab> <C-r>=shellescape(getline('.'))<CR>
@@ -913,6 +956,9 @@ nmap <Leader>a :let @n = expand("%:t:r")<CR><C-a><C-r>n.
 nmap <Leader>a :let @n = substitute(expand("%:t"), '[.].*', '', '')<CR>:call feedkeys(@n . '.', 't')<CR><C-a>
 " An alias.  Which will I remember?
 nmap <Leader>rel <Leader>a
+
+" Augment (with Git history)
+"nnoremap <Leader>a :GitShade<CR>
 
 
 " Tools for Visual Mode
@@ -1084,21 +1130,29 @@ nnoremap <Leader>del :execute "!del " . shellescape(getline(".")) . " ; sleep 1"
 " We put the results upside-down so that a repeat press of Ctrl-P will navigate to the next result (similar to VSCode)
 "nnoremap <silent> <C-P> :let g:fzf_layout = { 'window': '30split' }<CR>:Buffers<CR>
 "nnoremap <silent> <M-P> :let g:fzf_layout = { 'window': '30split' }<CR>:Buffers<CR>
+nnoremap <silent> <M-P> :Buffers<CR>
+" On my Manjaro, Alt-P emits ð
+"nnoremap <silent> ð :let g:fzf_layout = { 'window': '30split' }<CR>:Buffers<CR>
+nnoremap <silent> ð :Buffers<CR>
 " This interferes with my own [count]<C-E>
 "nnoremap <silent> <C-E> :FZF<CR>
 "nnoremap <silent> <Leader>o :Files<CR>
 " Override Asyncfinder
-nnoremap <silent> <C-A> :let g:fzf_layout = { 'window': '30split' }<CR>:Files<CR>
+"nnoremap <silent> <C-A> :let g:fzf_layout = { 'window': '30split' }<CR>:Files<CR>
+nnoremap <silent> <C-A> :Files<CR>
 " When opening the Files finders, put the prompt at the top (reverse layout)
-command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': ['--layout=reverse']}, <bang>0)
+command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--no-multi']}, <bang>0)
 " And for buffers with <C-B> we will put the prompt at the top
-nnoremap <silent> <C-B> :let g:fzf_layout = { 'window': '30split' }<CR>:call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
+"nnoremap <silent> <C-B> :let g:fzf_layout = { 'window': '30split' }<CR>:call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
+nnoremap <silent> <C-B> :call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
 " But for buffers with <C-P> I like it reversed, so we can hit <C-P> <C-P> <C-P> like in WebStorm
 " Break out of FZF when pressing Escape
 augroup FZF
 	autocmd!
 	autocmd FileType fzf inoremap <buffer> <Esc> <C-C><C-C>
 augroup END
+" The default produces an attractive popup, but it often shows an error "Not allowed in popup window" so I'm going to use my own version instead
+let g:fzf_layout = { 'window': '30split' }
 
 " Emulate Mac keys on Linux (GVim on Manjaro with KDE 5)
 " Alt-V like Cmd-V
@@ -1112,3 +1166,62 @@ vmap ø "+d
 nmap ú u
 " Alt-Shift-Z like Cmd-Shift-Z
 nmap Ú <C-R>
+
+" To go alongside tcomment or commentary.  Puts /* and */ on new lines above and below the selected block.
+vnoremap gC <Esc>o*/<Esc>gvo<Esc>O/*<Esc>
+
+" Make it easy to do case-insensitive search
+nnoremap // /\c
+nnoremap ?? ?\c
+" Make it easy to do search for whole word
+nnoremap /// /\<\><Left><Left>
+nnoremap ??? ?\<\><Left><Left>
+
+" On my Manjaro vim, gx wasn't working (it was downloading the resource with wget, and then opening the local copy in the browser)
+"nmap gx :execute "!xdg-open " . expand("<cWORD>")<CR>
+"nmap gx :execute "!open_in_current_browser '" . expand("<cWORD>") . "' >/dev/null 2>&1 &"<CR>
+"nmap gx :execute "!open_in_current_browser " . shellescape("<cWORD>") . " >/dev/null 2>&1 &"<CR>
+" I added <C-L> on the end because on a terminal, when we started running the browser, the screen would go blank
+nmap gx :silent execute "!open_in_current_browser " . shellescape("<cWORD>")<CR><C-L>
+
+" This is not ideal.  If you try to search with `/new` then this expansion happens!
+"cnoremap new new <Bar> wincmd p <Bar> wincmd c
+" We can check the command type, so the expansion only happens in certain situations
+cnoremap <expr> new getcmdtype() == ':' ? 'new <Bar> wincmd p <Bar> wincmd c' : 'new'
+
+nmap gh K
+
+" <Ctrl-R>$ to get some input from the shell
+inoremap <C-R>$ <C-R>=system('')[:-2]<Left><Left><Left><Left><Left><Left><Left>
+
+function! SearchForVisallySelectedText()
+	" Clobbers 0, as recommended here: https://vi.stackexchange.com/a/22702/630
+	normal gv"0y
+	let @/ = @0
+	normal n
+endfunction
+vnoremap * <Esc><C-U>:call SearchForVisallySelectedText()<CR>
+
+" When moving around with Shift-[ and Shift-], store the source of the first
+" jump, but do not store repeated jumps in the jumplist history (so there will
+" be fewer jumps stored in CTRL-O)
+"
+" NOTE: This doesn't actually start working until the first CursorHold event.
+"
+augroup KeepJumps_On_Repeated_Paragraph_Jumps
+	autocmd!
+	" I wanted to simply do this, but the first <CR> needs to be executed by the inner map, not the outer map!
+	"autocmd CursorHold * nnoremap { {:nnoremap { :keepjumps normal! {<CR><CR>
+	"autocmd CursorHold * nnoremap } }:nnoremap } :keepjumps normal! }<CR><CR>
+	autocmd CursorHold * nnoremap <silent> { {:call <SID>NMapWithNoJumps('{')<CR>
+	autocmd CursorHold * nnoremap <silent> } }:call <SID>NMapWithNoJumps('}')<CR>
+augroup END
+function s:NMapWithNoJumps(k)
+	execute "nnoremap <silent> " . a:k . " :keepjumps normal! " a:k . "<CR>"
+endfunction
+
+" Training
+vnoremap <silent> c <Esc>:<C-U>echo "Press S for surround plugin (or s to change selected text)"<CR>:sleep 2<CR>gv
+vnoremap <silent> cs <Esc>:<C-U>echo "Press S for surround plugin (or s to change selected text)"<CR>:sleep 2<CR>gv
+vnoremap <silent> csw <Esc>:<C-U>echo "Press S for surround plugin (or s to change selected text)"<CR>:sleep 2<CR>gv
+
