@@ -153,9 +153,11 @@ endfunction
 " Runs the given Ex command and pipes the output to the given shell command.
 " Separate the two commands with a bar symbol: |
 " For example:
-"   :PipeCmd version | grep --color python"
-"   :PipeCmd highlight | grep 'bold'
+"     :PipeCmd version | grep --color python"
+"     :PipeCmd highlight | grep 'bold'
 " I considered other names: CmdOut, PipeToShell
+" See also, the builtin :filter command
+"     :filter /bold/ highlight
 command! -nargs=+ -complete=command PipeCmd call s:PassVimCommandOutputToShellCommand(<q-args>)
 
 function! s:PassVimCommandOutputToShellCommand(line)
@@ -251,6 +253,7 @@ endfunction
 command! GitCommitThis :call s:GitCommitThis(<q-args>)
 command! GCthis :call s:GitCommitThis(<q-args>)
 
+" Quick convenient edit commands for my common targets
 "command! -nargs=+ ET e $JPATH/tools/<args>
 "command! -nargs=+ EP e $HOME/.vim/plugin/<args>
 "command! -nargs=+ EA :call feedkeys(":e $HOME/.vim-addon-manager/*" . <q-args> . "*")
@@ -259,6 +262,7 @@ nnoremap :ET<Space> :e $JPATH/code/shellscript/**/*
 nnoremap :EV<Space> :e $HOME/.vim/**/*
 nnoremap :EP<Space> :e $HOME/.vim/plugin/*
 nnoremap :EA<Space> :e $HOME/.vim-addon-manager/*
+nnoremap :EC<Space> :e $HOME/Dropbox/cheatsheets/*
 
 " Especially needed for MacVim, which is otherwise difficult to maximize.
 " It would be great to turn this into a toggler
@@ -272,13 +276,19 @@ nnoremap <D-≠> :MaximizeVim<CR>
 command! GitMergeToolSetup set nodiff | wincmd k | set nodiff | wincmd j | wincmd = | let @/ = "<<<<<<" | normal! n
 " On Mac OS X the colours don't load like they should, so I load them manually:
 " I also visit the other two windows with `wincmd l` so that dim_inactive_windows.vim will remove its dimming.
-command! GitMergeToolSetup exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | set nodiff | wincmd k | set nodiff | wincmd l | wincmd l | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
+command! GitMergeToolSetup exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | set nodiff | wincmd l | wincmd l | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
 " If I use `set lines` to maximize the window, then it takes ages, and the windows end up the wrong size, and `wincmd =` doesn't fix them all (possibly due to other plugins)
-"command! GitMergeToolSetup set lines=999 columns=9999 | exec ":source ~/.vim/colors_for_elvin_monokai.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | set nodiff | wincmd k | set nodiff | wincmd p | redraw | wincmd = | let @/ = "<<<<<<" | normal! n
+" Let's try set lines again, but let's not go crazy on the size this time
+command! GitMergeToolSetup set lines=300 columns=240 | exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | set nodiff | wincmd l | wincmd l | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
+" Finally, since I rebase more often than I merge, I want to switch around which of the panels are diffing at the start
+command! GitMergeToolSetup set lines=300 columns=240 | exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | wincmd l | wincmd l | set nodiff | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
 
+" This produced no results from rg
+"let fzf_grep_cmd = exists('$FZF_DEFAULT_COMMAND') ? $FZF_DEFAULT_COMMAND : 'grep'
+let fzf_grep_cmd = 'grep'
 " Use grep with fuzzyfinder
 " By <igemnace>
-command! -bang -nargs=* FZFGrep call fzf#vim#grep('grep -R -n '.shellescape(<q-args>), 0, <bang>0)
+command! -bang -nargs=* FZFGrep call fzf#vim#grep(fzf_grep_cmd . ' -R -n '.shellescape(<q-args>), 0, <bang>0)
 " Recommended by the README
 command! -bang -nargs=* GGrep call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
 " But if you have ag or ripgrep installed, you we can just use :Ag or :Rg
@@ -295,3 +305,30 @@ command! ALEList lopen | echo "Use ]l and [l to walk through reports"
 
 " Originally in ftplugin/sh.vim but I sometimes need this before Vim has detected the file is a shellscript!
 command! Shebang normal ggO#!/usr/bin/env bash<CR>set -e<CR><Esc><C-O>
+
+command! Prettier exec "!jprettier %" | edit | set ts=2 sw=2
+
+function! s:OnSave(cmd)
+	let setup_cmd = 'autocmd BufWritePost,FileWritePost *.* :execute "' . a:cmd . '"'
+	augroup OnSave
+		exec setup_cmd
+	augroup END
+endfunction
+command! -nargs=+ -complete=command OnSave call s:OnSave(<q-args>)
+command! OnSaveClear augroup OnSave | autocmd! | augroup END
+command! ClearOnSave augroup OnSave | autocmd! | augroup END
+
+" For example:
+" :OnSave silent! Prettier
+
+function! s:DoubleSpace()
+	" Change `. ` into `.  `
+	normal! %s/\. \([^ ]\)/.  \1/g
+	" Change `12.  Sentence` into `12. Sentence`
+	normal! %s/\([0-9]\+\.\)  /\1 /g
+endfunction
+command! DoubleSpace call s:DoubleSpace()
+
+command! RemoveTrailingSpaces exec "%s/  *$//"
+
+command! Date normal o<CR>### <C-R>=system('date')<CR><CR>
