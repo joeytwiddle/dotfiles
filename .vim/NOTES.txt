@@ -304,7 +304,7 @@ The output file will only be written when you quit Vim.
 ### Debugging Runtime
 
 ```
-:set verbosfile=/tmp/vim-log.out
+:set verbosefile=/tmp/vim-log.out
 :set verbose=15
 ```
 
@@ -405,3 +405,4 @@ zb         Scroll so cursor is at bottom
 
 
 
+<!-- vim: set ft=markdown: -->
