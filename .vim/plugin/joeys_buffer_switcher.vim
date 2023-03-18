@@ -6,6 +6,10 @@
 " CONSIDER: Allow <file> completion if no matching <buffer> is open.  (Ideally
 " we only want file completion IFF buffer completion offers no results).
 
+" BUG TODO:
+" It will sometimes take a bad match when a perfect match is available!
+" For example, in my Dwitter folder, I can type `ideas.txt` but it will open `fun_ideas.txt` instead of `ideas.txt`!
+
 " BUGS TODO:
 " If you press Esc or Ctrl+C it should not proceed to the BufExplorer fallback!
 "   The try catch below didn't fix that.
@@ -221,10 +225,18 @@ function! CompleteBuffersAndFiles(ArgLead, CmdLine, CursorPos)
     let i = i + 1
   endwhile
 
-  call extend(files, buffers)
+  " Files first, buffers after
+  "call extend(files, buffers)
+  "let files = s:ListWithoutDuplicates(files)
+  "return files
 
-  let files = s:ListWithoutDuplicates(files)
-  return files
+  " Buffers first, files after
+  " (Preferred since I primarily use this to switch buffers, and only occasionally to open new files.)
+  " Although this does change the order, completion will still select the shorter folder before any buffers below that folder, which is a shame.
+  " But still, there may some be circumstances where this order works better.
+  call extend(buffers, files)
+  let buffers = s:ListWithoutDuplicates(buffers)
+  return buffers
 endfunction
 
 function! s:ListWithoutDuplicates(list)
