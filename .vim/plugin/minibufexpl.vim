@@ -1686,6 +1686,10 @@ function! <SID>AutoUpdate(delBufNum)
     let g:miniBufExplInAutoUpdate = 1
   endif
 
+  if (bufname('%') == '[Command Line]')
+    return
+  endif
+
   " Don't bother autoupdating the MBE window
   if (bufname('%') == '-MiniBufExplorer-')
     " If this is the only buffer left then toggle the buffer
