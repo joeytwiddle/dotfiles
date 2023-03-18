@@ -11,7 +11,8 @@ function! InsertTabWrapper(direction)
     " Often I don't want 'longest'; I want to perform a quick search.
     " So I remove 'longest' here.  And my mappings for other plugins, such as Tern, may enable it before they act.
     " (I might feel differently if the number of results is low, or the number of chars in the word-so-far is low.)
-    set completeopt-=longest
+    " Now disabled to stop Coc from complaining, and also this should probably be configured in ~/.vimrc
+    "set completeopt-=longest
     let col = col('.') - 1
     " \k matches chars in 'iskeyword'
     "if !col || getline('.')[col - 1] !~ '\k'
