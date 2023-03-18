@@ -73,7 +73,7 @@ noremap <silent> <leader>pw :call DoWindowSwap()<CR>
 noremap <silent> <leader>cw :call MarkWindowSwap()<CR>
 " New idea: Start on one on of the windows.  Click on the other with the mouse and do \swapwin or :SwapWindows
 noremap <silent> <leader>swapwin :call MarkWindowSwap()<CR>:wincmd p<CR>:call DoWindowSwap()<CR>
-command SwapWindows call MarkWindowSwap() | :wincmd p | :call DoWindowSwap()
+command! SwapWindows call MarkWindowSwap() | :wincmd p | :call DoWindowSwap()
 
 " \SW \WI "swap window with"
 noremap <silent> <leader>SW :call MarkWindowSwap()<CR>
