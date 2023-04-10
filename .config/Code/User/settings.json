@@ -520,8 +520,11 @@
         { "before": [ "<Leader>", "t" ], "commands": [ "workbench.action.gotoSymbol" ] },
         { "before": [ "<Leader>", "f" ], "commands": [ "workbench.action.toggleSidebarVisibility" ] },
 
+        // JavaScript
         { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "i", "w", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
         { "before": [ "<Leader>", "L", "o", "g" ], "after": [ "\"", "l", "y", "i", "W", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
+        // Python
+        { "before": [ "<Leader>", "p", "l", "o", "g" ], "after": [ "\"", "l", "y", "i", "w", "o", "p", "r", "i", "n", "t", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", "Esc" ] },
 
         // For quick git work
         { "before": [ "<Leader>", "g", "c", "o" ], "commands": [ "git.checkout" ] },
@@ -539,7 +542,10 @@
         { "before": [ "[", "e" ], "commands": [ "editor.action.moveLinesUpAction" ] },
         //
         { "before": [ "<Leader>", "*" ], "commands": [ "workbench.action.findInFiles" ] },
+        // JavaScript
         { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
+        // Python
+        { "before": [ "<Leader>", "p", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "p", "r", "i", "n", "t", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", "Esc" ] },
     ],
     "vim.insertModeKeyBindingsNonRecursive": [
         // Unfortunately the = command can also affect other lines which are not highlighted.  Better not.

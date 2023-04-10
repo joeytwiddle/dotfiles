@@ -198,4 +198,8 @@
   // We can reach the Terminal with <Ctrl-W> <Down>, so we should be able to leave it with <Ctrl-W> <Up>
   // This might not go back where you were befor, if you have multiple editor groups open (split windows)
   { "key": "ctrl+w Up", "command": "workbench.action.focusPreviousGroup", "when": "terminalFocus" },
+
+  // In my Terminal, I use Ctrl-F to move forward one word, so I want Find to be on Ctrl-Shift-F instead.
+  { "key": "ctrl+f", "command": "-workbench.action.terminal.focusFind", "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported" },
+  { "key": "ctrl+shift+f", "command": "workbench.action.terminal.focusFind", "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported" },
 ]
