@@ -501,6 +501,7 @@ alias gpshharder='echo "Try: git push -u <remote> <local_branch>:refs/heads/<rem
 # I wanted to perform `git pull` and `git merge` with `git_autostashed` however they sometimes drop out unfinished, in which case the stash does not get popped as intended.
 alias gm='git merge'
 alias gmne='git merge --no-edit'
+alias gmnff='git merge --no-ff'
 # Git Merge Origin (this branch)
 #alias gmo='verbosely git merge "$(git_guess_upstream_branch)"'
 alias gmo='verbosely git merge "origin/$(git_get_current_branch)"'
@@ -1133,6 +1134,22 @@ gbd() {
 }
 alias gbdr='gbd -r'
 
+# Shows branches with descriptions
+# From: https://stackoverflow.com/a/16710084
+gbwd() {
+  current=$(git rev-parse --abbrev-ref HEAD)
+  branches=$(git for-each-ref --format='%(refname)' refs/heads/ | sed 's|refs/heads/||')
+  for branch in $branches; do
+    desc=$(git config branch.$branch.description)
+    if [ $branch == $current ]; then
+      branch="* \033[0;32m$branch\033[0m"
+     else
+       branch="  $branch"
+     fi
+     echo -e "$branch \033[0;36m$desc\033[0m"
+  done
+}
+
 # May rename "gitsummary"
 gitwhatsup() {
 	echo
@@ -1603,5 +1620,7 @@ alias gcleani='git clean -i'
 alias gcleanuntracked='git clean -di'
 alias gcleanignored='git clean -dXi'
 alias gcleanall='git clean -dxi'
+
+alias gcai='aicommits'
 
 # vim: ft=sh
