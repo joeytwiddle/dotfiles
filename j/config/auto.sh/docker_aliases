@@ -38,6 +38,9 @@ dstoprm() {
 	drm "$*"
 }
 alias ddestroy=dstoprm
+ddestroyall() {
+	docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
+}
 
 alias dlogs='docker logs'
 alias dlogsf='docker logs --follow'
@@ -49,7 +52,7 @@ alias dspf='docker system prune -f'
 alias dspa='docker system prune --all'
 
 alias dci='docker container inspect'
-alias dcd='docker container diff'
+alias dcdiff='docker container diff'
 
 alias dcp='docker cp'
 
@@ -107,7 +110,7 @@ alias dvl='docker volume ls'
 alias dvols='dvl'
 # Docker Volume Inspect All
 dvia() {
-docker volume ls -q |
+	docker volume ls -q |
 	while read volume_name
 	do docker volume inspect "$volume_name"
 	done
@@ -116,8 +119,29 @@ alias dvll='dvia'
 alias dvp='docker volume prune'
 alias dvpf='docker volume prune -f'
 
+# To check volume sizes, we must use dsdfv, although you'll need to look through the output, because it lists the sizes of lots of things
+alias dsdf='docker system df'
+alias dsdfv='docker system df -v | less -REX'
+
+# Docker does not have a rename command, however you can use this technique, to move files from one volume into another.
+# WARNING: When I tried this, it didn't immediately free up the disk space when files were moved out of the source volume.
+docker_volume_rename() {
+	local vol1="$1"
+	local vol2="$2"
+	docker run --rm \
+	       -v "${vol1}:/original" \
+	       -v "${vol2}:/migration" \
+	       ubuntu:latest \
+	       bash -c "mv /original/* /migration/"
+	#docker volume rm "$vol1"
+}
+
 
 # Docker Compose
 
 alias dcu='docker compose up'
+alias dcud='docker compose up -d'
+alias dcd='docker compose down'
 alias dcps='docker compose ps'
+alias dclogs='docker compose logs'
+alias dclf='docker compose logs -f'
