@@ -1,3 +1,5 @@
+# vim: filetype=sh
+
 # By default fzf does not ignore node_modules.
 # But if we ask it to use ag or rg, they will respect .gitignore which might be good enough.
 
@@ -27,6 +29,11 @@ if which show_file_contents >/dev/null 2>&1
 then FZF_FILE_PREVIEW_COMMAND="file {} | highlight ':.*' grey; echo \"\$(filesize {}) bytes\"; echo; show_file_contents {}"
 fi
 
+# You can press Shift-Down and Shift-Up to scroll the preview window
+
+# Make text wrap in the preview window
+export FZF_FILE_PREVIEW_WINDOW_OPTS="wrap"
+
 export FZF_DIRECTORY_PREVIEW_COMMAND="echo {}/; echo; ls -lartFh --color=always {}/"
 #if which gitls >/dev/null 2>&1
 #then FZF_DIRECTORY_PREVIEW_COMMAND="echo {}/; echo; gitls"
@@ -39,7 +46,7 @@ export FZF_DIRECTORY_PREVIEW_COMMAND="echo {}/; echo; ls -lartFh --color=always 
 #   - Exit if there's no match (--exit-0)
 fe() {
   local files
-  IFS=$'\n' files=($(fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --query="$1" --multi --select-1 --exit-0))
+  IFS=$'\n' files=($(fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --query="$1" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && "$FZF_EDITOR" "${files[@]}"
 }
 
@@ -48,7 +55,7 @@ fe() {
 #   - CTRL-E or Enter key to open with the $EDITOR
 fo() {
   local out file key
-  IFS=$'\n' out=("$(fzf-tmux --query="$1" --exit-0 --expect=ctrl-o,ctrl-e --preview="$FZF_FILE_PREVIEW_COMMAND")")
+  IFS=$'\n' out=("$(fzf-tmux --query="$1" --exit-0 --expect=ctrl-o,ctrl-e --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS")")
   key=$(head -1 <<< "$out")
   file=$(head -2 <<< "$out" | tail -1)
   if [ -n "$file" ]
@@ -60,7 +67,7 @@ fo() {
 # Like fe but gets the files from a global locate
 feg() {
   local files
-  IFS=$'\n' files=($(locate -b -i "$@" | filesonly | fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --multi --select-1 --exit-0))
+  IFS=$'\n' files=($(locate -b -i "$@" | filesonly | fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && "$FZF_EDITOR" "${files[@]}"
 }
 # But I probably type 'e' first, before deciding I need to do a global search
@@ -103,12 +110,10 @@ fcdglobal() {
   then cd "$dir"
   fi
 }
-alias fcdg=fcdglobal
-# Change Directory Globally
+# Global CD
+alias gcd=fcdglobal
+# CD Global
 alias cdg=fcdglobal
-# But "CD Fuzzy" is where my mind went
-#alias cdf=fcdglobal
-# Let's just try to use fcd
 
 # Fuzzy Ripgrep Ignoring-case
 frgi() {
