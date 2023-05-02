@@ -4,14 +4,30 @@
 
 echeat() {
 	(
-		cd ~/Dropbox/cheatsheets
-		fe "$@"
+		cd ~/Dropbox/cheatsheets || return
+		#fe "$@"
+		# If no matching file was found, we can create one
+		# BUG: This will also trigger if the user Quits fzf with CTRL-C
+		if ! fe "$@"
+		then
+			if [ ! -f "$1.md" ]
+			then e "$1.md"
+			fi
+		fi
 	)
 }
 
 ejconf() {
 	(
-		cd ~/j/config/auto.sh
+		cd ~/j/config/auto.sh || return
+		fe "$@"
+	)
+}
+
+# Edit Vim plugin
+evp() {
+	(
+		cd ~/.vim/plugin || return
 		fe "$@"
 	)
 }
