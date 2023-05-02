@@ -1,0 +1,2 @@
+# This is where pip (Python's package manager) installs executables
+export PATH="$HOME/.local/bin:$PATH"

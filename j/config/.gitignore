@@ -1,0 +1,2 @@
+# This is a public repo, so we shouldn't commit secrets
+/auto.sh/github_auths

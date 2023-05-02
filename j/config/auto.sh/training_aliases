@@ -1,0 +1,47 @@
+# vim: filetype=sh
+
+make_warning_beep() {
+	mplayer -noconsolecontrols "/stuff/must_have/portablelinux/usr/share/sounds/short-light-beep.wav" >/dev/null 2>&1
+	sleep 1
+}
+
+# This works:
+#     alias mv='mv -i'
+# But it won't help you if you are on a remote server without that alias!
+# So I am trying to train myself to always type `mv -i`
+mv_is_disabled() {
+	if [ "$1" = -i ]
+	then mv "$@"
+	else
+		printf "%s\n" "$(cursered;cursebold)XXX mv is disabled, use mv -i or mvi or \\mv instead.$(cursenorm)"
+		make_warning_beep
+		return 1
+	fi
+}
+alias mv='mv_is_disabled'
+alias mvi='mv -i'
+
+# -a is nice, it will copy directories recursively; -i because i don't want to overwrite stuff by accident
+# But it's dangerous to put this in an alias, because I will get used to it, and forget to use -a and -i on remote machines
+#     alias cp='cp -a -i'
+cp_is_disabled() {
+	if [ "$1" = -ai ] || [ "$1" = -ia ] || ( [ "$1" = -a ] && [ "$2" = -i ] ) || ( [ "$1" = -i ] && [ "$2" = -a ] )
+	then 'cp' "$@"
+	else
+		printf "%s\n" "$(cursered;cursebold)cp is disabled, use cp -ai or cpai or \\cp instead.$(cursenorm)"
+		make_warning_beep
+		return 1
+	fi
+}
+alias cp='cp_is_disabled'
+alias cpai='cp -a -i'
+
+rm_is_disabled() {
+	# In zsh echo shows \rm
+	# In bash echo shows \\rm
+	# But if we use printf, they both show the same
+	printf "%s\n" "$(cursered;cursebold)rm is disabled, use trash or del or \\rm instead.$(cursenorm)"
+	return 1
+}
+alias rm='rm_is_disabled'
+
