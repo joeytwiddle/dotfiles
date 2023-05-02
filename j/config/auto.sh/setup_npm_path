@@ -2,6 +2,9 @@
 # To mitigate this, I made some aliases to load nvm later, when needed
 # This behaviour is now disabled by default, but can be enabled by setting JSH_LOAD_NVM_LATER=x
 
+# For mixing a prefix with nvm, see https://github.com/nvm-sh/nvm/issues/2687
+# Apart from PREFIX, there is also NPM_CONFIG_PREFIX
+
 #if nvm --version >/dev/null 2>&1
 if [ -z "$JSH_LOAD_NVM_LATER" ]
 then
