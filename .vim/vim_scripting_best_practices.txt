@@ -128,6 +128,26 @@ instead of
 so that you bypass any user-defined keymaps, and execute `<cmd>` using standard vim commands.
 
 
+# Use `empty()` and `!empty()` to test strings
+
+For numerical toggles (e.g. 0/1) then it is fine to test:
+
+```vim
+if s:my_toggle_number
+```
+
+However this is not universally suitable for strings.
+
+```vim
+" BAD
+if s:my_string
+" GOOD
+if !empty(s:my_string)
+```
+
+This is because strings are converted into numbers, and then the number is compared to zero.  Details: https://vi.stackexchange.com/a/36271/630
+
+
 # Mappings
 
 Similarly with mappings, `nnoremap` is better than `nmap`, unless you actually want your mapping to run custom mappings defined by the user (or other scripts).
