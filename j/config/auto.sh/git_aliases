@@ -421,21 +421,25 @@ alias gcf='git_commit_immediate_fixup_DEBUG_VERSION'
 git_add_patch_by_date() {
 	local git_root_folder="$(git rev-parse --show-toplevel)"
 	cd "${git_root_folder}"
-	local modified_files
-	# dash cannot handle the array syntax here.  Even if we hide it in an if, dash still cannot parse this file!
-	# (This used to stop my Fluxbox from starting, until I changed my fluxbox startup script from startj to startj-simple.)
-	IFS=$'\n' modified_files=($(git status --porcelain | grep '^.M' | sed 's+^.. ++' | sortfilesbydate | reverse))
-	# This is a "safer" version, in that dash can parse it.
-	# But it is "unsafe" because it cannot handle filenames containing spaces.
-	#IFS=$'\n' modified_files="$(git status --porcelain | grep '^.M' | sed 's+^.. ++' | sortfilesbydate | reverse)"
-	# This did not allow any user input, and would have suffered the same as below anyway.
-	#| xargs -d '\n' git add -p
-	# This just puts them back into alphabetical/disk/git order!
-	#git add -p "${modified_files[@]}"
-	# This offers them in the desired reverse-date order, but now 'q' doesn't work.  Use Ctrl-C instead.
-	for file in "${modified_files[@]}"
-	do git add -p "${file}"
-	done
+	# We start a subshell here, because otherwise our custom IFS will leak back out!
+	(
+		# We probably don't need this local, now that it's in a subshell
+		local modified_files
+		# dash cannot handle the array syntax here.  Even if we hide it in an if, dash still cannot parse this file!
+		# (This used to stop my Fluxbox from starting, until I changed my fluxbox startup script from startj to startj-simple.)
+		IFS=$'\n' modified_files=($(git status --porcelain | grep '^.M' | sed 's+^.. ++' | sortfilesbydate | reverse))
+		# This is a "safer" version, in that dash can parse it.
+		# But it is "unsafe" because it cannot handle filenames containing spaces.
+		#IFS=$'\n' modified_files="$(git status --porcelain | grep '^.M' | sed 's+^.. ++' | sortfilesbydate | reverse)"
+		# This did not allow any user input, and would have suffered the same as below anyway.
+		#| xargs -d '\n' git add -p
+		# This just puts them back into alphabetical/disk/git order!
+		#git add -p "${modified_files[@]}"
+		# This offers them in the desired reverse-date order, but now 'q' doesn't work.  Use Ctrl-C instead.
+		for file in "${modified_files[@]}"
+		do git add -p "${file}"
+		done
+	)
 }
 alias gapd='git_add_patch_by_date'
 
