@@ -48,7 +48,7 @@ cdc_try() {
 	if [ "$1" != "$PWD" ] && [ "$(realpath "$1" 2>/dev/null)" = "$(realpath "$PWD")" ]
 	then
 		#echo "-> $1"
-		echo "$PWD -> $1"
+		echo "$PWD -> $1" >&2
 		'cd' "$1" || return 2
 		return 0
 	fi
