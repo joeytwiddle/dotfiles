@@ -28,7 +28,8 @@ cd_canonical() {
 	local without_sync="$(printf "%s" "$PWD" | sed 's+/SYNC/+/+')"
 	local without_rc_files="$(printf "%s" "$PWD" | sed 's+/SYNC/rc_files/+/+')"
 	local without_src_keep="$(printf "%s" "$PWD" | sed 's+/SYNC/src.KEEP/+/src/+')"
-	local in_stuff_ut="$(printf "%s" "$PWD" | sed 's+/home/HWI_BACKUPS/hwi_huge/big/ut/+/stuff/ut/+')"
+	#local in_stuff_ut="$(printf "%s" "$PWD" | sed 's+/home/HWI_BACKUPS/hwi_huge/big/ut/+/stuff/ut/+')"
+	local in_stuff_ut="$(printf "%s" "$PWD" | sed 's+/mnt/extra_btrfs/HWI_BACKUPS/hwi_huge/big/ut/+/stuff/ut/+')"
 
 	cdc_try "${HOME}/${folder_name}" && return 0
 	cdc_try "${HOME}/debugging" && return 0
