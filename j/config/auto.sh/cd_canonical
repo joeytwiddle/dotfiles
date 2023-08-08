@@ -25,9 +25,10 @@ cd_canonical() {
 	local without_proj="$(printf "%s" "$PWD" | sed 's+/SYNC/projects\(\|\.[^/]*\)/+/+')"
 	local without_proj_subdir="$(printf "%s" "$PWD" | sed 's+/\(SYNC/\|\)projects\(\|\.[^/]*\)/[^/]*/+/+')"
 	local with_short_proj="$(printf "%s" "$PWD" | sed 's+/SYNC/projects\(\|\.[^/]*\)/+/projects/+')"
-	local without_sync="$(printf "%s" "$PWD" | sed 's+/SYNC/+/+')"
 	local without_rc_files="$(printf "%s" "$PWD" | sed 's+/SYNC/rc_files/+/+')"
 	local without_src_keep="$(printf "%s" "$PWD" | sed 's+/SYNC/src.KEEP/+/src/+')"
+	local without_sync="$(printf "%s" "$PWD" | sed 's+/SYNC/+/+')"
+	local without_dropbox="$(printf "%s" "$PWD" | sed 's+/Dropbox/+/+')"
 	#local in_stuff_ut="$(printf "%s" "$PWD" | sed 's+/home/HWI_BACKUPS/hwi_huge/big/ut/+/stuff/ut/+')"
 	local in_stuff_ut="$(printf "%s" "$PWD" | sed 's+/mnt/extra_btrfs/HWI_BACKUPS/hwi_huge/big/ut/+/stuff/ut/+')"
 
@@ -39,6 +40,7 @@ cd_canonical() {
 	cdc_try "$without_rc_files" && return 0
 	cdc_try "$without_src_keep" && return 0
 	cdc_try "$without_sync" && return 0
+	cdc_try "$without_dropbox" && return 0
 	cdc_try "$in_stuff_ut" && return 0
 }
 
