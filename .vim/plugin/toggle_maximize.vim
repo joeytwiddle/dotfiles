@@ -255,26 +255,29 @@ endfunction
 
 " == Keymaps ==
 
-nnoremap  <silent> <C-F> :call <SID>ToggleMaximize()<Enter>
+nnoremap <silent> <C-F> :call <SID>ToggleMaximize()<Enter>
 " I have disabled this Insert mode binding, because <C-F> was sometimes conflicting with <C-X><C-F> file expansion (since installing CoC?)
 "inoremap <silent> <C-F> <Esc>:call <SID>ToggleMaximize()<Enter>a
-nnoremap  <silent> <C-\> :call <SID>ToggleMaximize()<Enter>
-inoremap <silent> <C-\> <Esc>:call <SID>ToggleMaximize()<Enter>a
-"nnoremap  <silent> <C-G> :call <SID>ToggleMaximize()<Enter>
+"nnoremap <silent> <C-\> :call <SID>ToggleMaximize()<Enter>
+"inoremap <silent> <C-\> <Esc>:call <SID>ToggleMaximize()<Enter>a
+"nnoremap <silent> <C-G> :call <SID>ToggleMaximize()<Enter>
 "inoremap <silent> <C-G> <Esc>:call <SID>ToggleMaximize()<Enter>a
-"nnoremap  <silent> <C-Z> :call <SID>ToggleMaximize()<Enter>
-"inoremap <silent> <C-Z> <Esc>:call <SID>ToggleMaximize()<Enter>a
+nnoremap <silent> <C-Z> :call <SID>ToggleMaximize()<Enter>
+inoremap <silent> <C-Z> <Esc>:call <SID>ToggleMaximize()<Enter>a
 
-nnoremap  <silent> <C-V> :call <SID>ToggleMaximizeVertically()<Enter>
-if "$_system_name" == 'OSX' && "$TERM" == 'xterm'
-  " In XQuartz on Mac, Backspace sends <C-H> so we shouldn't remap it!
-  " We may be able to retain this keybind in future if we can pass <BS> differently.
-  " An alternative check might be to examine t_kb.
-  " On Linux terminal t_kb=^?  In GVim it does not exist.
-  " What is it on Mac?
-else
-  nnoremap  <silent> <C-H> :call <SID>ToggleMaximizeHorizontally()<Enter>
-endif
+nnoremap <silent> <Leader><C-H> :call <SID>ToggleMaximizeHorizontally()<Enter>
+nnoremap <silent> <Leader><C-V> :call <SID>ToggleMaximizeVertically()<Enter>
+
+"nnoremap  <silent> <C-V> :call <SID>ToggleMaximizeVertically()<Enter>
+"if "$_system_name" == 'OSX' && "$TERM" == 'xterm'
+"  " In XQuartz on Mac, Backspace sends <C-H> so we shouldn't remap it!
+"  " We may be able to retain this keybind in future if we can pass <BS> differently.
+"  " An alternative check might be to examine t_kb.
+"  " On Linux terminal t_kb=^?  In GVim it does not exist.
+"  " What is it on Mac?
+"else
+"  nnoremap  <silent> <C-H> :call <SID>ToggleMaximizeHorizontally()<Enter>
+"endif
 " We will not override Ctrl-V or Ctrl-H in Insert mode; Ctrl-V is too useful,
 " and Ctrl-H might be what some systems see when the user presses Backspace.
 "inoremap <silent> <C-V> <Esc>:call <SID>ToggleMaximizeVertically()<Enter>a
@@ -283,8 +286,7 @@ endif
 " access it!  Even 0<C-V> still invokes our mapping.  One workaround is simply to
 " `nunmap <C-V>`!
 " Let's expose some alternative keybinds so <C-V> it can be reached again:
-nnoremap <Leader><C-V> <C-V>
+"nnoremap <Leader><C-V> <C-V>
 
 "" Does not work:
 "nnoremap <silent> <C-Enter> :call <SID>ToggleMaximize()<Enter>
-
