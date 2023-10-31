@@ -241,9 +241,6 @@ fun! vam#ActivateRecursively(list_of_scripts, ...)
     endif
 
     call add(opts.new_runtime_paths, rtp)
-    if (has_key(script_, 'exec'))
-      call add(opts.execs, script_.exec)
-    endif
 
     if s:c.debug_activation
       " activation takes place later (-> new_runtime_paths), but messages will be in order
@@ -312,24 +309,6 @@ fun! vam#PreprocessScriptIdentifier(list, opts)
   " only be loaded when installations take place
 endf
 
-fun! vam#AddRuntimePath(paths) abort
-  let rtp = split(&runtimepath, '\v(\\@<!(\\.)*\\)@<!\,')
-  let escapeComma = 'escape(v:val, '','')'
-
-  let new_runtime_paths = a:paths
-  let after = filter(map(copy(new_runtime_paths), 'v:val."/after"'), 'isdirectory(v:val)')
-  " rtp[-1:-1] keep users /after directory last, see github issue #165
-  let list = rtp[:0] + map(copy(new_runtime_paths), escapeComma)
-              \                 + rtp[1:-2]
-              \                 + map(after, escapeComma)
-              \                 + rtp[-1:-1]
-  if s:c.rtp_list_hook != ''
-    let list = call(s:c.rtp_list_hook, [list])
-  endif
-  let &runtimepath=join(list , ",")
-  unlet rtp
-endf
-
 " see also ActivateRecursively
 " Activate activates the plugins and their dependencies recursively.
 " I sources both: plugin/*.vim and after/plugin/*.vim files when called after
@@ -390,12 +369,10 @@ fun! vam#ActivateAddons(...) abort
   " add new_runtime_paths state if not present in opts yet
   let new_runtime_paths = get(opts, 'new_runtime_paths', [])
   let to_be_activated   = get(opts, 'to_be_activated',   {})
-  let execs   = get(opts, 'execs',   [])
 
 
   let opts.new_runtime_paths = new_runtime_paths
   let opts.to_be_activated   = to_be_activated
-  let opts.execs   = execs
 
   for a in args[0]
     let to_be_activated[has_key(a, 'name') ? a.name : 'rtp:'.a.activate_this_rtp] = a
@@ -413,9 +390,21 @@ fun! vam#ActivateAddons(...) abort
     " add paths after ~/.vim but before $VIMRUNTIME
     " don't miss the after directories if they exist and
     " put them last! (Thanks to Oliver Teuliere)
+    let rtp = split(&runtimepath, '\v(\\@<!(\\.)*\\)@<!\,')
+    let escapeComma = 'escape(v:val, '','')'
+    let after = filter(map(copy(new_runtime_paths), 'v:val."/after"'), 'isdirectory(v:val)')
     if !s:c.dont_source
-      call vam#AddRuntimePath(new_runtime_paths)
+      " rtp[-1:-1] keep users /after directory last, see github issue #165
+      let list = rtp[:0] + map(copy(new_runtime_paths), escapeComma)
+                  \                 + rtp[1:-2]
+                  \                 + map(after, escapeComma)
+                  \                 + rtp[-1:-1]
+      if s:c.rtp_list_hook != ''
+        let list = call(s:c.rtp_list_hook, [list])
+      endif
+      let &runtimepath=join(list , ",")
     endif
+    unlet rtp
 
     for rtp in new_runtime_paths
       " filetype off/on would do the same ?
@@ -434,8 +423,6 @@ fun! vam#ActivateAddons(...) abort
       for rtp in new_runtime_paths
         call vam#GlobThenSource(rtp, 'plugin/**/*.vim')
         call vam#GlobThenSource(rtp, 'after/plugin/**/*.vim')
-        call vam#GlobThenSource(rtp, 'plugin/**/*.lua')
-        call vam#GlobThenSource(rtp, 'after/plugin/**/*.lua') " eg cmp-path is using this
       endfor
 
       " Now find out which au groups are new and run them manually, cause
@@ -458,10 +445,6 @@ fun! vam#ActivateAddons(...) abort
         for group in event_to_groups[event]
           execute 'doautocmd' group event
         endfor
-      endfor
-
-      for e in execs
-        exec e
       endfor
 
       if !empty(new_runtime_paths)
@@ -504,9 +487,7 @@ endfun
 fun! vam#Scripts(scripts, opts) abort
   let activate = []
   let keys_ = keys(s:c.activate_on)
-  let scripts = (type(a:scripts) == type([])) ? a:scripts : map(filter(readfile(a:scripts), 'v:val !~ "#"'), 'eval(v:val)')
-  " filter expr - is eval evil ? You trust code anyway
-  call filter(scripts, 'type(v:val) != 4 || !has_key(v:val, "expr") || eval(v:val["expr"])')
+  let scripts = (type(a:scripts) == type([])) ? a:scripts : map(readfile(a:scripts), 'eval(v:val)')
   let scripts = vam#PreprocessScriptIdentifier(scripts, {'rewrite_names': 0})
   for x in scripts
     for k in keys_
