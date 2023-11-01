@@ -201,6 +201,9 @@ nnoremap <silent> <C-kPlus> <C-W>+
 nnoremap <silent> <C-kDivide> <C-W><
 nnoremap <silent> <C-kMultiply> <C-W>>
 
+" Recommended, to make <C-w>= behave more like you expect it to
+nnoremap <silent> <C-w>= <C-w>=:call ForgetWindowSizes()<CR>
+
 " BUGS:
 " When we add a new window to the list, e.g. TagList, when switching to it, the old unfocused size of the previous window from the *old* layout is applied.
 " I think we need to forget some things when layout changes?  Forget all unfocused sizes?

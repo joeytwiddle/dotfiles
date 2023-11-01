@@ -1,10 +1,16 @@
-# If we have nvm, then use the latest node
-# But disabled for now, because this slows down my shell startup
-if false && nvm --version >/dev/null
+# When I was using a slow HDD, each time I opened a new shell, nvm would significantly slow down the startup
+# To mitigate this, I made some aliases to load nvm later, when needed
+# This behaviour is now disabled by default, but can be enabled by setting JSH_LOAD_NVM_LATER=x
+
+#if nvm --version >/dev/null 2>&1
+if [ -z "$JSH_LOAD_NVM_LATER" ]
 then
 
-	unset PREFIX
-	nvm use node
+	#unset PREFIX
+	#nvm use node
+
+	# We shouldn't need to do anything.  Just use the nvm loaded in .bash_profile, as recommended.
+	:
 
 else
 
@@ -32,8 +38,14 @@ else
 	#export PATH="$HOME/npm/bin:$PATH"
 
 	# So a friendlier way is to set the PREFIX var.  (Too bad they didn't call this NODE_PREFIX or NPM_PREFIX)
-	export PREFIX="$HOME/npm"
-	export PATH="$PREFIX/bin:$PATH"
+	#export PREFIX="$HOME/npm"
+	#export PATH="$PREFIX/bin:$PATH"
+
+	if [ -d "$HOME/.yarn/bin" ]
+	then
+		# Ideally we would add "$(yarn global bin)" but we might not have yarn on the path until after we have loaded node
+		export PATH="$HOME/.yarn/bin:$PATH"
+	fi
 
 	# The code below assumes that we have nvm installed.
 
@@ -98,7 +110,9 @@ else
 		unalias npm 2>/dev/null
 
 		#export PREFIX="$HOME/.nvm/versions/node/v5.3.0"
-		export PREFIX="$HOME/.nvm/versions/node/v6.2.2"
+		#export PREFIX="$HOME/.nvm/versions/node/v6.2.2"
+		#export PREFIX="$HOME/.nvm/versions/node/v8.2.1"
+		export PREFIX="$HOME/.nvm/versions/node/v8.9.3"
 		export PATH="$PREFIX/bin:$PATH"
 		unset NODE_PATH
 		unset PREFIX
@@ -106,7 +120,7 @@ else
 		#export NVM_PATH="$PREFIX/lib/node"
 		#export NVM_BIN="$PREFIX/bin"
 
-		nodewhatsup
+		#nodewhatsup
 	}
 	# These two don't necessarily use the system node
 	# They just use whichever node + npm are currently on the PATH.
@@ -140,8 +154,8 @@ else
 	nodewhatsup() {
 		echo "nvm current: $(nvm current)"
 		echo "PREFIX:    $PREFIX"
-		echo "node:      $(which node)"
-		echo "npm:       $(which npm)"
+		echo "node:      $(which node 2>/dev/null)"
+		echo "npm:       $(which npm 2>/dev/null)"
 		echo "NVM_PATH:  $NVM_PATH"
 		echo "NVM_BIN:   $NVM_BIN"
 		echo "NODE_PATH: $NODE_PATH"
@@ -155,22 +169,25 @@ else
 		#if [ -d "${node_modules_folder}" ]
 		#then echo "Modules:   $node_modules_folder"
 		#fi
-		echo "npm root:  $('npm' root -g)"
+		# This might be useful/interesting BUT it is very slow, so I am disabling it for now.
+		#echo "npm root:  $('npm' root -g)"
 	}
 	nodestatus() {
 		nodewhatsup
 	}
 	yarnwhatsup() {
-		if ! which yarn >/dev/null
+		if ! which yarn >/dev/null 2>&1
 		then
 			echo "Yarn is not installed (or at least, not on the PATH)"
 			return
 		fi
-		echo "Yarn binary:        $(which yarn)"
-		echo "Yarn binary (real): $(realpath "$(which yarn)")"
+		echo "Yarn binary:        $(which yarn 2>/dev/null)"
+		echo "Yarn binary (real): $(realpath "$(which yarn 2>/dev/null)") 2>/dev/null"
 		echo "Yarn global:        $(yarn global dir)"
 		echo "Yarn bin folder:    $(yarn global bin)"
 	}
+
+	nvmusemagic
 
 fi
 

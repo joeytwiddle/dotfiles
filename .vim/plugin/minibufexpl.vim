@@ -428,6 +428,11 @@ endif
 " 0 = size to fit all buffers, otherwise the value is number of lines for
 " buffer. [Depreciated use g:miniBufExplMaxSize]
 "
+" Joey: Although this is quite a nice feature, it needs improvement: It needs
+" to scroll up/down so that the currently focused buffername is always in
+" view. For this reason, I currently prefer to use g:miniBufExplWrap = 0
+"
+"
 if !exists('g:miniBufExplMaxHeight')
   let g:miniBufExplMaxHeight = 0
 endif 
@@ -470,6 +475,15 @@ endif
 "
 if !exists('g:miniBufExplVSplit')
   let g:miniBufExplVSplit = 0
+endif
+
+" }}}
+" Wrap the window? {{{
+" Enabling this will mean your explorer will only ever use 1 line, but it will
+" scroll left and right to keep your current tab in view.
+"
+if !exists('g:miniBufExplWinWrap')
+  let g:miniBufExplWinWrap = 1
 endif
 
 " }}}
@@ -777,6 +791,12 @@ function! <SID>StartExplorer(sticky, delBufNum)
   setlocal foldcolumn=0
   setlocal nonumber
 
+  if g:miniBufExplWinWrap
+    setlocal wrap
+  else
+    setlocal nowrap
+  endif
+
   if has("syntax")
 
       " I don't know why but sometimes the syntax highlighting is forgotten,
@@ -811,6 +831,10 @@ function! <SID>StartExplorer(sticky, delBufNum)
       syn match MBEChanged            '|* [^|]*-*+ |*'
       syn match MBEVisibleChanged     '|* [^|]*\*+ |*'
 
+      "syn match MBEFolder '^[^\]]*/\]\ze '
+      "syn match MBEFolder '^[^|]*/\ze |'
+      syn match MBEFolder '^[^|]*\ze |'
+
       " Note that MBEVisibleChanged really means MBEFocusedChanged
       " whilst MBEChanged covers changed buffers which are visible or not
       " visible (just not the focused one).
@@ -838,7 +862,7 @@ function! <SID>StartExplorer(sticky, delBufNum)
 
     " Define highlights only if they have not been created yet, or if they were cleared somehow.
     "if !exists("g:did_minibufexplorer_syntax_inits")
-    if !HlExists("MBENormal")
+    if !HlExists("MBEFolder")
       let g:did_minibufexplorer_syntax_inits = 1
       " highlight MBEGap            ctermfg=white ctermbg=magenta guibg=magenta
       " highlight MBEGap            term=none cterm=none ctermbg=black ctermfg=grey guibg=black guifg=grey
@@ -864,6 +888,8 @@ function! <SID>StartExplorer(sticky, delBufNum)
       hi MBEVisibleNormal term=reverse ctermbg=cyan ctermfg=blue cterm=none guibg=cyan guifg=blue gui=none
       " hi StatusLineNC ctermfg=blue
       " highlight MBEVisibleChanged term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=black guibg=yellow guifg=black
+
+      hi link MBEFolder Directory
 
       " FIXED:
       " There seems no point making MBEVisibleChanged differ from
@@ -1399,7 +1425,9 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
 
           " Only show modifiable buffers (The idea is that we don't 
           " want to show Explorers)
-          if (g:miniBufExplShowOtherBuffers || (getbufvar(l:i, '&modifiable') == 1 && BufName != '-MiniBufExplorer-'))
+          "if (g:miniBufExplShowOtherBuffers || (getbufvar(l:i, '&modifiable') == 1 && BufName != '-MiniBufExplorer-'))
+          " The problem with that is, :bnext and :bprev will still visit these buffers, so hiding them is confusing!
+          if (g:miniBufExplShowOtherBuffers || BufName != '-MiniBufExplorer-')
           "" BUG: :bn and :bp visit modifiable buffers, so until I can prevent
           "" that, I want them displayed in the list, otherwise the list is
           "" confusing!
@@ -1412,6 +1440,10 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
             " Get filename & Remove []'s & ()'s
             let l:shortBufName = fnamemodify(l:BufName, ":t")                  
             let l:shortBufName = substitute(l:shortBufName, '[][()]', '', 'g') 
+            if l:shortBufName == ''
+              let l:bufType = getbufvar(l:i, '&buftype')
+              let l:shortBufName = len(bufType) ? '[' . bufType . ']' : '[Scratch]'
+            endif
             " let l:tab = '['.l:i.':'.l:shortBufName.']'
             " let l:tab = '['.l:shortBufName.']'
             if g:miniBufExplShowBufNums
@@ -1470,6 +1502,23 @@ function! <SID>BuildBufferList(delBufNum, updateBufList)
 
   " let l:fileNames = substitute(l:fileNames,' *$','','')
   let l:line = ''
+
+  if get(g:, 'miniBufExplShowSession', 1)
+    if len(get(v:, 'servername', '')) > 0 && match(v:servername, '^VIM[0-9]*') == -1
+      let l:line .= '(' . v:servername . ') '
+    endif
+  endif
+
+  if get(g:, 'miniBufExplShowFolder', 1)
+    "let l:cwd = substitute(fnamemodify(getcwd(), ':~'), '/$', '', '')
+    " Three parts
+    "let l:cwd = fnamemodify(getcwd(), ':~:s+.*/\([^/]*/[^/]*/[^/]*\)+\1+g') . '/'
+    " Two parts
+    let l:cwd = fnamemodify(getcwd(), ':~:s+.*/\([^/]*/[^/]*\)+\1+g') . '/'
+    "let l:cwd = fnamemodify(getcwd(), ':~:t')
+    let l:line .= l:cwd . ' '
+    " See MBEFolder for highlighting
+  endif
 
   if get(g:, 'miniBufExplShowMenu', 0)
     if exists('g:vloaded_tree_explorer') || exists('g:loaded_nerd_tree') || exists('g:loaded_netrwPlugin') || exists("loaded_winfileexplorer")
@@ -1635,6 +1684,10 @@ function! <SID>AutoUpdate(delBufNum)
     return
   else
     let g:miniBufExplInAutoUpdate = 1
+  endif
+
+  if (bufname('%') == '[Command Line]')
+    return
   endif
 
   " Don't bother autoupdating the MBE window

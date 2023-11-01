@@ -9,6 +9,7 @@
 " the text, and that syntax rule does not allow sub-parsing (contains).
 " NOTE: If we want to work independently of updatetime, we could use :sleep
 
+" See also: https://github.com/osyo-manga/vim-brightest
 " See also: http://of-vim-and-vigor.blogspot.com/2014/03/welcome-to-search-party.html
 "           https://github.com/dahu/SearchParty
 

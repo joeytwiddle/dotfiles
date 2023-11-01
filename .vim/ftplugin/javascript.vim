@@ -21,7 +21,14 @@ inoremap <buffer> {<CR> {<CR><CR>}<Up><Esc>cc
 " We use :silent! in case escaping '"' to '\"' fails because there are no '"'s in the expression.
 " ISSUES: Clobbers clipboard (easily fixed)
 "         :s clobbers search (@/) so we may want to store and restore it.
-vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_[<C-R>=expand('%:t')<Enter>] <C-R>":_QUOTE_<Esc>:silent! s/"/\\"/g <Bar> s/_QUOTE_/"/g<CR>A, <C-R>");<Esc>
+let foundSemicolon = search('; *$', 'nw') > 0
+if foundSemicolon
+  "vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_[<C-R>=expand('%:t')<Enter>] <C-R>":_QUOTE_<Esc>:silent! s/"/\\"/g <Bar> s/_QUOTE_/"/g<CR>A, <C-R>");<Esc>
+  vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_<C-R>":_QUOTE_<Esc>:silent! s/"/\\"/g <Bar> s/_QUOTE_/"/g<CR>A, <C-R>");<Esc>
+else
+  "vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_[<C-R>=expand('%:t')<Enter>] <C-R>":_QUOTE_<Esc>:silent! s/'/\\'/g <Bar> s/_QUOTE_/'/g<CR>A, <C-R>")<Esc>
+  vnoremap <buffer> <Leader>log yoconsole.log(_QUOTE_<C-R>":_QUOTE_<Esc>:silent! s/'/\\'/g <Bar> s/_QUOTE_/'/g<CR>A, <C-R>")<Esc>
+endif
 " viW is *sometimes* preferable, e.g. to catch 'obj.prop[i]' but more often than not it grabs too much, e.g. it catches 'obj.prop[i]);'
 nmap <buffer> <Leader>log viw<Leader>log
 nmap <buffer> <Leader>Log viW<Leader>log
@@ -33,12 +40,16 @@ nmap <buffer> <Leader>F Vip<Leader>F
 vnoremap <buffer> <Leader>V sunnamedVar<Esc>Ovar unnamedVar = <Esc>pa;<Esc>
 
 " Select entire function from visual mode ("v in function")
-"vnoremap if <Esc>?^\s*function<CR>v/{<CR>%o
-vnoremap if <Esc>?\<function\>\s*[A-Za-z0-9_$]*\s*(<CR>v/{<CR>%o
+"vnoremap af <Esc>?^\s*function<CR>v/{<CR>%o
+vnoremap af <Esc>?\<function\>\s*[A-Za-z0-9_$]*\s*(<CR>v/{<CR>%o
 
 " Like WebStorm, when closing a block, indent all the lines inbetween
-" DISABLED because currently = does not indent function callbacks correctly when they come after a `).then(`
-"inoremap <buffer> } }<Esc>mzv%=g'za
+" Note that this will also act on '}'s in strings.  It might be inconvenient.
+" Note that it also clobbers mark 'z'
+" Previously DISABLED because it was not indenting function callbacks correctly when they come after a `).then(`
+inoremap <buffer> } }<Esc>mzv%=g`za
+" BUG: If we are in the middle of the line (e.g. interpolating inside a template string) returning to the original mark position will be wrong, if the line has changed indentation (that situation is quite rare).  To fix that:
+" TODO: We should only do this if the } is at the end of the current line, or perhaps at the beginning of the current line (ignoring whitespace indentation).
 
 
 
@@ -169,19 +180,21 @@ endfunction
 function! s:LoadNodeModule()
   let cfile = expand("<cfile>")
   let fname = cfile
+  " See: https://www.npmjs.com/package/common-js-file-extensions
+  let extensions = ['', '.js', '.jsx', '.mjs', '.ts', '.tsx', '.json', '.es', '.es6']
   if !filereadable(fname)
-    let fname = s:SeekFile([expand("%:h"), '.', './node_modules'], ['', '.js'], cfile)
+    let fname = s:SeekFile([expand("%:h"), '.', './node_modules'], extensions, cfile)
     " Node looks in <package>/index.js first
     if !filereadable(fname)
-      let fname = s:SeekFile(['./node_modules/' . cfile . '/'], ['', '.js'], 'index.js')
+      let fname = s:SeekFile(['./node_modules/' . cfile . '/'], extensions, 'index')
     endif
     " But <package>/main.js is quite a common location
     if !filereadable(fname)
-      let fname = s:SeekFile(['./node_modules/' . cfile . '/'], ['', '.js'], 'main.js')
+      let fname = s:SeekFile(['./node_modules/' . cfile . '/'], extensions, 'main')
     endif
     " And <package>/lib/index.js is quite a common location
     if !filereadable(fname)
-      let fname = s:SeekFile(['./node_modules/' . cfile . '/lib'], ['', '.js'], 'index.js')
+      let fname = s:SeekFile(['./node_modules/' . cfile . '/lib'], extensions, 'index')
     endif
     " TODO: In fact the entry point file location is configurable in package.json.
     " We could try to extract it: node --eval 'fs=require("fs");data=JSON.parse(fs.readFileSync("./package.json"));console.log(data.bin)'
@@ -224,8 +237,13 @@ endif
 
 " Use CMD-SHIFT-L on Mac or CTRL-SHIFT-L on other systems
 " I wanted to map D-S-L but it didn't register (in MacVim gui mode)
-nnoremap <buffer> <silent> <D-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
-nnoremap <buffer> <silent> <C-S-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
+" BUG: This fires on CTRL-L which already has a useful meaning.
+"nnoremap <buffer> <silent> <C-S-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
+" But in my Linux xterm one of these triggers when I just prett <C-L> which is no good
+"nnoremap <buffer> <silent> <D-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
+"nnoremap <buffer> <silent> <C-S-L> :<C-U>call <SID>EslintFixCurrentFile()<CR>
+" Let's use this instead
+nnoremap <buffer> <silent> <Leader>lint :<C-U>call <SID>EslintFixCurrentFile()<CR>
 
 if !get(g:, 'EslintFix_is_reloading_file', 0)
   function! s:EslintFixCurrentFile()

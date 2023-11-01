@@ -79,8 +79,14 @@ endif
 "syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\([^=]\@=\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
 " Another alternative is to use \ze which means "set match end here"
 "syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\(\ze[^=]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
-syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\(\ze[^=>]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
-highlight javaScriptAssignVar ctermfg=white cterm=bold guifg=white gui=bold
+"syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\(\ze[^=>]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther
+
+" For the standard javascript syntax, we need to add ourselves into the large blocks
+syn match javaScriptAssignVar /\([A-Za-z_$][A-Za-z_$0-9]*\|\[.*\]\)\s*\(=\(\ze[^=>]\|$\)\|++\|--\|+=\|-=\|\*=\|\/=\)/ contains=javaScriptAssignment,javaScriptAssignmentOther containedin=jsBlock,jsParen,jsObject,jsFuncBlock,jsIfElseBlock,jsVariableDef,jsObjectProp
+" Note that this somewhat conflicts with my new blue jsObjectProp, which wants to highligh assigned _properties_ in blue
+
+"highlight javaScriptAssignVar ctermfg=white cterm=bold guifg=white gui=bold
+highlight javaScriptAssignVar ctermfg=254 cterm=bold guifg=#e4e4e4 gui=bold
 
 " Pangloss's Javascript syntax destroys my tricks above, but fortunately he creates his own syntax groups we can use!
 highlight link jsAssignExpIdent javaScriptAssignVar
@@ -141,8 +147,11 @@ syn match javascriptFunctionArgs /\zs[^()]*\ze)/ contained containedin=javascrip
 
 " For pangloss's highlighting (make 'var' and 'function' cyan like they used to be)
 " This should give us close to what we had before pangloss!
-" TODO: These do not play well with gentlemary.  Move them into joeys_default colorscheme?
-if exists('*IsScriptLoaded') && IsScriptLoaded('pangloss')
+"let usingPanglossSyntax = index(vamAddons, 'github:pangloss/vim-javascript') >= 0
+let usingPanglossSyntax = exists('*IsScriptLoaded') && IsScriptLoaded('pangloss')
+let current_colorscheme = get(g:, 'colors_name', 'default')
+let usingDefaultColorscheme = current_colorscheme == 'default'
+if usingPanglossSyntax && usingDefaultColorscheme
   silent! hi link javascriptFunction Identifier
   silent! hi link jsStorageClass Identifier
   silent! hi link jsFunction Identifier

@@ -1,0 +1,390 @@
+### Mac-like keybinds for linux
+
+# # Installation
+#
+# Install `sxhkd` and `xautomation` (for the xte executable)
+#
+# Grab `run_if_window_matches` from here: https://github.com/baskerville/sxhkd/issues/123#issuecomment-453724972
+#
+# Add this to your `~/.bashrc`:
+#
+#     export SXHKD_TERMINALS_EREGEXP="(konsole|gnome-terminal|hyper)"
+#
+# Maybe add your favourite terminal too.  Cmd-C/V will send Ctrl-Shift-C/V to these windows.
+#
+# Load your new .bashrc:
+#
+#     source ~/.bashrc
+#
+# Start listening for these keys by running:
+#
+#     sxhkd &
+#
+# To automatically start it with X-windows on a systemd system, see here: https://wiki.archlinux.org/index.php/Sxhkd#Systemd_service_file
+#
+# Alternatively, add `sxhkd &` to your ~/.xinitrc
+
+# Caveats:
+#
+# Holding down a key will not repeat it.
+#
+# We assume it is the left Alt, Shift and Control keys being pressed.  If you
+# use the right Alt or Shift keys, these bindings will not release them
+# properly.
+#
+# Notes:
+#
+# As you can see, we restore the original modifier keys after clearing them.
+# That means a second stroke of the trigger key will trigger the action a
+# second time.  But DO NOT try to restore the original non-modifier key; that
+# will create an infinite loop!
+#
+# It also means, if you press and release a stroke very quickly, before the
+# command has finished executing, then you may end up with a sticky modifier!
+#
+# All the keybinds work with Google Chrome, but with Firefox some of them don't
+# work too well.  I believe Alt triggers the menu and that gets in the way.
+
+
+
+# Reload this config
+control + alt + shift + r
+  killall -USR1 -u "$USER" sxhkd ; echo 'sxhkd config reloaded'
+
+
+
+### === Cut, copy and paste === ###
+
+alt + x
+  xte "keyup x" "keyup Meta_L" "keydown Control_L" "key x" "keyup Control_L" "keydown Meta_L"
+alt + c
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup c" "keyup Meta_L" "keydown Control_L"                   "key c"                 "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup c" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key c" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+alt + v
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup v" "keyup Meta_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+
+# Failed attempt to paste into gvim
+#alt + v
+#  run_if_window_matches --not --class "($SXHKD_TERMINALS_EREGEXP|gvim)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches       --class "(gvim)"                        -- xte "keyup v" "keyup Meta_L" "key Escape" "key i" "keydown Control_L" "key r" "keyup Control_L" "key plus" "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP"      -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+
+
+
+### === Common app keybinds === ###
+
+# Zoom in and out
+# Surprisingly the `alt + equal` mapping only works properly if I do `keyup plus`
+# For Vim, instead of Ctrl-(plus|minus) my bindings are (Shift-plus|minus)
+alt + equal
+  run_if_window_matches --not --class "(vim|gvim)" -- xte "keyup plus"  "keyup Meta_L" "keydown Control_L" "key plus"  "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "(vim|gvim)" -- xte "keyup plus"  "keyup Meta_L" "keydown Shift_L"   "key plus"  "keyup Shift_L"   "keydown Meta_L"
+alt + minus
+  run_if_window_matches --not --class "(vim|gvim)" -- xte "keyup minus" "keyup Meta_L" "keydown Control_L" "key minus" "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "(vim|gvim)" -- xte "keyup minus" "keyup Meta_L"                     "key minus"                   "keydown Meta_L"
+alt + 0
+  run_if_window_matches --not --class "(vim|gvim)" -- xte "keyup 0"     "keyup Meta_L" "keydown Control_L" "key 0"     "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "(vim|gvim)" -- xte "keyup 0"     "keyup Meta_L"                     "str :ZoomReset" "key Return" "keydown Meta_L"
+
+# Open application preferences
+alt + comma
+  xte "keyup comma" "keyup Meta_L" "keydown Control_L" "key comma" "keyup Control_L" "keydown Meta_L"
+
+# Close tab
+alt + w
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup w" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup w" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key w" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+
+# Close application
+alt + q
+  xte "keyup q" "key F4"
+
+
+
+### === Common keybinds for browsers === ###
+
+# Note that for alt-k strokes we send an extra "keydown Meta_L" "keyup Meta_L" both before and after the target stroke.
+# The reason for this is because those strokes open Firefox's menu, and repeating them forces the menu to close again, and the intended stroke to register.
+# They aren't strictly needed when Shift is held (that doesn't seem to trigger the menu)
+
+# New tab, and reopen closed tab
+alt + t
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup t" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup t" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key t" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+alt + shift + t
+  xte "keyup t" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L"
+
+# New window
+alt + n
+  xte "keyup n" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+
+# Private browsing in Chrome
+alt + shift + n
+  xte "keyup n" "keyup Meta_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Meta_L"
+
+# Private browsing in Firefox
+#alt + shift + p
+#  xte "keyup p" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L"
+
+# Focus location bar
+alt + l
+  xte "keyup l" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+
+# Reload page
+alt + r
+  xte "keyup r" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+
+# Reload without caching
+alt + shift + r
+  xte "keyup r" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L"
+
+# Make bookmark
+alt + d
+  xte "keyup d" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key d" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+
+# View source
+alt + u
+  xte "keyup u" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key u" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+
+# Toggle DevTools (Chrome)
+# But I also use this to position windows
+alt + super + j
+  run_if_window_matches       --class "(google-chrome|firefox)" -- xte "keyup j" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key j" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L" ; \
+  run_if_window_matches --not --class "(google-chrome|firefox)" -- put_current_xwindow bottom
+alt + super + i
+  xte "keyup i" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key i" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L"
+
+# On Alt-click (feels like Cmd-click) perform Control-click (e.g. to open a link in a separate tab).
+# This works but it blocks Alt-hold-and-drag from doing its normal "move window".
+# So I have disabled it.
+#alt + @button1
+#  xte "keyup Meta_L" "mouseup 1" "keydown Control_L" "mouseclick 1" "keyup Control_L" "keydown Meta_L"
+
+
+
+### === VSCode === ###
+
+# Make VSCode on Linux respond like WebStorm on macOS.  (Although I have already done most of that using VSCode's own config.)
+
+# Format file (by selecting everything then running Format Selection)
+#alt + shift + l
+#  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup l" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup l" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key a" "key k" "key f" "keyup Control_L" "keydown Shift_L" "keydown Meta_L"
+
+# Format with prettier (in VSCode send Ctrl-Shift-Alt-P, my rebind for editor.action.formatDocument)
+alt + shift + l
+  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup l" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup l" "keydown Control_L" "key l" "keyup Control_L"
+
+# Format with prettier (in VSCode send Ctrl-Shift-Alt-P, my rebind for editor.action.formatDocument)
+# Disabled now because I want it to perform quickOpenNavigatePreviousInFilePicker
+#alt + shift + p
+#  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup p" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup p" "keydown Control_L" "key p" "keyup Control_L"
+
+# When opening a search, start it immediately.  (More useful if we had already selected a word.)
+# VSCode now does this itself
+#alt + shift + f
+#  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keyup Shift_L" "key Return" "keydown Shift_L" "keydown Meta_L"
+
+
+
+### === Map Cmd to Ctrl for entire alphabet === ###
+
+# At this point it seems like I should just map the entire alphabet!
+# Here are all the letters I didn't cover above:
+# Select all text
+alt + a
+  xte "keyup a" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key a" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+alt + b
+  xte "keyup b" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key b" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+alt + e
+  xte "keyup e" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key e" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+# Find
+alt + f
+  xte "keyup f" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+# Repeat last find
+alt + g
+  xte "keyup g" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key g" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+alt + h
+  xte "keyup h" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key h" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+alt + i
+  xte "keyup i" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key i" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+# Although this is used in web browsers, I need to keep it clear for VSCode, to distinguish Ctrl-J (scroll down) from Alt-J (toggle panel)
+#alt + j
+#  xte "keyup j" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+alt + k
+  xte "keyup k" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key k" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+alt + m
+  xte "keyup m" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key m" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+# Print
+# Although this is used in various apps, I need to keep it clear for VSCode
+#alt + p
+#  xte "keyup p" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+# Save
+# Not playing nicely with VSCode, in any combination
+#alt + s
+#  xte "keyup s" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+# Redo (sometimes)
+alt + y
+  xte "keyup y" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key y" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+# Undo
+alt + z
+  xte "keyup z" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+
+# Here we map Alt-Shift-key to Ctrl-Shift-key for the entire alphabet
+# This attempt to do all the keys in one bind did not work:
+#alt + shift + {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z}
+#  xte "keyup "{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z} "keyup Meta_L" "keydown Control_L" "key "{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z} "keyup Control_L" "keydown Meta_L"
+# So we do each key individually:
+alt + shift + a
+  xte "keyup a" "keyup Meta_L" "keydown Control_L" "key a" "keyup Control_L" "keydown Meta_L"
+alt + shift + b
+  xte "keyup b" "keyup Meta_L" "keydown Control_L" "key b" "keyup Control_L" "keydown Meta_L"
+alt + shift + c
+  xte "keyup c" "keyup Meta_L" "keydown Control_L" "key c" "keyup Control_L" "keydown Meta_L"
+alt + shift + d
+  xte "keyup d" "keyup Meta_L" "keydown Control_L" "key d" "keyup Control_L" "keydown Meta_L"
+alt + shift + e
+  xte "keyup e" "keyup Meta_L" "keydown Control_L" "key e" "keyup Control_L" "keydown Meta_L"
+# I like to use this in VSCode but the keybind gets sticky.  So now VSCode watched for the keybind itself.
+#alt + shift + f
+#  xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L"
+alt + shift + g
+  xte "keyup g" "keyup Meta_L" "keydown Control_L" "key g" "keyup Control_L" "keydown Meta_L"
+alt + shift + h
+  xte "keyup h" "keyup Meta_L" "keydown Control_L" "key h" "keyup Control_L" "keydown Meta_L"
+alt + shift + i
+  xte "keyup i" "keyup Meta_L" "keydown Control_L" "key i" "keyup Control_L" "keydown Meta_L"
+#alt + shift + j
+#  xte "keyup j" "keyup Meta_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Meta_L"
+# For Google Chrome, Cmd-Shift-J means "Open Downloads", which is Ctrl+J on Linux
+alt + shift + j
+  xte "keyup j" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Shift_L" "keydown Meta_L"
+alt + shift + k
+  xte "keyup k" "keyup Meta_L" "keydown Control_L" "key k" "keyup Control_L" "keydown Meta_L"
+#alt + shift + l
+#  xte "keyup l" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L"
+alt + shift + m
+  xte "keyup m" "keyup Meta_L" "keydown Control_L" "key m" "keyup Control_L" "keydown Meta_L"
+alt + shift + n
+  xte "keyup n" "keyup Meta_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Meta_L"
+alt + shift + o
+  xte "keyup o" "keyup Meta_L" "keydown Control_L" "key o" "keyup Control_L" "keydown Meta_L"
+#alt + shift + p
+#  xte "keyup p" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L"
+alt + shift + q
+  xte "keyup q" "keyup Meta_L" "keydown Control_L" "key q" "keyup Control_L" "keydown Meta_L"
+alt + shift + r
+  xte "keyup r" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L"
+alt + shift + s
+  xte "keyup s" "keyup Meta_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Meta_L"
+alt + shift + t
+  xte "keyup t" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L"
+alt + shift + u
+  xte "keyup u" "keyup Meta_L" "keydown Control_L" "key u" "keyup Control_L" "keydown Meta_L"
+alt + shift + v
+  xte "keyup v" "keyup Meta_L" "keydown Control_L" "key v" "keyup Control_L" "keydown Meta_L"
+alt + shift + w
+  xte "keyup w" "keyup Meta_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Meta_L"
+alt + shift + x
+  xte "keyup x" "keyup Meta_L" "keydown Control_L" "key x" "keyup Control_L" "keydown Meta_L"
+alt + shift + y
+  xte "keyup y" "keyup Meta_L" "keydown Control_L" "key y" "keyup Control_L" "keydown Meta_L"
+# Redo
+alt + shift + z
+  xte "keyup z" "keyup Meta_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Meta_L"
+
+
+
+### === Navigation === ###
+
+# Switch tab left/right
+# Simple version which catches Alt-Shift-[/] and sends Ctrl-PageUp/PageDown
+#alt + shift + braceleft
+#  xte "keyup braceleft" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Prior" "keyup Control_L" "keydown Meta_L" "keydown Shift_L"
+#alt + shift + braceright
+#  xte "keyup braceright" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Next" "keyup Control_L" "keydown Meta_L" "keydown Shift_L"
+
+# Switch tab left/right
+# More complicated version which sends a different keystroke to Konsole applications (for my purposes Konsole listens for Ctrl-Shift-[/])
+alt + shift + braceleft
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceleft"  "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Prior"        "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceleft"  "keyup Meta_L"                 "keydown Control_L" "key bracketleft"  "keyup Control_L" "keydown Meta_L"
+alt + shift + braceright
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceright" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Next"         "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceright" "keyup Meta_L"                 "keydown Control_L" "key bracketright" "keyup Control_L" "keydown Meta_L"
+
+# Go back/forward
+# Cmd-Left and Cmd-Right usually navigate back and forwards on Mac.
+# The equivalents on Linux are Alt+Left and Alt+Right.
+# But I am mapping Alt+Left and Alt+Right below, as editing motions.
+# Targetting them here would simply trigger those bindings!
+# If you disable the editing keybinds below, then you could enable these.
+#alt + bracketleft
+#  xte "keyup bracketleft" "key Left"
+#alt + bracketright
+#  xte "keyup bracketright" "key Right"
+
+# Fortunately I already happen to be using a userscript called More Keybinds in my browser,
+# which puts browser back on Control-Backspace and forward on Control-Enter.
+# So I can target those strokes instead.
+# https://openuserjs.org/scripts/joeytwiddle/More_Keybinds
+# BUG: I cannot pass alt + bracketleft down to apps which actually understand it!
+# So for VSCode I added ctrl+alt+shift bracketleft/right keybinds, so I can activate them here
+alt + bracketleft
+  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketleft" "keyup Meta_L" "keydown Control_L" "key BackSpace" "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches --class "(code|code-oss)"         -- xte "keyup bracketleft" "keydown Control_L" "key bracketleft" "keyup Control_L"
+alt + bracketright
+  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketright" "keyup Meta_L" "keydown Control_L" "key Return" "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches --class "(code|code-oss)"         -- xte "keyup bracketright" "keydown Control_L" "key bracketright" "keyup Control_L"
+
+
+
+### === Keys used while editing text === ###
+
+# Move to home/end
+# In the first two keybinds, I find it helps to send an _extra_ Alt press, to counteract the Alt press that the application receives when we release.
+alt + Left
+  xte "keyup Meta_L" "keyup Left"  "key Home" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+alt + Right
+  xte "keyup Meta_L" "keyup Right" "key End"  "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+alt + shift + Left
+  xte "keyup Meta_L" "keyup Left"  "key Home" "keydown Meta_L"
+alt + shift + Right
+  xte "keyup Meta_L" "keyup Right" "key End"  "keydown Meta_L"
+
+# Move one word
+super + Left
+  xte "keyup Super_L" "keyup Left"  "keydown Control_L" "key Left"  "keyup Control_L" "keydown Super_L"
+super + Right
+  xte "keyup Super_L" "keyup Right" "keydown Control_L" "key Right" "keyup Control_L" "keydown Super_L"
+super + shift + Left
+  xte "keyup Super_L" "keyup Left"  "keydown Control_L" "key Left"  "keyup Control_L" "keydown Super_L"
+super + shift + Right
+  xte "keyup Super_L" "keyup Right" "keydown Control_L" "key Right" "keyup Control_L" "keydown Super_L"
+
+# On MacBooks, Fn-Backspace performs Delete
+# On Linux, the same fingerstroke is at Ctrl-Backspace
+# So let's map Ctrl-Backspace to perform Delete
+# I do like to use Ctrl-Backspace as "Go Back" in More Keybinds, but now I have made that trigger on Delete too.
+control + BackSpace
+  xte "keyup BackSpace" "keyup Control_L" "key Delete" "keydown Control_L"
+
+
+
+### === Keybinds for me which you might want to disable === ###
+
+# My keyboard has a Delete key where my fingers think Insert should be!
+# I never actually use Insert, but sometimes I want to use Shift-Insert.
+# Since I never use Shift-Delete, I can remap Shift-Delete to perform Shift-Insert.
+shift + Delete
+  xte "keyup Delete" "key Insert"
+
+F11
+  volumedown
+
+F12
+  volumeup

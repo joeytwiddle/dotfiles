@@ -1,3 +1,7 @@
+" Usually `[I` shows a list of all lines containing the word under the cursor.
+"
+" This scripts enhances `[I` to also prompt which line to jump to.
+
 function! UnderOccurences()
 	exe "normal! [I"
 	let nr = input("Which one: ")

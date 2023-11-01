@@ -1,0 +1,104 @@
+[1]
+Description=Application settings for gkrellm
+clientmachine=localhost
+clientmachinematch=0
+desktop=-1
+desktoprule=3
+skippager=true
+skippagerrule=3
+skipswitcher=true
+skipswitcherrule=3
+skiptaskbar=true
+skiptaskbarrule=3
+wmclass=gkrellm
+wmclasscomplete=false
+wmclassmatch=1
+
+[2]
+Description=Window settings for ktorrent
+clientmachine=localhost
+clientmachinematch=0
+position=108,-33
+positionrule=4
+size=1708,937
+sizerule=4
+title=All Torrents — KTorrent
+titlematch=0
+types=1
+windowrole=mainwindow#1
+windowrolematch=1
+wmclass=ktorrent
+wmclasscomplete=false
+wmclassmatch=1
+
+[3]
+Description=Application settings for smplayer
+clientmachine=localhost
+clientmachinematch=0
+opacityactive=100
+opacityactiverule=2
+wmclass=smplayer
+wmclasscomplete=false
+wmclassmatch=1
+
+[4]
+Description=Window settings for google-chrome
+clientmachine=localhost
+clientmachinematch=0
+opacityactive=100
+opacityactiverule=2
+title=Popout for YouTube™
+titlematch=0
+types=1
+windowrole=pop-up
+windowrolematch=1
+wmclass=crx_pofekaindcmmojfnfgbpklepkjfilcep google-chrome
+wmclasscomplete=true
+wmclassmatch=1
+
+[5]
+Description=Application settings for ktorrent
+clientmachine=localhost
+clientmachinematch=0
+desktop=6
+desktoprule=4
+wmclass=ktorrent
+wmclasscomplete=false
+wmclassmatch=1
+
+[Directories]
+dir_pixmap[$d]
+
+[General]
+BrowserApplication[$d]
+ColorScheme[$d]
+Name[$d]
+count=5
+fixed[$d]
+font[$d]
+menuFont[$d]
+shadeSortColumn[$d]
+smallestReadableFont[$d]
+toolBarFont[$d]
+
+[Icons]
+Theme[$d]
+
+[KDE]
+ChangeCursor[$d]
+ColorScheme[$d]
+LookAndFeelPackage[$d]
+contrast[$d]
+widgetStyle[$d]
+
+[KFileDialog Settings]
+Breadcrumb Navigation[$d]
+
+[Paths]
+Trash[$d]
+
+[PreviewSettings]
+MaximumSize[$d]
+camera[$d]
+file[$d]
+fonts[$d]

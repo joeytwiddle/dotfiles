@@ -1,0 +1,6 @@
+# Write your default config options here!
+
+subfont-autoscale=3
+subfont-osd-scale=2
+# Default: 5
+subfont-text-scale=4

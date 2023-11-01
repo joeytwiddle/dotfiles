@@ -34,7 +34,7 @@
 #         not prompt for a commit message (gca --no-edit).
 #
 #   gcf <commit> adds the currently staged changes to an earlier commit.
-#       This is very useful to fix a commit you made earlier.  It uses rebase
+#       This is very useful to "fix" a commit you made earlier.  It uses rebase
 #       with fixup.  You should not amend commits you have already pushed.
 #
 # Pulling, merging and pushing:
@@ -63,7 +63,9 @@
 #
 #   gssp allows you to select (y/n) which changes to stash, leaving the others.
 #
-#   gssk lets you select (y/n) which changes to destroy (kill).
+#   gssk My preferred way to drop unwanted changes (e.g. console logs after a
+#        bug was fixed)
+#        Lets you select (y/n) which changes to destroy (kill).
 #        It actually does gssp but then drops the stash afterwards.
 #        As a result it is recoverable (e.g. using git-list-dropped-stashes).
 #        So it is a less dangerous version of git reset --hard (grh).
@@ -86,8 +88,8 @@
 #
 #   gmt is a shortcut for git mergetool
 #
-#   gmr as mentioned earlier does git rebase --preserve-merges
-#       You should only really use this on branches you have not yet pushed.
+#   gmr as mentioned earlier does git rebase --rebase-merges
+#       You should only use this on branches you have not yet shared with others.
 #
 # Less used shortcuts:
 #
@@ -110,6 +112,19 @@
 
 # CONSIDER: Turn the aliases into shellscripts so they are available from vim's command line?
 #       Put them somewhere and load them onto the PATH optionally.  (Not everyone will want them.)  jsh modules...
+
+# See also: https://github.com/jasoncodes/dotfiles/blob/master/shell/aliases/git.sh
+
+# Note that:
+#
+#   local foo="$(bar)"
+#
+# is not the same as:
+#
+#   local foo
+#   foo="$(bar)"
+#
+# because the latter returns an exit code, but the former masks it.
 
 # If you happen to be using oh-my-zsh's git plugin, redefining its aliases will throw warnings, so we undefine them first.
 unalias gs 2>/dev/null
@@ -201,7 +216,9 @@ git_status_plus() {
 		# Unfortunately we need to do this now, and not after the sort-by-date.
 		# The best solution for the user is to use git ignore properly.
 		# The slowness of this process should encourage that!
-		# CONSIDER: The following while loop could be replaced by a call to xargs.
+		# DONE: The following while loop could be replaced by a call to xargs.
+		# `git status --porcelain` surrounds filenames containing special characters (including spaces) in quotes.  This will remove those quotes, since we don't need them.  However it doesn't unescape any of the characters that `git status --porcelain` escapes.  Both v1 and v2 do this.
+		sed 's+^"\(.*\)"$+\1+' |
 		head -n 20000 |
 		(
 			cd "$git_root_folder"
@@ -227,9 +244,11 @@ git_status_plus() {
 		#diff "$previous_stats_file" "$current_stats_file" |
 		#grep '^>'
 
-		cursereset="$(cursenorm)"
-		cursenormal="$(cursecyan)"
-		cursehighlight="$(curseyellow;cursebold)"
+		local cursereset="$(cursenorm)"
+		local cursenormal="$(cursecyan)"
+		local cursehighlight="$(curseyellow;cursebold)"
+
+		local path_prefix="$(git rev-parse --show-prefix)"
 
 		# CONSIDER TODO: The below is very inefficient.  Instead of all these greps, can we sort them and do a one-way diff?
 		cat "$current_stats_file" |
@@ -237,13 +256,17 @@ git_status_plus() {
 		head -n 1000 |
 		while read size date file
 		do
-			curseon="$cursenormal"
-			# We should really convert at least $file to a regexp.
-			# Ah, -F -x can do that for us.
+			local curseon="$cursenormal"
+			# If we haven't seen this file before, or it has changed size/date since last time, then we highlight it
 			if ! grep -F -x "$size $date $file" "$previous_stats_file" >/dev/null 2>&1
 			then curseon="$cursehighlight"
 			fi
-			echo "#       ${curseon}${file}${cursereset}"
+			# Find the file path relative to current path
+			# This only works for files underneath the current path
+			#local relfile="$(printf "%s\n" "$file" | sed "s+^$path_prefix++")"
+			local relfile="${file#$path_prefix}"
+			# If relfile is "" then presumably it was the current folder "."
+			echo "#       ${curseon}${relfile:-.}${cursereset}"
 		done
 
 		'cp' -f "$current_stats_file" "$previous_stats_file" 2>/dev/null
@@ -272,7 +295,8 @@ gd() {
 # Git Diff Words (also uses -w to ignore whitespace aka indentation)
 alias gdw='git diff -w --word-diff=color'
 # Git Diff Files
-alias gdf='git diff --stat'
+alias gdf='git diff --stat="$COLUMNS"'
+
 # Git Diff Staged / Cached (see which one I use most ... I used gdc!)
 #alias gds='gdc'
 alias gdc='gd --cached'
@@ -283,19 +307,26 @@ alias ga='git add -v'
 # I often like to do git commit -a, and wonder why there is no equivalent git add -a.  In fact there is, but the flag is -u!
 alias gau='ga -u'
 alias gaa='gau'
+
 #alias gc='git commit'
 alias gc='git commit -v'
-# I never use this, so disabled it.
-#alias gcm='gc -m'
+alias gcnv='gc --no-verify'
 alias gca='gc --amend'
-# Amend last commit without the editor prompt
-#alias gcaq='EDITOR=true gca'
-# Oh there is already an option for that!
+alias gcanv='gca --no-verify'
 alias gcane='gca --no-edit'
+alias gcanenv='gcane --no-verify'
+
+# gc -m but without needing quotes
+gcm() {
+	gc -m "$*"
+}
+gcam() {
+	gca -m "$*"
+}
 # gcam could mean -m with --amend or with -a
 # With --amend is more of a timesaver, and more consistent with gca.  But it is more dangerous if used accidentally!
 #alias gcam='gc --amend -m'
-#alias gcam='gc -a -m'
+alias gcAm='gc -a -m'
 # In reality, I rarely use gcam, so I just disabled it.
 alias gci='git commit --interactive'
 # -p "patch" allows us to choose which hunks to add or commit
@@ -304,11 +335,18 @@ alias gap='ga -p'
 #alias gcp='gc -p'
 
 # Perform git commit --fixup and do the rebase immediately
+#
+# For example, to patch the third previous commit with a small bugfix:
+#
+#     git add -p file_with_minor_fix.c
+#
+#     gcf HEAD~~
+#
 git_commit_immediate_fixup() {
 	local commit_to_amend="$1"
 	if [ -z "$commit_to_amend" ]
 	then
-		echo "You must provide a commit to fixup!"
+		echo "You must provide a target commit!"
 		return
 	fi
 
@@ -316,22 +354,80 @@ git_commit_immediate_fixup() {
 	commit_to_amend="$(git rev-parse "${commit_to_amend}")" || return
 
 	echo ">> Committing"
-	git commit --fixup "${commit_to_amend}" || return
+	git commit --no-verify --fixup "${commit_to_amend}" || return
 
 	echo ">> Performing rebase"
+	# If --rebase-merges is not working, you may need to use the older --preserve-merges
 	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
-	EDITOR=true git rebase -i --autosquash --autostash --preserve-merges "${commit_to_amend}~"
+	EDITOR=true git rebase -i --autosquash --autostash --rebase-merges --no-fork-point "${commit_to_amend}~"
 }
 alias gcf='git_commit_immediate_fixup'
 
+# The version above is the nice simple one for you to use.
+# This version is what Joey is using to debug issues.
+git_commit_immediate_fixup_DEBUG_VERSION() {
+	local commit_to_amend="$1"
+	if [ -z "$commit_to_amend" ]
+	then
+		echo "You must provide a target commit!"
+		return
+	fi
+
+	# Occasionally rebase appears to lose commits.
+	# In order to learn more about it, and hopefully eventually avoid it, I need to detect when it has happened.
+	# We may be able to avoid it by using --no-fork-point (https://stackoverflow.com/a/1628584/99777)
+	local do_extra_check=1
+
+	# We need a static commit ref, in case the commit is something relative like HEAD~
+	commit_to_amend="$(git rev-parse "${commit_to_amend}")" || return
+
+	echo ">> Committing"
+	git commit --no-verify --fixup "${commit_to_amend}" || return
+	[ -n "$do_extra_check" ] && git branch --force BACKUP-BEFORE-FIXUP-REBASE HEAD
+
+	echo ">> Performing rebase"
+	# If --rebase-merges is not working, you may need to use the older --preserve-merges
+	# --autosquash only arranges fixups when using -i, so we use -i with a dummy EDITOR
+	EDITOR=true git rebase -i --autosquash --autostash --rebase-merges --no-fork-point "${commit_to_amend}~"
+
+	if [ -n "$do_extra_check" ] && ( [ -d "$git_dir/rebase-merge" ] || [ -d "$git_dir/rebase-apply" ] )
+	then
+		echo "We cannot check the rebase was identical because it has been paused part way" >&2
+		echo "But you can check yourself by running this when finished:" >&2
+		echo "    git diff BACKUP-BEFORE-FIXUP-REBASE HEAD"
+	elif [ -n "$do_extra_check" ]
+	then
+		changes="$(git diff HEAD BACKUP-BEFORE-FIXUP-REBASE | wc -l)"
+		if [ "$changes" = 0 ]
+		then git branch -D BACKUP-BEFORE-FIXUP-REBASE
+		else
+			echo
+			echo "WARNING: The rebased repo does not match the pre-fixup repo.  Here is the diff:"
+			echo
+			git diff BACKUP-BEFORE-FIXUP-REBASE HEAD
+			echo
+			echo "You may restore by (stashing anything uncommitted and then) doing: git reset --hard BACKUP-BEFORE-FIXUP-REBASE"
+			echo
+			return 9
+		fi
+	fi
+}
+unalias gcf
+alias gcf='git_commit_immediate_fixup_DEBUG_VERSION'
+
 # Performs gap but offers the files in most-recently-modified order.
-# This is useful if you have made a few changes tangential to your main work, and now want to "pop" them off into a commit.
-# This is useful if you want to commit some of your most recent changes, while still leaving your older changes in the working tree.
+# This is useful if you have made a few changes tangential to your current task, and now want to "pop" them off into a commit.
+# You can easily pick out your most recent changes, and leave your older changes in the working tree.
 git_add_patch_by_date() {
 	local git_root_folder="$(git rev-parse --show-toplevel)"
 	cd "${git_root_folder}"
 	local modified_files
+	# dash cannot handle the array syntax here.  Even if we hide it in an if, dash still cannot parse this file!
+	# (This used to stop my Fluxbox from starting, until I changed my fluxbox startup script from startj to startj-simple.)
 	IFS=$'\n' modified_files=($(git status --porcelain | grep '^.M' | sed 's+^.. ++' | sortfilesbydate | reverse))
+	# This is a "safer" version, in that dash can parse it.
+	# But it is "unsafe" because it cannot handle filenames containing spaces.
+	#IFS=$'\n' modified_files="$(git status --porcelain | grep '^.M' | sed 's+^.. ++' | sortfilesbydate | reverse)"
 	# This did not allow any user input, and would have suffered the same as below anyway.
 	#| xargs -d '\n' git add -p
 	# This just puts them back into alphabetical/disk/git order!
@@ -348,12 +444,11 @@ then
 	: #compdef ga=git
 fi
 
-# This is for older versions of git (<1.7.0) which didn't accept the --all parameter.
-# We could actually perform the same action with the old built-in `git remote update`, but that won't let us fetch tags and do pruning.
-# We use --all if git supports it, although it isn't significantly faster.
 git_fetch_all() {
-	if [[ $(git --version | awk '/git/ {print $3}') < 1.7 ]]
+	if [[ "$(git --version | awk '/git/ {print $3}')" < "1.7" ]]
 	then
+		# This is for older versions of git (<1.7.0) which didn't accept the --all parameter.
+		# We could actually perform the same action with the old built-in `git remote update`, but that won't let us fetch tags and do pruning.
 		local remote
 		git remote |
 		while read remote
@@ -362,6 +457,7 @@ git_fetch_all() {
 			git fetch "${remote}" "$@"
 		done
 	else
+		# We use --all if git supports it, although it isn't significantly faster.
 		git fetch --all "$@"
 	fi
 }
@@ -376,7 +472,7 @@ alias gpl='git pull'
 alias gpll='git pull'
 
 #alias gps='git push'
-alias gpsh='git push'
+alias gpsh='git push -v'
 # Git Push Origin
 alias gpo='verbosely git push origin "$(git_get_current_branch)"'
 # Git Push Upstream.  Disabled because:
@@ -386,22 +482,38 @@ alias gpo='verbosely git push origin "$(git_get_current_branch)"'
 #alias gpu='verbosely git push "$(git_guess_upstream_branch)"'
 # -u sets upstream tracking branch
 #alias gpu='verbosely git push -u'
-# --no-verify will skip running hooks, --force will override remote branch even if it is ahead of local branch
+# --force will override remote branch even if it is ahead of local branch
+# --no-verify will skip running hooks
 alias gpshf='git push --force'
 alias gpshnv='git push --no-verify'
 alias gpshnvf='git push --no-verify --force'
 
+# This is just a reminder how to fix an occasional problem when trying to push (from a non-current local branch?) to a non-existent remote branch
+#
+# The problem shows up as:
+#
+#     error: unable to push to unqualified destination: master
+#     The destination refspec neither matches an existing ref on the remote nor
+#     begins with refs/, and we are unable to guess a prefix based on the source ref.
+#
+alias gpshharder='echo "Try: git push -u <remote> <local_branch>:refs/heads/<remote_branch>"'
+
 # I wanted to perform `git pull` and `git merge` with `git_autostashed` however they sometimes drop out unfinished, in which case the stash does not get popped as intended.
 alias gm='git merge'
+alias gmne='git merge --no-edit'
+alias gmnff='git merge --no-ff'
 # Git Merge Origin (this branch)
 #alias gmo='verbosely git merge "$(git_guess_upstream_branch)"'
 alias gmo='verbosely git merge "origin/$(git_get_current_branch)"'
 alias gmm='verbosely git merge master'
+alias gmmn='verbosely git merge main'
 #alias gmu='verbosely git merge "upstream/$(git_get_current_branch)"'
 alias gmu='verbosely git merge "$(git_guess_upstream_branch)"'
 alias gmom='verbosely git merge origin/master'
+alias gmomn='verbosely git merge origin/main'
 alias gmod='verbosely git merge origin/develop'
 alias gmum='verbosely git merge upstream/master'
+alias gmumn='verbosely git merge upstream/main'
 alias gmud='verbosely git merge upstream/develop'
 
 alias gmt='git mergetool'
@@ -419,7 +531,8 @@ alias gpp='gpr && git push'
 # If you have already fetched the remote branch, or you want to rebase against a branch that isn't upstream, you can use this
 grp_safe() {
 	local other_branch="$1"
-	[ -z "${other_branch}" ] && other_branch="$(git_guess_upstream_branch)" || shift
+	[ -n "${other_branch}" ] && shift
+	[ -z "${other_branch}" ] && other_branch="$(git_guess_upstream_branch)"
 
 	# Optional safety check: If we will be cherry-picking a commit that is already in other branches, rebasing could cause confusion for those branches.
 	# But that's not really a problem if those other branches are essentially throwaway branches, or if they are the upstream which we intend to override.
@@ -450,17 +563,19 @@ grp_safe() {
 	echo "Current commit before rebase (in case abort desired): ${current_commit}"
 	echo
 
-	git rebase --preserve-merges --autostash "${other_branch}" "$@"
+	git rebase --rebase-merges --autostash "${other_branch}" "$@"
 }
-#alias grp='git rebase --preserve-merges "$(git_guess_upstream_branch)"'
+#alias grp='git rebase --rebase-merges "$(git_guess_upstream_branch)"'
 alias grp='grp_safe'
 # Git Merge Rebase (mnemonic)
 alias gmr='grp_safe'
 alias grpu='grp $(git_guess_upstream_branch)'
 alias gmru='gmr $(git_guess_upstream_branch)'
 alias gmrom='gmr origin/master'
+alias gmromn='gmr origin/main'
 alias gmrod='gmr origin/develop'
 alias gmrum='gmr upstream/master'
+alias gmrumn='gmr upstream/main'
 alias gmrud='gmr upstream/develop'
 # Abort the rebase (like gra) but using the terminology we introduced above (grp and gmr)
 alias grpa='git rebase --abort'
@@ -470,8 +585,10 @@ alias gr='git reset'
 alias grh='gr --hard'
 alias grhu='grh "@{u}"'
 alias grhom='grh origin/master'
+alias grhomn='grh origin/main'
 alias grhod='grh origin/develop'
 alias grhum='grh upstream/master'
+alias grhumn='grh upstream/main'
 alias grhud='grh upstream/develop'
 alias grh~='grh head~'
 alias grh~~='grh head~~'
@@ -488,12 +605,14 @@ alias gcpc='git cherry-pick --continue'
 alias gcpa='git cherry-pick --abort'
 
 #alias gri='git rebase -i'
-alias gri='git rebase --interactive --autosquash --autostash'
-# I used to include --preserve-merges here, but it started dropping commits during a rebase, so I think it's safer off!
+alias gri='git rebase --interactive --autosquash --autostash --no-verify'
+# I used to include --rebase-merges here, but it started dropping commits during a rebase, so I think it's safer off!
 alias griu='gri @{u}'
 alias griom='gri origin/master'
+alias griomn='gri origin/main'
 alias griod='gri origin/develop'
 alias grium='gri upstream/master'
+alias griumn='gri upstream/main'
 alias griud='gri upstream/develop'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
@@ -507,15 +626,16 @@ alias grll='glc -g'
 # This steps through commits and diffs:
 alias grlll='gitlog2 -search "^(diff|[a-z0-9]{7}) .*" -g -p'
 
-# Be careful.  'grv' will call 'git remote' but 'gr' will call 'git reset'!
+# Be careful.  'grv' will call 'git remote -v' but 'gr' will call 'git reset'!
 alias grv='git remote -v'
 
 alias gt='git tag'
 
 alias fgc=friendlygitcommit
-alias lg=gitls
 alias gls=gitls
 alias glsl=gitls
+
+alias lg=lazygit
 
 #alias gp='git preview'   # This was defined in my .gitconfig as: git diff --stat HEAD..FETCH_HEAD
 #alias gw='git whatsnew'
@@ -526,7 +646,7 @@ alias glsl=gitls
 # Unfortunately whilst this provides the feature, git disables colors:
 #   gl | less +"/^commit.*" -r
 # Oh, fixed it.  Since this make paging commits very fast, now adding --stat
-#alias gl='git -c color.ui=always log -U2 -p -m --stat | less -R "+/^commit.*"'
+#alias gl='git -c color.ui=always log -U2 -p -m --stat="$COLUMNS" | less -R "+/^commit.*"'
 gitlog() {
 	# Show color if not piping.  Skip to next file or commit on 'n'.
 	if [ -t 1 ]
@@ -556,7 +676,7 @@ gitlog() {
 # I rarely want to use glp directly; I prefer glg because it customizes the color of the commit message.
 # OK so I recently had to track down some code which had been deleted/lost during a merge.  I was using git log <filename>.  The *only* way which worked was -c; -cc or neither would not display this line!  So -c all the way... at least for that case!  If -c causes duplicate information to be displayed, perhaps we should use it at the same time as not showing branches.
 # The --stat option sometimes abbreviates the filenames it displays.  If you need the whole path, use --numstat instead.
-alias glp='gitlog -p -U2 --stat'
+alias glp='gitlog -p -U2 --stat="$COLUMNS"'
 # Here --stat show a quick summary of changed files, before actually showing the diffs.  I rather enjoy this when using 'gl' as it lets me decide from the top of each commit whether there are any files I am interested in, and if not I can happily skip straight to the next commit.  In other situations, e.g. when I am planning to read all the details, --stat is just chaff.
 # "Git Log Grey" - Like 'gl' except we present my favourite colors
 # This is quite close to: git log --decorate -U2 -p -m --stat
@@ -570,6 +690,8 @@ alias glg='glp --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(res
 # We should probably swap glg and gl, since gl has a graph and glg does not!
 # Interestingly this can show some commits in a different order from glg alone, in the presence of merges.
 alias gl='glg --graph'
+# Git Log with Diffs
+alias gld='gl'
 # glx is like gl but without my custom format colours and without my Custom_format_bugs.
 alias glx='glp --graph'
 # Warning: glg and glc duplicate my color settings.  (Which are also set in my ~/.gitconfig.)  Part of the reason I passed everything through glg/glc was to display decorations (commit labels like HEAD and origin/master).  I have since learned this can be achieved by passing --decorate, so we may be able to reduce some duplication that way.
@@ -581,7 +703,11 @@ alias glm='glg -m --first-parent'
 
 # "Git Log Clear" - Single lines, no graph.  Shows more info than: git log --pretty=oneline
 # If you want to use this with --stat and --graph then it should have a %n at the end.  But this will make --graph show blank lines even when run without --stat.  Since glf does not use --graph, we don't really need this.
-alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
+#alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
+alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ad)%Creset" --date=relative'
+#alias glct='glc --date=local'
+alias glct='git log --pretty=format:"%C(yellow bold)%h%C(reset) %C(cyan)%ad%C(reset)%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an%Creset" --date=local'
+alias glctt='git log --pretty=format:"%C(yellow bold)%h%C(reset) %C(cyan)%ad / %cd%C(reset)%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an%Creset" --date=local'
 
 # "Git Log Long" - One per line, with graph
 #alias gll='git log --graph --decorate --pretty=oneline --abbrev-commit --all'   # Does not show committer's name or age of commit
@@ -590,6 +716,8 @@ alias glc='git log --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset)
 #alias gll='git log --graph --pretty=format:"%C(yellow)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ar)%Creset"'
 # Problem: When used with --graph, glc should end in %n.  But we don't want the %n when --graph is not used (e.g. in glf below)!  I don't personally want the %n, but --graph always draws a |\n straight after the formatted text, so it looks messy without it.
 alias gll='glc --graph'
+alias gllt='glct --graph'
+alias glltt='glctt --graph'
 # "Git Log Long Minus merges"
 # This lists the merge commits themselves, but does not list any of the commits that were brought in by the merge.  This is useful if you have merged things into the current branch, but you are only interested in the commits that were actually made on the current branch.
 # When using this, it can be nice to clearly distinguish merges from raw commits.  If your merge commit messages are pure, you can search /Merge.* or cleaner /Merge.* into [^ ]*
@@ -607,15 +735,15 @@ fi
 alias gllnm='gll --no-merges'
 # Git Log Long No Graph
 alias gllng='glc'
-alias glls='gll --stat'
+alias glls='gll --stat="$COLUMNS"'
 
 # "Git Log Word-diffed" - It is debatable whether we want to page through diffs or just whole commits; it kinda depends what the user is looking for that particular time!
 alias glw='gl --word-diff=color'
 # "Git Log Stats/Summary" - Just file stats, no diffs.  BUG: Not grey, because glg uses glp which does -p (diffs)!
 # Deprecated in favour of gls=gitls.  Use glf for this instead.
-#alias gls='gitlog --stat'
+#alias gls='gitlog --stat="$COLUMNS"'
 # "Git Log Files" - Compressed version of "Git Log Stats"
-#alias glf='glc --stat'
+#alias glf='glc --stat="$COLUMNS"'
 # New version allows easy n/N searching.  Could be merged with gitlog.
 gitlog2() {
 	local search
@@ -627,7 +755,7 @@ gitlog2() {
 	glc --color=always "$@" | less -R +"/$search"
 	#glc "$@"
 }
-alias glf='gitlog2 -search "^[^ ]+" --stat'
+alias glf='gitlog2 -search "^[^ ]+" --stat="$COLUMNS"'
 # With glf, we can walk commmits with /^[^ ]+
 # Just commit info, one per line
 # Git Log Files Porcelain: does not abbreviate filenames, shows numbers instead of '+'s and '-'s
@@ -636,16 +764,24 @@ alias glfp='gitlog2 -search "^[a-z0-9]{7}" --numstat'
 # Some common branches I like to read/search
 alias glu='gl @{u}'
 alias glom='gl origin/master'
+alias glomn='gl origin/main'
 alias glod='gl origin/develop'
 alias glum='gl upstream/master'
+alias glumn='gl upstream/main'
 alias glud='gl upstream/develop'
 alias gllu='gll @{u}'
 alias gllom='gll origin/master'
+alias gllomn='gll origin/main'
 alias gllod='gll origin/develop'
 alias gllum='gll upstream/master'
+alias gllumn='gll upstream/main'
 alias gllud='gll upstream/develop'
 
 alias gb='git branch'
+# Shows latest commit on each branch (although I prefer my gbd for this)
+alias gbv='git branch -v'
+# Also shows upstream tracking branch (if any)
+alias gbvv='git branch -vv'
 # Git Branch Force can be used to change the HEAD of a branch that is not the current branch
 alias gbf='git branch -f'
 # Git Branch Move (Rename)
@@ -662,6 +798,7 @@ alias gbb='git_in_root_dir git bisect bad'
 #alias gbr='git_in_root_dir git bisect reset'
 
 alias gco='git checkout'
+alias gcob='gco -b'
 # Sometimes we can't checkout because there are uncommitted changes to files which differ between the two branches
 # This can be handled by `git checkout -m` or by our own `gcos`
 alias gcom='gco -m'
@@ -748,6 +885,7 @@ alias gwinpshd='gd "$(git_guess_upstream_branch)..HEAD"'
 # Usually my @{upstream} is where I push to, but not where I pull from.
 # So I need to specify where I will pull from:
 #[ -z "$remote_upstream_branch" ] && remote_upstream_branch="origin/master"
+#[ -z "$remote_upstream_branch" ] && remote_upstream_branch="origin/main"
 [ -z "$remote_upstream_branch" ] && remote_upstream_branch="origin/develop"
 
 alias grm='git rm'
@@ -823,11 +961,14 @@ gsld() {
 		less -R +'/(^commit .*|^diff .*)'
 	)
 }
+alias gsdrop='git stash drop'
 
-# Use this to remove (reset) selected patches of uncommitted files.  Finer grained than `git reset` or `git checkout --` and also more convenient.
-# How does it work?  It stashes the few patches you select, and then drops the new commit from the stash.
+# Use this to remove (reset) selected patches of uncommitted code.  Finer grained than `git reset` or `git checkout --` and also interactive.
+# Answer "yes" to the hunks you want to remove/kill.
+# How does it work?  It stashes the few patches you select, and then drops that new stash from the stash list.
 # This affects the working tree, and thus is different from `git reset -p` which affects the index.
 # Apart from leaving a dropped stash in the garbage, it has the same functionality to the built-in `git checkout -p` (gcop).
+# Because the stash is dropped from the list, it is difficult to recover in case of an accident, but possible using `git-list-dropped-stashes` to search for the recently dropped commit.
 git_kill_patch() {
 	# If there are selections available, but none of them are selected, git stash -p will exit with code 1, so we know we don't need to drop.
 	# But if there are _no changes available_ to stash, git stash -p will immediately exit with code 0, and then we would proceed to drop whatever unrelated stash is at the top of the stack!
@@ -842,13 +983,20 @@ git_kill_patch() {
 	git stash drop
 }
 #alias gkp='git_kill_patch'
+# I remember it as Git Stash Save Kill
 alias gssk='git_kill_patch'
 
 # Apply a stash even if there are uncommitted changes in some of the affected files
 git_stash_apply_merge() {
-	git commit -a -m 'TEMPORARY COMMIT' &&
-		git stash apply "$@" &&
-		git reset HEAD~
+	# joeytwiddle's technique
+	#git commit -a -m 'TEMPORARY COMMIT' &&
+	#git stash apply "$@" &&
+	#git reset HEAD~
+	# iFreilicht's technique:
+	local git_root_folder="$(git rev-parse --show-toplevel)"
+	git add -u "$git_root_folder" &&
+	git stash apply "$@" &&
+	git reset
 }
 alias gsam='git_stash_apply_merge'
 alias gsaf='git_stash_apply_merge'
@@ -871,12 +1019,17 @@ git_clone_friendly() {
 	then git clone "$@"
 	else
 		local url="$1"
-		local username_dot_repo="$(printf "%s\n" "$1" | sed 's+/$++' | grep -o "[^/]*/[^/]*$" | tr '/' '.')"
-		git clone "$url" "$username_dot_repo"
+		# username.repo
+		#local folder="$(printf "%s\n" "$1" | sed 's+/$++' | grep -o "[^/]*/[^/]*$" | tr '/' '.')"
+		# repo
+		local folder="$(printf "%s\n" "$1" | sed 's+/$++' | grep -o "[^/]*$")"
+		git clone --recurse-submodules "$url" "$folder" &&
+		cd "$folder"
 	fi
 }
 #alias gcl='git_clone_friendly'
-alias gcl='git clone'
+#alias gcl='git clone'
+alias gcl='verbosely git clone --recurse-submodules'
 
 # Git Auto Commit, or Git Add Commit, or Git Add and Commit
 gac() {
@@ -949,25 +1102,25 @@ gbd() {
 	tail -n "${count}" |
 	while read refname rest
 	do
+		local local="${refname}"
 
-        local local="${refname}"
-        ## NOTE: This code is cloned from gbs.  Can we refactor it out?
-        if [ "$local" = "$current_branch" ]
-        then preBranch="* "
-        else
-            preBranch=". "
-            if [ -n "$showancestors" ]
-            then
-                local_branch_commit_hash="$(git rev-parse --verify "$local")"
-                common_commit_between_branch_and_current="$(git merge-base "$local" "$current_branch")"
-                if [ "$common_commit_between_branch_and_current" = "$local_branch_commit_hash" ]
-                then preBranch="| "
-                else preBranch="/ "
-                fi
-                # I considered using "+" and "-" instead, but these are harder to visually distinguish from "*" and each other.
-                # Another alternative I tried was "~" and "x", but again the "*" is easily lost there.
-            fi
-        fi
+		## NOTE: This code is cloned from gbs.  Can we refactor it out?
+		if [ "$local" = "$current_branch" ]
+		then preBranch="* "
+		else
+			preBranch=". "
+			if [ -n "$showancestors" ]
+			then
+				local_branch_commit_hash="$(git rev-parse --verify "$local")"
+				common_commit_between_branch_and_current="$(git merge-base "$local" "$current_branch")"
+				if [ "$common_commit_between_branch_and_current" = "$local_branch_commit_hash" ]
+				then preBranch="| "
+				else preBranch="/ "
+				fi
+			# I considered using "+" and "-" instead, but these are harder to visually distinguish from "*" and each other.
+			# Another alternative I tried was "~" and "x", but again the "*" is easily lost there.
+			fi
+		fi
 
 		echo "${preBranch}${refname} ${rest}"
 	done |
@@ -990,6 +1143,22 @@ gbd() {
 }
 alias gbdr='gbd -r'
 
+# Shows branches with descriptions
+# From: https://stackoverflow.com/a/16710084
+gbwd() {
+  current=$(git rev-parse --abbrev-ref HEAD)
+  branches=$(git for-each-ref --format='%(refname)' refs/heads/ | sed 's|refs/heads/||')
+  for branch in $branches; do
+    desc=$(git config branch.$branch.description)
+    if [ $branch == $current ]; then
+      branch="* \033[0;32m$branch\033[0m"
+     else
+       branch="  $branch"
+     fi
+     echo -e "$branch \033[0;36m$desc\033[0m"
+  done
+}
+
 # May rename "gitsummary"
 gitwhatsup() {
 	echo
@@ -1007,6 +1176,7 @@ gitwhatsup() {
 	#echo "${greenBackground}${whiteForeground}$(cursebold)$gitDir$(tput init)"
 	echo "$(cursecyan)=== Remotes ===$(cursenorm)"
 	git remote -v #| prepend_each_line "   "
+	echo "(For more details, run: git remote show <remote>)"
 	echo
 	echo "$(cursecyan)=== Local branches ===$(cursenorm)"
 	git branch -vv #| prepend_each_line "   "
@@ -1102,7 +1272,8 @@ gdv() {
 
 git_branch_status() {
     # Original: https://gist.github.com/Mark-Booth/5058384
-    # This version by Joeytwiddle
+    # Active: https://github.com/bill-auger/git-branch-status
+    # This version by joeytwiddle was forked from the original
     # Similar functionality can be had from: git branch -vv | highlight -bold '\<behind\> [0-9]*' red | highlight -bold '\<ahead\> [0-9]*' green
 
     # Displays your git branches with a summary of how many commits ahead or behind the local is from its remote branch.
@@ -1132,7 +1303,7 @@ git_branch_status() {
 
     local sorting=
 
-    usage="$(basename "$0") [-hamtMv] [<branch_name_regexp>] -- summarise status of branch(es)
+    usage="git_branch_status [-hamtMv] [<branch_name_regexp>] -- summarise status of branch(es)
 
 where:
     -h           show this help text
@@ -1168,7 +1339,7 @@ where:
     done
     shift "$((OPTIND - 1))"
 
-		# If we call a getopts from a function, it may change the value of OPTIND.  We need to reset it to the default (1), or future calls to getopts will start looking at the wrong argument!  (Needed for bash 3.2.57 at least.  Reproduce with two calls from an interactive shell, e.g. `git_branch_status -a -v`, and notice the arguments are ignored on the second call.)
+    # If we call a getopts from a function, it may change the value of OPTIND.  We need to reset it to the default (1), or future calls to getopts will start looking at the wrong argument!  (Needed for bash 3.2.57 at least.  Reproduce with two calls from an interactive shell, e.g. `git_branch_status -a -v`, and notice the arguments are ignored on the second call.)
     OPTIND=1
 
     branch_name_regexp="$1"
@@ -1192,17 +1363,17 @@ where:
         #[ -z "$remote" ] && continue
         # This is an assumption I made for our project - that if a branch does not have an upstream set, then we should assume the upstream is a branch on 'origin' with the same name.
         # It could be avoided if we used --track when initially creating the local branch with git branch or git checkout.  Tracking can also be setup retrospectively with `git branch -u <remote_branch>` in Git > 1.8.0 or `git branch --set-upstream <local_branch> <remote_branch>` in Git > 1.7.0.
-				guessed_remote=""
+        guessed_remote=""
         if [ -z "$remote" ]
         then
-					  guessed_remote=" ?"
+           guessed_remote=" ?"
             # If no upstream has been set, assume a remote branch with the same name
             remote="origin/$local"
             if ! git branch --list -r "$remote" | grep . >/dev/null
             then
                 # No remote branch exists
                 remote=""
-								guessed_remote=""
+                guessed_remote=""
                 # But if this is the current branch, or we are in verbose mode, we might still like to display it anyway.
                 # However ahead/behind counts are meaningless without a remote.
                 if [ "$local" = "$current_branch" ] || [ -n "$verbose" ]
@@ -1434,5 +1605,31 @@ git_list_submodule_urls() {
 # `git remote prune origin [--dry-run]` is faster than `git fetch --prune`
 
 # If `git blame` is not going back far enough, consider using `git log -S<search_string>` or `git log -L<start_line>,<end_line>`
+
+# From qswz on FreeNode
+#alias gco='git checkout'
+# with this (for bash)
+#complete -W '$(git for-each-ref --format="%(refname:short)" | grep -v origin/HEAD)' -o bashdefault -o default gco
+
+git_cd_to_toplevel() {
+	local git_root_folder
+	git_root_folder="$(git rev-parse --show-toplevel)" &&
+	cd "${git_root_folder}"
+}
+# Wait and see which of these I end up using, then remove the others
+alias gcdtl='git_cd_to_toplevel'
+alias cdgtl='git_cd_to_toplevel'
+alias cdgitroot='git_cd_to_toplevel'
+alias cdgr='git_cd_to_toplevel'
+alias cd_gitroot='git_cd_to_toplevel'
+alias cd_git_toplevel='git_cd_to_toplevel'
+
+alias gclean='git clean'
+alias gcleani='git clean -i'
+alias gcleanuntracked='git clean -di'
+alias gcleanignored='git clean -dXi'
+alias gcleanall='git clean -dxi'
+
+alias gcai='aicommits'
 
 # vim: ft=sh

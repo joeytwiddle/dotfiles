@@ -1,7 +1,7 @@
 [app] (name=xv) (class=MPlayer)
   [Deco]	{NORMAL}
   [Sticky]	{no}
-  [Layer]	{6}
+  [Layer]	{2}
   [Close]	{yes}
 [end]
 [app] (name=gl) (class=MPlayer)
@@ -58,24 +58,30 @@
  [app] (title=Untitled)
  [app] (title=chrome://devtools/devtools.html)
  [app] (title=Developer Tools.*)
+ [app] (title=DevTools - .*)
  [app] (title=chrome-devtools://.*)
  [app] (title=Error Console)
  [app] (title=Browser Console)
  [app] (title=Console - .*)
-  [Dimensions]	{91% 44%}
-  [Position]	(UPPERLEFT)	{9% 56%}
+  [Dimensions]	{69% 56%}
+  [Position]	(UPPERLEFT)	{31% 44%}
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
+ [app] (name=x-www-browser)
+ [app] (name=X-www-browser)
  [app] (name=Navigator)
+ [app] (name=Firefox)
+ [app] (name=chrome)
  [app] (name=google-chrome)
  [app] (name=Google-chrome)
- [app] (name=x-www-browser)
+ [app] (class=Google-chrome)
  [app] (name=chromium-browser)
  [app] (name=chromium-browser.real)
+ [app] (class=chromium-browser)
+ [app] (class=Chromium-browser)
  [app] (name=konqueror)
- [app] (name=chrome)
- [app] (name=X-www-browser)
+  [Workspace]	{4}
   [Close]	{yes}
 [end]
 [group]  (workspace=[current])
@@ -113,7 +119,7 @@
 [end]
 [app] (name=ktorrent) (class=Ktorrent) (role=MainWindow#1)
   [Workspace]	{5}
-  [Dimensions]	{84% 98%}
+  [Dimensions]	{83% 98%}
   [Position]	(UPPERLEFT)	{0% 0%}
   [Close]	{yes}
 [end]
@@ -125,8 +131,8 @@
   [Position]	(UPPERLEFT)	{520 92}
 [end]
 [transient] (name=google-chrome) (class=Google-chrome)
-  [Dimensions]	{69% 86%}
-  [Position]	(UPPERLEFT)	{15% 4%}
+  [Dimensions]	{72% 98%}
+  [Position]	(UPPERLEFT)	{14% 0%}
   [Close]	{yes}
 [end]
 [app] (name=Global) (class=Firefox) (role=console)
@@ -140,10 +146,50 @@
  [app] (title=joeys_get_for_chromium.*)
  [app] (name=joeys_get_for_chromium.*)
 [end]
-[group]  (workspace=[current])
+[group]  (workspace=7)
  [app] (class=Slack)
+ [app] (title=Gitter)
+ [app] (title=node-webkit)
  [app] (class=Hexchat)
  [app] (class=.*-nativefier-.*)
  [app] (class=Telegram)
  [app] (class=Skype)
+ [app] (class=messenger)
+ [app] (class=Messenger)
+ [app] (class=messenger for desktop)
+ [app] (title=Messenger for Desktop)
+[end]
+[app] (class=Slack)
+  [Workspace]	{7}
+[end]
+[app] (title=Gitter)
+  [Workspace]	{7}
+[end]
+[app] (class=Hexchat)
+  [Workspace]	{7}
+[end]
+[app] (class=.*-nativefier-.*)
+  [Workspace]	{7}
+[end]
+[app] (class=Telegram)
+  [Workspace]	{7}
+[end]
+[app] (class=Skype)
+  [Workspace]	{7}
+[end]
+[app] (class=messenger)
+  [Workspace]	{7}
+[end]
+[app] (class=Messenger)
+  [Workspace]	{7}
+[end]
+[app] (class=messenger for desktop)
+  [Workspace]	{7}
+[end]
+[app] (title=Messenger for Desktop)
+  [Workspace]	{7}
+[end]
+[group]  (workspace=[current])
+ [app] (title=Inkscape.*)
+ [app] (name=inkscape.*)
 [end]

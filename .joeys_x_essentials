@@ -1,6 +1,5 @@
-# set +x
-## Animated intro, and/or set background:
-## We start this as early as possible, to hide the default background
+# Animated intro, and/or set background:
+# We start this as early as possible, to hide the default background
 (
 
 	animatedIntro=1
@@ -56,14 +55,55 @@
 	# randomwallpaper
 
 ) &
-# set -x
 
 
-#cat $HOME/.my_x_settings 
-cat $HOME/.Xresources | grep -v "^#" | xrdb -merge
+if [ -f "$HOME/.Xresources" ]
+then cat $HOME/.Xresources | grep -v "^#" | xrdb -merge
+fi
 if [ -f "$HOME/.Xresources.local" ]
 then cat $HOME/.Xresources.local | grep -v "^#" | xrdb -merge
 fi
+
+# Keyboard
+
+# From fluxbox's xinitrc howto:
+# Turn off screen blanking
+xset s off
+# Turn on energy star features (monitor still goes blank but wakes up for mplayer =) except under kde :-(
+if echo "$WinMan" | grep kde
+then xset -dpms
+else xset dpms 3600 3600 3600
+fi
+# Disable bell
+xset -b
+
+
+### Keyboard
+
+# Increase keyboard rate (delay, repeats-per-second)
+#xset r rate 400 50
+#xset r rate 280 90
+#xset r rate 270 65
+# This is fun for scrolling:
+#xset r rate 270 99
+# But to actually stop in the right place, we need something smaller:
+#xset r rate 270 65
+# I must be getting old; that's too fast for me now!
+#xset r rate 270 45
+# Fits nicely to framerate
+xset r rate 250 60
+
+#xmodmap /stuff/portablelinux/etc/X11/Xmodmap.hwiDeb &
+
+# Typing "special" characters
+#xmodmap -e "keysym Control_R = Multi_key"
+# Now you can do <Control_R> followed by ?? to get ¿
+# And here are all the other things you can do: /usr/share/X11/locale/en_US.UTF-8/Compose
+# I think this key is called "Composite" by Gnome.
+# There is another magic key too.  Alt_GR-1 to produce ¹
+
+# Re-enable Ctrl+Alt+Backspace to close X, since Gentoo removed it.
+#setxkbmap -option terminate:ctrl_alt_bksp
 
 # E.g. if you wanted to switch to GB keyboard layout, you could put the following in that file:
 #setxkbmap -print gb | xkbcomp - "$DISPLAY"
@@ -71,66 +111,120 @@ if [ -f "$HOME"/.custom_keyboard_settings ]
 then . "$HOME"/.custom_keyboard_settings
 fi
 
+if command -v sxhkd >/dev/null
+then sxhkd &
+fi
+
+
+
+## Mouse
+
+set_mouse_speed=yes
+apply_trackpad_settings=yes
+if pgrep -u "$USER" plasmashell >/dev/null
+then
+	unset set_mouse_speed
+	unset apply_trackpad_settings
+fi
+
+if [ -n "$set_mouse_speed" ]
+then
+	# Mouse acceleration
+	# <acceleration> (scalar) <threshold> (pixels per update)
+	# For more action, increase the former, or reduce the latter
+	#xset m 2/3
+	#xset m 2/3 3
+	#xset m 4/5 3
+	# Save wrists with fast acceleration (hwi, porridge)
+	#xset m 12/5 10
+	# Even faster:
+	#xset m 20/5 5
+	# For yas:
+	#xset m 6/5 5
+	# Tomato:
+	#xset m 12/10 0
+	# Tomato with touchpad using focaltech-dkms driver, feeling lazy (but this is too fast for mouse!):
+	#xset m 20/10 0
+	# Tomato with USB mouse:
+	#xset m 14/10 0
+	# Tomato trackpad, make me reach and sometimes lift a finger.
+	# But the advantage with this is (hopefully) more accurate positioning at low speeds.
+	xset m 8/10 0
+	# I am using threshold 0 because no matter what I set it to, it doesn't seem to have any effect.
+fi
+
+
+
+### Trackpad
+
 # /usr/bin/synclient can be found in the xserver-xorg-input-synaptics package
 
-# If for some reason your OS didn't already enable multi-touch scrolling for you:
-synclient VertTwoFingerScroll=1     # Ubuntu gave me default 1
-synclient HorizTwoFingerScroll=1    # Ubuntu gave me default 0
+if [ -n "$apply_trackpad_settings" ]
+then
+	# If for some reason your OS didn't already enable multi-touch scrolling for you:
+	synclient VertTwoFingerScroll=1     # Ubuntu gave me default 1
+	synclient HorizTwoFingerScroll=1    # Ubuntu gave me default 0
 
-# "Natural Scrolling" direction for OSX victims.  Applies to mousewheel and touchpad (edge and two-finger scrolling)
-# Sensitivity is also set here.
-synclient VertScrollDelta=-40
-synclient HorizScrollDelta=-80
+	# Chrome respects the synclient touchpad scrolling direction set below.
+	# Firefox and xterm respect it, but also multiply it by whatever mousewheel setting you set with xmodmap.
+	# As a result, swapping the mousewheel directions will make Chrome act differently from all other apps!
 
-# Disable scrolling when you drag on the edge of the touchpad
-synclient VertEdgeScroll=0
-synclient HorizEdgeScroll=0
+	# "Natural Scrolling" direction for OSX victims.  Applies to mousewheel and touchpad (edge and two-finger scrolling)
+	# Sensitivity is also set here.
+	synclient VertScrollDelta=-40
+	synclient HorizScrollDelta=-80
 
-# My touchpad is too sensitive.  To prevent accidental clicks when thumb grazes it, increase the threshold.  (Default was 30.)
-# I'm not convinced this has any effect.  I can still click easily with value 50000000000!
-#synclient FingerHigh=50
+	# Disable scrolling when you drag on the edge of the touchpad
+	synclient VertEdgeScroll=0
+	synclient HorizEdgeScroll=0
 
-# Defaults on my system:
-#synclient AccelFactor=0.0678887
-#synclient MinSpeed=1
-#synclient MaxSpeed=1.75
+	# My touchpad is too sensitive.  To prevent accidental clicks when thumb grazes it, increase the threshold.  (Default was 30.)
+	# I'm not convinced this has any effect.  I can still click easily with value 50000000000!
+	#synclient FingerHigh=50
 
-# Increase speed of touchpad without affecting mouse
-# Make it really high, so I don't have to move my fingers so much (but I will have to move them fast)
+	# Defaults on my system:
+	#synclient AccelFactor=0.0678887
+	#synclient MinSpeed=1
+	#synclient MaxSpeed=1.75
 
-#synclient MinSpeed=1.2
-#synclient AccelFactor=0.0678887
-#synclient MaxSpeed=10.0
+	# Increase speed of touchpad without affecting mouse
+	# Make it really high, so I don't have to move my fingers so much (but I will have to move them fast)
 
-synclient MinSpeed=0.75
-#synclient AccelFactor=0.1
-#synclient MaxSpeed=4.0
+	#synclient MinSpeed=1.2
+	#synclient AccelFactor=0.0678887
+	#synclient MaxSpeed=10.0
 
-synclient AccelFactor=0.15
-synclient MaxSpeed=5.0
+	synclient MinSpeed=0.75
+	#synclient AccelFactor=0.1
+	#synclient MaxSpeed=4.0
 
-# Bottom-right of touchpad is right-click
-#synclient SoftButtonAreas="50% 0 82% 0 0 0 0 0"
-# Bottom-right of touchpad is right-click, and bottom-middle is middle click
-#synclient SoftButtonAreas="60% 0 82% 0 40% 59% 82% 0"
+	synclient AccelFactor=0.15
+	synclient MaxSpeed=5.0
 
-# To avoid accidentally tapping while typing, we can enable palm detection, which rejects all touches which are wider than the given PalmMinWidth.
-# Defaults:
-#   synclient PalmDetect=0
-#   synclient PalmMinWidth=10
-#   synclient PalmMinZ=200
-# My settings:
-synclient PalmDetect=1
-# If this doesn't work well enough, there are other options: https://wiki.archlinux.org/index.php/Touchpad_Synaptics#Disable_trackpad_while_typing
+	# Bottom-right of touchpad is right-click
+	#synclient SoftButtonAreas="50% 0 82% 0 0 0 0 0"
+	# Bottom-right of touchpad is right-click, and bottom-middle is middle click
+	#synclient SoftButtonAreas="60% 0 82% 0 40% 59% 82% 0"
 
-# Disable keyboard taps when typing.
-killall -u "$USER" syndaemon 2>/dev/null
-syndaemon -d -i 0.8s -K -R -t
+	# To avoid accidentally tapping while typing, we can enable palm detection, which rejects all touches which are wider than the given PalmMinWidth.
+	# Defaults:
+	#   synclient PalmDetect=0
+	#   synclient PalmMinWidth=10
+	#   synclient PalmMinZ=200
+	# My settings:
+	synclient PalmDetect=1
+	# If this doesn't work well enough, there are other options: https://wiki.archlinux.org/index.php/Touchpad_Synaptics#Disable_trackpad_while_typing
 
-# Reverse the normal direction of the mouse scrollwheel
-#echo "pointer = 1 2 3 5 4 6 7 8 9 10 11 12" | xmodmap -
-# Set the normal direction of the mouse scrollwheel
+	# Disable trackpad taps when typing
+	killall -u "$USER" syndaemon 2>/dev/null
+	syndaemon -d -i 0.8s -K -R -t
+fi
+
+# Set the normal direction of the mouse scrollwheel ("normal" direction)
 echo "pointer = 1 2 3 4 5 6 7 8 9 10 11 12" | xmodmap -
+# Reverse the normal direction of the mouse scrollwheel ("natural" direction)
+#echo "pointer = 1 2 3 5 4 6 7 8 9 10 11 12" | xmodmap -
+# But beware, this will make Chrome and Firefox act differently on the touchpad!  So it is not recommended.
 
 # You could also put settings like this into ~/.Xmodmap
 # When using gnome-settings-daemon or gnome-screensaver, these get loaded again whenever the screen is unlocked (or the machine unsuspends).  (Here "or" means "I don't know which".)
@@ -145,90 +239,45 @@ then
 	xsetroot -cursor_name X_cursor
 fi
 
-## From fluxbox's xinitrc howto:
-# turn off screen blanking
-xset s off
-## Turn on energy star features (monitor still goes blank but wakes up for mplayer =) except under kde :-(
-if echo "$WinMan" | grep kde
-then xset -dpms
-else xset dpms 3600 3600 3600
-fi
-## Disable bell
-xset -b
-## Increase keyboard rate (delay, repeats-per-second)
-# xset r rate 400 50
-# xset r rate 280 90
-# xset r rate 270 65
-## This is fun for scrolling:
-# xset r rate 270 99
-## But to actually stop in the right place, we need something smaller:
-#xset r rate 270 65
-## I must be getting old; that's too fast for me now!
-#xset r rate 270 45
-## Fits nicely to framerate
-xset r rate 250 60
 
-## Mouse acceleration
-## <acceleration> (scalar) <threshold> (pixels per update)
-## For more action, increase the former, or reduce the latter
-# xset m 2/3
-# xset m 2/3 3
-# xset m 4/5 3
-# Save wrists with fast acceleration (hwi, porridge)
-#xset m 12/5 10
-# Even faster:
-#xset m 20/5 5
-# For yas:
-#xset m 6/5 5
-# Tomato:
-#xset m 12/10 0
-# Tomato with touchpad using focaltech-dkms driver, feeling lazy (but this is too fast for mouse!):
-#xset m 20/10 0
-# Tomato with USB mouse:
-xset m 14/10 0
-
-## Got problems with characters displaying as squares [] ?
+# Fonts
+# Got problems with characters displaying as squares [] ?
 xset fp- unix/:7100     ## xfstt on ubuntu
-# xset fp+ unix/:7101   ## xfstt
+#xset fp+ unix/:7101   ## xfstt
+#[ -f /usr/lib/libgdkxft.so ] && export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libgdkxft.so
 
-## Allow connections to X display from anywhere
-# xhost +
+# Allow connections to X display from anywhere
+#xhost +
 
-# [ -f /usr/lib/libgdkxft.so ] && export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libgdkxft.so
-
-## Keyboard
-# xmodmap /stuff/portablelinux/etc/X11/Xmodmap.hwiDeb &
-
-## Typing "special" characters
-#xmodmap -e "keysym Control_R = Multi_key"
-# Now you can do <Control_R> followed by ?? to get ¿
-# And here are all the other things you can do: /usr/share/X11/locale/en_US.UTF-8/Compose
-# I think this key is called "Composite" by Gnome.
-# There is another magic key too.  Alt_GR-1 to produce ¹
 
 if [ -f "$HOME"/.custom_x_settings ]
 then . "$HOME"/.custom_x_settings
 fi
 
-if [ -d "$HOME/Dropbox" ] && ! pgrep -u $UID dropbox >/dev/null
+# Launcher
+if command -v albert >/dev/null
 then
-	(
-		sleep 20
-		dropbox start
-	) &
+	albert &
+	sleep 20
 fi
 
-## Re-enable Ctrl+Alt+Backspace to close X, since Gentoo removed it.
-#setxkbmap -option terminate:ctrl_alt_bksp
+# Give some times for the DE to start dropbox itself.  (E.g. KDE was starting it because it had been open the last time I logged out.)
+sleep 5
+if [ -d "$HOME/Dropbox" ] && ! pgrep -u $UID dropbox >/dev/null
+then
+	echo "Starting mounted-dropbox" >&2
+	#HOME=/mnt/dropbox.joey nice ionice dropbox start &
+	mounted-dropbox start &
+	sleep 20
+fi
 
-## Pre-cache files which I am likely to use soon
-false && (
-	folders_to_cache=".vim* /usr/share/vim .config/google-chrome .mozilla/firefox/Joey j/tools"
+# Pre-cache files which I am likely to use soon
+true && (
+	folders_to_cache=".vim* /usr/share/vim" # .config/google-chrome .mozilla/firefox/Joey j/tools"
 	packages_to_cache="google-chrome-stable firefox"
 
 	nicely_do="nice -n 15 ionice -c 3"
-	sleep 10
-	$nicely_do tar ch $folders_to_cache >/dev/null
+	$nicely_do tar ch --exclude=.git --exclude=sessions $folders_to_cache >/dev/null
 
 	## Simple, but does not recurse through dependent packages
 	## DISABLED for now because it wasn't really helping me.  I was just waiting for it to finish!
@@ -240,4 +289,4 @@ false && (
 	#$nicely_do precache_files_from_package $packages_to_cache >/dev/null 2>&1
 
 	echo "Precaching completed" >&2
-) &
+)

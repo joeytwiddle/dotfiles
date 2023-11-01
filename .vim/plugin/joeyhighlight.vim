@@ -6,7 +6,10 @@ endif
 augroup Joeyhighlight
 	au!
 	" My rules used to get overwritten by default vim scripts
-	" Not any more bitches!
+	" This tries to reload them
+	" But actually I only want to do this when on my primary colorscheme, not on all colorschemes.
+	" At present, they disable this augroup (which might explain why returning to my colorscheme does not feel 100%)
+	" TODO: Move these things to where they should be.  I.e. move them into my own colorscheme, joey-primary.vim
 	autocmd BufReadPost * :Joeyhighlight
 augroup END
 
@@ -73,6 +76,7 @@ function! Joeyhighlight()
 	" highlight Visual ctermfg=DarkMagenta ctermbg=White gui=none guibg=#660066 guifg=white
 	"" This is what I prefer, but I may have been using the above to ensure b/w terminals get reverse?
 	highlight Visual ctermbg=Magenta ctermfg=White cterm=bold gui=none guibg=#660066 guifg=white
+	"highlight Visual guifg=#449059 guifg=white
 	"" New orange!  (In GUI and hicolor term only)
 	"highlight Visual guibg=#ee9900 guifg=white
 	highlight Visual guibg=#cc7700 guifg=white
@@ -147,6 +151,7 @@ function! Joeyhighlight()
 	highlight PreProc ctermfg=magenta cterm=bold guifg=magenta gui=bold
 
 	" Java
+	if 0
 	" It appears to ignore the contains, otherwise I could use start=/^/ =)
 	"syntax region javaClassLine start=/class / end=/{/ contains=javaClassDecl
 	highlight link javaClassLine javaClassDecl
@@ -160,6 +165,7 @@ function! Joeyhighlight()
 	highlight Number ctermfg=LightBlue guifg=LightBlue
 	" To bring first sentence of Java comments in line with Comments.
 	highlight Special ctermfg=Magenta guifg=#d080d0
+	endif
 
 	" Shellscript
 	"highlight link shDeref shVariable
@@ -308,8 +314,14 @@ function! Joeyhighlight()
 	" Ubuntu's Vim made the PMenu look naff, so I filled out all the colors
 	"hi Pmenu ctermbg=magenta ctermfg=white cterm=bold guibg=#bb00bb guifg=white gui=bold
 	" I lightened the background for extra contrast, but it looked a bit faded, so I went back to full blue instead.
-	hi Pmenu ctermbg=blue ctermfg=white cterm=bold guibg=#0000ff guifg=#eeeeee gui=bold
-	hi Pmenusel ctermbg=black ctermfg=white cterm=bold guibg=#000066 guifg=white gui=bold
+	"hi Pmenu ctermbg=blue ctermfg=white cterm=bold guibg=#0000ff guifg=#eeeeee gui=bold
+	"hi Pmenusel ctermbg=black ctermfg=white cterm=bold guibg=#000066 guifg=white gui=bold
+	" Let's try in reverse now, with a brighter background on the current selection, and tweak a bit
+	hi Pmenu ctermbg=black ctermfg=white cterm=bold guibg=#000066 guifg=#cccccc gui=bold
+	hi Pmenusel ctermbg=blue ctermfg=white cterm=bold guibg=#0000ff guifg=#ffffff gui=bold
+	" Grey
+	"hi Pmenu ctermbg=238 ctermfg=white cterm=bold guibg=#444444 guifg=#cccccc gui=bold
+	"hi Pmenusel ctermbg=243 ctermfg=white cterm=bold guibg=#767676 guifg=#ffffff gui=bold
 
 	highlight CursorLine term=reverse cterm=none ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
 	" But if possible, I prefer it a dark green
@@ -356,8 +368,12 @@ function! Joeyhighlight()
 	"" Colors for file/folder explorers, trying to match jsh dark theme:
 
 	" VTreeExplorer (vtreeexplorer.vim, :VSTreeExplore)
-	hi Directory ctermfg=green cterm=none guifg=#00ff00 gui=none
-	hi TreeLnk ctermfg=green cterm=bold guifg=#00ff00 gui=bold
+	"hi Directory ctermfg=green cterm=none guifg=#00ff00 gui=none
+	"hi TreeLnk ctermfg=green cterm=bold guifg=#00ff00 gui=bold
+
+	" Jargo color scheme
+	hi Directory ctermfg=green cterm=none guifg=#47b427 gui=none
+	hi TreeLnk ctermfg=green cterm=bold guifg=#64e364 gui=bold
 
 	" NERD Tree (NERD_tree.vim, :NERDTree)
 	hi link treeDirSlash Directory
@@ -366,7 +382,8 @@ function! Joeyhighlight()
 	hi link treeOpenable Normal
 	hi link treeClosable Normal
 	hi link treeLink TreeLnk
-	hi treeExecFile ctermfg=red cterm=bold guifg=red gui=bold
+	"hi treeExecFile ctermfg=red cterm=bold guifg=red gui=bold
+	hi treeExecFile ctermfg=red cterm=bold guifg=#ff4250 gui=bold
 
 	" netrw (bundled netrwPlugin.vim, :vert split +:Explore)
 	hi link netrwSymLink TreeLnk
@@ -374,6 +391,18 @@ function! Joeyhighlight()
 	hi link netrwClassify treeDirSlash
 	hi link netrwExe treeExecFile
 
+	"hi link AsyncFinderDir TreeLnk
+	"hi AsyncFinderFile ctermfg=darkgreen guifg=#00bb00
+	hi clear AsyncFinderFile
+	hi link AsyncFinderDir Directory
+	hi link AsyncFinderFile Directory
+	hi AsyncFinderFileName ctermfg=white guifg=white
+	hi AsyncGrepFileName ctermfg=cyan guifg=#1abebc
+	hi AsyncGrepLine ctermfg=white guifg=white
+	" I prefer to highlight the ':'s too
+	syntax match AsyncGrepLine /:\d\+:/ containedin=AsyncGrepFilenameAndNumber
+	hi link AsyncFinderPattern Normal
+	hi link AsyncGrepPattern Normal
 
 
 	hi TabLine ctermbg=blue ctermfg=cyan cterm=none guibg=blue guifg=cyan gui=none

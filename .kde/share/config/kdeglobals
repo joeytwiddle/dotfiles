@@ -1,0 +1,190 @@
+[$Version]
+update_info=kaccel.upd:kde3.3/r1,mouse_cursor_theme.upd:kde3.4.99,kded.upd:kde3.0,kwin.upd:kde3.2Xinerama
+
+[Appmenu Style]
+Style=InApplication
+
+[ColorEffects:Disabled]
+Color=56,56,56
+ColorAmount=0
+ColorEffect=0
+ContrastAmount=0.65
+ContrastEffect=1
+IntensityAmount=0.1
+IntensityEffect=2
+
+[ColorEffects:Inactive]
+ChangeSelectionColor=true
+Color=112,111,110
+ColorAmount=-0.95000000000000007
+ColorEffect=0
+ContrastAmount=0.10000000000000001
+ContrastEffect=0
+Enable=false
+IntensityAmount=0
+IntensityEffect=0
+
+[Colors:Button]
+BackgroundAlternate=224,223,222
+BackgroundNormal=236,236,236
+DecorationFocus=26,188,156
+DecorationHover=54,215,183
+ForegroundActive=155,89,182
+ForegroundInactive=164,166,166
+ForegroundLink=76,107,138
+ForegroundNegative=231,76,60
+ForegroundNeutral=230,126,34
+ForegroundNormal=41,47,52
+ForegroundPositive=52,152,219
+ForegroundVisited=145,61,136
+
+[Colors:Complementary]
+BackgroundAlternate=59,64,69
+BackgroundNormal=49,54,59
+DecorationFocus=30,146,255
+DecorationHover=61,174,230
+ForegroundActive=147,206,233
+ForegroundInactive=175,176,179
+ForegroundLink=61,174,230
+ForegroundNegative=231,76,60
+ForegroundNeutral=253,188,75
+ForegroundNormal=239,240,241
+ForegroundPositive=46,204,113
+ForegroundVisited=61,174,230
+
+[Colors:Selection]
+BackgroundAlternate=62,138,204
+BackgroundNormal=26,188,156
+DecorationFocus=26,188,156
+DecorationHover=54,215,183
+ForegroundActive=96,55,113
+ForegroundInactive=222,222,222
+ForegroundLink=0,98,218
+ForegroundNegative=231,76,60
+ForegroundNeutral=168,88,23
+ForegroundNormal=255,255,255
+ForegroundPositive=37,116,165
+ForegroundVisited=145,61,136
+
+[Colors:Tooltip]
+BackgroundAlternate=196,224,255
+BackgroundNormal=41,47,52
+DecorationFocus=26,188,156
+DecorationHover=54,215,183
+ForegroundActive=155,89,182
+ForegroundInactive=164,166,166
+ForegroundLink=126,178,230
+ForegroundNegative=231,76,60
+ForegroundNeutral=230,126,34
+ForegroundNormal=247,247,247
+ForegroundPositive=52,152,219
+ForegroundVisited=145,61,136
+
+[Colors:View]
+BackgroundAlternate=248,247,246
+BackgroundNormal=255,255,255
+DecorationFocus=26,188,156
+DecorationHover=54,215,183
+ForegroundActive=155,89,182
+ForegroundInactive=164,166,166
+ForegroundLink=76,107,138
+ForegroundNegative=231,76,60
+ForegroundNeutral=230,126,34
+ForegroundNormal=41,47,52
+ForegroundPositive=52,152,219
+ForegroundVisited=145,61,136
+
+[Colors:Window]
+BackgroundAlternate=218,217,216
+BackgroundNormal=236,236,236
+DecorationFocus=54,215,183
+DecorationHover=26,188,156
+ForegroundActive=155,89,182
+ForegroundInactive=164,166,166
+ForegroundLink=76,107,138
+ForegroundNegative=231,76,60
+ForegroundNeutral=230,126,34
+ForegroundNormal=41,47,52
+ForegroundPositive=52,152,219
+ForegroundVisited=145,61,136
+
+[DirSelect Dialog]
+DirSelectDialog Size=805,512
+History Items[$e]=file://$HOME/Downloads/KTorrent_Complete/Audio_Books,file://$HOME/Downloads/KTorrent_Complete
+
+[General]
+ColorScheme=Breath
+Name[en_GB]=Breeze
+Name=Breath with dark titlebars
+desktopFont=Sans Serif,9,-1,5,50,0,0,0,0,0
+fixed=Monospace,9,-1,5,50,0,0,0,0,0
+font=Liberation Sans,10,-1,5,50,0,0,0,0,0,Regular
+menuFont=Liberation Sans,10,-1,5,50,0,0,0,0,0,Regular
+shadeSortColumn=true
+smallestReadableFont=Liberation Sans,8,-1,5,50,0,0,0,0,0,Regular
+taskbarFont=Sans Serif,9,-1,5,50,0,0,0,0,0
+toolBarFont=Liberation Sans,10,-1,5,50,0,0,0,0,0,Regular
+widgetStyle=fusion
+
+[Icons]
+Theme=breeze
+
+[KDE]
+DoubleClickInterval=400
+LookAndFeelPackage=org.kde.breezedark.desktop
+ShowIconsInMenuItems=true
+ShowIconsOnPushButtons=true
+SingleClick=false
+StartDragDist=4
+StartDragTime=500
+WheelScrollLines=8
+contrast=4
+widgetStyle=fusion
+
+[KDE-Global GUI Settings]
+GraphicEffectsLevel=6
+
+[KFileDialog Settings]
+Automatically select filename extension=true
+Breadcrumb Navigation=true
+Decoration position=0
+LocationCombo Completionmode=5
+PathCombo Completionmode=5
+Previews=false
+Recent URLs[$e]=$HOME/projects/ktorrent/,$HOME/projects/chillworth_golf_club/public_html/wp-content/uploads/2015/06/,$HOME/Downloads/
+Show Bookmarks=false
+Show Full Path=false
+Show Preview=false
+Show Speedbar=true
+Show hidden files=false
+Sort by=Date
+Sort directories first=true
+Sort reversed=false
+Speedbar Width=126
+View Style=Detail
+detailedViewIconSize=0
+
+[KShortcutsDialog Settings]
+Dialog Size=600,480
+
+[PreviewSettings]
+MaximumRemoteSize=0
+
+[Toolbar style]
+ToolButtonStyle=TextBesideIcon
+ToolButtonStyleOtherToolbars=TextBesideIcon
+
+[WM]
+activeBackground=53,61,68
+activeBlend=236,236,236
+activeFont=Sans Serif,8,-1,5,50,0,0,0,0,0
+activeForeground=255,255,255
+inactiveBackground=236,236,236
+inactiveBlend=236,236,236
+inactiveForeground=159,185,202
+
+[Windows]
+XineramaEnabled=
+XineramaMaximizeEnabled=
+XineramaMovementEnabled=
+XineramaPlacementEnabled=

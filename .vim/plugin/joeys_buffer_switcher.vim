@@ -6,6 +6,10 @@
 " CONSIDER: Allow <file> completion if no matching <buffer> is open.  (Ideally
 " we only want file completion IFF buffer completion offers no results).
 
+" BUG TODO:
+" It will sometimes take a bad match when a perfect match is available!
+" For example, in my Dwitter folder, I can type `ideas.txt` but it will open `fun_ideas.txt` instead of `ideas.txt`!
+
 " BUGS TODO:
 " If you press Esc or Ctrl+C it should not proceed to the BufExplorer fallback!
 "   The try catch below didn't fix that.
@@ -81,7 +85,7 @@ function! JoeysBufferSwitch()
     " endif
   endif " else we will probably print the whole list later
 
-  let searchExpr = '\V' . searchStr
+  let searchExpr = '\c\V' . searchStr
 
   " DONE: If we can find a visible window displaying that buffer, switch to
   " the window instead of loading the buffer in the current window.
@@ -123,10 +127,14 @@ function! JoeysBufferSwitch()
   let i = 1   " bufname says: Number zero is the alternate buffer for the current window.
   while i <= bufCount
     let bufName = bufname(i)
+    " Optional.  Not sure if we need this.  Currently we treat open buffers according to the path they were opened with.
+    "let bufName = resolve(expand(bufName))
+    " I often open files with `:e ./filename` but if we strip that leading `./` we can avoid duplicate buffer/file entries
+    let bufName = substitute(bufName, '^\.\/', '', '')
     " TODO: Some buffers need to be ignored e.g. if they are closed (no longer visible)
     if bufexists(i) && buflisted(i) && bufName != ""
       " Special case: exact match means we return it as the only match!
-      if bufName == searchStr
+      if bufName =~ searchStr
         "echo "Found exact match: ".i.": ".bufName
         " Does not work: sometimes it's a closed buffer, so :<i>b fails!
         let foundExactBuffer = i
@@ -205,7 +213,7 @@ function! CompleteBuffersAndFiles(ArgLead, CmdLine, CursorPos)
     endif
   endfor
 
-  let bufSearchExpr = '\V' . a:ArgLead
+  let bufSearchExpr = '\c\V' . a:ArgLead
   let buffers = []
   let bufCount = bufnr('$')
   let i=0
@@ -217,10 +225,18 @@ function! CompleteBuffersAndFiles(ArgLead, CmdLine, CursorPos)
     let i = i + 1
   endwhile
 
-  call extend(files, buffers)
+  " Files first, buffers after
+  "call extend(files, buffers)
+  "let files = s:ListWithoutDuplicates(files)
+  "return files
 
-  let files = s:ListWithoutDuplicates(files)
-  return files
+  " Buffers first, files after
+  " (Preferred since I primarily use this to switch buffers, and only occasionally to open new files.)
+  " Although this does change the order, completion will still select the shorter folder before any buffers below that folder, which is a shame.
+  " But still, there may some be circumstances where this order works better.
+  call extend(buffers, files)
+  let buffers = s:ListWithoutDuplicates(buffers)
+  return buffers
 endfunction
 
 function! s:ListWithoutDuplicates(list)

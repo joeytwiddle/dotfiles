@@ -1,0 +1,123 @@
+# vim: ft=sh
+
+alias dbuild='docker build'
+alias dsearch='docker search'
+alias dpull='docker pull'
+alias dpush='docker push'
+
+#alias dis='docker images'
+alias dimgs='docker images'
+alias dil='docker image ls'
+alias dps='docker ps'
+alias dconts='dps'
+alias dpsa='docker ps -a'
+alias dpsas='docker ps -a --size'
+#alias dcls='docker container list'
+#alias dclsa='docker container list -a'
+
+alias dcreate='docker build'
+alias drun='docker run'
+alias dexec='docker exec'
+alias dstart='docker start'
+alias drestart='docker restart'
+alias dstop='docker stop'
+alias dkill='docker kill'
+alias dinspect='docker inspect'
+
+#alias dirm='docker image rm'
+alias drmi='docker rmi'
+alias dcrm='docker container rm'
+alias drm='docker rm'
+alias drmf='docker rm -f'
+
+alias dtag='docker tag'
+
+# Stop and remove a container (kinder but slower than drmf)
+dstoprm() {
+	dstop "$*"
+	drm "$*"
+}
+alias ddestroy=dstoprm
+
+alias dlogs='docker logs'
+alias dlogsf='docker logs --follow'
+alias dlogl='docker logs "$(get_latest_docker_container_id)"'
+alias dloglf='docker logs --follow "$(get_latest_docker_container_id)"'
+
+alias dcleanup='echo ; echo "To clean up caches and stopped containers, run: dspf (relatively safe, but you will lose logs for stopped containers)" ; echo ; echo "To DESTROY EVERYTHING except running containers and their images, run: dspa (DANGEROUS!)" ; echo'
+alias dspf='docker system prune -f'
+alias dspa='docker system prune --all'
+
+alias dci='docker container inspect'
+alias dcd='docker container diff'
+
+alias dcp='docker cp'
+
+alias dstats='docker stats'
+alias dtop='docker top'
+alias dtopl='docker top $(get_latest_docker_container_id)'
+dtopall() {
+	for cid in $(docker ps -q)
+	do docker top "$cid" | drop 1 | prepend_each_line "$cid\t"
+	done
+}
+
+# Debug Docker Image
+ddi() {
+	docker run --rm -it "$1" /bin/bash
+}
+# Debug Latest Docker Image
+dldi() {
+	ddi "$(get_latest_docker_image_id)"
+}
+# Docker Debug Latest Image
+alias ddli='dldi'
+
+# Debug Docker Container
+ddc() {
+	local container_id="$1"
+
+	if [ "$(docker inspect -f "{{.State.Running}}" "$container_id")" = "false" ]
+	then
+		echo "Container $container_id is not running, so starting it now"
+		docker start "$container_id"
+	fi
+
+	docker exec -it "$container_id" /bin/bash
+}
+# Debug Latest Docker Container
+dldc() {
+	ddc "$(get_latest_docker_container_id)"
+}
+# Docker Debug Latest Container
+alias ddlc='dldc'
+
+get_latest_docker_container_id() {
+	docker ps --latest -q --no-trunc
+}
+get_latest_docker_image_id() {
+	docker images -q --no-trunc | head -n 1
+}
+
+
+# Volumes
+
+alias dv='docker volume'
+alias dvl='docker volume ls'
+alias dvols='dvl'
+# Docker Volume Inspect All
+dvia() {
+docker volume ls -q |
+	while read volume_name
+	do docker volume inspect "$volume_name"
+	done
+}
+alias dvll='dvia'
+alias dvp='docker volume prune'
+alias dvpf='docker volume prune -f'
+
+
+# Docker Compose
+
+alias dcu='docker compose up'
+alias dcps='docker compose ps'

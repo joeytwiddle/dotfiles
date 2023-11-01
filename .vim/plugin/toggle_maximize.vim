@@ -256,7 +256,8 @@ endfunction
 " == Keymaps ==
 
 nnoremap  <silent> <C-F> :call <SID>ToggleMaximize()<Enter>
-inoremap <silent> <C-F> <Esc>:call <SID>ToggleMaximize()<Enter>a
+" I have disabled this Insert mode binding, because <C-F> was sometimes conflicting with <C-X><C-F> file expansion (since installing CoC?)
+"inoremap <silent> <C-F> <Esc>:call <SID>ToggleMaximize()<Enter>a
 nnoremap  <silent> <C-\> :call <SID>ToggleMaximize()<Enter>
 inoremap <silent> <C-\> <Esc>:call <SID>ToggleMaximize()<Enter>a
 "nnoremap  <silent> <C-G> :call <SID>ToggleMaximize()<Enter>

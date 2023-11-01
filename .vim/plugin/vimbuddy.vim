@@ -29,6 +29,7 @@ let &statusline = substitute(&statusline, '%h', s:moreflags . '%h', '')
 let &statusline = substitute(&statusline, '%=', '%#StatusDiffing#%{ \&diff ? "[d]" : "" }%##%=', '')
 let &statusline = substitute(&statusline, '%=', '%#StatusInfo#%{ \&swapfile ? "swap " : "" }%##%=', '')
 let &statusline = substitute(&statusline, '%=', '%#StatusInfo#%{ \&paste ? "paste " : "" }%##%=', '')
+let &statusline = substitute(&statusline, '%=', '%=%y ', '')
 let &statusline = substitute(&statusline, '%=', '%=%#StatusInfo#%{ get(b:,"auto_updated_ctags",0) ? "tags " : "" }%##', '')
 let &statusline = substitute(&statusline, '%=', '%=%#StatusInfo#%{ \&fileformat == "unix" ? "" : \&fileformat." " }%##', '')
 if exists('*GetSearchStatus')
@@ -58,7 +59,7 @@ let g:ShowGitStatusForBuffer = get(g:, 'ShowGitStatusForBuffer', 1)
 
 " TODO: Offer a third datum: git branch status (which would display ahead/behind markers/count)?
 " TODO: The caching pattern is repeated, and could be refactored out
-" TODO: The caching pattern is not optimal.  statusline is regularly (continually) recalculated for *all* visible windows, not just the current one.  With many windows open, they might all have different update phase (although they will sync up after a pause), increasing the likelihood of unwanted interruption/delay.  (In fact, if one of the lookups takes a significant amount of time, later lookups in the same statusline will get a different refresh time, so the user might end up seeing them update at different times!)  The solution might be to link all updates to a global debounce (rate-limiting) timer, and to avoid interruption, also link to a CursorHold event.  Although if the CursorHold event fires *after* the statusline update, then we would just be setting up an annoying delay for the *next* keypress.  Therefore the solution is: we should split up the behaviour: performs (possibly debounced) updates on CursorHold, and place that value into a variable that statusline can read; statusline would never actually perform calculations itself inline.  However a concern with this approach is that the CursorHold handler might inefficiently calculate updates for data which is not actually being references in statusline!  A solution to this would be for statusline to leave a message indicating to CursorHold that a result should be calculated, and pick up the actual value on later updates.  Then what if the user changes their statusline, removing some of the calls?  Since statusline cannot inform the CursorHold about this, instead the CursorHold should occasionally or regularly *clear* the set of requested updates, then statusline will re-add still needed requests on the next update (and can at least display older cached values, rather than nothing, to avoid flicker.)  I dare say this two-threaded messaging approach is a little convoluted for such a simple feature, but it appears we can address all the major concerns, and optimize performance for users with slower machines / file access (consider the latency involved with sshfs mounted files - in fact use that as a test case!).
+" TODO: The caching pattern is not optimal.  statusline is regularly (continually) recalculated for *all* visible windows, not just the current one.  With many windows open, they might all have different update phase (although they will sync up after a pause), increasing the likelihood of unwanted interruption/delay.  (In fact, if one of the lookups takes a significant amount of time, later lookups in the same statusline will get a different refresh time, so the user might end up seeing them update at different times!)  The solution might be to link all updates to a global debounce (rate-limiting) timer, and to avoid interruption, also link to a CursorHold event.  Although if the CursorHold event fires *after* the statusline update, then we would just be setting up an annoying delay for the *next* keypress.  Therefore the solution is: we should split up the behaviour: perform (possibly debounced) updates on CursorHold, and place that value into a variable that statusline can read; statusline would never actually perform calculations itself inline.  However a concern with this approach is that the CursorHold handler might inefficiently calculate updates for data which is not actually being references in statusline!  A solution to this would be for statusline to leave a message indicating to CursorHold that a result should be calculated, and pick up the actual value on later updates.  Then what if the user changes their statusline, removing some of the calls?  Since statusline cannot inform the CursorHold about this, instead the CursorHold should occasionally or regularly *clear* the set of requested updates, then statusline will re-add still needed requests on the next update (and can at least display older cached values, rather than nothing, to avoid flicker.)  I dare say this two-threaded messaging approach is a little convoluted for such a simple feature, but it appears we can address all the major concerns, and optimize performance for users with slower machines / file access (consider the latency involved with sshfs mounted files - in fact use that as a test case!).
 " CONSIDER: Perhaps we should cache the git status for each buffer separately in a buffer-local variable, update it periodically, but also update it immediately after a buffer write, and soon after an editing operation.
 " CONSIDER: Maybe [ M] is not very interesting.  Maybe the user is more interested in +/- lines compared to the last commit of this file.  However [??] and [  ] and [!!] are interesting.
 
@@ -123,7 +124,10 @@ endfunction
 autocmd BufWritePost * unlet! b:last_checked_buffers_git_status_time
 
 function! s:CleanSystemCall(command)
-  let result = system(a:command)
+  " I was having an occasional conflict between this function and the ALE linter.
+  " Apparently CleanSystemCall triggers ALE's VimCloseCallback (via a python job_options.close_cb) which sometimes triggers lclose in CloseWindowIfNeeded, which is illegal under this stack.
+  " Hopefully noautocmd will fix that.
+  noautocmd let result = system(a:command)
   if v:shell_error > 0
     return ''
   else
@@ -242,14 +246,15 @@ function! VimBuddy()
 endfunction
 
 " Somtimes vim gets into a state which causes all the %## highlights to fail, turning black instead of returning to the default color.
+" I think it might happen when the colorscheme is changed (the required highlights gets lost?)
 " A quick workaround is to remove them:
 "   let &statusline = substitute(&statusline, '%##', '', 'g')
 " Or replace them with something (unfortunately this applies the same color to unfocused statuslines, which might look confusing if you usually highlight them differently):
 "   let &statusline = substitute(&statusline, '%##', '%#StatusLine#', 'g')
 " Or perhaps more tidy, remove all highlights:
 "   let &statusline = substitute(&statusline, '%#[^#]*#', '', 'g')
-" Disable highlight instructions in the statusline, until I can fix the bug
-" Using an autocmd so it also works on the custom statusline I put into MiniBufExplorer
+" We are going to do the latter by default, until we can fix the problem permanently.
+" Using an autocmd so it also works on the custom statusline I put into MiniBufExplorer.
 let &g:statusline = substitute(&g:statusline, '%#[^#]*#', '', 'g')
 let &l:statusline = substitute(&l:statusline, '%#[^#]*#', '', 'g')
 au WinEnter * let &g:statusline = substitute(&g:statusline, '%#[^#]*#', '', 'g')

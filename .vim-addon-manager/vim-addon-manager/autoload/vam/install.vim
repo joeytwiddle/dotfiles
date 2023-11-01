@@ -61,9 +61,9 @@ fun! vam#install#RewriteName(name)
     return 0
   endif
   if match[1] ==# 'github'
-    " github:{Name}      {"type": "git", "url": "git://github.com/{Name}/vim-addon-{Name}}
-    " github:{N}/{Repo}  {"type": "git", "url": "git://github.com/{N}/{Repo}"}
-    return {'type' : 'git', 'url' : 'git://github.com/'.(match[2] =~ '/' ? match[2] : match[2].'/vim-addon-'.match[2])}
+    " github:{Name}      {"type": "git", "url": "https://github.com/{Name}/vim-addon-{Name}}
+    " github:{N}/{Repo}  {"type": "git", "url": "https://github.com/{N}/{Repo}"}
+    return {'type' : 'git', 'url' : 'https://github.com/'.(match[2] =~ '/' ? match[2] : match[2].'/vim-addon-'.match[2])}
   else
     " hg:{URL}
     " svn:{URL}
@@ -119,6 +119,11 @@ fun! vam#install#CompleteRepoData(repository, opts)
       return 0
     endif
   endif
+
+  if has_key(repository, 'url') && repository.url =~# 'git://github.com'
+          let repository.url = substitute(repository.url, '^git:\/\/', 'https://', '')
+  end
+
   call extend(repository, a:repository)
   return repository
 endfun

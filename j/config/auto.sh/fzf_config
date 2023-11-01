@@ -1,0 +1,157 @@
+# By default fzf does not ignore node_modules.
+# But if we ask it to use ag or rg, they will respect .gitignore which might be good enough.
+
+# This is a variable name I invented, for use within this script
+export FZF_EDITOR="${EDITOR:-vim}"
+
+if command -v smartvim >/dev/null 2>&1
+then export FZF_EDITOR="smartvim"
+fi
+
+# Do en axact match by default.  To do a fuzzy match, prefix your search with `'`
+export FZF_DEFAULT_OPTS="--exact"
+
+if which rg > /dev/null 2>&1
+then export FZF_DEFAULT_COMMAND='rg --files --hidden'
+elif which ag > /dev/null 2>&1
+then export FZF_DEFAULT_COMMAND='ag -p ~/.gitignore -g ""'
+fi
+
+export FZF_FILE_PREVIEW_COMMAND="cat {}"
+if which bat >/dev/null 2>&1
+#then FZF_FILE_PREVIEW_COMMAND="bat -f --style='header,header-filename,header-filesize,changes,grid' {}"
+#then FZF_FILE_PREVIEW_COMMAND="file {} | highlight -bold '^[^:]*' white; echo \"\$(filesize {}) bytes\"; echo; bat -f --style='plain' {}"
+then FZF_FILE_PREVIEW_COMMAND="file {} | highlight ':.*' grey; echo \"\$(filesize {}) bytes\"; echo; bat -f --style='plain' {}"
+fi
+if which show_file_contents >/dev/null 2>&1
+then FZF_FILE_PREVIEW_COMMAND="file {} | highlight ':.*' grey; echo \"\$(filesize {}) bytes\"; echo; show_file_contents {}"
+fi
+
+export FZF_DIRECTORY_PREVIEW_COMMAND="echo {}/; echo; ls -lartFh --color=always {}/"
+#if which gitls >/dev/null 2>&1
+#then FZF_DIRECTORY_PREVIEW_COMMAND="echo {}/; echo; gitls"
+#fi
+
+# End config, start aliases
+
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+#   - Bypass fuzzy finder if there's only one match (--select-1)
+#   - Exit if there's no match (--exit-0)
+fe() {
+  local files
+  IFS=$'\n' files=($(fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --query="$1" --multi --select-1 --exit-0))
+  [[ -n "$files" ]] && "$FZF_EDITOR" "${files[@]}"
+}
+
+# Modified version where you can press
+#   - CTRL-O to open with `open` command,
+#   - CTRL-E or Enter key to open with the $EDITOR
+fo() {
+  local out file key
+  IFS=$'\n' out=("$(fzf-tmux --query="$1" --exit-0 --expect=ctrl-o,ctrl-e --preview="$FZF_FILE_PREVIEW_COMMAND")")
+  key=$(head -1 <<< "$out")
+  file=$(head -2 <<< "$out" | tail -1)
+  if [ -n "$file" ]
+  then [ "$key" = ctrl-o ] && open "$file" || "$FZF_EDITOR" "$file"
+  fi
+}
+
+# Fuzzy Edit Global
+# Like fe but gets the files from a global locate
+feg() {
+  local files
+  IFS=$'\n' files=($(locate -b -i "$@" | filesonly | fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --multi --select-1 --exit-0))
+  [[ -n "$files" ]] && "$FZF_EDITOR" "${files[@]}"
+}
+# But I probably type 'e' first, before deciding I need to do a global search
+alias eglobal='feg'
+alias elocate='feg'
+
+# fcd - fuzzy cd to selected subdirectory
+fcdlocal() {
+  local dir
+  dir="$(
+    find ${1:-.} -mindepth 1 -type d \
+      '(' \
+        -path '*/\.*' -prune \
+        -o -name 'node_modules' -prune \
+        -o -print \
+      ')' \
+      2>/dev/null |
+    fzf --preview="$FZF_DIRECTORY_PREVIEW_COMMAND" +m
+  )"
+
+  if [[ -n "$dir" ]]
+  then cd "$dir"
+  fi
+}
+alias fcd=fcdlocal
+# "CD Local" is where my mind went
+alias cdl=fcdlocal
+
+# fcd - fuzzy cd from anywhere
+# ex: fcd <parts_of_filename>...
+# With some code from https://superuser.com/a/875314/52910
+fcdglobal() {
+  local dir
+
+  #dir="$(/usr/bin/locate -0 -b -A "$@" | xargs -0 -I {} bash -c '[ -d "{}" ] && echo "{}"' | fzf -0 -1)"
+  # Simplified and case-insensitive
+  dir="$(/usr/bin/locate -b -A "$@" -i | dirsonly | fzf --preview="$FZF_DIRECTORY_PREVIEW_COMMAND" -0 -1 -i)"
+
+  if [[ -n "$dir" ]]
+  then cd "$dir"
+  fi
+}
+alias fcdg=fcdglobal
+# Change Directory Globally
+alias cdg=fcdglobal
+# But "CD Fuzzy" is where my mind went
+#alias cdf=fcdglobal
+# Let's just try to use fcd
+
+# Fuzzy Ripgrep Ignoring-case
+frgi() {
+  local result
+  IFS=$'\n' result="$(rg -i --line-number "$@" | cat | fzf-tmux --no-sort --tac --delimiter=: --nth=2..)"
+
+  local filename
+  local lineno
+  local _
+  if [[ -n "$result" ]]
+  then
+    IFS=':' read -r filename lineno _ <<< "$result"
+    # Vim can accept line-number with +99
+    # But if your editor cannot, then you had better remove the + argument
+    verbosely "$FZF_EDITOR" +"$lineno" "$filename"
+  fi
+}
+alias rgif=frgi
+
+# Some distributions make an alias for fgrep in ~/.bashrc
+unalias fgrep 2>/dev/null
+fgrep() {
+	echo "fgrep is a standard shortcut for grep -F.  Perhaps you want frgi instead?" >&2
+	return 1
+}
+
+# Fuzzy Git Checkout
+fgco() {
+  #git branch | fzf --no-sort --tac --query="$1" | xargs git checkout
+
+  local result
+  result="$(git_branch_most_recent_last_with_info | fzf --no-sort --tac --query="$1")"
+
+  local branch
+  local _
+  if [[ -n "$result" ]]
+  then
+    IFS=' ' read -r branch _ <<< "$result"
+    git checkout "$branch"
+  fi
+}
+git_branch_most_recent_last_with_info() {
+  #git for-each-ref --sort=committerdate refs/heads --format="%(refname:short)"
+  git for-each-ref --sort=committerdate refs/heads --format="%(refname:short) %(committerdate:relative) (%(authorname)) - %(subject)" | columnise-clever -ignore '[^ ]* *[^ ]* *[^ ]*'
+}
+alias gcof=fgco

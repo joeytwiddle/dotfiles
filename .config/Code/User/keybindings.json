@@ -1,0 +1,201 @@
+// Place your key bindings in this file to override the defaults
+// prettier-ignore
+[
+  // When composing "when" conditions, you may like to view what is available, using:
+  //     >Developer: Toggle Developer Tools
+  //     and
+  //     >Developer: Inspect Context Keys
+  // https://code.visualstudio.com/api/references/when-clause-contexts
+
+  // Navigation like WebStorm on Mac
+  { "key": "alt+shift+[", "command": "workbench.action.previousEditor" },
+  { "key": "alt+shift+]", "command": "workbench.action.nextEditor" },
+  { "key": "alt+[", "command": "workbench.action.navigateBack" },
+  { "key": "alt+]", "command": "workbench.action.navigateForward" },
+  { "key": "ctrl+alt+[", "command": "workbench.action.navigateBack" },
+  { "key": "ctrl+alt+]", "command": "workbench.action.navigateForward" },
+
+  // Text movement and selection like Mac (beginning/end of file not done)
+  { "key": "alt+right", "command": "cursorEnd", "when": "textInputFocus" },
+  { "key": "alt+shift+right", "command": "cursorEndSelect", "when": "textInputFocus" },
+  { "key": "alt+left", "command": "cursorHome", "when": "textInputFocus" },
+  { "key": "alt+shift+left", "command": "cursorHomeSelect", "when": "textInputFocus" },
+  { "key": "meta+right", "command": "cursorWordEndRight", "when": "textInputFocus" },
+  { "key": "meta+shift+right", "command": "cursorWordEndRightSelect", "when": "textInputFocus" },
+  { "key": "meta+left", "command": "cursorWordStartLeft", "when": "textInputFocus" },
+  { "key": "meta+shift+left", "command": "cursorWordStartLeftSelect", "when": "textInputFocus" },
+  { "key": "alt+shift+down", "command": "editor.action.moveLinesDownAction", "when": "editorTextFocus && !editorReadonly" },
+  { "key": "alt+shift+up", "command": "editor.action.moveLinesUpAction", "when": "editorTextFocus && !editorReadonly" },
+
+  // More Mac-like binds using Cmd
+  { "key": "alt+shift+f", "command": "workbench.view.search", "when": "!searchViewletVisible" },
+  { "key": "alt+backspace", "command": "editor.action.deleteLines", "when": "textInputFocus && !editorReadonly" },
+  // I am now using the default (Opt-Shift-F on Mac, Ctrl-Shift-I on Linux)
+  /*
+  { "key": "alt+shift+l", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
+  { "key": "alt+shift+p", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
+  { "key": "ctrl+alt+shift+p", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
+  */
+  { "key": "alt+z", "command": "undo", "when": "textInputFocus && !editorReadonly" },
+  { "key": "alt+shift+z", "command": "redo", "when": "textInputFocus && !editorReadonly" },
+
+  /*
+  // Text manipulation like Mac
+  // Note: There are a lot of definitions for ctrl+c, but we have only mirrored the main one so far.
+  { "key": "alt+c", "command": "editor.action.clipboardCopyAction", "when": "textInputFocus" },
+  { "key": "alt+x", "command": "editor.action.clipboardCutAction", "when": "textInputFocus && !editorReadonly" },
+  { "key": "alt+v", "command": "editor.action.clipboardPasteAction", "when": "textInputFocus && !editorReadonly" },
+  { "key": "alt+/", "command": "editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
+
+  // Walk through search results with Alt-Up/Down (VSCode default is F4, Shift-F4)
+  { "key": "alt+down", "command": "goToNextReferenceFromEmbeddedEditor", "when": "inReferenceSearchEditor" },
+  { "key": "alt+up", "command": "goToPreviousReferenceFromEmbeddedEditor", "when": "inReferenceSearchEditor" },
+  { "key": "alt+down", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
+  { "key": "alt+up", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
+  { "key": "alt+down", "command": "goToNextReference", "when": "referenceSearchVisible" },
+  { "key": "alt+up", "command": "goToPreviousReference", "when": "referenceSearchVisible" },
+
+  { "key": "ctrl+g", "command": "editor.action.nextMatchFindAction", "when": "editorFocus" },
+  { "key": "ctrl+shift+g", "command": "editor.action.previousMatchFindAction", "when": "editorFocus" },
+  { "key": "ctrl+l", "command": "workbench.action.gotoLine" },
+  { "key": "ctrl+backspace", "command": "deleteRight", "when": "textInputFocus && !editorReadonly" },
+  { "key": "ctrl+shift+j", "command": "editor.action.joinLines", "when": "editorFocus" },
+  */
+
+  { "key": "ctrl+=", "command": "editor.action.fontZoomIn" },
+  { "key": "ctrl+-", "command": "editor.action.fontZoomOut" },
+  { "key": "ctrl+0", "command": "editor.action.fontZoomReset" },
+  { "key": "ctrl+shift+=", "command": "workbench.action.zoomIn" },
+  { "key": "ctrl+shift+-", "command": "workbench.action.zoomOut" },
+  { "key": "ctrl+shift+0", "command": "workbench.action.zoomReset" },
+  { "key": "meta+up", "command": "editor.action.addSelectionToNextFindMatch", "when": "editorFocus" },
+  /*
+  { "key": "alt+z", "command": "workbench.action.maximizeEditor" },
+  */
+
+  { "key": "ctrl+shift+\\", "command": "workbench.action.splitEditorOrthogonal" },
+
+  { "key": "alt+w", "command": "workbench.action.closeWindow", "when": "!editorIsOpen && !multipleEditorGroups" },
+
+  /* To match macOS keybinds */
+  { "key": "meta+shift-f", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
+  { "key": "meta+shift+o", "command": "editor.action.organizeImports", "when": "editorTextFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/" },
+  { "key": "alt-j", "command": "workbench.action.togglePanel" },
+  { "key": "alt-p", "command": "workbench.action.quickOpen" },
+  { "key": "alt+p", "command": "workbench.action.quickOpenNavigateNextInFilePicker", "when": "inFilesPicker && inQuickOpen" },
+  { "key": "alt+shift+p", "command": "workbench.action.quickOpenNavigatePreviousInFilePicker", "when": "inFilesPicker && inQuickOpen" },
+  { "key": "alt+shift+p", "command": "workbench.action.showCommands", "when": "!inFilesPicker || !inQuickOpen" },
+  { "key": "alt+shift+e", "command": "workbench.view.explorer" },
+  // To train me to use Cmd-P / Alt-P instead of Ctrl-P
+  { "key": "ctrl+p", "command": "-workbench.action.quickOpen" },
+
+  // On Linux ctrl+shift+e should trigger "workbench.view.explorer" but GTK might hijack it for a new emoji feature.
+  // If you want it back, you may try to disable GTK's hijacking: https://github.com/microsoft/vscode/issues/48480
+
+  //{ "key": "alt+s", "command": "workbench.action.files.save" },
+  { "key": "alt+s", "command": "workbench.action.files.saveAll" },
+  { "key": "ctrl+s", "command": "workbench.action.files.saveAll" },
+
+  // Disable these VSCode defaults, because I need to use these keys in Vim mode
+  { "key": "ctrl+w", "command": "-workbench.action.closeWindow", "when": "!editorIsOpen && !multipleEditorGroups" },
+  { "key": "ctrl+w", "command": "-workbench.action.closeGroup", "when": "activeEditorGroupEmpty && multipleEditorGroups" },
+  { "key": "ctrl+w", "command": "-workbench.action.closeActiveEditor", "when": "editorFocus" },
+  /* Enable it only when there is one window pane (no splits) */
+  //{ "key": "ctrl+w", "command": "workbench.action.closeActiveEditor", "when": "editorFocus && !multipleEditorGroups" },
+
+  // Disable these Vim defaults, because I don't use them, and I would rather use the VSCode shortcuts
+  { "key": "ctrl+f", "command": "-extension.vim_ctrl+f", "when": "editorTextFocus && vim.active && vim.use<C-f> && !inDebugRepl && vim.mode != 'Insert'" },
+
+  { "key": "alt+shift+f", "command": "workbench.action.findInFiles" },
+
+  //{ "key": "ctrl+n", "command": "!extension.vim_ctrl+n", "when": "editorTextFocus && vim.active && vim.use<C-n> && !inDebugRepl || vim.active && vim.use<C-n> && !inDebugRepl && vim.mode == 'CommandlineInProgress' || vim.active && vim.use<C-n> && !inDebugRepl && vim.mode == 'SearchInProgressMode'" },
+  //{ "key": "ctrl+p", "command": "!extension.vim_ctrl+p", "when": "suggestWidgetVisible && vim.active && vim.use<C-p> && !inDebugRepl || vim.active && vim.use<C-p> && !inDebugRepl && vim.mode == 'CommandlineInProgress' || vim.active && vim.use<C-p> && !inDebugRepl && vim.mode == 'SearchInProgressMode'" },
+
+  //{ "key": "ctrl+n", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
+  //{ "key": "ctrl+p", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
+
+  // It looks like when multiple bindings match, it uses the later one
+  { "key": "alt+meta+down", "command": "references-view.next", "when": "reference-list.hasResult && references-view.canNavigate" },
+  { "key": "alt+meta+up", "command": "references-view.prev", "when": "reference-list.hasResult && references-view.canNavigate" },
+  { "key": "alt+meta+down", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult || inSearchEditor" },
+  { "key": "alt+meta+up", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult || inSearchEditor" },
+  // If multiple "when"s match, VSCode seems to prefer the later one, i.e. search above.
+  // So if I really want references instead of search results, I'll hold down shift.
+  { "key": "shift+alt+meta+down", "command": "references-view.next", "when": "reference-list.hasResult" },
+  { "key": "shift+alt+meta+up", "command": "references-view.prev", "when": "reference-list.hasResult" },
+  // There is reference-list.isActive but that is always true, and referenceSearchVisible but that is always false
+  // So it seems neither of those refer to the visibiility of the sidebar panel, which is what I'm interested in
+
+  // When focused on search, get back to editor by pressing Escape
+  // I couldn't find a "when" for when the references results are focused, so I would like to enable this always.
+  // But if I use an empty "when" then I cannot escape from Vim's insert mode.
+  { "key": "escape", "command": "workbench.action.focusActiveEditorGroup", "when": "searchInputBoxFocus" },
+  // One of the popups is difficult to get rid of.  Well it's possible with Shift-Escape (or Shift-Escape via Ctrl-L) but I just want Escape to remove it.
+  // I'm not sure which popup it is exactly, because there are a lot bound to Shift-Escape.  (So it might not be the suggestionWidget at all.)
+  // This attempt was problematic because, when autocomplete menu is focused, usually <Escape> will also break out of Vim's INSERT mode.  With this keybinding enabled, <Escape> closes the autocomplete menu, but it didn't leave INSERT mode.
+  //{ "key": "escape", "command": "hideSuggestWidget", "when": "suggestWidgetVisible && textInputFocus" },
+
+  // When focused on file explorer, get back to editor by pressing Escape
+  { "key": "escape", "command": "workbench.action.focusActiveEditorGroup", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
+
+  // A catch all, which should leave the sidebar whenever focus is there
+  // The case I needed this was after `gU` aka `references-view.find`
+  { "key": "escape", "command": "workbench.action.focusActiveEditorGroup", "when": "!editorFocus && !terminalFocus && !terminalFindFocus && !inputFocus" },
+  // It might be preferable to whitelist when we do want this to happen, rather than blacklist, but inventing this state boolean didn't work for me
+  //{ "key": "escape", "command": "workbench.action.focusActiveEditorGroup", "when": "sidebarFocus" },
+
+  // Use Tab to open autocomplete suggestions, and cycle through them
+  { "key": "tab", "command": "editor.action.triggerSuggest", "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly && atEndOfWord" },
+  { "key": "tab", "command": "selectNextSuggestion", "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus" },
+  { "key": "shift-tab", "command": "selectPrevSuggestion", "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus" },
+
+  // Use Tab whenever a list is focused
+  // I find this useful when jumping to a definition, when multiple suggestions are offered
+  { "key": "tab", "command": "list.focusDown", "when": "listFocus" },
+  { "key": "shift-tab", "command": "list.focusUp", "when": "listFocus" },
+
+  //{ "key": "tab", "command": "acceptSelectedSuggestion", "when": "acceptSuggestionOnEnter && suggestWidgetVisible && suggestionMakesTextEdit && textInputFocus" },
+
+  // Using VSCodeVim, when focused on the explorer/sidebar I would often try to use `Ctrl-W Right` to get back to the editor.
+  // But in VSCode, Ctrl+W closes the current editor!  So I made this mapping to intercept that.
+  { "key": "ctrl+w Right", "command": "workbench.action.focusActiveEditorGroup", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
+
+  /* Cycle zoom (requires Settings Cycler plugin) */
+  /* I use this because I like -0.5 on my Linux, but Ctrl-Plus/Minus round to integers */
+  {
+    "key": "ctrl+shift+0",
+    "command": "settings.cycle",
+    //"when": "editorTextFocus",
+    "args": {
+      "id": "cycleResetZoom", // must be unique
+      "overrideWorkspaceSettings": true,
+      "values": [
+        {
+          //"window.zoomLevel": -0.5
+          "window.zoomLevel": -0.8
+        },
+        {
+          //"window.zoomLevel": -0.8
+          "window.zoomLevel": -1
+        },
+        {
+          //"window.zoomLevel": 0
+          "window.zoomLevel": -0.5
+        }
+      ]
+    }
+  },
+
+  { "key": "ctrl+e", "command": "workbench.action.showEditorsInActiveGroup" },
+
+  { "key": "ctrl+PageUp", "command": "workbench.action.terminal.focusPrevious", "when": "terminalFocus" },
+  { "key": "ctrl+PageDown", "command": "workbench.action.terminal.focusNext", "when": "terminalFocus" },
+
+  { "key": "ctrl+alt+shift+l", "command": "editor.action.formatDocument.multiple" },
+  { "key": "ctrl+alt+shift+l", "command": "eslint.executeAutofix" },
+  { "key": "ctrl+alt+shift+o", "command": "editor.action.organizeImports", "when": "editorTextFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/" },
+
+  // We can reach the Terminal with <Ctrl-W> <Down>, so we should be able to leave it with <Ctrl-W> <Up>
+  // This might not go back where you were befor, if you have multiple editor groups open (split windows)
+  { "key": "ctrl+w Up", "command": "workbench.action.focusPreviousGroup", "when": "terminalFocus" },
+]

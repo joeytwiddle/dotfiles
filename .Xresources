@@ -19,12 +19,13 @@
 !xterm.vt100.font: -*-clean-medium-r-*-*-16-*-*-*-*-*-*-*
 !xterm.vt100.font: -*-clean-bold-r-*-*-16-*-*-*-*-*-*-*
 !! On Ubuntu, vt100 was not working, but * did:
-!xterm.*.font: -*-terminus-bold-r-*-*-16-*-*-*-*-*-*-*
+!xterm.*.font: -*-terminus-bold-r-*-*-14-*-*-*-*-*-*-*
 !xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
 !xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
-# For XQuartz (Mac):
-xterm.*.font: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
+!xterm.*.font: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
 !xterm.*.font: -*-lucidatypewriter-medium-*-*-*-13-*-*-*-*-*-*-*
+!xterm.*.font: -*-lucidatypewriter-medium-*-*-*-15-*-*-*-*-*-*-*
+!xterm.*.font: -b&h-lucidatypewriter-medium-r-normal-*-*-120-*-*-m-*-iso8859-1
 xterm.*.background: #000000
 xterm.*.foreground: #ffffff
 xterm.*.cursorColor: #ffdd44
@@ -37,17 +38,29 @@ xterm.*.fastScroll: true
 ! XTerm.*.faceName: Liberation Mono
 !xterm.*.faceSize2: 11
 !! 1=unreadable, 2=tiny, 3=small, 4=medium, 5=large, 7=huge
-xterm.*.font2: -*-lucidatypewriter-medium-*-*-*-9-*-*-*-*-*-*-*
+!xterm.*.font2: -*-lucidatypewriter-medium-*-*-*-9-*-*-*-*-*-*-*
 !xterm.*.font3: -*-lucidatypewriter-medium-*-*-*-10-*-*-*-*-*-*-*
 !xterm.*.font4: -*-lucidatypewriter-medium-*-*-*-13-*-*-*-*-*-*-*
 !xterm.*.font5: -*-lucidatypewriter-medium-*-*-*-15-*-*-*-*-*-*-*
+!xterm.*.font2: -b&h-lucidatypewriter-medium-r-normal-*-*-60-*-*-m-*-iso8859-1
+!xterm.*.font3: -b&h-lucidatypewriter-medium-r-normal-*-*-70-*-*-m-*-iso8859-1
+!xterm.*.font4: -b&h-lucidatypewriter-medium-r-normal-*-*-80-*-*-m-*-iso8859-1
+!xterm.*.font5: -b&h-lucidatypewriter-medium-r-normal-*-*-100-*-*-m-*-iso8859-1
 !xterm.*.font6: -*-lucidatypewriter-medium-*-*-*-17-*-*-*-*-*-*-*
-xterm.*.font6: -*-terminus-bold-r-*-*-24-*-*-*-*-*-*-*
+!xterm.*.font6: -*-terminus-bold-r-*-*-24-*-*-*-*-*-*-*
+xterm.*.font1: -*-clean-medium-r-*-*-6-*-*-*-*-*-*-*
+xterm.*.font2: -*-clean-medium-r-*-*-10-*-*-*-*-*-*-*
+xterm.*.font3: -*-clean-bold-r-*-*-14-*-*-*-*-*-*-*
+xterm.*.font3: -*-terminus-bold-r-*-*-12-*-*-*-*-*-*-*
+xterm.*.font4: -*-terminus-bold-r-*-*-18-*-*-*-*-*-*-*
+xterm.*.font5: -*-terminus-bold-r-*-*-24-*-*-*-*-*-*-*
+xterm.*.font6: -*-terminus-bold-r-*-*-32-*-*-*-*-*-*-*
+!xterm.vt100.font3
 ! For XQuartz (Mac):
+xterm.*.font: -*-lucidatypewriter-medium-*-*-*-11-*-*-*-*-*-*-*
 xterm.*.font3: -*-lucidatypewriter-*-*-*-*-10-*-*-*-*-*-*-*
 xterm.*.font4: -*-lucidatypewriter-*-*-*-*-14-*-*-*-*-*-*-*
 xterm.*.font5: -*-lucidatypewriter-*-*-*-*-16-*-*-*-*-*-*-*
-!xterm.vt100.font3
 
 ! http://lukas.zapletalovi.com/2013/07/hidden-gems-of-xterm.html
 ! Shows how to reconfigure keybinds, and where to find default settings (just list the files in xterm package).
@@ -164,39 +177,56 @@ XTerm.*.printerCommand: xterm -T History -e sh -c 'less -r <&3' 3<&0
 ! Strangely I could not change my foreground color with foreground, 7, 15 or 255!
 ! Oh, that is because I fixed them on the commandline with -bg and -fg
 ! These are what Vim recommends.  But some of them (e.g. green) are significantly more dull than usual.
-!xterm.*.color0:			#000000
-!xterm.*.color1:			#c00000
-!xterm.*.color2:			#008000
-!xterm.*.color3:			#808000
-!xterm.*.color4:			#0000c0
-!xterm.*.color5:			#c000c0
-!xterm.*.color6:			#008080
-!xterm.*.color7:			#c0c0c0
-!xterm.*.color8:			#808080
-!xterm.*.color9:			#ff6060
-!xterm.*.color10:			#00ff00
-!xterm.*.color11:			#ffff00
-!xterm.*.color12:			#8080ff
-!xterm.*.color13:			#ff40ff
-!xterm.*.color14:			#00ffff
-!xterm.*.color15:			#ffffff
+!xterm.*.color0:     #000000
+!xterm.*.color1:     #c00000
+!xterm.*.color2:     #008000
+!xterm.*.color3:     #808000
+!xterm.*.color4:     #0000c0
+!xterm.*.color5:     #c000c0
+!xterm.*.color6:     #008080
+!xterm.*.color7:     #c0c0c0
+!xterm.*.color8:     #808080
+!xterm.*.color9:     #ff6060
+!xterm.*.color10:    #00ff00
+!xterm.*.color11:    #ffff00
+!xterm.*.color12:    #8080ff
+!xterm.*.color13:    #ff40ff
+!xterm.*.color14:    #00ffff
+!xterm.*.color15:    #ffffff
+! My color theme based on Argonaut for iTerm2 (the first time I copied it, I made everything too dull)
+!xterm.*.color0:     #232323
+!xterm.*.color1:     #c50020
+!xterm.*.color2:     #3ca91e
+!xterm.*.color3:     #bb8417
+!xterm.*.color4:     #1561d3
+!xterm.*.color5:     #8742a6
+!xterm.*.color6:     #1fb2ae
+!xterm.*.color7:     #d5d5d5
+!xterm.*.color8:     #555555
+!xterm.*.color9:     #fc283f
+!xterm.*.color10:    #57e252
+!xterm.*.color11:    #fec444
+!xterm.*.color12:    #0092ff
+!xterm.*.color13:    #c05eeb
+!xterm.*.color14:    #3ad7bc
+!xterm.*.color15:    #ffffff
 ! My color theme based on Argonaut for iTerm2
-xterm.*.color0:			#232323
-xterm.*.color1:			#c50020
-xterm.*.color2:			#3ca91e
-xterm.*.color3:			#bb8417
-xterm.*.color4:			#1561d3
-xterm.*.color5:			#8742a6
-xterm.*.color6:			#1fb2ae
-xterm.*.color7:			#d5d5d5
-xterm.*.color8:			#555555
-xterm.*.color9:			#fc283f
-xterm.*.color10:			#57e252
-xterm.*.color11:			#fec444
-xterm.*.color12:			#0092ff
-xterm.*.color13:			#c05eeb
-xterm.*.color14:			#3ad7bc
-xterm.*.color15:			#ffffff
+xterm.*.color0:     #2e2e2e
+xterm.*.color1:     #d21e29
+xterm.*.color2:     #47b427
+xterm.*.color3:     #c8951b
+xterm.*.color4:     #1678dc
+xterm.*.color5:     #9b5bb5
+xterm.*.color6:     #1abebc
+xterm.*.color7:     #dddddd
+xterm.*.color8:     #686868
+xterm.*.color9:     #ff4250
+xterm.*.color10:    #64e364
+xterm.*.color11:    #ffcd55
+xterm.*.color12:    #00a6ff
+xterm.*.color13:    #cd7bf0
+xterm.*.color14:    #41dcc8
+xterm.*.color15:    #ffffff
 
 !! For coloured man-pages:
 !! From: http://bugs.gentoo.org/184604

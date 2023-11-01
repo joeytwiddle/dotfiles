@@ -1,0 +1,571 @@
+/*
+
+To use userChrome.css in modern Firefox, you may need to go to about:config and set `toolkit.legacyUserProfileCustomizations.stylesheets` to true.
+Save this profile in `<your_profile_folder>/chrome/userChrome.css` (you may need to create the chrome folder if it does not already exist)
+
+This explains how to configure live inspection and editing: https://www.reddit.com/r/FirefoxCSS/comments/73dvty/tutorial_how_to_create_and_livedebug_userchromecss/
+
+For more information on userChrome.css, you may refer to this website: https://www.userchrome.org/
+
+You can get some inspiration for styling here: https://www.reddit.com/r/FirefoxCSS/
+
+Old non-live method (requires a restart):
+When editing this file, the page chrome://browser/content/browser.xhtml is useful for discovering Firefox's IDs and classnames.
+To use the inspector on that page, you'll need to "Enable browser chrome and add-on debugging toolboxes" https://www.reddit.com/r/FirefoxCSS/comments/73dvty/tutorial_how_to_create_and_livedebug_userchromecss/
+It may be easier to open the DevTools before navigating to the chrome URL, because the keybind stops working.once the page has loaded.
+Unfortunately that page does not apply the CSS we set in this file, making it difficult to preview our changes.  (It used to, but it's not doing it in 2019.)
+It can also be useful to search the source code: https://github.com/mozilla/gecko-dev/search?q=tab-close-button
+
+*/
+
+/*
+ * Do not remove this @namespace line -- it's required for correct functioning
+ */
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); /* set default namespace to XUL */
+
+
+/* Disable Arial (because it looks a bit crappy on my Linux */
+/* Unfortunately these tricks didn't work for me. */
+/* @font-face { font-family: 'Arial'; src: local('FreeSans'); } */
+/* @font-face { font-family: 'Arial'; src: local('Liberation Sans'); } */
+/* This is what Google Fonts recommends, but even this didn't work */
+/* @font-face { font-family: 'Arial'; src: url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap'); } */
+/* Although it didn't work when I tried it in page scope either, on a Google Search results page: */
+/* downloadable font: rejected by sanitizer (font-family: "Arial" style:normal weight:400 stretch:100 src index:0) source: https://fonts.googleapis.com/css2?family=Open+Sans&display=swap */
+
+
+/* === Narrower tabs === */
+
+/* Re-enable min tab width=0 in Firefox-4 */
+/* In about:config I set browser.tabs.tabMinWidth with some success, but that doesn't seem to work lower than 40px. */
+/* Adjusting it with CSS below works for any width on Linux, but has no affect on macOS. */
+/*
+.tabbrowser-tab:not([pinned]) {
+    min-width: 1px !important;
+}
+*/
+/* Actually the recommended selector is: */
+/*
+.tabbrowser-tab[fadein]:not([pinned]) {
+    min-width: 240px !important;
+}
+*/
+/* Small tabs, just enough for favicons */
+.tabbrowser-tab[fadein]:not([pinned]) {
+    /* This is as narrow as I can make the tabs, without too much risk of messing things up */
+    /* min-width: 36px !important; */
+    /* I like to have them this narrow, but it requires some fixes elsewhere, to centralise the favicons. */
+    /* And we need to be careful, because these fixes can mess up pinned tabs. */
+    min-width: 28px !important;
+}
+/*
+:root {
+    --tab-min-width: 32px !important;
+}
+:root {
+    --toolbar-button-border-radius: 999px !important;
+}
+*/
+/* Centralise the favicon on the small tabs */
+.tabbrowser-tab[fadein]:not([selected]):not([pinned]) .tab-content {
+    /* This looks bad for large tabs! */
+    /* padding: 0 0px 0 7px !important; */
+    /* So instead we put margins on the elements inside the content */
+    padding: 0 4px !important;
+}
+.tabbrowser-tab[fadein]:not([selected]) .tab-icon-image {
+    margin-left: 7px !important;
+}
+.tabbrowser-tab[fadein]:not([selected]) .tab-close-button {
+    margin-right: 7px !important;
+}
+/* Make the selected tab wide, so we can read its title */
+.tabbrowser-tab[fadein]:not([pinned])[selected] {
+    min-width: 220px !important;
+    /* The max-width is applied when there are few tabs, but as soon as they start scrolling, they shrink. */
+    max-width: 300px !important;
+    width: auto !important;
+}
+
+
+
+/* === Rounded tabs, and tab lighting === */
+
+/* This rounds the top of the tabs, but it doesn't flange the bottom. */
+/* That is possible though, using SVGs: https://github.com/wilfredwee/photon-australis */
+
+/* Tab top border roundness */
+#TabsToolbar .tabbrowser-tab[selected],
+#TabsToolbar .tabbrowser-tab[selected] .tab-stack,
+#TabsToolbar .tabbrowser-tab[selected] .tab-background,
+#TabsToolbar .tabbrowser-tab[selected] .tab-content {
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+}
+#TabsToolbar .tab-background {
+    /* Compensate for the floating tab pills in 2021 */
+    margin-bottom: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    margin-top: 0 !important;
+}
+/* Reducing the top and bottom margins above does not leave much space for the green dot that appears on pinned tabs with pending notifications (which Firefox detects when their title changes). */
+/* But we can move that dot down a bit */
+.tabbrowser-tab:is([image], [pinned]) > .tab-stack > .tab-content[attention]:not([selected="true"]), .tabbrowser-tab > .tab-stack > .tab-content[pinned][titlechanged]:not([selected="true"]), #firefox-view-button[attention] {
+    background-image: radial-gradient(circle, var(--tab-attention-icon-color), var(--tab-attention-icon-color) 2px, transparent 2px) !important;
+    background-position: center bottom calc(2.5px + var(--tabs-navbar-shadow-size)) !important;
+}
+#TabsToolbar .tabbrowser-tab {
+    /* Remove the black border on either side of the selected tab */
+    --tabs-border-color: #0000 !important;
+    border: none !important;
+}
+/* The roundness looks better if there is a little gap above it */
+/* Note that Firefox's new design prefers a margin above the .tab-background rather than the .tab-stack, but our CSS was largely based around .tab-stack so we are sticking that way for now. */
+#TabsToolbar .tabbrowser-tab .tab-stack {
+    /* margin-top: 3px !important; */
+}
+/* Add a shadow to the left and right of the selected tab */
+#TabsToolbar .tabbrowser-tab[selected] .tab-stack {
+    /* box-shadow: 0 4px 8px #0006 !important; */
+    /* box-shadow: 0 2px 4px #0006 !important; */
+    box-shadow: 0 2px 2px #0006 !important;
+    /* Push the nearby tabs aside a bit, so they don't appear in the shadow */
+    /* margin-left: 2px !important; */
+    /* margin-right: 2px !important; */
+}
+
+/* The line that runs along the bottom of unselected tabs */
+/* or you could say it runs along the top of the toolbar. */
+/* It used to be dark, we can can make it light to look raised */
+:root {
+    --tabs-navbar-shadow-size: 0.5px !important;
+}
+#navigator-toolbox {
+    --tabs-border-color: #fff7 !important;
+}
+/*
+#nav-bar:not([tabs-hidden="true"]) {
+    box-shadow: 0 calc(-1 * var(--tabs-navbar-shadow-size)) 0 var(--tabs-border-color);
+}
+*/
+/* Unfortunately the selected tab's shadow overlaps the navbar-shadow above. */
+/* We could try to draw the line this way instead, but this gets overlapped by tab separators! */
+/*
+#TabsToolbar .tabbrowser-tab:not([selected]) .tab-stack {
+    border-bottom: 1px solid #fff8;
+}
+*/
+/* The selected tab's border should match the --tabs-border-color, */
+/* although it may need different alpha due to different background. */
+#TabsToolbar .tabbrowser-tab[selected] .tab-content {
+    border: 1px solid #fff4 !important;
+    border-top: 1px solid #fff7 !important;
+    /* border: 2px solid #fff4 !important; */
+    /* border-top: 2px solid #fff7 !important; */
+    border-bottom: none !important;
+}
+
+/* Remove colored line above each tab, because it extends outside the rounded edge */
+#TabsToolbar .tabbrowser-tab .tab-line {
+    visibility: hidden;
+    /*
+    position: absolute;
+    top: 4px;
+    left: 5px;
+    right: 5px;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    */
+}
+/* Give the selected tab some more horizontal whitespace */
+#TabsToolbar .tabbrowser-tab[selected] .tab-stack .tab-content {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+/* And give all the tabs some more vertical whitespace */
+/* This increases the height of the entire row */
+.tab-content {
+    /* min-height: 40px !important; */
+    /* min-height: 38px !important; */
+}
+.tab-label-container {
+    /* SCREWS_UP_PINNED_TABS */
+    /* padding-left: 4px !important; */
+    /* padding-right: 4px !important; */
+}
+#tabbrowser-tabs, #tabbrowser-arrowscrollbox, #tabbrowser-tabs[positionpinnedtabs] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[pinned] {
+    /* Default: 38px */
+    /* min-height: var(--tab-min-height); */
+    /* height: 24px !important; */
+    /* height: 20px !important; */
+}
+
+
+/* Make the location bar rounded */
+#nav-bar {
+    /* height: 48px !important; */
+    /* height: 44px !important; */
+}
+#urlbar {
+    /* --urlbar-toolbar-height: 48px !important; */
+}
+toolbaritem#urlbar-container {
+    /* --urlbar-container-height: 48px !important; */
+    /* min-height: 48px !important; */
+}
+#urlbar {
+    /* Default is 30px */
+    /* --urlbar-height: 32px !important; */
+    /* --urlbar-height: 32px !important; */
+    /* --urlbar-height: 24px !important; */
+}
+/* Default 8px and ??px */
+/*
+:root {
+    --toolbarbutton-inner-padding: 1px !important;
+    --toolbarbutton-outer-padding: 1px !important;
+}
+*/
+#urlbar-container, #search-container {
+    /* The spacing above and below the urlbar (default 3px but effectively 4 or 5px because of nav-bar height) */
+    /* padding-block: 6px !important; */
+}
+/* #urlbar:not(.megabar), #urlbar.megabar > #urlbar-background, #searchbar, #urlbar-input-container { */
+#urlbar, #urlbar-background, #searchbar, #urlbar-input-container {
+    border-radius: 16px !important;
+}
+#urlbar-input-container {
+    /* Subtly make the url box raised up a bit from the toolbar background */
+    /* box-shadow: 0 1px 1px #0004 !important; */
+    box-shadow: 0 0 3px #0002 !important;
+}
+#urlbar #urlbar-input-container {
+    padding: 0 4px;
+}
+/* Make the location bar background look 3d sunken, using innner shadow */
+/* Note that this overrides the external shadow the box gets when hovered: 0 1px 6px rgba(0,0,0,.1); */
+/* Old way */
+#urlbar:not(.megabar), #urlbar.megabar {
+    /* box-shadow: inset 0 1px 4px #0005 !important; */
+    /* box-shadow: inset 0 1px 8px #0000002c !important; */
+    /* box-shadow: inset 0 1px 10px #00000027 !important; */
+    /* box-shadow: inset 0 2px 8px #00000033 !important; */
+    /* box-shadow: inset 0 1px 10px #0000002d !important; */
+}
+/* New way */
+#urlbar-background {
+    /* box-shadow: inset 0 1px 10px #0000002d !important; */
+    /* box-shadow: inset 0 0 12px #0000002f !important; */
+    /* box-shadow: inset 0 0 6px #00000044 !important; */
+    /* box-shadow: inset 0 0 8px #00000033 !important; */
+    box-shadow: inset 0 0 10px #00000026 !important;
+}
+#urlbar:not(.megabar)[focused="true"], #urlbar.megabar[focused="true"] {
+    /* box-shadow: none !important; */
+    /* border: 1px solid #0008 !important; */
+}
+
+/* Firefox Developer Edition 2021/12/08: Remove the white border around the current tab */
+.tab-background:is([selected], [multiselected]):-moz-lwtheme {
+    border: none !important;
+}
+
+/* Sometimes this outline was appearing around the urlbar.  You can make it appear by using Tab to get out of the urlbar and back in again.  It actually affects all focusable elements, not just the urlbar.  But the urlbar was the only place that it bothered me. */
+:root:-moz-lwtheme-brighttext {
+    /* I guess this colour was provided by my OS theme (Manjaro KDE Breeze) */
+    /* --focus-outline-color: #00DDFF; */
+    /* But changing it didn't change anything */
+    /* --focus-outline-color: #000000 !important; */
+    /* This might work.  I didn't try it.  But it probably won't, because it references the one above! */
+    /* --toolbar-field-focus-border-color: #000000 !important; */
+}
+#urlbar[focused="true"]:not([suppress-focus-border]) > #urlbar-background, #searchbar:focus-within {
+    /* Defaults:
+    outline: var(--focus-outline);
+    outline-offset: calc(var(--focus-outline-width) * -1);
+    outline-color: var(--toolbar-field-focus-border-color);
+    border-color: transparent;
+    */
+    outline: none !important;
+}
+
+
+/* Make close tab button red on hover */
+/* .close-icon:hover { */
+.tab-close-button {
+    /* The new design has made it quite small.  Make it slightly larger. */
+    transform: scale(1.1);
+}
+.tab-close-button[fadein]:hover {
+    /* background: #aaa7; */
+    /* background: #9996; */
+    /* background: #0003; */
+    background-color: #f33 !important;
+    /* background: rgba(12, 12, 13, 0.1); */
+    /* fill: rgb(41, 47, 52); */
+    color: white !important;
+    /* border-radius: 6px; */
+    border-radius: 999px !important;
+    /* When the sound icon is showing, it touches the close button.  Let's prevent that. */
+    margin-left: 4px;
+}
+/* Make new tab button green on hover */
+toolbar .toolbarbutton-1[command="cmd_newNavigatorTab"]:not([disabled="true"]):not([checked]):not([open]):not(:active):hover > .toolbarbutton-icon {
+    background-color: #3b3 !important;
+    color: white !important;
+    /* This has no effect: */
+    /* border-radius: 999px; */
+    /* But this works: */
+    --toolbarbutton-border-radius: 999px;
+}
+/* We could in fact round all buttons on all toolbars. */
+/* (We might want to get more specific, to avoid rounding bookmarks. */
+/*
+:root {
+    --toolbarbutton-border-radius: 999px !important;
+}
+*/
+
+/* I kept clicking on the toggle sound icon accidentally when I was just trying to switch to a tab. */
+/* I tried to make it clearer when we are focused on the toggle sound icon. */
+/* But none of these CSS rules do anything. */
+/*
+.tab-icon-sound[fadein]:hover {
+    background-color: #f008 !important;
+}
+image.tab-icon-sound {
+    pointer-events: none !important;
+    display: none !important;
+}
+.tab-icon-sound {
+    width: 0 !important;
+    height: 0 !important;
+}
+*/
+
+
+/* This conflicted with the location bar in a weird way.  The selected text (or autocompleted text) would appear green-on-white instead of white-on-green as expected. */
+/* Give the toolbars a raised 3D look */
+/*
+/-* The selected tab itself is #fff6 *-/
+.tabbrowser-tab[selected] .tab-background {
+    /-* Unfortunately if we try to modify the background with alpha, it leaks an ugly bottom line. *-/
+    /-* background: linear-gradient(#fff4 0%, #fff6 15%, #fff6 85%, #fff8 100%) !important; *-/
+    /-* We must overwrite the background completely, not with alpha. *-/
+    /-* background: linear-gradient(#e4996b 0%, #e9ad88 100%) !important; *-/
+    /-* background: linear-gradient(#de8249 0%, #e39666 100%) !important; *-/
+    /-* background: linear-gradient(hsl(23, 69%, 68%), hsl(23, 69%, 65%)) !important; *-/
+    background: linear-gradient(hsl(23, 69%, 60%) 0%, hsl(23, 69%, 60%) 50%, hsl(23, 69%, 65%) 100%) !important;
+}
+/-* This background was affecting the selected text when editing a URL *-/
+/-* The not() fixes that, by disabling our background when the URL is being edited.  But that change it ugly. *-/
+/-* #nav-bar { *-/
+#nav-bar:not([urlbar-exceeds-toolbar-bounds=true]) {
+    background: linear-gradient(#fff6, #fff4) !important;
+    background: linear-gradient(hsl(23, 69%, 65%), hsl(23, 69%, 61%)) !important;
+    /-* background: linear-gradient(180deg, #fff6 0%, #fff8 5%, #fff6 100%) !important; *-/
+}
+#PersonalToolbar {
+    background: linear-gradient(#fff4, #fff3) !important;
+    background: linear-gradient(hsl(23, 69%, 61%), hsl(23, 69%, 58%)) !important;
+}
+*/
+/* Similar effect, but not quite (Firefox still lightens some parts, the the tab and toolbar do not merge smoothly) */
+/*
+#navigator-toolbox {
+    background: linear-gradient(hsl(23, 69%, 55%), hsl(23, 99%, 40%));
+}
+*/
+
+/* This surrounds the menu, tabs, location bar and bookmarks toolbar */
+/*
+#navigator-toolbox {
+    border: 1px solid black !important;
+}
+*/
+
+/* Make the currently selected tab and toolbars lighter than the rest of the UI */
+/* I wanted to use light grey, but to do that I would need to set the icons and text to black */
+/*
+.tabbrowser-tab[selected] .tab-background,
+#nav-bar,
+#PersonalToolbar {
+    background: #eee !important;
+    background: #eaaf8a !important;
+}
+*/
+
+/* Light background but curved */
+/*
+.tabbrowser-tab[selected] .tab-background {
+    background: linear-gradient(hsl(23, 70%, 77%), hsl(23, 70%, 77%)) !important;
+}
+#nav-bar {
+    background: linear-gradient(hsl(23, 70%, 77%), hsl(23, 70%, 70%)) !important;
+}
+#PersonalToolbar {
+    background: linear-gradient(hsl(23, 70%, 70%), hsl(23, 70%, 65%)) !important;
+}
+*/
+
+/* Light background but curved */
+/*
+.tabbrowser-tab[selected] .tab-background {
+    background: linear-gradient(hsl(23, 70%, 72%), hsl(23, 70%, 72%)) !important;
+}
+#nav-bar {
+    padding: 4px 0 !important;
+}
+#PersonalToolbar {
+    padding: 4px 0 !important;
+}
+*/
+
+/* Make the toolbars less cramped */
+#nav-bar {
+    /* If you increase top/bottom padding, you should also increase PersonalToolbar's bottom padding, but leave its top at 0 */
+    /* This approach no longer works.  We just set the toolbar height instead. */
+    /*
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+    */
+}
+#PersonalToolbar {
+    /* padding: 1px 1px 6px !important; */
+    padding-top: 0px !important;
+    padding-bottom: 4px !important;
+    /* Greater indentation on this toolbar helps to de-emphasise it */
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
+/* June 2022: Remove the white border from the active tab */
+#TabsToolbar .tab-background[selected] {
+    outline: none !important;
+}
+
+
+/* Attempt to make the back button a little 3D.  Did not work well with my orange theme. */
+/*
+#back-button .toolbarbutton-icon {
+    box-shadow: inset 0px -1px 4px #0004;
+}
+*/
+
+/* By default, text on the toolbar has a heavy shadow offset down and right.  This doesn't look beautiful.  Let's fix that. */
+#tabbrowser-tabs .tab-content *:-moz-lwtheme-brighttext,
+#PlacesToolbarItems > .bookmark-item:-moz-lwtheme-brighttext {
+    /* text-shadow: 0 0 1px #0009 !important; */
+    text-shadow: 0 0 2px #000a !important;
+}
+
+
+
+/* Some fixes for pinned tabs */
+
+/* Remove the unwanted shadow below the selected pinned tab */
+.tabbrowser-tab {
+    overflow-clip-margin: 0 !important;
+}
+/* #TabsToolbar #firefox-view-button[open] > .toolbarbutton-icon, #tabbrowser-tabs:not([noshadowfortests]) .tab-background:is([selected], [multiselected]) {
+    box-shadow: none !important;
+} */
+
+/* Make pinned tabs stand out from normal tabs, by darkening their background a little */
+/* (This does not apply to the selected pinned tab */
+.tabbrowser-tab[pinned] {
+    background: #0003 !important;
+}
+
+
+
+/* Joey's styles for TreeStyleTabs */
+/* These do make a difference, but a little opacity is still inherited, and the shadow still appears on the text (in Metal theme). */
+/* This one is probably not needed. */
+.treestyletab-tabbar-toolbar {
+    opacity: 1.0 !important;
+}
+/* This is the background which is visible when it is not filled with tabs (or when tabs are indented).  It also contains the actual tab labels. */
+.tabbrowser-tabs[treestyletab-mode="vertical"] {
+    opacity: 1.0 !important;
+}
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab {
+    opacity: 1.0 !important;
+    text-shadow: 0px 0px 0px white !important;
+    /* Use these for metal/sidebar themes, to close the large gaps between tabs.
+    margin-top: -4px !important;
+    margin-bottom: -4px !important;
+    */
+    /* Works but destroys the border's simple 3d effect. */
+    /* For the simple theme, make tabs a little bit shorter. */
+    margin-top:    -2px !important;
+    margin-bottom: -2px !important;
+    /* These do nothing */
+    /*
+    padding-top: 1px solid white !important;
+    padding-bottom: 1px solid black !important;
+    padding-top: -2px !important;
+    padding-bottom: -2px !important;
+    padding-top: 4px solid red !important;
+    padding-bottom: 4px solid green !important;
+    */
+    /* Appears to do nothing: */
+    /* background-color: #ff3300; */
+}
+/* Highlight the background of the current tab a bit more strongly, remove the borders since they don't work with the shrinking above. */
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab[selected='true'] {
+    /* border-top: 1px solid red !important; */
+    /* -moz-border-top-colors: ThreeDHighlight transparent !important; */
+    /* -moz-border-top-colors: none; */
+    -moz-border-top-colors: transparent !important;
+    /* padding-top: 1px solid red !important; */
+    /* background-color: rgb(96, 160, 238) !important; */
+    background-color: none !important;
+    background: -moz-linear-gradient(top, rgb(174,211,255), rgb(92,154,229)) repeat-x !important;
+}
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([selected='true']) {
+    /* border-top: 1px solid black !important; */
+    /* -moz-border-top-colors: ThreeDHighlight transparent !important; */
+    -moz-border-top-colors: transparent !important;
+    /* padding-top: 1px solid black !important; */
+    /* background-color: none !important; */
+    background: -moz-linear-gradient(top,  #dddddd,  #bbbbbb) repeat-x !important;
+}
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab[selected='true']:hover {
+    -moz-border-top-colors: !important;
+}
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([selected='true']):hover {
+    -moz-border-top-colors: !important;
+}
+/* Set the favicon's background too */
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab[selected='true'] * {
+    /* background-color: rgb(96, 160, 238) !important; */
+    background-color: transparent !important;
+    /* background: -moz-linear-gradient(top,  rgb(106,170,245),  rgb(77,122,177)) repeat-x !important; */
+    background: transparent;
+}
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([selected='true']) * {
+    background-color: transparent !important;
+    /* background: -moz-linear-gradient(top,  #dddddd,  #bbbbbb) repeat-x !important; */
+    background: transparent;
+}
+
+.tabbrowser-tabs[treestyletab-mode="vertical"] .tabbrowser-tab:not([pinned="true"]) {
+    /* May be a bit faster? */
+    /* Nope; ignored. */
+    box-shadow: none;
+}
+
+.tabbrowser-tabs:not([treestyletab-tabbar-position="top"]) .tabbrowser-tab, .tabbrowser-tabs:not([treestyletab-tabbar-position="top"]) .tabbrowser-tab:not([selected="true"]) {
+    /* Nope */
+    /*
+    border-top: 4px solid green;
+    border-bottom: 4px solid red;
+    */
+}
+

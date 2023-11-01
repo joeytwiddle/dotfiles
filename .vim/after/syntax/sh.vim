@@ -12,3 +12,5 @@ syn keyword	shImportantComment	contained		BUG ERROR
 hi link shImportantComment shTodo
 syn cluster	shCommentGroup	contains=shTodo,@Spell,shImportantComment
 
+syn match shDerefMarker /\$/ containedin=shDerefSimple
+hi link shDerefMarker Statement

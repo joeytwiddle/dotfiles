@@ -17,6 +17,11 @@ function! s:JoeysFinalSetup()
 		au!
 	augroup END
 
+	" These should work but they don't, even when I try them from a terminal
+	" Tried under KDE / qt5
+	"call system('xdotool windowstate --remove STICKY "$(xdotool getwindowfocus)"')
+	"call system('xdotool windowstate --remove ABOVE "$(xdotool getwindowfocus)"')
+
 	" Still doesn't always happen with this enabled.  (Or keeps resetting later?)
 	" highlight Comment ctermfg=darkgrey guifg=darkgrey
 
@@ -51,8 +56,13 @@ function! s:JoeysFinalSetup()
 
 	if ! &diff
 		"source ~/.vim/colors_for_elvin_monokai.vim
+		"colorscheme quantum
+		"hi Normal guibg=#20282f
 		source ~/.vim/colors_for_elvin_gentlemary.vim
-		" On second thought, my diff colours don't look good with that theme, so we will just use the theme-supplied diff colors.
+		" This should have been triggered from above script, but for some reason it isn't, so we call it explicitly.
+		call g:Joeys_After_Colorscheme()
+
+		" My diff colours don't look good with monokai, so we will just use the theme-supplied diff colors.
 		"source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin/traffic_lights_diff.vim
 	endif
 

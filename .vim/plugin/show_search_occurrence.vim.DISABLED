@@ -1,3 +1,5 @@
+" Disabled because since Vim 8.1.1270 we can do this with :set shortmess-=S
+"
 " When performing a search, displays "(n/m)" in the statusbar to indicate the
 " index of the current line within the list of matching lines in the buffer.
 "
@@ -17,7 +19,7 @@
 " If the current file is larger than the threshold (in bytes), then do not
 " display the summary.  This can prevent sluggishness when working on large
 " files.
-let g:ShowSearchOccurrences_MaxBufferSize = get(g:, 'ShowSearchOccurrences_MaxBufferSize', 1000000)
+let g:ShowSearchOccurrences_MaxBufferSize = get(g:, 'ShowSearchOccurrences_MaxBufferSize', 400000)
 
 let g:ShowSearchOccurrences_InCmdLine = get(g:, 'ShowSearchOccurrences_InCmdLine', 1)
 
@@ -42,7 +44,8 @@ function! GetSearchStatus(...)
 	let current_column = col('.')
 	" Check if we are on one of the search results
 	" TODO BUG: This only works if we are on the first character.  So it is not much use for e.g. /search/e-3
-	if match(this_line, @/, current_column-1) == current_column-1
+	" We use silent! when we call match(), in case @/ is an invalid regular expression
+	silent! if match(this_line, @/, current_column-1) == current_column-1
 		let buffer_size = line2byte(line("$")+1)-1
 		if buffer_size > g:ShowSearchOccurrences_MaxBufferSize
 			return ""

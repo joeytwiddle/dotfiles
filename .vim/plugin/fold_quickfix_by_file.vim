@@ -171,6 +171,10 @@ function! g:SeparateFilesVisually()
 				" Underline just the filename/path
 				let m = matchadd("QuickFixLastLineOfFile", '^\%'.previous_line.'l[^|]*')
 			endif
+		else
+			" MacVim was not properly highlighting the qfFileNames, even though ShowSyntaxUnderCursor said that was the highlighting group.
+			" A workaround is to explicity set the highlighting for this line.
+			let m = matchadd("qfFileName", '^\%'.current_line.'l[^|]*')
 		endif
 	endfor
 endfunction
