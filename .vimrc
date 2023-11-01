@@ -931,6 +931,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	"call add(vamAddons,"github:plasticboy/vim-markdown")  " Fix some bugs with the markdown syntax distributed with Vim (2010 May 21)
 	"let g:vim_markdown_folding_disabled=1
 	"silent! hi link mkdCode Preproc
+	" Enable folding for markdown files (now in default vim files)
+	let g:markdown_folding = 1
 
 	" This will start a new browser window for realtime markdown preview: https://github.com/vim-scripts/instant-markdown.vim
 
