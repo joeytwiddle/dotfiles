@@ -578,6 +578,10 @@ autocmd VimLeave * silent !stty ixon
 				" On Mac, S11 and S12 are both quite short, but Squat is just about right.
 				":silent! :set guifont=Envy\ Code\ Squat:h13
 			endif
+			" My 2023 settings
+			set guifont=HasklugNerdFontCompleteNerdFontM-Regular:h13 linespace=-1
+			winpos 200 38
+			set columns=137 lines=48
 		elseif s:operating_system == "Windows"
 			:set guifont=LucidaTypewriter\ 8
 		endif

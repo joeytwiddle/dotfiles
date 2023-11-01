@@ -401,6 +401,16 @@ function! InsertOmniComplete(direction)
 	return "\<c-x>\<c-o>"
 endfunction
 
+" For MacVim: When I press Cmd-Opt-K, position and size the window how I like it
+" When using Menlo:11
+"nnoremap <D-˚> :winpos 235 38<CR>:set columns=158 lines=58<CR>
+" When using Lucida/Hasklug
+nnoremap <D-˚> :set linespace=-1 guifont=HasklugNerdFontCompleteNerdFontM-Regular:h13<CR>:winpos 200 38<CR>:set columns=137 lines=48<CR>
+
+"set linespace=3 guifont=LucidaConsole:h13
+"set linespace=0 guifont=LucidaSans-Typewriter:h13
+"set linespace=-1 guifont=HasklugNerdFontCompleteNerdFontM-Regular:h13
+
 "" Now we have muted <C-R> but <C-R> can be useful, so let's make a workaround:
 "cnoremap <C-\><C-R> <C-R>
 "" But we cannot receive <C-\> on the terminal, so instead use \:
