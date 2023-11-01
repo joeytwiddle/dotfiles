@@ -632,7 +632,7 @@ autocmd VimLeave * silent !stty ixon
 	try
 		set formatoptions+=j
 		au BufReadPost,BufNewFile * set formatoptions+=j
-	catch e
+	catch
 	endtry
 
 	" To show the margin column
