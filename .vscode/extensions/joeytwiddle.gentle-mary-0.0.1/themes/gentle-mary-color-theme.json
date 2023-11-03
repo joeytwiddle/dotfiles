@@ -73,7 +73,8 @@
       "name": "General punctuation",
       "scope": "punctuation.separator.key-value.js, punctuation.definition.block",
       "settings": {
-        "foreground": "#CCCCCC"
+        "foreground": "#AAAAAA",
+        "fontStyle": "bold"
       }
     },
     {
