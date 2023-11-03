@@ -151,6 +151,15 @@
         "foreground": "#777777"
       }
     },
+    /*
+    {
+      "name": "Python Quoted Docstring",
+      "scope": "string.quoted.docstring.multi.python",
+      "settings": {
+        "foreground": "#777777"
+      }
+    },
+    */
     {
       "name": "Class",
       "scope": "entity.name.type.class",
