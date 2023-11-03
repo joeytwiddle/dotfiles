@@ -44,10 +44,10 @@ ms-python.vscode-pylance
 ms-toolsai.jupyter
 ms-vscode.cpptools
 ms-vscode.Theme-TomorrowKit
-ms-vscode.vscode-typescript-tslint-plugin
+#ms-vscode.vscode-typescript-tslint-plugin
 ms-vsliveshare.vsliveshare
 naumovs.color-highlight
-PhilHindle.errorlens
+#PhilHindle.errorlens
 ritwickdey.LiveServer
 RobbOwen.synthwave-vscode
 samrapdev.outrun

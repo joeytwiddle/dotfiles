@@ -1,4 +1,7 @@
 {
+  "// A tool to help tweak a theme": "https://themes.vscode.one/",
+  "// Basic configurable colors": "https://code.visualstudio.com/api/references/theme-color",
+  "// A big list of color keys": "https://gist.github.com/dcts/5b2af4c8b6918e7d35c4121f11d49fb1",
   "$schema": "vscode://schemas/color-theme",
   "type": "dark",
   "name": "Gentle Mary",
@@ -68,9 +71,10 @@
     },
     {
       "name": "General punctuation",
-      "scope": "punctuation.separator.key-value.js, punctuation.definition.block",
+      "scope": "punctuation.separator.key-value.js, punctuation.definition.block, punctuation.section.braces",
       "settings": {
-        "foreground": "#CCCCCC"
+        "foreground": "#AAAAAA",
+        "fontStyle": "bold"
       }
     },
     {
@@ -131,6 +135,41 @@
       }
     },
     {
+      "name": "ReScript React Component",
+      "scope": "source.rescript punctuation.definition.tag entity.name.class",
+      "settings": {
+        "foreground": "#3DA676"
+      }
+    },
+    {
+      "name": "ReScript Class Name",
+      "scope": "source.rescript entity.name.class",
+      "settings": {
+        "foreground": "#A576A0"
+      }
+    },
+    {
+      "name": "ReScript Enum Member",
+      "scope": "source.rescript variable.other.enummember",
+      "settings": {
+        "foreground": "#A576A0"
+      }
+    },
+    {
+      "name": "ReScript Operators (-> and others)",
+      /* I wanted to catch just -> syntax, but this catches all standard operators too. */
+      "scope": "source.rescript keyword.operator",
+      "settings": {
+        "foreground": "#dd9900"
+      }
+    },
+    {
+      "name": "ReScript Operator (~)",
+      "scope": "source.rescript punctuation.definition.keyword",
+      "settings": {
+        "foreground": "#dd9900"
+      }
+    },    {
       "name": "Global",
       "scope": "support.class, support.constant",
       "settings": {
@@ -151,6 +190,15 @@
         "foreground": "#777777"
       }
     },
+    /*
+    {
+      "name": "Python Quoted Docstring",
+      "scope": "string.quoted.docstring.multi.python",
+      "settings": {
+        "foreground": "#777777"
+      }
+    },
+    */
     {
       "name": "Class",
       "scope": "entity.name.type.class",
@@ -850,9 +898,12 @@
     //"pickerGroup.foreground": "#3794ff",
     //"progressBar.background": "#0e70c0",
     //"scrollbar.shadow": "#000000",
-    //"scrollbarSlider.activeBackground": "#bfbfbf66",
-    "scrollbarSlider.background": "#88888826",
+    //"scrollbarSlider.background": "#88888844",
     //"scrollbarSlider.hoverBackground": "#646464b3",
+    //"scrollbarSlider.activeBackground": "#bfbfbf66",
+    "scrollbarSlider.background": "#88888866",
+    "scrollbarSlider.hoverBackground": "#88888888",
+    "scrollbarSlider.activeBackground": "#88888888",
     //"settings.checkboxBackground": "#242424",
     //"settings.checkboxBorder": "#242424",
     //"settings.checkboxForeground": "#f0f0f0",
