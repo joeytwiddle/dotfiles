@@ -71,7 +71,7 @@
     },
     {
       "name": "General punctuation",
-      "scope": "punctuation.separator.key-value.js, punctuation.definition.block",
+      "scope": "punctuation.separator.key-value.js, punctuation.definition.block, punctuation.section.braces",
       "settings": {
         "foreground": "#AAAAAA",
         "fontStyle": "bold"
@@ -135,6 +135,41 @@
       }
     },
     {
+      "name": "ReScript React Component",
+      "scope": "source.rescript punctuation.definition.tag entity.name.class",
+      "settings": {
+        "foreground": "#3DA676"
+      }
+    },
+    {
+      "name": "ReScript Class Name",
+      "scope": "source.rescript entity.name.class",
+      "settings": {
+        "foreground": "#A576A0"
+      }
+    },
+    {
+      "name": "ReScript Enum Member",
+      "scope": "source.rescript variable.other.enummember",
+      "settings": {
+        "foreground": "#A576A0"
+      }
+    },
+    {
+      "name": "ReScript Operators (-> and others)",
+      /* I wanted to catch just -> syntax, but this catches all standard operators too. */
+      "scope": "source.rescript keyword.operator",
+      "settings": {
+        "foreground": "#dd9900"
+      }
+    },
+    {
+      "name": "ReScript Operator (~)",
+      "scope": "source.rescript punctuation.definition.keyword",
+      "settings": {
+        "foreground": "#dd9900"
+      }
+    },    {
       "name": "Global",
       "scope": "support.class, support.constant",
       "settings": {
