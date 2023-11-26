@@ -149,16 +149,24 @@
   { "key": "tab", "command": "selectNextSuggestion", "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus" },
   { "key": "shift-tab", "command": "selectPrevSuggestion", "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus" },
 
-  // Use Tab whenever a list is focused
+  // Use Tab to cycle whenever a list is focused
   // I find this useful when jumping to a definition, when multiple suggestions are offered
   { "key": "tab", "command": "list.focusDown", "when": "listFocus" },
   { "key": "shift-tab", "command": "list.focusUp", "when": "listFocus" },
+
+  // More lists that should use Tab to cycle
+  { "key": "tab", "command": "selectNextCodeAction", "when": "codeActionMenuVisible" },
+  { "key": "shift-tab", "command": "selectPrevCodeAction", "when": "codeActionMenuVisible" },
+  { "key": "tab", "command": "showNextParameterHint", "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible" },
+  { "key": "shift-tab", "command": "showPrevParameterHint", "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible" },
 
   //{ "key": "tab", "command": "acceptSelectedSuggestion", "when": "acceptSuggestionOnEnter && suggestWidgetVisible && suggestionMakesTextEdit && textInputFocus" },
 
   // Using VSCodeVim, when focused on the explorer/sidebar I would often try to use `Ctrl-W Right` to get back to the editor.
   // But in VSCode, Ctrl+W closes the current editor!  So I made this mapping to intercept that.
   { "key": "ctrl+w Right", "command": "workbench.action.focusActiveEditorGroup", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
+  { "key": "ctrl+w l", "command": "workbench.action.focusActiveEditorGroup", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
+  { "key": "] w", "command": "workbench.action.focusActiveEditorGroup", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
 
   /* Cycle zoom (requires Settings Cycler plugin) */
   /* I use this because I like -0.5 on my Linux, but Ctrl-Plus/Minus round to integers */
@@ -188,8 +196,9 @@
 
   { "key": "ctrl+e", "command": "workbench.action.showEditorsInActiveGroup" },
 
-  { "key": "ctrl+PageUp", "command": "workbench.action.terminal.focusPrevious", "when": "terminalFocus" },
-  { "key": "ctrl+PageDown", "command": "workbench.action.terminal.focusNext", "when": "terminalFocus" },
+  // VSCode now has good defaults for these (that work well when the terminal has been dragged into an editor tab)
+  //{ "key": "ctrl+PageUp", "command": "workbench.action.terminal.focusPrevious", "when": "terminalFocus" },
+  //{ "key": "ctrl+PageDown", "command": "workbench.action.terminal.focusNext", "when": "terminalFocus" },
 
   { "key": "ctrl+alt+shift+l", "command": "editor.action.formatDocument.multiple" },
   { "key": "ctrl+alt+shift+l", "command": "eslint.executeAutofix" },
@@ -197,9 +206,25 @@
 
   // We can reach the Terminal with <Ctrl-W> <Down>, so we should be able to leave it with <Ctrl-W> <Up>
   // This might not go back where you were befor, if you have multiple editor groups open (split windows)
+  // (Sometimes I move the terminal to the left or right or the editors, so I define more keys)
   { "key": "ctrl+w Up", "command": "workbench.action.focusPreviousGroup", "when": "terminalFocus" },
+  { "key": "ctrl+w k", "command": "workbench.action.focusPreviousGroup", "when": "terminalFocus" },
+  { "key": "ctrl+w Left", "command": "workbench.action.focusPreviousGroup", "when": "terminalFocus" },
+  { "key": "ctrl+w h", "command": "workbench.action.focusPreviousGroup", "when": "terminalFocus" },
+  { "key": "ctrl+w Down", "command": "workbench.action.focusNextGroup", "when": "terminalFocus" },
+  { "key": "ctrl+w j", "command": "workbench.action.focusNextGroup", "when": "terminalFocus" },
+  { "key": "ctrl+w Right", "command": "workbench.action.focusNextGroup", "when": "terminalFocus" },
+  { "key": "ctrl+w l", "command": "workbench.action.focusNextGroup", "when": "terminalFocus" },
+  // More useful keys for the terminal
+  { "key": "ctrl+w c", "command": "workbench.action.terminal.toggleTerminal", "when": "terminalFocus" },
+  { "key": "ctrl+z", "command": "workbench.action.toggleMaximizedPanel", "when": "terminalFocus" },
 
   // In my Terminal, I use Ctrl-F to move forward one word, so I want Find to be on Ctrl-Shift-F instead.
   { "key": "ctrl+f", "command": "-workbench.action.terminal.focusFind", "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported" },
   { "key": "ctrl+shift+f", "command": "workbench.action.terminal.focusFind", "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported" },
+
+  // Experiment: I was trying to complement the C-L binding in settings.json
+  // Result: This runs before, not after, the VSCodeVim binding
+  // Another result we found is that, both here and there, if we define two bindings with the same key and same when, then the second binding one overwrites the first.
+  //{ "key": "ctrl+l", "command": "workbench.action.toggleSidebarVisibility", "when": "sideBarVisible" },
 ]
