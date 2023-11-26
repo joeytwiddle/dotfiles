@@ -240,7 +240,8 @@
     "typescript.tsserver.experimental.enableProjectDiagnostics": true,
 
     // Default: languageDefined
-    "editor.autoClosingBrackets": "never",
+    //"editor.autoClosingBrackets": "never",
+    "editor.autoClosingBrackets": "languageDefined",
     "javascript.autoClosingTags": false,
     "typescript.autoClosingTags": false,
 
@@ -299,35 +300,6 @@
         "typescript",
         "typescriptreact"
     ],
-
-    // For steoates.autoimport
-    //"autoimport.filesToScan": "**/*.{ts,tsx,js,jsx}",
-
-    // For Error Lens
-    /*
-    //"errorLens.errorBackground": "#ff00001c",
-    //"errorLens.warningBackground": "#ff880012",
-    //"errorLens.infoBackground": "#0000ff00",
-    //"errorLens.hintBackground": "#00ffff00",
-    "errorLens.errorBackground": "#ff000000",
-    "errorLens.warningBackground": "#ff880000",
-    "errorLens.infoBackground": "#0000ff00",
-    "errorLens.hintBackground": "#00ffff00",
-    "errorLens.errorForeground": "#888888ff",
-    "errorLens.warningForeground": "#888888ff",
-    "errorLens.infoForeground": "#555555ff",
-    "errorLens.hintForeground": "#555555ff",
-    //"errorLens.errorForeground": "#88888800",
-    //"errorLens.warningForeground": "#88888800",
-    //"errorLens.infoForeground": "#55555500",
-    //"errorLens.hintForeground": "#55555500",
-    //"errorLens.fontWeight": 200,
-    //"errorLens.fontStyleItalic": false,
-    */
-
-    // For GitLens
-    "gitlens.codeLens.enabled": false,
-    "gitlens.currentLine.enabled": false,
     //"gitlens.hovers.currentLine.over": "line",
     //"gitlens.blame.compact": false,
     "gitlens.heatmap.toggleMode": "window",
@@ -479,13 +451,24 @@
         { "before": [ "c", "s", "W" ], "after": [ "v", "i", "W", "S" ] },
 
         // My custom keys
+        //
+        // Helpful links:
+        // - https://code.visualstudio.com/api/references/when-clause-contexts
+        //
         // As well as clearing the highlight, we also want Ctrl-L to hide any current popups
         // We tried "after": [ "S-Esc" ] and [ "S-Escape" ] but they didn't work.
         // So instead we list the commands directly (but there are many!)
         // Since clearSearchResults focuses the search window, I call focusActiveEditorGroup afterwards
         // To stop the highlighting of search text in the editor, "search.action.clearSearchResults" works, but it unhelpful if you later want to continue the search
         // What does work is unfocusing the search sidebar, which we do here with: "workbench.view.explorer", "workbench.action.focusActiveEditorGroup"
-        { "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen", "workbench.view.explorer", "workbench.action.focusActiveEditorGroup" ] },
+        // Unfortunately, if the sidebar was closed, this action will open it!
+        // So we would like to create two rules, one if the sidebar is visible, and one if it is not
+        // Unfortunately, it appears we cannot create two rules with the same "before", because the second rule appears to be overriding the first
+        { "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen", "workbench.view.explorer", "workbench.action.focusActiveEditorGroup" ], "when": "sideBarVisible" },
+        // If the sidebar is not visible, then the search will also not be visible, solving the issue mentioned above
+        // We could do this, but then we see the sidebar flicker visible and hidden again: "workbench.view.explorer", "workbench.action.focusActiveEditorGroup", "workbench.action.toggleSidebarVisibility"
+        //{ "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen" ], "when": "!sideBarVisible" },
+        //
         // We save the current file in order to pin it.  We save all files, because that's what I really want Ctrl-S to do
         { "before": [ "<C-S>" ], "commands": [ "workbench.action.files.save", "workbench.action.files.saveAll", "workbench.action.focusActiveEditorGroup" ] },
         // I also put a C-S keybinding in keybindings.json, and that one worked well.
@@ -517,6 +500,8 @@
         { "before": [ "<Leader>", "<Leader>", "r" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "workbench.action.replaceInFiles" ] },
         { "before": [ "<Leader>", "a" ], "commands": [ "gitlens.toggleLineBlame" ] },
         { "before": [ "<Leader>", "A" ], "commands": [ "gitlens.toggleFileBlame" ] },
+        // Git Shade
+        //{ "before": [ "<Leader>", "g", "s" ], "commands": [ "gitlens.toggleFileHeatmap" ] },
         { "before": [ "<Leader>", "t" ], "commands": [ "workbench.action.gotoSymbol" ] },
         { "before": [ "<Leader>", "f" ], "commands": [ "workbench.action.toggleSidebarVisibility" ] },
 
@@ -533,6 +518,9 @@
         { "before": [ "<Leader>", "j" ], "commands": [ "workbench.action.togglePanel" ] },
         { "before": [ "<Leader>", "b", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
         { "before": [ "<Leader>", "s" ], "commands": [ "workbench.action.openRecent" ] },
+
+        // Toggle Inline Fold plugin (in Vim this actually toggles foldenable, i.e. all folding)
+        { "before": [ "z", "i" ], "commands": [ "inlineFold.toggle" ] },
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
         // For Linux: If we hit paste (Ctrl-V) when something is selected, replace the selection with the clipboard
@@ -625,7 +613,8 @@
     "editor.suggest.preview": true,
     "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
     "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
-    "editor.cursorBlinking": "solid",
+    // blink, smooth, phase, expand, solid
+    "editor.cursorBlinking": "blink",
     "debug.javascript.autoAttachFilter": "smart",
     "gitlens.plusFeatures.enabled": false,
     "html.autoCreateQuotes": false,
@@ -637,8 +626,55 @@
         "error"
     ],
     "trunk.trunkGrayOutNonBlockingIssues": false,
-    "window.zoomLevel": -0.8,
     "errorLens.enabled": true,
+    "[python]": {
+        "editor.formatOnType": true,
+        "editor.defaultFormatter": "ms-python.python"
+    },
+
+    // Make some plugins faster
+    // Note: This will however make the Vim plugin slower after modifying VSCode settings!
+    // https://github.com/microsoft/vscode/issues/75627#issuecomment-1078827311
+    "extensions.experimental.affinity": {
+        "vscodevim.vim": 1,
+        "asvetliakov.vscode-neovim": 1
+    },
+
+    // Set this false, if you do not want Codegeex to store the code it generates for you
+    "Codegeex.Privacy": false,
+    "docker.contexts.label": "Name",
+
+    "svelte.enable-ts-plugin": true,
+    "totalTypeScript.hideAllTips": true,
+    "totalTypeScript.hideBasicTips": true,
+    "chatgpt.verbosity": "normal",
+
+    //"inlineFold.maskChar": "◦◦◦",
+    //"inlineFold.maskChar": "---",
+    "inlineFold.maskChar": "___",
+    //"inlineFold.maskChar": "(_)",
+    //"inlineFold.maskColor": "#68D7AC",
+    "inlineFold.unfoldOnLineSelect": true,
+    "inlineFold.autoFold": false,
+
+    "material-icon-theme.activeIconPack": "react_redux",
+
+    // Show files before folders - unconventional, but it can make it easier to see which folder a file belongs to
+    "explorer.sortOrder": "filesFirst",
+    // Collapse all files in a folder, as long as that folder contains a README (especially useful for the root folder)
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "README": "*",
+        "readme.*": "*",
+        "README.*": "*",
+    },
+    "workbench.iconTheme": "material-icon-theme",
+
+    // I find these add clutter, and I never actually read them (at least not the statusbar info)
+    // I use \a and \A instead when I want info
+    "gitlens.codeLens.enabled": false,
+    "gitlens.statusBar.enabled": false,
+
     // New Settings
     //"editor.guides.bracketPairsHorizontal": false,
     //"editor.guides.highlightActiveBracketPair": false,
