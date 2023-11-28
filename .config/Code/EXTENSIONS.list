@@ -30,7 +30,8 @@ joeytwiddle.gentle-mary
 johnpapa.vscode-peacock
 jpoissonnier.vscode-styled-components
 JuanBlanco.solidity
-k--kato.intellij-idea-keybindings
+# Disabled because it breaks Cmd-P when I am on .js or .res files O_o
+#k--kato.intellij-idea-keybindings
 kamikillerto.vscode-colorize
 kylepaulsen.stack-tabs
 markis.code-coverage
