@@ -89,6 +89,11 @@
   // To train me to use Cmd-P / Alt-P instead of Ctrl-P
   { "key": "ctrl+p", "command": "-workbench.action.quickOpen" },
 
+  { "key": "cmd+[", "command": "-editor.action.outdentLines", "when": "editorTextFocus && !editorReadonly" },
+  { "key": "cmd+]", "command": "-editor.action.indentLines", "when": "editorTextFocus && !editorReadonly" },
+  { "key": "cmd+[", "command": "workbench.action.navigateBack", "when": "canNavigateBack"  },
+  { "key": "cmd+]", "command": "workbench.action.navigateForward", "when": "canNavigateForward"  },
+
   // On Linux ctrl+shift+e should trigger "workbench.view.explorer" but GTK might hijack it for a new emoji feature.
   // If you want it back, you may try to disable GTK's hijacking: https://github.com/microsoft/vscode/issues/48480
 
@@ -107,6 +112,10 @@
   { "key": "ctrl+f", "command": "-extension.vim_ctrl+f", "when": "editorTextFocus && vim.active && vim.use<C-f> && !inDebugRepl && vim.mode != 'Insert'" },
 
   { "key": "alt+shift+f", "command": "workbench.action.findInFiles" },
+  // Oddly, while there was a System setting like this on macOS, it didn't work until I created an identical user setting
+  { "key": "cmd+shift+f", "command": "workbench.action.findInFiles" },
+  // Let's also put it on this
+  { "key": "ctrl+shift+f", "command": "workbench.action.findInFiles" },
 
   //{ "key": "ctrl+n", "command": "!extension.vim_ctrl+n", "when": "editorTextFocus && vim.active && vim.use<C-n> && !inDebugRepl || vim.active && vim.use<C-n> && !inDebugRepl && vim.mode == 'CommandlineInProgress' || vim.active && vim.use<C-n> && !inDebugRepl && vim.mode == 'SearchInProgressMode'" },
   //{ "key": "ctrl+p", "command": "!extension.vim_ctrl+p", "when": "suggestWidgetVisible && vim.active && vim.use<C-p> && !inDebugRepl || vim.active && vim.use<C-p> && !inDebugRepl && vim.mode == 'CommandlineInProgress' || vim.active && vim.use<C-p> && !inDebugRepl && vim.mode == 'SearchInProgressMode'" },
