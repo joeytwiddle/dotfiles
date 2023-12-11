@@ -215,8 +215,8 @@
       }
     },
     {
-      "name": "Class variable",
-      "scope": "variable.object.property, variable.other.property",
+      "name": "Class property",
+      "scope": "variable.object.property, variable.other.property, variable.other.object.property",
       "settings": {
         "foreground": "#4B95DC"
       }
