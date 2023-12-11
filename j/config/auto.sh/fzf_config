@@ -118,7 +118,10 @@ alias cdg=fcdglobal
 # Fuzzy Ripgrep Ignoring-case
 frgi() {
   local result
-  IFS=$'\n' result="$(rg -i --line-number "$@" | cat | fzf-tmux --no-sort --tac --delimiter=: --nth=2..)"
+  # TODO: We don't have a --preview here
+  #       We could create one, but it would need to strip the filename from the beginning of the line
+  #       We could make it extra complicated by also stripping the line number
+  IFS=$'\n' result="$(rg -i --line-number "$@" | cat | fzf-tmux --no-sort --tac --delimiter=: --nth=2.. )"
 
   local filename
   local lineno
