@@ -34,6 +34,14 @@
         "foreground": "#CCCCCC"
       }
     },
+    // Function parameters
+    {
+      "name": "Variable",
+      "scope": "variable.parameter, variable.other",
+      "settings": {
+        "foreground": "#CCCCCC"
+      }
+    },
     /*
     {
       "name": "Identifier",
