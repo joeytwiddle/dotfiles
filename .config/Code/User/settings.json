@@ -405,8 +405,9 @@
         { "before": [ "u" ], "commands": ["undo"] },
         { "before": [ "C-R" ], "commands": ["redo"] },
         // Other Vim keystrokes that weren't working for me in Vim-VSCode
-        { "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
-        { "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ] },
+        // Now they work, and if I try to use my keybinds below, then <Ctrl-O> followed by i will insert at the old cursor position!
+        //{ "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
+        //{ "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ] },
         { "before": [ "C-W", "c" ], "commands": [ "workbench.action.closeGroup" ] },
         { "before": [ "C-W", "s" ], "commands": [ "workbench.action.splitEditorDown" ] },
         { "before": [ "C-W", "S" ], "commands": [ "workbench.action.splitEditorRight" ] },
@@ -426,8 +427,9 @@
         { "before": [ "]", "q" ], "commands": [ "search.action.focusNextSearchResult" ], "when": "hasSearchResult" },
         { "before": [ "[", "f" ], "commands": [ "workbench.view.explorer", "list.focusUp", "explorer.openAndPassFocus" ] },
         { "before": [ "]", "f" ], "commands": [ "workbench.view.explorer", "list.focusDown", "explorer.openAndPassFocus" ] },
-        { "before": [ "[", "[", "f" ], "commands": [ "workbench.view.explorer", "list.focusUp", "list.focusUp", "explorer.openAndPassFocus" ] },
-        { "before": [ "]", "]", "f" ], "commands": [ "workbench.view.explorer", "list.focusDown", "list.focusDown", "explorer.openAndPassFocus" ] },
+        // We don't really need these.  Just use `2]f`
+        //{ "before": [ "[", "[", "f" ], "commands": [ "workbench.view.explorer", "list.focusUp", "list.focusUp", "explorer.openAndPassFocus" ] },
+        //{ "before": [ "]", "]", "f" ], "commands": [ "workbench.view.explorer", "list.focusDown", "list.focusDown", "explorer.openAndPassFocus" ] },
         { "before": [ "]", "e" ], "commands": [ "editor.action.moveLinesDownAction" ], "when": "editorTextFocus" },
         { "before": [ "[", "e" ], "commands": [ "editor.action.moveLinesUpAction" ], "when": "editorTextFocus" },
         { "before": [ "[", "g" ], "commands": [ "workbench.action.editor.previousChange" ] },
@@ -440,6 +442,10 @@
         { "before": [ "]", "r" ], "commands": [ "references-view.next" ], "when": "reference-list.hasResult" },
         { "before": [ "[", "w" ], "commands": [ "workbench.action.focusPreviousGroup" ] },
         { "before": [ "]", "w" ], "commands": [ "workbench.action.focusNextGroup" ] },
+        // Works a little like next/prev tag, but only if you are focused on the first line of a function
+        // These were super slow when `]]f` was enabled above
+        { "before": [ "[", "[" ], "commands": [ "editor.gotoPreviousFold" ] },
+        { "before": [ "]", "]" ], "commands": [ "editor.gotoNextFold" ] },
 
         // Navigation (mostly custom)
         // revealDefinition may work more often than goToImplementation
@@ -500,6 +506,8 @@
         { "before": [ "C-G" ], "after": [ "leader", "leader", "leader", "b", "d", "w" ] },
         { "before": [ "C-W", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
         { "before": [ "C-B", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
+        // I use // to get case-insensitive search
+        { "before": [ "/", "/" ], "after": [ "/", "\\", "c" ] },
 
         // My custom leader keybinds
         // Previously: "workbench.action.togglePanel" but this only works when the panel opens below the editor
@@ -516,11 +524,9 @@
         { "before": [ "<Leader>", "t" ], "commands": [ "workbench.action.gotoSymbol" ] },
         { "before": [ "<Leader>", "f" ], "commands": [ "workbench.action.toggleSidebarVisibility" ] },
 
-        // JavaScript
-        { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "i", "w", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
-        { "before": [ "<Leader>", "L", "o", "g" ], "after": [ "\"", "l", "y", "i", "W", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
-        // Python
-        { "before": [ "<Leader>", "p", "l", "o", "g" ], "after": [ "\"", "l", "y", "i", "w", "o", "p", "r", "i", "n", "t", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", "Esc" ] },
+        // Redefined below in vim.normalModeKeyBindings
+        //{ "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "i", "w", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
+        //{ "before": [ "<Leader>", "L", "o", "g" ], "after": [ "\"", "l", "y", "i", "W", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
 
         // For quick git work
         { "before": [ "<Leader>", "g", "c", "o" ], "commands": [ "git.checkout" ] },
@@ -533,6 +539,16 @@
         // Toggle Inline Fold plugin (in Vim this actually toggles foldenable, i.e. all folding)
         { "before": [ "z", "i" ], "commands": [ "inlineFold.toggle" ] },
     ],
+    "vim.normalModeKeyBindings": [
+        // Logging JavaScript
+        { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "l", "o", "g" ] },
+        { "before": [ "<Leader>", "L", "o", "g" ], "after": [ "v", "i", "W", "\\", "l", "o", "g" ] },
+        // Logging ReScript
+        { "before": [ "<Leader>", "r", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "r", "l", "o", "g" ] },
+        { "before": [ "<Leader>", "R", "l", "o", "g" ], "after": [ "v", "i", "W", "\\", "r", "l", "o", "g" ] },
+        // Logging Python
+        { "before": [ "<Leader>", "p", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "p", "l", "o", "g" ] },
+    ],
     "vim.visualModeKeyBindingsNonRecursive": [
         // For Linux: If we hit paste (Ctrl-V) when something is selected, replace the selection with the clipboard
         { "before": [ "C-V" ], "after": [ "s", "C-R", "+", "Esc" ] },
@@ -541,9 +557,12 @@
         { "before": [ "[", "e" ], "commands": [ "editor.action.moveLinesUpAction" ] },
         //
         { "before": [ "<Leader>", "*" ], "commands": [ "workbench.action.findInFiles" ] },
-        // JavaScript
+        //
+        // Logging JavaScript
         { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
-        // Python
+        // Logging ReScript
+        { "before": [ "<Leader>", "r", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "J", "s", ".", "l", "o", "g", "2", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", "Esc" ] },
+        // Logging Python
         { "before": [ "<Leader>", "p", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "p", "r", "i", "n", "t", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", "Esc" ] },
     ],
     "vim.insertModeKeyBindingsNonRecursive": [
