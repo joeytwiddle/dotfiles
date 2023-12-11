@@ -2,6 +2,7 @@
 // vim: filetype=javascript
 // prettier-ignore
 {
+    // macOS: 'HasklugNerdFontCompleteNerdFontM-Regular', 
     "editor.fontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
     //"editor.fontFamily": "'Hasklug Nerd Font', 'JetBrains Mono'",
     "editor.fontSize": 12,
@@ -25,6 +26,8 @@
     "debug.console.fontSize": 11,
     "debug.console.fontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
 
+    "workbench.colorTheme": "Gentle Mary",
+
     //"editor.renderWhitespace": "boundary",
 
     "files.autoSave": "onWindowChange",
@@ -36,6 +39,10 @@
     "breadcrumbs.enabled": true,
     // I think disabling this makes the editor slightly faster, but I could be wrong!
     "editor.minimap.enabled": true,
+    "editor.bracketPairColorization.enabled": false,
+    "editor.foldingImportsByDefault": true,
+
+    "explorer.confirmDelete": false,
 
     // Enable on Linux, disable on macOS (because it triggers accidentally if I press Cmd while a touchpad scroll is decaying)
     "editor.mouseWheelZoom": true,
@@ -50,8 +57,11 @@
     "workbench.editor.decorations.badges": true,
 
     // I find it easier to see the tree structure with a wider indent (default 8)
+    //"workbench.tree.indent": 8,
     "workbench.tree.indent": 12,
     //"workbench.tree.indent": 20,
+    // For deep trees, you will eventually need this, even with a low/default indent
+    "workbench.list.horizontalScrolling": true,
 
     // On startup, open all windows that were open in previous session
     "window.restoreWindows": "all",
@@ -305,6 +315,7 @@
     "gitlens.heatmap.toggleMode": "window",
     "gitlens.heatmap.hotColor": "#f6a60a",
     "gitlens.heatmap.coldColor": "#0a62f6",
+    //"gitlens.defaultGravatarsStyle": "wavatar",
 
     // For Trailing Spaces
     "trailing-spaces.deleteModifiedLinesOnly": true,
@@ -602,7 +613,6 @@
     "editor.lineNumbers": "on",
     "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
     "editor.wordWrap": "off",
-    "workbench.colorTheme": "Gentle Mary",
 
     // When using Ctrl-P to select a file, open with the same search that was used last time
     // This isn't helpful if you also use Ctrl-P to cycle through recently focused files
@@ -627,6 +637,7 @@
     ],
     "trunk.trunkGrayOutNonBlockingIssues": false,
     "errorLens.enabled": true,
+
     "[python]": {
         "editor.formatOnType": true,
         "editor.defaultFormatter": "ms-python.python"
@@ -657,7 +668,9 @@
     "inlineFold.unfoldOnLineSelect": true,
     "inlineFold.autoFold": false,
 
-    "material-icon-theme.activeIconPack": "react_redux",
+    "workbench.iconTheme": "material-icon-theme",
+    "material-icon-theme.activeIconPack": "react",
+    "material-icon-theme.saturation": 0.8,
 
     // Show files before folders - unconventional, but it can make it easier to see which folder a file belongs to
     "explorer.sortOrder": "filesFirst",
@@ -665,10 +678,10 @@
     "explorer.fileNesting.enabled": true,
     "explorer.fileNesting.patterns": {
         "README": "*",
-        "readme.*": "*",
         "README.*": "*",
+        // Using both upper and lowercase is good on Linux, but breaks it on macOS (which probably matches both rules)
+        //"readme.*": "*",
     },
-    "workbench.iconTheme": "material-icon-theme",
 
     // I find these add clutter, and I never actually read them (at least not the statusbar info)
     // I use \a and \A instead when I want info
