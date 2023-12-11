@@ -245,6 +245,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .css 01;33
 .CSS 01;33
 .sass 01;33
+.scss 01;33
 .less 01;33
 .dvi 01;33
 .pdf 01;33
@@ -372,6 +373,14 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .hxml 01;36 # Haxe build-file?
 ## More languages:
 .lua 01;36
+## Rescript, and generated files
+.res 01;36
+.bs.js 00;36
+.ast 00;36
+.d 00;36
+.cmj 00;36
+.cmi 00;36
+.cmt 00;36
 
 # dark cyan: Config files
 .config 00;36
@@ -382,6 +391,8 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .ini 00;36
 # .cvsignore .gitignore .eslintignore .npmignore ...
 *ignore 00;36
+*ignore.global 00;36
+*ignore.local 00;36
 .gitmodules 00;36
 .gitattributes 00;36
 .mf 00;36   # Java manifest file
@@ -396,6 +407,8 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 # Windows files
 .sys 00;36
 .pif 00;36
+# Used by ASDF
+.tool-versions 00;36
 
 # dark cyan: Plain data ("output")
 # We could use white for these instead
@@ -423,6 +436,10 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .out 00;37
 .err 00;37
 *tags 00;37 # ctags file (essentially a cache)
+# Caches
+.eslintcache 00;37
+# TypeScript cache tsconfig.tsbuildinfo 
+.tsbuildinfo 00;37
 
 # Don't work:
 #*tmp* 01;31
