@@ -1,5 +1,10 @@
 ## Apparently in bash you can hit CTRL-X CTRL-R to reload the inputrc without restarting the shell
 
+## If we want to overwrite defaults, this may be useful:
+## https://news.ycombinator.com/item?id=5250769
+## set bind-tty-special-chars Off
+## (which really just allows us to overwrite special chars)
+
 ## We could get rid of this file by passing -o options to zsh in jsh
 set show-all-if-ambiguous on
 # set print-completions-horizontally on
