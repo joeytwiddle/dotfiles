@@ -1507,7 +1507,17 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	" FZF requires some extra setup on your local environment: https://github.com/junegunn/fzf.vim#installation
 	if has('mac') || has('macunix')
-		call add(vamAddons,{'activate_this_rtp': '/usr/local/opt/fzf'})
+		" These used to work, but don't seem to work now
+		"call add(vamAddons, {'activate_this_rtp': '/usr/local/opt/fzf'})
+		"call add(vamAddons, {'activate_this_rtp': '/opt/homebrew/bin/fzf'})
+		"
+		" This is the recommended way (using VimPlug)
+		"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+		"
+		" Our way
+		call add(vamAddons, "github:junegunn/fzf")
+		" TODO: We may need to call fzf#install() through VAM or manually
+		"       (Although it doesn't seem to be needed if you already have fzf installed locally)
 	endif
 	call add(vamAddons,"github:junegunn/fzf.vim")
 	" CTRL-A CTRL-Q to select all and build quickfix list
