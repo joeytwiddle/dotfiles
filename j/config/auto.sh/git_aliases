@@ -615,6 +615,8 @@ alias grc='git rebase --continue'
 alias gra='git rebase --abort'
 
 alias grl='git reflog'
+alias grldr='git reflog --date=relative'
+# Ask git log to walk the reflog, producing output in a familiar style
 alias grll='glc -g'
 # This steps through diffs (but over commit messages, which is a little confusing):
 #alias grlll='glc -g -p'
