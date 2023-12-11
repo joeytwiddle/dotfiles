@@ -282,6 +282,7 @@ command! GitMergeToolSetup exec ":source ~/.vim/colors_for_elvin_gentlemary.vim"
 command! GitMergeToolSetup set lines=300 columns=240 | exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | set nodiff | wincmd l | wincmd l | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
 " Finally, since I rebase more often than I merge, I want to switch around which of the panels are diffing at the start
 command! GitMergeToolSetup set lines=300 columns=240 | exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | wincmd l | wincmd l | set nodiff | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
+command! GitMergeToolSetup set lines=57 columns=186 | exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | wincmd l | wincmd l | set nodiff | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
 
 " This produced no results from rg
 "let fzf_grep_cmd = exists('$FZF_DEFAULT_COMMAND') ? $FZF_DEFAULT_COMMAND : 'grep'
