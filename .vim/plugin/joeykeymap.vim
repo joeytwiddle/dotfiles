@@ -402,10 +402,13 @@ function! InsertOmniComplete(direction)
 endfunction
 
 " For MacVim: When I press Cmd-Opt-K, position and size the window how I like it
+" No longer needed, now done in vimrc
 " When using Menlo:11
 "nnoremap <D-˚> :winpos 235 38<CR>:set columns=158 lines=58<CR>
 " When using Lucida/Hasklug
-nnoremap <D-˚> :set linespace=-1 guifont=HasklugNerdFontCompleteNerdFontM-Regular:h13<CR>:winpos 200 38<CR>:set columns=137 lines=48<CR>
+"nnoremap <D-˚> :set linespace=-1 guifont=HasklugNerdFontCompleteNerdFontM-Regular:h13<CR>:winpos 200 38<CR>:set columns=137 lines=48<CR>
+" When I tried a Karabiner rule which remapped Opt-K to Up, that mapping stopped working, so I needed to use this instead:
+"nmap <D-Up> <D-˚>
 
 "set linespace=3 guifont=LucidaConsole:h13
 "set linespace=0 guifont=LucidaSans-Typewriter:h13
@@ -1141,6 +1144,19 @@ nnoremap <Leader>del :execute "!del " . shellescape(getline(".")) . " ; sleep 1"
 "nnoremap <silent> <C-P> :let g:fzf_layout = { 'window': '30split' }<CR>:Buffers<CR>
 "nnoremap <silent> <M-P> :let g:fzf_layout = { 'window': '30split' }<CR>:Buffers<CR>
 nnoremap <silent> <M-P> :Buffers<CR>
+" Unfortunately on Mac, it doesn't seem to notice whether I am pressing shift or not.  Whichever mapping I execute last overrides the former.
+" Also, Cmd-P tries to Print and I can't disable it
+if exists(':macmenu')
+	macmenu File.Print key=<nop>
+	"nnoremap <silent> <D-P> :Buffers<CR>
+	"nnoremap <silent> <M-S-P> :Commands<CR>
+	"nnoremap <silent> <D-S-P> :Commands<CR>
+	"nnoremap <silent> <C-P> :Buffers<CR>
+	"nnoremap <silent> <C-S-P> :Commands<CR>
+	nmenu File.Buffers :Buffers<CR>
+	nmenu File.Commands :Commands<CR>
+	macmenu File.Commands key=<D-S-P>
+endif
 " On my Manjaro, Alt-P emits ð
 "nnoremap <silent> ð :let g:fzf_layout = { 'window': '30split' }<CR>:Buffers<CR>
 nnoremap <silent> ð :Buffers<CR>
