@@ -60,7 +60,9 @@ function! s:JoeysFinalSetup()
 		"hi Normal guibg=#20282f
 		source ~/.vim/colors_for_elvin_gentlemary.vim
 		" This should have been triggered from above script, but for some reason it isn't, so we call it explicitly.
-		call g:Joeys_After_Colorscheme()
+		if exists('*Joeys_After_Colorscheme')
+			call g:Joeys_After_Colorscheme()
+		endif
 
 		" My diff colours don't look good with monokai, so we will just use the theme-supplied diff colors.
 		"source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin/traffic_lights_diff.vim
