@@ -218,21 +218,30 @@
     "editor.tokenColorCustomizations": {
         // If you want to play with syntax highlighting customisations, they go here:
         "textMateRules": [
-            //{ "name": "String", "scope": "string", "settings": { "fontStyle": "", "foreground": "#E6DB74" } },
+            /* Examples:
+            { "name": "String", "scope": "string", "settings": { "fontStyle": "", "foreground": "#E6DB74" } },
             {
-                "scope": "meta.path.search",
+                "name": "Rescript React Component",
+                "scope": "source.rescript punctuation.definition.tag entity.name.class",
                 "settings": {
-                    //"foreground": "#ffffff",
-                    "foreground": "#88CCCC",
-                    "fontStyle": "bold"
+                    "foreground": "#3DA676"
                 }
             },
             {
-                "scope": "meta.resultLinePrefix.lineNumber.search",
+                "name": "Rescript Class Name",
+                "scope": "source.rescript entity.name.class",
                 "settings": {
-                    "foreground": "#777777"
+                    "foreground": "#A576A0"
                 }
             },
+            {
+                "name": "Rescript Enum Member",
+                "scope": "source.rescript variable.other.enummember",
+                "settings": {
+                    "foreground": "#A576A0"
+                }
+            },
+            */
         ]
     },
 
