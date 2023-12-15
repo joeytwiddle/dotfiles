@@ -81,9 +81,6 @@
         "**/node_modules/**": true
     },
 
-    // Avoid getting unwanted autocompletes when typing '(' or '.'
-    "editor.acceptSuggestionOnCommitCharacter": false,
-
     // No longer a setting.  Now toggled in the sidebar Views menu.
     //"npm.enableScriptExplorer": true,
 
@@ -97,22 +94,18 @@
     // And now I'm using \log in vim mode
     //"editor.snippetSuggestions": "top",
 
+    // Intellisense settings, from https://code.visualstudio.com/docs/editor/intellisense#_customizing-intellisense
+    "editor.suggest.preview": true,
     // Controls if quick suggestions should show up while typing
     "editor.quickSuggestions": {
         "other": true,
         "comments": false,
         "strings": false
     },
-
-    // Emmet abbreviations were getting in the way of more useful suggestions
-    // We can use this to move them down the list
-    // Although it will of course affect all other types of snippets too
-    "emmet.showSuggestionsAsSnippets": true,
-    "editor.snippetSuggestions": "bottom",
-
-    // Intellisense settings, from https://code.visualstudio.com/docs/editor/intellisense#_customizing-intellisense
     // Controls whether suggestions should be accepted on commit characters. For example, in JavaScript, the semi-colon (`;`) can be a commit character that accepts a suggestion and types that character.
-    //"editor.acceptSuggestionOnCommitCharacter": true,
+    // Avoid getting unwanted autocompletes when typing '(' or '.'
+    // Although I have tried implementing my own completion with keybindings
+    "editor.acceptSuggestionOnCommitCharacter": false,
     // Controls if suggestions should be accepted on 'Enter' - in addition to 'Tab'. Helps to avoid ambiguity between inserting new lines or accepting suggestions. The value 'smart' means only accept a suggestion with Enter when it makes a textual change
     //"editor.acceptSuggestionOnEnter": "on",
     // Controls the delay in ms after which quick suggestions will show up.
@@ -120,6 +113,7 @@
     // Controls if suggestions should automatically show up when typing trigger characters
     //"editor.suggestOnTriggerCharacters": true,
     // Controls if pressing tab inserts the best suggestion and if tab cycles through other suggestions
+    // Note that I have also created a few keybinds to change Tab's behaviour too
     "editor.tabCompletion": "on",
     // Controls whether sorting favours words that appear close to the cursor
     //"editor.suggest.localityBonus": true,
@@ -129,6 +123,16 @@
     //"editor.wordBasedSuggestions": true,
     // Enable parameter hints
     //"editor.parameterHints.enabled": true,
+
+    // Should we select the first entry when the suggestions dropdown appears?
+    //"editor.suggest.selectionMode": "always",
+    "editor.suggest.selectionMode": "never",
+
+    // Emmet abbreviations were getting in the way of more useful suggestions
+    // We can use this to move them down the list
+    // Although it will of course affect all other types of snippets too
+    "emmet.showSuggestionsAsSnippets": true,
+    "editor.snippetSuggestions": "bottom",
 
     //"workbench.editor.enablePreview": false,
     //"workbench.editor.enablePreviewFromQuickOpen": false,
@@ -648,7 +652,6 @@
 
     // Stop asking me if I want to update go tools, just do it
     "go.toolsManagement.autoUpdate": true,
-    "editor.suggest.preview": true,
     "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
     "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
     // blink, smooth, phase, expand, solid

@@ -154,9 +154,33 @@
   //{ "key": "escape", "command": "workbench.action.focusActiveEditorGroup", "when": "sidebarFocus" },
 
   // Use Tab to open autocomplete suggestions, and cycle through them
+  // This sometimes doesn't work, but we fall back to "editor.tabCompletion" to open the suggestion list
   { "key": "tab", "command": "editor.action.triggerSuggest", "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly && atEndOfWord" },
-  { "key": "tab", "command": "selectNextSuggestion", "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus" },
-  { "key": "shift-tab", "command": "selectPrevSuggestion", "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus" },
+  // This is helpful if "editor.tabCompletion" is "off" but it prevents us from inserting real Tabs onto an empty line
+  //{ "key": "tab", "command": "editor.action.triggerSuggest", "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly" },
+  //{ "key": "tab", "command": "selectNextSuggestion", "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus" },
+  //{ "key": "shift-tab", "command": "selectPrevSuggestion", "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus" },
+  { "key": "tab", "command": "selectNextSuggestion", "when": "suggestWidgetVisible && textInputFocus" },
+  { "key": "shift-tab", "command": "selectPrevSuggestion", "when": "suggestWidgetVisible && textInputFocus" },
+
+  // Select the suggestion even if it's not focused
+  // This is an old VSCode habit which I should try to avoid
+  { "key": "enter", "command": "acceptSelectedSuggestion", "when": "suggestWidgetVisible && textInputFocus" },
+  // This doesn't actually accept the selection (because none is selected), but it does force me to hit Tab-Enter which is good
+  // Well good-ish.  I shouuld really hit Tab and then keep typing, like I do in Vim
+
+  // Act more like Vim, by accepting the current suggestion, if we keep typing
+  { "key": "space", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": " "} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
+  { "key": ".", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "."} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
+  { "key": ",", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ","} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
+  { "key": ";", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ";"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
+  { "key": "shift-9", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "("} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
+  { "key": "shift-0", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ")"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
+  { "key": "[", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "["} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
+  { "key": "]", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "]"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
+  { "key": "`", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "`"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
+  { "key": "shift-1", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "!"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
+  { "key": "shift-/", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "?"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
 
   // Use Tab to cycle whenever a list is focused
   // I find this useful when jumping to a definition, when multiple suggestions are offered
