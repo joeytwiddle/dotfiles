@@ -804,6 +804,10 @@ alias gcom='gco -m'
 alias gcos='git_do_with_changes_stashed gco'
 # `git checkout -p [. | path]` allows us to select hunks to reset.  It is a fine-graned version of `git checkout -- <path>`
 alias gcop='git checkout -p'
+# Useful alongside git-fetch-all-prs
+gcopr() {
+	gco "origin/pull/${1}"
+}
 
 # After successfully doing a 'git checkout', also run the commands in the POST_GIT_CHECKOUT env var.
 # Now disabled in favour of the alias above, because that can provide tab-completion from the shell, which this function suppresses
