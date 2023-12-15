@@ -673,6 +673,9 @@
     // This isn't helpful if you also use Ctrl-P to cycle through recently focused files
     //"workbench.quickOpen.preserveInput": true,
 
+    // Do not show all files you have recently opened (I do not want Ctrl-P to show files which I have merely skimmed through while searching)
+    "search.quickOpen.includeHistory": false,
+
     // Stop asking me if I want to update go tools, just do it
     "go.toolsManagement.autoUpdate": true,
     "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
