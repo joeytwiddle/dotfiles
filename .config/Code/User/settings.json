@@ -38,7 +38,7 @@
 
     "breadcrumbs.enabled": true,
     // I think disabling this makes the editor slightly faster, but I could be wrong!
-    "editor.minimap.enabled": true,
+    "editor.minimap.enabled": false,
     "editor.bracketPairColorization.enabled": false,
     "editor.foldingImportsByDefault": true,
 
@@ -51,7 +51,7 @@
     "workbench.editor.limit.enabled": true,
     "workbench.editor.limit.perEditorGroup": true,
     "workbench.editor.limit.value": 11,
-    "workbench.editor.wrapTabs": true,
+    "workbench.editor.wrapTabs": false,
 
     // Displays extra info (like 'M' or 'U' or a number) in the tab if the file has uncommitted changes
     "workbench.editor.decorations.badges": true,
@@ -139,6 +139,22 @@
 
     //"editor.occurrencesHighlight": false,
 
+    // Outline view often has too much stuff in it to make it useful
+    // Especially the deeper nodes can get in the way of the top-level things of interest
+    // Although we cannot prevent the deeper nodes from appearing, we can have them collapsed by default
+    "outline.collapseItems": "alwaysCollapse",
+
+    // What to show in Outline view?
+    "outline.showClasses": true,
+    "outline.showMethods": true,
+    "outline.showFunctions": true,
+    // First-level properties may be useful, but this can clog up the Outline tree by also showing deeper properties
+    "outline.showProperties": true,
+    // Imports are considered variables, so they really pollute the Outline tree
+    // Unfortunately const functions are also considered to be variables, so we lose them if we disable this. :-/
+    // Also disabling variables can hide some functions inside classes (which doesn't make sense to me)
+    "outline.showVariables": true,
+
     "workbench.colorCustomizations": {
         // These work, but only the backgrounds not the foregrounds
         // If we don't set them, then the theme can set them
@@ -220,7 +236,9 @@
     },
 
     "editor.tokenColorCustomizations": {
-        // If you want to play with syntax highlighting customisations, they go here:
+        // If you want to play with syntax highlighting customisations, put them here
+        // (If you like the changes, you could move them into your Color Theme file)
+        // To see what scopes are used in your current editor, run: Command Palette > Developer: Inspect Editor Tokens and Scopes
         "textMateRules": [
             /* Examples:
             { "name": "String", "scope": "string", "settings": { "fontStyle": "", "foreground": "#E6DB74" } },
@@ -263,8 +281,8 @@
     "typescript.tsserver.experimental.enableProjectDiagnostics": true,
 
     // Default: languageDefined
-    //"editor.autoClosingBrackets": "never",
-    "editor.autoClosingBrackets": "languageDefined",
+    "editor.autoClosingBrackets": "never",
+    //"editor.autoClosingBrackets": "languageDefined",
     "javascript.autoClosingTags": false,
     "typescript.autoClosingTags": false,
 
