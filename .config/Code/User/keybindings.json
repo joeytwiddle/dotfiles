@@ -238,7 +238,7 @@
   { "key": "ctrl+alt+shift+o", "command": "editor.action.organizeImports", "when": "editorTextFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/" },
 
   // We can reach the Terminal with <Ctrl-W> <Down>, so we should be able to leave it with <Ctrl-W> <Up>
-  // This might not go back where you were befor, if you have multiple editor groups open (split windows)
+  // This might not go back where you were before, if you have multiple editor groups open (split windows)
   // (Sometimes I move the terminal to the left or right or the editors, so I define more keys)
   { "key": "ctrl+w Up", "command": "workbench.action.focusPreviousGroup", "when": "terminalFocus" },
   { "key": "ctrl+w k", "command": "workbench.action.focusPreviousGroup", "when": "terminalFocus" },
@@ -260,4 +260,41 @@
   // Result: This runs before, not after, the VSCodeVim binding
   // Another result we found is that, both here and there, if we define two bindings with the same key and same when, then the second binding one overwrites the first.
   //{ "key": "ctrl+l", "command": "workbench.action.toggleSidebarVisibility", "when": "sideBarVisible" },
+
+  { "key": "shift+f10", "command": "editor.action.inspectTMScopes" },
+
+  { "key": "cmd+1", "command": "-workbench.action.focusFirstEditorGroup" },
+  { "key": "cmd+2", "command": "-workbench.action.focusSecondEditorGroup" },
+  { "key": "cmd+3", "command": "-workbench.action.focusThirdEditorGroup" },
+  { "key": "cmd+4", "command": "-workbench.action.focusFourthEditorGroup" },
+  { "key": "cmd+5", "command": "-workbench.action.focusFifthEditorGroup" },
+  { "key": "cmd+6", "command": "-workbench.action.focusSixthEditorGroup" },
+  { "key": "cmd+7", "command": "-workbench.action.focusSeventhEditorGroup" },
+  { "key": "cmd+8", "command": "-workbench.action.focusEighthEditorGroup" },
+  { "key": "cmd+9", "command": "-workbench.action.focusLastEditorGroup" },
+  { "key": "cmd+1", "command": "workbench.action.openEditorAtIndex1" },
+  { "key": "cmd+2", "command": "workbench.action.openEditorAtIndex2" },
+  { "key": "cmd+3", "command": "workbench.action.openEditorAtIndex3" },
+  { "key": "cmd+4", "command": "workbench.action.openEditorAtIndex4" },
+  { "key": "cmd+5", "command": "workbench.action.openEditorAtIndex5" },
+  { "key": "cmd+6", "command": "workbench.action.openEditorAtIndex6" },
+  { "key": "cmd+7", "command": "workbench.action.openEditorAtIndex7" },
+  { "key": "cmd+8", "command": "workbench.action.openEditorAtIndex8" },
+  { "key": "cmd+9", "command": "workbench.action.openEditorAtIndex9" },
+
+  { "key": "ctrl+shift+pageup", "command": "workbench.action.moveEditorLeftInGroup" },
+  {
+    "key": "ctrl+shift+pagedown",
+    "command": "workbench.action.moveEditorRightInGroup"
+  },
+  {
+    "key": "ctrl+.",
+    "command": "editor.action.quickFix",
+    "when": "editorHasCodeActionsProvider && textInputFocus && !editorReadonly"
+  },
+
+  // It seems my override here will work, even if I don't disable VSCodeVim's default
+  //{ "key": "ctrl+]", "command": "typescript.goToSourceDefinition", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
+  ////{ "key": "ctrl+]", "command": "-extension.vim_ctrl+]", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
+  //{ "key": "ctrl+shift+]", "command": "extension.vim_ctrl+]", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
 ]
