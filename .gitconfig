@@ -42,10 +42,19 @@
 
 
 [core]
+	# This allows you to ignore files in every repo you visit, although that can have some drawbacks:
+	# - There may be generated files which should be ignored for all users of the repo, but you don't notice them
+	# - When using third-party repos with unfamiliar filename extensions, you may be ignoring files which are actually important!
+	#excludesfile = ~/.gitignore.global
+	# This allows you to ignore files only on a project-by-project basis
+	# It's basically the same as .git/info/excludes, but with a slightly more familiar name
+	# NOTE: Only .gitignore.local in the root of the repo will be read.  The same filename in subfolders will be ignored.
+	excludesfile = .gitignore.local
+	# It may be better to learn to use .git/info/excludes instead
+	#
 	# May not be for everyone!  Actually changes your files as you commit them!
 	# TODO: Look up what the hell this does and document it!
 	#whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
-	excludesfile = ~/.gitignore.global
 	# Wrap lines when reading diffs
 	# This sometimes drops the top of the log off the top of the screen, which is annoying
 	#pager = less -r
