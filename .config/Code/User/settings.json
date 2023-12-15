@@ -474,6 +474,11 @@
         { "before": [ "g", "Leader", "H" ], "commands": [ "editor.action.peekImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
         { "before": [ "g", "Leader", "Leader", "h" ], "commands": [ "editor.action.peekTypeDefinition" ] },
 
+        { "before": [ "C-]" ], "commands": [ "typescript.goToSourceDefinition" ], "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
+        { "before": [ "C-S-]" ], "commands": [ "extension.vim_ctrl+]" ], " when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
+        { "before": [ "g", "S" ], "commands": [ "typescript.goToSourceDefinition" ] },
+        { "before": [ "g", "T" ], "commands": [ "editor.action.goToTypeDefinition" ] },
+
         // Things which surround plugin is supposed to do, but isn't doing
         //{ "before": [ "c", "s", "w", "`" ], "after": [ "e", "b", "i", "`", "<Escape>", "e", "a", "`", "<Escape>" ] },
         //{ "before": [ "c", "s", "w", "`" ], "after": [ "v", "i", "w", "S", "`" ] },
