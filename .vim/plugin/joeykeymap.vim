@@ -460,7 +460,8 @@ set wildmode=longest:full:list,full
 " When it's time to clear the search, avoid /skldjsdklfj<Enter> and just \/ or Ctrl-L
 " Also added :match to hide highlights from highlight_word_under_cursor.vim
 "nnoremap <silent> <Leader>/      :nohlsearch<CR>:match<CR>
-nmap     <silent> <C-L>     <C-L>:nohlsearch<CR>:match<CR>:diffupdate<CR>
+"nmap     <silent> <C-L>     <C-L>:nohlsearch<CR>:match<CR>:diffupdate<CR>
+nmap     <silent> <C-L>     <C-L>:nohlsearch<CR>:match<CR>:diffupdate<CR>:syntax sync fromstart<CR>
 "nnoremap <silent> <Leader>/ :nohlsearch<CR>:match<CR>:let @/='skj84ksdEKD93Od23423lfs'<CR>
 
 
@@ -953,25 +954,27 @@ nmap <C-S-Down>  <C-w>-
 nmap <C-S-Left>  <C-w><
 nmap <C-S-Right> <C-w>>
 
-" This may help to cleanup window sizes are resizing the Vim window.
+" This may help to clean up window sizes after resizing the Vim window.
 nnoremap ]= :exec "resize ".(&lines - 10)<CR>:exec "vert resize ".(&columns - (bufwinnr('__Tag_List__')>=0 ? 31 : 0) - (bufwinnr('TreeExplorer')>=0 ? 25 : 0))<CR>
 nnoremap [= :exec "resize ".(&lines - 20)<CR>:exec "vert resize ".(&columns - (bufwinnr('__Tag_List__')>=0 ? 31 : 0) - (bufwinnr('TreeExplorer')>=0 ? 25 : 0))<CR>
 " The -31 is for when TagList is open with width 30.
 " TODO: But what about when the file browser is open too?!
 
 " Search for similarly-named files using AsyncFinder
-nmap <Leader>a :let @n = expand("%:t:r")<CR><C-a><C-r>n.
+" BUG: The <C-r>n has stopped working now.  Could use feedkeys() instead, as below.
+nmap <Leader><C-E> :let @n = expand("%:t:r")<CR><C-a><C-r>n.
 " Search for similarly-named files using fzf
 " (need to use feedkeys because <C-R> doesn't work in the fzf window)
 "nmap <Leader>rel :let @n = expand("%:t:r")<CR>:call feedkeys(@n)<CR>:Files<CR>
 "nmap <Leader>a :let @n = expand("%:t:r")<CR>:call feedkeys(@n . '.', 't')<CR>:Files<CR>
 "nmap <Leader>a :let @n = substitute(expand("%:t"), '[.].*', '', '')<CR>:call feedkeys(@n . '.', 't')<CR>:Files<CR>
-nmap <Leader>a :let @n = substitute(expand("%:t"), '[.].*', '', '')<CR>:call feedkeys(@n . '.', 't')<CR><C-a>
+nmap <Leader><C-E> :let @n = substitute(expand("%:t"), '[.].*', '', '')<CR>:call feedkeys(@n . '.', 't')<CR><C-a>
 " An alias.  Which will I remember?
-nmap <Leader>rel <Leader>a
+nmap <Leader>rel <Leader><C-E>
 
-" Augment (with Git history)
-"nnoremap <Leader>a :GitShade<CR>
+" Toggle (Git history) Augment (same as I have in VSCode)
+nnoremap <Leader>a :GitShade<CR>
+nnoremap <Leader>A :GitShade<CR>
 
 
 " Tools for Visual Mode
@@ -1250,4 +1253,5 @@ endfunction
 vnoremap <silent> c <Esc>:<C-U>echo "Press S for surround plugin (or s to change selected text)"<CR>:sleep 2<CR>gv
 vnoremap <silent> cs <Esc>:<C-U>echo "Press S for surround plugin (or s to change selected text)"<CR>:sleep 2<CR>gv
 vnoremap <silent> csw <Esc>:<C-U>echo "Press S for surround plugin (or s to change selected text)"<CR>:sleep 2<CR>gv
+nnoremap <silent> <C-Q> :echo "Use <C-V> for blockwise visual, not <C-Q>"<CR>:sleep 2<CR>
 
