@@ -1,22 +1,22 @@
 {
-  "name": "gentle-mary",
-  "displayName": "Gentle Mary",
-  "description": "Simple primary colours, softened and smoothed",
-  "version": "0.0.1",
-  "publisher": "joeytwiddle",
-  "engines": {
-    "vscode": "^1.14.0"
-  },
-  "categories": [
-    "Themes"
-  ],
-  "contributes": {
-    "themes": [
-      {
-        "label": "Gentle Mary",
-        "uiTheme": "vs-dark",
-        "path": "./themes/gentle-mary-color-theme.json"
-      }
-    ]
-  }
+    "name": "gentle-mary",
+    "displayName": "Gentle Mary",
+    "description": "Simple primary colours, softened and smoothed",
+    "version": "0.0.1",
+    "publisher": "joeytwiddle",
+    "engines": {
+        "vscode": "^1.14.0"
+    },
+    "categories": [
+        "Themes"
+    ],
+    "contributes": {
+        "themes": [
+            {
+                "label": "Gentle Mary",
+                "uiTheme": "vs-dark",
+                "path": "./themes/gentle-mary-color-theme.json"
+            }
+        ]
+    }
 }
