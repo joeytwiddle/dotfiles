@@ -277,7 +277,7 @@
       "name": "YAML key",
       "scope": "entity.name.tag.yaml",
       "settings": {
-        "foreground": "#CCCCCC"
+        "foreground": "#4B95DC"
       }
     },
     {
