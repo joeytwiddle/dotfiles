@@ -10,6 +10,9 @@ if command -v smartvim >/dev/null 2>&1
 then export FZF_EDITOR="smartvim"
 fi
 
+# You might not need to specify an editor, if your system is configured nicely
+#FZF_EDITOR="xdg-open"
+
 # Do en axact match by default.  To do a fuzzy match, prefix your search with `'`
 export FZF_DEFAULT_OPTS="--exact"
 
@@ -73,6 +76,14 @@ feg() {
 # But I probably type 'e' first, before deciding I need to do a global search
 alias eglobal='feg'
 alias elocate='feg'
+
+# fo and fog are like fe and feg, except they open the file with xdg-open instead of an editor
+fo() {
+ FZF_EDITOR="xdg-open" fe "$@"
+}
+fog() {
+ FZF_EDITOR="xdg-open" feg "$@"
+}
 
 # fcd - fuzzy cd to selected subdirectory
 fcdlocal() {
