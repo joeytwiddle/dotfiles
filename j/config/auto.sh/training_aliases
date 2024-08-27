@@ -45,3 +45,9 @@ rm_is_disabled() {
 }
 alias rm='rm_is_disabled'
 
+alias adduser='useradd'
+alias useradd='echo "To create a skeleton home folder, remember: \\useradd -m"'
+alias useraddm='useradd -m'
+alias deluser='userdel'
+alias userdel='echo "To remove the user'"'"'s home folder, remember: \\userdel -r"'
+alias userdelr='userdel -r'
