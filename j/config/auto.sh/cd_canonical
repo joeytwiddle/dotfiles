@@ -31,6 +31,8 @@ cd_canonical() {
 	local without_dropbox="$(printf "%s" "$PWD" | sed 's+/Dropbox/+/+')"
 	#local in_stuff_ut="$(printf "%s" "$PWD" | sed 's+/home/HWI_BACKUPS/hwi_huge/big/ut/+/stuff/ut/+')"
 	local in_stuff_ut="$(printf "%s" "$PWD" | sed 's+/mnt/extra_btrfs/HWI_BACKUPS/hwi_huge/big/ut/+/stuff/ut/+')"
+	local in_large="$(printf "%s" "$PWD" | sed 's+/mnt/sd-card/LARGE/+/home/joey/+')"
+	local in_extra_btrfs="$(printf "%s" "$PWD" | sed 's+/mnt/extra_btrfs/+/home/joey/+')"
 
 	cdc_try "${HOME}/${folder_name}" && return 0
 	cdc_try "${HOME}/debugging" && return 0
@@ -42,6 +44,8 @@ cd_canonical() {
 	cdc_try "$without_sync" && return 0
 	cdc_try "$without_dropbox" && return 0
 	cdc_try "$in_stuff_ut" && return 0
+	cdc_try "$in_large" && return 0
+	cdc_try "$in_extra_btrfs" && return 0
 }
 
 cdc_try() {
