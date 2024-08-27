@@ -254,7 +254,7 @@ git_status_plus() {
 		cat "$current_stats_file" |
 		grep "^[0-9]* [0-9]* ${target_folder_from_root}" |
 		head -n 1000 |
-		while read size date file
+		while IFS=" " read size date file
 		do
 			local curseon="$cursenormal"
 			# If we haven't seen this file before, or it has changed size/date since last time, then we highlight it
@@ -305,8 +305,11 @@ alias gdu='gd @{upstream}'
 
 alias ga='git add -v'
 # I often like to do git commit -a, and wonder why there is no equivalent git add -a.  In fact there is, but the flag is -u!
+# Git Add Updates
 alias gau='ga -u'
-alias gaa='gau'
+
+# Git Add All (Note that this differs from git commit -a, because it adds untracked files)
+alias gaa='( git add -v -A && gdc --color=always ) | less -REX'
 
 #alias gc='git commit'
 alias gc='git commit -v'
@@ -330,7 +333,16 @@ alias gcAm='gc -a -m'
 # In reality, I rarely use gcam, so I just disabled it.
 alias gci='git commit --interactive'
 # -p "patch" allows us to choose which hunks to add or commit
-alias gap='ga -p'
+#alias gap='ga -p'
+# I want to make sure I don't forget to add anything I should have committed
+gap() {
+	git add -p "$@"
+	echo "Untracked files:"
+	git-list-untracked |
+	sortfilesbydate |
+	tail -n 12 |
+	prepend_each_line 'Untracked: '
+}
 # This is better used for git cherry-pick, as that is a greater saving, and I use it more often.
 #alias gcp='gc -p'
 
@@ -488,9 +500,9 @@ alias gpo='verbosely git push origin "$(git_get_current_branch)"'
 #alias gpu='verbosely git push -u'
 # --force will override remote branch even if it is ahead of local branch
 # --no-verify will skip running hooks
-alias gpshf='git push --force'
+alias gpshf='git push --force-with-lease'
 alias gpshnv='git push --no-verify'
-alias gpshnvf='git push --no-verify --force'
+alias gpshnvf='git push --no-verify --force-with-lease'
 
 # This is just a reminder how to fix an occasional problem when trying to push (from a non-current local branch?) to a non-existent remote branch
 #
@@ -631,6 +643,7 @@ alias grv='git remote -v'
 alias gt='git tag'
 
 alias fgc=friendlygitcommit
+alias fgca='friendlygitcommit -A'
 alias gls=gitls
 alias glsl=gitls
 
@@ -1030,15 +1043,16 @@ git_clone_friendly() {
 }
 #alias gcl='git_clone_friendly'
 #alias gcl='git clone'
-alias gcl='verbosely git clone --recurse-submodules'
+alias gcl='verbosely git clone --depth=1 --recurse-submodules'
 
 # Git Auto Commit, or Git Add Commit, or Git Add and Commit
-gac() {
-	git add "$@"
-	echo -n "Commit message: "
-	read msg
-	git commit -m "$msg"
-}
+#gac() {
+#	git add "$@"
+#	echo -n "Commit message: "
+#	read msg
+#	git commit -m "$msg"
+#}
+alias gac='gitautocommit'
 
 if ! which verbosely >/dev/null
 then
@@ -1473,6 +1487,9 @@ alias gbsd='gbs -d'
 alias gbsl='gbs -dM'
 # Alternatively, to get this all the time, you could do:
 #   export GBS_OPTIONS='-d -M'
+
+# Adapted from: https://github.com/alexander-schranz/dotfiles/blob/41493950ea581a3a3e1c4110f9d022805c3e3404/fish/conf.d/aliases.fish
+alias git_recent_branches='for k in `git branch | sed s/^..//`; do echo -e `git log -1 --pretty=format:"%Cgreen%ci %Cblue%cr%Creset" $k --`"	$k";done | sort | tail -n 10'
 
 replace_ancestor_markers_with_colors() {
 	# BUG TODO: In bash 4.4.12(1)-release on Mac OS X (installed via homebrew) the following three lines cause the script to background itself!
