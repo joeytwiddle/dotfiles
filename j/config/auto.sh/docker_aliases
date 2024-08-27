@@ -122,6 +122,8 @@ alias dvpf='docker volume prune -f'
 # To check volume sizes, we must use dsdfv, although you'll need to look through the output, because it lists the sizes of lots of things
 alias dsdf='docker system df'
 alias dsdfv='docker system df -v | less -REX'
+# Another way to see how much space containers (and volumes?) are taking, is to sum up the overlays
+#du -shc /var/lib/docker/overlay2/*/diff | sort -h -k 1 
 
 # Docker does not have a rename command, however you can use this technique, to move files from one volume into another.
 # WARNING: When I tried this, it didn't immediately free up the disk space when files were moved out of the source volume.
