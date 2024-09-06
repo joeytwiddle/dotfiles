@@ -348,3 +348,11 @@
 [mergetool]
 	# This prevents mergetool from leaving those annoying <file>.orig files around
 	keepBackup = false
+
+[http]
+	# Prevents the error "fatal: The remote end hung up unexpectedly"
+	# This can also be fixed by switching from https to git:
+	#     https://github.com/username/project
+	#     ->
+	#     git@github.com:username/project.git
+	postBuffer = 10g
