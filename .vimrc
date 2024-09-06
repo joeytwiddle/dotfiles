@@ -301,7 +301,7 @@ autocmd VimLeave * silent !stty ixon
 
 	let g:ToggleMaximize_RestoreWhenSwitchingWindow = 1
 
-	let g:NoSwapSuck_Debug = 1
+	"let g:NoSwapSuck_Debug = 1
 	"let g:NoSwapSuck_CheckSwapfileOnLoad = 0
 	"let g:NoSwapSuck_CreateSwapfileOnInsert = 0
 	"let g:NoSwapSuck_CloseSwapfileOnWrite = 0
@@ -581,12 +581,16 @@ autocmd VimLeave * silent !stty ixon
 			endif
 			" My 2023 settings
 			"set guifont=HasklugNerdFontCompleteNerdFontM-Regular:h13 linespace=-1
-			"winpos 200 38
-			"set columns=137 lines=48
+			"if has('gui_running')	
+				"winpos 200 38
+				"set columns=137 lines=48
+			"endif
 			" My 2024 settings
 			set guifont=Lucida\ Sans\ Typewriter\ Regular:h13
-			winpos 200 38
-			set columns=137 lines=50
+			if has('gui_running')	
+				winpos 200 38
+				set columns=137 lines=50
+			endif
 		elseif s:operating_system == "Windows"
 			:set guifont=LucidaTypewriter\ 8
 		endif
