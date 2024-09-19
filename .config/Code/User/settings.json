@@ -347,6 +347,7 @@
     "gitlens.heatmap.hotColor": "#f6a60a",
     "gitlens.heatmap.coldColor": "#0a62f6",
     //"gitlens.defaultGravatarsStyle": "wavatar",
+    "gitlens.defaultGravatarsStyle": "identicon",
 
     // For Trailing Spaces
     "trailing-spaces.deleteModifiedLinesOnly": true,
