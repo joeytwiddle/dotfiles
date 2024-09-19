@@ -9,6 +9,12 @@ Cache/
 CachedData/
 GPUCache/
 
+# macOS general
+.DS_Store
+.AppleDouble
+.LSOverride
+#._*
+
 # I moved .config and .local into rc_files
 # Although I probably should have moved the things I wanted, one by one
 # If you are wondering what all the untracked files are, you can list all untracked files (instead of just untracked folders) with:
