@@ -484,6 +484,8 @@ alias gfo='git fetch origin'
 #alias gfa='git_fetch_all'
 alias gfa='git_fetch_all --tags --prune'
 
+alias gfahistory='echo "To fetch all history, try: git fetch --unshallow"'
+
 alias gpl='git pull'
 alias gpll='git pull'
 
