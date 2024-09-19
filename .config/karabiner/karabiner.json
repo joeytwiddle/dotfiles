@@ -413,7 +413,6 @@
                 "rules": [
                     {
                         "description": "Ctrl + Arrow Keys to Option + Arrow Keys",
-                        "enabled": false,
                         "manipulators": [
                             {
                                 "from": {
@@ -471,7 +470,6 @@
                     },
                     {
                         "description": "Ctrl + Shift + Arrow Keys to Option + Shift + Arrow Keys",
-                        "enabled": false,
                         "manipulators": [
                             {
                                 "from": {
@@ -529,7 +527,6 @@
                     },
                     {
                         "description": "Ctrl + BS/Del Keys to Option + BS/Del Keys",
-                        "enabled": false,
                         "manipulators": [
                             {
                                 "from": {
