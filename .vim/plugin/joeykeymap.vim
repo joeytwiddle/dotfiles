@@ -582,7 +582,7 @@ nnoremap <C-s> :wa<Enter>
 "   stty -ixon
 " Save for MacVim on normal Mac save key.
 " (This changes the default Cmd-S behaviour, which is to save only the current buffer.)
-if $_system_name == 'OSX'
+if has('mac') || has('macunix')
 	nmap <d-s> <C-s>
 endif
 
@@ -856,9 +856,14 @@ cnoremap %d<Tab> %:h
 cnoremap $_<Tab> <C-r>=shellescape(getline('.'))<CR>
 cnoremap $=<Tab> <C-r>=shellescape(getline('.'))<CR>
 
-" MacVim maps Backspace in visual mode to `"-d` which differs from the behaviour I am accustomed to (a lazy way to move back a character).
-" silent! will prevent it complaining it the mapping does not exist (or was cleared on an earlier load of this script)
-silent! xunmap <BS>
+if has('mac') || has('macunix')
+	" MacVim maps Backspace in visual mode to `"-d` which differs from the behaviour I am accustomed to (a lazy way to move back a character).
+	" silent! will prevent it complaining it the mapping does not exist (or was cleared on an earlier load of this script)
+	silent! xunmap <BS>
+
+	" On macOS, hitting Shift-Insert (with external keyboard) should paste
+	imap <S-Help> <C-R>+
+endif
 
 " When editing a Vim file, make K lookup Vim's inline :help rather than calling 'man'.
 "autocmd BufReadPost {.vimrc,*.vim} setlocal keywordprg=:help
