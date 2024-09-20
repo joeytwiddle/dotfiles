@@ -638,13 +638,13 @@
       "settings": {
         "foreground": "#777777"
       }
-    }
+    },
     // Highlight where a variable is defined
     // (I actually want to do this for variable assignments too, but I found reads were indistinguishable from writes)
     /*
     {
       "name": "Variable definition",
-      "scope": "meta.definition.variable.js variable.other.readwrite.js, meta.definition.variable.js variable.other.constant.js, variable.other.constant.js",
+      "scope": "meta.definition.variable.js variable.other.readwrite.js, meta.definition.variable.js variable.other.constant.js, variable.other.constant.js, variable.other.readwrite.alias.js, meta.definition.variable.ts variable.other.readwrite.ts, meta.definition.variable.ts variable.other.constant.ts, variable.other.constant.ts, variable.other.readwrite.alias.ts",
       "settings": {
         //"fontStyle": "bold",
         "foreground": "#e4e4e4"
