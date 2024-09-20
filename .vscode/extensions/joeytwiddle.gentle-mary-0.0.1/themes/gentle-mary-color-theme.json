@@ -772,6 +772,7 @@
     //"editor.selectionBackground": "#ffaa5533",
     //"editor.selectionBackground": "#cccccc33",
     // This appears in the docs but doesn't work for me
+    // Apparently it's unfixable: https://github.com/microsoft/vscode/issues/36490
     "editor.selectionForeground": "#ffffff",
     // This is actually the word-under-cursor highlight aka "editor.occurrencesHighlight": true
     //"editor.selectionHighlightBackground": "#006600",
