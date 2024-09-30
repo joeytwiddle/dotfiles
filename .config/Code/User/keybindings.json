@@ -293,6 +293,21 @@
     "when": "editorHasCodeActionsProvider && textInputFocus && !editorReadonly"
   },
 
+  // Open settings with Cmd-, or Ctrl-,
+  // Cmd, Ctrl and Alt all do the same
+  // Hold Shift to open JSON
+  // Hold Control (on macOS) or Alt (on other platforms) to open Workspace Settings
+  { "key": "cmd+,", "command": "workbench.action.openSettings" },
+  { "key": "ctrl+,", "command": "workbench.action.openSettings" },
+  { "key": "alt+,", "command": "workbench.action.openSettings" },
+  { "key": "ctrl+cmd+,", "command": "workbench.action.openSettingsJson" },
+  { "key": "ctrl+shift+,", "command": "workbench.action.openSettingsJson" },
+  { "key": "ctrl+alt+,", "command": "workbench.action.openSettingsJson" },
+  { "key": "shift+cmd+,", "command": "workbench.action.openWorkspaceSettings" },
+  { "key": "shift+alt+,", "command": "workbench.action.openWorkspaceSettings" },
+  { "key": "ctrl+shift+cmd+,", "command": "workbench.action.openWorkspaceSettingsFile" },
+  { "key": "ctrl+shift+alt+,", "command": "workbench.action.openWorkspaceSettingsFile" },
+
   // It seems my override here will work, even if I don't disable VSCodeVim's default
   //{ "key": "ctrl+]", "command": "typescript.goToSourceDefinition", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
   ////{ "key": "ctrl+]", "command": "-extension.vim_ctrl+]", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
