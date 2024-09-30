@@ -348,6 +348,9 @@
     "gitlens.heatmap.coldColor": "#0a62f6",
     //"gitlens.defaultGravatarsStyle": "wavatar",
     "gitlens.defaultGravatarsStyle": "identicon",
+    "gitlens.blame.toggleMode": "window",
+    "gitlens.heatmap.ageThreshold": 90,
+    //"gitlens.heatmap.ageThreshold": 365,
 
     // For Trailing Spaces
     "trailing-spaces.deleteModifiedLinesOnly": true,
