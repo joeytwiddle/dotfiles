@@ -585,8 +585,8 @@
         { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "l", "o", "g" ] },
         { "before": [ "<Leader>", "L", "o", "g" ], "after": [ "v", "i", "W", "\\", "l", "o", "g" ] },
         // Logging ReScript
-        { "before": [ "<Leader>", "r", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "r", "l", "o", "g" ] },
-        { "before": [ "<Leader>", "R", "l", "o", "g" ], "after": [ "v", "i", "W", "\\", "r", "l", "o", "g" ] },
+        //{ "before": [ "<Leader>", "r", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "r", "l", "o", "g" ] },
+        //{ "before": [ "<Leader>", "R", "l", "o", "g" ], "after": [ "v", "i", "W", "\\", "r", "l", "o", "g" ] },
         // Logging Python
         { "before": [ "<Leader>", "p", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "p", "l", "o", "g" ] },
     ],
@@ -602,7 +602,7 @@
         // Logging JavaScript
         { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
         // Logging ReScript
-        { "before": [ "<Leader>", "r", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "J", "s", ".", "l", "o", "g", "2", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", "Esc" ] },
+        //{ "before": [ "<Leader>", "r", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "J", "s", ".", "l", "o", "g", "2", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", "Esc" ] },
         // Logging Python
         { "before": [ "<Leader>", "p", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "p", "r", "i", "n", "t", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", "Esc" ] },
     ],
