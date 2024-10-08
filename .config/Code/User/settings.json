@@ -27,6 +27,8 @@
     "debug.console.fontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
 
     "workbench.colorTheme": "Gentle Mary",
+    // This is good when working in bright conditions
+    //"workbench.colorTheme": "Default Light Modern",
 
     //"editor.renderWhitespace": "boundary",
 
@@ -125,8 +127,14 @@
     //"editor.parameterHints.enabled": true,
 
     // Should we select the first entry when the suggestions dropdown appears?
+    // I think this is now managed by my custom keybinds
     //"editor.suggest.selectionMode": "always",
     "editor.suggest.selectionMode": "never",
+
+    // VSCode keeps adding these.  I'm not sure what to do with them, so I'll just commit them for now.
+    "editor.suggestSelection": "first",
+    //"editor.suggestSelection": "recentlyUsedByPrefix",
+    //"vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
 
     // Emmet abbreviations were getting in the way of more useful suggestions
     // We can use this to move them down the list
@@ -496,6 +504,9 @@
         { "before": [ "g", "Leader", "H" ], "commands": [ "editor.action.peekImplementation" ], "when": "editorHasImplementationProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor" },
         { "before": [ "g", "Leader", "Leader", "h" ], "commands": [ "editor.action.peekTypeDefinition" ] },
 
+        // For the plugin "MDN Docs" https://marketplace.visualstudio.com/items?itemName=CoryGross.vscode-mdn-docs
+        { "before": [ "g", "m", "d", "n" ], "commands": [ "mdnDocs.showMdnDocs" ], "when": "editorLangId == 'css' || editorLangId == 'html' || editorLangId == 'javascript' || editorLangId == 'typescript'" },
+
         { "before": [ "C-]" ], "commands": [ "typescript.goToSourceDefinition" ], "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
         { "before": [ "C-S-]" ], "commands": [ "extension.vim_ctrl+]" ], " when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
         { "before": [ "g", "S" ], "commands": [ "typescript.goToSourceDefinition" ] },
@@ -664,10 +675,7 @@
         "**/.factorypath": true
     },
 
-    // VSCode keeps adding these.  I'm not sure what to do with them, so I'll just commit them for now.
-    "editor.suggestSelection": "first",
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-    "editor.tabSize": 2,
+    "editor.tabSize": 4,
     "editor.cursorStyle": "line",
     "editor.insertSpaces": false,
     "editor.lineNumbers": "on",
@@ -737,13 +745,20 @@
     // Show files before folders - unconventional, but it can make it easier to see which folder a file belongs to
     "explorer.sortOrder": "filesFirst",
     // Collapse all files in a folder, as long as that folder contains a README (especially useful for the root folder)
+    // A little bit weird to have various config files sitting "inside" the README, but effective at saving space in the explorer
+    // Beware adding other patterns here (e.g. package.json) because if TWO patterns match, then VScode collapses into NONE of them!
     "explorer.fileNesting.enabled": true,
     "explorer.fileNesting.patterns": {
         "README": "*",
         "README.*": "*",
-        // Using both upper and lowercase is good on Linux, but breaks it on macOS (which probably matches both rules)
+        // Using both upper and lowercase works on Linux, but fails to collapse on macOS (I think because it matches both rules)
         //"readme.*": "*",
     },
+
+    // Do not combine deep paths into one line in explorer
+    // e.g. "src / folders / with / only / one / child"
+    // because I find this UI inconsistent
+    "explorer.compactFolders": false,
 
     // I find these add clutter, and I never actually read them (at least not the statusbar info)
     // I use \a and \A instead when I want info
