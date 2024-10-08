@@ -4,7 +4,7 @@
 
 echeat() {
 	(
-		cd ~/Dropbox/cheatsheets || return
+		cd ~/Dropbox/cheatsheets 2>/dev/null || cd ~/cheatsheets || return
 		#fe "$@"
 		# If no matching file was found, we can create one
 		# BUG: This will also trigger if the user Quits fzf with CTRL-C
