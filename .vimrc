@@ -305,8 +305,14 @@ autocmd VimLeave * silent !stty ixon
 	"let g:NoSwapSuck_CheckSwapfileOnLoad = 0
 	"let g:NoSwapSuck_CreateSwapfileOnInsert = 0
 	"let g:NoSwapSuck_CloseSwapfileOnWrite = 0
-	"let g:NoSwapSuck_CloseSwapfileOnWrite = 0
-	"set noswapfile
+	" This was not sufficient to solve the problem when opening a file (although it might have helped when editing a file)
+	if has('mac') || has('macunix')
+		" It appears that MacVim does not actually delete the swapfile when we "close" it, which means it complains as soon as we start editing again, or open a new file.  Until we have debugged this, let's just not ever use the swapfile.
+		let g:NoSwapSuck_CheckSwapfileOnLoad = 0
+		let g:NoSwapSuck_CreateSwapfileOnInsert = 0
+		let g:NoSwapSuck_CloseSwapfileOnWrite = 1
+		set noswapfile
+	endif
 
 	" recover.vim works better if 'swapfile' is enabled when it runs.
 	"set swapfile
@@ -764,6 +770,12 @@ autocmd VimLeave * silent !stty ixon
 	" TODO: I also want this to run if I close Vim accidentally, e.g. with Ctrl-w c
 	" TODO: Put the above in a loop.
 
+	"" Fix for the external keyboard when I plug it into this UK layout MacBook
+	"if has('mac') || has('macunix')
+	"	nmap £ #
+	"	imap £ #
+	"endif
+
 " }}}
 
 
@@ -854,7 +866,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	let g:UltiSnipsJumpForwardTrigger="<tab>"
 	let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 	" With MacVim, UltiSnips picks python3 by default, which stops Asyncfinder from working.  Specifying python2 here prevents that problem.
-	let g:UltiSnipsUsePythonVersion = 2
+	" DISABLED: That fix has stopped working now that python2 is no longer installed
+	"let g:UltiSnipsUsePythonVersion = 2
 	"call add(vamAddons,'UltiSnips')                        " Breaks my usual Tab-completion!  (But is compatible with SuperTab)
 	call add(vamAddons,'github:joeytwiddle/ultisnips')     " Fix that restores my usual Tab-completion.
 
@@ -891,7 +904,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" call add(vamAddons,"github:kien/ctrlp.vim")          " Quick file finder (I mapped it to Ctrl-T).  Docs: http://kien.github.io/ctrlp.vim/
 	call add(vamAddons,"github:guns/xterm-color-table.vim")   " Useful for picking colours
 
-	call add(vamAddons,"github:joeytwiddle/asyncfinder.vim")   " Another quick file finder (I mapped it to Ctrl-A).
+	" On my VMO2 MacBook, the presence of any error messages or echo-es, combined with the presence of some of these vamAddons, sometimes (but not always) causes what appears to be a ""P happen when the file first opens.
+	"call add(vamAddons,"github:joeytwiddle/asyncfinder.vim")   " Another quick file finder (I mapped it to Ctrl-A).
 	"nmap <C-a> :AsyncFinder<Enter>
 	" I usually have RepeatLast enabled.  If so, this works much better:
 	"nmap <C-a> q:AsyncFinder<Enter>
