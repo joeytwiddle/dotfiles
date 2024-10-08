@@ -34,14 +34,16 @@
 #         not prompt for a commit message (gca --no-edit).
 #
 #   gcf <commit> adds the currently staged changes to an earlier commit.
+#       #
 #       This is very useful to "fix" a commit you made earlier.  It uses rebase
-#       with fixup.  You should not amend commits you have already pushed.
+#       with fixup.  Note: You should not amend commits you have already shared
+#       with others.
 #
 # Pulling, merging and pushing:
 #
 #   gpll is git pull
 #
-#   gf will fetch new commits for all remotes
+#   gfa will fetch new commits from all remotes
 #
 #   gmo does git merge origin/<current_branch> (or use gm <branch> yourself).
 #
@@ -61,14 +63,15 @@
 #   gss and gsp are git stash save and git stash pop respectively.
 #   gsd shows the diff/patch of your top stash.
 #
-#   gssp allows you to select (y/n) which changes to stash, leaving the others.
+#   gssp allows you to select (y/n) which changes to stash, keeping the others.
 #
-#   gssk My preferred way to drop unwanted changes (e.g. console logs after a
-#        bug was fixed)
-#        Lets you select (y/n) which changes to destroy (kill).
+#   gssk is my preferred way to drop unwanted changes (e.g. to remove the
+#        logging lines after a bug has been fixed)
+#
+#        It lets you select (y/n) which changes to destroy (kill).
 #        It actually does gssp but then drops the stash afterwards.
 #        As a result it is recoverable (e.g. using git-list-dropped-stashes).
-#        So it is a less dangerous version of git reset --hard (grh).
+#        So it is less dangerous than git reset --hard (grh).
 #
 # Useful tools:
 #
@@ -484,7 +487,7 @@ alias gfo='git fetch origin'
 #alias gfa='git_fetch_all'
 alias gfa='git_fetch_all --tags --prune'
 
-alias gfahistory='echo "To fetch all history, try: git fetch --unshallow"'
+alias gfahistory='echo "To fetch all history, try: git fetch --unshallow" ; echo "You should also edit .git/config and change the fetch targets from /main to /* twice"'
 
 alias gpl='git pull'
 alias gpll='git pull'
@@ -595,6 +598,32 @@ alias gmrod='gmr origin/develop'
 alias gmrum='gmr upstream/master'
 alias gmrumn='gmr upstream/main'
 alias gmrud='gmr upstream/develop'
+gmrreplace() {
+	local start_commit="$1"
+	local replace_commit="$2"
+
+	# Reset to first arg, then replays all commits from second arg (exclusive) to HEAD (inclusive)
+
+	local start_ref="$(git rev-parse "$replace_commit")"
+	local end_ref="$(git rev-parse HEAD)"
+
+	# Stash if needed
+	local stashed_commit="$(git stash create)"
+	git reset --hard
+	if [ -n "${stashed_commit}" ]
+	then echo "Created tempstash: ${stashed_commit}"
+	fi
+
+	git reset --hard "$start_commit" &&
+	git cherry-pick "${start_ref}...${end_ref}"
+
+	# Pop stash if needed
+	if [ -n "${stashed_commit}" ]
+	then
+		git stash apply --quiet "${stashed_commit}"
+		echo "Restored tempstash."
+	fi
+}
 
 alias gr='git reset'
 alias grh='gr --hard'
@@ -646,8 +675,7 @@ alias gt='git tag'
 
 alias fgc=friendlygitcommit
 alias fgca='friendlygitcommit -A'
-alias gls=gitls
-alias glsl=gitls
+alias gls='gitls -l'
 
 alias lg=lazygit
 
@@ -1028,7 +1056,7 @@ alias gspf='git_stash_pop_merge'
 alias gsi='git submodule init'
 alias gsu='git submodule update'
 
-# Like git clone but shows the username in the target directory
+# Like git clone but includes the GitHub/GitLab username in the target directory name
 # I no longer enjoy using this, because I care more about tab-completion of the project name than the author's name.  If there are separate repos with the same name, why not just put them all in one folder as different remotes?
 git_clone_friendly() {
 	if [ $# -gt 1 ]
@@ -1045,7 +1073,10 @@ git_clone_friendly() {
 }
 #alias gcl='git_clone_friendly'
 #alias gcl='git clone'
-alias gcl='verbosely git clone --depth=1 --recurse-submodules'
+alias gcl='echo "Try gclrsm (git clone --recurse submodules) or gcld1 (git clone --depth=1) or gclone"'
+alias gclrsm='verbosely git clone --recurse-submodules'
+alias gcld1='verbosely git clone --depth=1'
+alias gclone='git clone'
 
 # Git Auto Commit, or Git Add Commit, or Git Add and Commit
 #gac() {
