@@ -121,6 +121,8 @@
 	# List the aliases we have
 	alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t = \\2/' | sort
 
+	list-branches = branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
+
 	# whatisnotpushed: Preview what will be sent when you push (or if indeed a push is needed).
 	# As an alternative, you can read the "ahead" count shown on the second line of git status, or shown when switching between branches with git checkout.
 	whatisnotpushed = log @{upstream}_HEAD..HEAD --oneline
