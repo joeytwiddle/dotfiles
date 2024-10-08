@@ -371,6 +371,7 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .hxp 01;36 # Haxe project
 .hxp 01;36 # Haxe project
 .hxml 01;36 # Haxe build-file?
+.code-workspace 01;36 # VSCode Workspace
 ## More languages:
 .lua 01;36
 ## Rescript, and generated files
