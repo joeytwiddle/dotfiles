@@ -70,7 +70,7 @@ fo() {
 # Like fe but gets the files from a global locate
 feg() {
   local files
-  IFS=$'\n' files=($(locate -b -i "$@" | filesonly | fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --multi --select-1 --exit-0))
+  IFS=$'\n' files=($(unj locate -b -i "$@" | filesonly | fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && "$FZF_EDITOR" "${files[@]}"
 }
 # But I probably type 'e' first, before deciding I need to do a global search
@@ -115,7 +115,7 @@ fcdglobal() {
 
   #dir="$(/usr/bin/locate -0 -b -A "$@" | xargs -0 -I {} bash -c '[ -d "{}" ] && echo "{}"' | fzf -0 -1)"
   # Simplified and case-insensitive
-  dir="$(/usr/bin/locate -b -A "$@" -i | dirsonly | fzf --preview="$FZF_DIRECTORY_PREVIEW_COMMAND" -0 -1 -i)"
+  dir="$(unj locate -b -A "$@" -i | dirsonly | fzf --preview="$FZF_DIRECTORY_PREVIEW_COMMAND" -0 -1 -i)"
 
   if [[ -n "$dir" ]]
   then cd "$dir"
