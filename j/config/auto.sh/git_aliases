@@ -340,11 +340,12 @@ alias gci='git commit --interactive'
 # I want to make sure I don't forget to add anything I should have committed
 gap() {
 	git add -p "$@"
-	echo "Untracked files:"
+	#echo "Untracked files:"
 	git-list-untracked |
 	sortfilesbydate |
 	tail -n 12 |
-	prepend_each_line 'Untracked: '
+	#prepend_each_line 'Untracked: '
+	sed "s+.*+Untracked: $(curseyellow;cursebold)\\0$(cursenorm)+"
 }
 # This is better used for git cherry-pick, as that is a greater saving, and I use it more often.
 #alias gcp='gc -p'
@@ -598,14 +599,50 @@ alias gmrod='gmr origin/develop'
 alias gmrum='gmr upstream/master'
 alias gmrumn='gmr upstream/main'
 alias gmrud='gmr upstream/develop'
-gmrreplace() {
+
+alias grreplace='git_rebase_replace'
+alias gmrreplace='git_rebase_replace'
+git_rebase_replace() {
+	# Reset to first arg, then replay all commits from second arg (exclusive) to HEAD (inclusive)
+	# This is useful when you have commits in your history, some of which have been squash-merged into main, so you cannot rebase or merge from main.
+
+	local force=''
+
+	if [ "$1" = '-f' ]
+	then force=true ; shift
+	fi
+
 	local start_commit="$1"
 	local replace_commit="$2"
 
-	# Reset to first arg, then replays all commits from second arg (exclusive) to HEAD (inclusive)
+	if [ "$3" = '-f' ]
+	then force=true
+	fi
+
+	if [ -z "$start_commit" ] || [ -z "$replace_commit" ]
+	then
+		echo "git_rebase_replace <start_commit> <replace_commit>"
+		echo
+		echo "Will reset to the <start_commit> (e.g. origin/main) and then replay all commits from the <replace_commit> up to the current HEAD (inclusive)"
+		return
+	fi
+
+	if [ -z "$force"] && git diff --color=always "$start_commit" "$replace_commit" | grep --color=never .
+	then
+		echo
+		echo "Aborting rebase, because the two commits you passed should be identical.  Use -f to override."
+		return 1
+	fi
+
+	local current_commit="$(git rev-parse HEAD)"
+	echo "Current commit before rebase (in case abort desired): ${current_commit}"
+	echo
 
 	local start_ref="$(git rev-parse "$replace_commit")"
 	local end_ref="$(git rev-parse HEAD)"
+
+	echo "Resetting to ${start_commit}, then replaying from ${start_ref}"
+	echo
 
 	# Stash if needed
 	local stashed_commit="$(git stash create)"
@@ -624,6 +661,37 @@ gmrreplace() {
 		echo "Restored tempstash."
 	fi
 }
+
+git_restore_to() {
+	if git diff | grep . >/dev/null || git diff --cached | grep . >/dev/null
+	then
+		echo "Not resetting because there un uncommitted changes"
+		return
+	fi
+
+	# TODO: Check that (origin/master or origin/main) and origin/develop (if it exists) are both in history (or perhaps better, check that one of them matches the current commit).
+	# If not, warn the user, because they probably want to work on top of one of those, and they also won't want to lose any changes made on the local branch.
+	# We could just do it all for them: git fetch, and then select the most recent of those commits as our base_commit.
+
+	local base_commit="$(git rev-parse HEAD)"
+	local target_ref="$(git rev-parse "$1")"
+
+	local current_commit="$(git rev-parse HEAD)"
+	echo "Current commit before revert (in case abort desired): ${current_commit}"
+	echo
+
+	(
+		# cd to git root for the `git add .` and also in case the current folder disappears
+		local git_root_folder="$(git rev-parse --show-toplevel)"
+		'cd' "$git_root_folder"
+		#git reset --hard "$target_ref"
+		#git reset "$base_commit"
+		git restore --source="$target_ref"
+		git add .
+		git commit -m "chore: restore to ${target_ref}"
+	)
+}
+alias git_revert_to='git_restore_to'
 
 alias gr='git reset'
 alias grh='gr --hard'
@@ -657,8 +725,9 @@ alias griud='gri upstream/develop'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
 
-alias grl='git reflog'
-alias grldr='git reflog --date=relative'
+#alias grl='git reflog'
+alias grl='git reflog --color=always --pretty=format:"%C(yellow bold)%h%C(reset)%C(magenta bold)%d%C(reset) %C(black bold)%gs%C(reset) %C(cyan)- %an%C(reset) %C(cyan)(%ar)%C(reset)"'
+alias grldr='grl --date=relative'
 # Ask git log to walk the reflog, producing output in a familiar style
 alias grll='glc -g'
 # This steps through diffs (but over commit messages, which is a little confusing):
@@ -1015,15 +1084,15 @@ alias gsdrop='git stash drop'
 # Because the stash is dropped from the list, it is difficult to recover in case of an accident, but possible using `git-list-dropped-stashes` to search for the recently dropped commit.
 git_kill_patch() {
 	# If there are selections available, but none of them are selected, git stash -p will exit with code 1, so we know we don't need to drop.
-	# But if there are _no changes available_ to stash, git stash -p will immediately exit with code 0, and then we would proceed to drop whatever unrelated stash is at the top of the stack!
+	# But if there are no changes available to stash, git stash -p will immediately exit with code 0, and then we would proceed to drop whatever unrelated stash is at the top of the stack!
 	# To prevent that from happening, we abort early if there are no changes available to stash.
-	if ! git diff | grep . >/dev/null && ! git diff | grep . >/dev/null
+	if ! git diff | grep . >/dev/null
 	then
 		echo "There are no changes to kill"
 		return
 	fi
 
-	gssp &&
+	git stash -p &&
 	git stash drop
 }
 #alias gkp='git_kill_patch'
