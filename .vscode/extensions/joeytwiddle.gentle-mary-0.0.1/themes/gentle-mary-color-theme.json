@@ -79,7 +79,7 @@
     },
     {
       "name": "General punctuation",
-      "scope": "punctuation.separator.key-value.js, punctuation.definition.block, punctuation.section.braces",
+      "scope": "punctuation.separator.key-value.js, punctuation.separator.key-value.ts, punctuation.definition.block, punctuation.section.braces",
       "settings": {
         "foreground": "#AAAAAA",
         "fontStyle": "bold"
@@ -368,7 +368,7 @@
     },
     {
       "name": "HTML content",
-      "scope": "text.html.basic, meta.jsx.children.js",
+      "scope": "text.html.basic, meta.jsx.children.js, meta.jsx.children.ts",
       "settings": {
         "foreground": "#CCCCCC"
       }
@@ -640,12 +640,14 @@
       }
     },
     // Highlight where a variable is defined
-    // (I actually want to do this for variable assignments too, but I found reads were indistinguishable from writes)
     /*
     {
       "name": "Variable definition",
-      "scope": "meta.definition.variable.js variable.other.readwrite.js, meta.definition.variable.js variable.other.constant.js, variable.other.constant.js, variable.other.readwrite.alias.js, meta.definition.variable.ts variable.other.readwrite.ts, meta.definition.variable.ts variable.other.constant.ts, variable.other.constant.ts, variable.other.readwrite.alias.ts",
+      "scope": "meta.definition.variable.js variable.other.readwrite.js, meta.definition.variable.js variable.other.constant.js, variable.other.constant.js, meta.definition.variable.ts variable.other.readwrite.ts, meta.definition.variable.ts variable.other.constant.ts, variable.other.constant.ts",
+      // (I want to do this for variable assignments too, but I found reads were indistinguishable from writes)
+      // , variable.other.readwrite.alias.js, variable.other.readwrite.alias.ts
       "settings": {
+        // I find this to be a minor but helpful difference on macOS, but too strong on Linux
         //"fontStyle": "bold",
         "foreground": "#e4e4e4"
       }
