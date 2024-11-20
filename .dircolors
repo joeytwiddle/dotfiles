@@ -402,6 +402,9 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .yml 00;36
 .yaml 00;36
 .plist 00;36
+# Unfortunately, we cannot put wildcards at the end of the filename
+#.env* 00;36
+.properties 00;36
 # iTunes SQL database/library
 .itdb 00;36
 .itl 00;36
