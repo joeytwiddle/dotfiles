@@ -4,7 +4,8 @@
 {
     // macOS: 'HasklugNerdFontCompleteNerdFontM-Regular', 
     "editor.fontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
-    //"editor.fontFamily": "'Hasklug Nerd Font', 'JetBrains Mono'",
+    //"editor.fontFamily": "'Hasklug Nerd Font', 'JetBrains Mono', 'FiraCode'",
+    //"editor.fontLigatures": true,
     "editor.fontSize": 12,
     //"editor.fontWeight": 500,
     //"editor.fontFamily": "'sans'",
@@ -14,6 +15,13 @@
     //"vim.easymotionMarkerFontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
     //"vim.easymotionMarkerFontSize": "12",
     //"vim.easymotionMarkerYOffset": -1,
+
+    //"editor.inlayHints.fontFamily": "'Helvetica'",
+    //"editor.inlayHints.fontFamily": "'Geneva'",
+    //"editor.inlayHints.fontFamily": "'Microsoft Sans Serif'",
+    //"editor.inlayHints.fontFamily": "'Monaco'",
+    //"editor.inlayHints.fontFamily": "'Tahoma'",
+    "editor.inlayHints.fontSize": 11,
 
     // For macOS
     //"terminal.integrated.fontSize": 11,
@@ -36,17 +44,18 @@
 
     //"editor.trimAutoWhitespace": true,
     //"files.trimTrailingWhitespace": true,
-    "files.insertFinalNewline": true,
+    //"files.insertFinalNewline": true,
 
     "breadcrumbs.enabled": true,
     // I think disabling this makes the editor slightly faster, but I could be wrong!
     "editor.minimap.enabled": false,
     "editor.bracketPairColorization.enabled": false,
-    "editor.foldingImportsByDefault": true,
+    //"editor.foldingImportsByDefault": true,
 
     "explorer.confirmDelete": false,
 
     // Enable on Linux, disable on macOS (because it triggers accidentally if I press Cmd while a touchpad scroll is decaying)
+    // (This appears to be fixed now on macOS)
     "editor.mouseWheelZoom": true,
 
     // Limit the number of editors to keep open
@@ -100,9 +109,13 @@
     "editor.suggest.preview": true,
     // Controls if quick suggestions should show up while typing
     "editor.quickSuggestions": {
-        "other": true,
-        "comments": false,
-        "strings": false
+        // It's annoying to be offered suggestions when we are just typing text
+        // If we do want completion, we can still hit Tab
+        "comments": "off",
+        "strings": "off",
+        // When working on code, let it show the list of suggestions
+        // (Change this from "on" to "inline" if you only want it to preview the top suggestion)
+        "other": "on"
     },
     // Controls whether suggestions should be accepted on commit characters. For example, in JavaScript, the semi-colon (`;`) can be a commit character that accepts a suggestion and types that character.
     // Avoid getting unwanted autocompletes when typing '(' or '.'
@@ -123,8 +136,6 @@
     //"editor.suggestSelection": "recentlyUsed",
     // Enable word based suggestions
     //"editor.wordBasedSuggestions": true,
-    // Enable parameter hints
-    //"editor.parameterHints.enabled": true,
 
     // Should we select the first entry when the suggestions dropdown appears?
     // I think this is now managed by my custom keybinds
@@ -144,6 +155,27 @@
 
     //"workbench.editor.enablePreview": false,
     //"workbench.editor.enablePreviewFromQuickOpen": false,
+
+    // Without this, you need to press Ctrl-Shift-Space / Cmd-Shift-Space to see them
+    // Enable parameter hints
+    "editor.parameterHints.enabled": true,
+
+    // This will show the types of variables, functions, etc. inside the code
+    "editor.inlayHints.enabled": "offUnlessPressed",
+    "javascript.inlayHints.enumMemberValues.enabled": true,
+    "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+    "javascript.inlayHints.parameterNames.enabled": "all",
+    "javascript.inlayHints.parameterTypes.enabled": true,
+    "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
+    "javascript.inlayHints.variableTypes.enabled": true,
+    "typescript.inlayHints.enumMemberValues.enabled": true,
+    "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+    "typescript.inlayHints.parameterNames.enabled": "all",
+    "typescript.inlayHints.parameterTypes.enabled": true,
+    "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+    "typescript.inlayHints.variableTypes.enabled": true,
+    // The default is 43, but we can make it longer if we are toggling
+    //"editor.inlayHints.maximumLength": 80,
 
     //"editor.occurrencesHighlight": false,
 
@@ -171,11 +203,16 @@
         //"editor.selectionHighlightBackground": "#449059",
         //"editor.selectionHighlightForeground": "#ffffff",
 
+        "editorInlayHint.background": "#444444ff",
+        "editorInlayHint.foreground": "#ffffff44", // darker is better when always on
+        //"editorInlayHint.foreground": "#ffffff55",
+        // It is also possible to set different colours for different types: https://stackoverflow.com/a/72169980/99777
+
         // Highlights all/other occurrences of the word under the cursor
-        //"editor.wordHighlightBackground": "#006600aa",
-        //"editor.wordHighlightStrongBackground": "#006600aa",
-        //"editor.wordHighlightBorder": "#006600ff",
-        //"editor.wordHighlightStrongBorder": "#006600ff",
+        "editor.wordHighlightBackground": "#00660099",
+        "editor.wordHighlightStrongBackground": "#00660099",
+        "editor.wordHighlightBorder": "#006600dd",
+        "editor.wordHighlightStrongBorder": "#006600dd",
 
         // For the active search result
         "editor.findMatchBackground": "#0044bbaa",
@@ -186,8 +223,8 @@
         "editor.findMatchHighlightBorder": "#ffff0000",
 
         // Looking for these ... !
-        "editor.findRangeHighlightBackground": "#00ff00",
-        "editor.findRangeHighlightBorder": "#ff00ff",
+        "editor.findRangeHighlightBackground": "#ff00ffee",
+        "editor.findRangeHighlightBorder": "#ff00ffee",
 
         //"editorWarning.foreground": "#dd8800",
         "editorWarning.foreground": "#ffdd0099",
@@ -241,6 +278,8 @@
         //"list.dropBackground": "#0000002a",
         //"list.focusBackground": "#0000002a",
         "list.focusForeground": "#fff",
+        //"editor.selectionBackground": "#484848",
+        "editor.selectionForeground": "#ff00ff",
     },
 
     "editor.tokenColorCustomizations": {
@@ -287,6 +326,7 @@
     // Scan entire project for problems (not just open files) https://stackoverflow.com/q/55201424/99777
     // This is heavy on CPU, but on some projects, it may give you an early warning about errors
     "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+    // Note: If this is gobbling CPU then it is recommended to set `"skipLibCheck": true` in tsconfig's compilerOptions
 
     // Default: languageDefined
     "editor.autoClosingBrackets": "never",
@@ -349,6 +389,8 @@
         "typescript",
         "typescriptreact"
     ],
+
+    // Alternatives GitLens: https://www.reddit.com/r/vscode/comments/1cynetl/alternative_to_gitlens/
     //"gitlens.hovers.currentLine.over": "line",
     //"gitlens.blame.compact": false,
     "gitlens.heatmap.toggleMode": "window",
@@ -359,6 +401,12 @@
     "gitlens.blame.toggleMode": "window",
     "gitlens.heatmap.ageThreshold": 90,
     //"gitlens.heatmap.ageThreshold": 365,
+    // Stop bugging me about premium features
+    "gitlens.plusFeatures.enabled": false,
+    // I find these add clutter, and I never actually read them (at least not the statusbar info)
+    // I use \a and \A instead when I want info
+    "gitlens.codeLens.enabled": false,
+    "gitlens.statusBar.enabled": false,
 
     // For Trailing Spaces
     "trailing-spaces.deleteModifiedLinesOnly": true,
@@ -467,7 +515,10 @@
         { "before": [ "[", "l" ], "commands": [ "editor.action.marker.prevInFiles" ], "when": "editorTextFocus" },
         { "before": [ "]", "l" ], "commands": [ "editor.action.marker.nextInFiles" ], "when": "editorTextFocus" },
         { "before": [ "[", "q" ], "commands": [ "search.action.focusPreviousSearchResult" ], "when": "hasSearchResult" },
-        { "before": [ "]", "q" ], "commands": [ "search.action.focusNextSearchResult" ], "when": "hasSearchResult" },
+        //{ "before": [ "]", "q" ], "commands": [ "search.action.focusNextSearchResult" ], "when": "hasSearchResult" },
+        // The focusActiveEditorGroup sometimes works and sometimes doesn't.  When it doesn't, you need to hit Enter.
+        { "before": [ "]", "q" ], "commands": [ "search.action.remove", "workbench.action.focusActiveEditorGroup" ], "when": "hasSearchResult" },
+        // These work when focused in the editor. We also have bindings in keybindings.json for when we are focused on the explorer.
         { "before": [ "[", "f" ], "commands": [ "workbench.view.explorer", "list.focusUp", "explorer.openAndPassFocus" ] },
         { "before": [ "]", "f" ], "commands": [ "workbench.view.explorer", "list.focusDown", "explorer.openAndPassFocus" ] },
         // We don't really need these.  Just use `2]f`
@@ -573,8 +624,18 @@
         { "before": [ "<Leader>", "H" ], "commands": [ "gitlens.toggleFileHeatmap" ] },
         // Git Shade
         //{ "before": [ "<Leader>", "g", "s" ], "commands": [ "gitlens.toggleFileHeatmap" ] },
-        { "before": [ "<Leader>", "t" ], "commands": [ "workbench.action.gotoSymbol" ] },
+
+        // Toggle file explorer sidebar
         { "before": [ "<Leader>", "f" ], "commands": [ "workbench.action.toggleSidebarVisibility" ] },
+        // Toggle right sidebar
+        { "before": [ "<Leader>", "t" ], "commands": [ "workbench.action.toggleAuxiliaryBar" ] },
+        // Toggle both sidebars
+        { "before": [ "<Leader>", "i" ], "commands": [ "workbench.action.toggleAuxiliaryBar", "workbench.action.toggleSidebarVisibility" ] },
+        // Find items quickly by "tag"
+        { "before": [ "<Leader>", "T" ], "commands": [ "workbench.action.gotoSymbol" ] },
+
+        // Enable/disable Node.js debugger (can slow down processes running terminal, when not active debugging)
+        { "before": [ "<Leader>", "D" ], "commands": [ "extension.node-debug.toggleAutoAttach" ] },
 
         // Redefined below in vim.normalModeKeyBindings
         //{ "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "i", "w", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
@@ -600,6 +661,13 @@
         //{ "before": [ "<Leader>", "R", "l", "o", "g" ], "after": [ "v", "i", "W", "\\", "r", "l", "o", "g" ] },
         // Logging Python
         { "before": [ "<Leader>", "p", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "p", "l", "o", "g" ] },
+        
+        // Open parameter hints for a function with multiple forms, using Ctrl-Shift-Space.
+        // Notice that it will stick around even if you hit Escape or Ctrl-L.
+        // Adding these explicitly makes it easier to get rid of.
+        { "before": [ "<Esc>" ], "commands": [ "closeParameterHints" ] },
+        // Unfortunately enabling this (despite recursion) seems to block Ctrl-L from clearing the highlights from / searches
+        //{ "before": [ "C-L" ], "commands": [ "closeParameterHints" ] },
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
         // For Linux: If we hit paste (Ctrl-V) when something is selected, replace the selection with the clipboard
@@ -693,20 +761,28 @@
     "go.toolsManagement.autoUpdate": true,
     "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
     "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
+
     // blink, smooth, phase, expand, solid
     "editor.cursorBlinking": "blink",
+    "terminal.integrated.cursorBlinking": true,
+
+    "terminal.integrated.copyOnSelection": true,
+
     "debug.javascript.autoAttachFilter": "smart",
-    "gitlens.plusFeatures.enabled": false,
+    //"debug.javascript.autoAttachFilter": "onlyWithFlag",
+
     "html.autoCreateQuotes": false,
     "html.autoClosingTags": false,
+
+    "errorLens.enabled": true,
     "errorLens.enabledDiagnosticLevels": [
         "info",
         "hint",
         "warning",
         "error"
     ],
+
     "trunk.trunkGrayOutNonBlockingIssues": false,
-    "errorLens.enabled": true,
 
     "[python]": {
         "editor.formatOnType": true,
@@ -723,11 +799,15 @@
 
     // Set this false, if you do not want Codegeex to store the code it generates for you
     "Codegeex.Privacy": false,
+
     "docker.contexts.label": "Name",
 
     "svelte.enable-ts-plugin": true,
+    
+    // These draw blue squiggly lines under the code, to indicate where helps is available. They are a bit annoying.
     "totalTypeScript.hideAllTips": true,
     "totalTypeScript.hideBasicTips": true,
+
     "chatgpt.verbosity": "normal",
 
     //"inlineFold.maskChar": "◦◦◦",
@@ -748,6 +828,8 @@
     // A little bit weird to have various config files sitting "inside" the README, but effective at saving space in the explorer
     // Beware adding other patterns here (e.g. package.json) because if TWO patterns match, then VScode collapses into NONE of them!
     "explorer.fileNesting.enabled": true,
+    // When opening a project, DO NOT expand README automatically
+    "explorer.fileNesting.expand": false,
     "explorer.fileNesting.patterns": {
         "README": "*",
         "README.*": "*",
