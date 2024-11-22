@@ -134,6 +134,11 @@
   { "key": "shift+alt+meta+up", "command": "references-view.prev", "when": "reference-list.hasResult" },
   // There is reference-list.isActive but that is always true, and referenceSearchVisible but that is always false
   // So it seems neither of those refer to the visibiility of the sidebar panel, which is what I'm interested in
+  //
+  // VSCode's finder currently loses your position in the search results if you edit the line for the current result, or one of the line above it in the file.
+  // This is really annoying!  Using search.action.remove on every result can help with this, because it drops the current result, so if you do lose your place, you won't need to visit this discarded line again.
+  // Default: Ctrl/Cmd-Backspace but that does something destructive if the editor is focused
+  { "key": "alt+meta+right", "command": "search.action.remove", "when": "hasSearchResult || inSearchEditor" },
 
   // When focused on search, get back to editor by pressing Escape
   // I couldn't find a "when" for when the references results are focused, so I would like to enable this always.
@@ -199,6 +204,7 @@
   // But in VSCode, Ctrl+W closes the current editor!  So I made this mapping to intercept that.
   { "key": "ctrl+w Right", "command": "workbench.action.focusActiveEditorGroup", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
   { "key": "ctrl+w l", "command": "workbench.action.focusActiveEditorGroup", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
+  { "key": "ctrl+[", "command": "workbench.action.focusActiveEditorGroup", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
   { "key": "] w", "command": "workbench.action.focusActiveEditorGroup", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
 
   /* Cycle zoom (requires Settings Cycler plugin) */
@@ -291,11 +297,9 @@
   { "key": "ctrl+shift+cmd+[", "command": "workbench.action.moveEditorLeftInGroup" },
   { "key": "ctrl+shift+cmd+]", "command": "workbench.action.moveEditorRightInGroup" },
 
-  {
-    "key": "ctrl+.",
-    "command": "editor.action.quickFix",
-    "when": "editorHasCodeActionsProvider && textInputFocus && !editorReadonly"
-  },
+  // Suggest fixes like WebStorm
+  // Different from Tab and Ctrl+Space
+  { "key": "ctrl+.", "command": "editor.action.quickFix", "when": "editorHasCodeActionsProvider && textInputFocus && !editorReadonly" },
 
   // Open settings with Cmd-, or Ctrl-,
   // Cmd, Ctrl and Alt all do the same
@@ -311,6 +315,47 @@
   { "key": "shift+alt+,", "command": "workbench.action.openWorkspaceSettings" },
   { "key": "ctrl+shift+cmd+,", "command": "workbench.action.openWorkspaceSettingsFile" },
   { "key": "ctrl+shift+alt+,", "command": "workbench.action.openWorkspaceSettingsFile" },
+
+  // On macOS, Ctrl-Tab and Ctrl-Shift-Tab let us cycle through recently used tabs
+  // Unfortunately, if I use CapsLock as Ctrl, CapsLock-Shift-Tab does not work properly (VSCode sees is as Ctrl-Tab)
+  // A workaround is then to offer Ctrl-Grave instead. This actually mirrors Windows and Linux behaviour of Alt-Tab / Alt-Grave.
+  { "key": "ctrl+`", "command": "workbench.action.quickOpenNavigatePreviousInEditorPicker", "when": "inEditorsPicker && inQuickOpen" },
+  // However we don't bind this one, because we don't want ctrl-` to _open_ the picker
+  //{ "key": "ctrl+`", "command": "workbench.action.quickOpenLeastRecentlyUsedEditorInGroup", "when": "!activeEditorGroupEmpty" },
+
+  // In the Ctrl-P file picker, Tab will navigate through various UI widgets, but I only want it to navigate the files (other widgets I can select with the mouse)
+  // Unfortunately Shift+Tab doesn't seem to activate on macOS, so I have offered Shift=Grave and lone Grave for this
+  { "key": "tab", "command": "workbench.action.quickOpenNavigateNextInFilePicker", "when": "inFilesPicker && inQuickOpen" },
+  { "key": "shift+tab", "command": "workbench.action.quickOpenNavigatePreviousInFilePicker", "when": "inFilesPicker && inQuickOpen" },
+  { "key": "shift+`", "command": "workbench.action.quickOpenNavigatePreviousInFilePicker", "when": "inFilesPicker && inQuickOpen" },
+  { "key": "`", "command": "workbench.action.quickOpenNavigatePreviousInFilePicker", "when": "inFilesPicker && inQuickOpen" },
+
+  // Also make Tab work for other lists in Command Palette
+  { "key": "tab", "command": "quickInput.next", "when": "inQuickInput && quickInputType == 'quickPick'" },
+  { "key": "shift+tab", "command": "quickInput.previous", "when": "inQuickInput && quickInputType == 'quickPick'" },
+  { "key": "shift+`", "command": "quickInput.previous", "when": "inQuickInput && quickInputType == 'quickPick'" },
+  { "key": "`", "command": "quickInput.previous", "when": "inQuickInput && quickInputType == 'quickPick'" },
+
+  // This is Ctrl-Shift-Space / Cmd-Shift-Space by default, but here is another option
+  { "key": "ctrl+shift+/", "command": "editor.action.triggerParameterHints", "when": "editorHasSignatureHelpProvider && editorTextFocus" },
+  // I wanted this, but I couldn't get them both to work together
+  //{ "key": "ctrl+shift+/", "command": "editor.action.showDefinitionPreviewHover" },
+
+  // These block us from sending `[` e.g. when pressing `f[` to search for `[` on the current line
+  //{ "key": "[ f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusUp", "explorer.openAndPassFocus" ] }, "when": "!editorTextFocus && workbench.explorer.fileView.visible && vim.active && !inDebugRepl && vim.mode == 'Normal'" },
+  //{ "key": "] f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusDown", "explorer.openAndPassFocus" ] }, "when": "!editorTextFocus && workbench.explorer.fileView.visible && vim.active && !inDebugRepl && vim.mode == 'Normal'" },
+  // However we can use these to make [f and ]f work in the explorer, and continue using our keybinds in settings.json when focused on the editor
+  { "key": "[ f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusUp", "explorer.openAndPassFocus" ] }, "when": "workbench.explorer.fileView.visible && filesExplorerFocus" },
+  { "key": "] f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusDown", "explorer.openAndPassFocus" ] }, "when": "workbench.explorer.fileView.visible && filesExplorerFocus" },
+  // We can't use these, because they break common Vim commands such as "d2<Enter>"
+  //{ "key": "2 [ f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusUp", "list.focusUp", "explorer.openAndPassFocus" ] } },
+  //{ "key": "2 ] f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusDown", "list.focusDown", "explorer.openAndPassFocus" ] } },
+
+  // Dummy object, because without this, newly added bindings expand the last entry in the file
+  {
+    "foo": "bar"
+  },
+  // New keybinds should be moved above this
 
   // It seems my override here will work, even if I don't disable VSCodeVim's default
   //{ "key": "ctrl+]", "command": "typescript.goToSourceDefinition", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
