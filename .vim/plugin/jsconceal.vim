@@ -37,9 +37,11 @@ function! s:JSConcealOn()
   if level > 0
     syn keyword jsNiceFunction   function skipwhite conceal cchar=λ "𝒇𝑓𝐟𝐅𝑭𝗙𝗳
     syn match   jsNiceArrowFunction /=>/ containedin=jsArrowFunction conceal cchar=⇒
+    syn match   tsNiceArrowFunction /=>/ containedin=typescriptArrowFunc conceal cchar=⇒
   endif
   if level > 2
     syn keyword jsNiceReturn     return conceal cchar=⤺ "⬑↶↲⏎⇦⤆⇐↩⇤⬅↖⬉⇙⬋≪⬎↵↤↢↩↻⇙⇱◅◀
+    " In TypeScript, return is taken by typescriptStatementKeyword
     syn match   jsNiceApprox     /==/  conceal cchar=≈ "∼∿
     syn match   jsNiceNotApprox  /!=/  conceal cchar=≉
     syn match   jsNiceEqual      /===/ conceal cchar=≡ "=
@@ -96,6 +98,8 @@ endfunction
 
 function! s:JSConcealOff()
   silent! syn clear jsNiceFunction
+  silent! syn clear jsNiceArrowFunction
+  silent! syn clear tsNiceArrowFunction
   silent! syn clear jsThis
   silent! syn clear jsNicePrototype
   silent! syn clear jsNiceReturn
