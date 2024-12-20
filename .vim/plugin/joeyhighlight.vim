@@ -439,6 +439,9 @@ function! Joeyhighlight()
 		hi Normal guifg=#f7f7f7
 	endif
 
+	" Bugfix for GitGutter on MacVim, which (when the gutter is visible) highlights any changed lines in bright green
+	hi None guifg=NONE
+
 endfun
 
 " I had disabled this, to rely on autocmd above.
