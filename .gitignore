@@ -33,3 +33,5 @@ GPUCache/
 /.local/share/ktorrent/
 /.local/share/teamviewer*/
 /.vscode/extensions/
+
+/.config/yarn/global/node_modules/
