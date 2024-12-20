@@ -308,9 +308,7 @@ autocmd VimLeave * silent !stty ixon
 	" This was not sufficient to solve the problem when opening a file (although it might have helped when editing a file)
 	if has('mac') || has('macunix')
 		" It appears that MacVim does not actually delete the swapfile when we "close" it, which means it complains as soon as we start editing again, or open a new file.  Until we have debugged this, let's just not ever use the swapfile.
-		let g:NoSwapSuck_CheckSwapfileOnLoad = 0
-		let g:NoSwapSuck_CreateSwapfileOnInsert = 0
-		let g:NoSwapSuck_CloseSwapfileOnWrite = 1
+		let g:NoSwapSuck_Enabled = 0
 		set noswapfile
 	endif
 
@@ -1132,10 +1130,10 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	function s:InitEasyMotionHighlights()
 		" When I must type two chars, I want it to be clear which is the first one I must type!
 		" This is useful when using (easymotion-jumptoanywhere)
-		"highlight EasyMotionTarget        cterm=bold ctermbg=0 ctermfg=green  gui=bold guifg=green
-		highlight EasyMotionTarget        cterm=bold ctermbg=0 ctermfg=red    gui=bold guifg=red
-		highlight EasyMotionTarget2First  cterm=bold ctermbg=0 ctermfg=yellow gui=bold guifg=yellow
-		highlight EasyMotionTarget2Second cterm=bold ctermbg=0 ctermfg=blue   gui=bold guifg=blue
+		highlight EasyMotionTarget        cterm=bold ctermbg=0 ctermfg=red    gui=bold guifg=#ff3333
+		highlight EasyMotionTarget2First  cterm=bold ctermbg=0 ctermfg=yellow gui=bold guifg=#ffff00
+		"highlight EasyMotionTarget2Second cterm=bold ctermbg=0 ctermfg=darkyellow gui=bold guifg=#bbbb00
+		highlight EasyMotionTarget2Second cterm=bold ctermbg=0 ctermfg=blue   gui=bold guifg=#6666ff
 		" The default green move highlight made it hard to see where my cursor was.  Something darker contrasts better.
 		"hi link EasyMotionMoveHL EasyMotionTarget
 		"highlight EasyMotionMoveHL ctermbg=darkblue guibg=darkblue
