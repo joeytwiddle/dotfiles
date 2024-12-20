@@ -138,7 +138,8 @@
   // VSCode's finder currently loses your position in the search results if you edit the line for the current result, or one of the line above it in the file.
   // This is really annoying!  Using search.action.remove on every result can help with this, because it drops the current result, so if you do lose your place, you won't need to visit this discarded line again.
   // Default: Ctrl/Cmd-Backspace but that does something destructive if the editor is focused
-  { "key": "alt+meta+right", "command": "search.action.remove", "when": "hasSearchResult || inSearchEditor" },
+  //{ "key": "alt+meta+right", "command": "search.action.remove", "when": "hasSearchResult || inSearchEditor" },
+  { "key": "alt+meta+right", "command": "runCommands", "args": { "commands": [ "search.action.focusSearchList", "search.action.remove" ] }, "when": "hasSearchResult || inSearchEditor" },
 
   // When focused on search, get back to editor by pressing Escape
   // I couldn't find a "when" for when the references results are focused, so I would like to enable this always.
@@ -175,17 +176,21 @@
   // Well good-ish.  I shouuld really hit Tab and then keep typing, like I do in Vim
 
   // Act more like Vim, by accepting the current suggestion, if we keep typing
-  { "key": "space", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": " "} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
-  { "key": ".", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "."} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
-  { "key": ",", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ","} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
-  { "key": ";", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ";"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
-  { "key": "shift-9", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "("} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
-  { "key": "shift-0", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ")"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
-  { "key": "[", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "["} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
-  { "key": "]", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "]"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
-  { "key": "`", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "`"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
-  { "key": "shift-1", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "!"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
-  { "key": "shift-/", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "?"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus" },
+  { "key": "space", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": " "} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  { "key": ".", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "."} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  { "key": ",", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ","} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  { "key": ";", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ";"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  { "key": "shift-9", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "("} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  { "key": "shift-0", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ")"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  { "key": "[", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "["} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  { "key": "]", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "]"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  { "key": "`", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "`"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  { "key": "shift-1", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "!"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  { "key": "shift-/", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "?"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  { "key": "/", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "/"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  { "key": "'", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "'"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+
+  //{ "key": "tab", "command": "acceptSelectedSuggestion", "when": "acceptSuggestionOnEnter && suggestWidgetVisible && suggestionMakesTextEdit && textInputFocus" },
 
   // Use Tab to cycle whenever a list is focused
   // I find this useful when jumping to a definition, when multiple suggestions are offered
@@ -195,10 +200,8 @@
   // More lists that should use Tab to cycle
   { "key": "tab", "command": "selectNextCodeAction", "when": "codeActionMenuVisible" },
   { "key": "shift-tab", "command": "selectPrevCodeAction", "when": "codeActionMenuVisible" },
-  { "key": "tab", "command": "showNextParameterHint", "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible" },
-  { "key": "shift-tab", "command": "showPrevParameterHint", "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible" },
-
-  //{ "key": "tab", "command": "acceptSelectedSuggestion", "when": "acceptSuggestionOnEnter && suggestWidgetVisible && suggestionMakesTextEdit && textInputFocus" },
+  { "key": "tab", "command": "showNextParameterHint", "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible && !suggestWidgetVisible" },
+  { "key": "shift-tab", "command": "showPrevParameterHint", "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible && !suggestWidgetVisible" },
 
   // Using VSCodeVim, when focused on the explorer/sidebar I would often try to use `Ctrl-W Right` to get back to the editor.
   // But in VSCode, Ctrl+W closes the current editor!  So I made this mapping to intercept that.
@@ -233,7 +236,8 @@
     }
   },
 
-  { "key": "ctrl+e", "command": "workbench.action.showEditorsInActiveGroup" },
+  { "key": "ctrl+e", "command": "workbench.action.showAllEditorsByMostRecentlyUsed", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
+  { "key": "ctrl+b", "command": "workbench.action.showEditorsInActiveGroup", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
 
   // VSCode now has good defaults for these (that work well when the terminal has been dragged into an editor tab)
   //{ "key": "ctrl+PageUp", "command": "workbench.action.terminal.focusPrevious", "when": "terminalFocus" },
@@ -337,7 +341,7 @@
   { "key": "`", "command": "quickInput.previous", "when": "inQuickInput && quickInputType == 'quickPick'" },
 
   // This is Ctrl-Shift-Space / Cmd-Shift-Space by default, but here is another option
-  { "key": "ctrl+shift+/", "command": "editor.action.triggerParameterHints", "when": "editorHasSignatureHelpProvider && editorTextFocus" },
+  { "key": "ctrl+shift+/", "command": "editor.action.triggerParameterHints", "when": "editorHasSignatureHelpProvider && editorTextFocus && !inDebugRepl" },
   // I wanted this, but I couldn't get them both to work together
   //{ "key": "ctrl+shift+/", "command": "editor.action.showDefinitionPreviewHover" },
 
@@ -345,11 +349,16 @@
   //{ "key": "[ f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusUp", "explorer.openAndPassFocus" ] }, "when": "!editorTextFocus && workbench.explorer.fileView.visible && vim.active && !inDebugRepl && vim.mode == 'Normal'" },
   //{ "key": "] f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusDown", "explorer.openAndPassFocus" ] }, "when": "!editorTextFocus && workbench.explorer.fileView.visible && vim.active && !inDebugRepl && vim.mode == 'Normal'" },
   // However we can use these to make [f and ]f work in the explorer, and continue using our keybinds in settings.json when focused on the editor
-  { "key": "[ f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusUp", "explorer.openAndPassFocus" ] }, "when": "workbench.explorer.fileView.visible && filesExplorerFocus" },
-  { "key": "] f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusDown", "explorer.openAndPassFocus" ] }, "when": "workbench.explorer.fileView.visible && filesExplorerFocus" },
+  { "key": "[ f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusUp", "explorer.openAndPassFocus" ] }, "when": "workbench.explorer.fileView.visible && filesExplorerFocus && !inputFocus" },
+  { "key": "] f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusDown", "explorer.openAndPassFocus" ] }, "when": "workbench.explorer.fileView.visible && filesExplorerFocus && !inputFocus" },
   // We can't use these, because they break common Vim commands such as "d2<Enter>"
   //{ "key": "2 [ f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusUp", "list.focusUp", "explorer.openAndPassFocus" ] } },
   //{ "key": "2 ] f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusDown", "list.focusDown", "explorer.openAndPassFocus" ] } },
+  
+  // When the editor is focused, we can use these Vim bindings from settings.json
+  // But when we are focused, e.g. on a UI window, they don't work.  So we add them here.  (Theoretically, we only need them here, with no conditions.)
+  { "key": "[ b", "command": "workbench.action.previousEditor", "when": "!editorFocus && !inputFocus" },
+  { "key": "] b", "command": "workbench.action.nextEditor", "when": "!editorFocus && !inputFocus" },
 
   // Dummy object, because without this, newly added bindings expand the last entry in the file
   {
