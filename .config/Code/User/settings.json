@@ -237,10 +237,9 @@
         // Make folded (collapsed) lines clear, Vim style
         "editor.foldBackground": "#0000ff80",
 
-        //"editorBracketMatch.border": "#00000000",
-        //"editorBracketMatch.background": "#111111",
         "editorBracketMatch.border": "#00000000",
         "editorBracketMatch.background": "#0000ffbb",
+        //"editorBracketMatch.background": "#ff00ff66",
         //"editorBracketMatch.border": "#0000ffff",
         //"editorBracketMatch.background": "#00000000",
 
@@ -497,8 +496,10 @@
         { "before": [ "C-R" ], "commands": ["redo"] },
         // Other Vim keystrokes that weren't working for me in Vim-VSCode
         // Now they work, and if I try to use my keybinds below, then <Ctrl-O> followed by i will insert at the old cursor position!
-        //{ "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
-        //{ "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ] },
+        // But I have re-enabled them, because sometimes the default ctrl+o will skip over the previous file/tab and go to the previous one
+        { "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
+        { "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ] },
+        //
         { "before": [ "C-W", "c" ], "commands": [ "workbench.action.closeGroup" ] },
         { "before": [ "C-W", "s" ], "commands": [ "workbench.action.splitEditorDown" ] },
         { "before": [ "C-W", "S" ], "commands": [ "workbench.action.splitEditorRight" ] },
@@ -583,7 +584,8 @@
         // Unfortunately, if the sidebar was closed, this action will open it!
         // So we would like to create two rules, one if the sidebar is visible, and one if it is not
         // Unfortunately, it appears we cannot create two rules with the same "before", because the second rule appears to be overriding the first
-        { "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen", "workbench.view.explorer", "workbench.action.focusActiveEditorGroup" ], "when": "sideBarVisible" },
+        // One solution was to add "when": "sideBarVisible" which worked, but doesn't seem to be necessary now.
+        { "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen", "workbench.view.explorer", "workbench.action.focusActiveEditorGroup", "inlayHints.stopReadingLineWithHint" ] },
         // If the sidebar is not visible, then the search will also not be visible, solving the issue mentioned above
         // We could do this, but then we see the sidebar flicker visible and hidden again: "workbench.view.explorer", "workbench.action.focusActiveEditorGroup", "workbench.action.toggleSidebarVisibility"
         //{ "before": [ "C-L" ], "commands": [ ":nohlsearch", "closeAccessibilityHelp", "closeParameterHints", "closeReferenceSearch", "closeReferenceSearchEditor", "hideSuggestWidget", "workbench.action.closeQuickOpen" ], "when": "!sideBarVisible" },
@@ -841,11 +843,6 @@
     // e.g. "src / folders / with / only / one / child"
     // because I find this UI inconsistent
     "explorer.compactFolders": false,
-
-    // I find these add clutter, and I never actually read them (at least not the statusbar info)
-    // I use \a and \A instead when I want info
-    "gitlens.codeLens.enabled": false,
-    "gitlens.statusBar.enabled": false,
 
     // New Settings
     //"editor.guides.bracketPairsHorizontal": false,
