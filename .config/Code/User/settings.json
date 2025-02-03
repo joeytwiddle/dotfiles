@@ -161,6 +161,7 @@
     "editor.parameterHints.enabled": true,
 
     // This will show the types of variables, functions, etc. inside the code
+    // To show them, press Ctrl+Alt
     "editor.inlayHints.enabled": "offUnlessPressed",
     "javascript.inlayHints.enumMemberValues.enabled": true,
     "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
@@ -330,9 +331,29 @@
     // Default: languageDefined
     "editor.autoClosingBrackets": "never",
     //"editor.autoClosingBrackets": "languageDefined",
+
+    "html.autoCreateQuotes": false,
+
+    // Prevent <div></div> because usually I want the ending to come on a later line
+    // I use </ when I want to create the ending (see Auto Close Tag below)
+    "html.autoClosingTags": false,
     "javascript.autoClosingTags": false,
     "typescript.autoClosingTags": false,
 
+    // Prevent <!----> because I often want <!-- on one line, and --> on another
+    "[xml]": {
+        "editor.autoClosingComments": "never",
+    },
+
+    // For Auto Close Tag
+    // This will auto close tag when just typing </
+    // See also bundled settings "*.autoClosingTags"
+    // This adds support for JSX/TSX which do not have bundled support
+    // Unfortunately the plugin tends to cause my editor to freeze up, so disabled for now
+    // (Or it might be Auto Rename Tag that causes it, but I think it's actually this)
+    // I think these features are now available natively in VSCode, e.g. "linked editing".
+    "auto-close-tag.SublimeText3Mode": true,
+    "auto-close-tag.enableAutoCloseTag": false,
     // Deprecated: "html.mirrorCursorOnMatchingTag": true,
     // Old: "editor.renameOnType": true,
     "editor.linkedEditing": true,
@@ -395,8 +416,10 @@
     "gitlens.heatmap.toggleMode": "window",
     "gitlens.heatmap.hotColor": "#f6a60a",
     "gitlens.heatmap.coldColor": "#0a62f6",
+    // wavatar is cute and identicon seems nice, but for small icons on a dark theme, I think retro works best
     //"gitlens.defaultGravatarsStyle": "wavatar",
-    "gitlens.defaultGravatarsStyle": "identicon",
+    //"gitlens.defaultGravatarsStyle": "identicon",
+    "gitlens.defaultGravatarsStyle": "retro",
     "gitlens.blame.toggleMode": "window",
     "gitlens.heatmap.ageThreshold": 90,
     //"gitlens.heatmap.ageThreshold": 365,
@@ -538,7 +561,10 @@
         { "before": [ "[", "w" ], "commands": [ "workbench.action.focusPreviousGroup" ] },
         { "before": [ "]", "w" ], "commands": [ "workbench.action.focusNextGroup" ] },
         // Works a little like next/prev tag, but only if you are focused on the first line of a function
-        // These were super slow when `]]f` was enabled above
+        { "before": [ "[", "t" ], "commands": [ "editor.gotoPreviousFold" ] },
+        { "before": [ "]", "t" ], "commands": [ "editor.gotoNextFold" ] },
+        // In my Vim, I also override the default [[ and ]] with tag jumps
+        // (These were super slow when `]]f` was enabled above)
         { "before": [ "[", "[" ], "commands": [ "editor.gotoPreviousFold" ] },
         { "before": [ "]", "]" ], "commands": [ "editor.gotoNextFold" ] },
 
@@ -663,6 +689,8 @@
         //{ "before": [ "<Leader>", "R", "l", "o", "g" ], "after": [ "v", "i", "W", "\\", "r", "l", "o", "g" ] },
         // Logging Python
         { "before": [ "<Leader>", "p", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "p", "l", "o", "g" ] },
+        // Logging Fastify
+        { "before": [ "<Leader>", "f", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "f", "l", "o", "g" ] },
         
         // Open parameter hints for a function with multiple forms, using Ctrl-Shift-Space.
         // Notice that it will stick around even if you hit Escape or Ctrl-L.
@@ -686,6 +714,8 @@
         //{ "before": [ "<Leader>", "r", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "J", "s", ".", "l", "o", "g", "2", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", "Esc" ] },
         // Logging Python
         { "before": [ "<Leader>", "p", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "p", "r", "i", "n", "t", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", "Esc" ] },
+        // Logging Fastify
+        { "before": [ "<Leader>", "f", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "s", "e", "r", "v", "e", "r", ".", "l", "o", "g", ".", "d", "e", "b", "u", "g", "(", "C-R", "l", ",", " ", "\"", "C-R", "l", "\"", ")", "Esc" ] },
     ],
     "vim.insertModeKeyBindingsNonRecursive": [
         // Unfortunately the = command can also affect other lines which are not highlighted.  Better not.
@@ -727,16 +757,6 @@
         }
     ],
 
-    // For Auto Close Tag
-    // This will auto close tag when just typing </
-    // See also bundled settings "*.autoClosingTags"
-    // This adds support for JSX/TSX which do not have bundled support
-    // Unfortunately the plugin tends to cause my editor to freeze up, so disabled for now
-    // (Or it might be Auto Rename Tag that causes it, but I think it's actually this)
-    // I think these features are now available natively in VSCode, e.g. "linked editing".
-    "auto-close-tag.SublimeText3Mode": true,
-    "auto-close-tag.enableAutoCloseTag": false,
-
     "files.exclude": {
         // These appeared when I started working in Java (and installed the recommended Java plugins)
         "**/.classpath": true,
@@ -750,14 +770,20 @@
     "editor.insertSpaces": false,
     "editor.lineNumbers": "on",
     "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
-    "editor.wordWrap": "off",
+
+    "editor.wordWrap": "on",
+    "editor.wrappingIndent": "deepIndent",
 
     // When using Ctrl-P to select a file, open with the same search that was used last time
     // This isn't helpful if you also use Ctrl-P to cycle through recently focused files
-    //"workbench.quickOpen.preserveInput": true,
+    // But if you cycle recent windows with Ctrl-Tab, then you may enable this
+    "workbench.quickOpen.preserveInput": true,
 
     // Do not show all files you have recently opened (I do not want Ctrl-P to show files which I have merely skimmed through while searching)
     "search.quickOpen.includeHistory": false,
+
+    // Search not only filenames, but also symbols (e.g. function names)
+    "search.quickOpen.includeSymbols": true,
 
     // Stop asking me if I want to update go tools, just do it
     "go.toolsManagement.autoUpdate": true,
@@ -768,13 +794,15 @@
     "editor.cursorBlinking": "blink",
     "terminal.integrated.cursorBlinking": true,
 
+    "terminal.integrated.defaultProfile.osx": "bash",
     "terminal.integrated.copyOnSelection": true,
+    "terminal.integrated.middleClickBehavior": "paste",
+
+    // Avoid the error about terminal failing to start, when starting VSCode with many windows
+    "application.shellEnvironmentResolutionTimeout": 120,
 
     "debug.javascript.autoAttachFilter": "smart",
     //"debug.javascript.autoAttachFilter": "onlyWithFlag",
-
-    "html.autoCreateQuotes": false,
-    "html.autoClosingTags": false,
 
     "errorLens.enabled": true,
     "errorLens.enabledDiagnosticLevels": [
@@ -835,8 +863,8 @@
     "explorer.fileNesting.patterns": {
         "README": "*",
         "README.*": "*",
-        // Using both upper and lowercase works on Linux, but fails to collapse on macOS (I think because it matches both rules)
-        //"readme.*": "*",
+        "*.route.ts": "${capture}.test.ts",
+        //"*.ts": "${basename}.test.ts"
     },
 
     // Do not combine deep paths into one line in explorer
