@@ -180,15 +180,20 @@
   { "key": ".", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "."} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
   { "key": ",", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ","} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
   { "key": ";", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ";"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  // ( and )
   { "key": "shift-9", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "("} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
   { "key": "shift-0", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ")"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
   { "key": "[", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "["} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
   { "key": "]", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "]"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
   { "key": "`", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "`"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  // ! and ?
   { "key": "shift-1", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "!"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
   { "key": "shift-/", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "?"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
   { "key": "/", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "/"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
   { "key": "'", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "'"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  // < and >
+  { "key": "shift-,", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": "<"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
+  { "key": "shift-.", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ">"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
 
   //{ "key": "tab", "command": "acceptSelectedSuggestion", "when": "acceptSuggestionOnEnter && suggestWidgetVisible && suggestionMakesTextEdit && textInputFocus" },
 
@@ -260,7 +265,13 @@
   { "key": "ctrl+w l", "command": "workbench.action.focusNextGroup", "when": "terminalFocus" },
   // More useful keys for the terminal
   { "key": "ctrl+w c", "command": "workbench.action.terminal.toggleTerminal", "when": "terminalFocus" },
+  // This only works when the panel is aligned centrally
   { "key": "ctrl+z", "command": "workbench.action.toggleMaximizedPanel", "when": "terminalFocus" },
+  // Trying to make it easy to re-align the panel, when I want to toggle maximization
+  // Unfortunately these rarely trigger
+  // , "when": "terminalFocus"
+  //{ "key": "ctrl+a", "command": "workbench.action.alignPanelLeft" },
+  //{ "key": "ctrl+x", "command": "workbench.action.positionPanelBottom" },
 
   // In my Terminal, I use Ctrl-F to move forward one word, so I want Find to be on Ctrl-Shift-F instead.
   { "key": "ctrl+f", "command": "-workbench.action.terminal.focusFind", "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported" },
@@ -359,6 +370,12 @@
   // But when we are focused, e.g. on a UI window, they don't work.  So we add them here.  (Theoretically, we only need them here, with no conditions.)
   { "key": "[ b", "command": "workbench.action.previousEditor", "when": "!editorFocus && !inputFocus" },
   { "key": "] b", "command": "workbench.action.nextEditor", "when": "!editorFocus && !inputFocus" },
+
+  // Open list finder
+  // Especially useful in the file explorer in filter mode, (i.e. when `filesExplorerFocus` is true) but may work in other lists
+  { "key": "cmd+f", "command": "list.find", "when": "listFocus && listSupportsFind" },
+  { "key": "ctrl+f", "command": "list.find", "when": "listFocus && listSupportsFind" },
+  { "key": "alt+f", "command": "list.find", "when": "listFocus && listSupportsFind" },
 
   // Dummy object, because without this, newly added bindings expand the last entry in the file
   {
