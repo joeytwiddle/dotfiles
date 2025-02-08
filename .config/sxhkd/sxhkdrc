@@ -72,6 +72,29 @@ alt + v
 
 
 
+### === Manipulating windows === ###
+# Note that alt + super + j is defined later, so it can do something different for Google Chrome
+# We only want to set the size if the window is Vim, or GVim
+# TODO: Or another editor, or a terminal hosting an editor
+alt + super + k
+ run_if_window_matches --not --class "(vim|gvim)" -- put_current_xwindow top ; \
+ run_if_window_matches       --class "(vim|gvim)" -- eval unmaximize_current_xwindow --size 66% 81% && put_current_xwindow top
+alt + super + h
+ eval put_current_xwindow left_edge
+alt + super + l
+ eval put_current_xwindow right_edge
+
+
+#alt + super + Left
+#  put_current_xwindow tile_left
+#alt + super + Right
+#  put_current_xwindow tile_right
+#alt + super + Up
+#  put_current_xwindow tile_top
+#alt + super + Down
+#  put_current_xwindow tile_bottom
+
+
 ### === Common app keybinds === ###
 
 # Zoom in and out
