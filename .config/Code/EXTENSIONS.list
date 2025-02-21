@@ -30,13 +30,14 @@ joeberria.statusbarerror
 joeytwiddle.gentle-mary
 johnpapa.vscode-peacock
 juanblanco.solidity
-kamikillerto.vscode-colorize
+#kamikillerto.vscode-colorize
 mattpocock.ts-error-translator
 meganrogge.template-string-converter
 mikestead.dotenv
 moalamri.inline-fold
 ms-azuretools.vscode-docker
 ms-vsliveshare.vsliveshare
+naumovs.color-highlight
 oouo-diogo-perdigao.docthis
 pkief.material-icon-theme
 shardulm94.trailing-spaces
