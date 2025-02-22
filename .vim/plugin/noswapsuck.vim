@@ -204,44 +204,26 @@ function! s:ConsiderClosingSwapfile()
 endfunction
 
 function! s:ConsiderCreatingSwapfile(...)
-  if !g:NoSwapSuck_Enabled || s:SwapfileIsDisabledForCurrentBuffer()
+  if !g:NoSwapSuck_Enabled
     return
   endif
 
   let about_to_be_modified = a:0 ? a:1 : 0
-  if !&swapfile && ( &modified || about_to_be_modified )
+  if !&swapfile && ( &modified || about_to_be_modified ) && !s:SwapfileDisableForCurrentBuffer()
     if g:NoSwapSuck_Debug | echo "Setting swapfile" | endif
     setlocal swapfile
   endif
 endfunction
 
 function! s:SetSwapfileToCheck()
-  if !g:NoSwapSuck_Enabled || s:SwapfileIsDisabledForCurrentBuffer()
+  if !g:NoSwapSuck_Enabled
     return
   endif
 
   set swapfile
 endfunction
 
-function! s:SwapfileIsDisabledForCurrentBuffer()
-  if get(b:, 'NoSwapSuck_NoSwapfile', 0)
-    return 1
-  endif
-  if s:IsARemoteFile()
-    return 1
-  endif
-  return 0
+function! s:SwapfileDisableForCurrentBuffer()
+  return get(b:, 'NoSwapSuck_NoSwapfile', 0)
 endfunction
 
-function! s:IsARemoteFile()
-  if get(b:, 'netrw_method', '') != ''
-    return 1
-  endif
-  if expand('%') =~ '\m\C^\(dav\|fetch\|ftp\|http\|rcp\|rsync\|scp\|sftp\|file\)://'
-    return 1
-  endif
-  if expand('%') =~ '\(^/run/user/\d*/kio-fuse-.*\)'
-    return 1
-  endif
-  return 0
-endfunction
