@@ -247,6 +247,33 @@
     }
   },
 
+  // Cycle theme
+  {
+    "key": "cmd+k cmd+k",
+    "command": "settings.cycle",
+    "args": {
+      "id": "cycleColorTheme", // must be unique
+      "overrideWorkspaceSettings": true,
+      "values": [
+        // This is mine, it's nice and calm, but a bit boring
+        { "workbench.colorTheme": "Gentle Mary" },
+        // This one looks cool
+        { "workbench.colorTheme": "Material Theme" },
+        // Grey version
+        { "workbench.colorTheme": "Material Theme Darker" },
+        // These lighter themes are good when working in bright conditions
+        //{ "workbench.colorTheme": "Material Theme Lighter High Contrast" },
+        { "workbench.colorTheme": "Quiet Light" },
+        { "workbench.colorTheme": "Visual Studio Light" },
+        //{ "workbench.colorTheme": "Default Light +" },
+        { "workbench.colorTheme": "Default Light Modern" },
+      ]
+    }
+  },
+  // The following was only needed when we had bound Cmd-K Cmd-T Cmd-T above
+  // Since the above overrode the default Cmd-K Cmd-T, then let's create a new bind for it
+  //{ "key": "cmd+k cmd+t cmd+k", "command": "workbench.action.selectTheme" },
+
   { "key": "ctrl+e", "command": "workbench.action.showAllEditorsByMostRecentlyUsed", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
   { "key": "ctrl+b", "command": "workbench.action.showEditorsInActiveGroup", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
 

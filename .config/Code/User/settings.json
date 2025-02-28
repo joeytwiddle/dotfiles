@@ -34,10 +34,6 @@
     "debug.console.fontSize": 11,
     "debug.console.fontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
 
-    "workbench.colorTheme": "Gentle Mary",
-    // This is good when working in bright conditions
-    //"workbench.colorTheme": "Default Light Modern",
-
     //"editor.renderWhitespace": "boundary",
 
     "files.autoSave": "onWindowChange",
