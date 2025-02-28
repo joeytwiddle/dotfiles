@@ -311,7 +311,27 @@
                 }
             },
             */
-        ]
+        ],
+
+        // Overrides for Theo's Material Theme
+        "[Material Theme*]": {
+            "textMateRules": [
+                {
+                    "scope": "meta.brace.round.ts",
+                    "settings": {
+                        // Before: "##F07178",
+                        "foreground": "#f0f0f0",
+                    }
+                },
+                {
+                    "scope": "meta.object-literal.key string.quoted.single, support.type.property-name.json.comments",
+                    "settings": {
+                        // Before: "##F07178",
+                        "foreground": "#bb99ff",
+                    }
+                },
+            ],
+        },
     },
 
     // It's probably better to enable these settings in the .vscode folder local to each workspace/project
