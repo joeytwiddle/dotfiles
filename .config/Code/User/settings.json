@@ -45,8 +45,12 @@
     "breadcrumbs.enabled": true,
     // I think disabling this makes the editor slightly faster, but I could be wrong!
     "editor.minimap.enabled": false,
+
     "editor.bracketPairColorization.enabled": false,
-    //"editor.foldingImportsByDefault": true,
+    //"editor.guides.bracketPairsHorizontal": false,
+    //"editor.guides.highlightActiveBracketPair": false,
+
+    "editor.foldingImportsByDefault": false,
 
     "explorer.confirmDelete": false,
 
@@ -55,10 +59,12 @@
     "editor.mouseWheelZoom": true,
 
     // Limit the number of editors to keep open
+    // (Previously we used ZenTabs to do this)
     "workbench.editor.limit.enabled": true,
     "workbench.editor.limit.perEditorGroup": true,
-    "workbench.editor.limit.value": 11,
-    "workbench.editor.wrapTabs": false,
+    "workbench.editor.limit.value": 8,
+    // When a limit is enabled, wrapping can also be enabled
+    "workbench.editor.wrapTabs": true,
 
     // Displays extra info (like 'M' or 'U' or a number) in the tab if the file has uncommitted changes
     "workbench.editor.decorations.badges": true,
@@ -66,6 +72,7 @@
     // I find it easier to see the tree structure with a wider indent (default 8)
     //"workbench.tree.indent": 8,
     "workbench.tree.indent": 12,
+    "workbench.tree.renderIndentGuides": "onHover",
     //"workbench.tree.indent": 20,
     // For deep trees, you will eventually need this, even with a low/default indent
     "workbench.list.horizontalScrolling": true,
@@ -174,7 +181,7 @@
     // The default is 43, but we can make it longer if we are toggling
     //"editor.inlayHints.maximumLength": 80,
 
-    //"editor.occurrencesHighlight": false,
+    "editor.occurrencesHighlight": "multiFile",
 
     // Outline view often has too much stuff in it to make it useful
     // Especially the deeper nodes can get in the way of the top-level things of interest
@@ -536,8 +543,9 @@
         // Other Vim keystrokes that weren't working for me in Vim-VSCode
         // Now they work, and if I try to use my keybinds below, then <Ctrl-O> followed by i will insert at the old cursor position!
         // But I have re-enabled them, because sometimes the default ctrl+o will skip over the previous file/tab and go to the previous one
-        { "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
-        { "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ] },
+        // Disabled again. I would often go to a file, then Ctrl-O would not take me back, but through some irrelevant files first
+        //{ "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
+        //{ "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ] },
         //
         { "before": [ "C-W", "c" ], "commands": [ "workbench.action.closeGroup" ] },
         { "before": [ "C-W", "s" ], "commands": [ "workbench.action.splitEditorDown" ] },
@@ -746,11 +754,11 @@
     "vim.easymotionMarkerForegroundColorTwoCharFirst": "#ffb400",
     "vim.easymotionMarkerForegroundColorTwoCharSecond": "#ffb400",
 
-    // For ZenTabs
-    //"workbench.editor.enablePreviewFromQuickOpen": false,
+    // For ZenTabs (no longer needed because now VSCode has workbench.editor.limit)
     //"workbench.editor.enablePreview": false,
-    "zentabs.maximumOpenedTabs": 8,
-    "zentabs.applyLimitFor": "editorGroup",
+    //"workbench.editor.enablePreviewFromQuickOpen": false,
+    //"zentabs.maximumOpenedTabs": 8,
+    //"zentabs.applyLimitFor": "editorGroup",
 
     // For macros
     // We can execute these macros from keybindings.json
@@ -790,19 +798,21 @@
     "editor.wordWrap": "on",
     "editor.wrappingIndent": "deepIndent",
 
-    // When using Ctrl-P to select a file, open with the same search that was used last time
-    // This isn't helpful if you also use Ctrl-P to cycle through recently focused files
-    // But if you cycle recent windows with Ctrl-Tab, then you may enable this
+    // When using Ctrl-P to select a file, open with the same search that you entered last time
+    // (in case you selected the wrong file the first time, or you want to edit many files with the same name)
+    // This is annoying (not helpful) if you also use Ctrl-P to cycle through recently focused files MRU
+    // But if you cycle recent windows with Ctrl-Tab, then you may enjoy this
     "workbench.quickOpen.preserveInput": true,
 
     // Do not show all files you have recently opened (I do not want Ctrl-P to show files which I have merely skimmed through while searching)
     "search.quickOpen.includeHistory": false,
 
-    // Search not only filenames, but also symbols (e.g. function names)
+    // Search not only filenames, but also symbols (e.g. function and variable names)
     "search.quickOpen.includeSymbols": true,
 
     // Stop asking me if I want to update go tools, just do it
     "go.toolsManagement.autoUpdate": true,
+
     "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
     "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
 
@@ -849,7 +859,7 @@
     "docker.contexts.label": "Name",
 
     "svelte.enable-ts-plugin": true,
-    
+
     // These draw blue squiggly lines under the code, to indicate where helps is available. They are a bit annoying.
     "totalTypeScript.hideAllTips": true,
     "totalTypeScript.hideBasicTips": true,
@@ -868,6 +878,10 @@
     "material-icon-theme.activeIconPack": "react",
     "material-icon-theme.saturation": 0.8,
 
+    // Might be worth a try:
+    //"workbench.list.defaultFindMode": "filter",
+    //"workbench.list.defaultFindMatchType": "contiguous",
+
     // Show files before folders - unconventional, but it can make it easier to see which folder a file belongs to
     "explorer.sortOrder": "filesFirst",
     // Collapse all files in a folder, as long as that folder contains a README (especially useful for the root folder)
@@ -883,12 +897,20 @@
         //"*.ts": "${basename}.test.ts"
     },
 
+    // The Path Intellisense extension helps to autocomplete imports and other filenames
+    // But it requires us to disable the defaults
+    "javascript.suggest.paths": false,
+    "typescript.suggest.paths": false,
+
     // Do not combine deep paths into one line in explorer
     // e.g. "src / folders / with / only / one / child"
     // because I find this UI inconsistent
     "explorer.compactFolders": false,
 
+    // I would like to hide the explorer arrows, because the theme's icons are good enough, but we still get arrows when we perform fileNesting, and I don't like the way it indents the parent. With this set to false, the parent is not indented compared to regular files.
+    "material-icon-theme.hidesExplorerArrows": false,
+
     // New Settings
-    //"editor.guides.bracketPairsHorizontal": false,
-    //"editor.guides.highlightActiveBracketPair": false,
+    // Variables which regularly churn start here. No need to commit these.
+
 }
