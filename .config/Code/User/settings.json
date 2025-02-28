@@ -200,89 +200,99 @@
     "outline.showVariables": true,
 
     "workbench.colorCustomizations": {
-        // These work, but only the backgrounds not the foregrounds
-        // If we don't set them, then the theme can set them
-        //"editor.selectionBackground": "#153",
-        //"editor.selectionForeground": "#ffffff",
-        //"editor.selectionHighlightBackground": "#449059",
-        //"editor.selectionHighlightForeground": "#ffffff",
+        // I don't want to apply customisations when using light themes, so I only apply them when using my favourite theme
+        "[Gentle Mary]": {
+            // These work, but only the backgrounds not the foregrounds
+            // If we don't set them, then the theme can set them
+            //"editor.selectionBackground": "#153",
+            //"editor.selectionForeground": "#ffffff",
+            //"editor.selectionHighlightBackground": "#449059",
+            //"editor.selectionHighlightForeground": "#ffffff",
 
-        "editorInlayHint.background": "#444444ff",
-        "editorInlayHint.foreground": "#ffffff44", // darker is better when always on
-        //"editorInlayHint.foreground": "#ffffff55",
-        // It is also possible to set different colours for different types: https://stackoverflow.com/a/72169980/99777
+            "editorInlayHint.background": "#444444ff",
+            "editorInlayHint.foreground": "#ffffff44", // darker is better when always on
+            //"editorInlayHint.foreground": "#ffffff55",
+            // It is also possible to set different colours for different types: https://stackoverflow.com/a/72169980/99777
 
-        // Highlights all/other occurrences of the word under the cursor
-        "editor.wordHighlightBackground": "#00660099",
-        "editor.wordHighlightStrongBackground": "#00660099",
-        "editor.wordHighlightBorder": "#006600dd",
-        "editor.wordHighlightStrongBorder": "#006600dd",
+            // Highlights all/other occurrences of the word under the cursor
+            "editor.wordHighlightBackground": "#00660099",
+            "editor.wordHighlightStrongBackground": "#00660099",
+            "editor.wordHighlightBorder": "#006600dd",
+            "editor.wordHighlightStrongBorder": "#006600dd",
 
-        // For the active search result
-        "editor.findMatchBackground": "#0044bbaa",
-        "editor.findMatchBorder": "#ffff00dd",
-        // For the other seach results
-        // I turned off the border because it made code difficult to read, and I don't know any way to turn off the highlighting without actually clearing the search.
-        "editor.findMatchHighlightBackground": "#0044bbaa",
-        "editor.findMatchHighlightBorder": "#ffff0000",
+            // For the active search result
+            "editor.findMatchBackground": "#0044bbaa",
+            "editor.findMatchBorder": "#ffff00dd",
+            // For the other seach results
+            // I turned off the border because it made code difficult to read, and I don't know any way to turn off the highlighting without actually clearing the search.
+            "editor.findMatchHighlightBackground": "#0044bbaa",
+            "editor.findMatchHighlightBorder": "#ffff0000",
 
-        // Looking for these ... !
-        "editor.findRangeHighlightBackground": "#ff00ffee",
-        "editor.findRangeHighlightBorder": "#ff00ffee",
+            // Looking for these ... !
+            "editor.findRangeHighlightBackground": "#ff00ffee",
+            "editor.findRangeHighlightBorder": "#ff00ffee",
 
-        //"editorWarning.foreground": "#dd8800",
-        "editorWarning.foreground": "#ffdd0099",
-        "editorError.foreground": "#ff4444",
-        //"breadcrumb.foreground": "#888888",
+            //"editorWarning.foreground": "#dd8800",
+            "editorWarning.foreground": "#ffdd0099",
+            "editorError.foreground": "#ff4444",
+            //"breadcrumb.foreground": "#888888",
 
-        // I like to make unused code stand apart visually, so I make it darker than the default
-        "editorUnnecessaryCode.opacity": "#00000080",
+            // I like to make unused code stand apart visually, so I make it darker than the default
+            "editorUnnecessaryCode.opacity": "#00000080",
 
-        // Make folded (collapsed) lines clear, Vim style
-        "editor.foldBackground": "#0000ff80",
+            // Make folded (collapsed) lines clear, Vim style
+            "editor.foldBackground": "#0000ff80",
 
-        "editorBracketMatch.border": "#00000000",
-        "editorBracketMatch.background": "#0000ffbb",
-        //"editorBracketMatch.background": "#ff00ff66",
-        //"editorBracketMatch.border": "#0000ffff",
-        //"editorBracketMatch.background": "#00000000",
+            "editorBracketMatch.border": "#00000000",
+            "editorBracketMatch.background": "#0000ffbb",
+            //"editorBracketMatch.background": "#ff00ff66",
+            //"editorBracketMatch.border": "#0000ffff",
+            //"editorBracketMatch.background": "#00000000",
 
-        // For usernamehw.errorlens
-        //"errorLens.errorBackground": "#ff00001c",
-        //"errorLens.warningBackground": "#ff880012",
-        //"errorLens.infoBackground": "#0000ff00",
-        //"errorLens.hintBackground": "#00ffff00",
-        "errorLens.errorBackground": "#ff000000",
-        "errorLens.warningBackground": "#ff880000",
-        "errorLens.infoBackground": "#0000ff00",
-        "errorLens.hintBackground": "#00ffff00",
-        //"errorLens.errorForeground": "#888888ff",
-        "errorLens.errorForeground": "#ff888855",
-        "errorLens.warningForeground": "#555555ff",
-        //"errorLens.warningForeground": "#ffaa0055",
-        "errorLens.infoForeground": "#555555ff",
-        "errorLens.hintForeground": "#555555ff",
-        //"errorLens.errorForeground": "#88888800",
-        //"errorLens.warningForeground": "#88888800",
-        //"errorLens.infoForeground": "#55555500",
-        //"errorLens.hintForeground": "#55555500",
-        //"errorLens.fontWeight": 200,
-        //"errorLens.fontStyleItalic": false,
+            // For usernamehw.errorlens
+            //"errorLens.errorBackground": "#ff00001c",
+            //"errorLens.warningBackground": "#ff880012",
+            //"errorLens.infoBackground": "#0000ff00",
+            //"errorLens.hintBackground": "#00ffff00",
+            "errorLens.errorBackground": "#ff000000",
+            "errorLens.warningBackground": "#ff880000",
+            "errorLens.infoBackground": "#0000ff00",
+            "errorLens.hintBackground": "#00ffff00",
+            //"errorLens.errorForeground": "#888888ff",
+            "errorLens.errorForeground": "#ff888855",
+            "errorLens.warningForeground": "#555555ff",
+            //"errorLens.warningForeground": "#ffaa0055",
+            "errorLens.infoForeground": "#555555ff",
+            "errorLens.hintForeground": "#555555ff",
+            //"errorLens.errorForeground": "#88888800",
+            //"errorLens.warningForeground": "#88888800",
+            //"errorLens.infoForeground": "#55555500",
+            //"errorLens.hintForeground": "#55555500",
+            //"errorLens.fontWeight": 200,
+            //"errorLens.fontStyleItalic": false,
 
-        //"editorGutter.background": "#303030",
-        //"editor.background": "#1c2426",
+            //"editorGutter.background": "#303030",
+            //"editor.background": "#1c2426",
 
-        "scrollbarSlider.background": "#88888866",
-        "scrollbarSlider.hoverBackground": "#88888888",
-        "scrollbarSlider.activeBackground": "#88888888",
+            "scrollbarSlider.background": "#88888866",
+            "scrollbarSlider.hoverBackground": "#88888888",
+            "scrollbarSlider.activeBackground": "#88888888",
 
-        "list.activeSelectionBackground": "#0000002a",
-        "list.inactiveSelectionBackground": "#0000002a",
-        //"list.dropBackground": "#0000002a",
-        //"list.focusBackground": "#0000002a",
-        "list.focusForeground": "#fff",
-        //"editor.selectionBackground": "#484848",
-        "editor.selectionForeground": "#ff00ff",
+            //"list.activeSelectionBackground": "#0000002a",
+            //"list.inactiveSelectionBackground": "#0000002a",
+            //"list.dropBackground": "#0000002a",
+            //"list.focusBackground": "#0000002a",
+            "list.focusForeground": "#fff",
+            //"editor.selectionBackground": "#484848",
+            "editor.selectionForeground": "#ff00ff",
+
+            // Just experimenting
+            //"gitDecoration.modifiedResourceForeground": "#88dd00",
+            //"gitDecoration.conflictingResourceForeground": "#ff0000",
+            //"list.errorForeground": "#ff0000",
+
+            //"editorWhitespace.foreground": "#ff0000",
+        },
     },
 
     "editor.tokenColorCustomizations": {
