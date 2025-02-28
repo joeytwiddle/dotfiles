@@ -398,7 +398,7 @@
   // We can't use these, because they break common Vim commands such as "d2<Enter>"
   //{ "key": "2 [ f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusUp", "list.focusUp", "explorer.openAndPassFocus" ] } },
   //{ "key": "2 ] f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusDown", "list.focusDown", "explorer.openAndPassFocus" ] } },
-  
+
   // When the editor is focused, we can use these Vim bindings from settings.json
   // But when we are focused, e.g. on a UI window, they don't work.  So we add them here.  (Theoretically, we only need them here, with no conditions.)
   { "key": "[ b", "command": "workbench.action.previousEditor", "when": "!editorFocus && !inputFocus" },
@@ -409,6 +409,21 @@
   { "key": "cmd+f", "command": "list.find", "when": "listFocus && listSupportsFind" },
   { "key": "ctrl+f", "command": "list.find", "when": "listFocus && listSupportsFind" },
   { "key": "alt+f", "command": "list.find", "when": "listFocus && listSupportsFind" },
+
+  // Disable keybinds that may be interfering with "Copy With Imports" extension
+  // It turns out it was only the Vim keybinds which were a problem
+  //{ "key": "cmd+c", "command": "-execCopy" },
+  //{ "key": "ctrl+c", "command": "-execCopy" },
+  //{ "key": "cmd+v", "command": "-execPaste" },
+  //{ "key": "ctrl+v", "command": "-execPaste" },
+  //{ "key": "cmd+c", "command": "-editor.action.clipboardCopyAction" },
+  //{ "key": "ctrl+c", "command": "-editor.action.clipboardCopyAction" },
+  //{ "key": "cmd+v", "command": "-editor.action.clipboardPasteAction" },
+  //{ "key": "ctrl+v", "command": "-editor.action.clipboardPasteAction" },
+  { "key": "cmd+c", "command": "-extension.vim_cmd+c" },
+  { "key": "ctrl+c", "command": "-extension.vim_ctrl+c" },
+  { "key": "cmd+v", "command": "-extension.vim_cmd+v" },
+  { "key": "ctrl+v", "command": "-extension.vim_ctrl+v" },
 
   // Dummy object, because without this, newly added bindings expand the last entry in the file
   {
