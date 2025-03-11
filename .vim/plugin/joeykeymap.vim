@@ -682,48 +682,49 @@ nnoremap <C-w>x <C-w>x<C-w>w
 nnoremap <C-w>X <C-w>W<C-w>x
 " Note that these will not do as expected if a <count> is given.
 
-" Comment or uncomment on leader / or leader shift-/
-nmap <Leader>/ v<Leader>/
-nmap <D-/>     v<Leader>/
-"nmap <Leader>? v<Leader>?
-nmap <D-?>     v<Leader>?
-" By default, comment is //
-vnoremap <Leader>/ :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
-vnoremap <D-/>     :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
-vnoremap <Leader>? :s+^\(\s*\)//+\1+<Enter>:set nohlsearch<CR>
-vnoremap <D-?>     :s+^\(\s*\)//+\1+<Enter>:set nohlsearch<CR>
-" But override for other filetypes:
-" TODO: It is better if we put these into ftplugin, and create good rules for detecting filetype.
-"       For example the vim comment mappings do not get loaded when we open ~/.vimrc because it does not match the pattern *.vim!
-autocmd BufReadPost *.vim              vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\1"+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.vim              vnoremap <buffer> <D-/>     :s+^\(\s*\)+\1"+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.vim              vnoremap <buffer> <Leader>? :s+^\(\s*\)"+\1+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.vim              vnoremap <buffer> <D-?>     :s+^\(\s*\)"+\1+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.{sh,coffee,conf,py} vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\1#+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.{sh,coffee,conf,py} vnoremap <buffer> <D-/>     :s+^\(\s*\)+\1#+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.{sh,coffee,conf,py} vnoremap <buffer> <Leader>? :s+^\(\s*\)#+\1+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.{sh,coffee,conf,py} vnoremap <buffer> <D-?>     :s+^\(\s*\)#+\1+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.css              vnoremap <buffer> <Leader>/ :s+^\(\s*\)\(.*\)+\1/* \2 */+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.css              vnoremap <buffer> <D-/>     :s+^\(\s*\)\(.*\)+\1/* \2 */+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.css              vnoremap <buffer> <Leader>? :s+^\(\s*\)/[*]\(.*\)[*]/+\1\2+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.css              vnoremap <buffer> <D-?>     :s+^\(\s*\)/[*]\(.*\)[*]/+\1\2+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.{html,erb}       vnoremap <buffer> <Leader>/ :s+^\(\s*\)\(.*\)+\1<!-- \2 -->+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.{html,erb}       vnoremap <buffer> <D-/>     :s+^\(\s*\)\(.*\)+\1<!-- \2 -->+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.{html,erb}       vnoremap <buffer> <Leader>? :s+^\(\s*\)<!-- \(.*\) -->$+\1\2+<Enter>:set nohlsearch<CR>
-autocmd BufReadPost *.{html,erb}       vnoremap <buffer> <D-?>     :s+^\(\s*\)<!-- \(.*\) -->$+\1\2+<Enter>:set nohlsearch<CR>
-" We don't need to define these, because // commenting is the default specified at the top.
-"autocmd BufReadPost *.{c,cpp,C,c++,js} vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
-"autocmd BufReadPost *.{c,cpp,C,c++,js} vnoremap <buffer> <D-/>     :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
-"autocmd BufReadPost *.{c,cpp,C,c++,js} vnoremap <buffer> <Leader>? :s+^\(\s*\)//+\1+<Enter>:set nohlsearch<CR>
-"autocmd BufReadPost *.{c,cpp,C,c++,js} vnoremap <buffer> <D-?>     :s+^\(\s*\)//+\1+<Enter>:set nohlsearch<CR>
-" TODO: If we don't want to clobber the search pattern, we could store and retore the value of the @/ variable before and after.
-"       Another way to avoid clobbering the search pattern is to prepend :keeppatterns although that wasn't as easy as I had hoped.
-" TODO: We should use a function to generate the above.  That same function could setup F5 and F6 how I currently do in ~/.vim/ftplugin/*.vim
-" e.g. :call ThisBufferUsesCommentSymbol("/*", "*/")
-"   or :call ThisBufferUsesCommentSymbol("#")
-"   or :call RegisterCommentSymbol('coffee', '#')
-" We could also inspect &comments, but which one should we choose to use?  :-P
-" For multi-line comments, we could inspect &commentstring
+" I now use commentary or tcomment_vim (gc[motion]/gcc) instead of this
+"" Comment or uncomment on leader / or leader shift-/
+"nmap <Leader>/ v<Leader>/
+"nmap <D-/>     v<Leader>/
+""nmap <Leader>? v<Leader>?
+"nmap <D-?>     v<Leader>?
+"" By default, comment is //
+"vnoremap <Leader>/ :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
+"vnoremap <D-/>     :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
+"vnoremap <Leader>? :s+^\(\s*\)//+\1+<Enter>:set nohlsearch<CR>
+"vnoremap <D-?>     :s+^\(\s*\)//+\1+<Enter>:set nohlsearch<CR>
+"" But override for other filetypes:
+"" TODO: It is better if we put these into ftplugin, and create good rules for detecting filetype.
+""       For example the vim comment mappings do not get loaded when we open ~/.vimrc because it does not match the pattern *.vim!
+"autocmd BufReadPost *.vim              vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\1"+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.vim              vnoremap <buffer> <D-/>     :s+^\(\s*\)+\1"+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.vim              vnoremap <buffer> <Leader>? :s+^\(\s*\)"+\1+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.vim              vnoremap <buffer> <D-?>     :s+^\(\s*\)"+\1+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.{sh,coffee,conf,py} vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\1#+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.{sh,coffee,conf,py} vnoremap <buffer> <D-/>     :s+^\(\s*\)+\1#+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.{sh,coffee,conf,py} vnoremap <buffer> <Leader>? :s+^\(\s*\)#+\1+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.{sh,coffee,conf,py} vnoremap <buffer> <D-?>     :s+^\(\s*\)#+\1+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.css              vnoremap <buffer> <Leader>/ :s+^\(\s*\)\(.*\)+\1/* \2 */+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.css              vnoremap <buffer> <D-/>     :s+^\(\s*\)\(.*\)+\1/* \2 */+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.css              vnoremap <buffer> <Leader>? :s+^\(\s*\)/[*]\(.*\)[*]/+\1\2+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.css              vnoremap <buffer> <D-?>     :s+^\(\s*\)/[*]\(.*\)[*]/+\1\2+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.{html,erb}       vnoremap <buffer> <Leader>/ :s+^\(\s*\)\(.*\)+\1<!-- \2 -->+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.{html,erb}       vnoremap <buffer> <D-/>     :s+^\(\s*\)\(.*\)+\1<!-- \2 -->+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.{html,erb}       vnoremap <buffer> <Leader>? :s+^\(\s*\)<!-- \(.*\) -->$+\1\2+<Enter>:set nohlsearch<CR>
+"autocmd BufReadPost *.{html,erb}       vnoremap <buffer> <D-?>     :s+^\(\s*\)<!-- \(.*\) -->$+\1\2+<Enter>:set nohlsearch<CR>
+"" We don't need to define these, because // commenting is the default specified at the top.
+""autocmd BufReadPost *.{c,cpp,C,c++,js} vnoremap <buffer> <Leader>/ :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
+""autocmd BufReadPost *.{c,cpp,C,c++,js} vnoremap <buffer> <D-/>     :s+^\(\s*\)+\1//+<Enter>:set nohlsearch<CR>
+""autocmd BufReadPost *.{c,cpp,C,c++,js} vnoremap <buffer> <Leader>? :s+^\(\s*\)//+\1+<Enter>:set nohlsearch<CR>
+""autocmd BufReadPost *.{c,cpp,C,c++,js} vnoremap <buffer> <D-?>     :s+^\(\s*\)//+\1+<Enter>:set nohlsearch<CR>
+"" TODO: If we don't want to clobber the search pattern, we could store and retore the value of the @/ variable before and after.
+""       Another way to avoid clobbering the search pattern is to prepend :keeppatterns although that wasn't as easy as I had hoped.
+"" TODO: We should use a function to generate the above.  That same function could setup F5 and F6 how I currently do in ~/.vim/ftplugin/*.vim
+"" e.g. :call ThisBufferUsesCommentSymbol("/*", "*/")
+""   or :call ThisBufferUsesCommentSymbol("#")
+""   or :call RegisterCommentSymbol('coffee', '#')
+"" We could also inspect &comments, but which one should we choose to use?  :-P
+"" For multi-line comments, we could inspect &commentstring
 
 " Make Shift-Insert in GVim work like it does in X-Term
 "autocmd GUIEnter * inoremap <S-Insert> <Esc>"*pa
