@@ -1261,5 +1261,7 @@ endfunction
 vnoremap <silent> c <Esc>:<C-U>echo "Press S for surround plugin (or s to change selected text)"<CR>:sleep 2<CR>gv
 vnoremap <silent> cs <Esc>:<C-U>echo "Press S for surround plugin (or s to change selected text)"<CR>:sleep 2<CR>gv
 vnoremap <silent> csw <Esc>:<C-U>echo "Press S for surround plugin (or s to change selected text)"<CR>:sleep 2<CR>gv
-nnoremap <silent> <C-Q> :echo "Use <C-V> for blockwise visual, not <C-Q>"<CR>:sleep 2<CR>
+nnoremap <silent> <C-Q> :echo "Use <"."C-V> for blockwise visual, not <"."C-Q>"<CR>:sleep 2<CR>
 
+" Ctrl-Tab switches to recent buffers (currently only between the most recent two)
+nnoremap <C-Tab> <C-^>
