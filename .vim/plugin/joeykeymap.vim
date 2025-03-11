@@ -617,6 +617,8 @@ autocmd FileType sh,markdown nmap <buffer> <Leader>x :!\<C-R>=substitute(getline
 " A simple search for the word under cursor
 nnoremap <Leader><F3> :<C-U>copen<CR>:grep "\<<cword>\>" . -r --exclude-dir=node_modules
 nnoremap <Leader><F4> :<C-U>grep "\<<cword>\>" . -r --exclude-dir=node_modules<CR><CR>:cwindow<CR>
+" Improved: The ! avoids opening the first result, the silent doesn't print the progress, so we don't need two <CR>s
+nnoremap <Leader>* :<C-U>silent grep! "\<<cword>\>" . -r --exclude-dir=node_modules<CR>:cwindow<CR>
 
 " My more complex setup for searching, using my modified version of the grep.vim plugin.
 
