@@ -120,8 +120,13 @@ alt + w
   run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup w" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key w" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
 
 # Close application
-alt + q
-  xte "keyup q" "key F4"
+# This causes KDE to switch to virtual desktop 4!
+#alt + q
+#  xte "keyup q" "key F4"
+# This causes KDE to switch to virtual desktop 4, and then act weird when we came back!
+#alt + q
+#  xte "keyup q" "keyup alt" "key F4" "keydown alt"
+# So I have added Alt-Q and Meta-Q to KDE's KWin shortcuts
 
 
 
@@ -158,6 +163,14 @@ alt + l
 alt + r
   xte "keyup r" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 
+# Reload page, or rerun previous command
+# I have since moved this to alt + shift + Return
+#alt + r
+#  run_if_window_matches       --class "(google-chrome|firefox)"  -- xte "keyup r" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L" ; \
+#  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup r" "keyup Meta_L" "keyup Return" "key Up" "key Return" "keydown Meta_L" ; \
+#  run_if_window_matches --not --class "(google-chrome|firefox|${SXHKD_TERMINALS_EREGEXP})" -- :
+# In other apps, alt + r just does nothing!
+
 # Reload without caching
 alt + shift + r
   xte "keyup r" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L"
@@ -174,7 +187,7 @@ alt + u
 # But I also use this to position windows
 alt + super + j
   run_if_window_matches       --class "(google-chrome|firefox)" -- xte "keyup j" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key j" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L" ; \
-  run_if_window_matches --not --class "(google-chrome|firefox)" -- put_current_xwindow bottom
+  run_if_window_matches --not --class "(google-chrome|firefox)" -- eval unmaximize_current_xwindow --size 78% 45% && put_current_xwindow bottom
 alt + super + i
   xte "keyup i" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key i" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L"
 
@@ -270,8 +283,9 @@ alt + shift + c
   xte "keyup c" "keyup Meta_L" "keydown Control_L" "key c" "keyup Control_L" "keydown Meta_L"
 alt + shift + d
   xte "keyup d" "keyup Meta_L" "keydown Control_L" "key d" "keyup Control_L" "keydown Meta_L"
-alt + shift + e
-  xte "keyup e" "keyup Meta_L" "keydown Control_L" "key e" "keyup Control_L" "keydown Meta_L"
+# This wasn't working as intended in VSCode, so I will let VSCode capture it specifically
+#alt + shift + e
+#  xte "keyup e" "keyup Meta_L" "keydown Control_L" "key e" "keyup Control_L" "keydown Meta_L"
 # I like to use this in VSCode but the keybind gets sticky.  So now VSCode watched for the keybind itself.
 #alt + shift + f
 #  xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L"
@@ -340,16 +354,28 @@ alt + shift + braceright
   run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceright" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Next"         "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
   run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceright" "keyup Meta_L"                 "keydown Control_L" "key bracketright" "keyup Control_L" "keydown Meta_L"
 
+# Same thing for Ctrl-Win-Up/Down, to match laptop keypress Ctrl-Fn-Up/Down
+# These aren't working.  I don't know why.  I think they should!
+#ctrl + super + Up
+#  xte "keyup Super_L" "key Prior" "keydown Super_L"
+#ctrl + super + Down
+#  xte "keyup Super_L" "key Next" "keydown Super_L"
+
 # Go back/forward
 # Cmd-Left and Cmd-Right usually navigate back and forwards on Mac.
 # The equivalents on Linux are Alt+Left and Alt+Right.
 # But I am mapping Alt+Left and Alt+Right below, as editing motions.
 # Targetting them here would simply trigger those bindings!
 # If you disable the editing keybinds below, then you could enable these.
+alt + bracketleft
+  xte "keyup bracketleft" "key Left"
+alt + bracketright
+  xte "keyup bracketright" "key Right"
+# Ah, we can use Ctrl + bracketleft / bracketright, which perform navigation in Firefox (but not in Chrome)
 #alt + bracketleft
-#  xte "keyup bracketleft" "key Left"
+#  xte "keyup bracketleft" "keyup Meta_L" "keydown Control_L" "key bracketleft" "keyup Control_L"
 #alt + bracketright
-#  xte "keyup bracketright" "key Right"
+#  xte "keyup bracketright" "keyup Meta_L" "keydown Control_L" "key bracketright" "keyup Control_L"
 
 # Fortunately I already happen to be using a userscript called More Keybinds in my browser,
 # which puts browser back on Control-Backspace and forward on Control-Enter.
@@ -357,12 +383,16 @@ alt + shift + braceright
 # https://openuserjs.org/scripts/joeytwiddle/More_Keybinds
 # BUG: I cannot pass alt + bracketleft down to apps which actually understand it!
 # So for VSCode I added ctrl+alt+shift bracketleft/right keybinds, so I can activate them here
-alt + bracketleft
-  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketleft" "keyup Meta_L" "keydown Control_L" "key BackSpace" "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches --class "(code|code-oss)"         -- xte "keyup bracketleft" "keydown Control_L" "key bracketleft" "keyup Control_L"
-alt + bracketright
-  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketright" "keyup Meta_L" "keydown Control_L" "key Return" "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches --class "(code|code-oss)"         -- xte "keyup bracketright" "keydown Control_L" "key bracketright" "keyup Control_L"
+#
+# Disabled for now: Using the ones above
+# Note: I can also use my "More Keybinds" userscript to detect these keystrokes directly in the browser
+#
+#alt + bracketleft
+#  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketleft" "keyup Meta_L" "keydown Control_L" "key BackSpace" "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches --class "(code|code-oss)"         -- xte "keyup bracketleft" "keydown Control_L" "key bracketleft" "keyup Control_L"
+#alt + bracketright
+#  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketright" "keyup Meta_L" "keydown Control_L" "key Return" "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches --class "(code|code-oss)"         -- xte "keyup bracketright" "keydown Control_L" "key bracketright" "keyup Control_L"
 
 
 
@@ -370,10 +400,11 @@ alt + bracketright
 
 # Move to home/end
 # In the first two keybinds, I find it helps to send an _extra_ Alt press, to counteract the Alt press that the application receives when we release.
-alt + Left
-  xte "keyup Meta_L" "keyup Left"  "key Home" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
-alt + Right
-  xte "keyup Meta_L" "keyup Right" "key End"  "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+# Unfortunately Alt-Left and Alt-Right are the only way to get Back and Forward in some browsers, so we need to leave them alone
+#alt + Left
+#  xte "keyup Meta_L" "keyup Left"  "key Home" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+#alt + Right
+#  xte "keyup Meta_L" "keyup Right" "key End"  "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
 alt + shift + Left
   xte "keyup Meta_L" "keyup Left"  "key Home" "keydown Meta_L"
 alt + shift + Right
@@ -395,6 +426,11 @@ super + shift + Right
 # I do like to use Ctrl-Backspace as "Go Back" in More Keybinds, but now I have made that trigger on Delete too.
 control + BackSpace
   xte "keyup BackSpace" "keyup Control_L" "key Delete" "keydown Control_L"
+# I took the More Keybinds trigger off, because I don't like it.  Now Ctrl-Backspace does Delete in bash
+# But this didn't work because there is no way to go back in browser that I haven't already broken!
+#control + BackSpace
+#  run_if_window_matches       --class "(google-chrome|firefox)" -- xte "keyup Control_L" "keyup BackSpace" "keydown Meta_L" "key Left" "keyup Meta_L" "keydown Control_L" ; \
+#  run_if_window_matches --not --class "(google-chrome|firefox)" -- xte "keyup Control_L" "keyup BackSpace" "key Delete" "keydown Control_L"
 
 
 
@@ -406,8 +442,104 @@ control + BackSpace
 shift + Delete
   xte "keyup Delete" "key Insert"
 
+# My new Asus has moved the keys around, so I keep hitting Shift-PrintScreen by accident
+shift + Print
+  xte "keyup Print" "key Insert"
+
+alt + KP_Divide
+  volumedown
+
+alt + KP_Multiply
+  volumeup
+
+super + KP_Divide
+  volumedown
+
+super + KP_Multiply
+  volumeup
+
 F11
   volumedown
 
 F12
   volumeup
+
+super + F2
+  volumedown
+
+super + F3
+  volumeup
+
+ctrl + alt + slash
+  whatsplaying
+
+ctrl + alt + period
+  nextsong
+
+ctrl + super + slash
+  whatsplaying
+
+ctrl + super + period
+  nextsong
+
+XF86AudioNext
+  nextsong
+
+# Problem with xsnapshot: captures both monitors; sometimes loses half of the window and captures things behind it
+#super + c
+#  xsnapshot
+super + c
+  spectacle -b -a
+
+
+
+### === Special tricks === ###
+
+# Magic Spacebar
+control + shift + space
+  cycle_space_bar_mappings
+
+#control + shift + minus
+  #cycle_space_bar_mappings
+
+# Shift-Enter will re-execute the previous command
+# BUG: I couldn't execute Shift-Enter on non-terminals when I needed to (e.g. to enter a new line in WhatsApp)
+#shift + Return
+#  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup Return" "key Return" ; \
+#  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup Shift_L" "keyup Return" "key Up" "key Return" "keydown Shift_L"
+
+# Ctrl-Shift-Enter will re-execute the previous command
+#ctrl + shift + Return
+#  xte "keyup Shift_L" "keyup Control_L" "keyup Return" "key Up" "key Return" "keydown Shift_L" "keydown Control_L"
+# Unfortunately for some reason this didn't work with my CapsLock key (which I have mapped to Control_L)
+# For the same reason, I did not define ctrl + alt + Return
+
+# Actually for REPLs, I now prefer Alt-Shift-Enter, because the Enter helps to indicate the gravity of running a command
+# Alt-Shift-Enter will re-execute the previous command
+alt + shift + Return
+  xte "keyup Shift_L" "keyup Meta_L" "keyup Return" "key Up" "key Return" "keydown Shift_L" "keydown Meta_L"
+
+# This macOS user suggests Cmd-R: https://unix.stackexchange.com/questions/147563/how-do-i-repeat-the-last-command-without-using-the-arrow-keys
+# We did try that above, in the browser section
+
+# Get arrow keys from Super+IJKL
+# These don't work, but I don't understand why not
+#super + i
+#  xte "keyup Super_L" "key Up" "keydown Super_L"
+#super + j
+#  xte "keyup Super_L" "key Left" "keydown Super_L"
+#super + k
+#  xte "keyup Super_L" "key Down" "keydown Super_L"
+#super + l
+#  xte "keyup Super_L" "key Right" "keydown Super_L"
+
+# Most of these don't work because they are already bound to something by KDE
+#super + w
+#  xte "keyup Super_L" "key Up" "keydown Super_L"
+#super + a
+#  xte "keyup Super_L" "key Left" "keydown Super_L"
+#super + s
+#  xte "keyup Super_L" "key Down" "keydown Super_L"
+#super + d
+#  xte "keyup Super_L" "key Right" "keydown Super_L"
+
