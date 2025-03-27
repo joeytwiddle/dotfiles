@@ -56,19 +56,19 @@ control + alt + shift + r
 ### === Cut, copy and paste === ###
 
 alt + x
-  xte "keyup x" "keyup Meta_L" "keydown Control_L" "key x" "keyup Control_L" "keydown Meta_L"
+  xte "keyup x" "keyup Alt_L" "keydown Control_L" "key x" "keyup Control_L" "keydown Alt_L"
 alt + c
-  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup c" "keyup Meta_L" "keydown Control_L"                   "key c"                 "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup c" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key c" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup c" "keyup Alt_L" "keydown Control_L"                   "key c"                 "keyup Control_L" "keydown Alt_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup c" "keyup Alt_L" "keydown Control_L" "keydown Shift_L" "key c" "keyup Shift_L" "keyup Control_L" "keydown Alt_L"
 alt + v
-  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup v" "keyup Meta_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup v" "keyup Alt_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Alt_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup v" "keyup Alt_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 
 # Failed attempt to paste into gvim
 #alt + v
-#  run_if_window_matches --not --class "($SXHKD_TERMINALS_EREGEXP|gvim)" -- xte "keyup v" "keyup Meta_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Meta_L" ; \
-#  run_if_window_matches       --class "(gvim)"                        -- xte "keyup v" "keyup Meta_L" "key Escape" "key i" "keydown Control_L" "key r" "keyup Control_L" "key plus" "keyup Control_L" "keydown Meta_L" ; \
-#  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP"      -- xte "keyup v" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+#  run_if_window_matches --not --class "($SXHKD_TERMINALS_EREGEXP|gvim)" -- xte "keyup v" "keyup Alt_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Alt_L" ; \
+#  run_if_window_matches       --class "(gvim)"                        -- xte "keyup v" "keyup Alt_L" "key Escape" "key i" "keydown Control_L" "key r" "keyup Control_L" "key plus" "keyup Control_L" "keydown Alt_L" ; \
+#  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP"      -- xte "keyup v" "keyup Alt_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Alt_L"
 
 
 
@@ -101,23 +101,23 @@ alt + super + l
 # Surprisingly the `alt + equal` mapping only works properly if I do `keyup plus`
 # For Vim, instead of Ctrl-(plus|minus) my bindings are (Shift-plus|minus)
 alt + equal
-  run_if_window_matches --not --class "(vim|gvim)" -- xte "keyup plus"  "keyup Meta_L" "keydown Control_L" "key plus"  "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "(vim|gvim)" -- xte "keyup plus"  "keyup Meta_L" "keydown Shift_L"   "key plus"  "keyup Shift_L"   "keydown Meta_L"
+  run_if_window_matches --not --class "(vim|gvim)" -- xte "keyup plus"  "keyup Alt_L" "keydown Control_L" "key plus"  "keyup Control_L" "keydown Alt_L" ; \
+  run_if_window_matches       --class "(vim|gvim)" -- xte "keyup plus"  "keyup Alt_L" "keydown Shift_L"   "key plus"  "keyup Shift_L"   "keydown Alt_L"
 alt + minus
-  run_if_window_matches --not --class "(vim|gvim)" -- xte "keyup minus" "keyup Meta_L" "keydown Control_L" "key minus" "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "(vim|gvim)" -- xte "keyup minus" "keyup Meta_L"                     "key minus"                   "keydown Meta_L"
+  run_if_window_matches --not --class "(vim|gvim)" -- xte "keyup minus" "keyup Alt_L" "keydown Control_L" "key minus" "keyup Control_L" "keydown Alt_L" ; \
+  run_if_window_matches       --class "(vim|gvim)" -- xte "keyup minus" "keyup Alt_L"                     "key minus"                   "keydown Alt_L"
 alt + 0
-  run_if_window_matches --not --class "(vim|gvim)" -- xte "keyup 0"     "keyup Meta_L" "keydown Control_L" "key 0"     "keyup Control_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "(vim|gvim)" -- xte "keyup 0"     "keyup Meta_L"                     "str :ZoomReset" "key Return" "keydown Meta_L"
+  run_if_window_matches --not --class "(vim|gvim)" -- xte "keyup 0"     "keyup Alt_L" "keydown Control_L" "key 0"     "keyup Control_L" "keydown Alt_L" ; \
+  run_if_window_matches       --class "(vim|gvim)" -- xte "keyup 0"     "keyup Alt_L"                     "str :ZoomReset" "key Return" "keydown Alt_L"
 
 # Open application preferences
 alt + comma
-  xte "keyup comma" "keyup Meta_L" "keydown Control_L" "key comma" "keyup Control_L" "keydown Meta_L"
+  xte "keyup comma" "keyup Alt_L" "keydown Control_L" "key comma" "keyup Control_L" "keydown Alt_L"
 
 # Close tab
 alt + w
-  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup w" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup w" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key w" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup w" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup w" "keyup Alt_L" "keydown Control_L" "keydown Shift_L" "key w" "keyup Shift_L" "keyup Control_L" "keydown Alt_L"
 
 # Close application
 # This causes KDE to switch to virtual desktop 4!
@@ -132,70 +132,70 @@ alt + w
 
 ### === Common keybinds for browsers === ###
 
-# Note that for alt-k strokes we send an extra "keydown Meta_L" "keyup Meta_L" both before and after the target stroke.
+# Note that for alt-k strokes we send an extra "keydown Alt_L" "keyup Alt_L" both before and after the target stroke.
 # The reason for this is because those strokes open Firefox's menu, and repeating them forces the menu to close again, and the intended stroke to register.
 # They aren't strictly needed when Shift is held (that doesn't seem to trigger the menu)
 
 # New tab, and reopen closed tab
 alt + t
-  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup t" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L" ; \
-  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup t" "keyup Meta_L" "keydown Control_L" "keydown Shift_L" "key t" "keyup Shift_L" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup t" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup t" "keyup Alt_L" "keydown Control_L" "keydown Shift_L" "key t" "keyup Shift_L" "keyup Control_L" "keydown Alt_L"
 alt + shift + t
-  xte "keyup t" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L"
+  xte "keyup t" "keyup Alt_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Alt_L"
 
 # New window
 alt + n
-  xte "keyup n" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup n" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 
 # Private browsing in Chrome
 alt + shift + n
-  xte "keyup n" "keyup Meta_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Meta_L"
+  xte "keyup n" "keyup Alt_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Alt_L"
 
 # Private browsing in Firefox
 #alt + shift + p
-#  xte "keyup p" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L"
+#  xte "keyup p" "keyup Alt_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Alt_L"
 
 # Focus location bar
 alt + l
-  xte "keyup l" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup l" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 
 # Reload page
 alt + r
-  xte "keyup r" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup r" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 
 # Reload page, or rerun previous command
 # I have since moved this to alt + shift + Return
 #alt + r
-#  run_if_window_matches       --class "(google-chrome|firefox)"  -- xte "keyup r" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L" ; \
-#  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup r" "keyup Meta_L" "keyup Return" "key Up" "key Return" "keydown Meta_L" ; \
+#  run_if_window_matches       --class "(google-chrome|firefox)"  -- xte "keyup r" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L" ; \
+#  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup r" "keyup Alt_L" "keyup Return" "key Up" "key Return" "keydown Alt_L" ; \
 #  run_if_window_matches --not --class "(google-chrome|firefox|${SXHKD_TERMINALS_EREGEXP})" -- :
 # In other apps, alt + r just does nothing!
 
 # Reload without caching
 alt + shift + r
-  xte "keyup r" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L"
+  xte "keyup r" "keyup Alt_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Alt_L"
 
 # Make bookmark
 alt + d
-  xte "keyup d" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key d" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup d" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key d" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 
 # View source
 alt + u
-  xte "keyup u" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key u" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup u" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key u" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 
 # Toggle DevTools (Chrome)
 # But I also use this to position windows
 alt + super + j
-  run_if_window_matches       --class "(google-chrome|firefox)" -- xte "keyup j" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key j" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L" ; \
+  run_if_window_matches       --class "(google-chrome|firefox)" -- xte "keyup j" "keyup Alt_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key j" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Alt_L" ; \
   run_if_window_matches --not --class "(google-chrome|firefox)" -- eval unmaximize_current_xwindow --size 78% 45% && put_current_xwindow bottom
 alt + super + i
-  xte "keyup i" "keyup Meta_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key i" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Meta_L"
+  xte "keyup i" "keyup Alt_L" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key i" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keydown Alt_L"
 
 # On Alt-click (feels like Cmd-click) perform Control-click (e.g. to open a link in a separate tab).
 # This works but it blocks Alt-hold-and-drag from doing its normal "move window".
 # So I have disabled it.
 #alt + @button1
-#  xte "keyup Meta_L" "mouseup 1" "keydown Control_L" "mouseclick 1" "keyup Control_L" "keydown Meta_L"
+#  xte "keyup Alt_L" "mouseup 1" "keydown Control_L" "mouseclick 1" "keyup Control_L" "keydown Alt_L"
 
 
 
@@ -205,25 +205,25 @@ alt + super + i
 
 # Format file (by selecting everything then running Format Selection)
 #alt + shift + l
-#  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup l" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L" ; \
-#  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup l" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key a" "key k" "key f" "keyup Control_L" "keydown Shift_L" "keydown Meta_L"
+#  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup l" "keyup Alt_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Alt_L" ; \
+#  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup l" "keyup Alt_L" "keyup Shift_L" "keydown Control_L" "key a" "key k" "key f" "keyup Control_L" "keydown Shift_L" "keydown Alt_L"
 
 # Format with prettier (in VSCode send Ctrl-Shift-Alt-P, my rebind for editor.action.formatDocument)
 alt + shift + l
-  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup l" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L" ; \
+  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup l" "keyup Alt_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Alt_L" ; \
   run_if_window_matches       --class "(code|code-oss)" -- xte "keyup l" "keydown Control_L" "key l" "keyup Control_L"
 
 # Format with prettier (in VSCode send Ctrl-Shift-Alt-P, my rebind for editor.action.formatDocument)
 # Disabled now because I want it to perform quickOpenNavigatePreviousInFilePicker
 #alt + shift + p
-#  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup p" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup p" "keyup Alt_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Alt_L" ; \
 #  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup p" "keydown Control_L" "key p" "keyup Control_L"
 
 # When opening a search, start it immediately.  (More useful if we had already selected a word.)
 # VSCode now does this itself
 #alt + shift + f
-#  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L" ; \
-#  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keyup Shift_L" "key Return" "keydown Shift_L" "keydown Meta_L"
+#  run_if_window_matches --not --class "(code|code-oss)" -- xte "keyup f" "keyup Alt_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Alt_L" ; \
+#  run_if_window_matches       --class "(code|code-oss)" -- xte "keyup f" "keyup Alt_L" "keydown Control_L" "key f" "keyup Control_L" "keyup Shift_L" "key Return" "keydown Shift_L" "keydown Alt_L"
 
 
 
@@ -233,106 +233,106 @@ alt + shift + l
 # Here are all the letters I didn't cover above:
 # Select all text
 alt + a
-  xte "keyup a" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key a" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup a" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key a" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 alt + b
-  xte "keyup b" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key b" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup b" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key b" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 alt + e
-  xte "keyup e" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key e" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup e" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key e" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 # Find
 alt + f
-  xte "keyup f" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup f" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 # Repeat last find
 alt + g
-  xte "keyup g" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key g" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup g" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key g" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 alt + h
-  xte "keyup h" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key h" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup h" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key h" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 alt + i
-  xte "keyup i" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key i" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup i" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key i" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 # Although this is used in web browsers, I need to keep it clear for VSCode, to distinguish Ctrl-J (scroll down) from Alt-J (toggle panel)
 #alt + j
-#  xte "keyup j" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+#  xte "keyup j" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 alt + k
-  xte "keyup k" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key k" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup k" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key k" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 alt + m
-  xte "keyup m" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key m" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup m" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key m" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 # Print
 # Although this is used in various apps, I need to keep it clear for VSCode
 #alt + p
-#  xte "keyup p" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+#  xte "keyup p" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 # Save
 # Not playing nicely with VSCode, in any combination
 #alt + s
-#  xte "keyup s" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+#  xte "keyup s" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 # Redo (sometimes)
 alt + y
-  xte "keyup y" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key y" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup y" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key y" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 # Undo
 alt + z
-  xte "keyup z" "keyup Meta_L" "keydown Meta_L" "keyup Meta_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+  xte "keyup z" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 
 # Here we map Alt-Shift-key to Ctrl-Shift-key for the entire alphabet
 # This attempt to do all the keys in one bind did not work:
 #alt + shift + {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z}
-#  xte "keyup "{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z} "keyup Meta_L" "keydown Control_L" "key "{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z} "keyup Control_L" "keydown Meta_L"
+#  xte "keyup "{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z} "keyup Alt_L" "keydown Control_L" "key "{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z} "keyup Control_L" "keydown Alt_L"
 # So we do each key individually:
 alt + shift + a
-  xte "keyup a" "keyup Meta_L" "keydown Control_L" "key a" "keyup Control_L" "keydown Meta_L"
+  xte "keyup a" "keyup Alt_L" "keydown Control_L" "key a" "keyup Control_L" "keydown Alt_L"
 alt + shift + b
-  xte "keyup b" "keyup Meta_L" "keydown Control_L" "key b" "keyup Control_L" "keydown Meta_L"
+  xte "keyup b" "keyup Alt_L" "keydown Control_L" "key b" "keyup Control_L" "keydown Alt_L"
 alt + shift + c
-  xte "keyup c" "keyup Meta_L" "keydown Control_L" "key c" "keyup Control_L" "keydown Meta_L"
+  xte "keyup c" "keyup Alt_L" "keydown Control_L" "key c" "keyup Control_L" "keydown Alt_L"
 alt + shift + d
-  xte "keyup d" "keyup Meta_L" "keydown Control_L" "key d" "keyup Control_L" "keydown Meta_L"
+  xte "keyup d" "keyup Alt_L" "keydown Control_L" "key d" "keyup Control_L" "keydown Alt_L"
 # This wasn't working as intended in VSCode, so I will let VSCode capture it specifically
 #alt + shift + e
-#  xte "keyup e" "keyup Meta_L" "keydown Control_L" "key e" "keyup Control_L" "keydown Meta_L"
+#  xte "keyup e" "keyup Alt_L" "keydown Control_L" "key e" "keyup Control_L" "keydown Alt_L"
 # I like to use this in VSCode but the keybind gets sticky.  So now VSCode watched for the keybind itself.
 #alt + shift + f
-#  xte "keyup f" "keyup Meta_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Meta_L"
+#  xte "keyup f" "keyup Alt_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Alt_L"
 alt + shift + g
-  xte "keyup g" "keyup Meta_L" "keydown Control_L" "key g" "keyup Control_L" "keydown Meta_L"
+  xte "keyup g" "keyup Alt_L" "keydown Control_L" "key g" "keyup Control_L" "keydown Alt_L"
 alt + shift + h
-  xte "keyup h" "keyup Meta_L" "keydown Control_L" "key h" "keyup Control_L" "keydown Meta_L"
+  xte "keyup h" "keyup Alt_L" "keydown Control_L" "key h" "keyup Control_L" "keydown Alt_L"
 alt + shift + i
-  xte "keyup i" "keyup Meta_L" "keydown Control_L" "key i" "keyup Control_L" "keydown Meta_L"
+  xte "keyup i" "keyup Alt_L" "keydown Control_L" "key i" "keyup Control_L" "keydown Alt_L"
 #alt + shift + j
-#  xte "keyup j" "keyup Meta_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Meta_L"
+#  xte "keyup j" "keyup Alt_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Alt_L"
 # For Google Chrome, Cmd-Shift-J means "Open Downloads", which is Ctrl+J on Linux
 alt + shift + j
-  xte "keyup j" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Shift_L" "keydown Meta_L"
+  xte "keyup j" "keyup Alt_L" "keyup Shift_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Shift_L" "keydown Alt_L"
 alt + shift + k
-  xte "keyup k" "keyup Meta_L" "keydown Control_L" "key k" "keyup Control_L" "keydown Meta_L"
+  xte "keyup k" "keyup Alt_L" "keydown Control_L" "key k" "keyup Control_L" "keydown Alt_L"
 #alt + shift + l
-#  xte "keyup l" "keyup Meta_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Meta_L"
+#  xte "keyup l" "keyup Alt_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Alt_L"
 alt + shift + m
-  xte "keyup m" "keyup Meta_L" "keydown Control_L" "key m" "keyup Control_L" "keydown Meta_L"
+  xte "keyup m" "keyup Alt_L" "keydown Control_L" "key m" "keyup Control_L" "keydown Alt_L"
 alt + shift + n
-  xte "keyup n" "keyup Meta_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Meta_L"
+  xte "keyup n" "keyup Alt_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Alt_L"
 alt + shift + o
-  xte "keyup o" "keyup Meta_L" "keydown Control_L" "key o" "keyup Control_L" "keydown Meta_L"
+  xte "keyup o" "keyup Alt_L" "keydown Control_L" "key o" "keyup Control_L" "keydown Alt_L"
 #alt + shift + p
-#  xte "keyup p" "keyup Meta_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Meta_L"
+#  xte "keyup p" "keyup Alt_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Alt_L"
 alt + shift + q
-  xte "keyup q" "keyup Meta_L" "keydown Control_L" "key q" "keyup Control_L" "keydown Meta_L"
+  xte "keyup q" "keyup Alt_L" "keydown Control_L" "key q" "keyup Control_L" "keydown Alt_L"
 alt + shift + r
-  xte "keyup r" "keyup Meta_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Meta_L"
+  xte "keyup r" "keyup Alt_L" "keydown Control_L" "key r" "keyup Control_L" "keydown Alt_L"
 alt + shift + s
-  xte "keyup s" "keyup Meta_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Meta_L"
+  xte "keyup s" "keyup Alt_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Alt_L"
 alt + shift + t
-  xte "keyup t" "keyup Meta_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Meta_L"
+  xte "keyup t" "keyup Alt_L" "keydown Control_L" "key t" "keyup Control_L" "keydown Alt_L"
 alt + shift + u
-  xte "keyup u" "keyup Meta_L" "keydown Control_L" "key u" "keyup Control_L" "keydown Meta_L"
+  xte "keyup u" "keyup Alt_L" "keydown Control_L" "key u" "keyup Control_L" "keydown Alt_L"
 alt + shift + v
-  xte "keyup v" "keyup Meta_L" "keydown Control_L" "key v" "keyup Control_L" "keydown Meta_L"
+  xte "keyup v" "keyup Alt_L" "keydown Control_L" "key v" "keyup Control_L" "keydown Alt_L"
 alt + shift + w
-  xte "keyup w" "keyup Meta_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Meta_L"
+  xte "keyup w" "keyup Alt_L" "keydown Control_L" "key w" "keyup Control_L" "keydown Alt_L"
 alt + shift + x
-  xte "keyup x" "keyup Meta_L" "keydown Control_L" "key x" "keyup Control_L" "keydown Meta_L"
+  xte "keyup x" "keyup Alt_L" "keydown Control_L" "key x" "keyup Control_L" "keydown Alt_L"
 alt + shift + y
-  xte "keyup y" "keyup Meta_L" "keydown Control_L" "key y" "keyup Control_L" "keydown Meta_L"
+  xte "keyup y" "keyup Alt_L" "keydown Control_L" "key y" "keyup Control_L" "keydown Alt_L"
 # Redo
 alt + shift + z
-  xte "keyup z" "keyup Meta_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Meta_L"
+  xte "keyup z" "keyup Alt_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Alt_L"
 
 
 
@@ -341,18 +341,18 @@ alt + shift + z
 # Switch tab left/right
 # Simple version which catches Alt-Shift-[/] and sends Ctrl-PageUp/PageDown
 #alt + shift + braceleft
-#  xte "keyup braceleft" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Prior" "keyup Control_L" "keydown Meta_L" "keydown Shift_L"
+#  xte "keyup braceleft" "keyup Alt_L" "keyup Shift_L" "keydown Control_L" "key Prior" "keyup Control_L" "keydown Alt_L" "keydown Shift_L"
 #alt + shift + braceright
-#  xte "keyup braceright" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Next" "keyup Control_L" "keydown Meta_L" "keydown Shift_L"
+#  xte "keyup braceright" "keyup Alt_L" "keyup Shift_L" "keydown Control_L" "key Next" "keyup Control_L" "keydown Alt_L" "keydown Shift_L"
 
 # Switch tab left/right
 # More complicated version which sends a different keystroke to Konsole applications (for my purposes Konsole listens for Ctrl-Shift-[/])
 alt + shift + braceleft
-  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceleft"  "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Prior"        "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
-  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceleft"  "keyup Meta_L"                 "keydown Control_L" "key bracketleft"  "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceleft"  "keyup Alt_L" "keyup Shift_L" "keydown Control_L" "key Prior"        "keyup Control_L" "keydown Alt_L" "keydown Shift_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceleft"  "keyup Alt_L"                 "keydown Control_L" "key bracketleft"  "keyup Control_L" "keydown Alt_L"
 alt + shift + braceright
-  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceright" "keyup Meta_L" "keyup Shift_L" "keydown Control_L" "key Next"         "keyup Control_L" "keydown Meta_L" "keydown Shift_L" ; \
-  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceright" "keyup Meta_L"                 "keydown Control_L" "key bracketright" "keyup Control_L" "keydown Meta_L"
+  run_if_window_matches --not --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceright" "keyup Alt_L" "keyup Shift_L" "keydown Control_L" "key Next"         "keyup Control_L" "keydown Alt_L" "keydown Shift_L" ; \
+  run_if_window_matches       --class "$SXHKD_TERMINALS_EREGEXP" -- xte "keyup braceright" "keyup Alt_L"                 "keydown Control_L" "key bracketright" "keyup Control_L" "keydown Alt_L"
 
 # Same thing for Ctrl-Win-Up/Down, to match laptop keypress Ctrl-Fn-Up/Down
 # These aren't working.  I don't know why.  I think they should!
@@ -373,9 +373,9 @@ alt + bracketright
   xte "keyup bracketright" "key Right"
 # Ah, we can use Ctrl + bracketleft / bracketright, which perform navigation in Firefox (but not in Chrome)
 #alt + bracketleft
-#  xte "keyup bracketleft" "keyup Meta_L" "keydown Control_L" "key bracketleft" "keyup Control_L"
+#  xte "keyup bracketleft" "keyup Alt_L" "keydown Control_L" "key bracketleft" "keyup Control_L"
 #alt + bracketright
-#  xte "keyup bracketright" "keyup Meta_L" "keydown Control_L" "key bracketright" "keyup Control_L"
+#  xte "keyup bracketright" "keyup Alt_L" "keydown Control_L" "key bracketright" "keyup Control_L"
 
 # Fortunately I already happen to be using a userscript called More Keybinds in my browser,
 # which puts browser back on Control-Backspace and forward on Control-Enter.
@@ -388,10 +388,10 @@ alt + bracketright
 # Note: I can also use my "More Keybinds" userscript to detect these keystrokes directly in the browser
 #
 #alt + bracketleft
-#  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketleft" "keyup Meta_L" "keydown Control_L" "key BackSpace" "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketleft" "keyup Alt_L" "keydown Control_L" "key BackSpace" "keyup Control_L" "keydown Alt_L" ; \
 #  run_if_window_matches --class "(code|code-oss)"         -- xte "keyup bracketleft" "keydown Control_L" "key bracketleft" "keyup Control_L"
 #alt + bracketright
-#  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketright" "keyup Meta_L" "keydown Control_L" "key Return" "keyup Control_L" "keydown Meta_L" ; \
+#  run_if_window_matches --class "(google-chrome|firefox)" -- xte "keyup bracketright" "keyup Alt_L" "keydown Control_L" "key Return" "keyup Control_L" "keydown Alt_L" ; \
 #  run_if_window_matches --class "(code|code-oss)"         -- xte "keyup bracketright" "keydown Control_L" "key bracketright" "keyup Control_L"
 
 
@@ -402,13 +402,13 @@ alt + bracketright
 # In the first two keybinds, I find it helps to send an _extra_ Alt press, to counteract the Alt press that the application receives when we release.
 # Unfortunately Alt-Left and Alt-Right are the only way to get Back and Forward in some browsers, so we need to leave them alone
 #alt + Left
-#  xte "keyup Meta_L" "keyup Left"  "key Home" "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+#  xte "keyup Alt_L" "keyup Left"  "key Home" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 #alt + Right
-#  xte "keyup Meta_L" "keyup Right" "key End"  "keydown Meta_L" "keyup Meta_L" "keydown Meta_L"
+#  xte "keyup Alt_L" "keyup Right" "key End"  "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 alt + shift + Left
-  xte "keyup Meta_L" "keyup Left"  "key Home" "keydown Meta_L"
+  xte "keyup Alt_L" "keyup Left"  "key Home" "keydown Alt_L"
 alt + shift + Right
-  xte "keyup Meta_L" "keyup Right" "key End"  "keydown Meta_L"
+  xte "keyup Alt_L" "keyup Right" "key End"  "keydown Alt_L"
 
 # Move one word
 super + Left
@@ -429,7 +429,7 @@ control + BackSpace
 # I took the More Keybinds trigger off, because I don't like it.  Now Ctrl-Backspace does Delete in bash
 # But this didn't work because there is no way to go back in browser that I haven't already broken!
 #control + BackSpace
-#  run_if_window_matches       --class "(google-chrome|firefox)" -- xte "keyup Control_L" "keyup BackSpace" "keydown Meta_L" "key Left" "keyup Meta_L" "keydown Control_L" ; \
+#  run_if_window_matches       --class "(google-chrome|firefox)" -- xte "keyup Control_L" "keyup BackSpace" "keydown Alt_L" "key Left" "keyup Alt_L" "keydown Control_L" ; \
 #  run_if_window_matches --not --class "(google-chrome|firefox)" -- xte "keyup Control_L" "keyup BackSpace" "key Delete" "keydown Control_L"
 
 
@@ -517,7 +517,7 @@ control + shift + space
 # Actually for REPLs, I now prefer Alt-Shift-Enter, because the Enter helps to indicate the gravity of running a command
 # Alt-Shift-Enter will re-execute the previous command
 alt + shift + Return
-  xte "keyup Shift_L" "keyup Meta_L" "keyup Return" "key Up" "key Return" "keydown Shift_L" "keydown Meta_L"
+  xte "keyup Shift_L" "keyup Alt_L" "keyup Return" "key Up" "key Return" "keydown Shift_L" "keydown Alt_L"
 
 # This macOS user suggests Cmd-R: https://unix.stackexchange.com/questions/147563/how-do-i-repeat-the-last-command-without-using-the-arrow-keys
 # We did try that above, in the browser section
