@@ -486,13 +486,13 @@ nnoremap <Leader>l :set invnumber<Enter>
 
 " Quick buffer switching (beyond Ctrl-PageUp/Down)
 "" Select buffer by any part of filename and Tab completion or arrows, or by number
-"nnoremap <C-E> :ls<CR>:b<space>
+"nnoremap <C-B> :ls<CR>:b<space>
 nnoremap <Leader>W :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
-nnoremap <C-E> :<C-U>JoeysBufferSwitch<Enter>
+nnoremap <C-B> :<C-U>JoeysBufferSwitch<Enter>
 "" An interesting alternative, assuming you have MBE as your first window:
-"nnoremap <C-E> 1<C-W><C-W>/
+"nnoremap <C-B> 1<C-W><C-W>/
 "" Select file by filename with completion
-" nnoremap <C-E> :ls<CR>:e<space>
+" nnoremap <C-B> :ls<CR>:e<space>
 "" Select by name with completion or file without (joeys_buffer_switcher.vim)
 "nnoremap <Leader>e :JoeysBufferSwitch<Enter>
 "" Select buffer from list (bufexplorer.vim)
@@ -1179,9 +1179,9 @@ nnoremap <silent> ð :Buffers<CR>
 nnoremap <silent> <C-A> :Files<CR>
 " When opening the Files finders, put the prompt at the top (reverse layout)
 command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--no-multi']}, <bang>0)
-" And for buffers with <C-B> we will put the prompt at the top
-"nnoremap <silent> <C-B> :let g:fzf_layout = { 'window': '30split' }<CR>:call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
-nnoremap <silent> <C-B> :call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
+" And for buffers with <C-E> we will put the prompt at the top
+"nnoremap <silent> <C-E> :let g:fzf_layout = { 'window': '30split' }<CR>:call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
+nnoremap <silent> <C-E> :call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
 " But for buffers with <C-P> I like it reversed, so we can hit <C-P> <C-P> <C-P> like in WebStorm
 " Break out of FZF when pressing Escape
 augroup FZF
