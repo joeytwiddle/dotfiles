@@ -7,6 +7,14 @@ This explains how to configure live inspection and editing: https://www.reddit.c
 
 For more information on userChrome.css, you may refer to this website: https://www.userchrome.org/
 
+It has a page on finding recipes: https://www.userchrome.org/find-user-style-recipes.html
+
+From that page, I like this collection of mini-recipes: https://github.com/Timvde/UserChrome-Tweaks
+
+And this gallery of available styles: https://firefoxcss-store.github.io/
+
+There are also some mini-recipes (and other tweaks) on this page: https://wiki.archlinux.org/title/Firefox/Tweaks
+
 You can get some inspiration for styling here: https://www.reddit.com/r/FirefoxCSS/
 
 Old non-live method (requires a restart):
@@ -15,6 +23,8 @@ To use the inspector on that page, you'll need to "Enable browser chrome and add
 It may be easier to open the DevTools before navigating to the chrome URL, because the keybind stops working.once the page has loaded.
 Unfortunately that page does not apply the CSS we set in this file, making it difficult to preview our changes.  (It used to, but it's not doing it in 2019.)
 It can also be useful to search the source code: https://github.com/mozilla/gecko-dev/search?q=tab-close-button
+
+In the DevTools style editor, you can hit + to create a new style sheet, and then paste the contents of this file, to see what these styles will do.
 
 */
 
@@ -146,6 +156,11 @@ It can also be useful to search the source code: https://github.com/mozilla/geck
 #navigator-toolbox {
     --tabs-border-color: #fff7 !important;
 }
+/* This line runs across the top of the toolbar */
+/* We need to remove it, if we want the tab to appear connected to the toolbar */
+#nav-bar.browser-toolbar {
+    border-top: none !important;
+}
 /*
 #nav-bar:not([tabs-hidden="true"]) {
     box-shadow: 0 calc(-1 * var(--tabs-navbar-shadow-size)) 0 var(--tabs-border-color);
@@ -190,6 +205,11 @@ It can also be useful to search the source code: https://github.com/mozilla/geck
 .tab-content {
     /* min-height: 40px !important; */
     /* min-height: 38px !important; */
+}
+/* Probably better to edit this one, which can make the entire row taller or shorter */
+#tabbrowser-tabs[orient="horizontal"] {
+    /* The default appears to be 44 */
+    min-height: 42px !important;
 }
 .tab-label-container {
     /* SCREWS_UP_PINNED_TABS */
@@ -347,8 +367,21 @@ image.tab-icon-sound {
 */
 
 
-/* This conflicted with the location bar in a weird way.  The selected text (or autocompleted text) would appear green-on-white instead of white-on-green as expected. */
+/* Reduce the large gaps between the addon buttons on the toolbar */
+toolbar .toolbaritem-combined-buttons {
+    /* Default was 2px */
+    /* It's preferable to reduce --toolbarbutton-inner-padding because that affects builtin buttons like Bookmarks, History, Pocket as well as addons. */
+    margin-inline: 0px !important;
+}
+:root {
+    /* Default was 8px */
+    /* Unfortunately, this didn't take.  Firefox kept using the default. */
+    /*--toolbarbutton-inner-padding: 4px !important;*/
+}
+
+
 /* Give the toolbars a raised 3D look */
+/* This conflicted with the location bar in a weird way.  The selected text (or autocompleted text) would appear green-on-white instead of white-on-green as expected. */
 /*
 /-* The selected tab itself is #fff6 *-/
 .tabbrowser-tab[selected] .tab-background {
