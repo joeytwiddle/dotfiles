@@ -172,8 +172,8 @@
   // Select the suggestion even if it's not focused
   // This is an old VSCode habit which I should try to avoid
   { "key": "enter", "command": "acceptSelectedSuggestion", "when": "suggestWidgetVisible && textInputFocus" },
-  // This doesn't actually accept the selection (because none is selected), but it does force me to hit Tab-Enter which is good
-  // Well good-ish.  I shouuld really hit Tab and then keep typing, like I do in Vim
+  // This allows me to hit Tab-Enter to select and accept the suggestion.
+  // Without this, Tab-Enter would select the suggestion but then discard it and start a new line!
 
   // Act more like Vim, by accepting the current suggestion, if we keep typing
   { "key": "space", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": " "} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
@@ -202,6 +202,10 @@
   { "key": "shift-.", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": ">"} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
 
   //{ "key": "tab", "command": "acceptSelectedSuggestion", "when": "acceptSuggestionOnEnter && suggestWidgetVisible && suggestionMakesTextEdit && textInputFocus" },
+
+  // I usually have inline suggestions disabled, but not always
+  // This is needed for Complete
+  { "key": "ctrl+shift+enter", "command": "editor.action.inlineSuggest.commit", "when": "inlineSuggestionVisible && textInputFocus" },
 
   // Use Tab to cycle whenever a list is focused
   // I find this useful when jumping to a definition, when multiple suggestions are offered
@@ -250,6 +254,28 @@
   // Cycle theme
   {
     "key": "cmd+k cmd+k",
+    "command": "settings.cycle",
+    "args": {
+      "id": "cycleColorTheme", // must be unique
+      "overrideWorkspaceSettings": true,
+      "values": [
+        // This is mine, it's nice and calm, but a bit boring
+        { "workbench.colorTheme": "Gentle Mary" },
+        // This one looks cool
+        { "workbench.colorTheme": "Material Theme" },
+        // Grey version
+        { "workbench.colorTheme": "Material Theme Darker" },
+        // These lighter themes are good when working in bright conditions
+        //{ "workbench.colorTheme": "Material Theme Lighter High Contrast" },
+        { "workbench.colorTheme": "Quiet Light" },
+        { "workbench.colorTheme": "Visual Studio Light" },
+        //{ "workbench.colorTheme": "Default Light +" },
+        { "workbench.colorTheme": "Default Light Modern" },
+      ]
+    }
+  },
+  {
+    "key": "alt+k alt+k",
     "command": "settings.cycle",
     "args": {
       "id": "cycleColorTheme", // must be unique
@@ -430,6 +456,11 @@
     "foo": "bar"
   },
   // New keybinds should be moved above this
+
+  // Allow CTRL-F in terminal to pass down to shell, move it to CTRL-SHIFT-F instead
+  { "key": "ctrl+f",       "command": "-workbench.action.terminal.focusFind", "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported" },
+  { "key": "ctrl+shift+f", "command":  "workbench.action.terminal.focusFind", "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported" },
+  { "key": "ctrl+shift+t", "command": "workbench.action.terminal.new", "when": "terminalFocusInAny && (terminalProcessSupported || terminalWebExtensionContributedProfile)" },
 
   // It seems my override here will work, even if I don't disable VSCodeVim's default
   //{ "key": "ctrl+]", "command": "typescript.goToSourceDefinition", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
