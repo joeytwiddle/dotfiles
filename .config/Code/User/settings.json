@@ -2,7 +2,7 @@
 // vim: filetype=javascript
 // prettier-ignore
 {
-    // macOS: 'HasklugNerdFontCompleteNerdFontM-Regular', 
+    // On macOS: 'HasklugNerdFontCompleteNerdFontM-Regular',
     "editor.fontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
     //"editor.fontFamily": "'Hasklug Nerd Font', 'JetBrains Mono', 'FiraCode'",
     //"editor.fontLigatures": true,
@@ -101,15 +101,8 @@
     // Don't insert a space after comment chars
     "editor.comments.insertSpace": false,
 
-    // Let snippets take priority over other things in the suggestions list
-    // See: https://github.com/Microsoft/vscode/issues/10565#issuecomment-317319434
-    // Specifically I needed this for TypeScript, where a deprecated alias and two imports were suggested before my 'log' snippet
-    // But this sucks when I want to see the props on a component I am trying to use.
-    // And now I'm using \log in vim mode
-    //"editor.snippetSuggestions": "top",
-
-    // Intellisense settings, from https://code.visualstudio.com/docs/editor/intellisense#_customizing-intellisense
-    "editor.suggest.preview": true,
+    // Intellisense: https://code.visualstudio.com/docs/editing/intellisense#_customizing-intellisense
+    //
     // Controls if quick suggestions should show up while typing
     "editor.quickSuggestions": {
         // It's annoying to be offered suggestions when we are just typing text
@@ -121,7 +114,7 @@
         "other": "on"
     },
     // Controls whether suggestions should be accepted on commit characters. For example, in JavaScript, the semi-colon (`;`) can be a commit character that accepts a suggestion and types that character.
-    // Avoid getting unwanted autocompletes when typing '(' or '.'
+    // I disable this, to avoid getting unwanted autocompletes when typing '(' or '.'
     // Although I have tried implementing my own completion with keybindings
     "editor.acceptSuggestionOnCommitCharacter": false,
     // Controls if suggestions should be accepted on 'Enter' - in addition to 'Tab'. Helps to avoid ambiguity between inserting new lines or accepting suggestions. The value 'smart' means only accept a suggestion with Enter when it makes a textual change
@@ -139,6 +132,11 @@
     //"editor.suggestSelection": "recentlyUsed",
     // Enable word based suggestions
     //"editor.wordBasedSuggestions": true,
+
+    // Enable parameter hints
+    //"editor.parameterHints.enabled": true,
+    // Show the suggestion in the editor itself
+    "editor.suggest.preview": true,
 
     // Should we select the first entry when the suggestions dropdown appears?
     // I think this is now managed by my custom keybinds
@@ -719,13 +717,14 @@
         { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "l", "o", "g" ] },
         { "before": [ "<Leader>", "L", "o", "g" ], "after": [ "v", "i", "W", "\\", "l", "o", "g" ] },
         // Logging ReScript
+        // Disabled for now, because it forces <Leader>r (rename) to wait
         //{ "before": [ "<Leader>", "r", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "r", "l", "o", "g" ] },
         //{ "before": [ "<Leader>", "R", "l", "o", "g" ], "after": [ "v", "i", "W", "\\", "r", "l", "o", "g" ] },
         // Logging Python
         { "before": [ "<Leader>", "p", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "p", "l", "o", "g" ] },
         // Logging Fastify
         { "before": [ "<Leader>", "f", "l", "o", "g" ], "after": [ "v", "i", "w", "\\", "f", "l", "o", "g" ] },
-        
+
         // Open parameter hints for a function with multiple forms, using Ctrl-Shift-Space.
         // Notice that it will stick around even if you hit Escape or Ctrl-L.
         // Adding these explicitly makes it easier to get rid of.
@@ -831,6 +830,7 @@
     "terminal.integrated.cursorBlinking": true,
 
     "terminal.integrated.defaultProfile.osx": "bash",
+    "terminal.integrated.defaultProfile.linux": "bash",
     "terminal.integrated.copyOnSelection": true,
     "terminal.integrated.middleClickBehavior": "paste",
 
@@ -866,6 +866,11 @@
     // Set this false, if you do not want Codegeex to store the code it generates for you
     "Codegeex.Privacy": false,
 
+    "continue.enableTabAutocomplete": true,
+    // Set this false, if you do not want Continue to store data
+    // I leave this true, because the extension is open source <3
+    "continue.telemetryEnabled": true,
+
     "docker.contexts.label": "Name",
 
     "svelte.enable-ts-plugin": true,
@@ -885,6 +890,7 @@
     "inlineFold.autoFold": false,
 
     "workbench.iconTheme": "material-icon-theme",
+    "material-icon-theme.folders.theme": "specific",
     "material-icon-theme.activeIconPack": "react",
     "material-icon-theme.saturation": 0.8,
 
