@@ -68,7 +68,9 @@
   { "key": "ctrl+shift+=", "command": "workbench.action.zoomIn" },
   { "key": "ctrl+shift+-", "command": "workbench.action.zoomOut" },
   { "key": "ctrl+shift+0", "command": "workbench.action.zoomReset" },
+
   { "key": "meta+up", "command": "editor.action.addSelectionToNextFindMatch", "when": "editorFocus" },
+
   /*
   { "key": "alt+z", "command": "workbench.action.maximizeEditor" },
   */
@@ -140,6 +142,15 @@
   // Default: Ctrl/Cmd-Backspace but that does something destructive if the editor is focused
   //{ "key": "alt+meta+right", "command": "search.action.remove", "when": "hasSearchResult || inSearchEditor" },
   { "key": "alt+meta+right", "command": "runCommands", "args": { "commands": [ "search.action.focusSearchList", "search.action.remove" ] }, "when": "hasSearchResult || inSearchEditor" },
+  //
+  // BUG: Since Feb/March 2025, using F4 or alt+meta+down results in the search text being selected. I don't want this!
+  // I tried to cancel the text selection, but this still kept it selected
+  //{ "key": "alt+meta+down", "command": "runCommands", "args": { "commands": [ "search.action.focusNextSearchResult", "workbench.action.focusActiveEditorGroup", "setSelection", "cancelSelection", "editor.action.cancelSelectionAnchor", "cursorEndSelect", "removeSecondaryCursors" ] }, "when": "hasSearchResult || inSearchEditor" },
+  // Undoing these didn't make any difference (and certainly wouldn't to F4)
+  //{ "key": "alt+meta+down", "command": "-editor.action.insertCursorBelow", "when": "editorTextFocus" },
+  //{ "key": "alt+meta+up", "command": "-editor.action.insertCursorAbove", "when": "editorTextFocus" },
+  //{ "key": "alt+cmd+down", "command": "-editor.action.insertCursorBelow", "when": "editorTextFocus" },
+  //{ "key": "alt+cmd+up", "command": "-editor.action.insertCursorAbove", "when": "editorTextFocus" },
 
   // When focused on search, get back to editor by pressing Escape
   // I couldn't find a "when" for when the references results are focused, so I would like to enable this always.
@@ -451,19 +462,22 @@
   { "key": "cmd+v", "command": "-extension.vim_cmd+v" },
   { "key": "ctrl+v", "command": "-extension.vim_ctrl+v" },
 
-  // Dummy object, because without this, newly added bindings expand the last entry in the file
-  {
-    "foo": "bar"
-  },
-  // New keybinds should be moved above this
-
   // Allow CTRL-F in terminal to pass down to shell, move it to CTRL-SHIFT-F instead
   { "key": "ctrl+f",       "command": "-workbench.action.terminal.focusFind", "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported" },
   { "key": "ctrl+shift+f", "command":  "workbench.action.terminal.focusFind", "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported" },
   { "key": "ctrl+shift+t", "command": "workbench.action.terminal.new", "when": "terminalFocusInAny && (terminalProcessSupported || terminalWebExtensionContributedProfile)" },
+  { "key": "cmd+t", "command": "workbench.action.terminal.new", "when": "terminalFocusInAny && (terminalProcessSupported || terminalWebExtensionContributedProfile)" },
 
-  // It seems my override here will work, even if I don't disable VSCodeVim's default
-  //{ "key": "ctrl+]", "command": "typescript.goToSourceDefinition", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
+  // I was trying to debug why jumping was not bringing the Vim cursor, but this is a known issue which I cannot resolve this way
   ////{ "key": "ctrl+]", "command": "-extension.vim_ctrl+]", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
+  // It seems my override here will work, even if I don't disable VSCodeVim's default
+  //{ "key": "ctrl+]", "command": "editor.action.revealDefinition", "when": "editorHasDefinitionProvider && editorTextFocus" },
+  //{ "key": "ctrl+]", "command": "typescript.goToSourceDefinition", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
   //{ "key": "ctrl+shift+]", "command": "extension.vim_ctrl+]", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
+
+  // Dummy object, because without this, newly added bindings expand the last entry in the file
+  {
+    "foo": "bar"
+  },
+  // --- NEW KEYBINDS SHOULD BE MOVED ABOVE THIS ---
 ]
