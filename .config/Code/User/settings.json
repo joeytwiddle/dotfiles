@@ -35,6 +35,7 @@
     "debug.console.fontFamily": "'Lucida Console', 'Lucida Sans Typewriter', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
 
     //"editor.renderWhitespace": "boundary",
+    "editor.renderWhitespace": "selection",
 
     "files.autoSave": "onWindowChange",
 
@@ -62,7 +63,8 @@
     // (Previously we used ZenTabs to do this)
     "workbench.editor.limit.enabled": true,
     "workbench.editor.limit.perEditorGroup": true,
-    "workbench.editor.limit.value": 8,
+    // Notably, this is also the number of tabs you will see on Ctrl-Tab and (Ctrl-E) showAllEditorsByMostRecentlyUsed
+    "workbench.editor.limit.value": 12,
     // When a limit is enabled, wrapping can also be enabled
     "workbench.editor.wrapTabs": true,
 
@@ -70,12 +72,18 @@
     "workbench.editor.decorations.badges": true,
 
     // I find it easier to see the tree structure with a wider indent (default 8)
-    //"workbench.tree.indent": 8,
     "workbench.tree.indent": 12,
-    "workbench.tree.renderIndentGuides": "onHover",
+    //"workbench.tree.indent": 16,
     //"workbench.tree.indent": 20,
+    //"workbench.tree.renderIndentGuides": "always",
+    "workbench.tree.renderIndentGuides": "onHover",
     // For deep trees, you will eventually need this, even with a low/default indent
     "workbench.list.horizontalScrolling": true,
+
+    // I would like to hide the explorer arrows, because the theme's icons are good enough, but we still get arrows when we perform fileNesting, and I don't like the way it indents the parent. With this set to false, the parent is not indented compared to regular files.
+    // With this enabled, you might like to increase the tree.indent above, and change renderIndentGuides from "onHover" to "always"
+    "material-icon-theme.hidesExplorerArrows": false,
+    //"material-icon-theme.hidesExplorerArrows": true,
 
     // On startup, open all windows that were open in previous session
     "window.restoreWindows": "all",
@@ -798,13 +806,14 @@
         "**/.factorypath": true
     },
 
-    "editor.tabSize": 4,
+    "editor.tabSize": 2,
     "editor.cursorStyle": "line",
     "editor.insertSpaces": false,
     "editor.lineNumbers": "on",
     "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
 
     "editor.wordWrap": "on",
+    // "indent" appears to be only two characters, but since `//` is also two characters, a deeper indent can look better
     "editor.wrappingIndent": "deepIndent",
 
     // When using Ctrl-P to select a file, open with the same search that you entered last time
@@ -826,7 +835,7 @@
     "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
 
     // blink, smooth, phase, expand, solid
-    "editor.cursorBlinking": "blink",
+    "editor.cursorBlinking": "expand",
     "terminal.integrated.cursorBlinking": true,
 
     "terminal.integrated.defaultProfile.osx": "bash",
@@ -922,9 +931,6 @@
     // e.g. "src / folders / with / only / one / child"
     // because I find this UI inconsistent
     "explorer.compactFolders": false,
-
-    // I would like to hide the explorer arrows, because the theme's icons are good enough, but we still get arrows when we perform fileNesting, and I don't like the way it indents the parent. With this set to false, the parent is not indented compared to regular files.
-    "material-icon-theme.hidesExplorerArrows": false,
 
     // New Settings
     // Variables which regularly churn start here. No need to commit these.
