@@ -1,4 +1,5 @@
 #4ops.terraform
+#akamud.vscode-theme-onedark
 #akamud.vscode-theme-onelight
 #-aminer.codegeex
 #andrejunges.handlebars
@@ -16,6 +17,7 @@ corygross.vscode-mdn-docs
 # Might be useful again sometime
 #-davidanson.vscode-markdownlint
 dbaeumer.vscode-eslint
+#docker.docker
 #donjayamanne.githistory
 dotjoshjohnson.xml
 eamodio.gitlens
@@ -41,6 +43,7 @@ gruntfuggly.todo-tree
 #-hitode909.zentabs
 hoovercj.vscode-settings-cycler
 igorsbitnev.error-gutters
+#isral.elastic-tabstops-mono
 #-infeng.vscode-react-typescript
 #-jeff-hykin.better-shellscript-syntax
 joeberria.statusbarerror
@@ -56,12 +59,14 @@ kamikillerto.vscode-colorize
 letrieu.turbo-console-log
 maosantaella.night-wolf
 mattpocock.ts-error-translator
-meganrogge.template-string-converter
 mayronh.blackrock-theme
+meganrogge.template-string-converter
+#mermade.openapi-lint
 mf.vscode-styled-components
 mikeburgh.xml-format
 mikestead.dotenv
-moalamri.inline-fold
+# This was great for collapsing long Tailwind blocks, but it's no longer being maintained
+#moalamri.inline-fold
 #-mpontus.tab-cycle
 ms-azuretools.vscode-docker
 ms-python.debugpy
@@ -70,6 +75,8 @@ ms-python.python
 # Only works in VSCode, not in Code-OSS
 #-ms-python.vscode-pylance
 ms-vscode.cpptools
+# Crazy strict OpenAPI linter
+#pb33f.vacuum
 #-ms-vsliveshare.vsliveshare
 # I'm using vscode-colorize instead
 #-naumovs.color-highlight
@@ -123,5 +130,6 @@ vscodevim.vim
 #vue.volar
 #-wangtao0101.vscode-js-import
 #-wayou.vscode-todo-highlight
+#whizkydee.material-palenight-theme
 yandeu.five-server
 yoavbls.pretty-ts-errors
