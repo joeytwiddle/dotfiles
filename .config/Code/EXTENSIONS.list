@@ -1,7 +1,7 @@
 #4ops.terraform
 #akamud.vscode-theme-onelight
 #-aminer.codegeex
-andrejunges.handlebars
+#andrejunges.handlebars
 #-andreyvolosovich.monokai-st3
 apollographql.vscode-apollo
 avraammavridis.vsc-react-documentation
@@ -16,23 +16,23 @@ corygross.vscode-mdn-docs
 # Might be useful again sometime
 #-davidanson.vscode-markdownlint
 dbaeumer.vscode-eslint
-donjayamanne.githistory
+#donjayamanne.githistory
 dotjoshjohnson.xml
 eamodio.gitlens
 editorconfig.editorconfig
-eliotvu.uc
-emmanuelbeziat.vscode-great-icons
+#eliotvu.uc
+#emmanuelbeziat.vscode-great-icons
 enkia.tokyo-night
 # The -icons theme was considered suspicious
 #-equinusocio.vsc-community-material-theme
 #-equinusocio.vsc-material-theme
 #-equinusocio.vsc-material-theme-icons
 esbenp.prettier-vscode
-file-icons.file-icons
+#file-icons.file-icons
 #-fnando.linter
 #-formulahendry.auto-close-tag
 formulahendry.auto-rename-tag
-geddski.macros
+#geddski.macros
 #-genieai.chatgpt-vscode
 golang.go
 gruntfuggly.todo-tree
@@ -73,7 +73,7 @@ ms-vscode.cpptools
 #-ms-vsliveshare.vsliveshare
 # I'm using vscode-colorize instead
 #-naumovs.color-highlight
-nicoespeon.abracadabra
+#nicoespeon.abracadabra
 # Original
 #-oouo-diogo-perdigao.docthis
 onxgroup.elastic-tabstops-mono
@@ -81,7 +81,7 @@ onxgroup.elastic-tabstops-mono
 pkief.material-icon-theme
 planbcoding.vscode-react-refactor
 #-quodai-extension.quodai-code-context-extension
-redhat.java
+#redhat.java
 #redhat.vscode-xml
 #redhat.vscode-yaml
 robbowen.synthwave-vscode
@@ -89,7 +89,8 @@ robbowen.synthwave-vscode
 rvest.vs-code-prettier-eslint
 samrapdev.outrun
 #-sdras.night-owl
-shan.code-settings-sync
+#-shan.code-settings-sync
+# No longer maintained. See the built-in Settings Sync feature instead: https://code.visualstudio.com/docs/configure/settings-sync
 shardulm94.trailing-spaces
 simonsiefke.svg-preview
 sirtori.indenticator
@@ -98,28 +99,28 @@ stringham.copy-with-imports
 #-standard.vscode-standard
 #-steoates.autoimport
 #stylelint.vscode-stylelint
-svelte.svelte-vscode
+#svelte.svelte-vscode
 # TabNine unofficial
 #-svipas.code-autocomplete
-sysoev.language-stylus
+#sysoev.language-stylus
 #tchoupinax.tilt
 #-thibaudcolas.stylelint
 #-timkmecl.chatgpt
 timonwong.shellcheck
-tomphilbin.gruvbox-themes
-tonybaloney.vscode-pets
+#-tomphilbin.gruvbox-themes
+#tonybaloney.vscode-pets
 #-trunk.io
 #uloco.theme-bluloco-light
 usernamehw.errorlens
-visualstudioexptteam.vscodeintellicode
+#visualstudioexptteam.vscodeintellicode
 #-vit-m.template-strings
-vscjava.vscode-java-debug
-vscjava.vscode-java-dependency
-vscjava.vscode-java-test
-vscjava.vscode-maven
+#vscjava.vscode-java-debug
+#vscjava.vscode-java-dependency
+#vscjava.vscode-java-test
+#vscjava.vscode-maven
 #-vscode-icons-team.vscode-icons
 vscodevim.vim
-vue.volar
+#vue.volar
 #-wangtao0101.vscode-js-import
 #-wayou.vscode-todo-highlight
 yandeu.five-server
