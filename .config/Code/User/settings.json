@@ -928,8 +928,9 @@
     "explorer.fileNesting.patterns": {
         "README": "*",
         "README.*": "*",
-        "*.route.ts": "${capture}.test.ts",
-        //"*.ts": "${basename}.test.ts"
+        //"*.route.ts": "${capture}.test.ts",
+        //"*.plugin.ts": "${capture}.test.ts",
+        //"*.ts": "${basename}.test.ts",
     },
 
     // The Path Intellisense extension helps to autocomplete imports and other filenames
