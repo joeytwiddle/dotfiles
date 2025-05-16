@@ -68,7 +68,8 @@
     //"workbench.editor.limit.value": 12,
     //"workbench.editor.wrapTabs": true,
     // But I think I prefer having a longer tab list (because I use Ctrl-Tab instead of looking at the tabs at the top)
-    "workbench.editor.limit.value": 16,
+    // If I set higher than 14, the Ctrl-Tab and Ctrl-E drop-down lists get scrollbars
+    "workbench.editor.limit.value": 14,
     "workbench.editor.wrapTabs": false,
 
     // Displays extra info (like 'M' or 'U' or a number) in the tab if the file has uncommitted changes
