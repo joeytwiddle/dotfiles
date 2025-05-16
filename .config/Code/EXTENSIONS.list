@@ -36,13 +36,15 @@ esbenp.prettier-vscode
 formulahendry.auto-rename-tag
 #geddski.macros
 #-genieai.chatgpt-vscode
-golang.go
+#golang.go
+google.geminicodeassist
 gruntfuggly.todo-tree
 #-gvjacob.testdocs
 #-henoc.svgeditor
 #-hitode909.zentabs
 hoovercj.vscode-settings-cycler
-igorsbitnev.error-gutters
+# You can get this same feature (and more) from Error Lens
+#-igorsbitnev.error-gutters
 #isral.elastic-tabstops-mono
 #-infeng.vscode-react-typescript
 #-jeff-hykin.better-shellscript-syntax
@@ -69,9 +71,9 @@ mikestead.dotenv
 #moalamri.inline-fold
 #-mpontus.tab-cycle
 ms-azuretools.vscode-docker
-ms-python.debugpy
-ms-python.pylint
-ms-python.python
+#ms-python.debugpy
+#ms-python.pylint
+#ms-python.python
 # Only works in VSCode, not in Code-OSS
 #-ms-python.vscode-pylance
 ms-vscode.cpptools
