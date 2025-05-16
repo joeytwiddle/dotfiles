@@ -183,11 +183,26 @@
   { "key": "tab", "command": "selectNextSuggestion", "when": "suggestWidgetVisible && textInputFocus" },
   { "key": "shift-tab", "command": "selectPrevSuggestion", "when": "suggestWidgetVisible && textInputFocus" },
 
-  // Select the suggestion even if it's not focused
-  // This is an old VSCode habit which I should try to avoid
-  { "key": "enter", "command": "acceptSelectedSuggestion", "when": "suggestWidgetVisible && textInputFocus" },
-  // This allows me to hit Tab-Enter to select and accept the suggestion.
-  // Without this, Tab-Enter would select the suggestion but then discard it and start a new line!
+  // This was useful while I was retraining. The old way (VSCode's default?) focuses the first suggestion and then let's us hit Enter to accept it.
+  // But with my new setup, since nothing is focused, hitting Enter would ignore the suggestion widget, and accidentally start a new line!
+  // This keybind would accept the suggestion if one was selected (e.g. Tab then Enter)
+  // If no suggestion was selected, it would do nothing, successfully blocking the creation of a new line, which was good.
+  //{ "key": "enter", "command": "acceptSelectedSuggestion", "when": "suggestWidgetVisible && textInputFocus" },
+  // At one point, without this, Tab-Enter would select the suggestion but then discard it and start a new line!
+  //
+  // 20250516: Now that I have adapted to the new style (close to Vim's style) I actually _want_ Enter to start a new line!
+  // So I have disabled this keybind.
+  // And anyway, I'm no longer having the Tab-Enter problem mentioned above.
+
+  // 20250516: On the same day, if the suggestions were visible, pressing Escape would close the suggestion list but NOT exist Insert mode. I want it to leave Insert mode, so I changed VSCodeVim's keybind below
+  {
+    "key": "escape",
+    "command": "extension.vim_escape",
+    // Original
+    //"when": "editorTextFocus && vim.active && !dirtyDiffVisible && !inDebugRepl && !inlineEditIsVisible && !inlineSuggestionVisible && !notebookEditorFocused && !suggestWidgetVisible && !testing.isInPeek && !testing.isPeekVisible || editorTextFocus && vim.active && !dirtyDiffVisible && !inDebugRepl && !inlineEditIsVisible && !inlineSuggestionVisible && !suggestWidgetVisible && !testing.isInPeek && !testing.isPeekVisible && vim.mode == 'Insert'"
+    // My fix removed some of the !*Visible conditions
+    "when": "editorTextFocus && vim.active && !dirtyDiffVisible && !inDebugRepl && !notebookEditorFocused && !testing.isInPeek && !testing.isPeekVisible || editorTextFocus && vim.active && !dirtyDiffVisible && !inDebugRepl && !testing.isInPeek && !testing.isPeekVisible && vim.mode == 'Insert'"
+  },
 
   // Act more like Vim, by accepting the current suggestion, if we keep typing
   { "key": "space", "command": "runCommands",   "args": { "commands": [ "acceptSelectedSuggestion", { "command": "type", "args": {"text": " "} } ] }, "when": "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && textInputFocus && !inDebugRepl" },
@@ -427,7 +442,7 @@
   { "key": "shift+`", "command": "quickInput.previous", "when": "inQuickInput && quickInputType == 'quickPick'" },
   { "key": "`", "command": "quickInput.previous", "when": "inQuickInput && quickInputType == 'quickPick'" },
 
-  // This is Ctrl-Shift-Space / Cmd-Shift-Space by default, but here is another option
+  // Get parameter hints. This is Ctrl-Shift-Space / Cmd-Shift-Space by default, but here is another option
   { "key": "ctrl+shift+/", "command": "editor.action.triggerParameterHints", "when": "editorHasSignatureHelpProvider && editorTextFocus && !inDebugRepl" },
   // I wanted this, but I couldn't get them both to work together
   //{ "key": "ctrl+shift+/", "command": "editor.action.showDefinitionPreviewHover" },
