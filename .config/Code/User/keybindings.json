@@ -478,6 +478,52 @@
   { "key": "ctrl+shift+t", "command": "workbench.action.terminal.new", "when": "terminalFocusInAny && (terminalProcessSupported || terminalWebExtensionContributedProfile)" },
   { "key": "cmd+t", "command": "workbench.action.terminal.new", "when": "terminalFocusInAny && (terminalProcessSupported || terminalWebExtensionContributedProfile)" },
 
+  /* ==== Keybindings for AI tools ==== {{{ */
+
+  // Most AI chats open with cmd+l/ctrl+l. But I want to keep ctrl+l for cleaning up the screen (the same as I have in Vim).
+  // Unfortunately this doesn't work well if I keep them all in one keybindings.json
+  // Enabling some alt+l commands prevents others from working!
+  // For now, I'm enabling and disabling these keybindings, depending on which IDE I'm using.
+
+  // Autocomplete on Ctrl+Shift+Enter instead of on Tab
+  // This is used by Intellisense and Continue and others (probably Windsurf) but not by Cursor
+  { "key": "ctrl+shift+enter", "command": "editor.action.inlineSuggest.commit", "when": "inlineSuggestionVisible && textInputFocus" },
+
+  // Continue
+  // Make keys on Linux like those on macOS
+  { "key": "ctrl+l", "command": "-continue.focusContinueInput" },
+  { "key": "alt+l", "command": "continue.focusContinueInput", "when": "continue.focusContinueInput" },
+
+  //// Cursor
+  //// Autocomplete on Ctrl+Shift+Enter instead of on Tab
+  //{ "key": "tab", "command": "-editor.action.acceptCursorTabSuggestion", "when": "cpp.shouldAcceptTab" },
+  //{ "key": "ctrl+shift+enter", "command": "editor.action.acceptCursorTabSuggestion", "when": "cpp.shouldAcceptTab" },
+  //// Make keys on Linux like those on macOS
+  //{ "key": "ctrl+l", "command": "-aichat.newchataction" },
+  //{ "key": "alt+l", "command": "aichat.newchataction" },
+  //{ "key": "ctrl+k", "command": "-aipopup.action.modal.generate", "when": "editorFocus && !composerBarIsVisible" },
+  //// TODO: This doesn't work because I have bound "alt+k alt+k" to cycle theme, and any "alt+k alt+t" exists
+  ////{ "key": "alt+k", "command": "aipopup.action.modal.generate", "when": "editorFocus && !composerBarIsVisible" },
+  //{ "key": "alt+k alt+l", "command": "aipopup.action.modal.generate", "when": "editorFocus && !composerBarIsVisible" },
+
+  // Windsurf (they call their AI Chat "Cascade")
+  // Make keys on Linux like those on macOS
+  //{ "key": "ctrl+l", "command": "-windsurf.prioritized.chat.open", "when": "!terminalFocus" },
+  //{ "key": "alt+l", "command": "windsurf.prioritized.chat.open", "when": "windsurf.prioritized.chat.open" },
+  // I don't know if we need to adjust this one
+  ////{ "key": "ctrl+l", "command": "-windsurf.prioritized.chat.openFromTerminal", "when": "terminalFocus" },
+
+  // ??? I don't know what sets these!
+  // I did have a lot of AI tools installed at that time
+  //{ "key": "ctrl+l", "command": "-workbench.action.chat.newChat", "when": "chatIsEnabled && inChat && !config.chat.unifiedChatView && chatLocation != 'editing-session'" },
+  //{ "key": "ctrl+l", "command": "-workbench.action.chat.newChat", "when": "chatIsEnabled && inChat && chatLocation != 'editing-session'" },
+  //{ "key": "ctrl+l", "command": "-workbench.action.chat.newEditSession", "when": "chatEditingParticipantRegistered && chatIsEnabled && inChat" },
+  //{ "key": "ctrl+l", "command": "-workbench.action.chat.newEditSession", "when": "chatEditingParticipantRegistered && chatIsEnabled && inChat && chatLocation == 'editing-session'" },
+  //{ "key": "alt+l", "command": "workbench.action.chat.newChat", "when": "chatIsEnabled && inChat && !config.chat.unifiedChatView && chatLocation != 'editing-session'" },
+  //{ "key": "alt+l", "command": "workbench.action.chat.newEditSession", "when": "chatEditingParticipantRegistered && chatIsEnabled && inChat" },
+
+  /* }}} */
+
   // I was trying to debug why jumping was not bringing the Vim cursor, but this is a known issue which I cannot resolve this way
   ////{ "key": "ctrl+]", "command": "-extension.vim_ctrl+]", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
   // It seems my override here will work, even if I don't disable VSCodeVim's default
