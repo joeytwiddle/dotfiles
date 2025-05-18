@@ -7,6 +7,41 @@
   //     >Developer: Inspect Context Keys
   // https://code.visualstudio.com/api/references/when-clause-contexts
 
+  /*
+  // Walk through search results with Alt-Up/Down (VSCode default is F4, Shift-F4)
+  { "key": "alt+down", "command": "goToNextReferenceFromEmbeddedEditor", "when": "inReferenceSearchEditor" },
+  { "key": "alt+up", "command": "goToPreviousReferenceFromEmbeddedEditor", "when": "inReferenceSearchEditor" },
+  { "key": "alt+down", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
+  { "key": "alt+up", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
+  { "key": "alt+down", "command": "goToNextReference", "when": "referenceSearchVisible" },
+  { "key": "alt+up", "command": "goToPreviousReference", "when": "referenceSearchVisible" },
+
+  { "key": "ctrl+g", "command": "editor.action.nextMatchFindAction", "when": "editorFocus" },
+  { "key": "ctrl+shift+g", "command": "editor.action.previousMatchFindAction", "when": "editorFocus" },
+  { "key": "ctrl+l", "command": "workbench.action.gotoLine" },
+  { "key": "ctrl+backspace", "command": "deleteRight", "when": "textInputFocus && !editorReadonly" },
+  { "key": "ctrl+shift+j", "command": "editor.action.joinLines", "when": "editorFocus" },
+  */
+
+  { "key": "ctrl+=", "command": "editor.action.fontZoomIn" },
+  { "key": "ctrl+-", "command": "editor.action.fontZoomOut" },
+  { "key": "ctrl+0", "command": "editor.action.fontZoomReset" },
+  { "key": "ctrl+shift+=", "command": "workbench.action.zoomIn" },
+  { "key": "ctrl+shift+-", "command": "workbench.action.zoomOut" },
+  { "key": "ctrl+shift+0", "command": "workbench.action.zoomReset" },
+
+  { "key": "meta+up", "command": "editor.action.addSelectionToNextFindMatch", "when": "editorFocus" },
+
+  /*
+  { "key": "alt+z", "command": "workbench.action.maximizeEditor" },
+  */
+
+  { "key": "ctrl+shift+\\", "command": "workbench.action.splitEditorOrthogonal" },
+
+  { "key": "alt+w", "command": "workbench.action.closeWindow", "when": "!editorIsOpen && !multipleEditorGroups" },
+
+  /* ==== Make keybindings the same on Linux and macOS ==== {{{ */
+
   // Navigation like WebStorm on Mac
   { "key": "alt+shift+[", "command": "workbench.action.previousEditor", "when": "!terminalFocus" },
   { "key": "alt+shift+]", "command": "workbench.action.nextEditor", "when": "!terminalFocus" },
@@ -46,44 +81,14 @@
   { "key": "alt+x", "command": "editor.action.clipboardCutAction", "when": "textInputFocus && !editorReadonly" },
   { "key": "alt+v", "command": "editor.action.clipboardPasteAction", "when": "textInputFocus && !editorReadonly" },
   { "key": "alt+/", "command": "editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
-
-  // Walk through search results with Alt-Up/Down (VSCode default is F4, Shift-F4)
-  { "key": "alt+down", "command": "goToNextReferenceFromEmbeddedEditor", "when": "inReferenceSearchEditor" },
-  { "key": "alt+up", "command": "goToPreviousReferenceFromEmbeddedEditor", "when": "inReferenceSearchEditor" },
-  { "key": "alt+down", "command": "search.action.focusNextSearchResult", "when": "hasSearchResult" },
-  { "key": "alt+up", "command": "search.action.focusPreviousSearchResult", "when": "hasSearchResult" },
-  { "key": "alt+down", "command": "goToNextReference", "when": "referenceSearchVisible" },
-  { "key": "alt+up", "command": "goToPreviousReference", "when": "referenceSearchVisible" },
-
-  { "key": "ctrl+g", "command": "editor.action.nextMatchFindAction", "when": "editorFocus" },
-  { "key": "ctrl+shift+g", "command": "editor.action.previousMatchFindAction", "when": "editorFocus" },
-  { "key": "ctrl+l", "command": "workbench.action.gotoLine" },
-  { "key": "ctrl+backspace", "command": "deleteRight", "when": "textInputFocus && !editorReadonly" },
-  { "key": "ctrl+shift+j", "command": "editor.action.joinLines", "when": "editorFocus" },
   */
-
-  { "key": "ctrl+=", "command": "editor.action.fontZoomIn" },
-  { "key": "ctrl+-", "command": "editor.action.fontZoomOut" },
-  { "key": "ctrl+0", "command": "editor.action.fontZoomReset" },
-  { "key": "ctrl+shift+=", "command": "workbench.action.zoomIn" },
-  { "key": "ctrl+shift+-", "command": "workbench.action.zoomOut" },
-  { "key": "ctrl+shift+0", "command": "workbench.action.zoomReset" },
-
-  { "key": "meta+up", "command": "editor.action.addSelectionToNextFindMatch", "when": "editorFocus" },
-
-  /*
-  { "key": "alt+z", "command": "workbench.action.maximizeEditor" },
-  */
-
-  { "key": "ctrl+shift+\\", "command": "workbench.action.splitEditorOrthogonal" },
-
-  { "key": "alt+w", "command": "workbench.action.closeWindow", "when": "!editorIsOpen && !multipleEditorGroups" },
 
   /* To match Linux keybinds on macOS */
   { "key": "ctrl+shift+p", "command": "workbench.action.showCommands" },
 
   /* ==== Make Linux match macOS keybinds ==== {{{ */
 
+  // Some of these mimic WebStorm
   { "key": "meta+shift-f", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
   { "key": "meta+shift+o", "command": "editor.action.organizeImports", "when": "editorTextFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/" },
   { "key": "alt-j", "command": "workbench.action.togglePanel" },
@@ -95,10 +100,15 @@
   // To train me to use Cmd-P / Alt-P instead of Ctrl-P
   { "key": "ctrl+p", "command": "-workbench.action.quickOpen" },
 
-  { "key": "cmd+[", "command": "-editor.action.outdentLines", "when": "editorTextFocus && !editorReadonly" },
-  { "key": "cmd+]", "command": "-editor.action.indentLines", "when": "editorTextFocus && !editorReadonly" },
-  { "key": "cmd+[", "command": "workbench.action.navigateBack", "when": "canNavigateBack"  },
-  { "key": "cmd+]", "command": "workbench.action.navigateForward", "when": "canNavigateForward"  },
+  //{ "key": "cmd+[", "command": "-editor.action.outdentLines", "when": "editorTextFocus && !editorReadonly" },
+  //{ "key": "cmd+]", "command": "-editor.action.indentLines", "when": "editorTextFocus && !editorReadonly" },
+  //{ "key": "alt+[", "command": "-editor.action.outdentLines", "when": "editorTextFocus && !editorReadonly" },
+  //{ "key": "alt+]", "command": "-editor.action.indentLines", "when": "editorTextFocus && !editorReadonly" },
+
+  //{ "key": "cmd+[", "command": "workbench.action.navigateBack", "when": "canNavigateBack" },
+  //{ "key": "cmd+]", "command": "workbench.action.navigateForward", "when": "canNavigateForward" },
+  //{ "key": "alt+[", "command": "workbench.action.navigateBack", "when": "canNavigateBack" },
+  //{ "key": "alt+]", "command": "workbench.action.navigateForward", "when": "canNavigateForward" },
 
   // On Linux ctrl+shift+e should trigger "workbench.view.explorer" but GTK might hijack it for a new emoji feature.
   // If you want it back, you may try to disable GTK's hijacking: https://github.com/microsoft/vscode/issues/48480
@@ -183,6 +193,8 @@
 
   /* }}} */
 
+  /* ==== Autocomplete ==== {{{ */
+
   // Use Tab to open autocomplete suggestions, and cycle through them
   // This sometimes doesn't work, but we fall back to "editor.tabCompletion" to open the suggestion list
   { "key": "tab", "command": "editor.action.triggerSuggest", "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly && atEndOfWord" },
@@ -242,9 +254,7 @@
 
   //{ "key": "tab", "command": "acceptSelectedSuggestion", "when": "acceptSuggestionOnEnter && suggestWidgetVisible && suggestionMakesTextEdit && textInputFocus" },
 
-  // I usually have inline suggestions disabled, but not always
-  // This is needed for Complete
-  { "key": "ctrl+shift+enter", "command": "editor.action.inlineSuggest.commit", "when": "inlineSuggestionVisible && textInputFocus" },
+  /* }}} */
 
   // Use Tab to cycle whenever a list is focused
   // I find this useful when jumping to a definition, when multiple suggestions are offered
