@@ -63,10 +63,14 @@
     // (Previously we used ZenTabs to do this)
     "workbench.editor.limit.enabled": true,
     "workbench.editor.limit.perEditorGroup": true,
-    // Notably, this is also the number of tabs you will see on Ctrl-Tab and (Ctrl-E) showAllEditorsByMostRecentlyUsed
-    "workbench.editor.limit.value": 12,
+    // Notably, this is also the number of tabs you will see on Ctrl-Tab and Ctrl-E showAllEditorsByMostRecentlyUsed
     // When a limit is enabled, wrapping can also be enabled
-    "workbench.editor.wrapTabs": true,
+    //"workbench.editor.limit.value": 12,
+    //"workbench.editor.wrapTabs": true,
+    // But I think I prefer having a longer tab list (because I use Ctrl-Tab instead of looking at the tabs at the top)
+    // If I set higher than 14, the Ctrl-Tab and Ctrl-E drop-down lists get scrollbars
+    "workbench.editor.limit.value": 14,
+    "workbench.editor.wrapTabs": false,
 
     // Displays extra info (like 'M' or 'U' or a number) in the tab if the file has uncommitted changes
     "workbench.editor.decorations.badges": true,
@@ -683,6 +687,12 @@
         // Previously: "workbench.action.togglePanel" but this only works when the panel opens below the editor
         { "before": [ "<Leader>", "/" ], "commands": [ "workbench.action.findInFiles" ] },
         { "before": [ "<Leader>", "*" ], "after": [ "v", "i", "w" ], "commands": [ "workbench.action.findInFiles" ] },
+        // But \* is too many keystrokes (three, with \ being fiddly to reach), so let's invent something new:
+        { "before": [ "/", "*" ], "after": [ "v", "i", "w" ], "commands": [ "workbench.action.findInFiles" ] },
+        // I like g* but it does already mean something in Vim (* but without \<\>)
+        { "before": [ "g", "*" ], "after": [ "v", "i", "w" ], "commands": [ "workbench.action.findInFiles" ] },
+        // I wanted Ctrl+Shift+* but that probably would work in Vim terminal, and I couldn't even get it working in VSCode
+
         { "before": [ "<Leader>", "r" ], "commands": [ "editor.action.rename" ], "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly" },
         { "before": [ "<Leader>", "R" ], "after": [ "v", "i", "w", "<Cmd-Alt-F>" ], "commands": [ "editor.action.startFindReplaceAction" ] },
         { "before": [ "<Leader>", "w" ], "commands": [ "editor.action.toggleWordWrap" ] },
@@ -876,9 +886,9 @@
     "Codegeex.Privacy": false,
 
     "continue.enableTabAutocomplete": true,
-    // Set this false, if you do not want Continue to store data
-    // I leave this true, because the extension is open source <3
-    "continue.telemetryEnabled": true,
+    // Set this true if are happy to share your code with Continue
+    // I like to do that, because it's open source, but my default settings is to not share
+    "continue.telemetryEnabled": false,
 
     "docker.contexts.label": "Name",
 
@@ -918,8 +928,9 @@
     "explorer.fileNesting.patterns": {
         "README": "*",
         "README.*": "*",
-        "*.route.ts": "${capture}.test.ts",
-        //"*.ts": "${basename}.test.ts"
+        //"*.route.ts": "${capture}.test.ts",
+        //"*.plugin.ts": "${capture}.test.ts",
+        //"*.ts": "${basename}.test.ts",
     },
 
     // The Path Intellisense extension helps to autocomplete imports and other filenames
@@ -931,6 +942,9 @@
     // e.g. "src / folders / with / only / one / child"
     // because I find this UI inconsistent
     "explorer.compactFolders": false,
+
+    // Saves some screen space, but makes Peacock colours less prominent
+    "workbench.activityBar.location": "top",
 
     // New Settings
     // Variables which regularly churn start here. No need to commit these.

@@ -7,4 +7,4 @@ echo "So please uninstall any extensions you are not using"
 echo
 sleep 2
 
-code --list-extensions > ~/.config/Code/EXTENSIONS.list.LATEST
+code --list-extensions > ~/.config/Code/EXTENSIONS.list.CURRENT
