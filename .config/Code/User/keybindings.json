@@ -8,8 +8,8 @@
   // https://code.visualstudio.com/api/references/when-clause-contexts
 
   // Navigation like WebStorm on Mac
-  { "key": "alt+shift+[", "command": "workbench.action.previousEditor" },
-  { "key": "alt+shift+]", "command": "workbench.action.nextEditor" },
+  { "key": "alt+shift+[", "command": "workbench.action.previousEditor", "when": "!terminalFocus" },
+  { "key": "alt+shift+]", "command": "workbench.action.nextEditor", "when": "!terminalFocus" },
   { "key": "alt+[", "command": "workbench.action.navigateBack" },
   { "key": "alt+]", "command": "workbench.action.navigateForward" },
   { "key": "ctrl+alt+[", "command": "workbench.action.navigateBack" },
@@ -79,7 +79,8 @@
 
   { "key": "alt+w", "command": "workbench.action.closeWindow", "when": "!editorIsOpen && !multipleEditorGroups" },
 
-  /* To match macOS keybinds */
+  /* ==== Make Linux match macOS keybinds ==== {{{ */
+
   { "key": "meta+shift-f", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
   { "key": "meta+shift+o", "command": "editor.action.organizeImports", "when": "editorTextFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/" },
   { "key": "alt-j", "command": "workbench.action.togglePanel" },
@@ -112,6 +113,9 @@
 
   // Disable these Vim defaults, because I don't use them, and I would rather use the VSCode shortcuts
   { "key": "ctrl+f", "command": "-extension.vim_ctrl+f", "when": "editorTextFocus && vim.active && vim.use<C-f> && !inDebugRepl && vim.mode != 'Insert'" },
+
+  // Disable Vim's CTRL-X, so we get normal cut back
+  { "key": "ctrl+x", "command": "-extension.vim_ctrl+x", "when": "editorTextFocus && vim.active && vim.use<C-x> && !inDebugRepl" },
 
   { "key": "alt+shift+f", "command": "workbench.action.findInFiles" },
   // Oddly, while there was a System setting like this on macOS, it didn't work until I created an identical user setting
@@ -169,6 +173,12 @@
   { "key": "escape", "command": "workbench.action.focusActiveEditorGroup", "when": "!editorFocus && !terminalFocus && !terminalFindFocus && !inputFocus" },
   // It might be preferable to whitelist when we do want this to happen, rather than blacklist, but inventing this state boolean didn't work for me
   //{ "key": "escape", "command": "workbench.action.focusActiveEditorGroup", "when": "sidebarFocus" },
+
+  { "key": "alt+k alt+t", "command": "workbench.action.selectTheme" },
+  // Because tortilla maps Alt-T to Ctrl-T
+  { "key": "alt+k ctrl+t", "command": "workbench.action.selectTheme" },
+
+  /* }}} */
 
   // Use Tab to open autocomplete suggestions, and cycle through them
   // This sometimes doesn't work, but we fall back to "editor.tabCompletion" to open the suggestion list
@@ -374,8 +384,8 @@
   { "key": "cmd+9", "command": "workbench.action.openEditorAtIndex9" },
 
   // Before adding these, on macOS, Ctrl-PageUp/Down were only working on editor windows, not on UI windows
-  { "key": "ctrl+pageup", "command": "workbench.action.previousEditor" },
-  { "key": "ctrl+pagedown", "command": "workbench.action.nextEditor" },
+  { "key": "ctrl+pageup", "command": "workbench.action.previousEditor", "when": "!terminalFocus" },
+  { "key": "ctrl+pagedown", "command": "workbench.action.nextEditor", "when": "!terminalFocus" },
   //
   { "key": "ctrl+shift+pageup", "command": "workbench.action.moveEditorLeftInGroup" },
   { "key": "ctrl+shift+pagedown", "command": "workbench.action.moveEditorRightInGroup" },
