@@ -62,17 +62,15 @@
   { "key": "alt+shift+down", "command": "editor.action.moveLinesDownAction", "when": "editorTextFocus && !editorReadonly" },
   { "key": "alt+shift+up", "command": "editor.action.moveLinesUpAction", "when": "editorTextFocus && !editorReadonly" },
 
-  // More Mac-like binds using Cmd
-  { "key": "alt+shift+f", "command": "workbench.view.search", "when": "!searchViewletVisible" },
-  { "key": "alt+backspace", "command": "editor.action.deleteLines", "when": "textInputFocus && !editorReadonly" },
-  // I am now using the default (Opt-Shift-F on Mac, Ctrl-Shift-I on Linux)
-  /*
-  { "key": "alt+shift+l", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
-  { "key": "alt+shift+p", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
-  { "key": "ctrl+alt+shift+p", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
-  */
-  { "key": "alt+z", "command": "undo", "when": "textInputFocus && !editorReadonly" },
-  { "key": "alt+shift+z", "command": "redo", "when": "textInputFocus && !editorReadonly" },
+  /* To match Linux keybinds on macOS */
+  { "key": "ctrl+shift+p", "command": "workbench.action.showCommands" },
+
+  { "key": "ctrl+pageup", "command": "workbench.action.terminal.focusPrevious", "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus" },
+  { "key": "ctrl+pagedown", "command": "workbench.action.terminal.focusNext", "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus" },
+  { "key": "ctrl+pageup", "command": "workbench.action.debug.prevConsole", "when": "inDebugRepl" },
+  { "key": "ctrl+pagedown", "command": "workbench.action.debug.nextConsole", "when": "inDebugRepl" },
+
+  /* ==== Make Linux match macOS keybinds ==== {{{ */
 
   /*
   // Text manipulation like Mac
@@ -83,10 +81,8 @@
   { "key": "alt+/", "command": "editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
   */
 
-  /* To match Linux keybinds on macOS */
-  { "key": "ctrl+shift+p", "command": "workbench.action.showCommands" },
-
-  /* ==== Make Linux match macOS keybinds ==== {{{ */
+  { "key": "alt+z", "command": "undo", "when": "textInputFocus && !editorReadonly" },
+  { "key": "alt+shift+z", "command": "redo", "when": "textInputFocus && !editorReadonly" },
 
   // Some of these mimic WebStorm
   { "key": "meta+shift-f", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
@@ -99,16 +95,22 @@
   { "key": "alt+shift+e", "command": "workbench.view.explorer" },
   // To train me to use Cmd-P / Alt-P instead of Ctrl-P
   { "key": "ctrl+p", "command": "-workbench.action.quickOpen" },
+  { "key": "alt+shift+f", "command": "workbench.view.search", "when": "!searchViewletVisible" },
+  { "key": "alt+backspace", "command": "editor.action.deleteLines", "when": "textInputFocus && !editorReadonly" },
+  // I am now using the default (Opt-Shift-F on Mac, Ctrl-Shift-I on Linux)
+  /*
+  { "key": "alt+shift+l", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
+  { "key": "alt+shift+p", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
+  { "key": "ctrl+alt+shift+p", "command": "editor.action.formatDocument", "when": "editorTextFocus && !editorReadonly" },
+  */
 
-  //{ "key": "cmd+[", "command": "-editor.action.outdentLines", "when": "editorTextFocus && !editorReadonly" },
-  //{ "key": "cmd+]", "command": "-editor.action.indentLines", "when": "editorTextFocus && !editorReadonly" },
-  //{ "key": "alt+[", "command": "-editor.action.outdentLines", "when": "editorTextFocus && !editorReadonly" },
-  //{ "key": "alt+]", "command": "-editor.action.indentLines", "when": "editorTextFocus && !editorReadonly" },
-
-  //{ "key": "cmd+[", "command": "workbench.action.navigateBack", "when": "canNavigateBack" },
-  //{ "key": "cmd+]", "command": "workbench.action.navigateForward", "when": "canNavigateForward" },
-  //{ "key": "alt+[", "command": "workbench.action.navigateBack", "when": "canNavigateBack" },
-  //{ "key": "alt+]", "command": "workbench.action.navigateForward", "when": "canNavigateForward" },
+  // Cmd-[ and Cmd-] should not adjust line indent, but instead navigate back/forwards
+  { "key": "cmd+[", "command": "-editor.action.outdentLines", "when": "editorTextFocus && !editorReadonly" },
+  { "key": "cmd+]", "command": "-editor.action.indentLines", "when": "editorTextFocus && !editorReadonly" },
+  { "key": "cmd+[", "command": "workbench.action.navigateBack", "when": "canNavigateBack" },
+  { "key": "cmd+]", "command": "workbench.action.navigateForward", "when": "canNavigateForward" },
+  { "key": "alt+[", "command": "workbench.action.navigateBack", "when": "canNavigateBack" },
+  { "key": "alt+]", "command": "workbench.action.navigateForward", "when": "canNavigateForward" },
 
   // On Linux ctrl+shift+e should trigger "workbench.view.explorer" but GTK might hijack it for a new emoji feature.
   // If you want it back, you may try to disable GTK's hijacking: https://github.com/microsoft/vscode/issues/48480
@@ -168,6 +170,10 @@
   //{ "key": "alt+meta+up", "command": "-editor.action.insertCursorAbove", "when": "editorTextFocus" },
   //{ "key": "alt+cmd+down", "command": "-editor.action.insertCursorBelow", "when": "editorTextFocus" },
   //{ "key": "alt+cmd+up", "command": "-editor.action.insertCursorAbove", "when": "editorTextFocus" },
+
+  // Cursor disabled this (perhaps for good reason, because cmd+k is a Cursor feature: inline chat)
+  // But if we want to re-enable it, we can do that here:
+  { "key": "cmd+k cmd+t", "command": "workbench.action.selectTheme" },
 
   // When focused on search, get back to editor by pressing Escape
   // I couldn't find a "when" for when the references results are focused, so I would like to enable this always.
@@ -478,9 +484,12 @@
   //{ "key": "2 ] f", "command": "runCommands", "args": { "commands": [ "workbench.view.explorer", "list.focusDown", "list.focusDown", "explorer.openAndPassFocus" ] } },
 
   // When the editor is focused, we can use these Vim bindings from settings.json
-  // But when we are focused, e.g. on a UI window, they don't work.  So we add them here.  (Theoretically, we only need them here, with no conditions.)
-  { "key": "[ b", "command": "workbench.action.previousEditor", "when": "!editorFocus && !inputFocus" },
-  { "key": "] b", "command": "workbench.action.nextEditor", "when": "!editorFocus && !inputFocus" },
+  // But when we are focused, e.g. on a UI window, they don't work.  So we add them here.
+  // We need to exclude most text boxes, so we can type `[` and `]` in them.
+  // !composerFocused is needed for Cursor's AI chat
+  // We could remove the `[b` and `]b` keybinds from settings.json, and use only these keybinds here, if we remove the first three conditions.
+  { "key": "[ b", "command": "workbench.action.previousEditor", "when": "!editorFocus && !inputFocus && !textInputFocus && !inputBoxFocus && !composerFocused && !chatInputHasFocus && !inChatInput" },
+  { "key": "] b", "command": "workbench.action.nextEditor", "when": "!editorFocus && !inputFocus && !textInputFocus && !inputBoxFocus && !composerFocused && !chatInputHasFocus && !inChatInput" },
 
   // Open list finder
   // Especially useful in the file explorer in filter mode, (i.e. when `filesExplorerFocus` is true) but may work in other lists
@@ -516,6 +525,11 @@
   // Enabling some alt+l commands prevents others from working!
   // For now, I'm enabling and disabling these keybindings, depending on which IDE I'm using.
 
+  // Offer me some inline suggestions
+  // I don't really need/use this yet, so we could make it do something else.
+  // It's just here for experimentation.
+  { "key": "ctrl+shift+space", "command": "editor.action.inlineSuggest.trigger" },
+
   // Autocomplete on Ctrl+Shift+Enter instead of on Tab
   // This is used by Intellisense and Continue and others (probably Windsurf) but not by Cursor
   { "key": "ctrl+shift+enter", "command": "editor.action.inlineSuggest.commit", "when": "inlineSuggestionVisible && textInputFocus" },
@@ -525,17 +539,25 @@
   { "key": "ctrl+l", "command": "-continue.focusContinueInput" },
   { "key": "alt+l", "command": "continue.focusContinueInput", "when": "continue.focusContinueInput" },
 
-  //// Cursor
-  //// Autocomplete on Ctrl+Shift+Enter instead of on Tab
+  // Cursor
+  // Autocomplete on Ctrl+Shift+Enter instead of on Tab
   //{ "key": "tab", "command": "-editor.action.acceptCursorTabSuggestion", "when": "cpp.shouldAcceptTab" },
   //{ "key": "ctrl+shift+enter", "command": "editor.action.acceptCursorTabSuggestion", "when": "cpp.shouldAcceptTab" },
+  //// We might want to discourage the use of this, because I currently use that as a macro for Up-Enter
+  ////{ "key": "cmd+shift+enter", "command": "editor.action.acceptCursorTabSuggestion", "when": "cpp.shouldAcceptTab" },
+  //{ "key": "cmd+enter", "command": "-chatEditor.action.accept", "when": "chat.hasEditorModifications && editorFocus && hasUndecidedChatEditingResource && !chat.ctxHasRequestInProgress || chat.hasNotebookEditorModifications && editorFocus && hasUndecidedChatEditingResource && !chat.ctxHasRequestInProgress" },
+  //{ "key": "ctrl+enter", "command": "chatEditor.action.accept", "when": "chat.hasEditorModifications && editorFocus && hasUndecidedChatEditingResource && !chat.ctxHasRequestInProgress || chat.hasNotebookEditorModifications && editorFocus && hasUndecidedChatEditingResource && !chat.ctxHasRequestInProgress" },
   //// Make keys on Linux like those on macOS
   //{ "key": "ctrl+l", "command": "-aichat.newchataction" },
   //{ "key": "alt+l", "command": "aichat.newchataction" },
   //{ "key": "ctrl+k", "command": "-aipopup.action.modal.generate", "when": "editorFocus && !composerBarIsVisible" },
-  //// TODO: This doesn't work because I have bound "alt+k alt+k" to cycle theme, and any "alt+k alt+t" exists
-  ////{ "key": "alt+k", "command": "aipopup.action.modal.generate", "when": "editorFocus && !composerBarIsVisible" },
   //{ "key": "alt+k alt+l", "command": "aipopup.action.modal.generate", "when": "editorFocus && !composerBarIsVisible" },
+  //{ "key": "cmd+k cmd+l", "command": "aipopup.action.modal.generate", "when": "editorFocus && !composerBarIsVisible" },
+  //// The Partial Accept feature (when enabled)
+  //// This is usually on Cmd+Right, but that doesn't seem to work on macOS. Let's map it to ctrl+right instead.
+  //{ "key": "ctrl+right", "command": "editor.action.inlineSuggest.acceptNextWord", "when": "cppSuggestion && !editorReadonly || inlineSuggestionVisible && !editorReadonly" },
+  //// But on macOS, my Karabiner maps ctrl+right to alt+right, so we had better map that instead!
+  //{ "key": "alt+right", "command": "editor.action.inlineSuggest.acceptNextWord", "when": "cppSuggestion && !editorReadonly || inlineSuggestionVisible && !editorReadonly" },
 
   // Windsurf (they call their AI Chat "Cascade")
   // Make keys on Linux like those on macOS
