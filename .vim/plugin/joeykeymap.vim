@@ -1177,6 +1177,7 @@ nnoremap <silent> ð :Buffers<CR>
 " Override Asyncfinder
 "nnoremap <silent> <C-A> :let g:fzf_layout = { 'window': '30split' }<CR>:Files<CR>
 nnoremap <silent> <C-A> :Files<CR>
+nnoremap <silent> <D-p> :Files<CR>
 " When opening the Files finders, put the prompt at the top (reverse layout)
 command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--no-multi']}, <bang>0)
 " And for buffers with <C-E> we will put the prompt at the top
