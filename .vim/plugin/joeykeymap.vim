@@ -1182,7 +1182,16 @@ nnoremap <silent> <D-p> :Files<CR>
 command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--no-multi']}, <bang>0)
 " And for buffers with <C-E> we will put the prompt at the top
 "nnoremap <silent> <C-E> :let g:fzf_layout = { 'window': '30split' }<CR>:call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
-nnoremap <silent> <C-E> :call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
+"nnoremap <silent> <C-E> :<C-U>call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
+nnoremap <silent> <C-E> :<C-U>call <SID>JumpToBufferOrOpenFzfBuffers()<CR>
+function! s:JumpToBufferOrOpenFzfBuffers()
+	" If a count was provided before the keypress, then jump directly to the buffer with that number
+	if v:count > 0
+		exec v:count . "b"
+	else
+		call fzf#vim#buffers('', {'options': ['--layout=reverse']})
+	endif
+endfunction
 " But for buffers with <C-P> I like it reversed, so we can hit <C-P> <C-P> <C-P> like in WebStorm
 " Break out of FZF when pressing Escape
 augroup FZF
