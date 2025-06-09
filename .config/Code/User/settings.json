@@ -149,6 +149,8 @@
     //"editor.parameterHints.enabled": true,
     // Show the suggestion in the editor itself
     "editor.suggest.preview": true,
+    // You may want to turn this off, because it sometimes conflicts with Cursor (if Cursor suggests something, but then I use Tab to autocomplete, then I see two suggestions mushed together! I got this on Linux as well as macOS.)
+    //"editor.suggest.preview": false,
 
     // Should we select the first entry when the suggestions dropdown appears?
     // I think this is now managed by my custom keybinds
@@ -172,6 +174,13 @@
     // Without this, you need to press Ctrl-Shift-Space / Cmd-Shift-Space to see them
     // Enable parameter hints
     "editor.parameterHints.enabled": true,
+
+    // AI tools
+    // Cursor
+    "cursor.cpp.enablePartialAccepts": true,
+    // Gemini Code Assist
+    "geminicodeassist.enableTelemetry": false,
+    "geminicodeassist.verboseLogging": true,
 
     // This will show the types of variables, functions, etc. inside the code
     // To show them, press Ctrl+Alt
@@ -707,6 +716,8 @@
         { "before": [ "<Leader>", "f" ], "commands": [ "workbench.action.toggleSidebarVisibility" ] },
         // Toggle right sidebar
         { "before": [ "<Leader>", "t" ], "commands": [ "workbench.action.toggleAuxiliaryBar" ] },
+        // Focus Outline view
+        //{ "before": [ "<Leader>", "t" ], "commands": [ "outline.focus" ] },
         // Toggle both sidebars
         { "before": [ "<Leader>", "i" ], "commands": [ "workbench.action.toggleAuxiliaryBar", "workbench.action.toggleSidebarVisibility" ] },
         // Find items quickly by "tag"
