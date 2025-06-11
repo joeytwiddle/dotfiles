@@ -273,8 +273,12 @@ endif
 " nmap <C-X> :vnew \| vimshell bash<CR>
 
 "" Quick access to ConqueTerm
-:nnoremap <C-x> :ConqueTermSplit zsh<Enter>
 "" My ConqueTerm settings live in ~/.vimrc
+"nnoremap <C-x> :ConqueTermSplit zsh<Enter>
+""
+"" Use Vim's built-in terminal
+nnoremap <C-x> :belowright terminal<Enter>
+"nnoremap <C-`> :belowright terminal<Enter>
 
 "" I want :q to close the buffer, not the window.
 "" Unfortunately this does not quit Vim if we are on the last buffer.
@@ -566,7 +570,7 @@ nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:1 foldmethod=expr 
 " Not a good idea to map 'S' in Insert mode...
 "inoremap S <Esc>:w<Enter>i
 " Putting a custom mapping on S was a bad idea.  Because if muscle-memory tries to use it on a Vim without my keybinds, I end up clearing part of the current line and entering insert mode, which is probably terrifying for whoever is watching me edit.  Let's retrain the muscles to use Z instead:
-nnoremap <silent> S :echohl ErrorMsg <Bar> echo "NOT SAVED!  Press Z to save." <Bar> echohl<Enter>
+nnoremap <silent> S :echohl ErrorMsg <Bar> echo "NOT SAVED!  Press <C-s> to save." <Bar> echohl<Enter>
 "nnoremap Z :w<Enter>
 " Oh damnit Z was a little better, but not much.  Although Z does nothing on default Vim, ZZ is save-and-quit!  :S
 " We could instead go for something safer and easier to reach that I never use, e.g. L or H.  (Currently I have l seek forwards and L seek back, but I hardly ever use them.)
@@ -585,6 +589,11 @@ nnoremap <C-s> :wa<Enter>
 if has('mac') || has('macunix')
 	nmap <d-s> <C-s>
 endif
+" Same keystroke: Alt-S on Linux
+" In GVim
+nmap <A-s> <C-s>
+" But in Linux terminals, this is received as
+nmap <Esc>s <C-s>
 
 " Normally ZZ quits only the current window, and quits Vim if it was the last window.
 " But the builtin ZZ gets confused by MiniBufExplorer.
@@ -1179,17 +1188,23 @@ nnoremap <silent> ð :Buffers<CR>
 nnoremap <silent> <C-A> :Files<CR>
 nnoremap <silent> <D-p> :Files<CR>
 " When opening the Files finders, put the prompt at the top (reverse layout)
-command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--no-multi']}, <bang>0)
+"command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--no-multi']}, <bang>0)
+command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--no-multi']}), <bang>0)
 " And for buffers with <C-E> we will put the prompt at the top
 "nnoremap <silent> <C-E> :let g:fzf_layout = { 'window': '30split' }<CR>:call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
 "nnoremap <silent> <C-E> :<C-U>call fzf#vim#buffers('', {'options': ['--layout=reverse']})<CR>
+" We can't use <q-args> in a mapping, only in a command
+"nnoremap <silent> <C-E> :call fzf#vim#buffers(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse']}))<CR>
+"nnoremap <silent> <C-E> :call fzf#vim#buffers('', fzf#vim#with_preview({'options': ['--layout=reverse']}))<CR>
+" <C-E> used to call JoeysBufferSwitch(), which would work like <C-^> if prefixed by a number (it would simply jump to the numbered buffer)
+" Now that <C-E> calls FZF, I need a function to retain that old behaviour
 nnoremap <silent> <C-E> :<C-U>call <SID>JumpToBufferOrOpenFzfBuffers()<CR>
 function! s:JumpToBufferOrOpenFzfBuffers()
 	" If a count was provided before the keypress, then jump directly to the buffer with that number
 	if v:count > 0
 		exec v:count . "b"
 	else
-		call fzf#vim#buffers('', {'options': ['--layout=reverse']})
+		call fzf#vim#buffers('', fzf#vim#with_preview({'options': ['--layout=reverse']}))
 	endif
 endfunction
 " But for buffers with <C-P> I like it reversed, so we can hit <C-P> <C-P> <C-P> like in WebStorm
@@ -1231,6 +1246,8 @@ nnoremap ??? ?\<\><Left><Left>
 " I added <C-L> on the end because on a terminal, when we started running the browser, the screen would go blank
 nmap gx :silent execute "!open_in_current_browser " . shellescape("<cWORD>")<CR><C-L>
 
+" By default, :new splits the current window and the new empty window.
+" This mapping will close the current (old) window, to make the new one full size.
 " This is not ideal.  If you try to search with `/new` then this expansion happens!
 "cnoremap new new <Bar> wincmd p <Bar> wincmd c
 " We can check the command type, so the expansion only happens in certain situations
@@ -1273,5 +1290,8 @@ vnoremap <silent> cs <Esc>:<C-U>echo "Press S for surround plugin (or s to chang
 vnoremap <silent> csw <Esc>:<C-U>echo "Press S for surround plugin (or s to change selected text)"<CR>:sleep 2<CR>gv
 nnoremap <silent> <C-Q> :echo "Use <"."C-V> for blockwise visual, not <"."C-Q>"<CR>:sleep 2<CR>
 
-" Ctrl-Tab switches to recent buffers (currently only between the most recent two)
-nnoremap <C-Tab> <C-^>
+" Ctrl-Tab switches to recent buffers
+" Simple solution, but only toggles between the most recent two
+"nnoremap <C-Tab> <C-^>
+" Invokes fzf, makes it possible to reach older tabs, but with slightly different keystrokes from other apps
+nmap <C-Tab> <C-E>

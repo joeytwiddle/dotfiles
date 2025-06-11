@@ -750,6 +750,11 @@ function! <SID>StartExplorer(sticky, delBufNum)
   call <SID>DEBUG('Entering StartExplorer()'   ,10)
   call <SID>DEBUG('===========================',10)
 
+  " Some of the commands below break when we are focus on the Command Line window, so let's disable this function while that is open
+  if bufexists("[Command Line]")
+    return
+  endif
+
   if a:sticky == 1
     let g:miniBufExplorerAutoUpdate = 1
   endif
@@ -899,6 +904,11 @@ function! <SID>StartExplorer(sticky, delBufNum)
       " highlight MBEVisibleChanged  term=bold,reverse cterm=bold gui=bold ctermbg=white ctermfg=blue guibg=white guifg=blue
       " highlight MBEVisibleChanged  term=bold,reverse cterm=bold gui=bold ctermbg=yellow ctermfg=blue guibg=darkyellow guifg=blue
       highlight MBEVisibleChanged  term=bold,reverse gui=bold ctermbg=black ctermfg=white cterm=reverse,bold guibg=white guifg=black
+
+      " I actually prefer these settings, but since they keep getting cleared, we will reload them here
+      if filereadable($HOME . "/.vim/mac_colors.vim")
+        source $HOME/.vim/mac_colors.vim
+      endif
     endif
 
   endif

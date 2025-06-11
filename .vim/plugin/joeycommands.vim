@@ -307,7 +307,11 @@ command! VB          normal! <C-v>
 command! ALEList lopen | echo "Use ]l and [l to walk through reports"
 
 " Originally in ftplugin/sh.vim but I sometimes need this before Vim has detected the file is a shellscript!
-command! Shebang normal ggO#!/usr/bin/env bash<CR>set -e<CR><Esc><C-O>
+" On shell files, hitting `<CR>` prepends a `#` but in text files, it does not!
+" This version works on shell files but not text files:
+"command! Shebang normal ggO#!/usr/bin/env bash<CR><C-U>set -e<CR><Esc><C-O>
+" We search for `[#]*` instead of `#` because that will not complain if no match was found.
+command! Shebang normal ggO#!/usr/bin/env bash<CR><Esc>:s/^[#]*//<CR>aset -e<CR><Esc><C-O><C-O>
 
 command! Prettier exec "!jprettier %" | edit | set ts=2 sw=2
 

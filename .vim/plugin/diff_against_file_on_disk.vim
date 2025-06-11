@@ -38,6 +38,7 @@ function! DiffAgainstFileOnDisk()
   "exec "!" . g:DAFOD_diffcmd . " /tmp/working_copy.$USER % && echo '---- File and buffer are identical ----'"
   let filename = bufname("%")
   let filename_escaped = shellescape(filename)
+  " I wish I could use `silent` here, so the ugly `!...` command is not show, but unfortunately `silent` will also hide the shell command's output!
   exec "!" . g:DAFOD_diffcmd . " /tmp/working_copy.$USER " . filename_escaped . " && echo '---- File and buffer are identical ----'"
   " BUG: Many of my color diff commands don't return the correct exit code anyway!
   " This is annoying because it comes *after* the "Pres ENTER" message :P

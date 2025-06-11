@@ -1,3 +1,3 @@
-if exists("$VIMRUNTIME/macros/matchit.vim")
-  exec "source $VIMRUNTIME/macros/matchit.vim"
+if filereadable($VIMRUNTIME . "/macros/matchit.vim")
+  source $VIMRUNTIME/macros/matchit.vim
 endif
