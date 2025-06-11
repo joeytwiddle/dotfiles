@@ -483,7 +483,7 @@ endif
 " scroll left and right to keep your current tab in view.
 "
 if !exists('g:miniBufExplWinWrap')
-  let g:miniBufExplWinWrap = 1
+  let g:miniBufExplWinWrap = 0
 endif
 
 " }}}
