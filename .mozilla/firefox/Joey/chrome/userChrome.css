@@ -235,6 +235,7 @@ In the DevTools style editor, you can hit + to create a new style sheet, and the
 toolbaritem#urlbar-container {
     /* --urlbar-container-height: 48px !important; */
     /* min-height: 48px !important; */
+    /* min-height: 44px !important; */
 }
 #urlbar {
     /* Default is 30px */
@@ -255,7 +256,15 @@ toolbaritem#urlbar-container {
 }
 /* #urlbar:not(.megabar), #urlbar.megabar > #urlbar-background, #searchbar, #urlbar-input-container { */
 #urlbar, #urlbar-background, #searchbar, #urlbar-input-container {
-    border-radius: 16px !important;
+    /* Fully rounded */
+    /* border-radius: 16px !important; */
+    /* Slightly rounded, slightly square */
+    border-radius: 8px !important;
+}
+/* The pill which sits on the left of the location bar and offers different search engines */
+#urlbar-searchmode-switcher {
+  /*border-radius: 16px !important;*/
+  border-radius: 8px !important;
 }
 #urlbar-input-container {
     /* Subtly make the url box raised up a bit from the toolbar background */
@@ -281,7 +290,7 @@ toolbaritem#urlbar-container {
     /* box-shadow: inset 0 0 12px #0000002f !important; */
     /* box-shadow: inset 0 0 6px #00000044 !important; */
     /* box-shadow: inset 0 0 8px #00000033 !important; */
-    box-shadow: inset 0 0 10px #00000026 !important;
+    /* box-shadow: inset 0 0 10px #00000026 !important; */
 }
 #urlbar:not(.megabar)[focused="true"], #urlbar.megabar[focused="true"] {
     /* box-shadow: none !important; */
