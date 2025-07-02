@@ -53,7 +53,10 @@ joeberria.statusbarerror
 joelday.docthis
 joeytwiddle.gentle-mary
 johnpapa.vscode-peacock
+# AI tool
+#jolt.bridge
 #-jpoissonnier.vscode-styled-components
+jprestidge.theme-material-theme
 juanblanco.solidity
 #-k--kato.intellij-idea-keybindings
 kamikillerto.vscode-colorize
@@ -116,11 +119,13 @@ stringham.copy-with-imports
 #-thibaudcolas.stylelint
 #-timkmecl.chatgpt
 timonwong.shellcheck
+tobiasalthoff.atom-material-theme
 #-tomphilbin.gruvbox-themes
 #tonybaloney.vscode-pets
 #-trunk.io
 #uloco.theme-bluloco-light
 usernamehw.errorlens
+#visualstudioexptteam.intellicode-api-usage-examples
 #visualstudioexptteam.vscodeintellicode
 #-vit-m.template-strings
 #vscjava.vscode-java-debug
