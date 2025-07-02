@@ -316,16 +316,19 @@
       "values": [
         // This is mine, it's nice and calm, but a bit boring
         { "workbench.colorTheme": "Gentle Mary" },
-        // This one looks cool
-        { "workbench.colorTheme": "Material Theme" },
-        // Grey version
-        { "workbench.colorTheme": "Material Theme Darker" },
+        { "workbench.colorTheme": "Atom Material Theme" },
+        { "workbench.colorTheme": "Tokyo Night" },
+        { "workbench.colorTheme": "Black Rock" },
+        // These looks cool
+        { "workbench.colorTheme": "Night Wolf (gray)" },
+        { "workbench.colorTheme": "SynthWave '84" },
         // These lighter themes are good when working in bright conditions
-        //{ "workbench.colorTheme": "Material Theme Lighter High Contrast" },
         { "workbench.colorTheme": "Quiet Light" },
         { "workbench.colorTheme": "Visual Studio Light" },
         //{ "workbench.colorTheme": "Default Light +" },
         { "workbench.colorTheme": "Default Light Modern" },
+        //{ "workbench.colorTheme": "Community Material Theme Lighter" },
+        //{ "workbench.colorTheme": "Community Material Theme Lighter High Contrast" },
       ]
     }
   },
@@ -338,16 +341,19 @@
       "values": [
         // This is mine, it's nice and calm, but a bit boring
         { "workbench.colorTheme": "Gentle Mary" },
-        // This one looks cool
-        { "workbench.colorTheme": "Material Theme" },
-        // Grey version
-        { "workbench.colorTheme": "Material Theme Darker" },
+        { "workbench.colorTheme": "Atom Material Theme" },
+        { "workbench.colorTheme": "Tokyo Night" },
+        { "workbench.colorTheme": "Black Rock" },
+        // These looks cool
+        { "workbench.colorTheme": "Night Wolf (gray)" },
+        { "workbench.colorTheme": "SynthWave '84" },
         // These lighter themes are good when working in bright conditions
-        //{ "workbench.colorTheme": "Material Theme Lighter High Contrast" },
         { "workbench.colorTheme": "Quiet Light" },
         { "workbench.colorTheme": "Visual Studio Light" },
         //{ "workbench.colorTheme": "Default Light +" },
         { "workbench.colorTheme": "Default Light Modern" },
+        //{ "workbench.colorTheme": "Community Material Theme Lighter" },
+        //{ "workbench.colorTheme": "Community Material Theme Lighter High Contrast" },
       ]
     }
   },
