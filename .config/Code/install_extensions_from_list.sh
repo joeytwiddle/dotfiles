@@ -10,13 +10,13 @@ cat ~/.config/Code/EXTENSIONS.list |
     grep -v '^$' |
     # Skip any extensions which are already installed
     grep -v -F -x -f EXTENSIONS.list.CURRENT |
-    xargs -L 1 echo code --install-extension
+    xargs -L 1 -r echo code --install-extension
 
 cat ~/.config/Code/EXTENSIONS.list |
     grep '^#-' |
     sed 's/^#-//' |
     # Select only extensions which are currently installed
     grep -F -x -f EXTENSIONS.list.CURRENT |
-    xargs -L 1 echo code --uninstall-extension
+    xargs -L 1 -r echo code --uninstall-extension
 
 echo "# To install extensions, rerun with |sh"
