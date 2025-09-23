@@ -532,7 +532,8 @@
 
   // Disable existing keybindings which use Cmd-L or Alt-L
   { "key": "cmd+l", "command": "-expandLineSelection", "when": "textInputFocus" },
-  { "key": "alt+l", "command": "toggleSearchEditorContextLines", "when": "inSearchEditor" },
+  { "key": "alt+l", "command": "-toggleSearchEditorContextLines", "when": "inSearchEditor" },
+  { "key": "alt+l", "command": "-toggleFindInSelection", "when": "editorFocus" },
   //
   { "key": "cmd+l cmd+c", "command": "-fiveServer.close", "when": "editorTextFocus" },
   { "key": "alt+l alt+c", "command": "-fiveServer.close", "when": "editorTextFocus" },
