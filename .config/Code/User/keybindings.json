@@ -6,6 +6,10 @@
   //     and
   //     >Developer: Inspect Context Keys
   // https://code.visualstudio.com/api/references/when-clause-contexts
+  //
+  { "key": "alt+cmd+j", "command": "workbench.action.toggleDevTools" },
+  { "key": "meta+alt+j", "command": "workbench.action.toggleDevTools" },
+  { "key": "ctrl+shift+j", "command": "workbench.action.toggleDevTools" },
 
   /*
   // Walk through search results with Alt-Up/Down (VSCode default is F4, Shift-F4)
@@ -525,6 +529,15 @@
   { "key": "cmd+t", "command": "workbench.action.terminal.new", "when": "terminalFocusInAny && (terminalProcessSupported || terminalWebExtensionContributedProfile)" },
 
   /* ==== Keybindings for AI tools ==== {{{ */
+
+  // Disable existing keybindings which use Cmd-L or Alt-L
+  { "key": "cmd+l", "command": "-expandLineSelection", "when": "textInputFocus" },
+  { "key": "alt+l", "command": "toggleSearchEditorContextLines", "when": "inSearchEditor" },
+  //
+  { "key": "cmd+l cmd+c", "command": "-fiveServer.close", "when": "editorTextFocus" },
+  { "key": "alt+l alt+c", "command": "-fiveServer.close", "when": "editorTextFocus" },
+  { "key": "cmd+l cmd+o", "command": "-fiveServer.openViaShortcut", "when": "editorTextFocus" },
+  { "key": "alt+l alt+o", "command": "-fiveServer.openViaShortcut", "when": "editorTextFocus" },
 
   // Most AI chats open with cmd+l/ctrl+l. But I want to keep ctrl+l for cleaning up the screen (the same as I have in Vim).
   // Unfortunately this doesn't work well if I keep them all in one keybindings.json
