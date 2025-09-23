@@ -365,8 +365,8 @@
   // Since the above overrode the default Cmd-K Cmd-T, then let's create a new bind for it
   //{ "key": "cmd+k cmd+t cmd+k", "command": "workbench.action.selectTheme" },
 
-  { "key": "ctrl+e", "command": "workbench.action.showAllEditorsByMostRecentlyUsed", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
-  { "key": "ctrl+b", "command": "workbench.action.showEditorsInActiveGroup", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
+  { "key": "ctrl+e", "command": "workbench.action.showAllEditorsByMostRecentlyUsed", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl && !terminalFocus" },
+  { "key": "ctrl+b", "command": "workbench.action.showEditorsInActiveGroup", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl && !terminalFocus" },
 
   // Default to toggle sidebar is Ctrl+b / Alt+B, but we use that for buffer switcher
   // (Although I rarely actually use that. I use Ctrl+Tab or Ctrl+e far more often.)
