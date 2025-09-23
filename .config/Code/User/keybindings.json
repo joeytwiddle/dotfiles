@@ -562,8 +562,14 @@
 
   // Continue
   // Make keys on Linux like those on macOS
-  { "key": "ctrl+l", "command": "-continue.focusContinueInput" },
-  { "key": "alt+l", "command": "continue.focusContinueInput", "when": "continue.focusContinueInput" },
+  //{ "key": "ctrl+l", "command": "-continue.focusContinueInput" },
+  //{ "key": "alt+l", "command": "continue.focusContinueInput" },
+
+  // Gemini
+  ////{ "key": "cmd+l", "command": "cloudcode.gemini.chatView.focus" },
+  ////{ "key": "alt+l", "command": "cloudcode.gemini.chatView.focus" },
+  //{ "key": "cmd+l", "command": "workbench.view.extension.geminiChat", "when": "viewContainer.workbench.view.extension.geminiChat.enabled && !runningOnCloudShell" },
+  //{ "key": "alt+l", "command": "workbench.view.extension.geminiChat", "when": "viewContainer.workbench.view.extension.geminiChat.enabled && !runningOnCloudShell" },
 
   // Cursor
   // Autocomplete on Ctrl+Shift+Enter instead of on Tab
