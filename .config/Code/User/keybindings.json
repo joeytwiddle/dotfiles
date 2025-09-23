@@ -368,6 +368,12 @@
   { "key": "ctrl+e", "command": "workbench.action.showAllEditorsByMostRecentlyUsed", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
   { "key": "ctrl+b", "command": "workbench.action.showEditorsInActiveGroup", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
 
+  // Default to toggle sidebar is Ctrl+b / Alt+B, but we use that for buffer switcher
+  // (Although I rarely actually use that. I use Ctrl+Tab or Ctrl+e far more often.)
+  { "key": "ctrl+z", "command": "runCommands", "args": { "commands": [ "workbench.action.closeSidebar", "workbench.action.closeAuxiliaryBar" ] }, "when": "!terminalFocus && sideBarVisible" },
+  //{ "key": "ctrl+z", "command": "runCommands", "args": { "commands": [ "workbench.action.toggleSidebarVisibility", "workbench.action.toggleAuxiliaryBar" ] }, "when": "!terminalFocus && !sideBarVisible" },
+  { "key": "ctrl+z", "command": "runCommands", "args": { "commands": [ "workbench.action.toggleSidebarVisibility" ] }, "when": "!terminalFocus && !sideBarVisible" },
+
   // When you want to insert a literal tab
   { "key": "ctrl+v tab", "command": "type", "args": { "text": "\t" }, "when": "editorTextFocus" },
 
@@ -594,6 +600,12 @@
   //{ "key": "ctrl+l", "command": "-workbench.action.chat.newEditSession", "when": "chatEditingParticipantRegistered && chatIsEnabled && inChat && chatLocation == 'editing-session'" },
   //{ "key": "alt+l", "command": "workbench.action.chat.newChat", "when": "chatIsEnabled && inChat && !config.chat.unifiedChatView && chatLocation != 'editing-session'" },
   //{ "key": "alt+l", "command": "workbench.action.chat.newEditSession", "when": "chatEditingParticipantRegistered && chatIsEnabled && inChat" },
+
+  // Close the auxiliary bar when pressing ALt+L again
+  // Unfortunately auxiliaryBarFocus doesn't trigger when it should
+  // So we use auxiliaryBarVisible but we use this complex where clause so hopefully it won't close when it's visible but not focused
+  { "key": "cmd+l", "command": "workbench.action.closeAuxiliaryBar", "when": "auxiliaryBarVisible && !sideBarFocus && !editorFocus && !terminalFocus" },
+  { "key": "alt+l", "command": "workbench.action.closeAuxiliaryBar", "when": "auxiliaryBarVisible && !sideBarFocus && !editorFocus && !terminalFocus" },
 
   /* }}} */
 
