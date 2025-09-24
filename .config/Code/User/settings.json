@@ -152,6 +152,11 @@
     // You may want to turn this off, because it sometimes conflicts with Cursor (if Cursor suggests something, but then I use Tab to autocomplete, then I see two suggestions mushed together! I got this on Linux as well as macOS.)
     //"editor.suggest.preview": false,
 
+    // Automatically asks AI tools to show suggestions
+    //"editor.inlineSuggest.enabled": true,
+    // Do not automatically call AI tools. Only activate on "Trigger Inline Suggestion" (Ctrl+Shift+Space for me). Can help to prevent 429 Too Many Requests.
+    "editor.inlineSuggest.enabled": false,
+
     // Should we select the first entry when the suggestions dropdown appears?
     // I think this is now managed by my custom keybinds
     //"editor.suggest.selectionMode": "always",
