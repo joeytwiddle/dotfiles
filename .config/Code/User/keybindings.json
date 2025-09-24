@@ -295,16 +295,13 @@
       "overrideWorkspaceSettings": true,
       "values": [
         {
-          //"window.zoomLevel": -0.5
-          "window.zoomLevel": -0.8
+          "window.zoomLevel": -0.6
         },
         {
-          //"window.zoomLevel": -0.8
-          "window.zoomLevel": -1
+          "window.zoomLevel": -0.2
         },
         {
-          //"window.zoomLevel": 0
-          "window.zoomLevel": -0.5
+          "window.zoomLevel": 0.2
         }
       ]
     }
