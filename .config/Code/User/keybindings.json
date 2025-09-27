@@ -605,12 +605,34 @@
   //{ "key": "alt+l", "command": "workbench.action.chat.newChat", "when": "chatIsEnabled && inChat && !config.chat.unifiedChatView && chatLocation != 'editing-session'" },
   //{ "key": "alt+l", "command": "workbench.action.chat.newEditSession", "when": "chatEditingParticipantRegistered && chatIsEnabled && inChat" },
 
-  // Close the auxiliary bar when pressing ALt+L again
+  // Windsurf Plugin (formerly Codium)
+  //{ "key": "cmd+l", "command": "codeium.openChatView", "when": "true" },
+  //{ "key": "alt+l", "command": "codeium.openChatView", "when": "true" },
+
+  // Open auxiliary bar when pressing ALt+L / Cmd+L
+  // Instead of having Alt+L / Cmd+L open a specific extension, we can install various extensions at once, and just have that keybind open the auxiliary bar, to focus whichever one we were last working with
+  // Disadvantage: When using Windsurf, it does not focus back on the text input box, although with Gemini Code Assist it does
+  // You can hit Tab then Shift-Tab to refocus the input box in Windsurf
+  //
+  // Note that it's often not desirable to have multiple AI agents enabled at once, because it's not clear which one will be offering autocomplete suggestions.
+  //
+  // Disable unwanted defaults (actually doesn't seem necessary. These keybindings override those.)
+  //{ "key": "cmd+l", "command": "continue.focusContinueInput" },
+  { "key": "alt+l", "command": "workbench.action.focusAuxiliaryBar", "when": "!auxiliaryBarFocus" },
+  { "key": "cmd+l", "command": "workbench.action.focusAuxiliaryBar", "when": "!auxiliaryBarFocus" },
+
+  // Close the auxiliary bar when pressing ALt+L / Cmd+L
   // Unfortunately auxiliaryBarFocus doesn't trigger when it should
   // So we use auxiliaryBarVisible but we use this complex where clause so hopefully it won't close when it's visible but not focused
   { "key": "alt+l", "command": "workbench.action.closeAuxiliaryBar", "when": "auxiliaryBarVisible && !sideBarFocus && !editorFocus && !terminalFocus" },
   // I initially needed this for Continue on Linux, but it doesn't seem necessary for Continue on macOS, so let's leave that disabled
-  //{ "key": "cmd+l", "command": "workbench.action.closeAuxiliaryBar", "when": "auxiliaryBarVisible && !sideBarFocus && !editorFocus && !terminalFocus" },
+  // But actually I quite like it being consistent across all tools, so let's leave it enabled
+  { "key": "cmd+l", "command": "workbench.action.closeAuxiliaryBar", "when": "auxiliaryBarVisible && !sideBarFocus && !editorFocus && !terminalFocus" },
+
+  // Cycle through aux panel, or indeed primary sidebar panels?
+  // These are not working yet
+  //{ "key": "shift+cmd+[", "command": "workbench.action.previousPanelView", "when": "true" },
+  //{ "key": "shift+cmd+]", "command": "workbench.action.nextPanelView", "when": "true" },
 
   /* }}} */
 
