@@ -153,9 +153,9 @@
     //"editor.suggest.preview": false,
 
     // Automatically asks AI tools to show suggestions
-    //"editor.inlineSuggest.enabled": true,
+    "editor.inlineSuggest.enabled": true,
     // Do not automatically call AI tools. Only activate on "Trigger Inline Suggestion" (Ctrl+Shift+Space for me). Can help to prevent 429 Too Many Requests.
-    "editor.inlineSuggest.enabled": false,
+    //"editor.inlineSuggest.enabled": false,
 
     // Should we select the first entry when the suggestions dropdown appears?
     // I think this is now managed by my custom keybinds
