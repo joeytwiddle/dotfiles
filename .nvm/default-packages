@@ -1,0 +1,21 @@
+yarn
+pnpm
+#@eankeen/cliflix@2.4.0
+js-beautify
+#npkill
+prettier
+#standard
+tldr
+#nativefier
+#nodemon
+# Search https://npms.io from the command line!
+#npms-cli@1.6.0
+#ts-standard
+#typescript@4.1.5
+#webtorrent-cli@3.2.1
+#
+# Converts Node.js application into a single executable (you may want to use upx to compress the result)
+# https://github.com/nexe/nexe
+# Example: nexe ./index.js -t linux-x86-8.9.4 # That was the latest release I could find at https://github.com/nexe/nexe/releases/tag/v3.3.3
+# In my test, a hello-world program with the 8.9.4 binary was 33MB in size
+#nexe@3
