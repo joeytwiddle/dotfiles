@@ -242,7 +242,7 @@ git_status_plus() {
 			# Remove the fractional part of the date.
 			sed 's+\.[0-9]*++'
 		) |
-		sort -n -k 2 -r > "$current_stats_file"
+		sort -n -k 2 -r >| "$current_stats_file"
 
 		#diff "$previous_stats_file" "$current_stats_file" |
 		#grep '^>'
@@ -1362,7 +1362,7 @@ vim_for_git_logs() {
 }
 
 vim_for_git_logs_from_stdin() {
-	#cat > /tmp/vim_for_git_logs.out
+	#cat >| /tmp/vim_for_git_logs.out
 	#vim_for_git_logs "$@" /tmp/vim_for_git_logs.out
 	vim_for_git_logs "$@" -
 }
