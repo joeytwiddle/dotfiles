@@ -22,7 +22,7 @@
     },
     {
       "name": "Number",
-      "scope": "constant.numeric",
+      "scope": "constant.numeric, constant.dec.numeric.json5, constant.hex.numeric.json5",
       "settings": {
         "foreground": "#88CCCC"
       }
@@ -289,7 +289,7 @@
     },
     {
       "name": "JSON key",
-      "scope": "meta.object-literal.key, meta.object-literal.key string, support.type.property-name.json",
+      "scope": "meta.object-literal.key, meta.object-literal.key string, support.type.property-name.json, string.key.json5, variable.name.tag.json5.key",
       "settings": {
         "foreground": "#4B95DC"
       }
