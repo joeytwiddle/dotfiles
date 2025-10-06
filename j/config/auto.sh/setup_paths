@@ -40,8 +40,12 @@ fi
 PATH="/usr/local/bin:$PATH"
 
 # Python path
-for pyver in "$HOME"/Library/Python/*
-do export PATH="$pyver/bin:$PATH"
-done
+# Check the folder exists, to prevent (reduce) the error "no matches found"
+if [ -d "$HOME"/Library/Python/ ]
+then
+	for pyver in "$HOME"/Library/Python/*
+	do export PATH="$pyver/bin:$PATH"
+	done
+fi
 
 export PATH="$HOME/bin:$PATH"
