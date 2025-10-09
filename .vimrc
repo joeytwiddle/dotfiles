@@ -321,6 +321,10 @@ autocmd VimLeave * silent !stty ixon
 
 	let g:JBS_Show_Buffer_List_First = 0
 
+	if has('mac') || has('macunix')
+		let g:toggle_terminal_fix_macvim_mappings = 1
+	endif
+
 " }}}
 
 
