@@ -5,6 +5,15 @@ vnoremap <silent> <C-`> <ESC>:call <SID>ToggleTerm()<CR>
 inoremap <silent> <C-`> <ESC>:call <SID>ToggleTerm()<CR>
 tnoremap <silent> <C-`> <C-W>N:call <SID>ToggleTerm()<CR>
 
+" In MacVim, when I press Ctrl-` it receives a plain `, so let's map that
+" This will of course interfere with the default use of ` as "jump to mark"
+if get(g:, 'toggle_terminal_fix_macvim_mappings', 0) && (has('mac') || has('macunix')) && has('gui')
+	nmap ` <C-`>
+	vmap ` <C-`>
+	"imap ` <C-`>
+	tmap ` <C-`>
+endif
+
 " If this grows on me, I'll tnoremap <c-d> to <cmd>wincmd c<cr>
 
 function! s:ToggleTerm() abort
