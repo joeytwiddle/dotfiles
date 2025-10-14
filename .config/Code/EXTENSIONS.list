@@ -45,12 +45,10 @@ gruntfuggly.todo-tree
 hoovercj.vscode-settings-cycler
 # You can get this same feature (and more) from Error Lens
 #-igorsbitnev.error-gutters
-#isral.elastic-tabstops-mono
+isral.elastic-tabstops-mono
 #-infeng.vscode-react-typescript
 #-jeff-hykin.better-shellscript-syntax
 joeberria.statusbarerror
-# Newer fork
-joelday.docthis
 joeytwiddle.gentle-mary
 johnpapa.vscode-peacock
 # AI tool
@@ -87,8 +85,7 @@ ms-vscode.cpptools
 #-naumovs.color-highlight
 #nicoespeon.abracadabra
 # Original
-#-oouo-diogo-perdigao.docthis
-onxgroup.elastic-tabstops-mono
+-oouo-diogo-perdigao.docthis
 #-philhindle.errorlens
 pkief.material-icon-theme
 planbcoding.vscode-react-refactor
