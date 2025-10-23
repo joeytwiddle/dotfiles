@@ -55,7 +55,7 @@
     */
     {
       "name": "Keyword",
-      "scope": "keyword, modifier, variable.language.this, support.type.object, constant.language, keyword.operator.expression",
+      "scope": "keyword, modifier, variable.language.this, support.type.object, constant.language, keyword.operator.expression, keyword.operator.new",
       "settings": {
         "foreground": "#AF4A67",
         "fontStyle": "bold"
