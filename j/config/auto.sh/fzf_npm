@@ -1,0 +1,48 @@
+function fzf_npm_run() {
+	if ! command -v jq &> /dev/null
+	then
+		echo "Error: 'jq' (JSON processor) is required but not installed." >&2
+		echo "Install it via your package manager (e.g., 'sudo apt install jq' or 'brew install jq')." >&2
+		return 1
+	fi
+	if ! command -v fzf &> /dev/null
+	then
+		echo "Error: 'fzf' (fuzzy finder) is required but not installed." >&2
+		echo "Install it via your package manager (e.g., 'sudo apt install fzf' or 'brew install fzf')." >&2
+		return 1
+	fi
+
+	if [ ! -f "package.json" ]
+	then
+		echo "Error: package.json not found in the current directory." >&2
+		return 1
+	fi
+
+	local selected_line
+	# TODO: Pipe output of jq through column
+	selected_line=$(
+		jq -r '.scripts | to_entries[] | "\(.key)        :: \(.value)"' package.json 2>/dev/null |
+		sort |
+		fzf --prompt="npm run " \
+			--layout=reverse \
+			--query="$1" \
+			#--delimiter=' :: ' \
+			#--with-nth=1,.. \
+			#--border=rounded \
+			#--color=bg+:-1,fg:252,header:110,prompt:166,hl:108 \
+			#--header="Select npm script to run:"
+	)
+
+	local selected_script
+	if [ -n "$selected_line" ]
+	then
+		# Use 'cut' to extract only the first field (the script key) from the tab-separated line
+		selected_script="$(echo "$selected_line" | sed 's+ *:: .*++')"
+		echo "# Running: npm run ${selected_script}"
+		npm run "$selected_script"
+	fi
+}
+# My policy is to use nrf (f for fuzzy) but my fingers tend to have their own ideas. Let's see in time which alias they gravitate towards...
+alias nrf='fzf_npm_run'
+alias nrr='fzf_npm_run'
+alias nrx='fzf_npm_run'
