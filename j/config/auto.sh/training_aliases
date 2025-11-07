@@ -37,13 +37,20 @@ alias cp='cp_is_disabled'
 alias cpai='cp -a -i'
 
 rm_is_disabled() {
-	# In zsh echo shows \rm
-	# In bash echo shows \\rm
-	# But if we use printf, they both show the same
-	printf "%s\n" "$(cursered;cursebold)rm is disabled, use trash or del or \\rm instead.$(cursenorm)"
-	return 1
+	if [ "$1" = -i ] || [ "$1" = -f ]
+	then 'rm' "$@"
+	else
+		# In zsh echo shows \rm
+		# In bash echo shows \\rm
+		# But if we use printf, they both show the same
+		printf "%s\n" "$(cursered;cursebold)rm is disabled, use trash or del or \\rm instead.$(cursenorm)"
+		return 1
+	fi
 }
 alias rm='rm_is_disabled'
+alias rmi='rm -i'
+#alias rmf='rm -f'
+alias rmf='echo "Doing nothing. Use rm -f but only if you are sure!"'
 
 alias adduser='useradd'
 alias useradd='echo "To create a skeleton home folder, remember: \\useradd -m"'

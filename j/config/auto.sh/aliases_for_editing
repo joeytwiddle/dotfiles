@@ -17,6 +17,13 @@ echeat() {
 	)
 }
 
+econf() {
+	(
+		cd ~/.config || return
+		fe "$@"
+	)
+}
+
 ejconf() {
 	(
 		cd ~/j/config/auto.sh || return
