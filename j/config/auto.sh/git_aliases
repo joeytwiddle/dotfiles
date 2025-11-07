@@ -542,15 +542,16 @@ alias gmt='git mergetool'
 alias gma='git merge --abort'
 
 # Git pull --rebase will attempt to splice the new upstreams commits in before your unpushed commits.
-gpr_safe() {
-	local current_commit="$(git rev-parse HEAD)"
-	echo "Current commit before rebase (in case abort desired): ${current_commit}"
-	git pull --rebase=preserve
-}
-#alias gpr='git pull --rebase=preserve'
-alias gpr='gpr_safe'
-alias gpp='gpr && git push'
-# If you have already fetched the remote branch, or you want to rebase against a branch that isn't upstream, you can use this
+# But I rarely used this. I tend to use 'gmromn' instead. Using 'gpr' for something else now.
+#gpr_safe() {
+#	local current_commit="$(git rev-parse HEAD)"
+#	echo "Current commit before rebase (in case abort desired): ${current_commit}"
+#	git pull --rebase=preserve
+#}
+##alias gpr='git pull --rebase=preserve'
+#alias gpr='gpr_safe'
+#alias gpp='gpr && git push'
+## If you have already fetched the remote branch, or you want to rebase against a branch that isn't upstream, you can use this
 grp_safe() {
 	local other_branch="$1"
 	[ -n "${other_branch}" ] && shift
@@ -589,7 +590,7 @@ grp_safe() {
 }
 #alias grp='git rebase --rebase-merges "$(git_guess_upstream_branch)"'
 alias grp='grp_safe'
-# Git Merge Rebase (mnemonic)
+# Git Merge Rebase (my mnemonic)
 alias gmr='grp_safe'
 alias grpu='grp $(git_guess_upstream_branch)'
 alias gmru='gmr $(git_guess_upstream_branch)'
@@ -728,6 +729,7 @@ alias gra='git rebase --abort'
 #alias grl='git reflog'
 alias grl='git reflog --color=always --pretty=format:"%C(yellow bold)%h%C(reset)%C(magenta bold)%d%C(reset) %C(black bold)%gs%C(reset) %C(cyan)- %an%C(reset) %C(cyan)(%ar)%C(reset)"'
 alias grldr='grl --date=relative'
+alias grlp='grl -p'
 # Ask git log to walk the reflog, producing output in a familiar style
 alias grll='glc -g'
 # This steps through diffs (but over commit messages, which is a little confusing):
@@ -1749,6 +1751,8 @@ alias gcleani='git clean -i'
 alias gcleanuntracked='git clean -di'
 alias gcleanignored='git clean -dXi'
 alias gcleanall='git clean -dxi'
+
+alias gpr='git-open-pr-in-browser'
 
 alias gcai='aicommits'
 
