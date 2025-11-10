@@ -17,14 +17,14 @@
       "name": "Boolean",
       "scope": "constant.language.boolean",
       "settings": {
-        "foreground": "#88CCCC"
+        "foreground": "#66BBCC"
       }
     },
     {
       "name": "Number",
       "scope": "constant.numeric, constant.dec.numeric.json5, constant.hex.numeric.json5",
       "settings": {
-        "foreground": "#88CCCC"
+        "foreground": "#66BBCC"
       }
     },
     {
