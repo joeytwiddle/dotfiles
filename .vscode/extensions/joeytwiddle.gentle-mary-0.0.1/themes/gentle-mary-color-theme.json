@@ -39,7 +39,13 @@
       "name": "Variable",
       "scope": "variable.parameter, variable.other",
       "settings": {
+        //"fontStyle": "bold",
         "foreground": "#CCCCCC"
+        //"foreground": "#ee9933"
+        //"foreground": "#dd8866"
+        //"foreground": "#88eeee"
+        //"foreground": "#99ccbb"
+        //"foreground": "#22aacc"
       }
     },
     /*
@@ -47,9 +53,7 @@
       "name": "Identifier",
       "scope": "variable.parameter, variable.other.readwrite",
       "settings": {
-        //"foreground": "#ee9933"
-        //"foreground": "#dd8866"
-        "foreground": "#88eeee"
+        "foreground": "#22aacc"
       }
     },
     */
@@ -640,6 +644,7 @@
       }
     },
     // Highlight where a variable is defined
+    // Note: When enabling this, you might also want to do the same for "Function parameters"
     /*
     {
       "name": "Variable definition",
@@ -647,7 +652,9 @@
       // (I want to do this for variable assignments too, but I found reads were indistinguishable from writes)
       // , variable.other.readwrite.alias.js, variable.other.readwrite.alias.ts
       "settings": {
-        // I find this to be a minor but helpful difference on macOS, but too strong on Linux
+        // When using Lucida Console: "bold" is good on Linux but I don't see any difference on macOS (probably I just didn't have the bold variant installed!)
+        // When using Hasklug: I found "bold" to be a minor but helpful difference on macOS, but too strong on Linux
+        // So for the moment, I am just using a brighter colour
         //"fontStyle": "bold",
         "foreground": "#e4e4e4"
       }
