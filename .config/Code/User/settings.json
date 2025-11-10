@@ -350,6 +350,45 @@
             */
         ],
 
+        "[Gentle Mary]": {
+            "textMateRules": [
+                /*
+                {
+                    "name": "Variable",
+                    "scope": "variable.parameter, variable.other",
+                    "settings": {
+                        //"fontStyle": "bold",
+                        "foreground": "#CCCCCC"
+                        //"foreground": "#ee9933"
+                        //"foreground": "#dd8866"
+                        //"foreground": "#88eeee"
+                        //"foreground": "#99ccbb"
+                        //"foreground": "#22aacc"
+                    }
+                },
+                */
+                // Orange functions instead of green?
+                /*
+                {
+                    "name": "Function call",
+                    "scope": "entity.name.function, support.function",
+                    "settings": {
+                        //"foreground": "#3DA676"
+                        "foreground": "#dd8866"
+                    }
+                },
+                {
+                    "name": "Function definition",
+                    "scope": "entity.name.function",
+                    "settings": {
+                        //"foreground": "#3DA676"
+                        "foreground": "#dd8866"
+                    }
+                },
+                */
+            ],
+        },
+
         // Overrides for Theo's Material Theme
         "[Material Theme*]": {
             "textMateRules": [
