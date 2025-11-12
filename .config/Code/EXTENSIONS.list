@@ -1,11 +1,18 @@
 #4ops.terraform
 #akamud.vscode-theme-onedark
 #akamud.vscode-theme-onelight
+#alefragnani.bookmarks
 #-aminer.codegeex
 #andrejunges.handlebars
 #-andreyvolosovich.monokai-st3
 apollographql.vscode-apollo
 avraammavridis.vsc-react-documentation
+#bierner.emojisense
+# JSON5 extensions:
+# - mrmlnc.vscode-json5 (syntax highlighting only)
+# - blueglassblock.better-json5 (syntax highlighting and validation against JSONSchema)
+# - savh.json5-kit (lots of tools, but not sure if I enjoyed its syntax highlighting)
+#blueglassblock.better-json5
 bradlc.vscode-tailwindcss
 chris-hayes.chatgpt-reborn
 christian-kohler.path-intellisense
@@ -85,7 +92,7 @@ ms-vscode.cpptools
 #-naumovs.color-highlight
 #nicoespeon.abracadabra
 # Original
--oouo-diogo-perdigao.docthis
+oouo-diogo-perdigao.docthis
 #-philhindle.errorlens
 pkief.material-icon-theme
 planbcoding.vscode-react-refactor
