@@ -63,7 +63,7 @@ fe() {
       shift
     fi
     local files
-    IFS=$'\n' files=($(fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --query="$1 " --multi --select-1 --exit-0))
+    IFS=$'\n' files=($(fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --query="$1${1:+ }" --multi --select-1 --exit-0))
     [[ -n "$files" ]] && "$FZF_EDITOR" "${files[@]}"
   )
 }
@@ -73,7 +73,7 @@ fe() {
 #   - CTRL-E or Enter key to open with the $EDITOR
 fo() {
   local out file key
-  IFS=$'\n' out=("$(fzf-tmux --query="$1 " --exit-0 --expect=ctrl-o,ctrl-e --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS")")
+  IFS=$'\n' out=("$(fzf-tmux --query="$1${1:+ }" --exit-0 --expect=ctrl-o,ctrl-e --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS")")
   key=$(head -1 <<< "$out")
   file=$(head -2 <<< "$out" | tail -1)
   if [ -n "$file" ]
@@ -132,7 +132,7 @@ fcdlocal() {
     # So if it goes on too long, we just force the find to stop
     head -n 5000 |
     # We leave the sorting to find, because fzf sorting is weird
-    fzf-tmux --no-sort --no-multi --query="$1 " --preview="$FZF_DIRECTORY_PREVIEW_COMMAND"
+    fzf-tmux --no-sort --no-multi --query="$1${1:+ }" --preview="$FZF_DIRECTORY_PREVIEW_COMMAND"
   )"
 
   if [[ -n "$dir" ]]
@@ -194,10 +194,10 @@ fgrep() {
 
 # Fuzzy Git Checkout
 fgco() {
-  #git branch | fzf --no-sort --tac --query="$1 " | xargs git checkout
+  #git branch | fzf --no-sort --tac --query="$1${1:+ }" | xargs git checkout
 
   local result
-  result="$(git_branch_most_recent_last_with_info | fzf --no-sort --tac --query="$1 ")"
+  result="$(git_branch_most_recent_last_with_info | fzf --no-sort --tac --query="$1${1:+ }")"
 
   local branch
   local _
