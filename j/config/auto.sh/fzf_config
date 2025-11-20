@@ -13,8 +13,16 @@ fi
 # You might not need to specify an editor, if your system is configured nicely
 #FZF_EDITOR="xdg-open"
 
-# Do en axact match by default.  To do a fuzzy match, prefix your search with `'`
-export FZF_DEFAULT_OPTS="--exact"
+# By default, fzf lets you use CTRL-J/K/N/P to navigate up and down the list, but I also like to use Tab
+#
+# --exact - Do en axact match by default.  To do a fuzzy match, prefix your search with `'`
+# --reverse - Put the prompt at the top, and let the list flow downwards
+#             If you remove --reverse, you might also find it convenient to make tab to go in the other direction
+export FZF_DEFAULT_OPTS='--exact --reverse --bind "tab:down" --bind "shift-tab:up" --bind "`:up"'
+FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --bind 'ctrl-a:select-all'"
+
+# Do an exact match by default.  To do a fuzzy match, prefix your search with `'`
+export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --exact"
 
 if which rg > /dev/null 2>&1
 then export FZF_DEFAULT_COMMAND='rg --files --hidden'
