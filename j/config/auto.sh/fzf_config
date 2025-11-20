@@ -44,13 +44,20 @@ export FZF_DIRECTORY_PREVIEW_COMMAND="echo {}/; echo; ls -lartFh --color=always 
 
 # End config, start aliases
 
-# fe [FUZZY PATTERN] - Open the selected file with the default editor
-#   - Bypass fuzzy finder if there's only one match (--select-1)
-#   - Exit if there's no match (--exit-0)
+# fe [<dir>] [<pattern>] - Open the selected file with the default editor
+#   - Bypass fuzzy finder if there's only one match (--select-1 or -1)
+#   - Exit if there's no match (--exit-0 or -0)
 fe() {
-  local files
-  IFS=$'\n' files=($(fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && "$FZF_EDITOR" "${files[@]}"
+  (
+    if [ -d "$1" ]
+    then
+      cd "$1"
+      shift
+    fi
+    local files
+    IFS=$'\n' files=($(fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --query="$1" --multi --select-1 --exit-0))
+    [[ -n "$files" ]] && "$FZF_EDITOR" "${files[@]}"
+  )
 }
 
 # Modified version where you can press
