@@ -102,18 +102,24 @@ fog() {
 
 # fcd - fuzzy cd to selected subdirectory
 fcdlocal() {
+  local top_dir
   local dir
 
   # Old version: You provide the folder to look inside, and then filter further in fzf
+  if [ -d "$1" ]
+  then top_dir="$1"; shift
+  else top_dir="."
+  fi
+
   dir="$( \
-    find ${1:-.} -mindepth 1 -type d \
+    find "$top_dir" -mindepth 1 -type d \
       '(' \
         -path '*/\.*' -prune \
         -o -name 'node_modules' -prune \
         -o -print \
       ')' \
       2>/dev/null |
-    fzf-tmux --preview="$FZF_DIRECTORY_PREVIEW_COMMAND" +m
+    fzf-tmux --no-multi --query="$1${1:+ }" --preview="$FZF_DIRECTORY_PREVIEW_COMMAND"
   )"
 
   # New version: Searches for all subfolders below . but searches them breadth-first
