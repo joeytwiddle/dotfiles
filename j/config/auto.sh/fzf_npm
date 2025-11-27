@@ -18,14 +18,19 @@ function fzf_npm_run() {
 		return 1
 	fi
 
-	local selected_line
+	local selected_script
 	# TODO: Pipe output of jq through column
-	selected_line=$(
-		jq -r '.scripts | to_entries[] | "\(.key)        :: \(.value)"' package.json 2>/dev/null |
+	selected_script=$(
+		jq -r '.scripts | to_entries[] | "\(.key) :: \(.value)"' package.json |
 		sort |
+		if command -v columnise-clever >/dev/null 2>&1
+		then columnise-clever -only '[^ ]* ::'
+		else cat
+		fi |
 		fzf --prompt="npm run " \
 			--layout=reverse \
 			--query="$1" \
+			--accept-nth 1 \
 			#--delimiter=' :: ' \
 			#--with-nth=1,.. \
 			#--border=rounded \
@@ -33,12 +38,9 @@ function fzf_npm_run() {
 			#--header="Select npm script to run:"
 	)
 
-	local selected_script
-	if [ -n "$selected_line" ]
+	if [ -n "$selected_script" ]
 	then
-		# Use 'cut' to extract only the first field (the script key) from the tab-separated line
-		selected_script="$(echo "$selected_line" | sed 's+ *:: .*++')"
-		echo "# Running: npm run ${selected_script}"
+		echo "### npm run ${selected_script}"
 		npm run "$selected_script"
 	fi
 }
