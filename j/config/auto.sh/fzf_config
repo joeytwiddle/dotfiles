@@ -105,35 +105,35 @@ fcdlocal() {
   local dir
 
   # Old version: You provide the folder to look inside, and then filter further in fzf
-  #dir="$( \
-  #  find ${1:-.} -mindepth 1 -type d \
-  #    '(' \
-  #      -path '*/\.*' -prune \
-  #      -o -name 'node_modules' -prune \
-  #      -o -print \
-  #    ')' \
-  #    2>/dev/null |
-  #  fzf-tmux --preview="$FZF_DIRECTORY_PREVIEW_COMMAND" +m
-  #)"
-
-  # New version: Searches for all subfolders below . but searches them breadth-first
-  # Tell zsh to ignore the comments inside the $() - unfortunately this will leave it set for the entire session, but avoiding that would be cumbersome
-  [[ -n "$ZSH_NAME" ]] && set -k
   dir="$( \
-    find_breadth_first . -type d \
+    find ${1:-.} -mindepth 1 -type d \
       '(' \
         -path '*/\.*' -prune \
-        -o -path '*/node_modules' -prune \
-        -o -path '*/node_modules/*' -prune \
+        -o -name 'node_modules' -prune \
         -o -print \
       ')' \
       2>/dev/null |
-    # When the user makes a selection, 'fzf' will not exit and the 'cd' will not happen, until this 'find' has completed
-    # So if it goes on too long, we just force the find to stop
-    head -n 5000 |
-    # We leave the sorting to find, because fzf sorting is weird
-    fzf-tmux --no-sort --no-multi --query="$1${1:+ }" --preview="$FZF_DIRECTORY_PREVIEW_COMMAND"
+    fzf-tmux --preview="$FZF_DIRECTORY_PREVIEW_COMMAND" +m
   )"
+
+  # New version: Searches for all subfolders below . but searches them breadth-first
+  # Tell zsh to ignore the comments inside the $() - unfortunately this will leave it set for the entire session, but avoiding that would be cumbersome
+  #[[ -n "$ZSH_NAME" ]] && set -k
+  #dir="$( \
+  #  find_breadth_first . -type d \
+  #    '(' \
+  #      -path '*/\.*' -prune \
+  #      -o -path '*/node_modules' -prune \
+  #      -o -path '*/node_modules/*' -prune \
+  #      -o -print \
+  #    ')' \
+  #    2>/dev/null |
+  #  # When the user makes a selection, 'fzf' will not exit and the 'cd' will not happen, until this 'find' has completed
+  #  # So if it goes on too long, we just force the find to stop
+  #  head -n 5000 |
+  #  # We leave the sorting to find, because fzf sorting is weird
+  #  fzf-tmux --no-sort --no-multi --query="$1${1:+ }" --preview="$FZF_DIRECTORY_PREVIEW_COMMAND"
+  #)"
 
   if [[ -n "$dir" ]]
   then cd "$dir"
