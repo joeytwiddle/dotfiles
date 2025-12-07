@@ -62,9 +62,9 @@ function! s:FindMatches(seek_text)
     let start_time = reltimefloat(reltime())
 
     " Collect all matches with their match length and after_text
-    " Each item: [match_len, after_text, match_suffix, filename, line_num]
+    " Each item: [match_len, after_text, matched_text, filename, line_num]
     " We'll keep this sorted as we go for efficient threshold checking
-    let matches = []
+    let best_matches = []
     let current_buf = bufnr('%')
     let current_line = line('.')
 
@@ -91,7 +91,7 @@ function! s:FindMatches(seek_text)
             if g:CompletePartialLine_DebugLogging
                 echomsg printf('CompletePartialLine: aborting because max time exceeded (%fms > %dms)', elapsed_seconds, g:CompletePartialLine_MaxTimeMS)
             endif
-            call add(matches, [0, 'Timed out after '.elapsed_seconds.' seconds', '', 'TIMED_OUT', ''])
+            call add(best_matches, [0, 'Timed out after '.elapsed_seconds.' seconds', '', 'TIMED_OUT', ''])
             break
         endif
 
@@ -124,14 +124,19 @@ function! s:FindMatches(seek_text)
 
             let check_line = getbufline(bufnum, line_num)[0]
 
-            " Quick optimization: if we already have MaxResults matches, check if this line
-            " can potentially improve our results by checking if it contains at least
-            " the worst match in our list
-            if len(matches) >= g:CompletePartialLine_MaxResults
-                let min_suffix = matches[g:CompletePartialLine_MaxResults - 1][2]
-                if stridx(check_line, min_suffix) < 0
-                    continue
-                endif
+            " If we already have a full set of matches, what is the worst match we need to beat?
+            if len(best_matches) >= g:CompletePartialLine_MaxResults
+                let shortest_match_so_far = best_matches[g:CompletePartialLine_MaxResults - 1][2]
+                let shortest_match_so_far_len = best_matches[g:CompletePartialLine_MaxResults - 1][0]
+            else
+                let shortest_match_so_far = ''
+                let shortest_match_so_far_len = -1
+            endif
+
+            " Optimization: perform a quick check before we start looping from the longest
+            " If this line doesn't contain at least our shortest match so far, then it can't do any better, so skip it
+            if stridx(check_line, shortest_match_so_far) < 0
+                continue
             endif
 
             " Find longest match: longest suffix of seek_text that appears in check_line
@@ -141,29 +146,29 @@ function! s:FindMatches(seek_text)
             " Try all suffixes of seek_text, starting with the longest
             " We break early when we find a match since we want the longest
             for suffix_start in range(0, seek_len - 1)
-                let suffix = strpart(a:seek_text, suffix_start)
-                let suffix_len = len(suffix)
+                let potential_match = strpart(a:seek_text, suffix_start)
+                let potential_match_len = len(potential_match)
 
-                " If all remaining iterations will be smaller than best, then we can give up on this line
-                if suffix_len < best_match_len
+                " If all remaining iterations will be smaller than the shortest we already have collected, then we can give up on this line
+                if potential_match_len < shortest_match_so_far_len
                     break
                 endif
 
-                " Search for this suffix in check_line
-                let match_pos = stridx(check_line, suffix)
+                " Search for this text in check_line
+                let match_pos = stridx(check_line, potential_match)
                 if match_pos >= 0
                     " Found a match - this is the longest for this line since we start with longest
-                    let best_match_len = suffix_len
+                    let best_match_len = potential_match_len
                     let best_match_pos = match_pos
                     break
                 endif
             endfor
 
-            " If we found a match, get the text after it and add to matches list
+            " If we found a match, get the text after it and add to best_matches list
             if best_match_pos >= 0
                 let after_pos = best_match_pos + best_match_len
                 let after_text = strpart(check_line, after_pos)
-                let match_suffix = strpart(a:seek_text, seek_len - best_match_len)
+                let matched_text = strpart(a:seek_text, seek_len - best_match_len)
                 " Get filename for this buffer
                 let filename = bufname(bufnum)
                 if filename == ''
@@ -176,12 +181,13 @@ function! s:FindMatches(seek_text)
                 " Add this match to our collection and keep it sorted
                 " Insert in sorted order (by match_len descending, then after_text length descending)
                 " Only add if we don't have MaxResults yet, or if this is better than the worst one
+                " (We could skip the should_add check, opting instead to always add() and sometimes remove(), but in testing this took 30% longer. My test had a lot of matches, so we could skip many with shorter after_text.)
                 let should_add = 0
-                if len(matches) < g:CompletePartialLine_MaxResults
+                if len(best_matches) < g:CompletePartialLine_MaxResults
                     let should_add = 1
                 else
                     " Check if this match is better than the worst one (last in sorted list)
-                    let worst = matches[g:CompletePartialLine_MaxResults - 1]
+                    let worst = best_matches[g:CompletePartialLine_MaxResults - 1]
                     if best_match_len > worst[0] || (best_match_len == worst[0] && len(after_text) >= len(worst[1]))
                         let should_add = 1
                     endif
@@ -190,22 +196,22 @@ function! s:FindMatches(seek_text)
                 if should_add
                     " Find the right position to insert (keep sorted)
                     let inserted = 0
-                    for i in range(len(matches))
-                        let existing = matches[i]
+                    for i in range(len(best_matches))
+                        let existing = best_matches[i]
                         " Check if this match is better than existing[i]
                         if best_match_len > existing[0] || (best_match_len == existing[0] && len(after_text) >= len(existing[1]))
-                            call insert(matches, [best_match_len, after_text, match_suffix, filename, line_num], i)
+                            call insert(best_matches, [best_match_len, after_text, matched_text, filename, line_num], i)
                             let inserted = 1
                             break
                         endif
                     endfor
                     if !inserted
-                        call add(matches, [best_match_len, after_text, match_suffix, filename, line_num])
+                        call add(best_matches, [best_match_len, after_text, matched_text, filename, line_num])
                     endif
 
-                    " Keep only the top MaxResults matches
-                    if len(matches) > g:CompletePartialLine_MaxResults
-                        call remove(matches, g:CompletePartialLine_MaxResults, -1)
+                    " Keep only the top MaxResults best_matches
+                    if len(best_matches) > g:CompletePartialLine_MaxResults
+                        call remove(best_matches, g:CompletePartialLine_MaxResults, -1)
                     endif
                 endif
             endif
@@ -213,8 +219,8 @@ function! s:FindMatches(seek_text)
     endfor
 
     if g:CompletePartialLine_DebugLogging
-        if len(matches) > 0
-            let match_text = matches[0][1]
+        if len(best_matches) > 0
+            let match_text = best_matches[0][1]
         else
             let match_text = 'NONE'
         endif
@@ -222,10 +228,10 @@ function! s:FindMatches(seek_text)
         let elapsed_seconds = reltimefloat(reltime()) - start_time
         let g:CompletePartialLine_LastSearchTime = elapsed_seconds
         " Use echomsg so it appears in message history (echo gets overwritten by completion menu)
-        echomsg printf('CompletePartialLine: %.3f seconds, %d buffers, %d matches, first: "%s"', elapsed_seconds, len(buffers_to_search), len(matches), match_text)
+        echomsg printf('CompletePartialLine: %.3f seconds, %d buffers, %d matches, first: "%s"', elapsed_seconds, len(buffers_to_search), len(best_matches), match_text)
     endif
 
-    return matches
+    return best_matches
 endfunction
 
 function! s:TimeExceeded(start_time)
@@ -247,15 +253,15 @@ function! CompletePartialLine_CompleteFunc(findstart, base)
         " a:base contains the text from start column to cursor (should be empty for our use case)
         " Get the current line up to cursor for our search
         let seek_text = strpart(getline('.'), 0, col('.') - 1)
-        let matches = s:FindMatches(seek_text)
+        let best_matches = s:FindMatches(seek_text)
 
         " Convert to completion format: list of dictionaries with 'word', 'abbr', and 'menu' keys
         " 'word' is the full text to insert, 'abbr' is the truncated display version
         let completions = []
-        for match in matches
+        for match in best_matches
             let match_len = match[0]
             let after_text = match[1]
-            let match_suffix = match[2]
+            let matched_text = match[2]
             let filename = match[3]
             let line_num = match[4]
             let after_text_len = len(after_text)
@@ -275,7 +281,7 @@ function! CompletePartialLine_CompleteFunc(findstart, base)
             "call add(completions, {'word': after_text, 'abbr': after_text, 'menu': meta_info})
 
             " Display the metadata on the left (in abbr, instead of in menu)
-            call add(completions, {'word': after_text, 'abbr': meta_info, 'menu': match_suffix . after_text})
+            call add(completions, {'word': after_text, 'abbr': meta_info, 'menu': matched_text . after_text})
         endfor
         return completions
     endif
@@ -300,14 +306,14 @@ function! s:TriggerCompletion()
 endfunction
 
 " Original function for backward compatibility (returns first result)
-function! s:CompletePartialLine()
-    let seek_text = strpart(getline('.'), 0, col('.') - 1)
-    let matches = s:FindMatches(seek_text)
-    if len(matches) > 0
-        return matches[0][1]
-    endif
-    return ''
-endfunction
+"function! s:CompletePartialLine()
+"    let seek_text = strpart(getline('.'), 0, col('.') - 1)
+"    let best_matches = s:FindMatches(seek_text)
+"    if len(best_matches) > 0
+"        return best_matches[0][1]
+"    endif
+"    return ''
+"endfunction
 
 " Create Plug mapping for custom keybindings
 " Use expression mapping to set completefunc and trigger completion
