@@ -128,11 +128,9 @@ function! s:FindMatches(seek_text)
             if len(best_matches) >= g:CompletePartialLine_MaxResults
                 let shortest_match_so_far = best_matches[g:CompletePartialLine_MaxResults - 1][2]
                 let shortest_match_so_far_len = best_matches[g:CompletePartialLine_MaxResults - 1][0]
-                let shortest_match_so_far_after_text = best_matches[g:CompletePartialLine_MaxResults - 1][1]
             else
                 let shortest_match_so_far = ''
                 let shortest_match_so_far_len = -1
-                let shortest_match_so_far_after_text = ''
             endif
 
             " Optimization: perform a quick check before we start looping from the longest
@@ -181,7 +179,42 @@ function! s:FindMatches(seek_text)
                 endif
 
                 " Add this match to our collection and keep it sorted
-                call s:AddMatchIfBetter(best_matches, shortest_match_so_far_len, shortest_match_so_far_after_text, best_match_len, after_text, matched_text, filename, line_num)
+                " Insert in sorted order (by match_len descending, then after_text length descending)
+                " Only add if we don't have MaxResults yet, or if this is better than the worst one
+                " (We could skip the should_add check, opting instead to always add() and sometimes remove(), but in testing this took 30% longer. My test had a lot of matches, so we could skip many with shorter after_text.)
+                " I did try moving this code into a function for clarity, but that resulted in lost performance
+                let should_add = 0
+                if len(best_matches) < g:CompletePartialLine_MaxResults
+                    let should_add = 1
+                else
+                    " Check if this match is better than the worst one (last in sorted list)
+                    let worst = best_matches[g:CompletePartialLine_MaxResults - 1]
+                    if best_match_len > worst[0] || (best_match_len == worst[0] && len(after_text) >= len(worst[1]))
+                        let should_add = 1
+                    endif
+                endif
+
+                if should_add
+                    " Find the right position to insert (keep sorted)
+                    let inserted = 0
+                    for i in range(len(best_matches))
+                        let existing = best_matches[i]
+                        " Check if this match is better than existing[i]
+                        if best_match_len > existing[0] || (best_match_len == existing[0] && len(after_text) >= len(existing[1]))
+                            call insert(best_matches, [best_match_len, after_text, matched_text, filename, line_num], i)
+                            let inserted = 1
+                            break
+                        endif
+                    endfor
+                    if !inserted
+                        call add(best_matches, [best_match_len, after_text, matched_text, filename, line_num])
+                    endif
+
+                    " Keep only the top MaxResults best_matches
+                    if len(best_matches) > g:CompletePartialLine_MaxResults
+                        call remove(best_matches, g:CompletePartialLine_MaxResults, -1)
+                    endif
+                endif
             endif
         endfor
     endfor
@@ -206,44 +239,6 @@ function! s:TimeExceeded(start_time)
     let elapsed_seconds = reltimefloat(reltime()) - a:start_time
     if g:CompletePartialLine_MaxTimeSeconds > 0 && elapsed_seconds > g:CompletePartialLine_MaxTimeSeconds
         return 1
-    endif
-endfunction
-
-" Add a match to the best_matches list, keeping it sorted and truncated to MaxResults
-" Match structure: [match_len, after_text, matched_text, filename, line_num]
-function! s:AddMatchIfBetter(best_matches, shortest_match_so_far_len, shortest_match_so_far_after_text, match_len, after_text, matched_text, filename, line_num)
-    " Only add if we don't have MaxResults yet, or if this is better than the worst one
-    " (We could skip the should_add check, opting instead to always add() and sometimes remove(), but in testing this took 30% longer. My test had a lot of matches, so we could skip many with shorter after_text.)
-    let should_add = 0
-    if len(a:best_matches) < g:CompletePartialLine_MaxResults
-        let should_add = 1
-    else
-        " Check if this match is better than the worst one (last in sorted list)
-        if a:match_len > a:shortest_match_so_far_len || (a:match_len == a:shortest_match_so_far_len && len(a:after_text) >= len(a:shortest_match_so_far_after_text))
-            let should_add = 1
-        endif
-    endif
-
-    if should_add
-        " Find the right position to insert (keep sorted)
-        let inserted = 0
-        for i in range(len(a:best_matches))
-            let existing = a:best_matches[i]
-            " Check if this match is better than existing[i]
-            if a:match_len > existing[0] || (a:match_len == existing[0] && len(a:after_text) >= len(existing[1]))
-                call insert(a:best_matches, [a:match_len, a:after_text, a:matched_text, a:filename, a:line_num], i)
-                let inserted = 1
-                break
-            endif
-        endfor
-        if !inserted
-            call add(a:best_matches, [a:match_len, a:after_text, a:matched_text, a:filename, a:line_num])
-        endif
-
-        " Keep only the top MaxResults best_matches
-        if len(a:best_matches) > g:CompletePartialLine_MaxResults
-            call remove(a:best_matches, g:CompletePartialLine_MaxResults, -1)
-        endif
     endif
 endfunction
 
