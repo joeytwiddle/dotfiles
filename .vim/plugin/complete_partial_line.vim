@@ -28,6 +28,12 @@ if !exists('g:CompletePartialLine_MaxResults')
     let g:CompletePartialLine_MaxResults = 20
 endif
 
+" Option: if set to 1, log search time to message history and global variable
+" Note: Since anything echo-ed is often obscured by other things, use :10messages to read these logs
+if !exists('g:CompletePartialLine_LogTime')
+    let g:CompletePartialLine_LogTime = 0
+endif
+
 " Compare function for sorting matches (must be global for sort())
 function! CompletePartialLine_CompareMatches(a, b)
     if a:a[0] != a:b[0]
@@ -40,6 +46,11 @@ function! s:FindMatches(seek_text)
     " If seek_text is empty, nothing to do
     if a:seek_text == ''
         return []
+    endif
+
+    if g:CompletePartialLine_LogTime
+        " Start timing the search
+        let start_time = reltime()
     endif
 
     " Collect all matches with their match length and after_text
@@ -174,6 +185,20 @@ function! s:FindMatches(seek_text)
             endif
         endfor
     endfor
+
+    if g:CompletePartialLine_LogTime
+        if len(matches) > 0
+            let match_text = matches[0][1]
+        else
+            let match_text = 'NONE'
+        endif
+        " End timing and store/display the result if enabled
+        let elapsed = reltime(start_time)
+        let elapsed_seconds = reltimefloat(elapsed)
+        let g:CompletePartialLine_LastSearchTime = elapsed_seconds
+        " Use echomsg so it appears in message history (echo gets overwritten by completion menu)
+        echomsg printf('CompletePartialLine: %.3f seconds, %d buffers, %d matches, first: "%s"', elapsed_seconds, len(buffers_to_search), len(matches), match_text)
+    endif
 
     return matches
 endfunction
