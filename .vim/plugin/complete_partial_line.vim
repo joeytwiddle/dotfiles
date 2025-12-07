@@ -43,7 +43,7 @@ function! s:FindMatches(seek_text)
     endif
 
     " Collect all matches with their match length and after_text
-    " Each item: [match_len, after_text, match_suffix]
+    " Each item: [match_len, after_text, match_suffix, filename, line_num]
     " We'll keep this sorted as we go for efficient threshold checking
     let matches = []
     let current_buf = bufnr('%')
@@ -127,6 +127,14 @@ function! s:FindMatches(seek_text)
                 let after_pos = best_match_pos + best_match_len
                 let after_text = strpart(check_line, after_pos)
                 let match_suffix = strpart(a:seek_text, seek_len - best_match_len)
+                " Get filename for this buffer
+                let filename = bufname(bufnum)
+                if filename == ''
+                    let filename = '[No Name]'
+                else
+                    " Get just the filename without path
+                    let filename = fnamemodify(filename, ':t')
+                endif
 
                 " Add this match to our collection and keep it sorted
                 " Insert in sorted order (by match_len descending, then after_text length descending)
@@ -149,13 +157,13 @@ function! s:FindMatches(seek_text)
                         let existing = matches[i]
                         " Check if this match is better than existing[i]
                         if best_match_len > existing[0] || (best_match_len == existing[0] && len(after_text) >= len(existing[1]))
-                            call insert(matches, [best_match_len, after_text, match_suffix], i)
+                            call insert(matches, [best_match_len, after_text, match_suffix, filename, line_num], i)
                             let inserted = 1
                             break
                         endif
                     endfor
                     if !inserted
-                        call add(matches, [best_match_len, after_text, match_suffix])
+                        call add(matches, [best_match_len, after_text, match_suffix, filename, line_num])
                     endif
 
                     " Keep only the top MaxResults matches
@@ -167,22 +175,7 @@ function! s:FindMatches(seek_text)
         endfor
     endfor
 
-    " Sort matches by: 1) match length (descending), 2) after_text length (descending)
-    " This gives us the best matches first
-    if len(matches) > 0
-        call sort(matches, 'CompletePartialLine_CompareMatches')
-    endif
-
-    " Matches are already sorted (we kept them sorted as we added them)
-    " Return top N results (just the after_text strings)
-    let results = []
-    if len(matches) > 0
-        for i in range(0, min([len(matches) - 1, g:CompletePartialLine_MaxResults - 1]))
-            call add(results, matches[i][1])
-        endfor
-    endif
-
-    return results
+    return matches
 endfunction
 
 " Vim completefunc: returns start column when findstart=1, or list of matches when findstart=0
@@ -199,10 +192,26 @@ function! CompletePartialLine_CompleteFunc(findstart, base)
         let seek_text = strpart(getline('.'), 0, col('.') - 1)
         let matches = s:FindMatches(seek_text)
 
-        " Convert to completion format: list of dictionaries with 'word' key
+        " Convert to completion format: list of dictionaries with 'word', 'abbr', and 'menu' keys
+        " 'word' is the full text to insert, 'abbr' is the truncated display version
         let completions = []
+        " In order to see the metadata, we may need to truncate the display text
+        let max_display_width = winwidth(0) * / 2
         for match in matches
-            call add(completions, {'word': match})
+            let match_len = match[0]
+            let after_text = match[1]
+            let filename = match[3]
+            let line_num = match[4]
+            let after_text_len = len(after_text)
+            let menu_text = printf('partial|%s:%d|%d,%d', filename, line_num, match_len, after_text_len)
+
+            " Truncate display if needed, but keep full text for insertion
+            let display_text = after_text
+            if len(after_text) > max_display_width
+                let display_text = strpart(after_text, 0, max_display_width - 3) . '...'
+            endif
+
+            call add(completions, {'word': after_text, 'abbr': display_text, 'menu': menu_text})
         endfor
         return completions
     endif
@@ -231,7 +240,7 @@ function! s:CompletePartialLine()
     let seek_text = strpart(getline('.'), 0, col('.') - 1)
     let matches = s:FindMatches(seek_text)
     if len(matches) > 0
-        return matches[0]
+        return matches[0][1]
     endif
     return ''
 endfunction
