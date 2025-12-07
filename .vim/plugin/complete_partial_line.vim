@@ -1,56 +1,48 @@
 " Complete Partial Line - Vim Plugin
 " When CTRL-X CTRL-L is pressed in Insert mode, completes the current line
-" by finding the longest match from other lines in open buffers.
+" by finding the longest partial match from other lines in open buffers.
 
 if exists('loaded_complete_partial_line') || &cp
     finish
 endif
 let loaded_complete_partial_line = 1
 
-" Option: keymap to trigger completion (default: <C-X><C-L>)
+" Option: Keymap to trigger completion (default: <C-X><C-L>)
 " Set to empty string to disable any mapping
 if !exists('g:CompletePartialLine_Keymap')
     let g:CompletePartialLine_Keymap = '<C-X><C-L>'
 endif
 
-" Option: if set to 1, instead of just the current buffer, search all open buffers (below the MaxBufferLines limit)
-if !exists('g:CompletePartialLine_SearchAllOpenBuffers')
-    let g:CompletePartialLine_SearchAllOpenBuffers = 0
-endif
-
-" Option: if set to 1, load buffers that are not yet loaded (can be very slow if you have many buffers to load)
-if !exists('g:CompletePartialLine_LoadBuffers')
-    let g:CompletePartialLine_LoadBuffers = 0
-endif
-
-" Option: skip buffers with more lines than this (0 = no limit)
-if !exists('g:CompletePartialLine_MaxBufferLines')
-    let g:CompletePartialLine_MaxBufferLines = 20000
-endif
-
-" Option: if set to 1, will stop collecting matches after this many milliseconds
-if !exists('g:CompletePartialLine_MaxTimeSeconds')
-    let g:CompletePartialLine_MaxTimeSeconds = 4
-endif
-
-" Option: maximum number of completion results to return
+" Option: Maximum number of completion results to return
 if !exists('g:CompletePartialLine_MaxResults')
     let g:CompletePartialLine_MaxResults = 20
 endif
 
-" Option: if set to 1, log search time to message history and global variable
+" Option: If set to 1, instead of just the current buffer, search all open buffers (below the MaxBufferLines limit)
+if !exists('g:CompletePartialLine_SearchAllOpenBuffers')
+    let g:CompletePartialLine_SearchAllOpenBuffers = 1
+endif
+
+" Option: If set to 1, automatically load buffers that are not yet loaded (can be very slow if you have many buffers added but not yet loaded)
+if !exists('g:CompletePartialLine_AutoLoadBuffers')
+    let g:CompletePartialLine_AutoLoadBuffers = 0
+endif
+
+" Option: Skip buffers with more lines than this (0 = no limit)
+if !exists('g:CompletePartialLine_MaxBufferLines')
+    let g:CompletePartialLine_MaxBufferLines = 20000
+endif
+
+" Option: Will stop collecting matches after this many seconds
+if !exists('g:CompletePartialLine_MaxTimeSeconds')
+    let g:CompletePartialLine_MaxTimeSeconds = 4.0
+endif
+
+" Option: If set to 1, log messages to message history (including search time)
 " Note: Since anything echo-ed is often obscured by other things, use :10messages to read these logs
 if !exists('g:CompletePartialLine_DebugLogging')
     let g:CompletePartialLine_DebugLogging = 0
 endif
-
-" Compare function for sorting matches (must be global for sort())
-function! CompletePartialLine_CompareMatches(a, b)
-    if a:a[0] != a:b[0]
-        return a:b[0] - a:a[0]  " Longer match length is better
-    endif
-    return len(a:b[1]) - len(a:a[1])  " Longer after_text is better
-endfunction
 
 function! s:FindMatches(seek_text)
     " If seek_text is empty, nothing to do
@@ -73,7 +65,7 @@ function! s:FindMatches(seek_text)
         " Get all loaded buffers
         let buffers_to_search = []
         for bufnum in range(1, bufnr('$'))
-            if buflisted(bufnum) && (bufloaded(bufnum) || g:CompletePartialLine_LoadBuffers)
+            if buflisted(bufnum) && (bufloaded(bufnum) || g:CompletePartialLine_AutoLoadBuffers)
                 call add(buffers_to_search, bufnum)
             endif
         endfor
@@ -89,16 +81,16 @@ function! s:FindMatches(seek_text)
         if s:TimeExceeded(start_time)
             let elapsed_seconds = reltimefloat(reltime()) - start_time
             if g:CompletePartialLine_DebugLogging
-                echomsg printf('CompletePartialLine: aborting because max time exceeded (%fms > %dms)', elapsed_seconds, g:CompletePartialLine_MaxTimeMS)
+                echomsg printf('[CompletePartialLine]: aborting because max time exceeded (%fms > %fms)', elapsed_seconds, g:CompletePartialLine_MaxTimeSeconds)
             endif
-            call add(best_matches, [0, 'Timed out after '.elapsed_seconds.' seconds', '', 'TIMED_OUT', ''])
+            call add(best_matches, [0, '--Timed out after '.elapsed_seconds.' seconds--', '', '--TIMED_OUT--', ''])
             break
         endif
 
-        if g:CompletePartialLine_LoadBuffers && !bufloaded(bufnum)
+        if g:CompletePartialLine_AutoLoadBuffers && !bufloaded(bufnum)
             " If buffer is not yet loaded, load it now
             if g:CompletePartialLine_DebugLogging
-                echomsg printf('CompletePartialLine: loading buffer %d (%s)...', bufnum, bufname(bufnum))
+                echomsg printf('[CompletePartialLine]: loading buffer %d (%s)...', bufnum, bufname(bufnum))
             endif
             silent! call bufload(bufnum)
         endif
@@ -227,9 +219,8 @@ function! s:FindMatches(seek_text)
         endif
         " End timing and store/display the result if enabled
         let elapsed_seconds = reltimefloat(reltime()) - start_time
-        let g:CompletePartialLine_LastSearchTime = elapsed_seconds
         " Use echomsg so it appears in message history (echo gets overwritten by completion menu)
-        echomsg printf('CompletePartialLine: %.3f seconds, %d buffers, %d matches, first: "%s"', elapsed_seconds, len(buffers_to_search), len(best_matches), match_text)
+        echomsg printf('[CompletePartialLine]: %.3f seconds, %d buffers, %d matches, first: "%s"', elapsed_seconds, len(buffers_to_search), len(best_matches), match_text)
     endif
 
     return best_matches
@@ -305,16 +296,6 @@ function! s:TriggerCompletion()
     " Trigger completion
     return "\<C-X>\<C-U>"
 endfunction
-
-" Original function for backward compatibility (returns first result)
-"function! s:CompletePartialLine()
-"    let seek_text = strpart(getline('.'), 0, col('.') - 1)
-"    let best_matches = s:FindMatches(seek_text)
-"    if len(best_matches) > 0
-"        return best_matches[0][1]
-"    endif
-"    return ''
-"endfunction
 
 " Create Plug mapping for custom keybindings
 " Use expression mapping to set completefunc and trigger completion
