@@ -273,28 +273,30 @@ nnoremap <D-≠> :MaximizeVim<CR>
 
 " TODO: In a rebase we would probably prefer to turn diffing off for the top-right window, not the top-left window.
 "       (It it more useful to see the other person's diff instead of our diff.)
-command! GitMergeToolSetup set nodiff | wincmd k | set nodiff | wincmd j | wincmd = | let @/ = "<<<<<<" | normal! n
+"command! GitMergeToolSetup set nodiff | wincmd k | set nodiff | wincmd j | wincmd = | let @/ = "<<<<<<" | normal! n
 " On Mac OS X the colours don't load like they should, so I load them manually:
 " I also visit the other two windows with `wincmd l` so that dim_inactive_windows.vim will remove its dimming.
-command! GitMergeToolSetup exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | set nodiff | wincmd l | wincmd l | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
+"command! GitMergeToolSetup exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | set nodiff | wincmd l | wincmd l | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
 " If I use `set lines` to maximize the window, then it takes ages, and the windows end up the wrong size, and `wincmd =` doesn't fix them all (possibly due to other plugins)
 " Let's try set lines again, but let's not go crazy on the size this time
-command! GitMergeToolSetup set lines=300 columns=240 | exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | set nodiff | wincmd l | wincmd l | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
+"command! GitMergeToolSetup set lines=300 columns=240 | exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | set nodiff | wincmd l | wincmd l | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
 " Finally, since I rebase more often than I merge, I want to switch around which of the panels are diffing at the start
-command! GitMergeToolSetup set lines=300 columns=240 | exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | wincmd l | wincmd l | set nodiff | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
+"command! GitMergeToolSetup set lines=300 columns=240 | exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | wincmd l | wincmd l | set nodiff | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
 " On MacVim 2023, if I set lines to 300, the `wincmd =` would really believe the window was that tall, and give the panes bad proportions.
 " So we either need to set lines to the correct value, or wait and trigger the `wincmd =` later
-command! GitMergeToolSetup set lines=57 columns=186 | exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | wincmd l | wincmd l | set nodiff | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
+"command! GitMergeToolSetup set lines=57 columns=186 | exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | wincmd l | wincmd l | set nodiff | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = "<<<<<<" | normal! n
+" Improve search
+command! GitMergeToolSetup set lines=57 columns=186 | exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | wincmd l | wincmd l | set nodiff | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = '<<<<<<<\|=======\|>>>>>>>' | normal! n
 
 " This produced no results from rg
 "let fzf_grep_cmd = exists('$FZF_DEFAULT_COMMAND') ? $FZF_DEFAULT_COMMAND : 'grep'
+" But if you have ag or ripgrep installed, you we can just use :Ag or :Rg
 let fzf_grep_cmd = 'grep'
 " Use grep with fuzzyfinder
 " By <igemnace>
 command! -bang -nargs=* FZFGrep call fzf#vim#grep(fzf_grep_cmd . ' -R -n '.shellescape(<q-args>), 0, <bang>0)
 " Recommended by the README
 command! -bang -nargs=* GGrep call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
-" But if you have ag or ripgrep installed, you we can just use :Ag or :Rg
 
 " It occasionally happens that you can not enter blockwise-visual mode because both Ctrl-V and Ctrl-Q are being intercepted by the terminal app or the desktop.
 " To work around that if it occurs, we define a command `:VB` to enter blockwise-visual mode, in fact a full set of commands for consistency.
