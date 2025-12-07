@@ -18,9 +18,19 @@ if !exists('g:CompletePartialLine_SearchAllOpenBuffers')
     let g:CompletePartialLine_SearchAllOpenBuffers = 0
 endif
 
+" Option: if set to 1, load buffers that are not yet loaded (can be very slow if you have many buffers to load)
+if !exists('g:CompletePartialLine_LoadBuffers')
+    let g:CompletePartialLine_LoadBuffers = 0
+endif
+
 " Option: skip buffers with more lines than this (0 = no limit)
 if !exists('g:CompletePartialLine_MaxBufferLines')
     let g:CompletePartialLine_MaxBufferLines = 20000
+endif
+
+" Option: if set to 1, will stop collecting matches after this many milliseconds
+if !exists('g:CompletePartialLine_MaxTimeSeconds')
+    let g:CompletePartialLine_MaxTimeSeconds = 4
 endif
 
 " Option: maximum number of completion results to return
@@ -30,8 +40,8 @@ endif
 
 " Option: if set to 1, log search time to message history and global variable
 " Note: Since anything echo-ed is often obscured by other things, use :10messages to read these logs
-if !exists('g:CompletePartialLine_LogTime')
-    let g:CompletePartialLine_LogTime = 0
+if !exists('g:CompletePartialLine_DebugLogging')
+    let g:CompletePartialLine_DebugLogging = 0
 endif
 
 " Compare function for sorting matches (must be global for sort())
@@ -48,10 +58,8 @@ function! s:FindMatches(seek_text)
         return []
     endif
 
-    if g:CompletePartialLine_LogTime
-        " Start timing the search
-        let start_time = reltime()
-    endif
+    " Start timing the search
+    let start_time = reltimefloat(reltime())
 
     " Collect all matches with their match length and after_text
     " Each item: [match_len, after_text, match_suffix, filename, line_num]
@@ -65,7 +73,7 @@ function! s:FindMatches(seek_text)
         " Get all loaded buffers
         let buffers_to_search = []
         for bufnum in range(1, bufnr('$'))
-            if buflisted(bufnum) "&& bufloaded(bufnum)
+            if buflisted(bufnum) && (bufloaded(bufnum) || g:CompletePartialLine_LoadBuffers)
                 call add(buffers_to_search, bufnum)
             endif
         endfor
@@ -77,6 +85,24 @@ function! s:FindMatches(seek_text)
 
     " Search through all buffers
     for bufnum in buffers_to_search
+        " Abort if we've exceeded the maximum time
+        if s:TimeExceeded(start_time)
+            let elapsed_seconds = reltimefloat(reltime()) - start_time
+            if g:CompletePartialLine_DebugLogging
+                echomsg printf('CompletePartialLine: aborting because max time exceeded (%fms > %dms)', elapsed_seconds, g:CompletePartialLine_MaxTimeMS)
+            endif
+            call add(matches, [0, 'Timed out after '.elapsed_seconds.' seconds', '', 'TIMED_OUT', ''])
+            break
+        endif
+
+        if g:CompletePartialLine_LoadBuffers && !bufloaded(bufnum)
+            " If buffer is not yet loaded, load it now
+            if g:CompletePartialLine_DebugLogging
+                echomsg printf('CompletePartialLine: loading buffer %d (%s)...', bufnum, bufname(bufnum))
+            endif
+            silent! call bufload(bufnum)
+        endif
+
         let line_count = len(getbufline(bufnum, 1, '$'))
 
         " Skip buffers that exceed the maximum line count
@@ -86,7 +112,12 @@ function! s:FindMatches(seek_text)
 
         " Search through all lines in this buffer
         for line_num in range(1, line_count)
-            " Skip current line
+            " Abort if we've exceeded the maximum time
+            if s:TimeExceeded(start_time)
+                break
+            endif
+
+            " Skip the line the user is currently trying to complete
             if bufnum == current_buf && line_num == current_line
                 continue
             endif
@@ -186,21 +217,27 @@ function! s:FindMatches(seek_text)
         endfor
     endfor
 
-    if g:CompletePartialLine_LogTime
+    if g:CompletePartialLine_DebugLogging
         if len(matches) > 0
             let match_text = matches[0][1]
         else
             let match_text = 'NONE'
         endif
         " End timing and store/display the result if enabled
-        let elapsed = reltime(start_time)
-        let elapsed_seconds = reltimefloat(elapsed)
+        let elapsed_seconds = reltimefloat(reltime()) - start_time
         let g:CompletePartialLine_LastSearchTime = elapsed_seconds
         " Use echomsg so it appears in message history (echo gets overwritten by completion menu)
         echomsg printf('CompletePartialLine: %.3f seconds, %d buffers, %d matches, first: "%s"', elapsed_seconds, len(buffers_to_search), len(matches), match_text)
     endif
 
     return matches
+endfunction
+
+function! s:TimeExceeded(start_time)
+    let elapsed_seconds = reltimefloat(reltime()) - a:start_time
+    if g:CompletePartialLine_MaxTimeSeconds > 0 && elapsed_seconds > g:CompletePartialLine_MaxTimeSeconds
+        return 1
+    endif
 endfunction
 
 " Vim completefunc: returns start column when findstart=1, or list of matches when findstart=0
