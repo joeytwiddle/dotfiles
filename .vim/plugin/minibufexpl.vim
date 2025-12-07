@@ -689,8 +689,8 @@ augroup MiniBufExplorer
   "autocmd MiniBufExplorer VimEnter    * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1)
 
   autocmd MiniBufExplorer BufDelete   * call <SID>DEBUG('-=> BufDelete AutoCmd', 10) |call <SID>AutoUpdate(expand('<abuf>'))
-  autocmd MiniBufExplorer BufEnter    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |call <SID>AutoUpdate(-1)
-  autocmd MiniBufExplorer VimEnter    * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1) |call <SID>PostVimEnter()
+  autocmd MiniBufExplorer BufEnter    * call <SID>DEBUG('-=> BufEnter  AutoCmd', 10) |if empty(getcmdwintype()) |call <SID>AutoUpdate(-1) |endif
+  autocmd MiniBufExplorer VimEnter    * call <SID>DEBUG('-=> VimEnter  AutoCmd', 10) |if empty(getcmdwintype()) |let g:miniBufExplorerAutoUpdate = 1 |call <SID>AutoUpdate(-1) |call <SID>PostVimEnter()| endif
 
   "" BUG: Our PostVimEnter is no longer working with Vim 7.3 (ubuntu quantal) because vim decides to enter the MBE *after* PVE had decided that it wasn't focused!  :P
   "" 47:10:===========================
@@ -713,7 +713,7 @@ augroup MiniBufExplorer
   "" Instead of the above, we can just do a lazy update.  Although this is not
   "" so helpful for immediate navigation feedback!
   " Search for CursorHold or ListChanged to see why we may need this.
-  autocmd MiniBufExplorer CursorHold  * call <SID>DEBUG('-=> CursorHold AutoCmd', 10) |call <SID>AutoUpdate(-1)
+  autocmd MiniBufExplorer CursorHold  * call <SID>DEBUG('-=> CursorHold AutoCmd', 10) |if empty(getcmdwintype()) |call <SID>AutoUpdate(-1) |endif
 
   " BUG: MBE does not update when we close/delete a buffer.
   " Tried BufLeave, BufDelete and BufWipeout but MBE still shows the earlier
@@ -749,11 +749,6 @@ function! <SID>StartExplorer(sticky, delBufNum)
   call <SID>DEBUG('===========================',10)
   call <SID>DEBUG('Entering StartExplorer()'   ,10)
   call <SID>DEBUG('===========================',10)
-
-  " Some of the commands below break when we are focus on the Command Line window, so let's disable this function while that is open
-  if bufexists("[Command Line]")
-    return
-  endif
 
   if a:sticky == 1
     let g:miniBufExplorerAutoUpdate = 1
@@ -1694,10 +1689,6 @@ function! <SID>AutoUpdate(delBufNum)
     return
   else
     let g:miniBufExplInAutoUpdate = 1
-  endif
-
-  if (bufname('%') == '[Command Line]')
-    return
   endif
 
   " Don't bother autoupdating the MBE window
