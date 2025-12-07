@@ -125,17 +125,12 @@ function! s:FindMatches(seek_text)
             let check_line = getbufline(bufnum, line_num)[0]
 
             " Quick optimization: if we already have MaxResults matches, check if this line
-            " can potentially improve our results by checking if it contains a suffix
-            " at least as long as our current worst match
+            " can potentially improve our results by checking if it contains at least
+            " the worst match in our list
             if len(matches) >= g:CompletePartialLine_MaxResults
-                let min_match_len = matches[g:CompletePartialLine_MaxResults - 1][0]
-                " If the line doesn't contain the minimum length suffix, it can't improve
-                " (since longer matches are better, and we'll find them during processing if they exist)
-                if min_match_len <= seek_len
-                    let min_suffix = strpart(a:seek_text, seek_len - min_match_len)
-                    if stridx(check_line, min_suffix) < 0
-                        continue
-                    endif
+                let min_suffix = matches[g:CompletePartialLine_MaxResults - 1][2]
+                if stridx(check_line, min_suffix) < 0
+                    continue
                 endif
             endif
 
