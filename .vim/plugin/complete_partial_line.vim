@@ -68,6 +68,11 @@ function! s:CompletePartialLine()
 
             let check_line = getbufline(bufnum, line_num)[0]
 
+            " Quick check: if this line doesn't contain the current best match, then it can't improve our result, so skip it
+            if longest_match != '' && stridx(check_line, longest_match) < 0
+                continue
+            endif
+
             " Find longest match: longest suffix of seek_text that appears in check_line
             let seek_len = len(seek_text)
             let best_match_len = 0
@@ -79,9 +84,9 @@ function! s:CompletePartialLine()
                 let suffix = strpart(seek_text, suffix_start)
                 let suffix_len = len(suffix)
 
-                " Skip if this suffix can't be longer than what we already found
+                " If all remaining iterations will be smaller than best, then we can give up on this line
                 if suffix_len < best_match_len
-                    continue
+                    break
                 endif
 
                 " Search for this suffix in check_line
