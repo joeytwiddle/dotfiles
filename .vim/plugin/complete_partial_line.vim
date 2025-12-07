@@ -44,6 +44,7 @@ function! s:FindMatches(seek_text)
 
     " Collect all matches with their match length and after_text
     " Each item: [match_len, after_text, match_suffix]
+    " We'll keep this sorted as we go for efficient threshold checking
     let matches = []
     let current_buf = bufnr('%')
     let current_line = line('.')
@@ -60,6 +61,8 @@ function! s:FindMatches(seek_text)
     else
         let buffers_to_search = [current_buf]
     endif
+
+    let seek_len = len(a:seek_text)
 
     " Search through all buffers
     for bufnum in buffers_to_search
@@ -79,8 +82,22 @@ function! s:FindMatches(seek_text)
 
             let check_line = getbufline(bufnum, line_num)[0]
 
+            " Quick optimization: if we already have MaxResults matches, check if this line
+            " can potentially improve our results by checking if it contains a suffix
+            " at least as long as our current worst match
+            if len(matches) >= g:CompletePartialLine_MaxResults
+                let min_match_len = matches[g:CompletePartialLine_MaxResults - 1][0]
+                " If the line doesn't contain the minimum length suffix, it can't improve
+                " (since longer matches are better, and we'll find them during processing if they exist)
+                if min_match_len <= seek_len
+                    let min_suffix = strpart(a:seek_text, seek_len - min_match_len)
+                    if stridx(check_line, min_suffix) < 0
+                        continue
+                    endif
+                endif
+            endif
+
             " Find longest match: longest suffix of seek_text that appears in check_line
-            let seek_len = len(a:seek_text)
             let best_match_len = 0
             let best_match_pos = -1
 
@@ -111,8 +128,41 @@ function! s:FindMatches(seek_text)
                 let after_text = strpart(check_line, after_pos)
                 let match_suffix = strpart(a:seek_text, seek_len - best_match_len)
 
-                " Add this match to our collection
-                call add(matches, [best_match_len, after_text, match_suffix])
+                " Add this match to our collection and keep it sorted
+                " Insert in sorted order (by match_len descending, then after_text length descending)
+                " Only add if we don't have MaxResults yet, or if this is better than the worst one
+                let should_add = 0
+                if len(matches) < g:CompletePartialLine_MaxResults
+                    let should_add = 1
+                else
+                    " Check if this match is better than the worst one (last in sorted list)
+                    let worst = matches[g:CompletePartialLine_MaxResults - 1]
+                    if best_match_len > worst[0] || (best_match_len == worst[0] && len(after_text) >= len(worst[1]))
+                        let should_add = 1
+                    endif
+                endif
+
+                if should_add
+                    " Find the right position to insert (keep sorted)
+                    let inserted = 0
+                    for i in range(len(matches))
+                        let existing = matches[i]
+                        " Check if this match is better than existing[i]
+                        if best_match_len > existing[0] || (best_match_len == existing[0] && len(after_text) >= len(existing[1]))
+                            call insert(matches, [best_match_len, after_text, match_suffix], i)
+                            let inserted = 1
+                            break
+                        endif
+                    endfor
+                    if !inserted
+                        call add(matches, [best_match_len, after_text, match_suffix])
+                    endif
+
+                    " Keep only the top MaxResults matches
+                    if len(matches) > g:CompletePartialLine_MaxResults
+                        call remove(matches, g:CompletePartialLine_MaxResults, -1)
+                    endif
+                endif
             endif
         endfor
     endfor
@@ -123,6 +173,7 @@ function! s:FindMatches(seek_text)
         call sort(matches, 'CompletePartialLine_CompareMatches')
     endif
 
+    " Matches are already sorted (we kept them sorted as we added them)
     " Return top N results (just the after_text strings)
     let results = []
     if len(matches) > 0
