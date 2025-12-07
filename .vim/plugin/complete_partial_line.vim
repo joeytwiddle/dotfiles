@@ -195,23 +195,30 @@ function! CompletePartialLine_CompleteFunc(findstart, base)
         " Convert to completion format: list of dictionaries with 'word', 'abbr', and 'menu' keys
         " 'word' is the full text to insert, 'abbr' is the truncated display version
         let completions = []
-        " In order to see the metadata, we may need to truncate the display text
-        let max_display_width = winwidth(0) * / 2
         for match in matches
             let match_len = match[0]
             let after_text = match[1]
+            let match_suffix = match[2]
             let filename = match[3]
             let line_num = match[4]
             let after_text_len = len(after_text)
-            let menu_text = printf('partial|%s:%d|%d,%d', filename, line_num, match_len, after_text_len)
-
-            " Truncate display if needed, but keep full text for insertion
-            let display_text = after_text
-            if len(after_text) > max_display_width
-                let display_text = strpart(after_text, 0, max_display_width - 3) . '...'
+            "let meta_info = printf('partial|%s:%d|%d,%d', filename, line_num, match_len, after_text_len)
+            if g:CompletePartialLine_SearchAllOpenBuffers
+                let meta_info = printf('%s:%d', filename, line_num)
+            else
+                let meta_info = printf('%d', line_num)
             endif
 
-            call add(completions, {'word': after_text, 'abbr': display_text, 'menu': menu_text})
+            " If we display the metadata on the right, in order to see it, we may need to truncate the display text
+            "let max_display_width = winwidth(0) / 2
+            "let display_text = after_text
+            "if len(after_text) > max_display_width
+            "    let display_text = strpart(after_text, 0, max_display_width - 3) . '...'
+            "endif
+            "call add(completions, {'word': after_text, 'abbr': after_text, 'menu': meta_info})
+
+            " Display the metadata on the left (in abbr, instead of in menu)
+            call add(completions, {'word': after_text, 'abbr': meta_info, 'menu': match_suffix . after_text})
         endfor
         return completions
     endif
