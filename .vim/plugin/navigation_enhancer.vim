@@ -102,10 +102,20 @@ function! s:SeekBestWindow(realDirection,reverseDirection)
   endif
 
   if !l:moveDone
+   if !empty(getcmdwintype())
+     " Special case: We are in the Command Line window (q:) |cmdline-window|
+     " Vim will not let us move out of it (while it is still open)
+     " Even vanilla Vim will complain if we attempt e.g. <C-W> Up
+     " But we can prevent the error if we want to, either by not moving
+     echo "Use :q or CTRL-W C to close the Command Line window"
+     return
+     " or by closing the cmdline-window
+     exec "wincmd c"
+     return
+   endif
+
     " echo "Doing normal move"
     exec "wincmd ".a:realDirection
-    " BUG: This fails with an error if we attempt to move off the 'cmdwin'
-    "      Although Vim gives an error without this plugin anyway!
   endif
 
   " Record the route back (but not if we didn't actually move!)
