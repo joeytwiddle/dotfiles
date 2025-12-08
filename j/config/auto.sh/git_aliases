@@ -1756,6 +1756,11 @@ alias gcleanuntracked='git clean -di'
 alias gcleanignored='git clean -dXi'
 alias gcleanall='git clean -dxi'
 
+alias gwt='git worktree'
+alias gwta='git worktree add'
+alias gwtl='git worktree list'
+alias gwtp='git worktree prune'
+
 alias gpr='git-open-pr-in-browser'
 
 alias gcai='aicommits'

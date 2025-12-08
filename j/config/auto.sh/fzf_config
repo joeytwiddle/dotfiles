@@ -218,3 +218,16 @@ git_branch_most_recent_last_with_info() {
   git for-each-ref --sort=committerdate refs/heads --format="%(refname:short) %(committerdate:relative) (%(authorname)) - %(subject)" | columnise-clever -ignore '[^ ]* *[^ ]* *[^ ]*'
 }
 alias gcof=fgco
+
+# Git Worktree CD (gwtcd)
+# Lists git worktrees and allows fuzzy selection to cd into the selected worktree
+fgwtcd() {
+  local result
+  result="$(git worktree list | fzf-tmux --nth=1 --delimiter=' ' --accept-nth=1 --query="$1${1:+ }")"
+
+  if [[ -n "$result" ]]
+  then cd "$result" || return
+  fi
+}
+alias gwtcdf=fgwtcd
+alias gwtcd=fgwtcd
