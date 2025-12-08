@@ -147,6 +147,14 @@
       }
     },
     {
+      /* When a type (rather than a class) is imported in TypeScript */
+      "name": "Type",
+      "scope": "variable.other.readwrite.alias",
+      "settings": {
+        "foreground": "#A576A0"
+      }
+    },
+    {
       "name": "ReScript React Component",
       "scope": "source.rescript punctuation.definition.tag entity.name.class",
       "settings": {
