@@ -9,8 +9,8 @@ apollographql.vscode-apollo
 avraammavridis.vsc-react-documentation
 #bierner.emojisense
 # JSON5 extensions:
-# - mrmlnc.vscode-json5 (syntax highlighting only)
 # - blueglassblock.better-json5 (syntax highlighting and validation against JSONSchema)
+# - mrmlnc.vscode-json5 (syntax highlighting, but I prefer this, because it highlights string properties as strings)
 # - savh.json5-kit (lots of tools, but not sure if I enjoyed its syntax highlighting)
 #blueglassblock.better-json5
 bradlc.vscode-tailwindcss
