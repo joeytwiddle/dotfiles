@@ -837,11 +837,10 @@ alias glltt='glctt --graph'
 # gllm | highlight -bold -reverse "Merge.* into [^ ]*" magenta | more
 if which highlight >/dev/null
 then
-	# Better because it allows arguments to be passed.  Breaks if glc is not aliased until later.
+	# We use a function because it allows arguments to be passed.  Can break if gll/glc are aliased later.
 	gllm() {
-		gll -m --first-parent "$@" |highlight -bold "Merge.*" blue | less -REX
+		gll -m --first-parent --color=always "$@" | highlight -bold "Merge.*" blue | less -REX
 	}
-	#alias gllm='gll -m --first-parent | highlight -bold "Merge.*" blue | less -REX'
 else alias gllm='gll -m --first-parent'
 fi
 # This shows the commits from merged branches (/), but not the merge commits themselves (\).  It takes less space than gll.
@@ -1043,6 +1042,7 @@ alias gsa='git stash apply'
 # All this just adds the date to the normal git stash list:
 alias gsl='git stash list --date=relative --oneline | PADDING=0 DELIM=" " numbereachline | sedreplace "^\([0-9]*\)" "stash@{\1}" | sedreplace "refs/stash@" "" | dropcols 2 | less -REX'
 #alias gsl='git stash list --format=format:"%C(yellow bold)commit %H%C(magenta bold)%d%C(reset)%nAuthor: %an <%ae>%nDate:   %ad%n%n    %C(black bold)%s %C(reset)%C(yellow)%Creset%n"'
+alias gsll=gsl
 # Git Stash Diff shows the diff of the topmost or specified stash.  Notably not `git stash drop` which must be typed in full, to avoid doing it too easily and accidentally.
 # This shows only the diff:
 #alias gsd='git stash show -p'
