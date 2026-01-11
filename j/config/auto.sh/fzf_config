@@ -1,4 +1,4 @@
-# vim: filetype=sh
+# vim: filetype=sh ts=2 sw=2 expandtab
 
 # By default fzf does not ignore node_modules.
 # But if we ask it to use ag or rg, they will respect .gitignore which might be good enough.
@@ -13,16 +13,15 @@ fi
 # You might not need to specify an editor, if your system is configured nicely
 #FZF_EDITOR="xdg-open"
 
+# A standard env var that fzf recognises
+export FZF_DEFAULT_OPTS
+# --exact - Do an exact match by default.  To do a fuzzy match, prefix your search with `'`
+FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --exact"
 # By default, fzf lets you use CTRL-J/K/N/P to navigate up and down the list, but I also like to use Tab
-#
-# --exact - Do en axact match by default.  To do a fuzzy match, prefix your search with `'`
 # --reverse - Put the prompt at the top, and let the list flow downwards
-#             If you remove --reverse, you might also find it convenient to make tab to go in the other direction
-export FZF_DEFAULT_OPTS='--exact --reverse --bind "tab:down" --bind "shift-tab:up" --bind "`:up"'
-FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --bind 'ctrl-a:select-all'"
-
-# Do an exact match by default.  To do a fuzzy match, prefix your search with `'`
-export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --exact"
+#             If you remove --reverse, you might also find it convenient to make tab go in the other direction
+#             AKA --layout=reverse
+FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --reverse --bind 'tab:down' --bind 'shift-tab:up' --bind '\`:up' --bind 'ctrl-a:select-all'"
 
 if which rg > /dev/null 2>&1
 then export FZF_DEFAULT_COMMAND='rg --files --hidden'
@@ -49,6 +48,10 @@ export FZF_DIRECTORY_PREVIEW_COMMAND="echo {}/; echo; ls -lartFh --color=always 
 #if which gitls >/dev/null 2>&1
 #then FZF_DIRECTORY_PREVIEW_COMMAND="echo {}/; echo; gitls"
 #fi
+
+# Another variable which I have invented
+# I set CTRL-E and CTRL-O to use execute(), so we can come back to fzf and select another line later
+export FZF_BINDINGS=(--bind 'enter:become(smartvim {}),ctrl-e:execute(smartvim {}),ctrl-o:execute(code {})')
 
 # End config, start aliases
 
@@ -84,9 +87,16 @@ fo() {
 # Fuzzy Edit Global
 # Like fe but gets the files from a global locate
 feg() {
-  local files
-  IFS=$'\n' files=($(unj locate -b -i "$@" | filesonly | fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && "$FZF_EDITOR" "${files[@]}"
+  #local files
+  #IFS=$'\n' files=($(unj locate -b -i "$@" | filesonly | fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --multi --select-1 --exit-0))
+  #[[ -n "$files" ]] && "$FZF_EDITOR" "${files[@]}"
+  #
+  # Instead of using a files variable, we can use xargs.
+  # BUG: Although the fzf README suggests xargs will execute nothing when 0 files are selected, that does not seem to be the case.
+  #locate -b -i "$@" | filesonly | fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --multi --select-1 --exit-0 |
+  #  xargs -o "$FZF_EDITOR"
+  # Or we could use become()
+  locate -b -i "$@" | filesonly | fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --multi --select-1 "${FZF_BINDINGS[@]}"
 }
 # But I probably type 'e' first, before deciding I need to do a global search
 alias eglobal='feg'
@@ -112,7 +122,7 @@ fcdlocal() {
   fi
 
   dir="$( \
-    find "$top_dir" -mindepth 1 -type d \
+    find "$top_dir"/ -mindepth 1 -type d \
       '(' \
         -path '*/\.*' -prune \
         -o -name 'node_modules' -prune \
@@ -151,32 +161,47 @@ alias cdl=fcdlocal
 # But "CD Fuzzy" is what my fingers did
 alias cdf=fcdlocal
 
-# fcd - fuzzy cd from anywhere
-# ex: fcd <parts_of_filename>...
+# fcdg - fuzzy cd from anywhere
+# ex: fcdg <parts_of_filename>...
 # With some code from https://superuser.com/a/875314/52910
 fcdglobal() {
   local dir
 
   #dir="$(/usr/bin/locate -0 -b -A "$@" | xargs -0 -I {} bash -c '[ -d "{}" ] && echo "{}"' | fzf -0 -1)"
   # Simplified and case-insensitive
-  dir="$(unj locate -b -A "$@" -i | dirsonly | fzf --preview="$FZF_DIRECTORY_PREVIEW_COMMAND" -0 -1 -i)"
+  dir="$(/usr/bin/locate -b -A "$@" -i | dirsonly | sort_by_line_length | fzf --preview="$FZF_DIRECTORY_PREVIEW_COMMAND" -0 -1 -i)"
 
   if [[ -n "$dir" ]]
   then cd "$dir"
   fi
 }
-# Global CD
-alias gcd=fcdglobal
+# Fuzzy CD global
+alias fcdg=fcdglobal
 # CD Global
 alias cdg=fcdglobal
+# Global CD
+alias gcd=fcdglobal
+
+sort_by_line_length() {
+  awk '{ print length, $0 }' | sort -n | cut -d ' ' -f2-
+}
 
 # Fuzzy Ripgrep Ignoring-case
 frgi() {
   local result
-  # TODO: We don't have a --preview here
-  #       We could create one, but it would need to strip the filename from the beginning of the line
-  #       We could make it extra complicated by also stripping the line number
-  IFS=$'\n' result="$(rg -i --line-number "$@" | cat | fzf-tmux --no-sort --tac --delimiter=: --nth=2.. )"
+  # Early version without preview
+  #IFS=$'\n' result="$(rg -i --line-number "$@" | cat | fzf-tmux --no-sort --tac --delimiter=: --nth=2.. )"
+  #
+  # With preview, adapted from https://github.com/junegunn/fzf/issues/2789#issuecomment-2196524694
+  # Unfortunately, smartvim doesn't work great with line numbers
+  IFS=$'\n' result="$(
+    rg --color=always --line-number --no-heading --smart-case "${*:-}" \
+    | fzf-tmux -d':' --ansi \
+      --preview "bat -p --color=always {1} --highlight-line {2}" \
+      --preview-window ~8,+{2}-5 \
+      --no-sort --layout=reverse --delimiter=: --nth=2.. \
+      --bind 'enter:execute(gvim {1} +{2})'
+  )"
 
   local filename
   local lineno
@@ -194,8 +219,8 @@ alias rgif=frgi
 # Some distributions make an alias for fgrep in ~/.bashrc
 unalias fgrep 2>/dev/null
 fgrep() {
-	echo "fgrep is a standard shortcut for grep -F.  Perhaps you want frgi instead?" >&2
-	return 1
+  echo "fgrep is a standard shortcut for grep -F.  Perhaps you want frgi instead?" >&2
+  return 1
 }
 
 # Fuzzy Git Checkout
