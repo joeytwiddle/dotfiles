@@ -278,7 +278,7 @@ git_status_plus() {
 		'cp' -f "$previous_stats_file" "$previous_stats_file".REAL 2>/dev/null
 
 		echo "#"
-	) |
+	) 2>&1 |
 	if [ -t 1 ]
 	then less -R -E -X
 	else cat
@@ -349,6 +349,7 @@ gap() {
 }
 # This is better used for git cherry-pick, as that is a greater saving, and I use it more often.
 #alias gcp='gc -p'
+alias  gap.='gap .'
 
 # Perform git commit --fixup and do the rebase immediately
 #
