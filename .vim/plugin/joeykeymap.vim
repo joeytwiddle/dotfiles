@@ -1295,3 +1295,7 @@ nnoremap <silent> <C-Q> :echo "Use <"."C-V> for blockwise visual, not <"."C-Q>"<
 "nnoremap <C-Tab> <C-^>
 " Invokes fzf, makes it possible to reach older tabs, but with slightly different keystrokes from other apps
 nmap <C-Tab> <C-E>
+
+" Use backtick to scroll backwards through lists (like Shift-Tab, opposite of Tab)
+" but only if the list is visible
+inoremap <expr> ` pumvisible() ? "\<C-P>" : "`"
