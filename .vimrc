@@ -1565,7 +1565,10 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 		\ 'ctrl-t': 'tab split',
 		\ 'ctrl-x': 'split',
 		\ 'ctrl-v': 'vsplit' }
-	let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
+	" Use settings from shell if possible, but if not, fall back to these
+	if $FZF_DEFAULT_OPTS is ''
+		let $FZF_DEFAULT_OPTS = "--bind 'tab:down' --bind 'shift-tab:up' --bind '\`:up'"
+	endif
 
 	" }}}
 
