@@ -7,6 +7,17 @@
 " It comes from an old revision of http://vim.wikia.com/wiki/Smart_mapping_for_tab_completion
 " But a similar function called CleverTab can also be found at :h ins-completion (or :helpgrep CleverTab)
 
+" Option: Which keypress should we simulate to trigger completions
+" Default: "\<c-n>"
+" Alternative: "\<C-X>\<C-U>" to execute completefunc
+" Alternative: "\<C-X>\<C-F>" to complete filenames
+" Example: let g:AnotherTabCompletion_KeyToStartCompletion = "\<C-X>\<C-U>"
+" Note that this _will not work_ for mappings, only for default keys.
+"
+if !exists('g:AnotherTabCompletion_KeyToStartCompletion')
+    let g:AnotherTabCompletion_KeyToStartCompletion = "\<c-n>"
+endif
+
 function! InsertTabWrapper(direction)
     " Often I don't want 'longest'; I want to perform a quick search.
     " So I remove 'longest' here.  And my mappings for other plugins, such as Tern, may enable it before they act.
@@ -22,7 +33,12 @@ function! InsertTabWrapper(direction)
     elseif "backward" == a:direction
         return "\<c-p>"
     else
-        return "\<c-n>"
+        " Check if the popup menu is open
+        if pumvisible()
+            return "\<c-n>"
+        else
+            return g:AnotherTabCompletion_KeyToStartCompletion
+        endif
     endif
 endfunction
 
