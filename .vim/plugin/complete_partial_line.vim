@@ -7,6 +7,12 @@ if exists('loaded_complete_partial_line') || &cp
 endif
 let loaded_complete_partial_line = 1
 
+" Option: Should we enable CompletePartialLine as the default completion function?
+" This will set &completefunc so you can invoke it with <C-X><C-U>
+if !exists('g:CompletePartialLine_EnableAsDefault')
+    let g:CompletePartialLine_EnableAsDefault = 0
+endif
+
 " Option: Keymap to trigger completion (default: <C-X><C-L>)
 " Set to empty string to disable any mapping
 if !exists('g:CompletePartialLine_Keymap')
@@ -16,6 +22,11 @@ endif
 " Option: Maximum number of completion results to return
 if !exists('g:CompletePartialLine_MaxResults')
     let g:CompletePartialLine_MaxResults = 20
+endif
+
+" Option: As well as the long completions, offer completing just one word
+if !exists('g:CompletePartialLine_PartialCompletions')
+    let g:CompletePartialLine_PartialCompletions = 1
 endif
 
 " Option: If set to 1, instead of just the current buffer, search all open buffers (below the MaxBufferLines limit)
@@ -235,7 +246,7 @@ endfunction
 
 " Vim completefunc: returns start column when findstart=1, or list of matches when findstart=0
 " Must be global function for completefunc to work
-function! CompletePartialLine_CompleteFunc(findstart, base)
+function! CompletePartialLine(findstart, base)
     if a:findstart
         " Return the start column of the text to be completed
         " For line completion, we complete from the cursor position (insert new text)
@@ -250,6 +261,7 @@ function! CompletePartialLine_CompleteFunc(findstart, base)
         " Convert to completion format: list of dictionaries with 'word', 'abbr', and 'menu' keys
         " 'word' is the full text to insert, 'abbr' is the truncated display version
         let completions = []
+        let longest_matched_text = len(best_matches[0][2])
         for match in best_matches
             let match_len = match[0]
             let after_text = match[1]
@@ -260,11 +272,26 @@ function! CompletePartialLine_CompleteFunc(findstart, base)
             "let meta_info = printf('partial|%s:%d|%d,%d', filename, line_num, match_len, after_text_len)
             if g:CompletePartialLine_SearchAllOpenBuffers
                 let meta_info = printf('%s:%d', filename, line_num)
+                " TODO: left-pad the line_num up to four chars I reckon
             else
                 let meta_info = printf('%d', line_num)
             endif
 
-            " If we display the metadata on the right, in order to see it, we may need to truncate the display text
+            let completion_text = after_text
+            let menu_text = strpart(completion_text, 0, 40)
+
+            " Show more details about the match
+            let padding_needed = longest_matched_text
+            if padding_needed > 15
+                let padding_needed = 15
+            endif
+            let text_before = '|' . strpart(matched_text, strlen(matched_text) - padding_needed)
+            " Pre-pad with spaces
+            " We add 3 chars: One for the '|' and two for the match_len
+            let text_before = repeat(' ', padding_needed + 3 - len('' . match_len) - strlen(text_before)) . text_before
+            let meta_info = meta_info . '|' . match_len . text_before . '|'
+
+            " Alternatively, if we display the metadata on the right, in order to see it, we may need to truncate the display text
             "let max_display_width = winwidth(0) / 2
             "let display_text = after_text
             "if len(after_text) > max_display_width
@@ -273,7 +300,21 @@ function! CompletePartialLine_CompleteFunc(findstart, base)
             "call add(completions, {'word': after_text, 'abbr': after_text, 'menu': meta_info})
 
             " Display the metadata on the left (in abbr, instead of in menu)
-            call add(completions, {'word': after_text, 'abbr': meta_info, 'menu': matched_text . after_text})
+            call add(completions, {'word': completion_text, 'abbr': meta_info, 'menu': menu_text})
+
+            " If PartialCompletions is set, we add a shorter version of the same completion
+            if g:CompletePartialLine_PartialCompletions
+                " Only up to the next space character
+                "let completion_len = stridx(after_text, ' ', 1)
+                " Only up to the next non-alphanumeric
+                let next_non_alphanum = matchstr(after_text, '[^A-Za-z]')
+                let completion_len = stridx(after_text, next_non_alphanum)
+
+                let completion_text = strpart(after_text, 0, completion_len)
+                let remaining_text = strpart(after_text, completion_len + 1)
+                let menu_text = strpart(completion_text, 0, 40)
+                call insert(completions, {'word': completion_text, 'abbr': meta_info, 'menu': menu_text}, -1)
+            endif
         endfor
         return completions
     endif
@@ -285,7 +326,7 @@ function! s:TriggerCompletion()
     let s:saved_completefunc = &completefunc
 
     " Set our completefunc
-    let &completefunc = 'CompletePartialLine_CompleteFunc'
+    let &completefunc = 'CompletePartialLine'
 
     " Set up autocmd to restore completefunc when completion is done
     augroup CompletePartialLine_Restore
@@ -300,6 +341,10 @@ endfunction
 " Create Plug mapping for custom keybindings
 " Use expression mapping to set completefunc and trigger completion
 inoremap <expr> <Plug>CompletePartialLine <SID>TriggerCompletion()
+
+if g:CompletePartialLine_EnableAsDefault
+    let &completefunc = 'CompletePartialLine'
+endif
 
 " Set default mapping if option is not empty and user hasn't mapped it
 if g:CompletePartialLine_Keymap != '' && !hasmapto('<Plug>CompletePartialLine', 'i')
