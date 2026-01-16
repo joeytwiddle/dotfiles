@@ -325,6 +325,14 @@ autocmd VimLeave * silent !stty ixon
 		let g:toggle_terminal_fix_macvim_mappings = 1
 	endif
 
+	" Tell AnotherTabCompletion plugin to use completefunc
+	let g:AnotherTabCompletion_KeyToStartCompletion = "\<c-x>\<c-u>"
+	" Tell CompletePartialLine to register itself as the completefunc
+	let g:CompletePartialLine_EnableAsDefault = 1
+
+	" Options for CompletePartialLine
+	let g:CompletePartialLine_PartialCompletions = 1
+
 " }}}
 
 
@@ -854,7 +862,7 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" call add(vamAddons,"VOoM")                           " Another outliner
 	" call add(vamAddons,'github:xolox/vim-easytags')      " Runs ctags automatic for you, to update them
 	"call add(vamAddons,'github:ervandew/supertab')         " Seems a lot like another_tabcompletion.vim but the list appears backwards! =/
-	call add(vamAddons,'github:joeytwiddle/vim-foist')     " Complete a partial line, by looking for the longest match in history
+	"call add(vamAddons,'github:joeytwiddle/vim-foist')     " Complete a partial line, by looking for the longest match in history
 	                                                       " If they are not taken, we could use <C-X><C-P> for a partial line and <C-X><C-S> for a sentence
 
 	" asyncfinder wants python 2 (aka python), UltiSnips wants python3.
