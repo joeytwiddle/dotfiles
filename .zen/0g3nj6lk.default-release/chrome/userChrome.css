@@ -1,0 +1,4 @@
+/* Hide Zen Tabbar */
+#navigator-toolbox {
+  visibility: collapse !important;
+}

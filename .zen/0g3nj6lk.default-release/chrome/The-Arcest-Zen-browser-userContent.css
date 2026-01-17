@@ -1,0 +1,633 @@
+
+.pip-wrapper {
+    display: none !important;
+    } 
+
+markdown-style,  .warpper-content , body, main{
+  background: transparent !important;
+}
+    @-moz-document url-prefix("https://web.whatsapp.com/") {
+      .selectable-text , .x13faqbe * {
+        font-size: x-large !important;
+        line-height: 1.2 !important;
+      }
+    }
+/*-=============-*/
+@-moz-document
+  url-prefix("https://egybest"),
+  url-prefix("~~"),
+  url-prefix(https://www.rttentomatoes.com){
+	* {
+		color-scheme: : dark;
+		background-color: color-mix(in srgb, black 50%, transparent) !important;
+		box-shadow: none !important;
+		border-color: #ffffff1c !important;
+		color: #c8c8c8 !important;
+  }
+}
+
+
+
+/*-=============-*/
+/*---------------------------------*/
+
+@-moz-document url(about:home), url(about:newtab), url(about:privatebrowsing), url(chrome://browser/content/browser.xul) {
+    body {
+        width: 100%;
+        height: 100vh;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    
+    body::before {
+        content: "";
+        position: absolute;
+        height: 130vh;
+        width: auto;
+        aspect-ratio: 1/1 !important;
+        transform: translate(-50%, -50%);
+        top:100%;
+        left:100%;
+        background-color: #ffffff; /* Color fill */
+        mask-image: url('data:image/svg+xml,<%3Fxml version="1.0" encoding="utf-8"%3F><!-- Generator: Adobe Illustrator 28.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;fill:%23FFFFFF;}</style><path class="st0" d="M16,22.2c3.4,0,6.2-2.8,6.2-6.2c0-3.4-2.8-6.2-6.2-6.2c-3.4,0-6.2,2.8-6.2,6.2C9.8,19.4,12.6,22.2,16,22.2z M20.9,16c0,2.7-2.2,4.9-4.9,4.9s-4.9-2.2-4.9-4.9s2.2-4.9,4.9-4.9S20.9,13.3,20.9,16z"/><path class="st0" d="M26.7,16c0,5.9-4.8,10.7-10.7,10.7S5.3,21.9,5.3,16S10.1,5.3,16,5.3S26.7,10.1,26.7,16z M16,24.6c4.8,0,8.6-3.9,8.6-8.6S20.8,7.4,16,7.4S7.4,11.2,7.4,16S11.2,24.6,16,24.6z"/><path class="st0" d="M32,16c0,8.8-7.2,16-16,16S0,24.8,0,16S7.2,0,16,0S32,7.2,32,16z M16,29.1c7.3,0,13.1-5.9,13.1-13.1S23.3,2.9,16,2.9S2.9,8.7,2.9,16S8.7,29.1,16,29.1z"/></svg>');
+        mask-repeat: no-repeat;
+        mask-position: center;
+        opacity: 5% !important;  
+    }
+}
+
+@-moz-document url(about:home), url(about:newtab){
+    :root {
+        --newtab-background-color: rgba(43, 42, 51, 0.0) !important;
+    }
+    
+ 
+    .logo {
+        aspect-ratio: 1/1 !important;
+        /*For Stable*/
+        background-image: url('data:image/svg+xml,<%3Fxml version="1.0" encoding="utf-8"%3F><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;fill:%23f46e51; opacity:90%}</style><path class="st0" d="M16,22.2c3.4,0,6.2-2.8,6.2-6.2c0-3.4-2.8-6.2-6.2-6.2c-3.4,0-6.2,2.8-6.2,6.2C9.8,19.4,12.6,22.2,16,22.2z M20.9,16c0,2.7-2.2,4.9-4.9,4.9s-4.9-2.2-4.9-4.9s2.2-4.9,4.9-4.9S20.9,13.3,20.9,16z"/><path class="st0" d="M26.7,16c0,5.9-4.8,10.7-10.7,10.7S5.3,21.9,5.3,16S10.1,5.3,16,5.3S26.7,10.1,26.7,16z M16,24.6c4.8,0,8.6-3.9,8.6-8.6S20.8,7.4,16,7.4S7.4,11.2,7.4,16S11.2,24.6,16,24.6z"/><path class="st0" d="M32,16c0,8.8-7.2,16-16,16S0,24.8,0,16S7.2,0,16,0S32,7.2,32,16z M16,29.1c7.3,0,13.1-5.9,13.1-13.1S23.3,2.9,16,2.9S2.9,8.7,2.9,16S8.7,29.1,16,29.1z"/></svg>') !important ;        
+
+        /*For twilight
+        background-image: url('data:image/svg+xml,<%3Fxml version="1.0" encoding="utf-8"%3F><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;fill:%237493f1; opacity:90%}</style><path class="st0" d="M16,22.2c3.4,0,6.2-2.8,6.2-6.2c0-3.4-2.8-6.2-6.2-6.2c-3.4,0-6.2,2.8-6.2,6.2C9.8,19.4,12.6,22.2,16,22.2z M20.9,16c0,2.7-2.2,4.9-4.9,4.9s-4.9-2.2-4.9-4.9s2.2-4.9,4.9-4.9S20.9,13.3,20.9,16z"/><path class="st0" d="M26.7,16c0,5.9-4.8,10.7-10.7,10.7S5.3,21.9,5.3,16S10.1,5.3,16,5.3S26.7,10.1,26.7,16z M16,24.6c4.8,0,8.6-3.9,8.6-8.6S20.8,7.4,16,7.4S7.4,11.2,7.4,16S11.2,24.6,16,24.6z"/><path class="st0" d="M32,16c0,8.8-7.2,16-16,16S0,24.8,0,16S7.2,0,16,0S32,7.2,32,16z M16,29.1c7.3,0,13.1-5.9,13.1-13.1S23.3,2.9,16,2.9S2.9,8.7,2.9,16S8.7,29.1,16,29.1z"/></svg>') !important ;        
+        */
+        background-position: center;
+        background-size: 50px !important;
+        width: fit-content !important;
+        height: 80px !important;
+       opacity: 10%;
+    }
+    
+    .wordmark {
+        opacity: 10%;
+        background-size: 172px !important;
+        width: 172px !important;
+        height: 81px !important;
+    }
+
+    
+    .logo-and-wordmark {
+        margin-block-end: 14px !important;
+    }
+}
+
+@-moz-document url(about:privatebrowsing){
+    .info {
+        display:none !important;
+    }
+    
+    .search-wrapper {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top:50% !important;
+        left: 50% !important;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .wordmark {
+        opacity: 80%
+    }
+
+    
+    .fake-textbox {
+        color:white !important;
+        opacity: 100% !important;
+    }
+}
+/*---------------------------------*/
+
+
+
+ @-moz-document url-prefix("https://web.whatsapp.com/") {
+
+button {
+color: #778790;
+}
+
+/* Font Styles */
+.selectable-text *
+{
+  font-size: xx-large !important ;
+  line-height: 1.2 !important ;
+}
+.selectable-text [href],
+.selectable-text [rel],
+.x13faqbe  {
+  font-size: large !important ;
+   line-height: 0 !important ;
+  
+}
+
+/* compact contact */
+._aigw {
+        flex: 0 0 25% !important ;
+        max-width: 40%!important ;
+    }
+
+/* days */
+._amkb {
+  filter: hue-rotate(275deg)brightness(4) opacity(.5);
+}
+}
+
+
+ @-moz-document url-prefix("https://music.youtube.com/") {
+      ytmusic-player-page * {
+          background: transparent;
+        }
+   ytmusic-browse-response * {
+      background: transparent;
+   }
+   * {
+     background: transparent;
+   }
+        }
+
+   @-moz-document url-prefix("https://www.youtube.com/") {
+     :root *{
+--yt-spec-base-background: rgba(33, 33, 60, .1);}
+     
+     
+    .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--filled {
+  color: rgba(330, 33, 60,1)!important;
+}
+     
+     html[dark] {
+background-color: #e61d1d00 !important;
+}
+     
+    #video-title.ytd-rich-grid-media {
+    font-family: "Poppins", "Poppins", sans-serif !important;
+    font-size: 2rem !important;
+    line-height: 2.1rem !important;
+    font-weight: 500 !important;
+  }
+    
+     
+      yt-chip-cloud-chip-renderer{
+  background-color: rgba(0, 0, 0, .8);
+        color: #000;
+     border-radius: 8px!important;}
+     
+     #chips-wrapper.ytd-feed-filter-chip-bar-renderer , #container.ytd-masthead {
+      backdrop-filter: blur(9px) contrast(0.5) brightness(.5)!important;
+      background-color: transparent !important; 
+      transition:  background-color 3s ease-in-out !important;
+     
+}
+     
+    
+video.video-stream.html5-main-video {
+        position: fixed !important;
+        top:0px;
+       border-radius: 8px 8px 18px 18px!important;
+      
+        
+       }
+     
+ 
+    #full-bleed-container , ytd-watch-flexy{
+     
+      border-radius:  0px 0px 18px 18px!important;
+      background: rgba(0, 0, 0, 0.0)!important;
+     
+      transition:  background 2s ease-in-out  , border-radius 4s ease-in-out!important;
+}
+   
+        ytd-watch-flexy[fullscreen]{
+       border-radius: 0px!important;
+       background: rgba(0, 0, 0, 1.0)!important; 
+       transition:  background 3s ease-in-out , border-radius 4s ease-in-out!important;
+     } 
+/*
+     *:not(.ytd-masthead ,ytd-mini-guide-renderer , .ytd-feed-filter-chip-bar-renderer , .tp-yt-app-drawer ,.ytp-timed-markers-container ,.ytp-gradient-bottom
+     , canvas, caption, center, cite, code, dd, del, dfn, div, dl, dt, em, embed, fieldset, font, form, h1, h2, h3, h4, h5, h6, hr, i, iframe, img, ins, kbd, label, legend, li, menu, object, ol, p, pre, q, s, samp, small, span, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, tr, tt, u, ul, var) {
+      background: transparent !important;
+    }
+     */
+}
+
+
+ @-moz-document url-prefix("https://audioz.download/") { body , nav#menu , main {
+  background: transparent !important;
+    background-color: transparent ;
+   backdrop-filter: blur(9px);
+   }
+}
+
+
+ @-moz-document url-prefix("https://www.reddit.com") {
+:root.theme-beta, :root.theme-rpl {
+  background-color: #0000;
+  --shreddit-content-background: #0892EE00;
+  --styled-scrollbar-background: #167CBF00;
+}
+   shreddit-feed *{
+   font-size: x-large !important;
+   line-height: 1.2 !important ;
+     
+}
+
+.text-14 {
+   font-size: large !important;
+}
+
+.bg-neutral-background-weak {
+    background-color:transparent !important ;
+   backdrop-filter: blur(32.8px) !important;
+}
+   .bg-neutral-background {
+  background-color: var(--color-neutral-background);
+     
+ 
+}
+
+.flex-grid--main-container-card {
+    min-width: 78% !important ;
+  
+}
+.min-w-\[316px\] ,    .xs\:min-w-\[316px\] {
+    min-width: 0px !important ;
+  
+}
+.px-md {
+   padding-left: .5rem !important ;
+   padding-right: .5rem !important ;
+   min-width: 0px !important ;
+}
+     body,
+  html {
+    background: transparent !important;
+  }
+}
+
+@-moz-document domain(reddit.com) {
+  body,
+  html {
+    background: transparent !important;
+    
+  }
+  #comment-tree {
+    background: transparent !important;
+  }
+  .bg-neutral-background,
+  .bg-neutral-background-weak {
+     background-color: rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(3px);
+  }
+  .bg-\[color\:var\(--shreddit-content-background\)\] {
+    background-color: transparent !important;
+  }
+  .threadline,
+  .shreddit-post,
+  aside,
+  comment-body-header,
+  shreddit-comment-tree {
+    background-color: transparent !important;
+  }
+}
+
+@-moz-document url-prefix("zzz") {
+  body ,main ,nav#menu , element, .bg-native{
+    background: transparent !important;
+    background-color: transparent !important;
+   
+  }
+}
+@-moz-document url-prefix("https://appstorrent.ru/") {
+ *:not(.dropdown-notif-content.show,.dropdown-login.show,.dropdown-lastcomm-content.show,#scroll_top,aside.main .footer .tablet-footer .tablet-footer-link,.filters .dropfilter .dropdown-filter-content 
+  , .ui-dialog) {
+    background: transparent !important;
+   
+   
+   
+  }
+
+}
+
+
+@-moz-document url-prefix("https://rutracker.org/") {
+ * {
+    background: color-mix(in srgb, black 10% ,transparent) !important;
+    background-color: color-mix(in srgb, black 10% , transparent) !important;
+}
+
+
+}
+
+
+@-moz-document domain(chatgpt.com) {
+  body, html,
+    .bg-token-main-surface-primary, /* Navbar */
+    .bg-token-sidebar-surface-primary, /* Sidebar */
+    .bg-token-sidebar-surface-primary * /* All sidebar elements */ {
+    background: transparent !important;
+  }
+}
+
+@-moz-document domain(monica.im) { body,html {
+    background: transparent !important;
+  }
+}
+
+@-moz-document domain(google.com) { .sfbg {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+    backdrop-filter: blur(20px);
+  }
+  body,
+  html,
+  .f6F9Be,
+  div#search > * {
+    background-color: transparent !important;
+  }
+  .g,
+  .appbar {
+    background-color: transparent !important;
+  }
+  div#rso {
+    * {
+      background-color: transparent !important;
+    }
+  }
+  div#cnt > div {
+  }
+}
+@-moz-document domain(github.com) {
+  body,
+  html,
+  header,
+  #repository-container-header,
+  .gh-header,
+  
+  .feed-background,
+  .color-bg-default {
+    background-color: transparent !important;
+  }
+  
+  
+  .feed-item-content,
+   .search-suggestions,
+  .discussion-timeline-actions {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(15px);
+  }
+}
+
+
+@-moz-document domain(duckduckgo.com) {
+  body,
+  html,
+  .site-wrapper,
+  .zci-wrap,
+  .zci,
+  .header-wrap,
+  .metabar,
+  .footer,
+  *::before,
+  .module--translations-translatedtext {
+    background: transparent !important;
+  }
+}
+
+@-moz-document domain(discord.com) {
+  :root {
+    .layer_cd0de5 :is([role="dialog"], .streamPreview_adbea6) {
+      background: hsl(var(--primary-700-hsl)) !important;
+    }
+
+    --primary-560: rgba(0, 0, 0, 0.05) !important;
+    --primary-600: rgba(0, 0, 0, 0.05) !important;
+    --primary-630: rgba(0, 0, 0, 0.05) !important;
+    --primary-645: rgba(0, 0, 0, 0.05) !important;
+    --primary-660: rgba(0, 0, 0, 0.05) !important;
+    --primary-700: rgba(0, 0, 0, 0.05) !important;
+    --primary-730: rgba(0, 0, 0, 0.05) !important;
+    --primary-760: rgba(0, 0, 0, 0.05) !important;
+    --primary-830: rgba(0, 0, 0, 0.05) !important;
+    --primary-860: rgba(0, 0, 0, 0.05) !important;
+    --primary-900: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  [class^="focusLock_"] {
+    --saturation-factor: 1;
+    --primary-600: hsl(var(--primary-600-hsl) / 1) !important;
+    --primary-600-hsl: 222.857 calc(var(--saturation-factor, 1) * 6.667%)
+      20.588% !important;
+    --modal-background: var(--primary-600);
+  }
+
+  .no-webkit-scrollbar * {
+    scrollbar-width: none !important;
+  }
+}
+
+@-moz-document domain(x.com) {
+  :root {
+    --theme-popup: rgba(0, 0, 0, 0.8);
+    --theme-bg-dim: rgba(0 ,0, 0, 0.4);
+  }
+
+  body {
+    background-color: var(--theme-bg-dim) !important;
+  }
+
+  [data-testid="primaryColumn"],
+  [aria-label="Trending"] > * > *,
+  [aria-label="Home timeline"] > *> *,
+  [aria-label="Search"] > * {
+    background: transparent !important;
+  }
+  
+  select,
+	[data-testid="Dropdown"],
+	[data-testid="hoverCardParent"],
+	[data-testid="DMDrawer"] > div,
+	div[role="dialog"],
+	div[role="listbox"],
+	div[role="radio"] {
+		background: var(--theme-popup) !important;
+	}
+
+  .r-kemksi, .r-5zmot {
+    background: transparent !important;
+  }
+}
+
+@-moz-document domain(zen-browser.app) {
+  body,
+  html {
+    background: transparent !important;
+  }
+}
+
+
+
+@-moz-document domain("about:about") {
+  background: transparent;
+}
+
+/* new */
+
+@-moz-document domain("about:home"), domain("about:newtab"){
+  
+  /* accent color */
+  :root{
+    --tr-col: color-mix(in srgb, var(--newtab-background-color) 40%, transparent);
+    --tr-hov-col: color-mix(in srgb, var(--tr-col) 80%, var(--newtab-text-primary-color));
+    --newtab-background-color-secondary: color-mix(in srgb, var(--newtab-background-color) 90%, var(--newtab-text-primary-color)) !important;
+    --background-color-box: var(--tr-col) !important;
+    --rounding: 20px;
+    --big-rounding: 15px;
+    --giant-rounding: 25px;
+    --blur-radius: 25px;
+  }
+  
+  .toggle-button[aria-pressed="true"] {
+    border-color: transparent;
+  }
+  
+  /* rounded corners */
+  .top-site-button,
+  .context-menu button,
+  .close-button,
+  .home-section .section .selector
+  {border-radius: var(--rounding) !important;}
+  
+  .top-site-outer, 
+  .top-site-inner,
+  .context-menu,
+  .icon-settings,
+  .weatherCard
+  {border-radius: var(--big-rounding) !important;}
+  
+  /* pinned links */
+  .top-site-button {overflow: clip;}
+  
+  .tile, .top-site-icon{
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+  
+  .top-site-button, .customize-menu{
+    background-color: var(--tr-col) !important;
+    backdrop-filter: blur(var(--blur-radius));
+  }
+    
+  .title {
+    background-color: color-mix(in srgb, var(--tr-col) 90%, var(--newtab-text-primary-color));
+    & > span {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+  }
+  
+  .top-site-outer:is(.active, :focus, :hover){
+    background: transparent !important;
+  }
+  
+  .top-site-outer, .top-site-inner {
+    & > a {padding: 0 !important;}
+    padding: 5px;
+  }
+  
+  .top-site-outer:not(:hover) .icon-pin-small{display: none !important;}
+  
+  .context-menu-item{
+    padding-inline: 5px !important;
+    padding-block: 1px !important;
+  }
+  
+  /* search box */
+  .search-handoff-button {
+    border-radius: 100px !important;
+    backdrop-filter: blur(var(--blur-radius));
+    background-color: var(--tr-col) !important;
+  }
+
+  /* height overflow */
+  @media (height > 700px) {
+    body:not(.inline-onboarding) .fixed-search .search-wrapper {
+      background-color: var(--tr-col) !important;
+      backdrop-filter: blur(var(--blur-radius));
+    }
+    .logo-and-wordmark {display: flex !important;}
+  }
+  
+  @media (height <= 700px) {
+    .search-wrapper {padding: 20px 0 30px !important;}
+    .outer-wrapper > main {margin-top: 0px !important;}
+  }
+  
+  /* margin to logo when only search is enabled */
+  .only-search .logo-and-wordmark {margin-top: 20px !important;}
+  
+  /* wallpaper */
+  body{
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: cover !important;
+    background-attachment: fixed !important;
+  }
+  
+  /* bg */
+ 
+  /* central box */
+  main{
+    margin-top: 0% !important;
+    height: 10%;
+    background-color: var(--tr-col);
+    border-radius: var(--giant-rounding);
+  }
+  
+  /* logo */
+  .logo{
+    width: 100px !important;
+    height: 100px !important;
+    scale: 2;
+  }
+  
+  /* settings */
+  .icon-settings:hover {background-color: var(--tr-hov-col) !important;}
+  .close-button-wrapper {background-color: transparent !important;}
+  
+  .home-section .section .selector{
+    background-color: var(--tr-col) !important;
+    &:hover{background-color: var(--tr-hov-col) !important;}
+  }
+  
+  /* weather */
+  .weatherInfoLink:hover, .weatherButtonContextMenuWrapper:hover {
+    background-color: var(--tr-hov-col) !important;
+  }
+  
+  .weatherCard:not(:hover) .weatherButtonContextMenuWrapper{opacity: 0}
+  .weatherInfoLink {border-radius: 0px !important;}
+  .weatherButtonContextMenuWrapper::after{display: none !important;}
+  
+}
+
+@-moz-document url("about:privatebrowsing") {
+  .search-handoff-button {border-radius: 100px !important;}
+  .info {border-radius: var(--big-rounding) !important;}
+}

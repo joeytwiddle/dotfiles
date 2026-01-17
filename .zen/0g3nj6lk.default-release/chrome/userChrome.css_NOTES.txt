@@ -1,0 +1,1 @@
+If you are trying to edit Sideberry styles, then this can be found in Sideberry Settings > Style Editor, and can be edited in realtime.
