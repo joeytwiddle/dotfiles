@@ -1,4 +1,26 @@
+/* How to enable this file, and how to test CSS live, before adding to this file:
+ * https://docs.zen-browser.app/guides/live-editing
+ */
+
 /* Hide Zen Tabbar */
+/* You might want to enable this, e.g. if you want to stick with Sidebery for tab management */
+/*
 #navigator-toolbox {
   visibility: collapse !important;
+}
+*/
+
+/* The following settings are discussed here:
+ * https://github.com/CosmoCreeper/Zen-Themes/issues/87
+ */
+
+/* Slightly increase the size of the border around the SuperPins */
+.zen-workspace-pinned-tabs-section .tab-background {
+  scale: 1.1;
+}
+
+/* Increase size of icons inside the SuperPins */
+/* Alternative: [pinned="true"] .tab-icon-image */
+.tab-content[pinned="true"] {
+  scale: 1.7;
 }
