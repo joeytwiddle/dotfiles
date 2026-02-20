@@ -1,9 +1,9 @@
-" Detect whether the document uses single space after period or double spaces after periods, then enforce that by highlighting violations.
+" Detect whether the document uses single space after period or double spaces after periods, then highlights violations of that style.
 
-hi link txtProblematicSpacesAfterPeriod Error
+hi link ProblematicSpacesAfterPeriod Error
 
-command! EnforceSingleSpaceAfterPeriod let b:spaces_after_period_double = 0 | silent! syn clear txtProblematicSpacesAfterPeriod | syn match txtProblematicSpacesAfterPeriod /\.\zs  \+\ze/ containedin=ALL
-command! EnforceDoubleSpaceAfterPeriod let b:spaces_after_period_double = 1 | silent! syn clear txtProblematicSpacesAfterPeriod | syn match txtProblematicSpacesAfterPeriod /\.\zs \ze[^ ]/ containedin=ALL
+command! OneSpaceAfterPeriod let b:spaces_after_period = 1 | silent! syn clear ProblematicSpacesAfterPeriod | syn match ProblematicSpacesAfterPeriod /\.\zs  \+\ze/ containedin=ALL
+command! TwoSpacesAfterPeriod let b:spaces_after_period = 2 | silent! syn clear ProblematicSpacesAfterPeriod | syn match ProblematicSpacesAfterPeriod /\.\zs \ze[^ ]/ containedin=ALL
 
 function! s:CountLinesMatching(pattern)
   let saved_view = winsaveview()
@@ -14,31 +14,32 @@ function! s:CountLinesMatching(pattern)
   return cnt
 endfunction
 
-function! s:RestoreSpacesAfterPeriodSyntax()
-  if !exists('b:spaces_after_period_double')
+function! s:RestoreConsistentSpacesAfterPeriodSyntax()
+  if !exists('b:spaces_after_period')
     " Detect: more lines with double space than single?
-    if s:CountLinesMatching('\. \S') >= s:CountLinesMatching('\.  \S')
-      :EnforceSingleSpaceAfterPeriod
+    if s:CountLinesMatching('\. \S') > s:CountLinesMatching('\.  \S')
+      :OneSpaceAfterPeriod
     else
-      :EnforceDoubleSpaceAfterPeriod
+      :TwoSpacesAfterPeriod
     endif
   else
-    if get(b:, 'spaces_after_period_double', 0)
-      :EnforceDoubleSpaceAfterPeriod
+    " Restore
+    if b:spaces_after_period == 2
+      :TwoSpacesAfterPeriod
     else
-      :EnforceSingleSpaceAfterPeriod
+      :OneSpaceAfterPeriod
     endif
   endif
-  "echo "b:spaces_after_period_double = " . b:spaces_after_period_double
+  "echo "b:spaces_after_period = " . b:spaces_after_period
 endfunction
 
-augroup SpacesAfterPeriod
+augroup ConsistentSpacesAfterPeriod
   autocmd!
   " Run after filetype syntax so our matches take priority; BufReadPost for new buffers
-  autocmd FileType * call s:RestoreSpacesAfterPeriodSyntax()
-  autocmd BufReadPost,BufNewFile * call s:RestoreSpacesAfterPeriodSyntax()
-  autocmd Colorscheme * call s:RestoreSpacesAfterPeriodSyntax()
+  autocmd FileType * call s:RestoreConsistentSpacesAfterPeriodSyntax()
+  autocmd BufReadPost,BufNewFile * call s:RestoreConsistentSpacesAfterPeriodSyntax()
+  autocmd Colorscheme * call s:RestoreConsistentSpacesAfterPeriodSyntax()
 augroup END
 
-" In case the file has already been loaded
-call s:RestoreSpacesAfterPeriodSyntax()
+" For the current buffer
+call s:RestoreConsistentSpacesAfterPeriodSyntax()
