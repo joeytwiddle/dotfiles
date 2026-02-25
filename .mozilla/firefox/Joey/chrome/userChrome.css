@@ -17,14 +17,27 @@ There are also some mini-recipes (and other tweaks) on this page: https://wiki.a
 
 You can get some inspiration for styling here: https://www.reddit.com/r/FirefoxCSS/
 
-Old non-live method (requires a restart):
-When editing this file, the page chrome://browser/content/browser.xhtml is useful for discovering Firefox's IDs and classnames.
-To use the inspector on that page, you'll need to "Enable browser chrome and add-on debugging toolboxes" https://www.reddit.com/r/FirefoxCSS/comments/73dvty/tutorial_how_to_create_and_livedebug_userchromecss/
-It may be easier to open the DevTools before navigating to the chrome URL, because the keybind stops working.once the page has loaded.
-Unfortunately that page does not apply the CSS we set in this file, making it difficult to preview our changes.  (It used to, but it's not doing it in 2019.)
-It can also be useful to search the source code: https://github.com/mozilla/gecko-dev/search?q=tab-close-button
+# How to develop this file
 
-In the DevTools style editor, you can hit + to create a new style sheet, and then paste the contents of this file, to see what these styles will do.
+We can test changes not on the live browser, but on a tab inside your browser.
+
+1. Open a new tab, and then open DevTools with Ctrl-Shift-I.  (It's easier to open it before we open the page, because the keybind stops working.once the page has loaded.)
+
+2. Open chrome://browser/content/browser.xhtml
+
+3. (Optional) In DevTools, switch to the Style Editor, hit + to create a new stylesheet, and then copy and paste the contents of this file.
+
+4. Use Pick an Element to inspect elements, and then try tweaking their CSS.
+
+   (Aside from the elements browser, it can also be useful to search the source code: https://github.com/mozilla/gecko-dev/search?q=tab-close-button )
+
+5. If you find a CSS tweak which you like, copy and paste it into this file.
+
+Community docs: https://www.userchrome.org/
+
+Official docs: https://support.mozilla.org/en-US/kb/contributors-guide-firefox-advanced-customization
+
+Old docs: https://www.reddit.com/r/FirefoxCSS/comments/73dvty/tutorial_how_to_create_and_livedebug_userchromecss/
 
 */
 
@@ -109,8 +122,8 @@ In the DevTools style editor, you can hit + to create a new style sheet, and the
 #TabsToolbar .tabbrowser-tab[selected] .tab-stack,
 #TabsToolbar .tabbrowser-tab[selected] .tab-background,
 #TabsToolbar .tabbrowser-tab[selected] .tab-content {
-    border-top-left-radius: 8px !important;
-    border-top-right-radius: 8px !important;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
 }
 #TabsToolbar .tab-background {
     /* Compensate for the floating tab pills in 2021 */
@@ -238,7 +251,7 @@ toolbaritem#urlbar-container {
     /* min-height: 44px !important; */
 }
 #urlbar {
-    /* Default is 30px */
+    /* Default is 30px or maybe now 32px */
     /* --urlbar-height: 32px !important; */
     /* --urlbar-height: 32px !important; */
     /* --urlbar-height: 24px !important; */
@@ -254,6 +267,16 @@ toolbaritem#urlbar-container {
     /* The spacing above and below the urlbar (default 3px but effectively 4 or 5px because of nav-bar height) */
     /* padding-block: 6px !important; */
 }
+/* We can change the height of the location box */
+/* Just keep these two in sync */
+/*
+#urlbar-background {
+  height: 36px !important;
+}
+.urlbar-input-box {
+    height: 32px !important;
+}
+*/
 /* #urlbar:not(.megabar), #urlbar.megabar > #urlbar-background, #searchbar, #urlbar-input-container { */
 #urlbar, #urlbar-background, #searchbar, #urlbar-input-container {
     /* Fully rounded */
@@ -292,10 +315,17 @@ toolbaritem#urlbar-container {
     /* box-shadow: inset 0 0 8px #00000033 !important; */
     /* box-shadow: inset 0 0 10px #00000026 !important; */
 }
+/* What Firefox actually has by default
+#urlbar[focused] > #urlbar-background,
+#searchbar:focus-within {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.23);
+}
+*/
 #urlbar:not(.megabar)[focused="true"], #urlbar.megabar[focused="true"] {
     /* box-shadow: none !important; */
     /* border: 1px solid #0008 !important; */
 }
+
 
 /* Firefox Developer Edition 2021/12/08: Remove the white border around the current tab */
 .tab-background:is([selected], [multiselected]):-moz-lwtheme {
@@ -303,6 +333,7 @@ toolbaritem#urlbar-container {
 }
 
 /* Sometimes this outline was appearing around the urlbar.  You can make it appear by using Tab to get out of the urlbar and back in again.  It actually affects all focusable elements, not just the urlbar.  But the urlbar was the only place that it bothered me. */
+/* In 2025, on my Linux, even without my userChrome, when the urlbar is focused, it gets a blue outline/highlight which looks to be 1px wide but is 2px inside the input box, so it leaves 1px of background visible outside it, which looks ugly. */
 :root:-moz-lwtheme-brighttext {
     /* I guess this colour was provided by my OS theme (Manjaro KDE Breeze) */
     /* --focus-outline-color: #00DDFF; */
@@ -311,14 +342,21 @@ toolbaritem#urlbar-container {
     /* This might work.  I didn't try it.  But it probably won't, because it references the one above! */
     /* --toolbar-field-focus-border-color: #000000 !important; */
 }
-#urlbar[focused="true"]:not([suppress-focus-border]) > #urlbar-background, #searchbar:focus-within {
+#urlbar-background, #searchbar:focus-within {
     /* Defaults:
     outline: var(--focus-outline);
     outline-offset: calc(var(--focus-outline-width) * -1);
     outline-color: var(--toolbar-field-focus-border-color);
     border-color: transparent;
     */
+    /* By 2025, this was doing nothing */
     outline: none !important;
+}
+/* We can introduce our own focused style */
+/* But this will encroach on the search engine pill inside, so I expand it to 2px, so it actually touches, or skip it entirely */
+#urlbar-background:has(+ .urlbar-input-container .urlbar-input-box:focus-within) {
+  /*border: 2px solid var(--focus-outline-color) !important;*/
+  /*border: 2px solid #0008 !important;*/
 }
 
 
@@ -611,3 +649,6 @@ toolbar .toolbaritem-combined-buttons {
     */
 }
 
+#urlbar[open] > #urlbar-background {
+  outline: 1px solid red !important;
+}
