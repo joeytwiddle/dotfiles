@@ -1,0 +1,123 @@
+/* === Rounded tabs, and tab lighting === */
+
+/* This rounds the top of the tabs, but it doesn't flange the bottom. */
+/* That is possible though, using SVGs: https://github.com/wilfredwee/photon-australis */
+
+/* Tab top border roundness */
+#TabsToolbar .tabbrowser-tab[selected],
+#TabsToolbar .tabbrowser-tab[selected] .tab-stack,
+#TabsToolbar .tabbrowser-tab[selected] .tab-background,
+#TabsToolbar .tabbrowser-tab[selected] .tab-content {
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+}
+#TabsToolbar .tab-background {
+    /* Compensate for the floating tab pills in 2021 */
+    margin-bottom: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    margin-top: 0 !important;
+}
+/* Reducing the top and bottom margins above does not leave much space for the green dot that appears on pinned tabs with pending notifications (which Firefox detects when their title changes). */
+/* But we can move that dot down a bit */
+.tabbrowser-tab:is([image], [pinned]) > .tab-stack > .tab-content[attention]:not([selected="true"]), .tabbrowser-tab > .tab-stack > .tab-content[pinned][titlechanged]:not([selected="true"]), #firefox-view-button[attention] {
+    background-image: radial-gradient(circle, var(--tab-attention-icon-color), var(--tab-attention-icon-color) 2px, transparent 2px) !important;
+    background-position: center bottom calc(2.5px + var(--tabs-navbar-shadow-size)) !important;
+}
+#TabsToolbar .tabbrowser-tab {
+    /* Remove the black border on either side of the selected tab */
+    --tabs-border-color: #0000 !important;
+    border: none !important;
+}
+/* The roundness looks better if there is a little gap above it */
+/* Note that Firefox's new design prefers a margin above the .tab-background rather than the .tab-stack, but our CSS was largely based around .tab-stack so we are sticking that way for now. */
+#TabsToolbar .tabbrowser-tab .tab-stack {
+    /* margin-top: 3px !important; */
+}
+/* Add a shadow to the left and right of the selected tab */
+#TabsToolbar .tabbrowser-tab[selected] .tab-stack {
+    /* box-shadow: 0 4px 8px #0006 !important; */
+    /* box-shadow: 0 2px 4px #0006 !important; */
+    box-shadow: 0 2px 2px #0006 !important;
+    /* Push the nearby tabs aside a bit, so they don't appear in the shadow */
+    /* margin-left: 2px !important; */
+    /* margin-right: 2px !important; */
+}
+
+/* The line that runs along the bottom of unselected tabs */
+/* or you could say it runs along the top of the toolbar. */
+/* It used to be dark, we can can make it light to look raised */
+:root {
+    --tabs-navbar-shadow-size: 0.5px !important;
+}
+#navigator-toolbox {
+    --tabs-border-color: #fff7 !important;
+}
+/* This line runs across the top of the toolbar */
+/* We need to remove it, if we want the tab to appear connected to the toolbar */
+#nav-bar.browser-toolbar {
+    border-top: none !important;
+}
+/*
+#nav-bar:not([tabs-hidden="true"]) {
+    box-shadow: 0 calc(-1 * var(--tabs-navbar-shadow-size)) 0 var(--tabs-border-color);
+}
+*/
+/* Unfortunately the selected tab's shadow overlaps the navbar-shadow above. */
+/* We could try to draw the line this way instead, but this gets overlapped by tab separators! */
+/*
+#TabsToolbar .tabbrowser-tab:not([selected]) .tab-stack {
+    border-bottom: 1px solid #fff8;
+}
+*/
+/* The selected tab's border should match the --tabs-border-color, */
+/* although it may need different alpha due to different background. */
+#TabsToolbar .tabbrowser-tab[selected] .tab-content {
+    border: 1px solid #fff4 !important;
+    border-top: 1px solid #fff7 !important;
+    /* border: 2px solid #fff4 !important; */
+    /* border-top: 2px solid #fff7 !important; */
+    border-bottom: none !important;
+}
+
+/* Remove colored line above each tab, because it extends outside the rounded edge */
+#TabsToolbar .tabbrowser-tab .tab-line {
+    visibility: hidden;
+    /*
+    position: absolute;
+    top: 4px;
+    left: 5px;
+    right: 5px;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    */
+}
+/* Give the selected tab some more horizontal whitespace */
+#TabsToolbar .tabbrowser-tab[selected] .tab-stack .tab-content {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+/* And give all the tabs some more vertical whitespace */
+/* This increases the height of the entire row */
+.tab-content {
+    /* min-height: 40px !important; */
+    /* min-height: 38px !important; */
+}
+/* Probably better to edit this one, which can make the entire row taller or shorter */
+#tabbrowser-tabs[orient="horizontal"] {
+    /* The default appears to be 44 */
+    min-height: 42px !important;
+}
+.tab-label-container {
+    /* SCREWS_UP_PINNED_TABS */
+    /* padding-left: 4px !important; */
+    /* padding-right: 4px !important; */
+}
+#tabbrowser-tabs, #tabbrowser-arrowscrollbox, #tabbrowser-tabs[positionpinnedtabs] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[pinned] {
+    /* Default: 38px */
+    /* min-height: var(--tab-min-height); */
+    /* height: 24px !important; */
+    /* height: 20px !important; */
+}
