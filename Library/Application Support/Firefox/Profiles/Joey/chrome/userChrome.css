@@ -1,0 +1,13 @@
+/* This file requires: about:config > `toolkit.legacyUserProfileCustomizations.stylesheets = true` */
+
+/* If you want vertical tabs without an extesion, go to: Settings > Browser Layout and enable Vertical Tabs. */
+/* Use Ctrl+Z (on macOS) or use the sidebar icon to toggle titles, which makes the vertical tabs much narrower */
+
+/* But if you want to hide the horizontal tab bar explicitly, you can use this */
+/* This may be useful if you are using Sidebery or Tree Style Tabs, and you don't want to see the native tabs (horizontal or vertical) at all */
+/* For interactivity, we only hide the horizontal tab if the user sets `browser.uidensity` to `2` (Touch) */
+:root[uidensity="touch"] #TabsToolbar {
+  visibility: collapse !important;
+}
+
+/* You may also like to toggle the titlebar: Right-click the toolbar, choose "Customize Toolbar," and uncheck "Title Bar" at the bottom left to reduce clutter. */
