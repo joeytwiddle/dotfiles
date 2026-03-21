@@ -13,10 +13,10 @@ endif
 set hlsearch
 
 " We want these keys to temporarily flash the highlighting again
-nnoremap <silent> n :set hlsearch<CR>n
-nnoremap <silent> N :set hlsearch<CR>N
-nnoremap <silent> gn :set hlsearch<CR>gn
-nnoremap <silent> gN :set hlsearch<CR>gN
+nnoremap <silent> n n:set hlsearch<CR>
+nnoremap <silent> N N:set hlsearch<CR>
+nnoremap <silent> gn gn:set hlsearch<CR>
+nnoremap <silent> gN gN:set hlsearch<CR>
 
 " Redundant mappings, since they re-enable highlighting automatically
 " But needed when we use the TECHNIQUE2 below
