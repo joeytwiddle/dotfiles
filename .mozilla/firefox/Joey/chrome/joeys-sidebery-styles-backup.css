@@ -1,3 +1,11 @@
+/* Copied from Zen into Firefox */
+
+/* Get more inspiration from here:
+   https://github.com/mbnuqw/sidebery/wiki/Sidebery-Styles-Snippets
+   and here
+   https://github.com/mbnuqw/sidebery/blob/550758d5cce79b580e3d5329a454be51e29acc39/src/styles/themes/proton/sidebar/tab.styl
+*/
+
 /* Control how much pinned tabs column you want below, width of the pinned tabs will be automatically resized depend on it. */
 #root.root {
     --pinned-tabs-col: 6;
@@ -16,17 +24,17 @@
 /* ------------------------------------- */
 
 /*
-#root.root {--tabs-height: 40px;}
-#root.root {--toolbar-bg: transparent;}
-#root.root {--general-border-radius: 0px;}
-#root.root {--general-margin: 10px;}
+
+
+
+
 #root.root {--nav-btn-height: 25px;}
 #root.root {--nav-btn-width: 25px;}
 #root.root {--ntb-btn-height: 25px;}
 #root.root {--tabs-close-btn-margin: 5px;}
-#root.root {--tabs-inner-gap: 10px;}
+
 #root.root {--nav-btn-margin: 8px;}
-#root.root {--tabs-margin: 7px;}
+
 */
 
 #root.root {--tabs-pinned-width: calc( (96vw - (var(--tabs-margin)*var(--pinned-tabs-col))) / var(--pinned-tabs-col));}
@@ -48,15 +56,16 @@
 		background-color: #6664;
 		background-color: #fff;
 		background-color: transparent;
+		background-color: #6663;
     border-radius: 11px;
     /* Since padding didn't work, I just shrink the whole thing */
-		transform: scale(0.9);
+		transform: scale(1);
 }
 
 /* Scale the inner icon, not the outer container (which turns grey on hover) */
 /* I don't know what the exact structure is, but this seems to do it */
 .Tab[data-pin="true"] .body img {
-    /* This is suitable when you are using a background for each pinned tab */
+    /* This is suitable when you are using a background for each pinned tab */141414
 		/* transform: scale(calc(10/var(--pinned-tabs-col))); */
 		/* This will touch the edges of the body background */
 		transform: scale(calc(16/var(--pinned-tabs-col)));
@@ -66,6 +75,14 @@
     /* border-radius: 20%; */
 }
 
+/* The background of pinned tabs, unselected and selected */
+.Tab[data-pin="true"] .body {
+	background: #8880 !important;
+}
+.Tab[data-pin="true"][data-active="true"] .body {
+	background: #6667 !important;
+}
+
 /*
 .Tab .title {
     background: linear-gradient(90deg, var(--tabs-normal-fg) 70%, #f1f1f100 95%);
@@ -73,3 +90,39 @@
     color: transparent;
 }
 */
+
+/* More additions by Joey, to make Sidebery look like Zen's tab */
+/* Change the background */
+/* Old: .Tab { background: #131313; } */
+#root.root {--toolbar-bg: #1e1e1e;}
+#root.root {--frame-bg: #131313;}
+/* Discarded title opacity */
+/* Default */
+/* #root.root {--tabs-discarded-title-opacity: 0.56;} */
+#root.root {--tabs-discarded-title-opacity: 0.75;}
+/* #root.root {--tabs-discarded-title-opacity: 1;} */
+/* #root.root {--tabs-discarded-favicon-opacity: 0.5;} */
+#root.root {--tabs-discarded-favicon-opacity: 1;}
+/* .Tab[data-discarded="false"] .title { font-weight: bold; } */
+.Tab .title { font-size: 0.9rem; }
+.Tab[data-active="true"] .body { background: #6665; }
+/* .Tab .body { border-radius: 8px; } */
+#root.root {--tabs-border-radius: 8px;}
+/* .Tab .body { margin: 4px 0 } */
+#root.root {--tabs-height: 36px;}
+/* I wanted tabs-margin 5 but this causes the LHS to show too many indent lines */
+/* It's also annoying that the vertical and horizontal padding are both controlled by the one variable. */
+#root.root {--tabs-margin: 3px;}
+/* This tends to affect the menu things above the pinned tabs */
+#root.root {--general-margin: 1px;}
+/* #root.root {--tabs-activated-shadow: 0 1px 4px -1px rgba(0,0,0,0.282), inset 0 0 0 1px rgba(255,255,255,0.031);} */
+/* No shadow on the tab. 2D not 3D. */
+#root.root {--tabs-activated-shadow: 0;}
+/* Make close button visible on current tab (like Zen does) */
+.Tab[data-active="true"] .close { opacity: 1 }
+/* Larger close button */
+.Tab .close { scale: 1.15 }
+/* Slow fade background when changing tab (like Zen) */
+/* .Tab .body { transition: background 250ms linear; } */
+/* But I prefer it slightly faster */
+.Tab .body { transition: background 100ms linear; }
