@@ -1,0 +1,75 @@
+/* Control how much pinned tabs column you want below, width of the pinned tabs will be automatically resized depend on it. */
+#root.root {
+    --pinned-tabs-col: 6;
+}
+
+/* ------------------------------------- */
+
+/* Moving Sidebery navigation bar to bottom, to mimic how Space works on Arc Browser. Make sure to choose Horizontal when activating the navigation bar. */
+/*
+.top-horizontal-box {
+  display: flex;
+  order: 1; 
+}
+*/
+
+/* ------------------------------------- */
+
+/*
+#root.root {--tabs-height: 40px;}
+#root.root {--toolbar-bg: transparent;}
+#root.root {--general-border-radius: 0px;}
+#root.root {--general-margin: 10px;}
+#root.root {--nav-btn-height: 25px;}
+#root.root {--nav-btn-width: 25px;}
+#root.root {--ntb-btn-height: 25px;}
+#root.root {--tabs-close-btn-margin: 5px;}
+#root.root {--tabs-inner-gap: 10px;}
+#root.root {--nav-btn-margin: 8px;}
+#root.root {--tabs-margin: 7px;}
+*/
+
+#root.root {--tabs-pinned-width: calc( (96vw - (var(--tabs-margin)*var(--pinned-tabs-col))) / var(--pinned-tabs-col));}
+#root.root {--tabs-pinned-height: calc( (96vw - (var(--tabs-margin)*var(--pinned-tabs-col))) / var(--pinned-tabs-col));}
+
+.Tab[data-pin="true"] .body {
+		/*
+    border: 0px solid #D75B00;
+    box-shadow: 0px 2px 1px #00000000;
+    background: transparent;
+    padding: -10px;
+    color: #ffffff20;
+    padding-left: 6px;
+    padding-right: 6px;
+		*/
+}
+
+[data-pin="true"] .body {
+		background-color: #6664;
+		background-color: #fff;
+		background-color: transparent;
+    border-radius: 11px;
+    /* Since padding didn't work, I just shrink the whole thing */
+		transform: scale(0.9);
+}
+
+/* Scale the inner icon, not the outer container (which turns grey on hover) */
+/* I don't know what the exact structure is, but this seems to do it */
+.Tab[data-pin="true"] .body img {
+    /* This is suitable when you are using a background for each pinned tab */
+		/* transform: scale(calc(10/var(--pinned-tabs-col))); */
+		/* This will touch the edges of the body background */
+		transform: scale(calc(16/var(--pinned-tabs-col)));
+		/* But I want some margin/padding, so I scale down a little */
+		transform: scale(calc(12/var(--pinned-tabs-col)));
+		/* Force the icon to have rounded edges. Might look abd on some icons. */
+    /* border-radius: 20%; */
+}
+
+/*
+.Tab .title {
+    background: linear-gradient(90deg, var(--tabs-normal-fg) 70%, #f1f1f100 95%);
+    background-clip: text;
+    color: transparent;
+}
+*/
