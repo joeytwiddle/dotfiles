@@ -1082,7 +1082,8 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 
 	" NOTE: For the tern plugin to work, you need to cd into the folder and do `npm install`
 	"       You also need to create a .tern-project file for each project!
-	call add(vamAddons,"github:marijnh/tern_for_vim")     " Static analysis of JS files
+	" Disabled because I rarely use this, and it often throws out error messages
+	"call add(vamAddons,"github:marijnh/tern_for_vim")     " Static analysis of JS files
 	"let g:tern_show_argument_hints = 'on_hold'
 	let g:tern_show_argument_hints = 'never'              " Disabled because it keeps locking up Vim until tern times out (our codebase is large)
 	let g:tern_show_signature_in_pum = 1
