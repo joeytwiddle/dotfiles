@@ -1080,18 +1080,6 @@ if argc() == 0 || argv(0) != ".git/COMMIT_EDITMSG"
 	" But so far it has just been giving me 'undefined'
 	"call add(vamAddons,"github:michalliu/sourcebeautify.vim")
 
-	" NOTE: For the tern plugin to work, you need to cd into the folder and do `npm install`
-	"       You also need to create a .tern-project file for each project!
-	" Disabled because I rarely use this, and it often throws out error messages
-	"call add(vamAddons,"github:marijnh/tern_for_vim")     " Static analysis of JS files
-	"let g:tern_show_argument_hints = 'on_hold'
-	let g:tern_show_argument_hints = 'never'              " Disabled because it keeps locking up Vim until tern times out (our codebase is large)
-	let g:tern_show_signature_in_pum = 1
-	" Curiously the documentation pops up in a Scratch window when I use <Tab> to complete a word, even if both of the above are set to off (defaults).
-	" I also manually installed this: https://github.com/Slava/tern-meteor
-	" When editing a JS or CS file, make K lookup documentation with Tern
-	autocmd BufReadPost,BufNewFile *.{js,coffee} nnoremap <buffer> K :TernDoc<CR>
-
 	" Here is a minimal alternative to EasyMotion: https://github.com/vim-scripts/PreciseJump
 	"call add(vamAddons,"github:Lokaltog/vim-easymotion")  " Let's use the latest EasyMotion
 	call add(vamAddons,"github:joeytwiddle/vim-easymotion") " My dev copy
