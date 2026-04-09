@@ -1,3 +1,5 @@
+/* NOTE: This file has been copied from Zen into Firefox, so you probably want to look at the Firefox file for the latest updates */
+
 /* Get more inspiration from here:
    https://github.com/mbnuqw/sidebery/wiki/Sidebery-Styles-Snippets
    and here
@@ -14,7 +16,7 @@
 /* Moving Sidebery navigation bar to bottom, to mimic how Space works on Arc Browser. Make sure to choose Horizontal when activating the navigation bar. */
 /*
 .top-horizontal-box {
-  display: flex;141414
+  display: flex;
   order: 1; 
 }
 */
@@ -73,6 +75,14 @@
     /* border-radius: 20%; */
 }
 
+/* The background of pinned tabs, unselected and selected */
+.Tab[data-pin="true"] .body {
+	background: #8880 !important;
+}
+.Tab[data-pin="true"][data-active="true"] .body {
+	background: #6667 !important;
+}
+
 /*
 .Tab .title {
     background: linear-gradient(90deg, var(--tabs-normal-fg) 70%, #f1f1f100 95%);
@@ -86,16 +96,13 @@
 /* Old: .Tab { background: #131313; } */
 #root.root {--toolbar-bg: #1e1e1e;}
 #root.root {--frame-bg: #131313;}
-/* Discarded title opacity */
-/* Default */
-/* #root.root {--tabs-discarded-title-opacity: 0.56;} */
-#root.root {--tabs-discarded-title-opacity: 0.75;}
-/* #root.root {--tabs-discarded-title-opacity: 1;} */
-/* #root.root {--tabs-discarded-favicon-opacity: 0.5;} */
-#root.root {--tabs-discarded-favicon-opacity: 1;}
 /* .Tab[data-discarded="false"] .title { font-weight: bold; } */
 .Tab .title { font-size: 0.9rem; }
-.Tab[data-active="true"] .body { background: #6665; }
+/* #root.root {--tabs-activated-bg: #6665;} */
+/* #root.root {--tabs-activated-fg: #ffffffff;} */
+/* Discarded (unloaded) tabs: We keep the text readable, and let the faded favicons communicate that the tab is unloaded (defaults 0.56 and 0.5) */
+#root.root {--tabs-discarded-title-opacity: 0.56;}
+#root.root {--tabs-discarded-favicon-opacity: 0.3;}
 /* .Tab .body { border-radius: 8px; } */
 #root.root {--tabs-border-radius: 8px;}
 /* .Tab .body { margin: 4px 0 } */
