@@ -61,7 +61,7 @@
 # Stashing (and dropping changes):
 #
 #   gss and gsp are git stash save and git stash pop respectively.
-#   gsd shows the diff/patch of your top stash.
+#   gsld lists your stashes along with their diffs/patches
 #
 #   gssp allows you to select (y/n) which changes to stash, keeping the others.
 #
@@ -811,6 +811,8 @@ alias glx='glp --graph'
 # Warning: glg and glc duplicate my color settings.  (Which are also set in my ~/.gitconfig.)  Part of the reason I passed everything through glg/glc was to display decorations (commit labels like HEAD and origin/master).  I have since learned this can be achieved by passing --decorate, so we may be able to reduce some duplication that way.
 # "Git Log with Merges-combined/merged)" - shows diffs in the merge, does not show individual commits from merged branches
 alias glm='glg -m --first-parent'
+alias glnm='glg --no-merges'
+alias glnmfp='glg --no-merges --first-parent'
 # It seems to me that -c should be combined with --first-parent, to avoid seeing the same diffs twice (the final actual merge, as well as the commits on the branch)
 # When -c is used, -m does nothing (at least in the example I tested)
 # I did tests comparing `glg -c` against `glg -m`, and `glg -c --first-parent` against `glg -m --first-parent`.  Whilst -c did show the full diff of manual merges, it also excluded a lot of stuff!  Notably, merges with no conflicts.  (From the manual: "it lists only files which were modified from all parents").  So I don't see any way to see the true patched of manual merges (-c) without also excluding stuff.  Therefore, use -c only when you think you need it!  :P
@@ -846,6 +848,8 @@ else alias gllm='gll -m --first-parent'
 fi
 # This shows the commits from merged branches (/), but not the merge commits themselves (\).  It takes less space than gll.
 alias gllnm='gll --no-merges'
+# Shows only commits on the local branch, not merge commits or commits from the merges
+alias gllnmfp='gll --no-merges --first-parent'
 # Git Log Long No Graph
 alias gllng='glc'
 alias glls='gll --stat="$COLUMNS"'
@@ -1048,7 +1052,8 @@ alias gsll=gsl
 # This shows only the diff:
 #alias gsd='git stash show -p'
 # This shows the log and other header info too:
-alias gsd='git show stash@{0}'
+# Disabled now so I can run Get-shit-done instead. I tend to use 'gsld' anyway.
+#alias gsd='git show stash@{0}'
 # Git Stash (diff) Files shows the files changed (like --stat)
 alias gsf='git stash show'
 # Git Stash List Diffs: lists all stashed commits, displaying their diffs
@@ -1759,8 +1764,12 @@ alias gcleanall='git clean -dxi'
 
 alias gwt='git worktree'
 alias gwta='git worktree add'
-alias gwtl='git worktree list'
-alias gwtp='git worktree prune'
+#alias gwtl='git worktree list'
+# Highlight first column (path) in green, second column (commit) in yellow, third columns (branch) in magenta.
+#alias gwtl="git worktree list | highlight -bold '\[.*\]' magenta | highlight '^[^ \t]*' green | highlight -bold ' [0-9a-f]\+ ' yellow"
+alias gwtl="git worktree list | sed \"s+^\([^ ]*\)\( *\)\([^ ]*\)\( *\)\(.*\)+$(cursegreen)\1$(cursenorm)\2$(curseyellow;cursebold)\3$(cursenorm)\4$(cursemagenta;cursebold)\5$(cursenorm)+\""
+alias gwtp='echo "Use gwtpv (git worktree prune --verbose)"'
+alias gwtpv='git worktree prune --verbose'
 
 alias gpr='git-open-pr-in-browser'
 
