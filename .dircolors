@@ -401,6 +401,8 @@ OTHER_WRITABLE 30;41 # dir that is other-writable (o+w) and not sticky (red)
 .mf 00;36   # Java manifest file
 .gradle 00;36
 .json 00;36
+.json5 00;36
+.jsonl 00;36
 .yml 00;36
 .yaml 00;36
 .plist 00;36
