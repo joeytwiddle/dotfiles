@@ -4,36 +4,50 @@
 "   Fuzzy-find any buflisted buffer across every running Vim server
 "   (as reported by `vim --serverlist`) and jump to it.
 "
-"   Each candidate is shown as `SERVER$BUFNAME`.  Picking one runs
-"   `vim --servername SERVER --remote BUFNAME`, which switches the
-"   target server to that buffer (or loads it if it isn't open yet).
-
-" If you want to add a keymap for this, add this to your ~/.vimrc:
+"   Each candidate is shown in two columns: SERVER (padded to 20 chars)
+"   and BUFNAME.  The raw values are smuggled in as hidden tab-separated
+"   columns ahead of the display text -- fzf returns the *complete*
+"   original line on selection regardless of --with-nth, so this is the
+"   tidiest way to keep the visible text purely cosmetic while still
+"   recovering an exact servername (which may contain spaces) and the
+"   exact bufname for `--remote`.
 "
-"     nnoremap <silent> <Leader><Leader><C-E> :FindBufferInAllServers<CR>
+"   Picking one runs `vim --servername SERVER --remote BUFNAME`, which
+"   switches the target server to that buffer (or loads it if it isn't
+"   open yet).
 
-if exists('g:loaded_fzf_find_buffer_in_all_servers')
-	finish
-endif
-let g:loaded_fzf_find_buffer_in_all_servers = 1
+" if exists('g:loaded_fzf_find_buffer_in_all_servers')
+" 	finish
+" endif
+" let g:loaded_fzf_find_buffer_in_all_servers = 1
 
-" Shell pipeline that emits one line per buffer in the form: SERVER$BUFNAME
-" (kept verbatim from the spec; just split across vim string concats)
+" Shell pipeline that emits one tab-separated line per buffer:
+"   SERVER<TAB>BUFNAME<TAB>SERVER_padded  BUFNAME
+" Fields 1 and 2 carry the raw values for the sink/preview; field 3 is
+" the formatted display.  We hide fields 1-2 from fzf via --with-nth=3..
+" so the user only sees the pretty two-column layout, but on selection
+" fzf hands us back the WHOLE line so we can extract the raw values.
+"
+" `awk` runs streaming, so candidates appear in fzf as they arrive.
 let s:list_command =
 	\   'for server in $(vim --serverlist); do'
 	\ . ' vim --servername "$server" --remote-expr'
 	\ . ' ''join(map(filter(range(1,bufnr("$")), "buflisted(v:val)"), "bufname(v:val)"), "\n")'''
 	\ . ' 2>&1 | sed ''s/: Send expression failed.//'' | sed "s/^/${server}\$/";'
 	\ . ' done'
+	\ . ' | awk ''{ i = index($0, "$"); s = substr($0, 1, i-1); b = substr($0, i+1); printf "%s\t%s\t%-20s  %s\n", s, b, s, b }'''
 
 function! s:OpenInServer(line) abort
-	let l:idx = stridx(a:line, '$')
-	if l:idx <= 0
+	" The line is `SERVER<TAB>BUFNAME<TAB>display...`; the third field
+	" (the display text) is purely cosmetic.  Field 1 is the raw server
+	" (may contain spaces); field 2 is the raw buffer name.
+	let l:parts = split(a:line, "\t", 1)
+	if len(l:parts) < 2
 		echohl ErrorMsg | echomsg 'FindBufferInAllServers: cannot parse selection: ' . a:line | echohl None
 		return
 	endif
-	let l:server  = strpart(a:line, 0, l:idx)
-	let l:bufname = strpart(a:line, l:idx + 1)
+	let l:server  = l:parts[0]
+	let l:bufname = l:parts[1]
 	if empty(l:bufname)
 		echohl ErrorMsg | echomsg 'FindBufferInAllServers: empty buffer name (server ' . l:server . ')' | echohl None
 		return
@@ -64,7 +78,15 @@ function! s:Run() abort
 	call fzf#run(fzf#wrap('find-buffer-in-all-servers', {
 		\ 'source':  s:list_command,
 		\ 'sink':    function('s:OpenInServer'),
-		\ 'options': ['--prompt', 'Server$Buffer> ', '--layout=reverse', '--no-multi', '--delimiter=\$', '--nth=1,2'],
+		\ 'options': [
+		\     '--prompt', 'Server  Buffer> ',
+		\     '--layout=reverse',
+		\     '--no-multi',
+		\     '--delimiter', "\t",
+		\     '--with-nth', '3..',
+		\     '--preview', '[ -f {2} ] && head -n 500 -- {2} 2>/dev/null || echo "(no preview)"',
+		\     '--preview-window', 'right,60%,wrap',
+		\ ],
 		\ }))
 endfunction
 
