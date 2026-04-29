@@ -36,26 +36,41 @@
 " modern Vims have).  [No Name] buffers come back with an empty name,
 " which our sink and preview both already handle.
 "
-" We then sort across all servers, numerically descending by `lastused`,
-" so most-recently-used buffers float to the top.  This costs us
-" true streaming-into-fzf -- sort can't emit until it has consumed all
-" input -- but the per-server `vim --remote-expr` round-trips already
-" dominate latency, so the user-visible cost is small.  fflush() in
-" the final awk keeps lines popping line-by-line into fzf once sort
-" starts emitting.
+" We fan the per-server queries out via `xargs -P 20`, then sort the
+" merged stream numerically descending by `lastused` so MRU buffers
+" float to the top.  Parallelism brings the dominant cost (one vim
+" --remote-expr round-trip per server) down to ~max() instead of
+" sum().  We do still lose true streaming because `sort` can't emit
+" until it has consumed all of its input, but the user-visible delay
+" is bounded by the slowest single server, not the total.  fflush()
+" in the final awk keeps lines popping line-by-line into fzf once
+" sort starts emitting.
 "
-" `sort -t $'\t'` forces tab-only field splitting; without -t, BSD
-" sort would split on whitespace runs, which would mis-key any server
-" name that contains spaces.
+" Cross-platform notes:
+"   * `xargs -r` -- GNU coreutils needs it to skip the utility on
+"     empty input; BSD xargs already skips and accepts -r as a no-op.
+"     With this flag, both behave identically when no servers are up.
+"   * `xargs -I {}` is newline-delimited on both BSD and GNU, so
+"     server names with spaces survive intact.
+"   * The inner per-server script is `sh -c '...' _ {}`, written
+"     entirely with shell double-quoted strings so we can wrap the
+"     whole script in single quotes for `sh -c` without any inner
+"     quote conflicts.  That means every `"` in the vim --remote-expr
+"     becomes `\"` and every `\` becomes `\\` (one shell-escape
+"     level), and the awk script's `$0` is escaped as `\$0` to keep
+"     the outer shell from expanding it.
+"   * `sort -t "$(printf '\t')"` rather than `sort -t $'\t'` because
+"     $'...' is a bashism not guaranteed under POSIX /bin/sh (dash,
+"     ash); the printf form works on any POSIX shell.
 
 let s:list_command =
-	\   'for server in $(vim --serverlist); do'
-	\ . ' vim --servername "$server" --remote-expr'
-	\ . ' ''join(map(getbufinfo({"buflisted":1}), "v:val.lastused . \"\\t\" . v:val.name"), "\n")'''
-	\ . ' 2>&1 | sed ''s/: Send expression failed.//'''
-	\ . ' | awk -v server="$server" ''BEGIN{OFS="\t"} {print server, $0}'';'
-	\ . ' done'
-	\ . ' | sort -t $''\t'' -k2,2 -nr'
+	\   'vim --serverlist | xargs -r -P 20 -I {} sh -c '''
+	\ . 'server="$1";'
+	\ . ' vim --servername "$server" --remote-expr "join(map(getbufinfo({\"buflisted\":1}), \"v:val.lastused . \\\"\\\\t\\\" . v:val.name\"), \"\\n\")"'
+	\ . ' 2>&1 | sed "s/: Send expression failed.//"'
+	\ . ' | awk -v s="$server" "BEGIN{OFS=\"\\t\"} {print s, \$0}"'
+	\ . ''' _ {}'
+	\ . ' | sort -t "$(printf ''\t'')" -k2,2 -nr'
 	\ . ' | awk -F "\t" ''{ printf "%s\t%s\t%-12.12s  %s\n", $1, $3, $1, $3; fflush() }'''
 
 function! s:OpenInServer(line) abort
