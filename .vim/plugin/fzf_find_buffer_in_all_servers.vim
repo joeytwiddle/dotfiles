@@ -4,8 +4,8 @@
 "   Fuzzy-find any buflisted buffer across every running Vim server
 "   (as reported by `vim --serverlist`) and jump to it.
 "
-"   Each candidate is shown in two columns: SERVER (padded to 20 chars)
-"   and BUFNAME.  The raw values are smuggled in as hidden tab-separated
+"   Each candidate is shown in two columns: SERVER (truncated/padded to
+"   12 chars) and BUFNAME.  The raw values are smuggled in as hidden tab-separated
 "   columns ahead of the display text -- fzf returns the *complete*
 "   original line on selection regardless of --with-nth, so this is the
 "   tidiest way to keep the visible text purely cosmetic while still
@@ -22,20 +22,30 @@
 " let g:loaded_fzf_find_buffer_in_all_servers = 1
 
 " Shell pipeline that emits one tab-separated line per buffer:
-"   SERVER<TAB>BUFNAME<TAB>SERVER_padded  BUFNAME
+"   SERVER<TAB>BUFNAME<TAB>SERVER_padded(12)  BUFNAME
 " Fields 1 and 2 carry the raw values for the sink/preview; field 3 is
 " the formatted display.  We hide fields 1-2 from fzf via --with-nth=3..
 " so the user only sees the pretty two-column layout, but on selection
 " fzf hands us back the WHOLE line so we can extract the raw values.
 "
-" `awk` runs streaming, so candidates appear in fzf as they arrive.
+" The remote-expr asks each server for the *absolute* path of every
+" listed buffer (via fnamemodify(..., ':p')) -- bufname() alone often
+" returns a relative path or just a filename, which breaks our preview
+" pane (and would break --remote in some CWDs too).  [No Name] buffers
+" yield an empty bufname so we leave them empty rather than letting
+" fnamemodify expand '' to the CWD.
+"
+" `awk` runs streaming -- but awk block-buffers its stdout when piped,
+" so without `fflush()` after every printf the whole list would arrive
+" at fzf only when the pipeline closes.  fflush() is portable across
+" BWK/gawk/mawk and avoids the macOS-incompatible `stdbuf -oL` trick.
 let s:list_command =
 	\   'for server in $(vim --serverlist); do'
 	\ . ' vim --servername "$server" --remote-expr'
-	\ . ' ''join(map(filter(range(1,bufnr("$")), "buflisted(v:val)"), "bufname(v:val)"), "\n")'''
+	\ . ' ''join(map(filter(range(1,bufnr("$")), "buflisted(v:val)"), "bufname(v:val) == \"\" ? \"\" : fnamemodify(bufname(v:val), \":p\")"), "\n")'''
 	\ . ' 2>&1 | sed ''s/: Send expression failed.//'' | sed "s/^/${server}\$/";'
 	\ . ' done'
-	\ . ' | awk ''{ i = index($0, "$"); s = substr($0, 1, i-1); b = substr($0, i+1); printf "%s\t%s\t%-20s  %s\n", s, b, s, b }'''
+	\ . ' | awk ''{ i = index($0, "$"); s = substr($0, 1, i-1); b = substr($0, i+1); printf "%s\t%s\t%-12.12s  %s\n", s, b, s, b; fflush() }'''
 
 function! s:OpenInServer(line) abort
 	" The line is `SERVER<TAB>BUFNAME<TAB>display...`; the third field
@@ -84,8 +94,8 @@ function! s:Run() abort
 		\     '--no-multi',
 		\     '--delimiter', "\t",
 		\     '--with-nth', '3..',
-		\     '--preview', '[ -f {2} ] && head -n 500 -- {2} 2>/dev/null || echo "(no preview)"',
-		\     '--preview-window', 'right,60%,wrap',
+		\     '--preview', '[ -f {2} ] && show_file_contents {2} 2>/dev/null || echo "(no preview)"',
+		\     '--preview-window', 'right,40%,nowrap',
 		\ ],
 		\ }))
 endfunction
