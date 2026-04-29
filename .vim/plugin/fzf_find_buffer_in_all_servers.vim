@@ -28,24 +28,35 @@
 " so the user only sees the pretty two-column layout, but on selection
 " fzf hands us back the WHOLE line so we can extract the raw values.
 "
-" The remote-expr asks each server for the *absolute* path of every
-" listed buffer (via fnamemodify(..., ':p')) -- bufname() alone often
-" returns a relative path or just a filename, which breaks our preview
-" pane (and would break --remote in some CWDs too).  [No Name] buffers
-" yield an empty bufname so we leave them empty rather than letting
-" fnamemodify expand '' to the CWD.
+" Each remote-expr asks its server for `<lastused>\t<name>` per listed
+" buffer.  getbufinfo({"buflisted":1}) exposes both directly: `name`
+" is already the full path (no fnamemodify needed -- bufname() alone
+" was the unreliable one) and `lastused` is the localtime timestamp at
+" which the buffer was last entered (requires +viminfo, which all
+" modern Vims have).  [No Name] buffers come back with an empty name,
+" which our sink and preview both already handle.
 "
-" `awk` runs streaming -- but awk block-buffers its stdout when piped,
-" so without `fflush()` after every printf the whole list would arrive
-" at fzf only when the pipeline closes.  fflush() is portable across
-" BWK/gawk/mawk and avoids the macOS-incompatible `stdbuf -oL` trick.
+" We then sort across all servers, numerically descending by `lastused`,
+" so most-recently-used buffers float to the top.  This costs us
+" true streaming-into-fzf -- sort can't emit until it has consumed all
+" input -- but the per-server `vim --remote-expr` round-trips already
+" dominate latency, so the user-visible cost is small.  fflush() in
+" the final awk keeps lines popping line-by-line into fzf once sort
+" starts emitting.
+"
+" `sort -t $'\t'` forces tab-only field splitting; without -t, BSD
+" sort would split on whitespace runs, which would mis-key any server
+" name that contains spaces.
+
 let s:list_command =
 	\   'for server in $(vim --serverlist); do'
 	\ . ' vim --servername "$server" --remote-expr'
-	\ . ' ''join(map(filter(range(1,bufnr("$")), "buflisted(v:val)"), "bufname(v:val) == \"\" ? \"\" : fnamemodify(bufname(v:val), \":p\")"), "\n")'''
-	\ . ' 2>&1 | sed ''s/: Send expression failed.//'' | sed "s/^/${server}\$/";'
+	\ . ' ''join(map(getbufinfo({"buflisted":1}), "v:val.lastused . \"\\t\" . v:val.name"), "\n")'''
+	\ . ' 2>&1 | sed ''s/: Send expression failed.//'''
+	\ . ' | awk -v server="$server" ''BEGIN{OFS="\t"} {print server, $0}'';'
 	\ . ' done'
-	\ . ' | awk ''{ i = index($0, "$"); s = substr($0, 1, i-1); b = substr($0, i+1); printf "%s\t%s\t%-12.12s  %s\n", s, b, s, b; fflush() }'''
+	\ . ' | sort -t $''\t'' -k2,2 -nr'
+	\ . ' | awk -F "\t" ''{ printf "%s\t%s\t%-12.12s  %s\n", $1, $3, $1, $3; fflush() }'''
 
 function! s:OpenInServer(line) abort
 	" The line is `SERVER<TAB>BUFNAME<TAB>display...`; the third field
@@ -89,11 +100,12 @@ function! s:Run() abort
 		\ 'source':  s:list_command,
 		\ 'sink':    function('s:OpenInServer'),
 		\ 'options': [
-		\     '--prompt', 'Server  Buffer> ',
+		\     '--prompt', 'Buffers(Global)> ',
 		\     '--layout=reverse',
 		\     '--no-multi',
 		\     '--delimiter', "\t",
 		\     '--with-nth', '3..',
+		\     '--tiebreak', 'index',
 		\     '--preview', '[ -f {2} ] && show_file_contents {2} 2>/dev/null || echo "(no preview)"',
 		\     '--preview-window', 'right,40%,nowrap',
 		\ ],
