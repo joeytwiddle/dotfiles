@@ -989,6 +989,9 @@ nmap <Leader><C-E> :let @n = substitute(expand("%:t"), '[.].*', '', '')<CR>:call
 " An alias.  Which will I remember?
 nmap <Leader>rel <Leader><C-E>
 
+" Pick a buffer across all running Vim servers (see plugin/fzf_find_buffer_in_all_servers.vim)
+nnoremap <silent> <Leader><Leader><C-E> :FindBufferInAllServers<CR>
+
 " Toggle (Git history) Augment (same as I have in VSCode)
 nnoremap <Leader>a :GitShade<CR>
 nnoremap <Leader>A :GitShade<CR>
