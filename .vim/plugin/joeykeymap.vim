@@ -1247,7 +1247,7 @@ nnoremap ??? ?\<\><Left><Left>
 "nmap gx :execute "!open_in_current_browser '" . expand("<cWORD>") . "' >/dev/null 2>&1 &"<CR>
 "nmap gx :execute "!open_in_current_browser " . shellescape("<cWORD>") . " >/dev/null 2>&1 &"<CR>
 " I added <C-L> on the end because on a terminal, when we started running the browser, the screen would go blank
-nmap gx :silent execute "!open_in_current_browser " . shellescape("<cWORD>")<CR><C-L>
+nmap gX :silent execute "!open_in_current_browser " . shellescape("<cWORD>")<CR><C-L>
 
 " By default, :new splits the current window and the new empty window.
 " This mapping will close the current (old) window, to make the new one full size.
@@ -1301,4 +1301,5 @@ nmap <C-Tab> <C-E>
 
 " Use backtick to scroll backwards through lists (like Shift-Tab, opposite of Tab)
 " but only if the list is visible
-inoremap <expr> ` pumvisible() ? "\<C-P>" : "`"
+" Disabled because this will trigger unwanted <C-P> when I am actually just trying to close a `...` block. I think this happens when CoC has auto-opened the pop-up menu.
+"inoremap <expr> ` pumvisible() ? "\<C-P>" : "`"
