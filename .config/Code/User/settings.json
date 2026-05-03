@@ -73,7 +73,8 @@
     "workbench.editor.wrapTabs": false,
 
     // Displays extra info (like 'M' or 'U' or a number) in the tab if the file has uncommitted changes
-    "workbench.editor.decorations.badges": true,
+    // Disabled because I find this more noisy than informative
+    "workbench.editor.decorations.badges": false,
 
     // I find it easier to see the tree structure with a wider indent (default 8)
     "workbench.tree.indent": 12,
@@ -104,7 +105,11 @@
 
     // I think this enough to stop the CPU going to 100% for 5 minutes after populating node_modules folder
     "files.watcherExclude": {
-        "**/node_modules/**": true
+        "**/node_modules*/**": true,
+        "**/node_modules*/*/**": true,
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/dist/**": true,
     },
 
     // No longer a setting.  Now toggled in the sidebar Views menu.
@@ -144,6 +149,10 @@
     //"editor.suggestSelection": "recentlyUsed",
     // Enable word based suggestions
     //"editor.wordBasedSuggestions": true,
+
+    // Do not show info about the code on mouse hover.
+    // I find this annoying on mouse, and I get the info using my keybind `g h` instead.
+    "editor.hover.enabled": false,
 
     // Enable parameter hints
     //"editor.parameterHints.enabled": true,
@@ -226,97 +235,112 @@
     "workbench.colorCustomizations": {
         // I don't want to apply customisations when using light themes, so I only apply them when using my favourite theme
         "[Gentle Mary]": {
-            // These work, but only the backgrounds not the foregrounds
-            // If we don't set them, then the theme can set them
-            //"editor.selectionBackground": "#153",
-            //"editor.selectionForeground": "#ffffff",
-            //"editor.selectionHighlightBackground": "#449059",
-            //"editor.selectionHighlightForeground": "#ffffff",
+          // These work, but only the backgrounds not the foregrounds
+          // If we don't set them, then the theme can set them
+          //"editor.selectionBackground": "#153",
+          //"editor.selectionForeground": "#ffffff",
+          //"editor.selectionHighlightBackground": "#449059",
+          //"editor.selectionHighlightForeground": "#ffffff",
 
-            "editorInlayHint.background": "#444444ff",
-            "editorInlayHint.foreground": "#ffffff44", // darker is better when always on
-            //"editorInlayHint.foreground": "#ffffff55",
-            // It is also possible to set different colours for different types: https://stackoverflow.com/a/72169980/99777
+          "editorInlayHint.background": "#444444ff",
+          "editorInlayHint.foreground": "#ffffff44", // darker is better when always on
+          //"editorInlayHint.foreground": "#ffffff55",
+          // It is also possible to set different colours for different types: https://stackoverflow.com/a/72169980/99777
 
-            // Highlights all/other occurrences of the word under the cursor
-            "editor.wordHighlightBackground": "#00660099",
-            "editor.wordHighlightStrongBackground": "#00660099",
-            "editor.wordHighlightBorder": "#006600dd",
-            "editor.wordHighlightStrongBorder": "#006600dd",
+          // Highlights all/other occurrences of the word under the cursor
+          "editor.wordHighlightBackground": "#00660099",
+          "editor.wordHighlightStrongBackground": "#00660099",
+          "editor.wordHighlightBorder": "#006600dd",
+          "editor.wordHighlightStrongBorder": "#006600dd",
 
-            // For the active search result
-            "editor.findMatchBackground": "#0044bbaa",
-            "editor.findMatchBorder": "#ffff00dd",
-            // For the other seach results
-            // I turned off the border because it made code difficult to read, and I don't know any way to turn off the highlighting without actually clearing the search.
-            "editor.findMatchHighlightBackground": "#0044bbaa",
-            "editor.findMatchHighlightBorder": "#ffff0000",
+          // For the active search result
+          "editor.findMatchBackground": "#0044bbaa",
+          "editor.findMatchBorder": "#ffff00dd",
+          // For the other seach results
+          // I turned off the border because it made code difficult to read, and I don't know any way to turn off the highlighting without actually clearing the search.
+          "editor.findMatchHighlightBackground": "#0044bbaa",
+          "editor.findMatchHighlightBorder": "#ffff0000",
 
-            // Looking for these ... !
-            "editor.findRangeHighlightBackground": "#ff00ffee",
-            "editor.findRangeHighlightBorder": "#ff00ffee",
+          // Looking for these ... !
+          "editor.findRangeHighlightBackground": "#ff00ffee",
+          "editor.findRangeHighlightBorder": "#ff00ffee",
 
-            //"editorWarning.foreground": "#dd8800",
-            "editorWarning.foreground": "#ffdd0099",
-            "editorError.foreground": "#ff4444",
-            //"breadcrumb.foreground": "#888888",
+          //"editorWarning.foreground": "#dd8800",
+          "editorWarning.foreground": "#ffdd0099",
+          "editorError.foreground": "#ff4444",
+          //"breadcrumb.foreground": "#888888",
 
-            // I like to make unused code stand apart visually, so I make it darker than the default
-            "editorUnnecessaryCode.opacity": "#00000080",
+          // I like to make unused code stand apart visually, so I make it darker than the default
+          "editorUnnecessaryCode.opacity": "#00000080",
 
-            // Make folded (collapsed) lines clear, Vim style
-            "editor.foldBackground": "#0000ff80",
+          // Make folded (collapsed) lines clear, Vim style
+          "editor.foldBackground": "#0000ff80",
 
-            "editorBracketMatch.border": "#00000000",
-            "editorBracketMatch.background": "#0000ffbb",
-            //"editorBracketMatch.background": "#ff00ff66",
-            //"editorBracketMatch.border": "#0000ffff",
-            //"editorBracketMatch.background": "#00000000",
+          // Dark blue
+          //"editorBracketMatch.border": "#0000ffbb",
+          //"editorBracketMatch.background": "#0000ffbb",
+          // Mid blue
+          "editorBracketMatch.border": "#4444ffff",
+          "editorBracketMatch.background": "#4444ffbb",
+          // Magenta
+          //"editorBracketMatch.background": "#ff00ff66",
+          //"editorBracketMatch.border": "#ff00ff99",
 
-            // For usernamehw.errorlens
-            //"errorLens.errorBackground": "#ff00001c",
-            //"errorLens.warningBackground": "#ff880012",
-            //"errorLens.infoBackground": "#0000ff00",
-            //"errorLens.hintBackground": "#00ffff00",
-            "errorLens.errorBackground": "#ff000000",
-            "errorLens.warningBackground": "#ff880000",
-            "errorLens.infoBackground": "#0000ff00",
-            "errorLens.hintBackground": "#00ffff00",
-            //"errorLens.errorForeground": "#888888ff",
-            "errorLens.errorForeground": "#ff888855",
-            "errorLens.warningForeground": "#555555ff",
-            //"errorLens.warningForeground": "#ffaa0055",
-            "errorLens.infoForeground": "#555555ff",
-            "errorLens.hintForeground": "#555555ff",
-            //"errorLens.errorForeground": "#88888800",
-            //"errorLens.warningForeground": "#88888800",
-            //"errorLens.infoForeground": "#55555500",
-            //"errorLens.hintForeground": "#55555500",
-            //"errorLens.fontWeight": 200,
-            //"errorLens.fontStyleItalic": false,
+          // For usernamehw.errorlens
+          //"errorLens.errorBackground": "#ff00001c",
+          //"errorLens.warningBackground": "#ff880012",
+          //"errorLens.infoBackground": "#0000ff00",
+          //"errorLens.hintBackground": "#00ffff00",
+          "errorLens.errorBackground": "#ff000000",
+          "errorLens.warningBackground": "#ff880000",
+          "errorLens.infoBackground": "#0000ff00",
+          "errorLens.hintBackground": "#00ffff00",
+          //"errorLens.errorForeground": "#888888ff",
+          "errorLens.errorForeground": "#ff888855",
+          "errorLens.warningForeground": "#555555ff",
+          //"errorLens.warningForeground": "#ffaa0055",
+          "errorLens.infoForeground": "#555555ff",
+          "errorLens.hintForeground": "#555555ff",
+          //"errorLens.errorForeground": "#88888800",
+          //"errorLens.warningForeground": "#88888800",
+          //"errorLens.infoForeground": "#55555500",
+          //"errorLens.hintForeground": "#55555500",
+          //"errorLens.fontWeight": 200,
+          //"errorLens.fontStyleItalic": false,
 
-            //"editorGutter.background": "#303030",
-            //"editor.background": "#1c2426",
+          //"editorGutter.background": "#303030",
+          //"editor.background": "#1c2426",
 
-            "scrollbarSlider.background": "#88888866",
-            "scrollbarSlider.hoverBackground": "#88888888",
-            "scrollbarSlider.activeBackground": "#88888888",
+          "scrollbarSlider.background": "#88888866",
+          "scrollbarSlider.hoverBackground": "#88888888",
+          "scrollbarSlider.activeBackground": "#88888888",
 
-            //"list.activeSelectionBackground": "#0000002a",
-            //"list.inactiveSelectionBackground": "#0000002a",
-            //"list.dropBackground": "#0000002a",
-            //"list.focusBackground": "#0000002a",
-            "list.focusForeground": "#fff",
-            //"editor.selectionBackground": "#484848",
-            "editor.selectionForeground": "#ff00ff",
+          //"list.activeSelectionBackground": "#0000002a",
+          //"list.inactiveSelectionBackground": "#0000002a",
+          //"list.dropBackground": "#0000002a",
+          //"list.focusBackground": "#0000002a",
+          "list.focusForeground": "#fff",
+          //"editor.selectionBackground": "#484848",
+          "editor.selectionForeground": "#ff00ff",
 
-            // Just experimenting
-            //"gitDecoration.modifiedResourceForeground": "#88dd00",
-            //"gitDecoration.conflictingResourceForeground": "#ff0000",
-            //"list.errorForeground": "#ff0000",
+          // Just experimenting
+          //"gitDecoration.modifiedResourceForeground": "#88dd00",
+          //"gitDecoration.conflictingResourceForeground": "#ff0000",
+          //"list.errorForeground": "#ff0000",
 
-            //"editorWhitespace.foreground": "#ff0000",
+          //"editorWhitespace.foreground": "#ff0000",
+
+          // TODO: Make the text input box in Gemini Code Assist have a dark background
         },
+
+        // AI auto-completion suggestions
+        "editorGhostText.border": "#0000ff",
+        //"editorGhostText.background": "#444444",
+        //"editorGhostText.background": "#336633",
+        "editorGhostText.background": "#663366",
+        // Largely overridden by syntax highlighting
+        //"editorGhostText.foreground": "#888888",
+        "editorGhostText.foreground": "#ff00ff",
     },
 
     "editor.tokenColorCustomizations": {
@@ -533,7 +557,7 @@
     //"trailing-spaces.borderColor": "#552222",
 
     // For TodoTree
-    "todo-tree.tree.showScanModeButton": false,
+    //"todo-tree.tree.showScanModeButton": false,
     "todo-tree.highlights.defaultHighlight": {
         "icon": "alert",
         "type": "text",
@@ -543,16 +567,40 @@
         "iconColour": "#25f"
     },
     "todo-tree.general.tags": [
+        "@TODO",
         "TODO",
         "@todo",
+        "todo",
+        "@FIXME",
         "FIXME",
         "@fixme",
+        "fixme",
+        "@BUG",
         "BUG",
         "@bug",
+        "bug",
+        "@WARNING",
+        "WARNING",
+        "@warning",
+        "warning",
+        "@CONSIDER",
         "CONSIDER",
         "@consider",
+        "consider",
+        //"@NOTE",
+        //"NOTE",
+        //"@note",
+        //"note",
+        "@SLOW",
+        "SLOW",
+        "@slow",
+        "slow",
+        // Markdown checklists
+        "- [ ]",
+        //"- [x]",
+        // Non-markdown checklists
         "[ ]",
-        "[x]"
+        //"[x]",
     ],
     /*
     "todo-tree.highlights.customHighlight": {
@@ -604,8 +652,8 @@
     //"vim.useSystemClipboard": true,
     //"vim.useCtrlKeys": true,
     "vim.hlsearch": true,
-    "vim.ignorecase": false,
-    "vim.smartcase": false,
+    "vim.ignorecase": true,
+    "vim.smartcase": true,
     "vim.highlightedyank.enable": true,
     "vim.normalModeKeyBindingsNonRecursive": [
         // VSCode's undo has some issues: namely that it is not atomic - it sometimes affects multiple lines (which could include a line off-screen!)
@@ -617,8 +665,9 @@
         // Now they work, and if I try to use my keybinds below, then <Ctrl-O> followed by i will insert at the old cursor position!
         // But I have re-enabled them, because sometimes the default ctrl+o will skip over the previous file/tab and go to the previous one
         // Disabled again. I would often go to a file, then Ctrl-O would not take me back, but through some irrelevant files first
-        //{ "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ] },
-        //{ "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ] },
+        // Enabled again. 2025-11-03 Cursor, the default C-O would skip steps if they were in the same file (effectively performing my C-U!)
+        { "before": [ "C-O" ], "commands": [ "workbench.action.navigateBack" ], "when": "canNavigateBack" },
+        { "before": [ "C-I" ], "commands": [ "workbench.action.navigateForward" ], "when": "canNavigateBack" },
         //
         { "before": [ "C-W", "c" ], "commands": [ "workbench.action.closeGroup" ] },
         { "before": [ "C-W", "s" ], "commands": [ "workbench.action.splitEditorDown" ] },
@@ -759,9 +808,9 @@
         // Toggle file explorer sidebar
         { "before": [ "<Leader>", "f" ], "commands": [ "workbench.action.toggleSidebarVisibility" ] },
         // Toggle right sidebar
-        { "before": [ "<Leader>", "t" ], "commands": [ "workbench.action.toggleAuxiliaryBar" ] },
+        //{ "before": [ "<Leader>", "t" ], "commands": [ "workbench.action.toggleAuxiliaryBar" ] },
         // Focus Outline view
-        //{ "before": [ "<Leader>", "t" ], "commands": [ "outline.focus" ] },
+        { "before": [ "<Leader>", "t" ], "commands": [ "outline.focus" ] },
         // Toggle both sidebars
         { "before": [ "<Leader>", "i" ], "commands": [ "workbench.action.toggleAuxiliaryBar", "workbench.action.toggleSidebarVisibility" ] },
         // Find items quickly by "tag"
@@ -781,6 +830,9 @@
         { "before": [ "<Leader>", "j" ], "commands": [ "workbench.action.togglePanel" ] },
         { "before": [ "<Leader>", "b", "d" ], "commands": [ "workbench.action.closeActiveEditor" ] },
         { "before": [ "<Leader>", "s" ], "commands": [ "workbench.action.openRecent" ] },
+
+        // There isn't an equivalent (stateful) VSCode command for zm, but this will often do something close to what I wanted
+        { "before": [ "z", "m" ], "commands": [ "editor.foldAllExcept" ], "when": "editorTextFocus && foldingEnabled" },
 
         // Toggle Inline Fold plugin (in Vim this actually toggles foldenable, i.e. all folding)
         { "before": [ "z", "i" ], "commands": [ "inlineFold.toggle" ] },
@@ -879,6 +931,7 @@
 
     "editor.wordWrap": "on",
     // "indent" appears to be only two characters, but since `//` is also two characters, a deeper indent can look better
+    //"editor.wrappingIndent": "indent",
     "editor.wrappingIndent": "deepIndent",
 
     // When using Ctrl-P to select a file, open with the same search that you entered last time
@@ -891,7 +944,13 @@
     "search.quickOpen.includeHistory": false,
 
     // Search not only filenames, but also symbols (e.g. function and variable names)
+    // Note: It does NOT appear to include all the symbols that '#' does
     "search.quickOpen.includeSymbols": true,
+    // Use '@' to search for symbols in the current file
+    // Use '#' to search for symbols in ALL files!
+    // Beware the '#' search is case-sensitive!
+    // And it doesn't always work.
+    // You may like to try '%' instead.
 
     // Stop asking me if I want to update go tools, just do it
     "go.toolsManagement.autoUpdate": true,
@@ -907,6 +966,8 @@
     "terminal.integrated.defaultProfile.linux": "bash",
     "terminal.integrated.copyOnSelection": true,
     "terminal.integrated.middleClickBehavior": "paste",
+    // Incrased for long test suites
+    "terminal.integrated.scrollback": 40000,
 
     // Avoid the error about terminal failing to start, when starting VSCode with many windows
     "application.shellEnvironmentResolutionTimeout": 120,
