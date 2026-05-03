@@ -55,10 +55,11 @@
   { "key": "ctrl+alt+]", "command": "workbench.action.navigateForward" },
 
   // Text movement and selection like Mac (beginning/end of file not done)
-  { "key": "alt+right", "command": "cursorEnd", "when": "textInputFocus" },
-  { "key": "alt+shift+right", "command": "cursorEndSelect", "when": "textInputFocus" },
-  { "key": "alt+left", "command": "cursorHome", "when": "textInputFocus" },
-  { "key": "alt+shift+left", "command": "cursorHomeSelect", "when": "textInputFocus" },
+  // These first four should be disable on macOS because my USB keyboard sends Alt when I am trying to send Opt
+  //{ "key": "alt+right", "command": "cursorEnd", "when": "textInputFocus" },
+  //{ "key": "alt+shift+right", "command": "cursorEndSelect", "when": "textInputFocus" },
+  //{ "key": "alt+left", "command": "cursorHome", "when": "textInputFocus" },
+  //{ "key": "alt+shift+left", "command": "cursorHomeSelect", "when": "textInputFocus" },
   { "key": "meta+right", "command": "cursorWordEndRight", "when": "textInputFocus" },
   { "key": "meta+shift+right", "command": "cursorWordEndRightSelect", "when": "textInputFocus" },
   { "key": "meta+left", "command": "cursorWordStartLeft", "when": "textInputFocus" },
@@ -73,6 +74,8 @@
   { "key": "ctrl+pagedown", "command": "workbench.action.terminal.focusNext", "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus" },
   { "key": "ctrl+pageup", "command": "workbench.action.debug.prevConsole", "when": "inDebugRepl" },
   { "key": "ctrl+pagedown", "command": "workbench.action.debug.nextConsole", "when": "inDebugRepl" },
+  { "key": "ctrl+pageup", "command": "workbench.action.terminal.focusPrevious", "when": "terminalFocus" },
+  { "key": "ctrl+pagedown", "command": "workbench.action.terminal.focusNext", "when": "terminalFocus" },
 
   /* ==== Make Linux match macOS keybinds ==== {{{ */
 
@@ -317,10 +320,11 @@
       "values": [
         // This is mine, it's nice and calm, but a bit boring
         { "workbench.colorTheme": "Gentle Mary" },
-        { "workbench.colorTheme": "Atom Material Theme" },
+        //{ "workbench.colorTheme": "Atom Material Theme" }, // Not available in Cursor
         { "workbench.colorTheme": "Tokyo Night" },
         { "workbench.colorTheme": "Black Rock" },
         // These looks cool
+        { "workbench.colorTheme": "One Dark Pro" },
         { "workbench.colorTheme": "Night Wolf (gray)" },
         { "workbench.colorTheme": "SynthWave '84" },
         // These lighter themes are good when working in bright conditions
@@ -342,10 +346,11 @@
       "values": [
         // This is mine, it's nice and calm, but a bit boring
         { "workbench.colorTheme": "Gentle Mary" },
-        { "workbench.colorTheme": "Atom Material Theme" },
+        //{ "workbench.colorTheme": "Atom Material Theme" }, // Not available in Cursor
         { "workbench.colorTheme": "Tokyo Night" },
         { "workbench.colorTheme": "Black Rock" },
         // These looks cool
+        { "workbench.colorTheme": "One Dark Pro" },
         { "workbench.colorTheme": "Night Wolf (gray)" },
         { "workbench.colorTheme": "SynthWave '84" },
         // These lighter themes are good when working in bright conditions
@@ -362,8 +367,9 @@
   // Since the above overrode the default Cmd-K Cmd-T, then let's create a new bind for it
   //{ "key": "cmd+k cmd+t cmd+k", "command": "workbench.action.selectTheme" },
 
-  { "key": "ctrl+e", "command": "workbench.action.showAllEditorsByMostRecentlyUsed", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl && !terminalFocus" },
-  { "key": "ctrl+b", "command": "workbench.action.showEditorsInActiveGroup", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl && !terminalFocus" },
+  // These two used to start with `editorTextFocus && ` but I'm not sure that's needed, and I want them to fire if I am focused on Explorer or Chat
+  { "key": "ctrl+e", "command": "workbench.action.showAllEditorsByMostRecentlyUsed", "when": "vim.active && vim.use<C-]> && !inDebugRepl && !terminalFocus" },
+  { "key": "ctrl+b", "command": "workbench.action.showEditorsInActiveGroup", "when": "vim.active && vim.use<C-]> && !inDebugRepl && !terminalFocus" },
 
   // Default to toggle sidebar is Ctrl+b / Alt+B, but we use that for buffer switcher
   // (Although I rarely actually use that. I use Ctrl+Tab or Ctrl+e far more often.)
@@ -558,10 +564,16 @@
   { "key": "ctrl+shift+enter", "command": "editor.action.inlineSuggest.commit", "when": "inlineSuggestionVisible && textInputFocus" },
 
   // Continue
-  // Make keys on Linux like those on macOS
+  //// Reclaim Ctrl+L for editor and terminal cleanup (remove default shortcut on Linux)
   //{ "key": "ctrl+l", "command": "-continue.focusContinueInput" },
-  //// Default: { "key": "cmd+l", "command": "continue.focusContinueInput" },
-  //{ "key": "alt+l", "command": "continue.focusContinueInput" },
+  ////
+  //// When focused on Continue sidebar, hit Cmd/Ctrl+N to start a new chat
+  //// Actually I couldn't determine focus, so I just check if it's visible
+  //{ "key": "cmd+n", "command": "continue.newSession", "when": "activeAuxiliary" },
+  //{ "key": "alt+n", "command": "continue.newSession", "when": "activeAuxiliary" },
+  //{ "key": "ctrl+n", "command": "continue.newSession", "when": "activeAuxiliary" },
+  //// When I have Continue enabled in VSCode but I am using the same config for Cursor, I want Cursor to override Continue's keybind
+  //{ "key": "cmd+n", "command": "composer.createNewWithPrevContext", "when": "composerFocused || cursor.appLayout == 'agent' || focusedView =~ /^workbench.panel.aichat.view/" },
 
   // Gemini
   ////{ "key": "cmd+l", "command": "cloudcode.gemini.chatView.focus" },
@@ -569,8 +581,8 @@
   //{ "key": "cmd+l", "command": "workbench.view.extension.geminiChat", "when": "viewContainer.workbench.view.extension.geminiChat.enabled && !runningOnCloudShell" },
   //{ "key": "alt+l", "command": "workbench.view.extension.geminiChat", "when": "viewContainer.workbench.view.extension.geminiChat.enabled && !runningOnCloudShell" },
 
-  // Cursor
-  // Autocomplete on Ctrl+Shift+Enter instead of on Tab
+  // Cursor (they call their chat sidebar "composer")
+  //// Autocomplete on Ctrl+Shift+Enter instead of on Tab
   //{ "key": "tab", "command": "-editor.action.acceptCursorTabSuggestion", "when": "cpp.shouldAcceptTab" },
   //{ "key": "ctrl+shift+enter", "command": "editor.action.acceptCursorTabSuggestion", "when": "cpp.shouldAcceptTab" },
   //// We might want to discourage the use of this, because I currently use that as a macro for Up-Enter
@@ -580,6 +592,10 @@
   //// Make keys on Linux like those on macOS
   //{ "key": "ctrl+l", "command": "-aichat.newchataction" },
   //{ "key": "alt+l", "command": "aichat.newchataction" },
+  //// Actually let's disable NewChatAction. I prefer to simply focus the sidebar, not start a fresh chat.
+  //// Um, for some reason disabling these will break the auxbar from closing
+  ////{ "key": "cmd+l", "command": "-aichat.newchataction" },
+  ////{ "key": "alt+l", "command": "-aichat.newchataction" },
   //{ "key": "ctrl+k", "command": "-aipopup.action.modal.generate", "when": "editorFocus && !composerBarIsVisible" },
   //{ "key": "alt+k alt+l", "command": "aipopup.action.modal.generate", "when": "editorFocus && !composerBarIsVisible" },
   //{ "key": "cmd+k cmd+l", "command": "aipopup.action.modal.generate", "when": "editorFocus && !composerBarIsVisible" },
@@ -588,9 +604,18 @@
   //{ "key": "ctrl+right", "command": "editor.action.inlineSuggest.acceptNextWord", "when": "cppSuggestion && !editorReadonly || inlineSuggestionVisible && !editorReadonly" },
   //// But on macOS, my Karabiner maps ctrl+right to alt+right, so we had better map that instead!
   //{ "key": "alt+right", "command": "editor.action.inlineSuggest.acceptNextWord", "when": "cppSuggestion && !editorReadonly || inlineSuggestionVisible && !editorReadonly" },
+  //// This did not work here. Needed to be moved below the other cmd+l shortcuts
+  ////{ "key": "cmd+l", "command": "composer.closeComposerTab", "when": "composerFocused && !editorTextFocus || !editorTextFocus && focusedView =~ /^workbench.panel.aichat.view/" },
+  ////
+  //// Cursor's chat window tends to discard my recent chat when I open a new one, making it harder to get back to a previous one from the tabs. So I'll use the history instead.
+  //{ "key": "ctrl+tab", "command": "composer.showComposerHistory", "when": "composerFocused" },
+  ////{ "key": "ctrl+pageup", "command": "composer.showComposerHistory", "when": "composerFocused" },
+  ////{ "key": "ctrl+pagedown", "command": "composer.showComposerHistory", "when": "composerFocused" },
+  //// I think Cursor added this itself?
+  //{ "key": "alt+cmd+s", "command": "workbench.action.toggleUnifiedSidebarFromKeyboard", "when": "cursor.agentIdeUnification.enabled == true && !isAuxiliaryWindowFocusedContext" },
 
   // Windsurf (they call their AI Chat "Cascade")
-  // Make keys on Linux like those on macOS
+  //// Make keys on Linux like those on macOS
   //{ "key": "ctrl+l", "command": "-windsurf.prioritized.chat.open", "when": "!terminalFocus" },
   //{ "key": "alt+l", "command": "windsurf.prioritized.chat.open", "when": "windsurf.prioritized.chat.open" },
   // I don't know if we need to adjust this one
@@ -617,24 +642,59 @@
   // Note that it's often not desirable to have multiple AI agents enabled at once, because it's not clear which one will be offering autocomplete suggestions.
   //
   // Disable unwanted defaults (actually doesn't seem necessary. These keybindings override those.)
-  //{ "key": "cmd+l", "command": "continue.focusContinueInput" },
+  //{ "key": "cmd+l", "command": "-continue.focusContinueInput" },
   { "key": "alt+l", "command": "workbench.action.focusAuxiliaryBar", "when": "!auxiliaryBarFocus" },
   { "key": "cmd+l", "command": "workbench.action.focusAuxiliaryBar", "when": "!auxiliaryBarFocus" },
+  // Override for Continue. This will ensure the input box is focused (useful, and also necessary to ensure another Cmd+L closes the auxbar),
+  // but it will also insert the current code position (might not always be what you wanted).
+  // You can always hit Backspace to remove the code that was inserted.
+  { "key": "alt+l", "command": "continue.focusContinueInputWithoutClear", "when": "continue.continueGUIView.active" },
+  { "key": "cmd+l", "command": "continue.focusContinueInputWithoutClear", "when": "continue.continueGUIView.active" },
 
-  // Close the auxiliary bar when pressing ALt+L / Cmd+L
+  // Leave the auxiliary bar when pressing <Escape>
+  { "key": "escape", "command": "workbench.action.focusActiveEditorGroup", "when": "auxiliaryBarFocus" },
+  // Close the auxiliary bar when pressing ALt+L / Cmd+L, if it is focused
   // Unfortunately auxiliaryBarFocus doesn't trigger when it should
   // So we use auxiliaryBarVisible but we use this complex where clause so hopefully it won't close when it's visible but not focused
-  { "key": "alt+l", "command": "workbench.action.closeAuxiliaryBar", "when": "auxiliaryBarVisible && !sideBarFocus && !editorFocus && !terminalFocus" },
+  { "key": "alt+l", "command": "workbench.action.closeAuxiliaryBar", "when": "auxiliaryBarVisible && !sideBarFocus && !editorFocus && !terminalFocus && !filesExplorerFocus" },
   // I initially needed this for Continue on Linux, but it doesn't seem necessary for Continue on macOS, so let's leave that disabled
   // But actually I quite like it being consistent across all tools, so let's leave it enabled
-  { "key": "cmd+l", "command": "workbench.action.closeAuxiliaryBar", "when": "auxiliaryBarVisible && !sideBarFocus && !editorFocus && !terminalFocus" },
+  // But it can be a fiddle when using Cursor (e.g. when Keyboard Shortcuts page is focused) so you might also want to disable it
+  //{ "key": "cmd+l", "command": "workbench.action.closeAuxiliaryBar", "when": "auxiliaryBarVisible && !sideBarFocus && !editorFocus && !terminalFocus && !filesExplorerFocus" },
+  // Quick way to get back to the editor
+  { "key": "alt+e", "command": "workbench.action.focusActiveEditorGroup", "when": "auxiliaryBarFocus" },
+  { "key": "cmd+e", "command": "workbench.action.focusActiveEditorGroup", "when": "auxiliaryBarFocus" },
+  // Specifically for Cursor
+  // But disabled, because I prefer to hide the auxbar, instead of closing it
+  //{ "key": "cmd+l", "command": "composer.closeComposerTab", "when": "composerFocused && !editorTextFocus || !editorTextFocus && focusedView =~ /^workbench.panel.aichat.view/" },
 
-  // Cycle through aux panel, or indeed primary sidebar panels?
-  // These are not working yet
-  //{ "key": "shift+cmd+[", "command": "workbench.action.previousPanelView", "when": "true" },
-  //{ "key": "shift+cmd+]", "command": "workbench.action.nextPanelView", "when": "true" },
+  // When focused on the auxiliary panel, cycle through the tabs
+  { "key": "shift+cmd+[", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus" },
+  { "key": "shift+cmd+]", "command": "workbench.action.nextAuxiliaryBarView", "when": "auxiliaryBarFocus" },
+  { "key": "alt+shift+[", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus" },
+  { "key": "alt+shift+]", "command": "workbench.action.nextAuxiliaryBarView", "when": "auxiliaryBarFocus" },
+  { "key": "ctrl+pageup", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus" },
+  { "key": "ctrl+pagedown", "command": "workbench.action.nextAuxiliaryBarView", "when": "auxiliaryBarFocus" },
+
+  // Fix for "Open In GitHub" extension v1.3.6, which was blocking CTRL+L from reaching the terminal
+  // Can be removed once this PR is merge: https://github.com/bugthesystem/vscode-open-in-github/pull/176
+  { "key": "ctrl+l c", "command": "-extension.copyGitHubLinkToClipboard" },
+  { "key": "ctrl+l g", "command": "-extension.openInGitHub" },
+  { "key": "ctrl+l p", "command": "-extension.openPrGitProvider" },
+  { "key": "ctrl+l c", "command": "extension.copyGitHubLinkToClipboard", "when": "!terminalFocus" },
+  { "key": "ctrl+l g", "command": "extension.openInGitHub", "when": "!terminalFocus" },
+  { "key": "ctrl+l p", "command": "extension.openPrGitProvider", "when": "!terminalFocus" },
 
   /* }}} */
+
+  // System default
+  //{ "key": "ctrl+`", "command": "workbench.action.terminal.toggleTerminal", "when": "terminal.active" },
+  // But I would like to hide the problem bar when the terminal is visible, even if it is not focused
+  //{ "key": "ctrl+`", "command": "TODO", "when": "terminal.visible" },
+
+  // Keybind to toggle Open Editors View, including focusing it
+  { "key": "ctrl+shift+e", "command": "workbench.files.action.focusOpenEditorsView", "when": "!openEditorsFocus" },
+  { "key": "ctrl+shift+e", "command": "workbench.explorer.openEditorsView.removeView", "when": "openEditorsFocus" },
 
   // I was trying to debug why jumping was not bringing the Vim cursor, but this is a known issue which I cannot resolve this way
   ////{ "key": "ctrl+]", "command": "-extension.vim_ctrl+]", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
@@ -644,8 +704,8 @@
   //{ "key": "ctrl+shift+]", "command": "extension.vim_ctrl+]", "when": "editorTextFocus && vim.active && vim.use<C-]> && !inDebugRepl" },
 
   // Dummy object, because without this, newly added bindings expand the last entry in the file
+  // --- NEW KEYBINDS SHOULD BE MOVED ABOVE THIS ---
   {
     "foo": "bar"
   },
-  // --- NEW KEYBINDS SHOULD BE MOVED ABOVE THIS ---
 ]
