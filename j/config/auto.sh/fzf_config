@@ -142,6 +142,8 @@ fcdlocal() {
   #      -path '*/\.*' -prune \
   #      -o -path '*/node_modules' -prune \
   #      -o -path '*/node_modules/*' -prune \
+  #      -o -path '*/dist' -prune \
+  #      -o -path '*/dist/*' -prune \
   #      -o -print \
   #    ')' \
   #    2>/dev/null |
