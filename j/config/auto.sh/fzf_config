@@ -21,7 +21,8 @@ FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --exact"
 # --reverse - Put the prompt at the top, and let the list flow downwards
 #             If you remove --reverse, you might also find it convenient to make tab go in the other direction
 #             AKA --layout=reverse
-FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --reverse --bind 'tab:down' --bind 'shift-tab:up' --bind '\`:up' --bind 'ctrl-]:select+down' --bind 'ctrl-/:select+up' --bind 'ctrl-a:select-all'"
+FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --reverse --bind 'tab:down' --bind 'shift-tab:up' --bind '\`:up' --bind 'ctrl-]:select+down' --bind 'ctrl-a:select-all'"
+FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --bind 'pgup:preview-page-up' --bind 'pgdn:preview-page-down' --bind 'ctrl-/:change-preview-window(bottom,70%,border-top|hidden|right,70%,border-left)'"
 
 if which rg > /dev/null 2>&1
 then export FZF_DEFAULT_COMMAND='rg --files --hidden'
