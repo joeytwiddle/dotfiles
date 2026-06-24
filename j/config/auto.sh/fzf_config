@@ -23,6 +23,8 @@ FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --exact"
 #             AKA --layout=reverse
 FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --reverse --bind 'tab:down' --bind 'shift-tab:up' --bind '\`:up' --bind 'ctrl-]:select+down' --bind 'ctrl-a:select-all'"
 FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --bind 'pgup:preview-page-up' --bind 'pgdn:preview-page-down' --bind 'ctrl-/:change-preview-window(bottom,70%,border-top|hidden|right,70%,border-left)'"
+# Style the scrollbars. Alternatives: ▏▎▍▌▋▊▉█ or ░▒▓
+FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --scrollbar '▌▌' --color 'scrollbar:#444444,preview-scrollbar:#444444'"
 
 if which rg > /dev/null 2>&1
 then export FZF_DEFAULT_COMMAND='rg --files --hidden'
@@ -52,6 +54,7 @@ export FZF_DIRECTORY_PREVIEW_COMMAND="echo {}/; echo; ls -lartFh --color=always 
 
 # Another variable which I have invented
 # I set CTRL-E and CTRL-O to use execute(), so we can come back to fzf and select another line later
+# TODO: Most of my bindings live in FZF_DEFAULT_OPTS. So should we make this name more specific, e.g. FZF_EDIT_BINDINGS?
 export FZF_BINDINGS=(--bind 'enter:become(smartvim {}),ctrl-e:execute(smartvim {}),ctrl-o:execute(code {})')
 
 # End config, start aliases
@@ -103,6 +106,20 @@ feg() {
 alias eglobal='feg'
 alias elocate='feg'
 
+feg_breadth_first() {
+  echo "Don't panic if you see nothing. fzf will only open when the first result is found. Start without arguments if you want to see progress." >&2
+  find_breadth_first "$HOME" -type f \
+    '(' \
+      -path '*/node_modules' -prune \
+      -o -path '*/node_modules/*' -prune \
+      -o -path '*/dist' -prune \
+      -o -path '*/dist/*' -prune \
+      -o -print \
+    ')' \
+    2>/dev/null |
+  fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --multi --select-1 "${FZF_BINDINGS[@]}" --query="$1${1:+ }"
+}
+
 # fo and fog are like fe and feg, except they open the file with xdg-open instead of an editor
 fo() {
  FZF_EDITOR="xdg-open" fe "$@"
@@ -126,7 +143,7 @@ fcdlocal() {
     find "$top_dir"/ -mindepth 1 -type d \
       '(' \
         -path '*/\.*' -prune \
-        -o -name 'node_modules' -prune \
+        -o -name 'node_modules*' -prune \
         -o -print \
       ')' \
       2>/dev/null |
@@ -137,7 +154,7 @@ fcdlocal() {
   # Tell zsh to ignore the comments inside the $() - unfortunately this will leave it set for the entire session, but avoiding that would be cumbersome
   #[[ -n "$ZSH_NAME" ]] && set -k
   #dir="$( \
-  #  find_breadth_first . -type d \
+  #  find_breadth_first "$top_dir" -type d \
   #    '(' \
   #      -path '*/\.*' -prune \
   #      -o -path '*/node_modules' -prune \
@@ -149,8 +166,9 @@ fcdlocal() {
   #    2>/dev/null |
   #  # When the user makes a selection, 'fzf' will not exit and the 'cd' will not happen, until this 'find' has completed
   #  # So if it goes on too long, we just force the find to stop
+  #  # We could avoid this by piping directly to fzf, and not doing dir=$(...)
   #  head -n 5000 |
-  #  # We leave the sorting to find, because fzf sorting is weird
+  #  # We leave the sorting to find, because fzf does not perform sorting
   #  fzf-tmux --no-sort --no-multi --query="$1${1:+ }" --preview="$FZF_DIRECTORY_PREVIEW_COMMAND"
   #)"
 
@@ -179,11 +197,11 @@ fcdglobal() {
   fi
 }
 # Fuzzy CD global
-alias fcdg=fcdglobal
+#alias fcdg=fcdglobal
 # CD Global
 alias cdg=fcdglobal
 # Global CD
-alias gcd=fcdglobal
+#alias gcd=fcdglobal
 
 sort_by_line_length() {
   awk '{ print length, $0 }' | sort -n | cut -d ' ' -f2-
@@ -231,7 +249,13 @@ fgco() {
   #git branch | fzf --no-sort --tac --query="$1${1:+ }" | xargs git checkout
 
   local result
-  result="$(git_branch_most_recent_last_with_info | fzf --no-sort --tac --query="$1${1:+ }")"
+  #result="$(git_branch_most_recent_last_with_info | fzf --no-sort --tac --query="$1${1:+ }")"
+  result="$(
+    git_branch_most_recent_last_with_info |
+    fzf --no-sort --tac --query="$1${1:+ }" \
+      --preview 'git log -n 200 --graph --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ad)%Creset" --date=relative --color=always {1}' \
+      --preview-window=down:50%
+  )"
 
   local branch
   local _
