@@ -66,12 +66,10 @@
     // Notably, this is also the number of tabs you will see on Ctrl-Tab and Ctrl-E showAllEditorsByMostRecentlyUsed
     // When a limit is enabled, wrapping can also be enabled
     //"workbench.editor.limit.value": 12,
-    //"workbench.editor.wrapTabs": true,
+    "workbench.editor.wrapTabs": false,
     // But I think I prefer having a longer tab list (because I use Ctrl-Tab instead of looking at the tabs at the top)
     // If I set higher than 14, the Ctrl-Tab and Ctrl-E drop-down lists get scrollbars
-    "workbench.editor.limit.value": 14,
-    "workbench.editor.wrapTabs": false,
-
+    "workbench.editor.limit.value": 20,
     // Displays extra info (like 'M' or 'U' or a number) in the tab if the file has uncommitted changes
     // Disabled because I find this more noisy than informative
     "workbench.editor.decorations.badges": false,
@@ -112,6 +110,17 @@
         "**/dist/**": true,
     },
 
+    /*
+    // Cheaper file-watching over huge codebases
+    // May help reduce our EBADF errors?
+    "js/ts.tsserver.watchOptions": {
+        "watchFile": "useFsEvents",   // still getting EBADF
+        //"watchFile": "useFsEventsOnParentDirectory",   // less work, but may be inaccurate
+        "watchDirectory": "useFsEvents",
+        "fallbackPolling": "dynamicPriorityPolling"
+    },
+    */
+
     // No longer a setting.  Now toggled in the sidebar Views menu.
     //"npm.enableScriptExplorer": true,
 
@@ -151,8 +160,11 @@
     //"editor.wordBasedSuggestions": true,
 
     // Do not show info about the code on mouse hover.
-    // I find this annoying on mouse, and I get the info using my keybind `g h` instead.
-    "editor.hover.enabled": false,
+    // I find this annoying on mouse movement, so I get the info using my keybind `g h` instead.
+    // But I also toggle this on/off with <Leader>t h
+    "editor.hover.enabled": "on",
+    // When the mouse moves over the tooltip, should the tooltip stay (or disappear)? Necessary if you ever want to copy from it.
+    //"editor.hover.sticky": false,
 
     // Enable parameter hints
     //"editor.parameterHints.enabled": true,
@@ -435,18 +447,21 @@
     },
 
     // It's probably better to enable these settings in the .vscode folder local to each workspace/project
-    // In fact, the best way is to add `@ts-check` to all JS files.
+    // An alternative way is to add `@ts-check` to all JS files.
+    //
     // Use TypeScript to check JSDocs in Javascript files
-    // Old: "javascript.implicitProjectConfig.checkJs": true,
-    // New:
     // Disabled for now, to reduce CPU gobbling
     //"js/ts.implicitProjectConfig.checkJs": true,
     // For more on that: https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/
-    //"javascript.implicitProjectConfig.experimentalDecorators": false,
+    //
+    //"js/ts.implicitProjectConfig.experimentalDecorators": false,
+    //
     // Scan entire project for problems (not just open files) https://stackoverflow.com/q/55201424/99777
     // This is heavy on CPU, but on some projects, it may give you an early warning about errors
-    "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+    // Disabled for now, to reduce CPU gobbling, and false positives
     // Note: If this is gobbling CPU then it is recommended to set `"skipLibCheck": true` in tsconfig's compilerOptions
+    //       I think that might stop TypeScript from descending into the JS files in node_modules
+    //"typescript.tsserver.experimental.enableProjectDiagnostics": true,
 
     // Default: languageDefined
     "editor.autoClosingBrackets": "never",
@@ -489,6 +504,7 @@
 
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
+        //"editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
     },
     "[javascriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -534,8 +550,27 @@
     //"gitlens.hovers.currentLine.over": "line",
     //"gitlens.blame.compact": false,
     "gitlens.heatmap.toggleMode": "window",
-    "gitlens.heatmap.hotColor": "#f6a60a",
-    "gitlens.heatmap.coldColor": "#0a62f6",
+    //
+    // Green - blue (nice, but green can be visually confused with uncommitted changes)
+    //"gitlens.heatmap.hotColor": "#a6f60a33",
+    //"gitlens.heatmap.coldColor": "#0a62f611",
+    // Yellow - red
+    //"gitlens.heatmap.hotColor": "#f6a60a66",
+    //"gitlens.heatmap.coldColor": "#f6660a00",
+    // Yellow - grey
+    //"gitlens.heatmap.hotColor": "#f6a60a66",
+    //"gitlens.heatmap.coldColor": "#33333311",
+    // Light grey - dark grey
+    //"gitlens.heatmap.hotColor": "#dddddd66",
+    //"gitlens.heatmap.coldColor": "#33333311",
+    // White - black
+    "gitlens.heatmap.hotColor": "#ffffff44",
+    "gitlens.heatmap.coldColor": "#33333300",
+    //
+    // Where to show the colours: "gutter", "overview", "line"
+    "gitlens.heatmap.locations": ["gutter"],
+    "gitlens.heatmap.fadeLines": false,
+    //
     // wavatar is cute and identicon seems nice, but for small icons on a dark theme, I think retro works best
     //"gitlens.defaultGravatarsStyle": "wavatar",
     //"gitlens.defaultGravatarsStyle": "identicon",
@@ -805,6 +840,28 @@
         // Git Shade
         //{ "before": [ "<Leader>", "g", "s" ], "commands": [ "gitlens.toggleFileHeatmap" ] },
 
+        {
+            "before": [ "<Leader>", "t", "h" ],
+            "commands": [
+                {
+                    "command": "settings.cycle",
+                    "args": {
+                        "id": "toggleHoverPopups", // must be unique
+                        "overrideWorkspaceSettings": true,
+                        "values": [
+                            {
+                            "editor.hover.enabled": true
+                            },
+                            {
+                            "editor.hover.enabled": false
+                            },
+                        ]
+                    }
+                }
+            ],
+            "when": "editorTextFocus",
+        },
+
         // Toggle file explorer sidebar
         { "before": [ "<Leader>", "f" ], "commands": [ "workbench.action.toggleSidebarVisibility" ] },
         // Toggle right sidebar
@@ -867,7 +924,7 @@
         { "before": [ "<Leader>", "*" ], "commands": [ "workbench.action.findInFiles" ] },
         //
         // Logging JavaScript
-        { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "c", "o", "n", "s", "o", "l", "e", ".", "l", "o", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
+        { "before": [ "<Leader>", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "c", "o", "n", "s", "o", "l", "e", ".", "d", "e", "b", "u", "g", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", ";", "Esc" ] },
         // Logging ReScript
         //{ "before": [ "<Leader>", "r", "l", "o", "g" ], "after": [ "\"", "l", "y", "o", "J", "s", ".", "l", "o", "g", "2", "(", "\"", "C-R", "l", ":", "\"", ",", " ", "C-R", "l", ")", "Esc" ] },
         // Logging Python
@@ -920,7 +977,9 @@
         "**/.classpath": true,
         "**/.project": true,
         "**/.settings": true,
-        "**/.factorypath": true
+        "**/.factorypath": true,
+        // I added this when my Mac was getting a lot of EBADF errors
+        "**/node_modules*": true,
     },
 
     "editor.tabSize": 2,
@@ -929,7 +988,11 @@
     "editor.lineNumbers": "on",
     "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
 
+    // Toggle with <Leader>w
     "editor.wordWrap": "on",
+    // Show margin line
+    "editor.rulers": [140],
+
     // "indent" appears to be only two characters, but since `//` is also two characters, a deeper indent can look better
     //"editor.wrappingIndent": "indent",
     "editor.wrappingIndent": "deepIndent",
@@ -998,15 +1061,44 @@
         "asvetliakov.vscode-neovim": 1
     },
 
+    // When VSCode Vim was locking up, I tried various things to fix it
+    // But ultimately we just needed the affinity setting above, which I think had been removed by Cursor
+    //"editor.stickyScroll.enabled": false,
+    // Don't walk up from the current workspace to find a '.git' folder
+    //"git.openRepositoryInParentFolders": "never",
+    // Only manage git for repos you actually open a file from — not all repos below the workspace
+    //"git.autoRepositoryDetection": "openEditors",
+    // Disables the git status in explorer/tab badges
+    //"git.decorations.enabled": false,
+    //
+    // The lock up tends to happen only after editing a .TS file (not after editing this file)
+    //
+    // Disable the gutter marks "+/-" for the current editor
+    //"scm.diffDecorations": "none",
+    //
+    //"js/ts.tsserver.automaticTypeAcquisition.enabled": false,   // stops the typingsInstaller scans
+    // Debugging
+    //"js/ts.tsserver.log": "verbose",
+
+    // Whether to send automatic feedback to VSCode and similarly from extensions
+    // Some extensions may not respect this, and may have their own separate setting
+    "telemetry.telemetryLevel": "off",
+
     // Set this false, if you do not want Codegeex to store the code it generates for you
     "Codegeex.Privacy": false,
 
     "continue.enableTabAutocomplete": true,
     // Set this true if are happy to share your code with Continue
-    // I like to do that, because it's open source, but my default settings is to not share
     "continue.telemetryEnabled": false,
 
-    "docker.contexts.label": "Name",
+    "claudeCode.preferredLocation": "sidebar",
+    "claudeCode.enableNewConversationShortcut": true,
+
+    "chat.disableAIFeatures": true,
+    // Experimental feature
+    "github.copilot.nextEditSuggestions.enabled": true,
+
+    "containers.contexts.label": "Name",
 
     "svelte.enable-ts-plugin": true,
 
@@ -1062,7 +1154,15 @@
     // Saves some screen space, but makes Peacock colours less prominent
     "workbench.activityBar.location": "top",
 
-    // New Settings
-    // Variables which regularly churn start here. No need to commit these.
+    "bookmarks.keepBookmarksOnLineDelete": true,
+
+    // Disable the new feature where setting pop out in a separate window
+    "workbench.editor.useModal": "off",
+
+    //
+
+    // --- New Settings ---
+    // DO NOT COMMIT
+    // Variables which regularly churn start here. Copy any you want to keep out of here, and leave the rest uncommitted.
 
 }
