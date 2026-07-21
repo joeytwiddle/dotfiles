@@ -388,21 +388,144 @@
 
         "[Gentle Mary]": {
             "textMateRules": [
-                /*
+                // Fixes for Vimscript
+                {
+                  "name": "Function",
+                  "scope": "storage.function",
+                  "settings": {
+                    "foreground": "#A576A0" // green-cyan
+                  }
+                },
+                {
+                  "name": "Autocmd Group",
+                  "scope": "storage.type.augroup, keyword.control.end",
+                  "settings": {
+                    "foreground": "#A576A0" // green-cyan
+                  }
+                },
+
+                // Make variables something other than white?
                 {
                     "name": "Variable",
+                    // "scope": "variable, support.variable, support.class, support.constant, meta.definition.variable, entity.name.function",
                     "scope": "variable.parameter, variable.other",
                     "settings": {
                         //"fontStyle": "bold",
-                        "foreground": "#CCCCCC"
-                        //"foreground": "#ee9933"
-                        //"foreground": "#dd8866"
-                        //"foreground": "#88eeee"
-                        //"foreground": "#99ccbb"
-                        //"foreground": "#22aacc"
+                        //"foreground": "#CCCCCC"
+                        //"foreground": "#DDDDDD"
+                        //"foreground": "#FFFFFF"
+                        //"foreground": "#f79855" // strong light orange
+                        //"foreground": "#dd8866" // greyish orange (nice, stands out)
+                        //"foreground": "#88eeee" // bright cyan
+                        //"foreground": "#99ccbb" // faint greenish cyan
+                        //"foreground": "#69b1c3" // faint cyan
+                        //"foreground": "#22aacc" // cyan
+                        //"foreground": "#36b9bb" // greenish cyan
+                        //"foreground": "#64bbbd" // lighter greenish cyan
+                        //"foreground": "#56b7b9" // less greenish cyan
+                        //"foreground": "#80bcbd" // even lighter greenish cyan (FAVOURITE)
+                        //"foreground": "#6fa7dc" // property blue but lighter
+                        "foreground": "#4B95DC" // property blue
+                    }
+                },
+
+                // Shell redirection, (`keyword.operator` alone would apply to assignment, comparison and boolean operators)
+                {
+                "name": "Global",
+                "scope": "keyword.operator.redirect",
+                  "settings": {
+                    "foreground": "#A576A0"
+                  }
+                },
+
+                // Keep variables white, but make other things (mostly punctuation) not-white?
+                /*
+                {
+                  "name": "Brackets",
+                  "scope": "meta.brace",
+                  "settings": {
+                    //"foreground": "#CCCCCC"
+                    "foreground": "#36b9bb" // green-cyan
+                  }
+                },
+                {
+                  "name": "General punctuation",
+                  "scope": "punctuation.separator.key-value.js, punctuation.separator.key-value.ts, punctuation.definition.block, punctuation.section.braces, punctuation.definition.parameters",
+                  "settings": {
+                    "fontStyle": "bold",
+                    //"foreground": "#AAAAAA"
+                    "foreground": "#36b9bb" // green-cyan
+                  }
+                },
+                {
+                  "name": "Modules",
+                  "scope": "support.module, support.node",
+                  "settings": {
+                    "foreground": "#CCCCCC",
+                    "fontStyle": "italic"
+                  }
+                },
+                {
+                  "name": "Global",
+                  "scope": "support.class, support.constant",
+                  "settings": {
+                    "foreground": "#CCCCCC"
+                  }
+                },
+                {
+                  "name": "Operator",
+                  "scope": "keyword.operator",
+                  "settings": {
+                    //"foreground": "#CCCCCC",
+                    "foreground": "#AF4A67",
+                    "fontStyle": ""
+                  }
+                },
+                {
+                  "name": "JavaScript semicolon",
+                  "scope": "punctuation.terminator.statement",
+                  "settings": {
+                    //"foreground": "#8A8A8A"
+                    "foreground": "#4a8182"
+                  }
+                },
+                {
+                  "name": "TypeScript type definition",
+                  "scope": "keyword.operator.type.annotation.ts",
+                  "settings": {
+                    "foreground": "#CCCCCC"
+                  }
+                },
+                {
+                  "name": "Modifier",
+                  "scope": "modifier",
+                  "settings": {
+                    //"foreground": "#CCCCCC"
+                    "foreground": "#AF4A67"
+                  }
+                },
+                */
+
+                // If we make variables blue, make properties duller blue?
+                /*
+                {
+                    "name": "Object property",
+                    "scope": "variable.object.property, variable.other.property, variable.other.object.property, support.variable.property.ts",
+                    "settings": {
+                        "foreground": "#4d81ab"
+                        //"foreground": "#bbbbbb"
+                    }
+                },
+                {
+                    "name": "JSON key",
+                    "scope": "meta.object-literal.key, meta.object-literal.key string, support.type.property-name.json, string.key.json5, variable.name.tag.json5.key",
+                    "settings": {
+                        "foreground": "#4d81ab"
+                        //"foreground": "#bbbbbb"
                     }
                 },
                 */
+
                 // Orange functions instead of green?
                 /*
                 {
@@ -499,7 +622,8 @@
     "files.associations": {
         "*.uc.jpp": "unrealscript",
         "*.js.jpp": "javascript",
-        "*.spp*": "asm"
+        "*.spp*": "asm",
+        "fzf_config": "shellscript"
     },
 
     "[javascript]": {
@@ -549,6 +673,7 @@
     // Alternatives GitLens: https://www.reddit.com/r/vscode/comments/1cynetl/alternative_to_gitlens/
     //"gitlens.hovers.currentLine.over": "line",
     //"gitlens.blame.compact": false,
+    "gitlens.blame.toggleMode": "window",
     "gitlens.heatmap.toggleMode": "window",
     //
     // Green - blue (nice, but green can be visually confused with uncommitted changes)
@@ -575,7 +700,6 @@
     //"gitlens.defaultGravatarsStyle": "wavatar",
     //"gitlens.defaultGravatarsStyle": "identicon",
     "gitlens.defaultGravatarsStyle": "retro",
-    "gitlens.blame.toggleMode": "window",
     "gitlens.heatmap.ageThreshold": 90,
     //"gitlens.heatmap.ageThreshold": 365,
     // Stop bugging me about premium features
@@ -1014,6 +1138,10 @@
     // Beware the '#' search is case-sensitive!
     // And it doesn't always work.
     // You may like to try '%' instead.
+
+    // Sort results with most recently changed at the top
+    // Only affects history results, not file results
+    //"search.quickOpen.history.filterSortOrder": "recency",
 
     // Stop asking me if I want to update go tools, just do it
     "go.toolsManagement.autoUpdate": true,
