@@ -7,6 +7,7 @@
   //     >Developer: Inspect Context Keys
   // https://code.visualstudio.com/api/references/when-clause-contexts
   //
+  // Disable these strokes if you want to use Bookmarks Explorer's Cmd+Alt+J/K/L
   { "key": "alt+cmd+j", "command": "workbench.action.toggleDevTools" },
   { "key": "meta+alt+j", "command": "workbench.action.toggleDevTools" },
   { "key": "ctrl+shift+j", "command": "workbench.action.toggleDevTools" },
@@ -130,6 +131,7 @@
   { "key": "ctrl+w", "command": "-workbench.action.closeWindow", "when": "!editorIsOpen && !multipleEditorGroups" },
   { "key": "ctrl+w", "command": "-workbench.action.closeGroup", "when": "activeEditorGroupEmpty && multipleEditorGroups" },
   { "key": "ctrl+w", "command": "-workbench.action.closeActiveEditor", "when": "editorFocus" },
+  { "key": "ctrl+w", "command": "-workbench.action.switchWindow" }, // on macOS
   /* Enable it only when there is one window pane (no splits) */
   //{ "key": "ctrl+w", "command": "workbench.action.closeActiveEditor", "when": "editorFocus && !multipleEditorGroups" },
 
@@ -287,6 +289,29 @@
   { "key": "ctrl+[", "command": "workbench.action.focusActiveEditorGroup", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
   { "key": "] w", "command": "workbench.action.focusActiveEditorGroup", "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus" },
 
+  /* Toggle popups/hints on hover */
+  /* Disabled because this prevents me from inserting a backslash elsewhere */
+  /* I moved this over to a vim keybinding instead */
+  /*
+  {
+    "key": "\\ t h",
+    "command": "settings.cycle",
+    "when": "editorTextFocus",
+    "args": {
+      "id": "toggleHoverPopups", // must be unique
+      "overrideWorkspaceSettings": true,
+      "values": [
+        {
+          "editor.hover.enabled": true
+        },
+        {
+          "editor.hover.enabled": false
+        },
+      ]
+    }
+  },
+  */
+
   /* Cycle zoom (requires Settings Cycler plugin) */
   /* I use this because I like -0.5 on my Linux, but Ctrl-Plus/Minus round to integers */
   {
@@ -318,6 +343,8 @@
       "id": "cycleColorTheme", // must be unique
       "overrideWorkspaceSettings": true,
       "values": [
+        // Experimenting: various favourites
+        /*
         // This is mine, it's nice and calm, but a bit boring
         { "workbench.colorTheme": "Gentle Mary" },
         //{ "workbench.colorTheme": "Atom Material Theme" }, // Not available in Cursor
@@ -334,6 +361,11 @@
         { "workbench.colorTheme": "Default Light Modern" },
         //{ "workbench.colorTheme": "Community Material Theme Lighter" },
         //{ "workbench.colorTheme": "Community Material Theme Lighter High Contrast" },
+        */
+        //
+        // Quick version: My favourite dark and my favourite light (for Claude Code extension)
+        { "workbench.colorTheme": "Gentle Mary" },
+        { "workbench.colorTheme": "Quiet Light" },
       ]
     }
   },
@@ -344,6 +376,8 @@
       "id": "cycleColorTheme", // must be unique
       "overrideWorkspaceSettings": true,
       "values": [
+        // Experimenting: various favourites
+        /*
         // This is mine, it's nice and calm, but a bit boring
         { "workbench.colorTheme": "Gentle Mary" },
         //{ "workbench.colorTheme": "Atom Material Theme" }, // Not available in Cursor
@@ -360,6 +394,11 @@
         { "workbench.colorTheme": "Default Light Modern" },
         //{ "workbench.colorTheme": "Community Material Theme Lighter" },
         //{ "workbench.colorTheme": "Community Material Theme Lighter High Contrast" },
+        */
+        //
+        // Quick version: My favourite dark and my favourite light (for Claude Code extension)
+        { "workbench.colorTheme": "Gentle Mary" },
+        { "workbench.colorTheme": "Quiet Light" },
       ]
     }
   },
@@ -611,8 +650,14 @@
   //{ "key": "ctrl+tab", "command": "composer.showComposerHistory", "when": "composerFocused" },
   ////{ "key": "ctrl+pageup", "command": "composer.showComposerHistory", "when": "composerFocused" },
   ////{ "key": "ctrl+pagedown", "command": "composer.showComposerHistory", "when": "composerFocused" },
+  ////
+  //// Cursor Agents Panel
+  //// I prefer Ctrl-` to toggle terminal, and Cmd+J to toggle the panel
+  //{ "key": "cmd+j", "command": "-glass.toggleTerminal", "when": "isGlassAgentWorkspace" },
+  //{ "key": "cmd+j", "command": "glass.togglePanel", "when": "isGlassAgentWorkspace" },
+  ////
   //// I think Cursor added this itself?
-  //{ "key": "alt+cmd+s", "command": "workbench.action.toggleUnifiedSidebarFromKeyboard", "when": "cursor.agentIdeUnification.enabled == true && !isAuxiliaryWindowFocusedContext" },
+  ////{ "key": "alt+cmd+s", "command": "workbench.action.toggleUnifiedSidebarFromKeyboard", "when": "cursor.agentIdeUnification.enabled == true && !isAuxiliaryWindowFocusedContext" },
 
   // Windsurf (they call their AI Chat "Cascade")
   //// Make keys on Linux like those on macOS
@@ -634,7 +679,13 @@
   //{ "key": "cmd+l", "command": "codeium.openChatView", "when": "true" },
   //{ "key": "alt+l", "command": "codeium.openChatView", "when": "true" },
 
+  // Claude Code extension in VSCode
+  //{ "key": "shift+cmd+c", "command": "-workbench.action.terminal.openNativeConsole", "when": "!isSessionsWindow && !terminalFocus" },
+  //{ "key": "shift+cmd+c", "command": "claudeVSCodeSessionsList.focus" },
+  //{ "key": "cmd+l", "command": "claude-vscode.focus", "when": "editorTextFocus && !config.claudeCode.useTerminal" },
+
   // Open auxiliary bar when pressing ALt+L / Cmd+L
+  // Note: I disable this when I have a keybind above to open a specific agent. (We could also put this earlier.)
   // Instead of having Alt+L / Cmd+L open a specific extension, we can install various extensions at once, and just have that keybind open the auxiliary bar, to focus whichever one we were last working with
   // Disadvantage: When using Windsurf, it does not focus back on the text input box, although with Gemini Code Assist it does
   // You can hit Tab then Shift-Tab to refocus the input box in Windsurf
@@ -643,6 +694,7 @@
   //
   // Disable unwanted defaults (actually doesn't seem necessary. These keybindings override those.)
   //{ "key": "cmd+l", "command": "-continue.focusContinueInput" },
+  //
   { "key": "alt+l", "command": "workbench.action.focusAuxiliaryBar", "when": "!auxiliaryBarFocus" },
   { "key": "cmd+l", "command": "workbench.action.focusAuxiliaryBar", "when": "!auxiliaryBarFocus" },
   // Override for Continue. This will ensure the input box is focused (useful, and also necessary to ensure another Cmd+L closes the auxbar),
@@ -653,14 +705,13 @@
 
   // Leave the auxiliary bar when pressing <Escape>
   { "key": "escape", "command": "workbench.action.focusActiveEditorGroup", "when": "auxiliaryBarFocus" },
+  //
   // Close the auxiliary bar when pressing ALt+L / Cmd+L, if it is focused
   // Unfortunately auxiliaryBarFocus doesn't trigger when it should
   // So we use auxiliaryBarVisible but we use this complex where clause so hopefully it won't close when it's visible but not focused
+  // You might want to disable the cmd+l binding when using Cursor
   { "key": "alt+l", "command": "workbench.action.closeAuxiliaryBar", "when": "auxiliaryBarVisible && !sideBarFocus && !editorFocus && !terminalFocus && !filesExplorerFocus" },
-  // I initially needed this for Continue on Linux, but it doesn't seem necessary for Continue on macOS, so let's leave that disabled
-  // But actually I quite like it being consistent across all tools, so let's leave it enabled
-  // But it can be a fiddle when using Cursor (e.g. when Keyboard Shortcuts page is focused) so you might also want to disable it
-  //{ "key": "cmd+l", "command": "workbench.action.closeAuxiliaryBar", "when": "auxiliaryBarVisible && !sideBarFocus && !editorFocus && !terminalFocus && !filesExplorerFocus" },
+  { "key": "cmd+l", "command": "workbench.action.closeAuxiliaryBar", "when": "auxiliaryBarVisible && !sideBarFocus && !editorFocus && !terminalFocus && !filesExplorerFocus" },
   // Quick way to get back to the editor
   { "key": "alt+e", "command": "workbench.action.focusActiveEditorGroup", "when": "auxiliaryBarFocus" },
   { "key": "cmd+e", "command": "workbench.action.focusActiveEditorGroup", "when": "auxiliaryBarFocus" },
