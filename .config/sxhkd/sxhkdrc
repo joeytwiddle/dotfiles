@@ -51,7 +51,9 @@
 control + alt + shift + r
   killall -USR1 -u "$USER" sxhkd ; echo 'sxhkd config reloaded'
 
-
+# Clear all modifier keys (useful if they get stuck)
+control + alt + shift + c
+  x11vnc -deny_all -clear_keys -timeout 1 ; echo 'cleared all modifier keys'
 
 ### === Cut, copy and paste === ###
 
@@ -152,12 +154,20 @@ alt + shift + n
   xte "keyup n" "keyup Alt_L" "keydown Control_L" "key n" "keyup Control_L" "keydown Alt_L"
 
 # Private browsing in Firefox
+# Doesn't work!
 #alt + shift + p
 #  xte "keyup p" "keyup Alt_L" "keydown Control_L" "key p" "keyup Control_L" "keydown Alt_L"
 
 # Focus location bar
-alt + l
-  xte "keyup l" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
+# This doesn't work very well in Firefox (it tends to leave the menu open)
+# And it also breaks Cursor/Windsurf/Trae because they use Alt+L to toggle the AI chat
+# No actually they use Ctrl+L for now
+#alt + l
+#  xte "keyup Alt_L" "keyup l" "keydown Control_L" "keyup Alt_L" "key l" "keyup Control_L" "keydown Alt_L"
+# Try pressing Alt a second time (or third time) so the menu doesn't open
+# I think this used to work, but it doesn't work now
+#alt + l
+#  xte "keyup l" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key l" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 
 # Reload page
 alt + r
@@ -234,8 +244,9 @@ alt + shift + l
 # Select all text
 alt + a
   xte "keyup a" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key a" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
-alt + b
-  xte "keyup b" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key b" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
+# Disabled because it breaks alt+b toggle sidebar visibility in VSCode
+#alt + b
+#  xte "keyup b" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key b" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 alt + e
   xte "keyup e" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key e" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 # Find
@@ -251,8 +262,9 @@ alt + i
 # Although this is used in web browsers, I need to keep it clear for VSCode, to distinguish Ctrl-J (scroll down) from Alt-J (toggle panel)
 #alt + j
 #  xte "keyup j" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key j" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
-alt + k
-  xte "keyup k" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key k" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
+# Used for my VSCode binding Alt-K Alt-K
+#alt + k
+#  xte "keyup k" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key k" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 alt + m
   xte "keyup m" "keyup Alt_L" "keydown Alt_L" "keyup Alt_L" "keydown Control_L" "key m" "keyup Control_L" "keydown Alt_L" "keyup Alt_L" "keydown Alt_L"
 # Print
@@ -485,6 +497,14 @@ ctrl + super + period
 XF86AudioNext
   nextsong
 
+F1
+  xte "keyup F1" "key XF86MonBrightnessDown"
+  #adjust_brightness_by -5
+
+F2
+  xte "keyup F2" "key XF86MonBrightnessUp"
+  #adjust_brightness_by +5
+
 # Problem with xsnapshot: captures both monitors; sometimes loses half of the window and captures things behind it
 #super + c
 #  xsnapshot
@@ -496,11 +516,13 @@ super + c
 ### === Special tricks === ###
 
 # Magic Spacebar
-control + shift + space
-  cycle_space_bar_mappings
+# Disabled because I use this keybinding for autocomplete in VSCode
+#control + shift + space
+#  cycle_space_bar_mappings
 
 #control + shift + minus
-  #cycle_space_bar_mappings
+# Disabled because I use this keybinding for zoom in VSCode
+#  cycle_space_bar_mappings
 
 # Shift-Enter will re-execute the previous command
 # BUG: I couldn't execute Shift-Enter on non-terminals when I needed to (e.g. to enter a new line in WhatsApp)
@@ -522,16 +544,35 @@ alt + shift + Return
 # This macOS user suggests Cmd-R: https://unix.stackexchange.com/questions/147563/how-do-i-repeat-the-last-command-without-using-the-arrow-keys
 # We did try that above, in the browser section
 
+# Get up/downarrow keys from Ctrl+J/K
+#ctrl + j
+#  xte "keyup Control_L" "keyup j" "key Down" "keydown Control_L"
+#ctrl + k
+#  xte "keyup Control_L" "keyup k" "key Up" "keydown Control_L"
+
 # Get arrow keys from Super+IJKL
-# These don't work, but I don't understand why not
+# Unfortunately, Super+H already toggles horizontal maximisation
+# And re. WASD,  Super+S already toggles sticky
+# Worked when I tried it in keyd
 #super + i
-#  xte "keyup Super_L" "key Up" "keydown Super_L"
+#  xte "keyup Super_L" "keyup i" "key Left" "keydown Super_L"
 #super + j
-#  xte "keyup Super_L" "key Left" "keydown Super_L"
+#  xte "keyup Super_L" "keyup j" "key Down" "keydown Super_L"
 #super + k
-#  xte "keyup Super_L" "key Down" "keydown Super_L"
+#  xte "keyup Super_L" "keyup k" "key Up" "keydown Super_L"
 #super + l
-#  xte "keyup Super_L" "key Right" "keydown Super_L"
+#  xte "keyup Super_L" "keyup l" "key Right" "keydown Super_L"
+
+# Get arrow keys from Ctrl+Shift+IJKL
+# Well no, because ctrl + shift + i is used to open DevTools in Firefox
+#ctrl + shift + i
+#  xte "keyup Control_L" "keyup Shift_L" "keyup i" "key Left" "keydown Control_L" "keydown Shift_L"
+#ctrl + shift + j
+#  xte "keyup Control_L" "keyup Shift_L" "keyup j" "key Down" "keydown Control_L" "keydown Shift_L"
+#ctrl + shift + k
+#  xte "keyup Control_L" "keyup Shift_L" "keyup k" "key Up" "keydown Control_L" "keydown Shift_L"
+#ctrl + shift + l
+#  xte "keyup Control_L" "keyup Shift_L" "keyup l" "key Right" "keydown Control_L" "keydown Shift_L"
 
 # Most of these don't work because they are already bound to something by KDE
 #super + w
@@ -543,3 +584,28 @@ alt + shift + Return
 #super + d
 #  xte "keyup Super_L" "key Right" "keydown Super_L"
 
+# KDE Zoom / Screen Magnification (like macOS Zoom) only had keybindings in KDE 6.3, no mouse bindings, but we can map from one to the other
+# Disadvantage: This does also send the mouse wheel events
+super + button4
+  xte "keydown Super_L" "key equal"
+super + button5
+  xte "keydown Super_L" "key minus"
+
+# For Keychron: When pressing Option+Up/Down send PageUp/Down, which feels similar to Fn-Up/Down on laptop keyboards
+# Sadly not working
+#super + up
+#  xte "keyup Super_L" "key Prior" "keydown Super_L"
+#super + down
+#  xte "keyup Super_L" "key Next"  "keydown Super_L"
+#
+#ctrl + super + up
+#  xte "keyup Super_L" "key Prior" "keydown Super_L"
+#ctrl + super + down
+#  xte "keyup Super_L" "key Next"  "keydown Super_L"
+
+# When I have been using macOS, I sometimes try to use Alt+click to open a link in a new tab
+# So let's convert that into Ctrl+click
+# It works in browsers, but not in VSCode
+# BUG: This prevents Alt+drag to move windows around
+#alt + button1
+#  xte "keyup Alt_L" "keydown Control_L" "mouseclick 1" "keyup Control_L"
