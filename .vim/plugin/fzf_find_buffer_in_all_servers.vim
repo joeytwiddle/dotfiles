@@ -36,42 +36,90 @@
 " modern Vims have).  [No Name] buffers come back with an empty name,
 " which our sink and preview both already handle.
 "
-" We fan the per-server queries out via `xargs -P 20`, then sort the
-" merged stream numerically descending by `lastused` so MRU buffers
-" float to the top.  Parallelism brings the dominant cost (one vim
-" --remote-expr round-trip per server) down to ~max() instead of
-" sum().  We do still lose true streaming because `sort` can't emit
-" until it has consumed all of its input, but the user-visible delay
-" is bounded by the slowest single server, not the total.  fflush()
-" in the final awk keeps lines popping line-by-line into fzf once
-" sort starts emitting.
+" Current approach: query each server with a single --remote-expr call,
+" collect results in Vimscript, sort locally, and return lines to fzf
+" as a list.  Uses only system() + shellescape() — no external tools
+" needed, identical on macOS and Linux.
 "
-" Cross-platform notes:
-"   * `xargs -r` -- GNU coreutils needs it to skip the utility on
-"     empty input; BSD xargs already skips and accepts -r as a no-op.
-"     With this flag, both behave identically when no servers are up.
-"   * `xargs -I {}` is newline-delimited on both BSD and GNU, so
-"     server names with spaces survive intact.
-"   * The inner per-server script is `sh -c '...' _ {}`, written
-"     entirely with shell double-quoted strings so we can wrap the
-"     whole script in single quotes for `sh -c` without any inner
-"     quote conflicts.  That means every `"` in the vim --remote-expr
-"     becomes `\"` and every `\` becomes `\\` (one shell-escape
-"     level), and the awk script's `$0` is escaped as `\$0` to keep
-"     the outer shell from expanding it.
-"   * `sort -t "$(printf '\t')"` rather than `sort -t $'\t'` because
-"     $'...' is a bashism not guaranteed under POSIX /bin/sh (dash,
-"     ash); the printf form works on any POSIX shell.
+" Trade-off: fzf doesn't open until all servers have responded because
+" the Vimscript function runs to completion before returning the source
+" list.  For a fast initial launch with incremental streaming, see the
+" old shell-pipeline approach commented out below.
+"
+" Old shell-pipeline approach (commented out below):
+"   The pipeline fans out queries via `xargs -P 20` for parallelism and
+"   pipes directly into fzf's source, so fzf opens immediately and starts
+"   streaming results as sort produces them.  However, it depends on
+"   xargs, sort, awk, and sed with POSIX/GNU compatibility quirks.
+"
+"   Cross-platform notes for the old pipeline:
+"     * `xargs -r` — GNU needs it to skip on empty input; BSD accepts -r
+"       as a no-op.  With -r, both behave identically when no servers
+"       are up.
+"     * `xargs -I {}` is newline-delimited on both BSD and GNU, so
+"       server names with spaces survive intact.
+"     * `sort -t "$(printf '\t')"` rather than `sort -t $'\t'` because
+"       $'...' is a bashism not guaranteed under POSIX /bin/sh (dash,
+"       ash); the printf form works on any POSIX shell.
+"     * To switch back, uncomment s:list_command and change s:Run()'s
+"       'source' from s:ListBuffers() to s:list_command.
 
-let s:list_command =
-	\   'vim --serverlist | xargs -r -P 20 -I {} sh -c '''
-	\ . 'server="$1";'
-	\ . ' vim --servername "$server" --remote-expr "join(map(getbufinfo({\"buflisted\":1}), \"v:val.lastused . \\\"\\\\t\\\" . v:val.name\"), \"\\n\")"'
-	\ . ' 2>&1 | sed "s/: Send expression failed.//"'
-	\ . ' | awk -v s="$server" "BEGIN{OFS=\"\\t\"} {print s, \$0}"'
-	\ . ''' _ {}'
-	\ . ' | sort -t "$(printf ''\t'')" -k2,2 -nr'
-	\ . ' | awk -F "\t" ''{ printf "%s\t%s\t%-12.12s  %s\n", $1, $3, $1, $3; fflush() }'''
+function! s:ListBuffers() abort
+	let l:servers = systemlist('vim --serverlist')
+	if len(l:servers) == 0
+		return []
+	endif
+
+	let l:entries = []
+	let l:vim_expr = 'join(map(getbufinfo({''buflisted'':1}), "v:val.lastused . \"\\t\" . v:val.name"), \"\\n\")'
+
+	for server in l:servers
+		if empty(server) | continue | endif
+		if server ==# v:servername
+			for info in getbufinfo({'buflisted':1})
+				call add(l:entries, [info.lastused, server, info.name])
+			endfor
+		else
+			let l:cmd = 'vim --servername ' . shellescape(server) . ' --remote-expr ' . shellescape(l:vim_expr)
+			let l:out = system(l:cmd)
+			if v:shell_error
+				continue
+			endif
+			for line in split(l:out, "\n", 1)
+				if empty(line) | continue | endif
+				let l:parts = split(line, "\t", 1)
+				if len(l:parts) < 2 | continue | endif
+				let l:lastused = str2nr(l:parts[0])
+				let l:bufname = l:parts[1]
+				call add(l:entries, [l:lastused, server, l:bufname])
+			endfor
+		endif
+	endfor
+
+	call sort(l:entries, {a, b -> b[0] - a[0]})
+
+	let l:result = []
+	for [l:lastused, l:server, l:bufname; _] in l:entries
+		let l:display_server = printf('%-12.12s', l:server)
+		call add(l:result, l:server . "\t" . l:bufname . "\t" . l:display_server . '  ' . l:bufname)
+	endfor
+
+	return l:result
+endfunction
+
+" Old shell-pipeline source (streams to fzf immediately; see trade-off
+" notes above).  Uncomment this and swap s:ListBuffers() for
+" s:list_command in s:Run() to switch back.
+"
+" let s:list_command =
+" 	\   'vim --serverlist | xargs -r -P 20 -I {} sh -c '''
+" 	\ . 'server="$1";'
+" 	\ . ' vim --servername "$server" --remote-expr "join(map(getbufinfo({\"buflisted\":1}), \"v:val.lastused . \\\"\\\\t\\\" . v:val.name\"), \"\\n\")"'
+" 	\ . ' 2>&1 | sed "s/: Send expression failed.//"'
+" 	\ . ' | awk -v s="$server" "BEGIN{OFS=\"\\t\"} {print s, \$0}"'
+" 	\ . ''' _ {}'
+" 	\ . ' | sort -t "$(printf ''\t'')" -k2,2 -nr'
+" 	\ . ' | awk -F "\t" ''{ printf "%s\t%s\t%-12.12s  %s\n", $1, $3, $1, $3; fflush() }'''
 
 function! s:OpenInServer(line) abort
 	" The line is `SERVER<TAB>BUFNAME<TAB>display...`; the third field
@@ -112,7 +160,8 @@ function! s:Run() abort
 		return
 	endif
 	call fzf#run(fzf#wrap('find-buffer-in-all-servers', {
-		\ 'source':  s:list_command,
+		\ 'source':  s:ListBuffers(),
+		\ " 'source':  s:list_command,  " old shell-pipeline source
 		\ 'sink':    function('s:OpenInServer'),
 		\ 'options': [
 		\     '--prompt', 'Buffers(Global)> ',
