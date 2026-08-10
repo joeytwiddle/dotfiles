@@ -383,9 +383,11 @@ command! -nargs=+ -complete=command ServerDo :call s:ServerDo(<q-args>)
 
 " :ServerBufDo <command>
 "   Convenience: runs :ServerDo bufdo <command>.
+"   Uses noautocmd to avoid nested :redir errors from BufEnter autocommands
+"   conflicting with execute().
 
 function! s:ServerBufDo(command) abort
-	call s:ServerDo('bufdo ' . a:command)
+	call s:ServerDo('noautocmd bufdo ' . a:command)
 endfunction
 
 command! -nargs=+ -complete=command ServerBufDo :call s:ServerBufDo(<q-args>)
