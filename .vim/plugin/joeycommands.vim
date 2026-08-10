@@ -363,7 +363,7 @@ function! s:ServerDo(command) abort
 			echo substitute(l:out, '\n\+$', '', '')
 		else
 			let l:capture_expr = "execute('silent! " . substitute(a:command, "'", "''", "g") . "')"
-			let l:cmd = 'vim --servername ' . shellescape(server) . ' --remote-expr ' . shellescape(l:capture_expr)
+			let l:cmd = 'vim --servername ' . shellescape(server) . ' --remote-expr ' . shellescape(l:capture_expr) . ' 2>&1'
 			let l:out = system(l:cmd)
 			if v:shell_error
 				echohl ErrorMsg
