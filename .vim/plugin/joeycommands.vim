@@ -341,3 +341,46 @@ command! DoubleSpace call s:DoubleSpace()
 command! RemoveTrailingSpaces exec "%s/  *$//"
 
 command! Date normal o<CR>### <C-R>=system('date')<CR><CR>
+
+""""""""""""""""""""""""""""""""" ServerDo """""""""""""""""""""""""""""""
+
+" :ServerDo <command>
+"   Execute the Ex command <command> in every running Vim server (including
+"   the current one).  Uses --remote-expr to run execute('command') in each
+"   server via `vim --serverlist`.
+
+function! s:ServerDo(command) abort
+	let l:servers = systemlist('vim --serverlist')
+	if len(l:servers) == 0
+		echo 'ServerDo: no servers found'
+		return
+	endif
+	for server in l:servers
+		if empty(server) | continue | endif
+		echo 'ServerDo: ' . server
+		if server ==# v:servername
+			execute a:command
+		else
+			let l:vim_expr = "execute('" . substitute(a:command, "'", "''", "g") . "')"
+			let l:cmd = 'vim --servername ' . shellescape(server) . ' --remote-expr ' . shellescape(l:vim_expr)
+			let l:out = system(l:cmd)
+			if v:shell_error
+				echohl ErrorMsg
+				echomsg 'ServerDo on ' . server . ': ' . substitute(l:out, '\n\+$', '', '')
+				echohl None
+			endif
+		endif
+	endfor
+	echo 'ServerDo: done'
+endfunction
+
+command! -nargs=+ -complete=command ServerDo :call s:ServerDo(<q-args>)
+
+" :ServerBufDo <command>
+"   Convenience: runs :ServerDo bufdo <command>.
+
+function! s:ServerBufDo(command) abort
+	call s:ServerDo('bufdo ' . a:command)
+endfunction
+
+command! -nargs=+ -complete=command ServerBufDo :call s:ServerBufDo(<q-args>)
