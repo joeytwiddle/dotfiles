@@ -360,17 +360,19 @@ function! s:ServerDo(command) abort
 		echo 'ServerDo: ' . server
 		if server ==# v:servername
 			let l:out = execute(a:command)
-			echo substitute(l:out, '\n\+$', '', '')
+			let l:out = substitute(substitute(l:out, '^\n\+', '', ''), '\n\+$', '', '')
+			if !empty(l:out) | echo l:out | endif
 		else
 			let l:capture_expr = "execute('silent! " . substitute(a:command, "'", "''", "g") . "')"
 			let l:cmd = 'vim --servername ' . shellescape(server) . ' --remote-expr ' . shellescape(l:capture_expr) . ' 2>&1'
 			let l:out = system(l:cmd)
+			let l:out = substitute(substitute(l:out, '^\n\+', '', ''), '\n\+$', '', '')
 			if v:shell_error
 				echohl ErrorMsg
-				echomsg 'ServerDo on ' . server . ': ' . substitute(l:out, '\n\+$', '', '')
+				echomsg 'ServerDo on ' . server . ': ' . l:out
 				echohl None
-			else
-				echo substitute(l:out, '\n\+$', '', '')
+			elseif !empty(l:out)
+				echo l:out
 			endif
 		endif
 	endfor
