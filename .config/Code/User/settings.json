@@ -1287,6 +1287,12 @@
     // Disable the new feature where setting pop out in a separate window
     "workbench.editor.useModal": "off",
 
+    // For Kilo Code
+    "terminal.integrated.commandsToSkipShell": [
+        "kilo-code.new.agentManagerOpen",
+        "kilo-code.new.agentManager.showTerminal"
+    ],
+
     //
 
     // --- New Settings ---
