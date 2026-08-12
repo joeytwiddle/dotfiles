@@ -720,12 +720,12 @@
   //{ "key": "cmd+l", "command": "composer.closeComposerTab", "when": "composerFocused && !editorTextFocus || !editorTextFocus && focusedView =~ /^workbench.panel.aichat.view/" },
 
   // When focused on the auxiliary panel, cycle through the tabs
-  { "key": "shift+cmd+[", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus" },
-  { "key": "shift+cmd+]", "command": "workbench.action.nextAuxiliaryBarView", "when": "auxiliaryBarFocus" },
-  { "key": "alt+shift+[", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus" },
-  { "key": "alt+shift+]", "command": "workbench.action.nextAuxiliaryBarView", "when": "auxiliaryBarFocus" },
-  { "key": "ctrl+pageup", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus" },
-  { "key": "ctrl+pagedown", "command": "workbench.action.nextAuxiliaryBarView", "when": "auxiliaryBarFocus" },
+  { "key": "shift+cmd+[", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
+  { "key": "shift+cmd+]", "command": "workbench.action.nextAuxiliaryBarView",     "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
+  { "key": "alt+shift+[", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
+  { "key": "alt+shift+]", "command": "workbench.action.nextAuxiliaryBarView",     "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
+  { "key": "ctrl+pageup", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
+  { "key": "ctrl+pagedown", "command": "workbench.action.nextAuxiliaryBarView",   "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
 
   // Fix for "Open In GitHub" extension v1.3.6, which was blocking CTRL+L from reaching the terminal
   // Can be removed once this PR is merge: https://github.com/bugthesystem/vscode-open-in-github/pull/176
