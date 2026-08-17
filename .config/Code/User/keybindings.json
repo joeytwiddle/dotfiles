@@ -705,6 +705,9 @@
 
   // Leave the auxiliary bar when pressing <Escape>
   { "key": "escape", "command": "workbench.action.focusActiveEditorGroup", "when": "auxiliaryBarFocus" },
+  // Escape can be a problem if Claude Code is working (interrupts the request), but Cmd-E is the default, so let's use that
+  { "key": "cmd+e", "command": "workbench.action.focusActiveEditorGroup", "when": "" },
+  { "key": "alt+e", "command": "workbench.action.focusActiveEditorGroup", "when": "" },
   //
   // Close the auxiliary bar when pressing ALt+L / Cmd+L, if it is focused
   // Unfortunately auxiliaryBarFocus doesn't trigger when it should
