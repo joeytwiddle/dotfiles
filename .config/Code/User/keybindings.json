@@ -602,7 +602,7 @@
   // This is used by Intellisense and Continue and others (probably Windsurf) but not by Cursor
   { "key": "ctrl+shift+enter", "command": "editor.action.inlineSuggest.commit", "when": "inlineSuggestionVisible && textInputFocus" },
 
-  // Continue
+  //// Continue
   //// Reclaim Ctrl+L for editor and terminal cleanup (remove default shortcut on Linux)
   //{ "key": "ctrl+l", "command": "-continue.focusContinueInput" },
   ////
@@ -614,7 +614,7 @@
   //// When I have Continue enabled in VSCode but I am using the same config for Cursor, I want Cursor to override Continue's keybind
   //{ "key": "cmd+n", "command": "composer.createNewWithPrevContext", "when": "composerFocused || cursor.appLayout == 'agent' || focusedView =~ /^workbench.panel.aichat.view/" },
 
-  // Gemini
+  //// Gemini
   ////{ "key": "cmd+l", "command": "cloudcode.gemini.chatView.focus" },
   ////{ "key": "alt+l", "command": "cloudcode.gemini.chatView.focus" },
   //{ "key": "cmd+l", "command": "workbench.view.extension.geminiChat", "when": "viewContainer.workbench.view.extension.geminiChat.enabled && !runningOnCloudShell" },
@@ -659,7 +659,7 @@
   //// I think Cursor added this itself?
   ////{ "key": "alt+cmd+s", "command": "workbench.action.toggleUnifiedSidebarFromKeyboard", "when": "cursor.agentIdeUnification.enabled == true && !isAuxiliaryWindowFocusedContext" },
 
-  // Windsurf (they call their AI Chat "Cascade")
+  //// Windsurf (they call their AI Chat "Cascade")
   //// Make keys on Linux like those on macOS
   //{ "key": "ctrl+l", "command": "-windsurf.prioritized.chat.open", "when": "!terminalFocus" },
   //{ "key": "alt+l", "command": "windsurf.prioritized.chat.open", "when": "windsurf.prioritized.chat.open" },
@@ -675,16 +675,18 @@
   //{ "key": "alt+l", "command": "workbench.action.chat.newChat", "when": "chatIsEnabled && inChat && !config.chat.unifiedChatView && chatLocation != 'editing-session'" },
   //{ "key": "alt+l", "command": "workbench.action.chat.newEditSession", "when": "chatEditingParticipantRegistered && chatIsEnabled && inChat" },
 
-  // Windsurf Plugin (formerly Codium)
+  //// Windsurf Plugin (formerly Codium)
   //{ "key": "cmd+l", "command": "codeium.openChatView", "when": "true" },
   //{ "key": "alt+l", "command": "codeium.openChatView", "when": "true" },
 
-  // Claude Code extension in VSCode
+  //// Claude Code extension in VSCode
   //{ "key": "shift+cmd+c", "command": "-workbench.action.terminal.openNativeConsole", "when": "!isSessionsWindow && !terminalFocus" },
   //{ "key": "shift+cmd+c", "command": "claudeVSCodeSessionsList.focus" },
-  //{ "key": "cmd+l", "command": "claude-vscode.focus", "when": "editorTextFocus && !config.claudeCode.useTerminal" },
+  ////{ "key": "cmd+l", "command": "claude-vscode.focus", "when": "editorTextFocus && !config.claudeCode.useTerminal" },
+  //// Beware: If you have any Claude Code sessions open in an editor window, this command will switch your editor away from the current file and into one of them!
+  //{ "key": "ctrl+shift+l", "command": "claude-vscode.insertAtMention", "when": "" },
 
-  // Open auxiliary bar when pressing ALt+L / Cmd+L
+  // Open and close auxiliary bar when pressing ALt+L / Cmd+L
   // Note: I disable this when I have a keybind above to open a specific agent. (We could also put this earlier.)
   // Instead of having Alt+L / Cmd+L open a specific extension, we can install various extensions at once, and just have that keybind open the auxiliary bar, to focus whichever one we were last working with
   // Disadvantage: When using Windsurf, it does not focus back on the text input box, although with Gemini Code Assist it does
@@ -718,17 +720,24 @@
   // Quick way to get back to the editor
   { "key": "alt+e", "command": "workbench.action.focusActiveEditorGroup", "when": "auxiliaryBarFocus" },
   { "key": "cmd+e", "command": "workbench.action.focusActiveEditorGroup", "when": "auxiliaryBarFocus" },
+  //
   // Specifically for Cursor
   // But disabled, because I prefer to hide the auxbar, instead of closing it
   //{ "key": "cmd+l", "command": "composer.closeComposerTab", "when": "composerFocused && !editorTextFocus || !editorTextFocus && focusedView =~ /^workbench.panel.aichat.view/" },
+  // Not needed, because I have the below
+  //{ "key": "cmd+l", "command": "workbench.action.toggleAuxiliaryBar", "when": "!isAuxiliaryWindowFocusedContext && !composerFocused" },
+  // Cursor Chat in Sidebar
+  { "key": "cmd+l", "command": "composer.focusComposer", "when": "editorFocus" },
+  { "key": "cmd+l", "command": "composer.closeComposerTab", "when": "composerFocused" },
 
-  // When focused on the auxiliary panel, cycle through the tabs
-  { "key": "shift+cmd+[", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
-  { "key": "shift+cmd+]", "command": "workbench.action.nextAuxiliaryBarView",     "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
-  { "key": "alt+shift+[", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
-  { "key": "alt+shift+]", "command": "workbench.action.nextAuxiliaryBarView",     "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
-  { "key": "ctrl+pageup", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
-  { "key": "ctrl+pagedown", "command": "workbench.action.nextAuxiliaryBarView",   "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
+  //// When focused on the auxiliary panel, cycle through the tabs
+  //// DISABLE these when using Cursor
+  //{ "key": "shift+cmd+[", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
+  //{ "key": "shift+cmd+]", "command": "workbench.action.nextAuxiliaryBarView",     "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
+  //{ "key": "alt+shift+[", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
+  //{ "key": "alt+shift+]", "command": "workbench.action.nextAuxiliaryBarView",     "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
+  //{ "key": "ctrl+pageup", "command": "workbench.action.previousAuxiliaryBarView", "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
+  //{ "key": "ctrl+pagedown", "command": "workbench.action.nextAuxiliaryBarView",   "when": "auxiliaryBarFocus || claudeVSCodeSidebarSecondary.visible && !editorAreaFocus" },
 
   // Fix for "Open In GitHub" extension v1.3.6, which was blocking CTRL+L from reaching the terminal
   // Can be removed once this PR is merge: https://github.com/bugthesystem/vscode-open-in-github/pull/176
