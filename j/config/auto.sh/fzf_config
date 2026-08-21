@@ -1,5 +1,7 @@
 # vim: filetype=sh ts=2 sw=2 expandtab
 
+echo "[fzf_config]" >&2
+
 # By default fzf does not ignore node_modules.
 # But if we ask it to use ag or rg, they will respect .gitignore which might be good enough.
 
@@ -84,12 +86,14 @@ fo() {
   key=$(head -1 <<< "$out")
   file=$(head -2 <<< "$out" | tail -1)
   if [ -n "$file" ]
-  then [ "$key" = ctrl-o ] && open "$file" || "$FZF_EDITOR" "$file"
+  then [ "$key" = 'ctrl-o' ] && open "$file" || "$FZF_EDITOR" "$file"
   fi
 }
 
 # Fuzzy Edit Global
 # Like fe but gets the files from a global locate
+# On re-sourcing, the alias set for macOS below would expand into (and break) this definition
+unalias feg 2>/dev/null
 feg() {
   #local files
   #IFS=$'\n' files=($(unj locate -b -i "$@" | filesonly | fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --multi --select-1 --exit-0))
@@ -99,7 +103,7 @@ feg() {
   # BUG: Although the fzf README suggests xargs will execute nothing when 0 files are selected, that does not seem to be the case.
   #locate -b -i "$@" | filesonly | fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --multi --select-1 --exit-0 |
   #  xargs -o "$FZF_EDITOR"
-  # Or we could use become()
+  # or we could use become()
   locate -b -i "$@" | filesonly | fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --multi --select-1 "${FZF_BINDINGS[@]}"
 }
 # But I probably type 'e' first, before deciding I need to do a global search
@@ -119,6 +123,13 @@ feg_breadth_first() {
     2>/dev/null |
   fzf-tmux --preview="$FZF_FILE_PREVIEW_COMMAND" --preview-window="$FZF_FILE_PREVIEW_WINDOW_OPTS" --multi --select-1 "${FZF_BINDINGS[@]}" --query="$1${1:+ }"
 }
+
+# On macOS, locate is unreliable (off by default), so prefer the breadth-first find
+if [[ "$OSTYPE" == darwin* ]]
+then
+  unset -f feg
+  alias feg='feg_breadth_first "$HOME"'
+fi
 
 # fo and fog are like fe and feg, except they open the file with xdg-open instead of an editor
 fo() {
@@ -188,9 +199,9 @@ alias cdf=fcdlocal
 fcdglobal() {
   local dir
 
-  #dir="$(/usr/bin/locate -0 -b -A "$@" | xargs -0 -I {} bash -c '[ -d "{}" ] && echo "{}"' | fzf -0 -1)"
+  #dir="$('locate' -0 -b -A "$@" | xargs -0 -I {} bash -c '[ -d "{}" ] && echo "{}"' | fzf -0 -1)"
   # Simplified and case-insensitive
-  dir="$(/usr/bin/locate -b -A "$@" -i | dirsonly | sort_by_line_length | fzf --preview="$FZF_DIRECTORY_PREVIEW_COMMAND" -0 -1 -i)"
+  dir="$('locate' -b -A "$@" -i | dirsonly | sort_by_line_length | fzf --preview="$FZF_DIRECTORY_PREVIEW_COMMAND" -0 -1 -i)"
 
   if [[ -n "$dir" ]]
   then cd "$dir"
@@ -215,9 +226,10 @@ frgi() {
   #
   # With preview, adapted from https://github.com/junegunn/fzf/issues/2789#issuecomment-2196524694
   # Unfortunately, smartvim doesn't work great with line numbers
+  # We use fzf's built-in --tmux rather than the fzf-tmux wrapper: on quit the wrapper can wedge waiting for a status fifo that never arrives, and because it still holds this command substitution's pipe open the shell freezes
   IFS=$'\n' result="$(
     rg --color=always --line-number --no-heading --smart-case "${*:-}" \
-    | fzf-tmux -d':' --ansi \
+    | fzf --tmux center,80% -d':' --ansi \
       --preview "bat -p --color=always {1} --highlight-line {2}" \
       --preview-window ~8,+{2}-5 \
       --no-sort --layout=reverse --delimiter=: --nth=2.. \
@@ -252,7 +264,7 @@ fgco() {
   #result="$(git_branch_most_recent_last_with_info | fzf --no-sort --tac --query="$1${1:+ }")"
   result="$(
     git_branch_most_recent_last_with_info |
-    fzf --no-sort --tac --query="$1${1:+ }" \
+    fzf --ansi --no-sort --tac --query="$1${1:+ }" \
       --preview 'git log -n 200 --graph --pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ad)%Creset" --date=relative --color=always {1}' \
       --preview-window=down:50%
   )"
@@ -267,7 +279,13 @@ fgco() {
 }
 git_branch_most_recent_last_with_info() {
   #git for-each-ref --sort=committerdate refs/heads --format="%(refname:short)"
-  git for-each-ref --sort=committerdate refs/heads --format="%(refname:short) %(committerdate:relative) (%(authorname)) - %(subject)" | columnise-clever -ignore '[^ ]* *[^ ]* *[^ ]*'
+  # Colours read from the same places as gbd/git_branch_by_date in git_aliases, so the two listings stay in sync
+  # (we colour before columnise-clever, which is ANSI-aware, and fzf --ansi strips the codes back off the selection)
+  local reset_color=$'\033[0m'
+  local branch_color="$(git config --get-color color.branch.local yellow)"
+  local date_color="$(tput setaf 6)"
+  local subject_color="$(tput setaf 0; tput bold)"
+  git for-each-ref --sort=committerdate refs/heads --format="${branch_color}%(refname:short)${reset_color} ${date_color}%(committerdate:relative) (%(authorname)) -${reset_color} ${subject_color}%(subject)${reset_color}" | columnise-clever -ignore '[^ ]* *[^ ]* *[^ ]*'
 }
 alias gcof=fgco
 
@@ -275,7 +293,13 @@ alias gcof=fgco
 # Lists git worktrees and allows fuzzy selection to cd into the selected worktree
 fgwtcd() {
   local result
-  result="$(git worktree list | fzf-tmux --nth=1 --delimiter=' ' --accept-nth=1 --query="$1${1:+ }")"
+  # fzf cannot colour individual fields, so we inject the colours ourselves and let --ansi interpret them (it also strips them back off the selection)
+  local green=$'\033[32m' bright_yellow=$'\033[93m' bright_magenta=$'\033[95m' reset=$'\033[0m'
+  result="$(
+    git worktree list |
+    sed -E "s/^([^ ]+)( +)([^ ]+)( *)(.*)/${green}\1${reset}\2${bright_yellow}\3${reset}\4${bright_magenta}\5${reset}/" |
+    fzf-tmux --ansi --delimiter=' ' --accept-nth=1 --query="$1${1:+ }"
+  )"
 
   if [[ -n "$result" ]]
   then cd "$result" || return
