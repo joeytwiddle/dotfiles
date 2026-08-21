@@ -1,3 +1,5 @@
+# vim: filetype=sh noexpandtab
+
 function fzf_npm_run() {
 	if ! command -v jq &> /dev/null
 	then
@@ -31,12 +33,12 @@ function fzf_npm_run() {
 			--layout=reverse \
 			--query="$1" \
 			--accept-nth 1 \
+	)
 			#--delimiter=' :: ' \
 			#--with-nth=1,.. \
 			#--border=rounded \
 			#--color=bg+:-1,fg:252,header:110,prompt:166,hl:108 \
 			#--header="Select npm script to run:"
-	)
 
 	if [ -n "$selected_script" ]
 	then
@@ -46,5 +48,5 @@ function fzf_npm_run() {
 }
 # My policy is to use nrf (f for fuzzy) but my fingers tend to have their own ideas. Let's see in time which alias they gravitate towards...
 alias nrf='fzf_npm_run'
-alias nrr='fzf_npm_run'
-alias nrx='fzf_npm_run'
+alias nrx='echo "Use: nrf"'
+alias nrz='echo "Use: nrf"'
