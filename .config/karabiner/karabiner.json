@@ -4,6 +4,136 @@
             "complex_modifications": {
                 "rules": [
                     {
+                        "description": "Explicitly pass Ctrl + Arrow keys (prevents Claude Code bug when holding keys down on an external keyboard)",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "left_arrow",
+                                    "modifiers": { "mandatory": ["left_control"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_arrow",
+                                        "modifiers": ["left_control"]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "right_arrow",
+                                    "modifiers": { "mandatory": ["left_control"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "right_arrow",
+                                        "modifiers": ["left_control"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Shift-[ and Ctrl-Shift-] switch window in tmux",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "open_bracket",
+                                    "modifiers": { "mandatory": ["left_control", "left_shift"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "b",
+                                        "modifiers": ["left_control"]
+                                    },
+                                    { "key_code": "p" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "close_bracket",
+                                    "modifiers": { "mandatory": ["left_control", "left_shift"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "b",
+                                        "modifiers": ["left_control"]
+                                    },
+                                    { "key_code": "n" }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Shift-Cmd-[ and Ctrl-Shift-Cmd-] switch window in tmux",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "open_bracket",
+                                    "modifiers": { "mandatory": ["left_command", "left_control", "left_shift"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "b",
+                                        "modifiers": ["left_control"]
+                                    },
+                                    { "key_code": "p" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "close_bracket",
+                                    "modifiers": { "mandatory": ["left_command", "left_control", "left_shift"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "b",
+                                        "modifiers": ["left_control"]
+                                    },
+                                    { "key_code": "n" }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Opt-[ and Opt-] switch window in tmux",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "open_bracket",
+                                    "modifiers": { "mandatory": ["left_option"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "b",
+                                        "modifiers": ["left_control"]
+                                    },
+                                    { "key_code": "p" }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "close_bracket",
+                                    "modifiers": { "mandatory": ["left_option"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "b",
+                                        "modifiers": ["left_control"]
+                                    },
+                                    { "key_code": "n" }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Cmd-Shift-Enter to Up then Enter in terminal apps",
                         "manipulators": [
                             {
@@ -628,17 +758,104 @@
                             "to": [{ "key_code": "left_command" }]
                         }
                     ]
+                },
+                {
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "product_id": 4097,
+                        "vendor_id": 12994
+                    },
+                    "simple_modifications": [
+                        {
+                            "from": { "key_code": "left_control" },
+                            "to": [{ "key_code": "left_control" }]
+                        }
+                    ]
+                },
+                {
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "is_pointing_device": true,
+                        "product_id": 560,
+                        "vendor_id": 13364
+                    },
+                    "ignore": false,
+                    "simple_modifications": [
+                        {
+                            "from": { "key_code": "caps_lock" },
+                            "to": [{ "key_code": "left_control" }]
+                        },
+                        {
+                            "from": { "key_code": "home" },
+                            "to": [{ "key_code": "page_down" }]
+                        },
+                        {
+                            "from": { "key_code": "left_command" },
+                            "to": [{ "key_code": "left_option" }]
+                        },
+                        {
+                            "from": { "key_code": "left_control" },
+                            "to": [{ "key_code": "left_control" }]
+                        },
+                        {
+                            "from": { "key_code": "left_option" },
+                            "to": [{ "key_code": "left_command" }]
+                        },
+                        {
+                            "from": { "key_code": "page_down" },
+                            "to": [{ "key_code": "page_up" }]
+                        },
+                        {
+                            "from": { "key_code": "page_up" },
+                            "to": [{ "key_code": "home" }]
+                        }
+                    ]
+                },
+                {
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "is_pointing_device": true,
+                        "product_id": 640,
+                        "vendor_id": 13364
+                    },
+                    "ignore": false,
+                    "simple_modifications": [
+                        {
+                            "from": { "key_code": "home" },
+                            "to": [{ "key_code": "page_down" }]
+                        },
+                        {
+                            "from": { "key_code": "left_command" },
+                            "to": [{ "key_code": "left_option" }]
+                        },
+                        {
+                            "from": { "key_code": "left_control" },
+                            "to": [{ "key_code": "left_control" }]
+                        },
+                        {
+                            "from": { "key_code": "left_option" },
+                            "to": [{ "key_code": "left_command" }]
+                        },
+                        {
+                            "from": { "key_code": "page_down" },
+                            "to": [{ "key_code": "page_up" }]
+                        },
+                        {
+                            "from": { "key_code": "page_up" },
+                            "to": [{ "key_code": "home" }]
+                        }
+                    ]
                 }
             ],
             "name": "Joey config for US MacBook (set VK=ANSI)",
             "selected": true,
             "simple_modifications": [
                 {
-                    "from": { "key_code": "caps_lock" },
+                    "from": { "apple_vendor_top_case_key_code": "keyboard_fn" },
                     "to": [{ "key_code": "left_control" }]
                 },
                 {
-                    "from": { "apple_vendor_top_case_key_code": "keyboard_fn" },
+                    "from": { "key_code": "caps_lock" },
                     "to": [{ "key_code": "left_control" }]
                 },
                 {
