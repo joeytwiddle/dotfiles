@@ -727,6 +727,40 @@ alias griud='gri upstream/develop'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
 
+# fzf-driven commit picker — same look as gll for the list, full --stat+patch
+# in the preview pane (scrollable with Shift-Up/Down). Extra args forwarded
+# to git log, so you can narrow the scope with a path, range, --grep, etc.
+# Echoes the selected commit's hash to stdout, or nothing on cancel.
+#
+# The format includes a hidden tab-separated %H after the colourful display
+# so fzf can pluck the hash out reliably regardless of graph chars / ANSI.
+git_pick_commit() {
+	git log --color=always --graph --date=relative \
+		--pretty=format:"%C(yellow bold)%h%C(magenta bold)%d%C(reset) %C(black bold)%s %C(reset)%C(cyan)- %an (%ad)%Creset%x09%H" \
+		"$@" |
+	fzf --ansi --no-sort \
+		--delimiter=$'\t' --with-nth=1 \
+		--preview 'git -c color.ui=always show --stat --patch {2}' |
+	awk -F$'\t' '{print $2}'
+}
+
+# Pick a commit then run gri / gcf against it. Pass extra args to scope the
+# log listing (e.g. grif master..HEAD, gcff -- path/to/file).
+grif() {
+	local hash
+	hash="$(git_pick_commit "$@")"
+	[ -n "$hash" ] || return
+	# We actually use the commit before, because if the user has searched for a commit, they probably want that to be the first in the rebase
+	gri "${hash}~"
+}
+
+gcff() {
+	local hash
+	hash="$(git_pick_commit "$@")"
+	[ -n "$hash" ] || return
+	gcf "$hash"
+}
+
 #alias grl='git reflog'
 alias grl='git reflog --color=always --pretty=format:"%C(yellow bold)%h%C(reset)%C(magenta bold)%d%C(reset) %C(black bold)%gs%C(reset) %C(cyan)- %an%C(reset) %C(cyan)(%ar)%C(reset)"'
 alias grldr='grl --date=relative'
