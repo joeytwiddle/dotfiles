@@ -226,10 +226,10 @@ frgi() {
   #
   # With preview, adapted from https://github.com/junegunn/fzf/issues/2789#issuecomment-2196524694
   # Unfortunately, smartvim doesn't work great with line numbers
-  # We use fzf's built-in --tmux rather than the fzf-tmux wrapper: on quit the wrapper can wedge waiting for a status fifo that never arrives, and because it still holds this command substitution's pipe open the shell freezes
+  # Do not pass fzf's -d here: fzf-tmux claims -d for its own "split down [HEIGHT]" option, so -d':' set a bogus pane height, wedged the wrapper on quit, and froze this shell (--delimiter=: below does the job)
   IFS=$'\n' result="$(
     rg --color=always --line-number --no-heading --smart-case "${*:-}" \
-    | fzf --tmux center,80% -d':' --ansi \
+    | fzf-tmux --ansi \
       --preview "bat -p --color=always {1} --highlight-line {2}" \
       --preview-window ~8,+{2}-5 \
       --no-sort --layout=reverse --delimiter=: --nth=2.. \
