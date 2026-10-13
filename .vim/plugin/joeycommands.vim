@@ -415,11 +415,5 @@ endfunction
 
 command! -nargs=+ -complete=command ServerBufDo :call s:ServerBufDo(<q-args>)
 
-function! CopyFilePath()
-	let filepath = expand('%:p')
-	call setreg('+', filepath)
-	echo "File path copied to clipboard: " . filepath
-endfunction
-
-command! CopyFilePath call CopyFilePath()
-
+command! CopyFileNameToClipboard let @+ = expand('%:t')
+command! CopyFilePathToClipboard let @+ = expand('%:p')
