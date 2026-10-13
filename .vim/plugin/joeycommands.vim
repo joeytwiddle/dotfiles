@@ -288,6 +288,26 @@ nnoremap <D-≠> :MaximizeVim<CR>
 " Improve search
 command! GitMergeToolSetup set lines=57 columns=186 | exec ":source ~/.vim/colors_for_elvin_gentlemary.vim" | exec ":source ~/.vim-addon-manager/github-joeytwiddle-vim-diff-traffic-lights-colors/plugin//traffic_lights_diff.vim" | 20wincmd j | set nodiff | wincmd k | wincmd l | wincmd l | set nodiff | wincmd j | wincmd = | silent! call ForgetWindowSizes() | let @/ = '<<<<<<<\|=======\|>>>>>>>' | normal! n
 
+function! s:GetGitRootOrFallback() abort
+    " 1. Try Git toplevel
+    let l:git_root_output = systemlist('git rev-parse --show-toplevel 2>/dev/null')
+    if v:shell_error == 0 && !empty(l:git_root_output)
+        return l:git_root_output[0]
+	endif
+
+	" 2. Fall back to current buffer's directory
+	let l:current_buffer_path = expand('%:p') " Get full path of current buffer
+	if !empty(l:current_buffer_path) && filereadable(l:current_buffer_path)
+		let l:buffer_dir = expand('%:p:h')
+		if !empty(l:buffer_dir) && isdirectory(l:buffer_dir)
+			return l:buffer_dir
+		endif
+	endif
+
+	" 3. Fall back to CWD
+	return getcwd()
+endfunction
+
 " This produced no results from rg
 "let fzf_grep_cmd = exists('$FZF_DEFAULT_COMMAND') ? $FZF_DEFAULT_COMMAND : 'grep'
 " But if you have ag or ripgrep installed, you we can just use :Ag or :Rg
@@ -296,7 +316,10 @@ let fzf_grep_cmd = 'grep'
 " By <igemnace>
 command! -bang -nargs=* FZFGrep call fzf#vim#grep(fzf_grep_cmd . ' -R -n '.shellescape(<q-args>), 0, <bang>0)
 " Recommended by the README
-command! -bang -nargs=* GGrep call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
+command! -bang -nargs=* GGrep call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, fzf#vim#with_preview({ 'dir': systemlist('git rev-parse --show-toplevel')[0] }), <bang>0)
+
+" Use grep with fuzzyfinder (no args)
+command! -bang -nargs=* FGrep call fzf#vim#grep('grep -R --line-number . '.shellescape(<SID>GetGitRootOrFallback()), 0, fzf#vim#with_preview({ 'dir': <SID>GetGitRootOrFallback() }), <bang>0)
 
 " It occasionally happens that you can not enter blockwise-visual mode because both Ctrl-V and Ctrl-Q are being intercepted by the terminal app or the desktop.
 " To work around that if it occurs, we define a command `:VB` to enter blockwise-visual mode, in fact a full set of commands for consistency.
@@ -391,3 +414,12 @@ function! s:ServerBufDo(command) abort
 endfunction
 
 command! -nargs=+ -complete=command ServerBufDo :call s:ServerBufDo(<q-args>)
+
+function! CopyFilePath()
+	let filepath = expand('%:p')
+	call setreg('+', filepath)
+	echo "File path copied to clipboard: " . filepath
+endfunction
+
+command! CopyFilePath call CopyFilePath()
+
