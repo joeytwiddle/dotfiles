@@ -36,10 +36,11 @@
 " modern Vims have).  [No Name] buffers come back with an empty name,
 " which our sink and preview both already handle.
 "
-" Current approach: query each server with a single --remote-expr call,
+" Current approach: query each server with a single remote_expr() call,
 " collect results in Vimscript, sort locally, and return lines to fzf
-" as a list.  Uses only system() + shellescape() — no external tools
-" needed, identical on macOS and Linux.
+" as a list.  Uses only serverlist() + remote_expr() — no shell, so it
+" sidesteps MacVim's `--remote-expr` replying on stderr with a trailing
+" ": Send expression failed.".
 "
 " Trade-off: fzf doesn't open until all servers have responded because
 " the Vimscript function runs to completion before returning the source
@@ -65,13 +66,13 @@
 "       'source' from s:ListBuffers() to s:list_command.
 
 function! s:ListBuffers() abort
-	let l:servers = systemlist('vim --serverlist')
+	let l:servers = split(serverlist(), "\n")
 	if len(l:servers) == 0
 		return []
 	endif
 
 	let l:entries = []
-	let l:vim_expr = 'join(map(getbufinfo({''buflisted'':1}), "v:val.lastused . \"\\t\" . v:val.name"), \"\\n\")'
+	let l:vim_expr = 'join(map(getbufinfo({"buflisted":1}), "v:val.lastused . \"\\t\" . v:val.name"), "\n")'
 
 	for server in l:servers
 		if empty(server) | continue | endif
@@ -80,11 +81,11 @@ function! s:ListBuffers() abort
 				call add(l:entries, [info.lastused, server, info.name])
 			endfor
 		else
-			let l:cmd = 'vim --servername ' . shellescape(server) . ' --remote-expr ' . shellescape(l:vim_expr)
-			let l:out = system(l:cmd)
-			if v:shell_error
+			try
+				let l:out = remote_expr(server, l:vim_expr, '', 2)
+			catch
 				continue
-			endif
+			endtry
 			for line in split(l:out, "\n", 1)
 				if empty(line) | continue | endif
 				let l:parts = split(line, "\t", 1)
@@ -161,7 +162,7 @@ function! s:Run() abort
 	endif
 	call fzf#run(fzf#wrap('find-buffer-in-all-servers', {
 		\ 'source':  s:ListBuffers(),
-		\ " 'source':  s:list_command,  " old shell-pipeline source
+		"\ 'source':  s:list_command,  " old shell-pipeline source
 		\ 'sink':    function('s:OpenInServer'),
 		\ 'options': [
 		\     '--prompt', 'Buffers(Global)> ',
