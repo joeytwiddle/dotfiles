@@ -32,6 +32,15 @@ function! s:ToggleTerm() abort
 			" Get back into insert mode
 			normal! A
 		else
+			if bufname(term) is "!sh"
+				" Workaround for MacVim or Vim in iTerm (I can't remember which)
+				" We are probably in an fzf terminal window (and the user might have pressed a plain '`').
+				" Ideally we would do nothing terminal-related, and just pass the '`' key to fzf.
+				" But I couldn't find a way to pass the key, so for now, we just do nothing.
+				" Get back into insert mode (likely where we started)
+				normal! a
+				return
+			endif
 			" Terminal open, close all windows showing it in the tab
 			for win_id in win_findbuf(term)
 				let win_nr = win_id2win(win_id)
