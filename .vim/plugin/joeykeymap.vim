@@ -23,10 +23,11 @@ nmap [6^ <C-PageDown>
 nmap [5^ <C-PageUp>
 
 "" Inside screen on pea, and for xterm on Ubuntu:
+"" But disabled because in plain iTerm tab, it catches normal PageUp/PageDown
 "noremap [6;5~ :bn<Enter>
 "noremap [5;5~ :bp<Enter>
-nmap [6;5~ <C-PageDown>
-nmap [5;5~ <C-PageUp>
+"nmap [6;5~ <C-PageDown>
+"nmap [5;5~ <C-PageUp>
 
 "" But in the QuickFixList, we want Ctrl-PageUp/PageDown to cycle "cope tabs", not buffers.
 "autocmd BufReadPost quickfix nnoremap <buffer> <C-PageDown> :cnewer<CR>
@@ -977,21 +978,6 @@ nnoremap [= :exec "resize ".(&lines - 20)<CR>:exec "vert resize ".(&columns - (b
 " The -31 is for when TagList is open with width 30.
 " TODO: But what about when the file browser is open too?!
 
-" Search for similarly-named files using AsyncFinder
-" BUG: The <C-r>n has stopped working now.  Could use feedkeys() instead, as below.
-nmap <Leader><C-E> :let @n = expand("%:t:r")<CR><C-a><C-r>n.
-" Search for similarly-named files using fzf
-" (need to use feedkeys because <C-R> doesn't work in the fzf window)
-"nmap <Leader>rel :let @n = expand("%:t:r")<CR>:call feedkeys(@n)<CR>:Files<CR>
-"nmap <Leader>a :let @n = expand("%:t:r")<CR>:call feedkeys(@n . '.', 't')<CR>:Files<CR>
-"nmap <Leader>a :let @n = substitute(expand("%:t"), '[.].*', '', '')<CR>:call feedkeys(@n . '.', 't')<CR>:Files<CR>
-nmap <Leader><C-E> :let @n = substitute(expand("%:t"), '[.].*', '', '')<CR>:call feedkeys(@n . '.', 't')<CR><C-a>
-" An alias.  Which will I remember?
-nmap <Leader>rel <Leader><C-E>
-
-" Pick a buffer across all running Vim servers (see plugin/fzf_find_buffer_in_all_servers.vim)
-nnoremap <silent> <Leader><Leader><C-E> :FindBufferInAllServers<CR>
-
 " Toggle (Git history) Augment (same as I have in VSCode)
 nnoremap <Leader>a :GitShade<CR>
 nnoremap <Leader>A :GitShade<CR>
@@ -1219,6 +1205,24 @@ augroup END
 " The default produces an attractive popup, but it often shows an error "Not allowed in popup window" so I'm going to use my own version instead
 let g:fzf_layout = { 'window': '30split' }
 
+" Pick a buffer across all running Vim servers (see plugin/fzf_find_buffer_in_all_servers.vim)
+"nnoremap <silent> <Leader><Leader><C-E> :FindBufferInAllServers<CR>
+" I want to try using this on <C-E> by swapping with the local fzf switcher.
+nnoremap <silent> <C-E> :FindBufferInAllServers<CR>
+nnoremap <silent> <Leader><Leader><C-E> :<C-U>call <SID>JumpToBufferOrOpenFzfBuffers()<CR>
+
+" Search for similarly-named files using AsyncFinder (or whatever file-picker we currently have on CTRL-A)
+" BUG: The <C-r>n has stopped working now.  Could use feedkeys() instead, as below.
+nmap <Leader><C-E> :let @n = expand("%:t:r")<CR><C-a><C-r>n.
+" Search for similarly-named files using fzf
+" (need to use feedkeys because <C-R> doesn't work in the fzf window)
+"nmap <Leader>rel :let @n = expand("%:t:r")<CR>:call feedkeys(@n)<CR>:Files<CR>
+"nmap <Leader>a :let @n = expand("%:t:r")<CR>:call feedkeys(@n . '.', 't')<CR>:Files<CR>
+"nmap <Leader>a :let @n = substitute(expand("%:t"), '[.].*', '', '')<CR>:call feedkeys(@n . '.', 't')<CR>:Files<CR>
+nmap <Leader><C-E> :let @n = substitute(expand("%:t"), '[.].*', '', '')<CR>:call feedkeys(@n . '.', 't')<CR><C-a>
+" An alias.  Which will I remember?
+nmap <Leader>rel <Leader><C-E>
+
 " Emulate Mac keys on Linux (GVim on Manjaro with KDE 5)
 " Alt-V like Cmd-V
 nmap ö "+P
@@ -1296,7 +1300,7 @@ nnoremap <silent> <C-Q> :echo "Use <"."C-V> for blockwise visual, not <"."C-Q>"<
 " Ctrl-Tab switches to recent buffers
 " Simple solution, but only toggles between the most recent two
 "nnoremap <C-Tab> <C-^>
-" Invokes fzf, makes it possible to reach older tabs, but with slightly different keystrokes from other apps
+" Invokes fzf, makes it possible to reach older tabs, but we must press Enter to select (does not select on Tab release)
 nmap <C-Tab> <C-E>
 
 " Use backtick to scroll backwards through lists (like Shift-Tab, opposite of Tab)
