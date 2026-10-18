@@ -1,3 +1,4 @@
+# This file is not working now, since I removed it from ~/.gitconfig in favour of ./.gitignore.local
 .*.sw?
 .*~
 .DS_Store
